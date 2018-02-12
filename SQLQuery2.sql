@@ -39,22 +39,22 @@ select productname , unitprice , unitsInStock , (unitprice*unitsInStock) as 'Tot
 2.from
 3.where : filta antes de grupar
 4.group by : Categoria
-5.having : 
-6.orden by 
+5.having :
+6.orden by
 */
---Instruccion select : no utilizar en una base de datos de producción.
-select * from Customers 
+--Instruccion select : no utilizar en una base de datos de producciï¿½n.
+select * from Customers
 where Country = 'France' or Country = 'Canada' --no usar "and "
 order by Country
 --Instruccion select con Group by
-select country ,companyname from Customers 
+select country ,companyname from Customers
 where country like 'A%'
 --
-select country ,count(companyname) as 'Acumulado' from Customers 
+select country ,count(companyname) as 'Acumulado' from Customers
 where country like 'A%'
 group by country-- obligado a contar
 --
-select country ,count(companyname) as 'Acumulado' from Customers 
+select country ,count(companyname) as 'Acumulado' from Customers
 where country like 'A%'
 group by country-- obligado a contar
 having count(companyname)>2
@@ -84,10 +84,12 @@ select companyname,contactname,country  from Customers
 for xml raw
 --Filtrar Uso Case
 select productname,unitprice,
-	case categoryid  
+	case categoryid
 		when 1 then 'producto 1'
 		when 2 then 'producto 2'
 		when 3 then 'producto 3'
 		else 'Otros'
 	end as 'Producto'
 from Products
+
+/* Febrero del 2018*/

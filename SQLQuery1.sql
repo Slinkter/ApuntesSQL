@@ -9,7 +9,7 @@ use tutorial
 create table usuarios2
 (
 id_usuario int  not null,
-nombre varchar(50) 
+nombre varchar(50)
 )
 ;
 drop table usuarios2
@@ -67,24 +67,24 @@ nombre varchar(50) not null
 /*Scrip 7*/
 insert into usuario2 values('a')
 insert into usuario2 values('b')
-insert into usuario2 values('c') 
+insert into usuario2 values('c')
 insert into usuario2 values('d')
 insert into usuario2 values('e')
 select * from usuario2;
 
 /*Scrip 8:video 13*/
 create database libreria
- 
+
 use libreria
- 
-create table libros 
+
+create table libros
 (
 id_libro int identity primary key,
 nombre varchar(50) not null,
 precio_venta int not null,
 precio_compra float not null
 )
- 
+
 insert into libros values('El Lobo',115,95.23);
 insert into libros values('Caperucita Roja',236,189.25);
 insert into libros values('Programación en Java',78,50.36);
@@ -113,7 +113,7 @@ select 'Libros : '+nombre+' ' from libros where id_libro=1
 select precio_venta as 'Precio de venta s/.' , precio_compra as 'precio de compra S/.' from libros;
 /*Scrip 10:Libreria2*/
 create database Libreria2;
-use libreria2 
+use libreria2
 create table libros
 (
 titulo varchar(50)not null,
@@ -134,9 +134,9 @@ insert into libros values ('Los Lugares mas Aterradores','libro de terror','Karl
 insert into libros values ('','','',200,145);﻿
 select * from libros
 select COUNT(*) from libros where precio_compra > 290
-select SUM(precio_venta) from libros 
-select max(precio_venta) from libros 
-select min(precio_venta) from libros 
+select SUM(precio_venta) from libros
+select max(precio_venta) from libros
+select min(precio_venta) from libros
 /*Scrip 11:hola a todos*/
 select SUBSTRING('hola a todos ',8,1);
 select STR(123)
@@ -145,8 +145,8 @@ select len ('cambiando el world')
 select CHAR(78)/*codigo asci*/
 select lower('MI NOMBRE ES LUIS') AS Algo
 select UPPER('     MI NOMBRE ES JHONATAN') AS ALGO
-select LTRIM('                    MI NOMBRE ES JHONATAN               ') AS ALGO 
-select RTRIM('                    MI NOMBRE ES JHONATAN               ') AS ALGO 
+select LTRIM('                    MI NOMBRE ES JHONATAN               ') AS ALGO
+select RTRIM('                    MI NOMBRE ES JHONATAN               ') AS ALGO
 select REPLACE('HOLA WORLD','WORLD','MUNDO')
 select REVERSE('anita la tina')
 select PATINDEX('%luis%','donde esta luis?')
@@ -287,7 +287,7 @@ use empleados;
 select count(*) as 'Numero de usuarios' from usuarios /*no cuenta nulls*/
 select sum(edad) as 'La suma de edad  de usuarios' from usuarios
 select AVG(edad) as 'El promedio de edad de usuarios' from usuarios
-select avg(edad) from usuarios where sexo = 'M' and edad<18/*sumar las edad de los hombre*/ 
+select avg(edad) from usuarios where sexo = 'M' and edad<18/*sumar las edad de los hombre*/
 select avg(edad) from usuarios where sexo = 'F' and edad<18
 select * from usuarios order by edad asc
 /*max min */
@@ -296,9 +296,9 @@ select max(edad) as 'Edad maxima' from usuarios;
 select min(nombre) from usuarios
 select max(nombre) from usuarios
 /*Scrip 18:Having necesita operadores de agrupamiento*/
-select nombre,AVG(edad) from usuarios where sexo ='f' 
-group by nombre 
-having avg(edad)>20 
+select nombre,AVG(edad) from usuarios where sexo ='f'
+group by nombre
+having avg(edad)>20
 /*Scrip 19: compute*/
 select nombre,edad from usuarios where sexo='f'
 select min(edad) from usuarios where sexo='f'
@@ -311,13 +311,13 @@ select edad from usuarios order by edad;
 select distinct edad from usuarios order by edad;
 select sum(distinct edad) from usuarios
 /*Scrip 21 : top*/
-select top 10 * from usuarios 
+select top 10 * from usuarios
 select top 10 * from usuarios  order by id_usuario desc
 /*Scrip 22 : Backup*/
 /*Averiguar para sql server 2016*/
 /*Script 22 : inner Join*/
 create database escuela
-use escuela 
+use escuela
 
 CREATE TABLE CARRERA (
 ID_CARRERA INT PRIMARY KEY NOT NULL,
@@ -368,26 +368,26 @@ select * from datos right join alumno on alumno.ID_ALUMNO = datos.ID_ALUMNO;
 select * from datos right join ALUMNO on datos.ID_ALUMNO = ALUMNO.ID_ALUMNO;
 /*Script*/
 /*Group by*/
-select  alumno.nombre,carrera.carrera from datos inner join alumno 
-on datos.id_alumno = alumno.id_alumno  inner join carrera 
+select  alumno.nombre,carrera.carrera from datos inner join alumno
+on datos.id_alumno = alumno.id_alumno  inner join carrera
 on carrera.ID_CARRERA= alumno.ID_CARRERA where edad>18 group by  alumno.nombre,carrera.carrera ;
 /*Script*/
 /*Update with inner join*/
 select * from alumno inner join carrera
 on alumno.id_carrera = carrera.id_carrera;
 
-update alumno set nombre='TI' 
+update alumno set nombre='TI'
 from alumno inner join carrera
 on alumno.id_carrera = carrera.id_carrera
 where carrera.ID_CARRERA = 1;
 
-delete alumno 
+delete alumno
 from alumno inner join carrera
 on alumno.id_carrera = carrera.id_carrera
 where carrera.id_carrera=1;
 /*Script */
 select * from carrera ;
-alter table carrera 
+alter table carrera
 add cupo_limitado int;
 
 alter table carrera
@@ -399,7 +399,7 @@ add cupo_minimo int;
 alter table carrera
 add cupo_limitado int;
 
-alter table carrera 
+alter table carrera
 add resta as (cupo_minimo +100);
 
 alter table carrera
@@ -415,7 +415,7 @@ create table libros
 (
 id_libro int primary key,
 titulo varchar(50),
-num_pag int 
+num_pag int
 )
 
 insert into libros values (1,'100 años de soledad',789);
@@ -430,10 +430,10 @@ select * from libros;
 update libros set titulo ='ana Karenina'
 from libros where id_libro = 3;
 
-update libros set titulo = 'madame bovary' 
+update libros set titulo = 'madame bovary'
 from libros where id_libro = 4;
 
-update libros set titulo = 'jugadores' 
+update libros set titulo = 'jugadores'
 from libros where id_libro = 6
 /*Script */
 select * from libros where id_libro = (select id_libro from libros where titulo = 'jugadores');
@@ -454,13 +454,13 @@ where id_usuario = any (select id_usuario from usuarios where edad > 24);
 select * from usuarios;
 select * from usuarios order by edad desc
 
-delete usuarios 
-where tipo_usuario = 
+delete usuarios
+where tipo_usuario =
 any (select id_usuario from usuarios where edad > 24)
 /*Script */
 create table nombres
 (
-nombre varchar(50) 
+nombre varchar(50)
 )
 
 insert into nombres (nombre)
@@ -475,7 +475,7 @@ create view usuarios_view as select nombre, edad from usuarios;
 
 select count(nombre) as 'Cantidad de usuarios' from usuarios_view
 /*Video 46 : Cifrado de vista-Seguridad*/
-select * from 
+select * from
 sp_helptext usuarios_view
 
 create view usuarios_view2 with encryption as select nombre,edad from usuarios;
@@ -552,16 +552,16 @@ delete from copy_m
 use empleados
 select * from usuarios;
 select id_usuario , nombre , edad =
-case 
+case
 	when edad <=17 then 'Menor'
 	when edad >= 20 then 'Mayor'
 end
 from usuarios;
 /*Video 52 : if*/
 select * from usuarios
-if exists (select * from usuarios where edad <18) 
+if exists (select * from usuarios where edad <18)
 	select * from usuarios where edad <18
-else 
+else
 	select 'No hay empleados de 8 años'as 'Rpta'
 
 /*Video 53: Variable*/
@@ -569,79 +569,79 @@ use empleados
 select * from usuarios
 declare @variableSexo varchar(20)
 declare @variableEdad int
-set @variableSexo = 'M' 
+set @variableSexo = 'M'
 set @variableEdad = 18
 select * from usuarios where sexo = @variableSexo and edad>= @variableEdad
 /*Video 54: procedimiento almacenado*/
 /*Video 55: Creacion de procedimeinto almacenado*/
-create procedure Mujeres 
-as 
+create procedure Mujeres
+as
 select nombre,sexo,edad from usuarios where sexo ='F'
 exec Mujeres
 
-create procedure insertarChica as 
+create procedure insertarChica as
 insert into usuarios values (60,'paulina' , 'paul','registrado',20,'F')
 
 /*video 56*/
 drop proc insertarChica
 if object_id (Mujeres) is not nul
 	drop procedure Mujeres
-else 
+else
 	select 'NO EXISTE'
 
 /*Video 57*/
 create procedure selecion
 @edad int ,
 @sexo varchar(20)
-as 
+as
 select * from usuarios where edad>=@edad and sexo=@sexo;
 exec selecion 18 ,'F'
 /*Video 58:*/
 create procedure algo
 @edad int,
 @sexo varchar(20),
-@count int output 
+@count int output
 as
  set @count = (select count(id_usuario) from usuarios where edad > @edad and sexo = @sexo)
 
-declare @total int 
+declare @total int
 exec algo 18,'M',@total output
-select @total 
+select @total
 /*Video 59*/
 create procedure algo2
 @edad int,
 @sexo varchar(20)
-as 
+as
 if (@edad is null) or (@sexo is null)
-	return 0 
+	return 0
 else
 	return 1
 
-declare @retorno int 
+declare @retorno int
 exec @retorno = algo2 null,null
 select @retorno as 'Rpta'
 
 /*Video 60*/
 use empleados
-sp_help 
+sp_help
 sp_helptext copy_m
 sp_stored_procedures algo
 sp_depends copy_m
 select * from sysobjects order by id
 /*Video 61*/
 /*Sin encriptacion*/
-create proc procedimientoEncriptado 
+create proc procedimientoEncriptado
 @edad int
-as 
+as
 select * from usuarios where edad>=@edad
 
 exec procedimientoEncriptado 18
 sp_helptext procedimientoEncriptado
 /*con encriptacion*/
 alter proc procedimientoEncriptado
-@edad int 
+@edad int
 with  encryption
-as 
+as
 select * from usuarios where edad>=@edad
 
 exec procedimientoEncriptado 18
@@ -654,16 +654,16 @@ set @resultado = (select sum (edad) from usuarios)
 
 create procedure procedimiento2
 @numuero2 int output
-as 
+as
 begin
 declare @numero int
 	exec procedimiento1 @numero output
 	set @numuero2 = @numero
 end
 --Mostrar datos
-declare @num int --declaro una variable 
+declare @num int --declaro una variable
 exec procedimiento2 @num output -- paso la variablde salidad
-select @num --imprimir el valore 
+select @num --imprimir el valore
 /*video 63*/
 /*video 64:trigger*/
 create database Tienda
@@ -704,7 +704,7 @@ as
 begin
 	declare @total int
 	set @total = (select sum(cantidad) from TablaVentas)
-	update TablaTotales 
+	update TablaTotales
 	set TablaTotales.cantidad = @total
 end
 select * from TablaVentas
@@ -713,7 +713,7 @@ insert into TablaVentas values (7,2,10)
 
 /*Video 65*/
 select * from TablaAlmacen
-select * from TablaVentas join TablaAlmacen 
+select * from TablaVentas join TablaAlmacen
 on TablaVentas.id_producto = TablaAlmacen.id_producto
 
 --Creacion trigger--
@@ -725,7 +725,7 @@ as
 		declare @total int --Declaramos una variable int
 			set @total = (select sum(cantidad) from TablaVentas) --obtenemos la suma de las cantidades y lo asignamos a la variable
 				insert into TablaTotales values(1)
-	end 
+	end
 
 --Comprobamos los valores ingresados
 	select * from TablaVentas
@@ -737,4 +737,5 @@ set cantidad = 20
 where TablaVentas.id_venta = 3
 
 /*Video 66*/
+/* Febrero del 2018*/
 /*Video 67*/
