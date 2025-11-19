@@ -287,3 +287,110 @@ select * from table(dbms_xplan.display());
 
 ```
 ---
+---
+
+## Ejemplos Adicionales de `SQLQuery1.sql`
+
+### Subconsultas con `IN`, `ANY` y `ALL`
+
+Estos scripts demuestran cómo usar subconsultas en la cláusula `WHERE` para filtrar datos basados en un conjunto de valores devueltos por otra consulta. Se exploran los operadores `IN`, `NOT IN`, `= ANY` y `<> ALL`.
+
+```sql
+/*Script sobre Libreria4 */
+create database Libreria4;
+use Libreria4;
+create table libros
+(
+id_libro int primary key,
+titulo varchar(50),
+num_pag int
+);
+-- ... (inserciones y actualizaciones) ...
+select * from libros;
+
+-- Subconsulta que devuelve un solo valor
+select * from libros where id_libro = (select id_libro from libros where titulo = 'jugadores');
+
+-- Uso de IN con un conjunto de valores explícito
+select * from libros where id_libro in (2,4,6); /*Escoger por id */
+
+-- Uso de NOT IN para exclusión
+select * from libros where id_libro not in (2,4,6);/*Excepcion a 2 4 6*/
+
+-- Uso de NOT IN con una subconsulta
+select * from libros where id_libro not in (select id_libro from libros where num_pag>1000);
+
+/*
+in : = any
+not in : <> all
+*/
+
+-- Uso de ANY
+-- Encuentra mujeres cuya edad coincide con la edad de al menos un hombre.
+use empleados;
+select * from usuarios where sexo ='F' and edad = any(select edad from usuarios where sexo='M');
+
+-- Uso de ALL
+-- Encuentra mujeres cuya edad no coincide con la edad de ningún hombre.
+select * from usuarios where sexo = 'F' and edad <> all (select edad from usuarios where sexo='M');
+
+-- Actualización con subconsulta usando ANY
+update usuarios set tipo_usuario = 'root'
+where id_usuario = any (select id_usuario from usuarios where edad > 24);
+```
+
+### `INSERT` desde un `SELECT`
+
+Ejemplo de cómo insertar los resultados de una consulta `SELECT` directamente en otra tabla.
+
+```sql
+create table nombres
+(
+nombre varchar(50)
+);
+
+insert into nombres (nombre)
+select (nombre) from usuarios;
+
+select * from nombres;
+```
+---
+
+### Creación y Uso de Vistas (Scripts 45-49)
+
+Estos scripts cubren la creación, uso y gestión de vistas en SQL. Las vistas se utilizan para simplificar consultas complejas, encapsular lógica y proporcionar una capa de seguridad.
+
+```sql
+/*Script : Video 45 :Vista*/
+use empleados;
+create view usuarios_view as select nombre, edad from usuarios;
+
+select count(nombre) as 'Cantidad de usuarios' from usuarios_view;
+
+/*Video 46 : Cifrado de vista-Seguridad*/
+-- Ver el código de una vista
+sp_helptext usuarios_view;
+
+-- Crear una vista encriptada
+create view usuarios_view2 with encryption as select nombre,edad from usuarios;
+sp_helptext usuarios_view2; -- Error: el objeto está encriptado
+
+/*Video 47-48 : Vistas actualizables*/
+drop view usuarios_view,usuarios_view2;
+
+create view Mujeres as select * from usuarios where sexo='F';
+select * from Mujeres order by edad asc;
+
+-- Se puede actualizar o eliminar de una vista si se basa en una sola tabla
+-- y no contiene agregaciones, DISTINCT, GROUP BY, etc.
+update Mujeres set tipo_usuario ='SuperUsuario' where edad>25;
+delete from Mujeres where edad < 20;
+
+/*Video 49 : Vistas con CHECK OPTION*/
+-- WITH CHECK OPTION fuerza a que todas las inserciones y actualizaciones
+-- a través de la vista cumplan con la condición de la cláusula WHERE de la vista.
+create view copy_m as select * from usuarios where sexo ='M' with check option;
+
+-- Esto fallaría si intentamos insertar un registro con sexo = 'F' a través de la vista copy_m
+-- insert into copy_m (nombre, ..., sexo) values ('ana', ..., 'F');
+```

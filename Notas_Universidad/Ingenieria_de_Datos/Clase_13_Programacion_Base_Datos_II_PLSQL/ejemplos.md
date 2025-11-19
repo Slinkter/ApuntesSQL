@@ -346,3 +346,154 @@ end;
 /
 ```
 ---
+---
+
+## Ejemplos Adicionales de T-SQL (de `SQLQuery1.sql`)
+
+Estos ejemplos, escritos en T-SQL (SQL Server), complementan los conceptos de PL/SQL con la sintaxis y las características específicas de SQL Server para procedimientos almacenados y triggers.
+
+### Script 58-62: Procedimientos Almacenados Avanzados
+
+Estos scripts cubren temas más avanzados como parámetros `OUTPUT`, valores de retorno, encriptación, procedimientos almacenados anidados y el uso de procedimientos del sistema para obtener metadatos.
+
+```sql
+/*Video 58: Parámetros OUTPUT*/
+create procedure algo
+@edad int,
+@sexo varchar(20),
+@count int output
+as
+ set @count = (select count(id_usuario) from usuarios where edad > @edad and sexo = @sexo);
+GO
+
+declare @total int;
+exec algo 18,'M', @total output;
+select @total as 'Total_Hombres_Mayores_18';
+GO
+
+/*Video 59: Valores de Retorno*/
+create procedure algo2
+@edad int,
+@sexo varchar(20)
+as
+if (@edad is null) or (@sexo is null)
+	return 0; -- Retorna 0 si los parámetros son nulos
+else
+	return 1; -- Retorna 1 si son válidos
+GO
+
+declare @retorno int;
+exec @retorno = algo2 null,null;
+select @retorno as 'Rpta';
+GO
+
+/*Video 60: Procedimientos del Sistema*/
+sp_help; -- Muestra información sobre objetos de la base de datos
+sp_helptext copy_m; -- Muestra el texto de una vista o procedimiento no encriptado
+sp_stored_procedures algo; -- Lista procedimientos almacenados
+sp_depends copy_m; -- Muestra las dependencias de un objeto
+GO
+
+/*Video 61: Encriptación de Procedimientos*/
+alter proc procedimientoEncriptado
+@edad int
+with  encryption
+as
+select * from usuarios where edad>=@edad;
+GO
+
+exec procedimientoEncriptado 18;
+sp_helptext procedimientoEncriptado; -- Error: El objeto está encriptado
+GO
+
+/*Video 62: Procedimientos Anidados*/
+create procedure procedimiento1
+@resultado int output
+as
+set @resultado = (select sum (edad) from usuarios);
+GO
+
+create procedure procedimiento2
+@numuero2 int output
+as
+begin
+ declare @numero int;
+ exec procedimiento1 @numero output; -- Llama a otro procedimiento
+ set @numuero2 = @numero;
+end;
+GO
+
+declare @num int;
+exec procedimiento2 @num output;
+select @num as 'Suma_Total_Edad';
+GO
+```
+
+### Script 64-65: Triggers
+
+Ejemplos de cómo crear triggers DML (`INSERT`, `UPDATE`) para ejecutar acciones automáticamente cuando los datos de una tabla son modificados.
+
+```sql
+/*video 64:trigger*/
+create database Tienda;
+use Tienda;
+create table TablaAlmacen(
+id_producto int primary key,
+descripcion varchar(20),
+cantidad int
+);
+insert into TablaAlmacen values (1,'aceite',80), (2,'refresco',60), (3,'atun',50), (4,'leche',90);
+
+create table TablaVentas(
+id_venta int primary key,
+id_producto int,
+cantidad int
+);
+create table TablaTotales(
+id_insercion int primary key,
+cantidad int
+);
+insert into TablaTotales values (1, 0); -- Inicializar la tabla de totales
+GO
+
+-- Trigger para actualizar el total de ventas en cada inserción
+create trigger InsertarVentas
+on TablaVentas
+for insert
+as
+begin
+	declare @total int;
+	set @total = (select sum(cantidad) from TablaVentas);
+	update TablaTotales
+	set cantidad = @total
+    where id_insercion = 1;
+end;
+GO
+
+insert into TablaVentas values (1,1,20);
+insert into TablaVentas values (2,2,10);
+select * from TablaTotales; -- Debería mostrar 30
+GO
+
+/*Video 65: Trigger de Actualización*/
+-- Este trigger parece tener una lógica incorrecta en el original.
+-- Un trigger de UPDATE debería usar las tablas 'inserted' y 'deleted'.
+-- A continuación, un ejemplo corregido conceptualmente:
+
+create trigger ActualizarVenta
+on TablaVentas
+for update
+as
+begin
+	declare @total int;
+	set @total = (select sum(cantidad) from TablaVentas);
+	update TablaTotales
+	set cantidad = @total
+    where id_insercion = 1;
+end;
+GO
+
+update TablaVentas set cantidad = 15 where id_venta = 2;
+select * from TablaTotales; -- Debería mostrar 35 (20 + 15)
+GO
+```

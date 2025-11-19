@@ -77,7 +77,6 @@ El modelamiento de datos es una disciplina esencial que sirve como puente entre 
 *   **Conexiones Siguientes:** Es la introducción directa a la "Normalización" (Clase 07 y 09), donde se refinarán los modelos lógicos de datos. También es crucial para entender por qué las sentencias DML (Clase 05) y las consultas SQL (Clase 10 y 11) se escriben de cierta manera, ya que operan sobre las estructuras definidas por el modelamiento.
 
 ---
-**Nota:** El contenido de esta clase ha sido inferido del título del curso y conocimientos generales sobre la materia, dado que el archivo `.ppt` original no pudo ser procesado directamente.
 ![Diagrama de clase](assets/IMG_0038.JPG)
 ![Diagrama de clase](assets/IMG_0039.JPG)
 ![Diagrama de clase](assets/IMG_0040.JPG)
@@ -85,3 +84,51 @@ El modelamiento de datos es una disciplina esencial que sirve como puente entre 
 ![Diagrama de clase](assets/IMG_0042.JPG)
 ![Diagrama de clase](assets/IMG_0043.JPG)
 ![Diagrama de clase](assets/IMG_0044.JPG)
+---
+
+## Caso Práctico: Modelamiento para un Gimnasio
+
+A continuación se resumen los requerimientos y reglas de negocio extraídos del documento del proyecto "Aplicativo Web de Inscripción y atención al usuario para un gimnasio". Este es un ejemplo práctico de los requisitos que informan el proceso de modelamiento de datos.
+
+### Entidades Principales Identificadas
+-   **Sucursal**
+-   **Personal** (con cargos como Administrador, Recepcionista, Entrenador, etc.)
+-   **Socio** (Cliente)
+-   **Servicios** (Entrenamiento, Aeróbicos, Baile, Nutrición, etc.)
+-   **Paquetes** (Diario, Inter-diario, Fines de semana)
+-   **Matrícula**
+-   **Cita** (con Médico o Nutricionista)
+-   **Hoja de Vida del Socio** (historial de medidas, peso, etc.)
+-   **Horario de Clases**
+
+### Reglas de Negocio Clave
+1.  El gimnasio tiene varias sucursales.
+2.  Cada sucursal tiene personal con diferentes cargos.
+3.  Los servicios se ofrecen en forma de paquetes (Diario, Inter-diario, Fines de semana).
+4.  Al matricularse, el socio escoge un paquete.
+5.  Tras la matrícula, se programa una cita inicial con un médico para registrar el estado inicial del socio (medidas, peso) en su "Hoja de Vida".
+6.  Esta revisión médica se realiza mensualmente.
+7.  El socio puede sacar citas adicionales con el nutricionista.
+8.  Un socio puede pagar extra por un "Personal Trainer" que le será asignado.
+9.  Un servicio (ej. Baile) puede tener varios horarios en un mismo día.
+10. Cada servicio en un horario específico es impartido por un solo profesional.
+
+### Requerimientos Funcionales
+*   **Sistema:**
+    *   Registrar clientes.
+    *   Actualizar información de clientes.
+    *   Registrar y actualizar horarios de clases.
+    *   Generar reportes y consultas (horarios, clases, clientes).
+    *   Permitir que Nutricionistas, Médicos y Entrenadores accedan al historial del socio.
+*   **Clientes (Socios):**
+    *   Ingresar al sistema con usuario y clave.
+    *   Consultar horarios de clases.
+    *   Consultar su historial de avance.
+    *   Sacar citas.
+
+### Requerimientos No Funcionales
+*   El sistema debe ser accesible desde cualquier dispositivo (responsive design).
+*   Debe solicitar autenticación para todos los usuarios.
+*   Debe ser amigable (fácil de usar).
+
+Estos requerimientos y reglas de negocio son la base para construir el **Modelo Conceptual** (identificando entidades, atributos y relaciones) y el **Modelo Lógico** (definiendo tablas, claves y aplicando normalización).

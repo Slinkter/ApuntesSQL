@@ -170,3 +170,98 @@ end;
 /
 ```
 ---
+---
+
+## Ejemplos Adicionales de T-SQL (de `SQLQuery1.sql`)
+
+Estos ejemplos, escritos en T-SQL (SQL Server), muestran conceptos de lógica procedural que son análogos a PL/SQL, como las estructuras de control `CASE` e `IF`, y el uso de variables.
+
+### Script 51: Expresión `CASE`
+
+La expresión `CASE` permite una lógica condicional dentro de una sentencia `SELECT`, similar a un `switch` o una serie de `if-then-else`.
+
+```sql
+/*Video 51:Case*/
+use empleados;
+select id_usuario , nombre , edad_categoria =
+case
+	when edad <=17 then 'Menor'
+	when edad >= 20 then 'Mayor'
+    else 'Rango intermedio' -- Añadido para completar la lógica
+end
+from usuarios;
+```
+
+### Script 52: Sentencia `IF...ELSE`
+
+La estructura `IF...ELSE` permite ejecutar bloques de código condicionalmente.
+
+```sql
+/*Video 52 : if*/
+use empleados;
+if exists (select * from usuarios where edad < 18)
+	select * from usuarios where edad < 18;
+else
+	select 'No hay empleados menores de 18 años' as 'Rpta';
+```
+
+### Script 53: Declaración y Uso de Variables
+
+Ejemplo de cómo declarar variables, asignarles un valor y usarlas en una consulta.
+
+```sql
+/*Video 53: Variable*/
+use empleados;
+declare @variableSexo varchar(20);
+declare @variableEdad int;
+set @variableSexo = 'M';
+set @variableEdad = 18;
+
+select * from usuarios where sexo = @variableSexo and edad >= @variableEdad;
+```
+---
+
+### Script 54-57: Creación y Ejecución de Procedimientos Almacenados
+
+Introducción a los procedimientos almacenados, que son bloques de código SQL precompilados y reutilizables. Se muestra cómo crearlos, ejecutarlos, eliminarlos y pasarles parámetros.
+
+```sql
+/*Video 54: procedimiento almacenado*/
+/*Video 55: Creacion de procedimeinto almacenado*/
+-- Procedimiento simple sin parámetros
+create procedure Mujeres
+as
+select nombre,sexo,edad from usuarios where sexo ='F';
+GO
+
+-- Ejecutar el procedimiento
+exec Mujeres;
+GO
+
+-- Procedimiento que realiza una inserción
+create procedure insertarChica as
+insert into usuarios values (60,'paulina' , 'paul','registrado',20,'F');
+GO
+
+/*video 56: Eliminar Procedimientos*/
+drop proc insertarChica;
+GO
+
+-- Eliminar un procedimiento si existe
+if object_id ('Mujeres') is not null
+	drop procedure Mujeres;
+else
+	select 'NO EXISTE';
+GO
+
+/*Video 57: Procedimientos con Parámetros de Entrada*/
+create procedure selecion
+@edad int ,
+@sexo varchar(20)
+as
+select * from usuarios where edad>=@edad and sexo=@sexo;
+GO
+
+-- Ejecutar el procedimiento con parámetros
+exec selecion 18 ,'F';
+```

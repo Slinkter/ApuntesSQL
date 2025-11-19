@@ -231,3 +231,188 @@ set linesize 800
 select * from table(dbms_xplan.display);
 ```
 ---
+---
+
+## Ejemplos Adicionales de `SQLQuery1.sql`
+
+### Script 10: Funciones de Agregación
+
+Ejemplos del uso de las funciones de agregación `COUNT`, `SUM`, `MAX` y `MIN` para obtener estadísticas resumidas de un conjunto de datos.
+
+```sql
+/*Scrip 10:Libreria2*/
+create database Libreria2;
+use libreria2
+create table libros
+(
+titulo varchar(50)not null,
+descripción varchar(100)not null,
+autor varchar(50)not null,
+precio_venta int not null,
+precio_compra int not null,
+)
+insert into libros values ('El Arbol Místico','libro de misterio','Daniel Cortez',128,111);
+insert into libros values ('El Canguro Saltarín','libro infantil','Mariana Perez',189,145);
+-- ... (más inserciones) ...
+select * from libros;
+select COUNT(*) from libros where precio_compra > 290;
+select SUM(precio_venta) from libros;
+select max(precio_venta) from libros;
+select min(precio_venta) from libros;
+```
+---
+
+### Script 15-16: Búsqueda con `LIKE` y `COUNT`
+
+Estos scripts demuestran el uso de `NULL`, `NOT NULL`, `BETWEEN`, y el operador `LIKE` con comodines (`%`, `_`) para realizar búsquedas de patrones flexibles. También se muestra cómo contar filas con `COUNT`.
+
+```sql
+/*Scrip 15: */
+-- ... (creación y alteración de tabla) ...
+select * from libros where nombre is not null;
+select * from libros where precio_venta between 200 and 300;
+
+/*Scrip 15*: Usando Like */
+use libreria3;
+select * from libros where nombre like '%100%';
+select * from libros where nombre not like '%el%';
+select * from libros where nombre like 'nar%';/* buscar palabras que comienza nar....*/
+select * from libros where nombre like '%nia';/* buscar palabras que terminan ....nia*/
+select * from libros where nombre like '%la ma_ia de las m_tem_ticas%';
+
+/*Scrip 16: */
+select COUNT(nombre) as 'Cantidad de libros' from libros where id_libro>10;
+```
+
+### Script 17-18: Agregación con `GROUP BY` y `HAVING`
+
+Ejemplos de cómo agrupar datos y aplicar condiciones a los grupos. Se utilizan `COUNT`, `SUM`, `AVG`, `MIN`, `MAX` y se introduce la cláusula `HAVING` para filtrar los resultados de la agrupación.
+
+```sql
+/*Scrip 17: */
+create database empleados;
+use empleados;
+create table usuarios(
+id_usuario int identity primary key,
+nombre varchar(30) not null,
+usuario varchar(30) not null,
+contraseña varchar(30) not null,
+tipo_usuario varchar(10) not null,
+edad int not null,
+sexo varchar(20) not null
+);
+-- ... (inserciones) ...
+
+/*count sum avg: operadorea de agrupamiento*/
+select count(*) as 'Numero de usuarios' from usuarios;
+select sum(edad) as 'La suma de edad  de usuarios' from usuarios;
+select AVG(edad) as 'El promedio de edad de usuarios' from usuarios;
+select avg(edad) from usuarios where sexo = 'M' and edad<18;
+
+/*max min */
+select min(edad) as 'Edad minima' from usuarios;
+select max(edad) as 'Edad maxima' from usuarios;
+
+/*Scrip 18:Having necesita operadores de agrupamiento*/
+select nombre,AVG(edad) from usuarios where sexo ='f'
+group by nombre
+having avg(edad)>20;
+```
+
+### Script 20-21: `DISTINCT` y `TOP`
+
+Uso de `DISTINCT` para eliminar filas duplicadas de un resultado y de `TOP` para limitar el número de filas devueltas.
+
+```sql
+/*Scrip 20 : Distintic*/
+select distinct nombre from usuarios order by nombre;
+select distinct edad from usuarios order by edad;
+select sum(distinct edad) from usuarios;
+
+/*Scrip 21 : top*/
+select top 10 * from usuarios;
+select top 10 * from usuarios  order by id_usuario desc;
+```
+
+### Script 22: `INNER JOIN` y `LEFT/RIGHT JOIN`
+
+Ejemplos de cómo combinar datos de múltiples tablas utilizando diferentes tipos de `JOIN`.
+
+```sql
+/*Script 22 : inner Join*/
+create database escuela;
+use escuela;
+CREATE TABLE CARRERA (ID_CARRERA INT PRIMARY KEY, CARRERA VARCHAR(20));
+CREATE TABLE ALUMNO(ID_ALUMNO INT PRIMARY KEY, NOMBRE VARCHAR(20), APELLIDOS VARCHAR(20), ID_CARRERA INT);
+CREATE table datos (ID_DATOS INT PRIMARY KEY, ID_ALUMNO INT, EMAIL VARCHAR(20), EDAD int);
+-- ... (inserciones y FKs) ...
+
+/*Inner Join */
+select ALUMNO.NOMBRE, ALUMNO.APELLIDOS , datos.EDAD,datos.EMAIL 
+from datos 
+inner join alumno on  datos.ID_ALUMNO = alumno.ID_ALUMNO 
+inner join carrera on alumno.ID_CARRERA = carrera.ID_CARRERA 
+where carrera.ID_CARRERA = 1;
+
+/*Inner join left*/
+select * from datos inner join ALUMNO on datos.ID_ALUMNO = alumno.ID_ALUMNO;
+select * from alumno left join datos on alumno.ID_ALUMNO = datos.ID_ALUMNO;
+select * from datos right join alumno on alumno.ID_ALUMNO = datos.ID_ALUMNO;
+```
+---
+
+## Ejemplos Adicionales de `SQLQuery2.sql` (Northwind)
+
+Estos ejemplos, basados en la base de datos Northwind, demuestran una variedad de técnicas de filtrado y agrupación en T-SQL.
+
+### `GROUP BY` con `HAVING`
+```sql
+use Northwind;
+
+-- Contar compañías por país, agrupando solo los que tienen más de 2.
+select country ,count(companyname) as 'Acumulado' from Customers
+where country like 'A%'
+group by country
+having count(companyname)>2;
+```
+
+### Cláusulas de Filtrado: `BETWEEN`, `IN`, `LIKE`
+```sql
+-- Filtrar con BETWEEN
+select productname,unitprice from Products
+where UnitPrice between 25 and 30;
+
+-- Filtrar con IN
+select companyname,contactname,country from customers
+where country in('USA','Canada','Mexico');
+
+-- Filtrar con LIKE y rangos
+select companyname,contactname,country from customers
+where CompanyName like '[A-C]%'; -- Empieza con A, B, o C
+```
+
+### `DISTINCT` para Valores Únicos
+```sql
+select Distinct country from customers order by Country;
+```
+
+### Exportar a XML con `FOR XML`
+```sql
+-- Diferentes formatos de salida XML
+select companyname,contactname,country from Customers for xml auto;
+select companyname,contactname,country from Customers for xml path;
+select companyname,contactname,country from Customers for xml raw;
+```
+
+### Expresión `CASE` en `SELECT`
+```sql
+-- Clasificar productos por su ID de categoría
+select productname,unitprice,
+	case categoryid
+		when 1 then 'producto 1'
+		when 2 then 'producto 2'
+		when 3 then 'producto 3'
+		else 'Otros'
+	end as 'Producto'
+from Products;
+```

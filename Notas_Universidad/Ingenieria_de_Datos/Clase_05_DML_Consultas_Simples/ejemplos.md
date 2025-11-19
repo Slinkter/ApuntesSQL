@@ -241,3 +241,194 @@ grant select any table to usuario20;
 grant select any table to usuario21;
 ```
 ---
+
+---
+
+## Ejemplos Adicionales de `SQLQuery1.sql`
+
+### Script 1-2: Creación y Eliminación de Bases de Datos y Tablas
+
+Ejemplos básicos de DDL para crear y eliminar bases de datos y tablas.
+
+```sql
+/*Script 1*/
+create database tutorial;
+create database prueba;
+drop database tutorial;
+drop database prueba;
+
+/*Script 2*/
+create database tutorial;
+use tutorial
+create table usuarios2
+(
+id_usuario int  not null,
+nombre varchar(50)
+)
+;
+drop table usuarios2
+```
+
+### Script 3: Creación de Tabla e Inserción de Datos
+
+Ejemplo de `CREATE TABLE` con `PRIMARY KEY` y múltiples sentencias `INSERT` para poblar la tabla. También incluye consultas `SELECT` básicas para verificar los datos.
+
+```sql
+/*Scrip 3*/
+create table usuarios
+(
+id_usuarios int primary key,
+nombre varchar(50) not null,
+edad int not null
+);
+insert into usuarios values(1,'miguel',56);
+insert into usuarios values(2,'miguel',56);
+insert into usuarios values(3,'miguel',56);
+insert into usuarios values(4,'miguel',41);
+insert into usuarios values(5,'miguel',31);
+insert into usuarios values(6,'miguel',71);
+insert into usuarios values(7,'miguel',91);
+select * from usuarios;
+select * from usuarios where edad >50;
+select * from usuarios where edad<40;
+```
+
+### Script 4: Comandos `DELETE`, `TRUNCATE` y `DROP`
+
+Demostración de las diferencias entre `DELETE` (eliminar filas), `TRUNCATE` (resetear tabla) y `DROP` (eliminar tabla).
+
+```sql
+/*Scrip 4:*/
+/*Delete : elimna una fila a mas*/
+/*drop : elimna tabla*/
+/**truncate: resetear toda la tabla*/
+Select * from usuarios where nombre = 'Alex';
+insert into usuarios values(10,'alex',23);
+select * from usuarios where edad = 23;
+create table pruebas(
+nombre varchar(50) not null,
+edad int not null
+);
+
+insert into pruebas values('david',11);
+insert into pruebas values('manuel',22);
+insert into pruebas values('mariana',6);
+
+select * from pruebas;
+delete from pruebas;
+delete from usuarios where id_usuarios = 10;
+select * from usuarios;
+truncate table pruebas;
+drop table pruebas;
+```
+
+### Script 5: Comando `UPDATE`
+
+Ejemplo de cómo modificar registros existentes en una tabla usando la sentencia `UPDATE`.
+
+```sql
+/*Scrip 5*/
+select * from usuarios;
+update usuarios set nombre = 'alex' where id_usuarios = 2;
+update usuarios set edad =23 where id_usuarios = 1;
+```
+---
+
+### Script 6-8: Campos `IDENTITY` y Consultas con Expresiones
+
+Estos scripts muestran cómo usar campos `IDENTITY` para valores autoincrementales y cómo realizar cálculos y manipulaciones de datos directamente en la sentencia `SELECT`.
+
+```sql
+/*Scrip 6 */
+/*Identity*/
+create table usuario2
+(
+id_usuario int identity ,
+nombre varchar(50) not null
+);
+
+/*Scrip 7*/
+insert into usuario2 values('a');
+insert into usuario2 values('b');
+insert into usuario2 values('c');
+insert into usuario2 values('d');
+insert into usuario2 values('e');
+select * from usuario2;
+
+/*Scrip 8:video 13*/
+create database libreria;
+use libreria;
+create table libros
+(
+id_libro int identity primary key,
+nombre varchar(50) not null,
+precio_venta int not null,
+precio_compra float not null
+);
+
+insert into libros values('El Lobo',115,95.23);
+insert into libros values('Caperucita Roja',236,189.25);
+-- ... (más inserciones) ...
+select * from libros;
+/*Precio de Venta - precio compra*/
+select nombre, 10*(precio_venta - precio_compra) as Ganancia_10_libros from libros where id_libro >1;
+/*Actualizar*/
+update libros set precio_venta = precio_venta + (precio_venta*0.1) where id_libro =1;
+```
+
+### Script 9, 11, 12: Funciones de Cadena y Fecha
+
+Ejemplos de funciones de SQL Server para manipular cadenas de texto (concatenación, mayúsculas, minúsculas, subcadenas) y para trabajar con fechas (obtener partes de una fecha, calcular diferencias).
+
+```sql
+/*Scrip 9:concatenacion*/
+select 'Libros : '+nombre+' ' from libros where id_libro=1;
+select precio_venta as 'Precio de venta s/.' , precio_compra as 'precio de compra S/.' from libros;
+
+/*Scrip 11:hola a todos*/
+select SUBSTRING('hola a todos ',8,1);
+select STR(123);
+select STUFF ('cambiando el world',14,5,'mundo');
+select len ('cambiando el world');
+select CHAR(78);/*codigo asci*/
+select lower('MI NOMBRE ES LUIS') AS Algo;
+select UPPER('     MI NOMBRE ES JHONATAN') AS ALGO;
+select LTRIM('                    MI NOMBRE ES JHONATAN               ') AS ALGO;
+select RTRIM('                    MI NOMBRE ES JHONATAN               ') AS ALGO;
+select REPLACE('HOLA WORLD','WORLD','MUNDO');
+select REVERSE('anita la tina');
+select PATINDEX('%luis%','donde esta luis?');
+select REPLICATE('Hola ',10);
+select 'luis ' + SPACE(8) + ' jhonatan';
+
+/*Scrip 12: FECHAS*/
+select GETDATE();
+select DATEPART(year,GETDATE());
+select DATEPART(MONTH,GETDATE());
+select DATEPART(DAY,GETDATE());
+select DATENAME(MONTH,GETDATE());
+select DATEDIFF(day,'2014/01/03','2017/04/03');
+select DATEDIFF(MONTH,'2014/01/03','2017/04/03');
+select DATEDIFF(YEAR,'2014/01/03','2017/04/03');
+select YEAR(GETDATE());
+```
+
+### Script 13-14: Ordenamiento y Operadores Lógicos
+
+Uso de `ORDER BY` para ordenar los resultados y de los operadores lógicos `NOT`, `AND`, `OR` para construir condiciones de filtrado complejas.
+
+```sql
+/*Scrip 13: Order by*/
+use libreria2;
+select  * from libros order by precio_venta desc;
+
+/*Scrip 14: Operadores Negativos*/
+/*
+         | not | and | or |
+*/
+select * from libros where not titulo = 'Ladron de sueños';
+select * from libros where not autor ='Karla Sanchez' and not titulo = 'Ladron de sueños';
+select * from libros order by precio_compra asc;
+select * from libros where precio_compra < 120;
+select * from libros where precio_venta = 128 or precio_venta < 245;
+```

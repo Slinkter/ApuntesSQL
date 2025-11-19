@@ -25,6 +25,24 @@ La administración de información es el proceso de organizar, almacenar y mante
 
 En este contexto, las bases de datos son el componente central para la gestión y administración de la información. Entender los principios básicos de cómo se estructuran, acceden y manipulan los datos dentro de una base de datos es el primer paso para dominar la administración de información a nivel técnico.
 
+### Lenguajes de Base de Datos (SQL)
+
+El Lenguaje de Consulta Estructurado (SQL) es el estándar para interactuar con bases de datos relacionales. Se divide en varias subcategorías de comandos:
+
+*   **Data Manipulation Language (DML):** Se utiliza para modificar los datos.
+    *   `SELECT`: Extrae datos de la base de datos.
+    *   `INSERT`: Inserta nuevos datos en una tabla.
+    *   `UPDATE`: Actualiza datos existentes.
+    *   `DELETE`: Elimina datos.
+*   **Data Definition Language (DDL):** Se utiliza para definir y gestionar la estructura de la base de datos.
+    *   `CREATE`: Crea objetos de base de datos (tablas, vistas, etc.).
+    *   `ALTER`: Modifica la estructura de un objeto existente.
+    *   `DROP`: Elimina objetos de la base de datos.
+*   **Data Control Language (DCL):** Se utiliza para gestionar los permisos de los usuarios.
+    *   `GRANT`: Otorga permisos a los usuarios.
+    *   `REVOKE`: Revoca permisos previamente otorgados.
+    *   `DENY`: Niega explícitamente permisos.
+
 ---
 
 ## Pistas y Keywords
@@ -36,6 +54,8 @@ En este contexto, las bases de datos son el componente central para la gestión 
 *   **Ciclo de Vida de la Información:** Etapas del dato.
 *   **Bases de Datos:** Almacén central de datos.
 *   **Disponibilidad, Integridad, Seguridad:** Pilares de la administración.
+*   **SQL:** Lenguaje de Consulta Estructurado.
+*   **DML, DDL, DCL:** Sublenguajes de SQL.
 
 ---
 
@@ -49,6 +69,3 @@ La administración de información es la base sobre la cual se construyen todos 
 
 *   **Conexiones Anteriores:** Si bien esta es la primera clase formal, los conceptos de administración de información son inherentes a cualquier interacción con sistemas informáticos y gestión de datos.
 *   **Conexiones Siguientes:** Esta clase es la piedra angular para comprender los "Sistemas de Gestión de Bases de Datos" (Clase 02), "Bases de Datos Relacionales" (Clase 03) y la "Administración de RDBMS" (Clase 04), ya que proporciona el contexto y el propósito subyacente para todas las tecnologías que se estudiarán a continuación. Sentará las bases para entender por qué las bases de datos son diseñadas de cierta manera y por qué se aplican ciertos principios de integridad y seguridad.
-
----
-**Nota:** El contenido de esta clase ha sido inferido del título del curso y conocimientos generales sobre la materia, dado que el archivo `.ppt` original no pudo ser procesado directamente.

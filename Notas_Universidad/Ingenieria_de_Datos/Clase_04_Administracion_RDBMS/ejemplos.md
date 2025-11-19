@@ -24,7 +24,7 @@ select /*+ PARALLEL(d,6) */ * from demo1 d;
 
 select /*+ PARALLEL(d,6) */ campo1,campo2 from demo1 d;
 
-select /*+ PARALLEL(d1,6), PARALLE(d2,8) */ campo1,campo2 from demo1 d1, demo2 d2;
+select /*+ PARALLEL(d1,6), PARALLEL(d2,8) */ campo1,campo2 from demo1 d1, demo2 d2;
 
 SQL> create table demo2 (campo1 number);
 
@@ -570,3 +570,32 @@ SQL> select * from aula;
 */
 ```
 ---
+---
+
+## Ejemplos Adicionales de `SQLQuery1.sql`
+
+### Script 15: Modificación de Tablas con `ALTER TABLE`
+
+Ejemplos de cómo añadir y eliminar columnas de una tabla existente utilizando el comando `ALTER TABLE`.
+
+```sql
+/*Scrip 15: */
+create database libreria3;
+use libreria3;
+create table libros(
+id_libro int identity primary key,
+nombre varchar(50) not null,
+precio_venta float not null,
+precio_compra float not null
+);
+
+/*Eliminar columna */
+alter table libros drop column nombre ;
+alter table libros drop column precio_venta;
+alter table libros drop column precio_compra;
+
+/*Agregar columna */
+alter table libros add nombre varchar(50);
+alter table libros add precio_venta float  not null;
+alter table libros add precio_compra float not null;
+```
