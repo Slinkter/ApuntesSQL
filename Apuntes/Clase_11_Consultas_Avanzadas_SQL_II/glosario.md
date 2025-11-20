@@ -1,23 +1,19 @@
-# Glosario - Clase 11: Consultas Avanzadas SQL II
+# Glosario - Clase 11: SQL Embebido (PL/SQL)
 
-*   **Funciones Analíticas (SQL):** Funciones que calculan un valor agregado basándose en un grupo de filas (una "ventana") relacionadas con la fila actual, pero sin agrupar el conjunto de resultados.
-*   **Funciones de Ventana (SQL):** Sinónimo de funciones analíticas, se refieren a las funciones que usan la cláusula `OVER` para definir un subconjunto de filas para el cálculo.
-*   **OVER (Cláusula de Ventana):** Cláusula que define la "ventana" o conjunto de filas sobre el cual se va a aplicar una función analítica, especificando particiones y orden.
-*   **PARTITION BY:** Parte de la cláusula `OVER` que divide el conjunto de resultados de la consulta en particiones, y la función analítica se aplica de forma independiente a cada partición.
-*   **ORDER BY (en Cláusula de Ventana):** Parte de la cláusula `OVER` que define el orden lógico de las filas dentro de cada partición o ventana.
-*   **Cláusula de Ventana (frame_clause: ROWS, RANGE):** Subcláusula de `OVER` que define el subconjunto específico de filas dentro de la partición sobre las que se realizará el cálculo (ej. `ROWS BETWEEN N PRECEDING AND CURRENT ROW`).
-*   **ROW_NUMBER():** Función analítica que asigna un número secuencial único a cada fila dentro de su partición, comenzando desde 1.
-*   **RANK():** Función analítica que asigna un rango a cada fila dentro de su partición. Si hay valores iguales, se les asigna el mismo rango y se saltan los siguientes números de rango.
-*   **DENSE_RANK():** Función analítica similar a `RANK()`, pero asigna rangos consecutivos sin saltar números en caso de valores iguales.
-*   **LEAD():** Función analítica que permite acceder a datos de una fila posterior en el mismo conjunto de resultados (ventana), según el orden especificado.
-*   **LAG():** Función analítica que permite acceder a datos de una fila anterior en el mismo conjunto de resultados (ventana), según el orden especificado.
-*   **Expresiones de Tabla Comunes (CTEs):** Consultas con nombre temporales y auto-contenidas que pueden ser referenciadas dentro de una sentencia SQL principal (SELECT, INSERT, UPDATE, DELETE), mejorando la legibilidad y modularidad.
-*   **WITH (Cláusula CTE):** La palabra clave que introduce una Expresión de Tabla Común en SQL.
-*   **Consulta Recursiva (CTE):** Un tipo de CTE que se refiere a sí misma, utilizada para procesar datos jerárquicos o en gráficos (ej. árboles, redes).
-*   **UNION ALL:** Operador de conjunto que combina los conjuntos de resultados de dos o más sentencias `SELECT`, incluyendo todas las filas resultantes, incluso los duplicados.
-*   **INTERSECT (SQL):** Operador de conjunto que devuelve solo las filas que son comunes a los conjuntos de resultados de dos sentencias `SELECT`.
-*   **EXCEPT (SQL) / MINUS (Oracle):** Operador de conjunto que devuelve las filas que están en el primer conjunto de resultados de `SELECT` pero no en el segundo.
-*   **CASE Expression (SQL):** Una construcción SQL que permite definir lógica condicional (IF-THEN-ELSE) directamente dentro de una sentencia `SELECT`, `WHERE`, `ORDER BY`, etc.
-*   **Unbounded Preceding:** En la cláusula de ventana, indica que la ventana comienza desde la primera fila de la partición.
-*   **Current Row (frame_clause):** En la cláusula de ventana, indica que la ventana incluye la fila actual.
-*   **N Preceding/Following:** En la cláusula de ventana, indica que la ventana incluye las `N` filas anteriores o posteriores a la fila actual.
+*   **BEGIN (PL/SQL):** Sección obligatoria en un bloque PL/SQL donde se coloca la lógica de ejecución del programa y las sentencias SQL.
+*   **Bloque PL/SQL:** La unidad básica de un programa PL/SQL, que puede ser anónimo o nombrado (procedimiento, función, paquete, trigger).
+*   **Cursor:** Estructura de memoria utilizada para procesar un conjunto de filas devuelto por una consulta `SELECT` de forma individual, fila por fila.
+*   **DECLARE (PL/SQL):** Sección opcional en un bloque PL/SQL donde se declaran variables, cursores y excepciones.
+*   **EXCEPTION (PL/SQL):** Sección opcional en un bloque PL/SQL donde se manejan los errores que puedan ocurrir durante la ejecución del programa.
+*   **Función (PL/SQL):** Un tipo de subprograma PL/SQL que realiza una tarea específica y siempre **retorna un único valor** al entorno que la invocó.
+*   **LOOP (PL/SQL):** Estructura de control de flujo que permite ejecutar un bloque de código repetidamente.
+*   **NO_DATA_FOUND:** Excepción predefinida en PL/SQL que se dispara cuando una sentencia `SELECT INTO` no encuentra ninguna fila.
+*   **Paquetes (PL/SQL):** Contenedores lógicos que agrupan procedimientos, funciones, variables, cursores y tipos relacionados, facilitando la organización y reutilización del código.
+*   **PL/SQL:** Extensión procedural del lenguaje SQL, que combina la potencia de SQL para la manipulación de datos con las capacidades de programación procedural (variables, estructuras de control, manejo de errores).
+*   **Parámetro IN:** Parámetro de un procedimiento o función PL/SQL que se utiliza para pasar valores de entrada al subprograma.
+*   **Parámetro IN OUT:** Parámetro de un procedimiento o función PL/SQL que se utiliza para pasar valores de entrada y para retornar valores de salida desde el subprograma.
+*   **Parámetro OUT:** Parámetro de un procedimiento o función PL/SQL que se utiliza para retornar valores de salida desde el subprograma.
+*   **Procedimiento (PL/SQL):** Un tipo de subprograma PL/SQL que realiza una tarea específica y se almacena en la base de datos. Puede aceptar parámetros de entrada y/o salida, pero no retorna un valor directamente.
+*   **SQL Embebido:** La integración de sentencias SQL dentro de un lenguaje de programación procedural (como PL/SQL, Java con JDBC, C# con ADO.NET, etc.).
+*   **Trigger (PL/SQL):** Bloque de código PL/SQL que se ejecuta automáticamente (se "dispara") en respuesta a un evento específico en la base de datos, como una operación `INSERT`, `UPDATE` o `DELETE` en una tabla, o un evento de nivel de esquema/base de datos.
+*   **Variables (PL/SQL):** Espacios de memoria con nombre que se utilizan para almacenar valores durante la ejecución de un bloque PL/SQL.

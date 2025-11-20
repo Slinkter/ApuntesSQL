@@ -1,418 +1,168 @@
-# Ejemplos - Clase 10: Consultas Avanzadas SQL I
+# Ejemplos - Clase 10: JOIN, Subconsultas y Agrupamiento (SQL Avanzado)
 
-## Ejemplos de Consultas con Subconsultas y Funciones (9 de Octubre de 2013)
+Para los siguientes ejemplos, asumiremos las siguientes tablas simplificadas:
 
-Este script presenta una serie de consultas `SELECT` que demuestran el uso de subconsultas, funciones de agregación (`MAX`), funciones de cadena (`SUBSTR`, `||`) y funciones de conversión de fecha (`TO_CHAR`). Estos ejemplos son un excelente punto de partida para entender cómo construir consultas más complejas y analíticas.
+**Tabla `EMPLEADOS`**
 
-```sql
--- Encontrar el salario máximo de todos los empleados
-SQL> select max(salary) from hr.employees;
-/*
-MAX(SALARY)
------------
-      24000
-*/
+| ID_Empleado | Nombre    | Apellido  | ID_Departamento | Salario |
+| :---------- | :-------- | :-------- | :-------------- | :------ |
+| 1           | Ana       | García    | 10              | 50000   |
+| 2           | Luis      | Pérez     | 20              | 55000   |
+| 3           | Marta     | Sánchez   | 10              | 52000   |
+| 4           | Pedro     | Ramírez   | 30              | 60000   |
+| 5           | Sofía     | Díaz      | 20              | 58000   |
+| 6           | Elena     | Torres    | NULL            | 62000   |
 
--- Encontrar el nombre y fecha de contratación del empleado con el salario máximo
-SQL> select first_name, hire_date from hr.employees where salary=24000;
-/*
-FIRST_NAME           HIRE_DATE
--------------------- ---------
-Steven               17-JUN-87
-*/
+**Tabla `DEPARTAMENTOS`**
 
--- Igual que el anterior, pero formateando el año de contratación
-SQL> select first_name, to_char(hire_date,'YYYY') from hr.employees where salary=24000;
-/*
-FIRST_NAME           TO_C
--------------------- ----
-Steven               1987
-*/
+| ID_Departamento | Nombre_Departamento | Ubicacion |
+| :-------------- | :------------------ | :-------- |
+| 10              | Ventas              | Madrid    |
+| 20              | Marketing           | Barcelona |
+| 30              | TI                  | Madrid    |
+| 40              | I+D                 | Valencia  |
 
--- Ejemplo de consulta que no devuelve filas
-SQL> select first_name,salary*0.75 from hr.employees where department_id=56;
--- no rows selected
+### Ejemplo 1: INNER JOIN (Equijoin)
 
--- Uso de una subconsulta en la cláusula WHERE
--- Encontrar empleados que ganan más de la mitad del salario de 'Steven'
-SQL> select first_name, salary from hr.employees where salary > (select max(salary*0.5) from hr.employees where first_name='Steven');
-/*
-FIRST_NAME               SALARY
--------------------- ----------
-Michael                   13000
-Steven                    24000
-Neena                     17000
-Lex                       17000
-John                      14000
-Karen                     13500
-*/
-
--- Encontrar empleados sin manager (manager_id es nulo)
-SQL> select first_name, last_name from hr.employees where manager_id is NULL;
-/*
-FIRST_NAME           LAST_NAME
--------------------- -------------------------
-Steven               King
-*/
-
--- Concatenar nombre y apellido de empleados contratados después de 2012
-SQL> select first_name||' '||last_name from hr.employees where to_char(hire_date,'YYYY')>2012;
--- no rows selected
-
--- Uso del operador LIKE para búsqueda de patrones
--- Encontrar empleados cuyo apellido empieza con 'K' y ganan más de 1000
-SQL> select first_name, last_name, salary from hr.employees where last_name like 'K%' and salary>1000;
-/*
-FIRST_NAME           LAST_NAME                     SALARY
--------------------- ------------------------- ----------
-Payam                Kaufling                        7900
-Alexander            Khoo                            3100
-Janette              King                           10000
-Steven               King                           24000
-Neena                Kochhar                        17000
-Sundita              Kumar                           6100
-*/
-
--- Uso de la función SUBSTR para búsqueda de patrones
--- Alternativa al LIKE para encontrar empleados cuyo apellido empieza con 'K'
-SQL> select first_name, last_name, salary from hr.employees where substr(last_name,1,1)='K' and salary>1000;
-/*
-FIRST_NAME           LAST_NAME                     SALARY
--------------------- ------------------------- ----------
-Steven               King                           24000
-Neena                Kochhar                        17000
-Alexander            Khoo                            3100
-Payam                Kaufling                        7900
-Janette              King                           10000
-Sundita              Kumar                           6100
-*/
-```
----
-
-## Ejemplos de GROUP BY, HAVING, JOIN y Funciones Varias (14 de Octubre de 2013)
-
-Este script profundiza en las consultas SQL avanzadas, mostrando el uso de `GROUP BY`, `HAVING`, `JOIN` (en sintaxis ANSI y antigua), y una variedad de funciones escalares como `NVL`, `ROUND`, `TRUNC`, `INSTR`, `LENGTH`, `DECODE` y `CASE`. También introduce la herramienta `EXPLAIN PLAN` para el análisis de rendimiento de consultas.
+**Objetivo:** Obtener el nombre de los empleados y el nombre de su departamento.
 
 ```sql
--- 1) Contar empleados por año de contratación
-SQL> select to_char(hire_date,'YYYY'), count(*)
-from hr.employees
-group by to_char(hire_date,'YYYY')
-order by 1;
-/*
-TO_C   COUNT(*)
----- ----------
-2001          1
-...
-*/
-
--- 2) Contar empleados por la primera letra de su apellido
-SQL> select substr(last_name,1,1), count(*)
-from hr.employees
-group by substr(last_name,1,1)
-order by 1;
-/*
-S   COUNT(*)
-- ----------
-A          4
-...
-*/
-
--- 3) Salario máximo por departamento
-select department_id, max(salary)
-from hr.employees
-group by department_id;
-/*
-DEPARTMENT_ID MAX(SALARY)
-------------- -----------
-          100       12008
-...
-*/
-
--- 4) Uso de NVL para manejar valores nulos en GROUP BY
--- NVL(valor, valor_si_es_nulo)
--- En SQL Server, su equivalente es ISNULL()
-select nvl(department_id,-1), max(salary)
-from hr.employees
-group by department_id; -- Agrupa por el valor original
--- o, mejor:
-select nvl(department_id,-1), max(salary)
-from hr.employees
-group by nvl(department_id,-1); -- Agrupa por el valor transformado
-
--- 5) Uso de HAVING para filtrar grupos
--- Departamentos cuya suma de salarios es mayor a 10000
-select department_id, sum(salary)
-from hr.employees
-group by department_id
-having sum(salary)>10000
-order by 2;
-/*
-DEPARTMENT_ID SUM(SALARY)
-------------- -----------
-           20       19000
-...
-*/
-
--- 6) Cálculo de semanas de antigüedad
-select first_name||' '||last_name, round((sysdate-hire_date)/7,0)
-from hr.employees;
-
--- 7) Ejemplos de funciones ROUND y TRUNC
--- ROUND redondea al número más cercano, TRUNC trunca decimales.
-round(458.12,1) -- 458.1
-round(123.5678,3) -- 123.568
-round(978.9,-1) -- 980
-
-trunc(458.12,1) -- 458.1
-trunc(123.5678,3) -- 123.567
-trunc(978.9,-1) -- 970
-
--- 8) Uso de DECODE (específico de Oracle) y CASE (estándar ANSI)
--- DECODE
-select
-decode(length(first_name),4,-10,20,-20,30,-30,0), first_name
-from hr.employees;
-
--- CASE
-select first_name, 
- case
-  when (salary<5000) then 'C'
-  when (salary<10000) and (salary>=5000) then 'B'
-  when (salary>=10000) then 'A'
-  else 'N/A'
- end clasificacion, department_id
-from hr.employees;
-
-
--- 9) JOIN en sintaxis ANSI vs. Oracle antigua
--- Sintaxis ANSI (recomendada)
-select last_name, d.DEPARTMENT_NAME
-from hr.employees e inner join hr.departments d 
-on e.department_id = d.department_id;
-
--- Sintaxis Oracle antigua
-select last_name, d.DEPARTMENT_NAME
-from hr.employees e, hr.departments d 
-where e.department_id = d.department_id;
-
--- 10) Join de tres tablas
-select last_name, d.DEPARTMENT_NAME, l.POSTAL_CODE||', '||l.STREET_ADDRESS
-from (hr.employees e inner join hr.departments d 
-on e.department_id = d.department_id)
-inner join hr.locations l
-on d.location_id = l.location_id;
-
-
--- 11) Subconsulta en una expresión CASE
-select last_name, JOB_TITLE,
- case 
-  when salary>(select avg(salary) from hr.employees) then 'Y'
-  else 'N'
- end rpta
-from hr.employees e join hr.jobs j
-on j.job_id = e.job_id;
-
--- 12) Agrupación con JOIN
-select last_name, count(*)
-from hr.employees e join hr.job_history jh
-on e.employee_id = jh.employee_id
-group by e.last_name;
-
--- 13) Costeo de consulta (EXPLAIN PLAN)
-explain plan for 
- select last_name, count(*)
- from hr.employees e join hr.job_history jh
- on e.employee_id = jh.employee_id
- group by e.last_name;
-
--- Mostrar el plan de ejecución
-set linesize 800
-select * from table(dbms_xplan.display);
+SELECT E.Nombre, E.Apellido, D.Nombre_Departamento
+FROM EMPLEADOS E
+INNER JOIN DEPARTAMENTOS D ON E.ID_Departamento = D.ID_Departamento;
 ```
----
----
 
-## Ejemplos Adicionales de `SQLQuery1.sql`
+**Resultado:**
 
-### Script 10: Funciones de Agregación
+| Nombre | Apellido | Nombre_Departamento |
+| :----- | :------- | :------------------ |
+| Ana    | García   | Ventas              |
+| Luis   | Pérez    | Marketing           |
+| Marta  | Sánchez  | Ventas              |
+| Pedro  | Ramírez  | TI                  |
+| Sofía  | Díaz     | Marketing           |
 
-Ejemplos del uso de las funciones de agregación `COUNT`, `SUM`, `MAX` y `MIN` para obtener estadísticas resumidas de un conjunto de datos.
+### Ejemplo 2: LEFT JOIN (LEFT OUTER JOIN)
+
+**Objetivo:** Obtener todos los empleados y, si tienen, el nombre de su departamento. Queremos ver también a los empleados sin departamento.
 
 ```sql
-/*Scrip 10:Libreria2*/
-create database Libreria2;
-use libreria2
-create table libros
-(
-titulo varchar(50)not null,
-descripción varchar(100)not null,
-autor varchar(50)not null,
-precio_venta int not null,
-precio_compra int not null,
-)
-insert into libros values ('El Arbol Místico','libro de misterio','Daniel Cortez',128,111);
-insert into libros values ('El Canguro Saltarín','libro infantil','Mariana Perez',189,145);
--- ... (más inserciones) ...
-select * from libros;
-select COUNT(*) from libros where precio_compra > 290;
-select SUM(precio_venta) from libros;
-select max(precio_venta) from libros;
-select min(precio_venta) from libros;
+SELECT E.Nombre, E.Apellido, D.Nombre_Departamento
+FROM EMPLEADOS E
+LEFT JOIN DEPARTAMENTOS D ON E.ID_Departamento = D.ID_Departamento;
 ```
----
 
-### Script 15-16: Búsqueda con `LIKE` y `COUNT`
+**Resultado:**
 
-Estos scripts demuestran el uso de `NULL`, `NOT NULL`, `BETWEEN`, y el operador `LIKE` con comodines (`%`, `_`) para realizar búsquedas de patrones flexibles. También se muestra cómo contar filas con `COUNT`.
+| Nombre | Apellido | Nombre_Departamento |
+| :----- | :------- | :------------------ |
+| Ana    | García   | Ventas              |
+| Luis   | Pérez    | Marketing           |
+| Marta  | Sánchez  | Ventas              |
+| Pedro  | Ramírez  | TI                  |
+| Sofía  | Díaz     | Marketing           |
+| Elena  | Torres   | NULL                |
+
+### Ejemplo 3: RIGHT JOIN (RIGHT OUTER JOIN)
+
+**Objetivo:** Obtener todos los departamentos y, si tienen, los empleados asignados. Queremos ver también los departamentos sin empleados.
 
 ```sql
-/*Scrip 15: */
--- ... (creación y alteración de tabla) ...
-select * from libros where nombre is not null;
-select * from libros where precio_venta between 200 and 300;
-
-/*Scrip 15*: Usando Like */
-use libreria3;
-select * from libros where nombre like '%100%';
-select * from libros where nombre not like '%el%';
-select * from libros where nombre like 'nar%';/* buscar palabras que comienza nar....*/
-select * from libros where nombre like '%nia';/* buscar palabras que terminan ....nia*/
-select * from libros where nombre like '%la ma_ia de las m_tem_ticas%';
-
-/*Scrip 16: */
-select COUNT(nombre) as 'Cantidad de libros' from libros where id_libro>10;
+SELECT E.Nombre, E.Apellido, D.Nombre_Departamento
+FROM EMPLEADOS E
+RIGHT JOIN DEPARTAMENTOS D ON E.ID_Departamento = D.ID_Departamento;
 ```
 
-### Script 17-18: Agregación con `GROUP BY` y `HAVING`
+**Resultado:**
 
-Ejemplos de cómo agrupar datos y aplicar condiciones a los grupos. Se utilizan `COUNT`, `SUM`, `AVG`, `MIN`, `MAX` y se introduce la cláusula `HAVING` para filtrar los resultados de la agrupación.
+| Nombre | Apellido | Nombre_Departamento |
+| :----- | :------- | :------------------ |
+| Ana    | García   | Ventas              |
+| Luis   | Pérez    | Marketing           |
+| Marta  | Sánchez  | Ventas              |
+| Pedro  | Ramírez  | TI                  |
+| Sofía  | Díaz     | Marketing           |
+| NULL   | NULL     | I+D                 |
+
+### Ejemplo 4: Self Join
+
+**Objetivo:** Encontrar empleados que ganan más que su propio manager (asumiendo que `ID_Jefe` es una FK a `ID_Empleado` en la misma tabla `EMPLEADOS`).
+
+**Tabla `EMPLEADOS_CON_JEFE`** (asumiendo una columna `ID_Jefe`)
+
+| ID_Empleado | Nombre    | Salario | ID_Jefe |
+| :---------- | :-------- | :------ | :------ |
+| 1           | Ana       | 50000   | NULL    |
+| 2           | Luis      | 55000   | 1       |
+| 3           | Marta     | 52000   | 1       |
+| 4           | Pedro     | 60000   | 2       |
 
 ```sql
-/*Scrip 17: */
-create database empleados;
-use empleados;
-create table usuarios(
-id_usuario int identity primary key,
-nombre varchar(30) not null,
-usuario varchar(30) not null,
-contraseña varchar(30) not null,
-tipo_usuario varchar(10) not null,
-edad int not null,
-sexo varchar(20) not null
-);
--- ... (inserciones) ...
-
-/*count sum avg: operadorea de agrupamiento*/
-select count(*) as 'Numero de usuarios' from usuarios;
-select sum(edad) as 'La suma de edad  de usuarios' from usuarios;
-select AVG(edad) as 'El promedio de edad de usuarios' from usuarios;
-select avg(edad) from usuarios where sexo = 'M' and edad<18;
-
-/*max min */
-select min(edad) as 'Edad minima' from usuarios;
-select max(edad) as 'Edad maxima' from usuarios;
-
-/*Scrip 18:Having necesita operadores de agrupamiento*/
-select nombre,AVG(edad) from usuarios where sexo ='f'
-group by nombre
-having avg(edad)>20;
+SELECT E.Nombre AS Empleado, E.Salario AS SalarioEmpleado,
+       J.Nombre AS Jefe, J.Salario AS SalarioJefe
+FROM EMPLEADOS_CON_JEFE E
+INNER JOIN EMPLEADOS_CON_JEFE J ON E.ID_Jefe = J.ID_Empleado
+WHERE E.Salario > J.Salario;
 ```
 
-### Script 20-21: `DISTINCT` y `TOP`
+**Resultado (ejemplo hipotético):**
 
-Uso de `DISTINCT` para eliminar filas duplicadas de un resultado y de `TOP` para limitar el número de filas devueltas.
+| Empleado | SalarioEmpleado | Jefe | SalarioJefe |
+| :------- | :-------------- | :--- | :---------- |
+| Pedro    | 60000           | Luis | 55000       |
+
+### Ejemplo 5: Subconsulta Escalar en WHERE
+
+**Objetivo:** Encontrar los empleados cuyo salario es mayor que el salario promedio de todos los empleados.
 
 ```sql
-/*Scrip 20 : Distintic*/
-select distinct nombre from usuarios order by nombre;
-select distinct edad from usuarios order by edad;
-select sum(distinct edad) from usuarios;
-
-/*Scrip 21 : top*/
-select top 10 * from usuarios;
-select top 10 * from usuarios  order by id_usuario desc;
+SELECT Nombre, Apellido, Salario
+FROM EMPLEADOS
+WHERE Salario > (SELECT AVG(Salario) FROM EMPLEADOS);
 ```
 
-### Script 22: `INNER JOIN` y `LEFT/RIGHT JOIN`
+**Resultado (si AVG(Salario) es, por ejemplo, 55000):**
 
-Ejemplos de cómo combinar datos de múltiples tablas utilizando diferentes tipos de `JOIN`.
+| Nombre | Apellido | Salario |
+| :----- | :------- | :------ |
+| Pedro  | Ramírez  | 60000   |
+| Sofía  | Díaz     | 58000   |
+| Elena  | Torres   | 62000   |
+
+### Ejemplo 6: Funciones de Agregación con GROUP BY
+
+**Objetivo:** Contar cuántos empleados hay en cada departamento y cuál es el salario promedio por departamento.
 
 ```sql
-/*Script 22 : inner Join*/
-create database escuela;
-use escuela;
-CREATE TABLE CARRERA (ID_CARRERA INT PRIMARY KEY, CARRERA VARCHAR(20));
-CREATE TABLE ALUMNO(ID_ALUMNO INT PRIMARY KEY, NOMBRE VARCHAR(20), APELLIDOS VARCHAR(20), ID_CARRERA INT);
-CREATE table datos (ID_DATOS INT PRIMARY KEY, ID_ALUMNO INT, EMAIL VARCHAR(20), EDAD int);
--- ... (inserciones y FKs) ...
-
-/*Inner Join */
-select ALUMNO.NOMBRE, ALUMNO.APELLIDOS , datos.EDAD,datos.EMAIL 
-from datos 
-inner join alumno on  datos.ID_ALUMNO = alumno.ID_ALUMNO 
-inner join carrera on alumno.ID_CARRERA = carrera.ID_CARRERA 
-where carrera.ID_CARRERA = 1;
-
-/*Inner join left*/
-select * from datos inner join ALUMNO on datos.ID_ALUMNO = alumno.ID_ALUMNO;
-select * from alumno left join datos on alumno.ID_ALUMNO = datos.ID_ALUMNO;
-select * from datos right join alumno on alumno.ID_ALUMNO = datos.ID_ALUMNO;
+SELECT D.Nombre_Departamento, COUNT(E.ID_Empleado) AS Num_Empleados, AVG(E.Salario) AS Salario_Promedio
+FROM EMPLEADOS E
+INNER JOIN DEPARTAMENTOS D ON E.ID_Departamento = D.ID_Departamento
+GROUP BY D.Nombre_Departamento;
 ```
----
 
-## Ejemplos Adicionales de `SQLQuery2.sql` (Northwind)
+**Resultado:**
 
-Estos ejemplos, basados en la base de datos Northwind, demuestran una variedad de técnicas de filtrado y agrupación en T-SQL.
+| Nombre_Departamento | Num_Empleados | Salario_Promedio |
+| :------------------ | :------------ | :--------------- |
+| Ventas              | 2             | 51000            |
+| Marketing           | 2             | 56500            |
+| TI                  | 1             | 60000            |
 
-### `GROUP BY` con `HAVING`
+### Ejemplo 7: GROUP BY con HAVING
+
+**Objetivo:** Mostrar los departamentos donde el salario promedio de sus empleados es superior a 52000.
+
 ```sql
-use Northwind;
-
--- Contar compañías por país, agrupando solo los que tienen más de 2.
-select country ,count(companyname) as 'Acumulado' from Customers
-where country like 'A%'
-group by country
-having count(companyname)>2;
+SELECT D.Nombre_Departamento, AVG(E.Salario) AS Salario_Promedio
+FROM EMPLEADOS E
+INNER JOIN DEPARTAMENTOS D ON E.ID_Departamento = D.ID_Departamento
+GROUP BY D.Nombre_Departamento
+HAVING AVG(E.Salario) > 52000;
 ```
 
-### Cláusulas de Filtrado: `BETWEEN`, `IN`, `LIKE`
-```sql
--- Filtrar con BETWEEN
-select productname,unitprice from Products
-where UnitPrice between 25 and 30;
+**Resultado:**
 
--- Filtrar con IN
-select companyname,contactname,country from customers
-where country in('USA','Canada','Mexico');
-
--- Filtrar con LIKE y rangos
-select companyname,contactname,country from customers
-where CompanyName like '[A-C]%'; -- Empieza con A, B, o C
-```
-
-### `DISTINCT` para Valores Únicos
-```sql
-select Distinct country from customers order by Country;
-```
-
-### Exportar a XML con `FOR XML`
-```sql
--- Diferentes formatos de salida XML
-select companyname,contactname,country from Customers for xml auto;
-select companyname,contactname,country from Customers for xml path;
-select companyname,contactname,country from Customers for xml raw;
-```
-
-### Expresión `CASE` en `SELECT`
-```sql
--- Clasificar productos por su ID de categoría
-select productname,unitprice,
-	case categoryid
-		when 1 then 'producto 1'
-		when 2 then 'producto 2'
-		when 3 then 'producto 3'
-		else 'Otros'
-	end as 'Producto'
-from Products;
-```
+| Nombre_Departamento | Salario_Promedio |
+| :------------------ | :--------------- |
+| Marketing           | 56500            |
+| TI                  | 60000            |

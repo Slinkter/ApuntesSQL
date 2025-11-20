@@ -1,110 +1,151 @@
-# Ejercicios Resueltos - Clase 11: Consultas Avanzadas SQL II
+# Ejercicios Resueltos - Clase 11: SQL Embebido (PL/SQL)
 
-## Práctica Calificada #3 (Solucionario - 30 de Octubre de 2013)
+Para los siguientes ejercicios, utilizaremos una tabla `EMPLEADOS` simplificada:
 
-Esta es la solución a una práctica calificada que evalúa la capacidad de construir consultas SQL complejas a partir de un modelo de datos dado. Los ejercicios cubren `GROUP BY`, `JOIN`s, subconsultas, `ROWNUM`, hints de paralelismo y optimización de índices.
+**Tabla `EMPLEADOS`**
 
-### Modelo de Datos
-*(El modelo de datos se presenta en el documento original como un diagrama de Entidad-Relación, mostrando tablas como `Pelicula`, `Categoria`, `Actor`, `Director`, `Opinion`, `Cartelera`, `Funcion`, etc.)*
+| ID_Empleado | Nombre    | Apellido  | Salario | ID_Departamento |
+| :---------- | :-------- | :-------- | :------ | :-------------- |
+| 1           | Ana       | García    | 50000   | 10              |
+| 2           | Luis      | Pérez     | 55000   | 20              |
+| 3           | Marta     | Sánchez   | 52000   | 10              |
+| 4           | Pedro     | Ramírez   | 60000   | 30              |
 
----
+### Ejercicio 1: Bloque PL/SQL Anónimo con Condicional
 
-### Consultas
+**Enunciado:**
+Escribe un bloque PL/SQL anónimo que, dado un `ID_Empleado`, determine si el salario del empleado es "Alto" (>= 55000), "Medio" (>= 50000 y < 55000) o "Bajo" (< 50000). Muestra el nombre del empleado y su clasificación salarial.
 
-**1. Mostrar la cantidad de películas que fueron estrenadas en el año 2012. Tenga en cuenta que el campo `FechaEstreno` es un tipo de dato `DATE`. Paralelizar la consulta con 4 hilos de ejecución.**
+**Solución:**
 ```sql
-select /*+ PARALLEL(p,4) */ count(*)
-from pelicula p
-where to_char(fechaestreno,'YYYY')='2012';
+DECLARE
+  v_id_empleado EMPLEADOS.ID_Empleado%TYPE := 2; -- Cambia el ID para probar
+  v_nombre      EMPLEADOS.Nombre%TYPE;
+  v_salario     EMPLEADOS.Salario%TYPE;
+  v_clasificacion VARCHAR2(20);
+BEGIN
+  SELECT Nombre, Salario
+  INTO v_nombre, v_salario
+  FROM EMPLEADOS
+  WHERE ID_Empleado = v_id_empleado;
+
+  IF v_salario >= 55000 THEN
+    v_clasificacion := 'Alto';
+  ELSIF v_salario >= 50000 THEN
+    v_clasificacion := 'Medio';
+  ELSE
+    v_clasificacion := 'Bajo';
+  END IF;
+
+  DBMS_OUTPUT.PUT_LINE('El empleado ' || v_nombre || ' tiene un salario ' || v_clasificacion || '.');
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    DBMS_OUTPUT.PUT_LINE('Empleado con ID ' || v_id_empleado || ' no encontrado.');
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Ha ocurrido un error inesperado: ' || SQLERRM);
+END;
+/
 ```
 
-**2. Mostrar un reporte donde se visualice la cantidad de películas por categoría que ha participado el actor Charlton Heston. El reporte debe mostrar la descripción de la categoría y el total de veces que el actor ha participado.**
-```sql
-select c.descripcion, count(*)
-from pelicula p 
-join categoria c on p.idcategoria = c.idcategoria
-join actor_pelicula ap on ap.idpelicula = p.idpelicula
-join actor a on a.idactor = ap.idactor
-where a.nombreCompleto = 'Charlton Heston'
-group by c.descripcion;
-```
+### Ejercicio 2: Procedimiento para Aumentar Salario por Departamento
 
-**3. Indique cual es la semana del año 2012 que ha tenido más carteleras presentadas.**
+**Enunciado:**
+Crea un procedimiento PL/SQL llamado `AUMENTAR_SALARIO_DEP` que reciba el `ID_Departamento` y un `Porcentaje_Aumento`. El procedimiento debe aumentar el salario de todos los empleados de ese departamento en el porcentaje especificado. Si el departamento no existe, debe mostrar un mensaje de error.
+
+**Solución:**
 ```sql
-select #semana from (
-    select #semana, count(*) as total
-    from cartelera
-    where año=2012
-    group by #semana
-    order by total desc
+CREATE OR REPLACE PROCEDURE AUMENTAR_SALARIO_DEP (
+  p_id_departamento EMPLEADOS.ID_Departamento%TYPE,
+  p_porcentaje_aumento NUMBER
 )
-where rownum<=1;
+AS
+  v_num_empleados_afectados NUMBER;
+BEGIN
+  UPDATE EMPLEADOS
+  SET Salario = Salario * (1 + p_porcentaje_aumento / 100)
+  WHERE ID_Departamento = p_id_departamento;
+
+  v_num_empleados_afectados := SQL%ROWCOUNT;
+
+  IF v_num_empleados_afectados = 0 THEN
+    DBMS_OUTPUT.PUT_LINE('No se encontraron empleados en el departamento ' || p_id_departamento || '.');
+  ELSE
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE(v_num_empleados_afectados || ' empleados del departamento ' || p_id_departamento || ' actualizados con éxito.');
+  END IF;
+EXCEPTION
+  WHEN OTHERS THEN
+    ROLLBACK;
+    DBMS_OUTPUT.PUT_LINE('Error al aumentar salario: ' || SQLERRM);
+END;
+/
+
+-- Para ejecutar el procedimiento:
+-- EXEC AUMENTAR_SALARIO_DEP(10, 5); -- Aumentar 5% el salario de empleados del departamento 10
+-- EXEC AUMENTAR_SALARIO_DEP(99, 10); -- Probar con un departamento que no existe
 ```
 
-**4. Por cada película, liste el titulo de distribución y la cantidad de directores que han participado en ella.**
+### Ejercicio 3: Función para Obtener el Salario Máximo por Departamento
+
+**Enunciado:**
+Crea una función PL/SQL llamada `GET_MAX_SALARIO_DEP` que reciba un `ID_Departamento` y retorne el salario máximo de ese departamento. Si el departamento no tiene empleados o no existe, debe retornar 0.
+
+**Solución:**
 ```sql
-select p.tituloDistri, count(*)
-from pelicula p 
-join director_pelicula dp on p.idpelicula = dp.idpelicula
-group by p.tituloDistri;
+CREATE OR REPLACE FUNCTION GET_MAX_SALARIO_DEP (
+  p_id_departamento EMPLEADOS.ID_Departamento%TYPE
+)
+RETURN NUMBER
+IS
+  v_max_salario EMPLEADOS.Salario%TYPE := 0;
+BEGIN
+  SELECT MAX(Salario)
+  INTO v_max_salario
+  FROM EMPLEADOS
+  WHERE ID_Departamento = p_id_departamento;
+
+  RETURN NVL(v_max_salario, 0); -- NVL para retornar 0 si MAX(Salario) es NULL (no hay empleados)
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE_APPLICATION_ERROR(-20001, 'Error en GET_MAX_SALARIO_DEP: ' || SQLERRM);
+END;
+/
+
+-- Para usar la función:
+-- SELECT GET_MAX_SALARIO_DEP(10) FROM DUAL;
+-- SELECT GET_MAX_SALARIO_DEP(20) FROM DUAL;
+-- SELECT GET_MAX_SALARIO_DEP(99) FROM DUAL;
 ```
 
-**5. Liste por cada categoría, la cantidad de películas con una duración mayor a 90 minutos.**
-```sql
-select c.descripcion, count(*)
-from categoria c 
-join pelicula p on c.idcategoria = p.idcategoria
-where p.duracion>=90
-group by c.descripcion;
-```
+### Ejercicio 4: Trigger para Controlar el Salario Mínimo
 
-**6. Liste las categorías que no tienen alguna película asociada.**
-```sql
-select descripcion
-from categoria
-where idcategoria not in (select idcategoria from pelicula);
-```
+**Enunciado:**
+Crea un trigger `BEFORE INSERT OR UPDATE` en la tabla `EMPLEADOS` que impida que el `Salario` de un empleado sea menor a 10000. Si se intenta insertar o actualizar con un salario menor, debe generar un error.
 
-**7. Liste el NombreCompleto de cada actor y el personaje que ha tenido en la película cuyo Título Original es: Ben-Hur.**
+**Solución:**
 ```sql
-select a.nombreCompleto, ap.personaje
-from pelicula p 
-join actor_pelicula ap on p.idpelicula = ap.idpelicula
-join actor a on a.idactor = ap.idactor
-where p.TituloOrig = 'Ben-Hur';
-```
+CREATE OR REPLACE TRIGGER TRG_SALARIO_MINIMO
+BEFORE INSERT OR UPDATE OF Salario ON EMPLEADOS
+FOR EACH ROW
+BEGIN
+  IF :NEW.Salario < 10000 THEN
+    RAISE_APPLICATION_ERROR(-20002, 'El salario no puede ser inferior a 10000.');
+  END IF;
+END;
+/
 
-**8. Liste el Titulo Original de cada película del Genero 'TERROR' que haya tenido más de 5 clasificaciones con el valor de EXCELENTE.**
-```sql
-select p.TituloOrig, count(*)
-from pelicula p 
-join genero g on p.idgenero = g.idgenero
-join opinion o on o.idpelicula = p.idpelicula
-join clasificacion c on c.idclasificacion = o.idclasificacion
-where g.descripcion = 'TERROR' and c.descripcion = 'EXCELENTE'
-group by p.TituloOrig
-having count(*)>5;
-```
+-- Para probar el trigger:
+-- -- Esto fallará
+-- INSERT INTO EMPLEADOS (ID_Empleado, Nombre, Apellido, Salario, ID_Departamento)
+-- VALUES (5, 'Nuevo', 'Empleado', 5000, 10);
 
-**9. Liste las películas (Titulo Original) que están disponibles para el público el día 30 de Octubre entre las 18:00 h y las 22:00 h.**
-```sql
-select p.tituloorig
-from pelicula p 
-join funcion f on p.idpelicula = f.idpelicula
-where to_char(f.dia,'YYYYMMDD')='20131030' and f.horaInicio=18 and f.horaFinal=22;
-```
+-- -- Esto también fallará
+-- UPDATE EMPLEADOS
+-- SET Salario = 8000
+-- WHERE ID_Empleado = 1;
 
-**10. Basado en la siguiente consulta y plan de ejecución, implemente un mecanismo para mejorar el tiempo de respuesta.**
-*Consulta Original:*
-```sql
-select historicoj_.ID_, historicoj_.PROCINST_ as "PROCINST2_169_",
-...
-from BPMPORTA.HISTORICO_JBPM_TASKINSTANCE historicoj_ where historicoj_.ID_= 2096;
+-- -- Esto funcionará
+-- UPDATE EMPLEADOS
+-- SET Salario = 12000
+-- WHERE ID_Empleado = 1;
 ```
-*Plan de Ejecución:* Muestra un `TABLE ACCESS FULL`.
-
-*Solución:* Crear un índice en la columna utilizada para el filtro para evitar un recorrido completo de la tabla.
-```sql
-create index IDX_BPMPORTA_HISTORICO_JBPM_TASKINSTANCE on BPMPORTA.HISTORICO_JBPM_TASKINSTANCE(ID_);
-```
----

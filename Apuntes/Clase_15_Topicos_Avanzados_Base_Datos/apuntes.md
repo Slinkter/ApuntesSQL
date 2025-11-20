@@ -1,87 +1,15 @@
-# Clase 15: Tópicos Avanzados de Bases de Datos
+# 📊 Clase 15: Data Warehouse (Arquitectura y Explotación)
 
-**Fecha:** Noviembre 18, 2025 (Inferido del periodo del curso)
+| Columna de Palabras Clave y Preguntas | Columna de Notas: Conceptos Clave (¡Sencillo y Divertido!) |
+| :--- | :--- |
+| **DW vs. Sistemas Operacionales (OLTP)** | Los **Sistemas Operacionales** (OLTP) ejecutan el negocio (transacciones rápidas, datos actuales, empleados por oficinistas). El **DW** (Sistemas Analíticos) administra el negocio (análisis histórico, integración, usado por *decision makers*). |
+| **Definición de Data Warehouse** | Un DW es **Organizado por Temas** (información relacionada), **Variante en el Tiempo** (histórico y auditable), **No Volátil** (permanente) e **Integrado** (consistente). |
+| **Data Mart** | Es una versión más pequeña y especializada del DW, diseñada para un grupo o departamento específico (Ej. Ventas o Finanzas), mejorando el acceso y el análisis para ese grupo. |
+| **ETL (Extracción, Transformación y Carga)** | Este es el proceso más costoso y largo (¡el **80% de los recursos!**). Implica tomar datos de las fuentes, **transformarlos** (limpiar, integrar, derivar) y **cargarlos** en el DW. |
+| **Metadatos y Cubos** | Los **Metadatos** son la clave para entender el contexto de la data. La información se representa en **Cubos de Datos** multidimensionales, que tienen Dimensiones (Ej. Año, País, Color) y Hechos (Medidas de interés). |
+| **Explotación de Datos** | ¿Cómo usamos toda esta información? **Query Ad hoc** (consultas puntuales). **OLAP** (Online Analytical Processing): Análisis multidimensional avanzado sobre los cubos (Ej. rodar, picar y rebanar el cubo). **Data Mining** (Minería de Datos): Herramientas que buscan automáticamente **patrones y tendencias**. |
+| **Tipos de Data Mining** | **Minería de Descubrimiento** (encontrar patrones en todo el almacén, a veces los más valiosos). **Minería Predictiva** (usar datos conocidos para crear modelos que predicen valores futuros). |
 
----
-
-## Notas Generales
-
-### Introducción a los Tópicos Avanzados
-
-Los tópicos avanzados de bases de datos exploran tecnologías y conceptos que van más allá de las bases de datos relacionales tradicionales, abordando desafíos modernos como el volumen masivo de datos (Big Data), la necesidad de alta disponibilidad, el rendimiento extremo y la gestión de datos no estructurados o semiestructurados.
-
-### Bases de Datos NoSQL
-
-Las bases de datos NoSQL ("Not only SQL") surgieron para abordar las limitaciones de las bases de datos relacionales en escenarios de Big Data, escalabilidad horizontal, agilidad en el desarrollo y manejo de datos no estructurados. Se clasifican típicamente en varios tipos:
-
-*   **Bases de Datos Clave-Valor:** Almacenan datos como una colección de pares clave-valor. Simples, rápidas y altamente escalables. Ej: Redis, DynamoDB.
-*   **Bases de Datos Orientadas a Documentos:** Almacenan datos en documentos flexibles, generalmente en formatos como JSON o BSON. Ideal para datos semiestructurados y cambios de esquema frecuentes. Ej: MongoDB, Couchbase.
-*   **Bases de Datos Orientadas a Columnas (Wide-Column Stores):** Almacenan datos en familias de columnas, lo que permite un acceso eficiente a grandes volúmenes de datos dispersos en muchas máquinas. Ej: Cassandra, HBase.
-*   **Bases de Datos Orientadas a Grafos:** Almacenan datos como nodos (entidades) y aristas (relaciones) que conectan esos nodos. Optimizadas para manejar relaciones complejas y consultas de grafos. Ej: Neo4j, ArangoDB.
-
-### Big Data
-
-Se refiere a conjuntos de datos tan grandes y complejos que las herramientas tradicionales de procesamiento de datos no pueden gestionarlos eficazmente. Se caracteriza por las "3 Vs":
-*   **Volumen:** Cantidades masivas de datos.
-*   **Velocidad:** Datos generados y procesados a alta velocidad.
-*   **Variedad:** Datos de diferentes tipos y formatos (estructurados, semiestructurados, no estructurados).
-A menudo, la gestión de Big Data implica el uso de sistemas distribuidos como Hadoop y Spark.
-
-### Bases de Datos en la Nube (Cloud Databases)
-
-Servicios de bases de datos ofrecidos por proveedores de nube (AWS, Azure, Google Cloud) que permiten a los usuarios aprovisionar, escalar y gestionar bases de datos sin la necesidad de administrar la infraestructura subyacente. Ofrecen flexibilidad, escalabilidad y alta disponibilidad. Ej: Amazon RDS, Azure SQL Database, Google Cloud Spanner.
-
-### Bases de Datos en Memoria (In-Memory Databases - IMDB)
-
-Almacenan todos o la mayoría de los datos en la memoria principal (RAM) de la computadora en lugar de en el disco. Esto resulta en tiempos de acceso a datos y rendimiento de consultas significativamente más rápidos, ideal para aplicaciones que requieren baja latencia y procesamiento en tiempo real. Ej: SAP HANA, Redis, VoltDB.
-
-### Procesamiento Paralelo y Distribuido
-
-Técnicas que involucran la división de tareas de procesamiento de datos entre múltiples procesadores o nodos de una red para acelerar la ejecución. Es fundamental para Big Data y sistemas de bases de datos escalables.
-*   **Sharding:** División de una base de datos en piezas más pequeñas y manejables (fragmentos) distribuidas en múltiples servidores.
-*   **Replicación:** Creación de múltiples copias de los datos en diferentes ubicaciones para asegurar la alta disponibilidad y la recuperación ante desastres.
-
-### Seguridad Avanzada en Bases de Datos
-
-Más allá de los controles de acceso básicos, incluye:
-*   **Cifrado de Datos:** Proteger los datos en reposo y en tránsito.
-*   **Enmascaramiento de Datos:** Ocultar datos sensibles para entornos de desarrollo/pruebas.
-*   **Auditoría de Bases de Datos:** Registrar y monitorear todas las actividades de acceso y modificación de datos para detección de anomalías y cumplimiento.
-*   **Gestión de Vulnerabilidades:** Identificación y mitigación de debilidades de seguridad en el software de la base de datos.
+**Resumen de la Clase 15:** Un DW es un sistema analítico integrado, no volátil e histórico, que se diferencia del OLTP. Vimos que el proceso ETL consume la mayor parte del esfuerzo. Finalmente, el análisis de datos se realiza mediante OLAP (consultas multidimensionales) y Data Mining (que descubre patrones y ayuda a la predicción).
 
 ---
-
-## Pistas y Keywords
-
-*   **NoSQL:** Bases de datos no relacionales (clave-valor, documento, columna, grafo).
-*   **Big Data:** Volumen, Velocidad, Variedad.
-*   **Bases de Datos en la Nube:** DBaaS (Database as a Service).
-*   **Bases de Datos en Memoria (IMDB):** Almacenamiento en RAM, alto rendimiento.
-*   **Procesamiento Paralelo/Distribuido:** Escalabilidad, Sharding, Replicación.
-*   **Seguridad Avanzada (DB):** Cifrado, Enmascaramiento, Auditoría.
-*   **Escalabilidad Horizontal:** Añadir más máquinas para capacidad.
-
----
-
-## Resumen Final Crítico
-
-Los tópicos avanzados de bases de datos reflejan la evolución del campo para satisfacer las crecientes demandas de la era digital, marcada por el Big Data y la necesidad de sistemas altamente escalables, disponibles y seguros. Desde las diversas arquitecturas NoSQL hasta las bases de datos en la nube y en memoria, y las técnicas de procesamiento distribuido, estas innovaciones proporcionan herramientas poderosas para enfrentar desafíos complejos. Comprender estas áreas permite a los profesionales diseñar y gestionar soluciones de datos de vanguardia, adaptadas a requisitos empresariales dinámicos y volúmenes de datos masivos.
-
----
-
-## Conexiones con Clases Anteriores y Siguientes
-
-*   **Conexiones Anteriores:** Esta clase expande los conceptos de diseño y administración de bases de datos vistos en "Bases de Datos Relacionales" (Clase 03) y "Administración de RDBMS" (Clase 04), mostrando alternativas y extensiones a los modelos tradicionales. Los conocimientos de SQL avanzado (Clase 10 y 11) siguen siendo relevantes para interactuar con algunas bases de datos NoSQL y para analizar datos en entornos de Big Data.
-*   **Conexiones Siguientes:** Estos tópicos avanzados son cruciales para entender las tendencias actuales en la industria y prepararse para roles en arquitectura de datos, ingeniería de Big Data, o administración de bases de datos en la nube. Proporcionan el contexto para explorar herramientas y plataformas específicas en el ámbito profesional.
-
----
-**Nota:** El contenido de esta clase ha sido inferido del título del curso y conocimientos generales sobre la materia, dado que el archivo `.ppt` original no pudo ser procesado directamente.
-
----
-
-## Material de Referencia
-
-La siguiente documentación fue utilizada como material de apoyo para esta clase. Se recomienda su revisión para una comprensión más profunda.
-
-*   `../../Ingenieria de datos/otros/Restrictions on Parallel DML.pdf`
-*   `../../Ingenieria de datos/otros/Taller_HA_MSSQL2012.pdf`

@@ -1,22 +1,13 @@
-# Glosario - Clase 04: Administración de RDBMS
+# Glosario - Clase 04: DML y Consultas Básicas
 
-*   **RDBMS (Relational Database Management System):** Un tipo de Sistema de Gestión de Base de Datos que organiza los datos en tablas con filas y columnas, basándose en el modelo relacional.
-*   **DBA (Database Administrator):** El profesional responsable de la gestión, mantenimiento, seguridad y operación eficiente de una base de datos.
-*   **Instalación y Configuración (RDBMS):** Proceso inicial de desplegar el software del RDBMS en un servidor y establecer sus parámetros operativos.
-*   **Diseño Físico y Lógico (DB):** La fase de planificación donde se define la estructura de la base de datos (tablas, relaciones, etc. - lógico) y cómo se almacenarán los datos en el hardware (índices, particiones, etc. - físico).
-*   **Gestión de Almacenamiento (DB):** Tareas del DBA relacionadas con la asignación, monitoreo y optimización del espacio en disco utilizado por la base de datos.
-*   **Seguridad y Permisos (DB):** La implementación de controles para proteger la base de datos del acceso no autorizado y la gestión de los derechos de los usuarios sobre los objetos de la base de datos.
-*   **Respaldo y Recuperación (DB):** Estrategias y procesos para crear copias de seguridad de los datos y restaurar la base de datos a un estado consistente después de una falla o desastre.
-*   **Monitoreo de Rendimiento (DB):** La observación continua de la base de datos para identificar cuellos de botella y asegurar que opera de manera eficiente.
-*   **Optimización de Consultas (SQL):** El proceso de mejorar la eficiencia de las sentencias SQL para que se ejecuten más rápido y consuman menos recursos.
-*   **Alta Disponibilidad (DB):** Medidas y arquitecturas implementadas para asegurar que la base de datos esté accesible y operativa la mayor parte del tiempo posible, minimizando el tiempo de inactividad.
-*   **Instancia (Base de Datos):** La combinación de la memoria del sistema (ej. SGA en Oracle) y los procesos en segundo plano que permiten acceder y gestionar los archivos de la base de datos.
-*   **Base de Datos (Archivos Físicos):** El conjunto de archivos físicos almacenados en el disco que contienen los datos reales y la información de control de la base de datos.
-*   **Tablespace:** Una unidad lógica de almacenamiento en bases de datos Oracle que agrupa segmentos de datos y se mapea a uno o más archivos de datos físicos.
-*   **Usuario (DB):** Una cuenta creada en la base de datos que permite a una persona o aplicación conectarse y realizar operaciones, con los privilegios asignados.
-*   **Esquema (DB):** Una colección lógica de objetos de base de datos (tablas, vistas, índices, etc.) que son propiedad de un usuario de la base de datos.
-*   **Privilegios (DB):** Derechos específicos otorgados a un usuario o rol para realizar una acción o acceder a un objeto particular en la base de datos (ej. `SELECT` en una tabla).
-*   **Roles (DB):** Un conjunto de privilegios nombrados que se pueden otorgar a usuarios, simplificando la gestión de seguridad al agrupar permisos comunes.
-*   **Herramientas de Línea de Comandos (DB):** Interfaces basadas en texto para interactuar con la base de datos y realizar tareas administrativas (ej. SQL*Plus).
-*   **Herramientas Gráficas (DB GUI):** Aplicaciones con interfaz de usuario gráfica que facilitan la administración y el desarrollo de bases de datos de forma visual (ej. SQL Developer, MySQL Workbench).
-*   **Planificación de la Capacidad (DB):** El proceso de prever las necesidades futuras de recursos (almacenamiento, CPU, memoria) de la base de datos para asegurar que puede crecer con la demanda.
+*   **ALL:** Cláusula usada con `SELECT` para especificar que se quieren mostrar todas las filas, incluyendo duplicados (comportamiento por defecto si no se usa `DISTINCT`).
+*   **AND:** Operador lógico utilizado en la cláusula `WHERE` para combinar dos o más condiciones, requiriendo que todas sean verdaderas.
+*   **DELETE:** Comando DML utilizado para eliminar una o más filas de una tabla. Siempre se debe usar con `WHERE` para evitar vaciar la tabla.
+*   **DISTINCT:** Cláusula usada con `SELECT` para retornar solo los valores únicos de una columna o conjunto de columnas, eliminando duplicados.
+*   **DML (Data Manipulation Language):** Lenguaje de Manipulación de Datos. Es el conjunto de comandos SQL utilizados para interactuar con el *contenido* de las tablas, es decir, para insertar, modificar, eliminar y consultar filas.
+*   **INSERT:** Comando DML utilizado para añadir una nueva fila (registro) a una tabla.
+*   **NOT:** Operador lógico que niega una condición. Usado en la cláusula `WHERE`.
+*   **OR:** Operador lógico utilizado en la cláusula `WHERE` para combinar dos o más condiciones, requiriendo que al menos una sea verdadera.
+*   **SELECT:** Comando DML fundamental para consultar (recuperar) datos de una o más tablas en la base de datos. Es el comando más usado en SQL.
+*   **UPDATE:** Comando DML utilizado para modificar los valores de las columnas en una o más filas de una tabla existente. Es crucial usarlo con `WHERE`.
+*   **WHERE:** Cláusula utilizada con `SELECT`, `UPDATE` y `DELETE` para especificar las condiciones que deben cumplir las filas para ser afectadas por la operación, filtrando los resultados.

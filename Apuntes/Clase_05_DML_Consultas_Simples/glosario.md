@@ -1,21 +1,18 @@
-# Glosario - Clase 05: DML y Consultas Simples
+# Glosario - Clase 05: Modelamiento de Datos en la Empresa
 
-*   **Lenguaje de Manipulación de Datos (DML):** Parte de SQL que se ocupa de la recuperación, inserción, modificación y eliminación de datos en una base de datos.
-*   **SELECT:** Sentencia DML utilizada para recuperar datos de una o varias tablas en una base de datos.
-*   **FROM:** Cláusula de la sentencia `SELECT` que especifica la tabla o tablas de las cuales se van a recuperar los datos.
-*   **WHERE:** Cláusula opcional de la sentencia `SELECT`, `UPDATE` o `DELETE` que especifica las condiciones que deben cumplir las filas para ser incluidas en la operación.
-*   **ORDER BY:** Cláusula opcional de la sentencia `SELECT` que especifica el orden en que se deben clasificar las filas del conjunto de resultados.
-*   **DISTINCT:** Palabra clave utilizada con `SELECT` para eliminar filas duplicadas del conjunto de resultados.
-*   **Operadores de Comparación (=, !=, <>, >, <, >=, <=):** Símbolos utilizados en la cláusula `WHERE` para comparar valores y filtrar registros (ej. igual, diferente, mayor que, menor que).
-*   **Operadores Lógicos (AND, OR, NOT):** Palabras clave utilizadas en la cláusula `WHERE` para combinar o negar condiciones de filtrado (ej. ambas condiciones, al menos una, lo contrario).
-*   **BETWEEN:** Operador utilizado en la cláusula `WHERE` para seleccionar valores dentro de un rango inclusivo especificado.
-*   **IN (Operador SQL):** Operador utilizado en la cláusula `WHERE` para seleccionar valores que coincidan con cualquier valor de una lista proporcionada.
-*   **LIKE (Operador SQL):** Operador utilizado en la cláusula `WHERE` para buscar un patrón especificado en una columna de texto, usando caracteres comodín (`%` y `_`).
-*   **IS NULL / IS NOT NULL:** Condiciones utilizadas en la cláusula `WHERE` para verificar si un valor en una columna es nulo o no nulo, respectivamente.
-*   **INSERT INTO:** Sentencia DML utilizada para añadir nuevas filas (registros) a una tabla en la base de datos.
-*   **VALUES (SQL):** Cláusula de la sentencia `INSERT` que especifica los valores a insertar en las columnas de una nueva fila.
-*   **UPDATE:** Sentencia DML utilizada para modificar los datos existentes en una o varias filas de una tabla.
-*   **SET (SQL):** Cláusula de la sentencia `UPDATE` que especifica las columnas a modificar y los nuevos valores que se les asignarán.
-*   **DELETE FROM:** Sentencia DML utilizada para eliminar una o varias filas de una tabla.
-*   **Condición (SQL):** Una expresión lógica que se evalúa como verdadera, falsa o desconocida, utilizada para filtrar o controlar operaciones en SQL.
-*   **Cláusula (SQL):** Una parte de una sentencia SQL que realiza una función específica (ej. `FROM`, `WHERE`, `GROUP BY`).
+*   **Abstracción (Modelado de Datos):** Proceso de simplificar la realidad para representar solo los detalles relevantes en un modelo de datos.
+*   **Cardinalidad (Modelo E-R):** En el Modelo Entidad-Relación, especifica el número de instancias de una entidad que pueden asociarse con el número de instancias de otra entidad. Se expresa como mínima y máxima (ej. (0,1) Cero o una; (1,N) Una o muchas).
+*   **Cardinalidad Máxima:** El número máximo de ocurrencias de una entidad que puede estar relacionada con una ocurrencia de otra entidad.
+*   **Cardinalidad Mínima:** El número mínimo de ocurrencias de una entidad que *debe* estar relacionada con una ocurrencia de otra entidad. Si es cero, la participación es opcional; si es uno, es mandatoria.
+*   **Clave Foránea (FK):** Atributo en una entidad que es la clave primaria de otra entidad, utilizada para establecer una relación entre ambas.
+*   **Clave Primaria (PK):** Atributo o conjunto de atributos que identifica de forma única cada instancia de una entidad.
+*   **Entidad:** En el Modelo Entidad-Relación, representa una "cosa" o "concepto" del mundo real sobre el cual se desea almacenar información (ej. Empleado, Producto, Pedido).
+*   **Entidad Asociativa:** Un tipo de entidad que surge de la relación entre dos o más entidades, y a menudo contiene atributos propios de la relación. A veces se le llama "entidad de relación" o "intersección".
+*   **Entidad Débil:** Una entidad que no puede existir de forma independiente; su existencia depende de otra entidad (la entidad fuerte). No tiene una clave primaria propia y su clave depende, en parte, de la clave de la entidad fuerte.
+*   **Entidad Fuerte:** Una entidad que puede existir de forma independiente, es decir, tiene su propia clave primaria única.
+*   **Modelamiento de Datos:** El proceso de crear una representación abstracta de la estructura de datos que necesita una base de datos. Es la parte más importante del desarrollo de un sistema.
+*   **Modelo de Datos:** Una colección de conceptos que pueden ser usados para describir la estructura de una base de datos.
+*   **Modelo Entidad-Relación (E-R):** Herramienta conceptual de diseño de bases de datos que representa las entidades (objetos o conceptos) y las relaciones entre ellas.
+*   **Relación (Modelo E-R):** Una asociación entre dos o más entidades. Describe cómo las instancias de una entidad se conectan con las instancias de otra.
+*   **Reglas de Negocio:** Enunciados explícitos que definen o restringen algún aspecto de la operación de una empresa. Son cruciales para determinar la estructura y las restricciones del modelo de datos.
+*   **Sistema Orientado a Datos:** Un sistema cuyo diseño y desarrollo priorizan la estructura y estabilidad de los datos, dado que los datos suelen ser más estables que los procesos de negocio.
