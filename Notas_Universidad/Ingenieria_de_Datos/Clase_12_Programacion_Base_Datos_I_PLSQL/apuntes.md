@@ -130,3 +130,23 @@ PL/SQL es una herramienta poderosa que integra la funcionalidad de SQL con la l�
 
 *   **Conexiones Anteriores:** Esta clase se construye sobre el conocimiento de SQL (Clase 05, 10 y 11), permitiendo la integración de consultas SQL con lógica programática. Los fundamentos de bases de datos relacionales y administración (Clase 03 y 04) son la base sobre la cual PL/SQL opera.
 *   **Conexiones Siguientes:** Esta introducción sienta las bases para temas más avanzados de PL/SQL, como el manejo de cursores, excepciones, procedimientos almacenados, funciones, paquetes y triggers, que se explorarán en la Clase 13. La capacidad de programar directamente en la base de datos es crucial para la eficiencia y la seguridad del sistema.
+
+---
+
+## Material de Referencia
+
+La siguiente documentación de Oracle fue utilizada como material de apoyo para esta clase. Se recomienda su revisión para una comprensión más profunda.
+
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Taller_Oracle_PLSQL_22112010.pdf`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Concepto_HA_CTG.pdf`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les01.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les02.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les03.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les04.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les05.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les06.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les07.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les08.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les09.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les10.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les11.ppt`

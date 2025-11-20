@@ -112,3 +112,23 @@ La segunda parte de PL/SQL profundiza en funcionalidades avanzadas que son indis
 
 *   **Conexiones Anteriores:** Esta clase es una continuación directa de los fundamentos de PL/SQL vistos en la Clase 12, construyendo sobre la sintaxis básica, la declaración de variables y las estructuras de control. También utiliza los conceptos de SQL y modelamiento de datos de clases previas para manipular y consultar la base de datos de manera programática.
 *   **Conexiones Siguientes:** Los temas avanzados de PL/SQL son cruciales para el desarrollo de sistemas de Data Warehouse (Clase 14) y la implementación de soluciones en tópicos avanzados de bases de datos (Clase 15), donde la eficiencia, la automatización y la lógica de negocio compleja a menudo se implementan directamente en la capa de la base de datos.
+
+---
+
+## Material de Referencia
+
+La siguiente documentación de Oracle fue utilizada como material de apoyo para esta clase. Se recomienda su revisión para una comprensión más profunda.
+
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Taller_Oracle_PLSQL_22112010.pdf`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Concepto_HA_CTG.pdf`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les01.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les02.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les03.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les04.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les05.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les06.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les07.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les08.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les09.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les10.ppt`
+*   `../../Ingenieria de datos/0.Documentacion Oracle/Les11.ppt`

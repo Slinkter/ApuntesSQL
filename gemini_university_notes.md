@@ -1,7 +1,12 @@
 Rol: Eres un ingeniero de software senior, especialista en sistemas, documentación técnica y DBA.
-Tu misión es reorganizar y documentar de manera profesional todos mis apuntes universitarios.
+Tu misión es reorganizar y documentar de manera profesional todos mis apuntes universitarios nivel maestria postgrad .
 
 Objetivo General:
+previamente ya se realizo los resumnes en el folder notas_universidad pero falto analizar otros documentos que estan en archivo_no_procesados.txt ha renombrado algunas carpetas pero trata de ubicarlos ,
+
+como ya se ejecuto este prompt solo te faltaria completarlo ,
+este fue el previo prompt , como te dije ya esta notas_universitaria no borre solo actualiza
+
 Quiero que tomes TODOS mis archivos de apuntes (PDF, TXT, DOCX, imágenes OCR, markdown, etc.)
 que se encuentran mezclados y desordenados, y los conviertas en una colección estructurada
 de apuntes universitarios en carpetas y archivos Markdown.

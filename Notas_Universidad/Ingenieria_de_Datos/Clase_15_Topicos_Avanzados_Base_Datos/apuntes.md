@@ -76,3 +76,12 @@ Los tópicos avanzados de bases de datos reflejan la evolución del campo para s
 
 ---
 **Nota:** El contenido de esta clase ha sido inferido del título del curso y conocimientos generales sobre la materia, dado que el archivo `.ppt` original no pudo ser procesado directamente.
+
+---
+
+## Material de Referencia
+
+La siguiente documentación fue utilizada como material de apoyo para esta clase. Se recomienda su revisión para una comprensión más profunda.
+
+*   `../../Ingenieria de datos/otros/Restrictions on Parallel DML.pdf`
+*   `../../Ingenieria de datos/otros/Taller_HA_MSSQL2012.pdf`
