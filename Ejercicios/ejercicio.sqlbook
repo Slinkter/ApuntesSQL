@@ -1,2 +1,69 @@
 -- SQLBook: Code
 -- Active: 1759459348836@@127.0.0.1@3306@Northwind
+SELECT DATABASE(),USER(),VERSION()
+-- SQLBook: Code
+show TABLEs;
+-- SQLBook: Code
+DESCRIBE Categories;
+DESCRIBE Customers;
+DESCRIBE Employees;
+DESCRIBE OrderDetails; -- OJO: a veces es Order_Details
+DESCRIBE Orders;
+DESCRIBE Products;
+DESCRIBE Shippers;
+DESCRIBE Suppliers;
+-- SQLBook: Code
+select * from `Northwind`.`Customers`
+-- SQLBook: Code
+use `Northwind`
+-- SQLBook: Code
+select * from `Employees`
+-- SQLBook: Code
+select * from `Customers`
+-- SQLBook: Code
+SELECT `ContactName`, `Country`  from `Customers`
+-- SQLBook: Code
+SELECT * from `Products`
+-- SQLBook: Code
+SELECT `ProductName`, `Price` from `Products`
+-- SQLBook: Code
+SELECT   `ProductName` AS NOMBRE_PRODUCTO  FROM `Products`
+
+-- SQLBook: Code
+SELECT * FROM `Products`;
+-- SQLBook: Code
+SELECT * FROM `Products` WHERE `SupplierID`=3 
+-- SQLBook: Code
+SELECT * FROM `Products` WHERE `Price`>50 ORDER BY  `Price` DESC
+-- SQLBook: Code
+SELECT * FROM `Orders`
+-- SQLBook: Code
+SELECT * FROM `Customers`
+-- SQLBook: Code
+SELECT * FROM Customers 
+WHERE ContactName LIKE 'A%';
+-- SQLBook: Code
+SELECT * FROM `Customers`
+-- SQLBook: Code
+SELECT * FROM `Customers`
+WHERE `Country` LIKE "%LAND%"
+-- SQLBook: Code
+SELECT * FROM `Customers`
+WHERE `Country` IN ("Germany","France","UK") 
+ORDER BY `Country` ASC
+-- SQLBook: Code
+SELECT * FROM `Customers`
+WHERE `Country` IS NULL
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
