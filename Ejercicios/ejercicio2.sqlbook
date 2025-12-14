@@ -1,0 +1,79 @@
+-- SQLBook: Code
+show databases;
+-- SQLBook: Code
+use Northwind;
+
+show tables;
+-- SQLBook: Code
+SELECT * from `Customers`;
+-- SQLBook: Code
+SELECT * from `Orders`;
+-- SQLBook: Code
+SELECT c.`ContactName`,`OrderID` FROM `Orders` o LEFT JOIN `Customers` c ON o.`CustomerID` = c.`CustomerID`
+-- SQLBook: Code
+SELECT * from `OrderDetails`;
+-- SQLBook: Code
+SELECT p.ProductName, od.Quantity
+FROM Products p
+LEFT JOIN OrderDetails od 
+ON p.ProductID = od.ProductID;
+-- SQLBook: Code
+SELECT e.`FirstName`, o.`OrderID` 
+from `Orders` o
+RIGHT JOIN `Employees` e
+on e.`EmployeeID` = o.`EmployeeID`
+-- SQLBook: Code
+SELECT c.`ContactName`,p.`ProductName`,od.`Quantity` from `Orders` o 
+JOIN `Customers` c ON o.`CustomerID` = c.`CustomerID`
+JOIN `OrderDetails` od on o.`OrderID` = od.`OrderID`
+JOIN `Products` p on od.`ProductID` = p.`ProductID`
+WHERE o.`OrderID` =10250
+-- SQLBook: Code
+SELECT o.`OrderID`,cs.`ContactName`,e.`FirstName`, s.`ShipperName` 
+FROM `Orders` o 
+JOIN `Customers` cs ON o.`CustomerID` = cs.`CustomerID`
+JOIN `Employees` e ON o.`EmployeeID` = e.`EmployeeID`
+JOIN `Shippers` s ON o.`ShipperID` = s.`ShipperID`;
+
+
+-- SQLBook: Code
+-- Active: 1759459348836@@127.0.0.1@3306@Northwind
+SHOW DATABASES;
+-- SQLBook: Code
+SELECT * FROM `Orders`
+-- SQLBook: Code
+SELECT * FROM `Customers`
+-- SQLBook: Code
+SELECT c.`CustomerID`,c.`CustomerName`,o.`OrderID`
+FROM `Customers` c 
+LEFT JOIN `Orders` o 
+ON c.`CustomerID` = o.`CustomerID`
+-- SQLBook: Code
+SELECT * FROM `Products` p LEFT JOIN  `OrderDetails` od ON p.`ProductID` = od.`ProductID`
+-- SQLBook: Code
+SELECT * FROM `OrderDetails`
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code
+
+-- SQLBook: Code

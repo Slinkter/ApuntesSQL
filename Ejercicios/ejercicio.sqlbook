@@ -101,15 +101,75 @@ SELECT `EmployeeID`, COUNT(*) FROM `Orders` GROUP BY `EmployeeID`
 -- SQLBook: Code
 SELECT * FROM `Orders`
 -- SQLBook: Code
+SELECT * FROM `Products`;
+-- SQLBook: Code
+SHOW TABLES;
+-- SQLBook: Code
+select p.ProductID,p.ProductName ,s.SupplierName from products p inner join Suppliers s ON p.SupplierID=s.SupplierID
+-- SQLBook: Code
+select p.ProductID,p.ProductName ,s.SupplierName from products p right join Suppliers s ON p.SupplierID=s.SupplierID order by p.productid desc;
+-- SQLBook: Code
+select * from OrderDetails  WHERE `OrderID`= 10248;
 
 -- SQLBook: Code
+select * from products;
+-- SQLBook: Markup
+#Obtener detalles de un pedido (producto y cantidad) para el pedido 10248:
+
+
 
 -- SQLBook: Code
-
+Select 
+p.`ProductName` ,
+o.`OrderID`,
+o.`Quantity` 
+from `Products` as p 
+inner join 
+`OrderDetails` as o 
+ON 
+p.`ProductID` = o.`ProductID`
+WHERE
+o.`OrderID` = 10248
 -- SQLBook: Code
-
+SELECT
+    p.ProductName,
+    o.Quantity
+FROM
+    Products AS p
+INNER JOIN
+    OrderDetails AS o
+ON
+    p.ProductID = o.ProductID  -- Esta es la condición de UNIÓN (la clave)
+WHERE
+    o.OrderID = 10248;         -- Esta es la condición de FILTRO
 -- SQLBook: Code
+SELECT * from `Orders`;
+-- SQLBook: Code
+select o.`OrderID`, e.`FirstName`,e.`LastName`,o.`OrderDate` from `Orders` as o INNER JOIN `Employees` as e on o.`EmployeeID` = e.`EmployeeID`;
+-- SQLBook: Code
+show tables;
+-- SQLBook: Code
+#Para el pedido 10250, mostrar el nombre del cliente,
+# el nombre del producto y la cantidad.
+SELECT c.`ContactName`  from `Customers` c JOIN `Products` p on c.`CustomerID`=p. 
+-- SQLBook: Code
+SELECT * FROM `Orders` WHERE `OrderID` = 10250;
 
+SELECT 
+    c.customerName ,o.`OrderID`,p.`ProductName` 
+from `Orders` o 
+INNER JOIN `Customers` c on o.`CustomerID` = c.`CustomerID`
+INNER JOIN `OrderDetails` od on o.`OrderID` = od.`OrderID` 
+INNER JOIN `Products` p on od.`ProductID` = p.`ProductID`
+WHERE o.`OrderID` = 10250;
+#####
+SELECT 
+    c.ContactName, p.ProductName, od.Quantity
+FROM Orders o
+JOIN Customers c ON o.CustomerID = c.CustomerID
+JOIN OrderDetails od ON o.OrderID = od.OrderID
+JOIN Products p ON od.ProductID = p.ProductID
+WHERE o.OrderID = 10250;
 -- SQLBook: Code
 
 -- SQLBook: Code
