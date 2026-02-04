@@ -1,0 +1,91 @@
+Recomendación:
+http://download.oracle.com/otndocs/products/warehouse/olap/videos/creating_cubes_concepts/Creating_Cubes_Concepts.html
+http://download.oracle.com/otndocs/products/warehouse/olap/videos/creating_cubes_with_awm/Creating_Cubes_Using_AWM.html
+
+create user RRHH identified by oracle;
+grant dba to rrhh;
+
+connect rrhh/oracle
+
+create table DIM_EMPLEADO
+(
+ employee_id number(6),
+ nombreCompleto varchar(50),
+ salary number(8,2),
+ job_id varchar(10),
+ job_title varchar(35)
+);
+
+create table DIM_DEPARTAMENTO
+(
+ department_id number(4),
+ department_name varchar(30),
+ city_id number(4),
+ city varchar(30),
+ country_id char(2),
+ country_name varchar(40)
+);
+
+create table DIM_TIEMPO
+(
+ tiempo_id number,
+ numMes number,
+ numAnio number
+);
+
+alter table DIM_EMPLEADO add constraint PK_DIM_EMPLEADO primary key (employee_id);
+
+alter table DIM_DEPARTAMENTO add constraint PK_DIM_DEPARTAMENTO primary key (department_id);
+
+alter table DIM_TIEMPO add constraint PK_DIM_TIEMPO primary key (tiempo_id);
+
+create table FACT_RRHH
+(
+ employee_id number(6),
+ department_id number(4),
+ tiempo_id number,
+ CostoTotal number,
+ TotalEmpleado number
+);
+
+alter table FACT_RRHH add constraint FK_EMPLEADO foreign key (employee_id) references DIM_EMPLEADO(employee_id);
+
+alter table FACT_RRHH add constraint FK_DEPARTAMENTO foreign key (department_id) references DIM_DEPARTAMENTO(department_id);
+
+alter table FACT_RRHH add constraint FK_TIEMPO foreign key (tiempo_id) references DIM_TIEMPO(tiempo_id);
+
+
+
+
+--> Dimensiones
+
+create dimension DIM_EMP
+ level employee is (DIM_EMPLEADO.employee_id)
+ level job is (DIM_EMPLEADO.job_id)
+hierarchy job_id (
+ employee child of job
+)
+attribute employee determines (DIM_EMPLEADO.nombreCompleto,DIM_EMPLEADO.salary)
+attribute job determines (DIM_EMPLEADO.job_title);
+
+
+begin 
+cwm_olap_dimension.set_plural_name('RRHH', 'DIM_EMP', 'DIM_EMP'); 
+cwm_olap_dimension.set_default_display_hierarchy('RRHH', 'DIM_EMP', 'JOB_ID'); 
+cwm_olap_dimension.set_display_name('RRHH', 'DIM_EMP', 'DIM_EMP'); 
+cwm_olap_level.set_display_name('RRHH', 'DIM_EMP', 'EMPLOYEE', 'EMPLOYEE'); 
+cwm_olap_level_attribute.set_name('RRHH', 'DIM_EMP', 'EMPLOYEE', 'NOMBRECOMPLETO', 'NOMBRECOMPLETO'); 
+cwm_olap_level_attribute.set_name('RRHH', 'DIM_EMP', 'EMPLOYEE', 'SALARY', 'SALARY'); 
+cwm_olap_level.set_display_name('RRHH', 'DIM_EMP', 'JOB', 'JOB'); 
+cwm_olap_level_attribute.set_name('RRHH', 'DIM_EMP', 'JOB', 'JOB_TITLE', 'JOB_TITLE'); 
+cwm_olap_hierarchy.set_display_name('RRHH', 'DIM_EMP', 'JOB_ID', 'JOB_ID'); 
+cwm_olap_dim_attribute.create_dimension_attribute('RRHH', 'DIM_EMP', 'NOMBRECOMPLETO', 'NOMBRECOMPLETO', ''); 
+cwm_olap_dim_attribute.create_dimension_attribute('RRHH', 'DIM_EMP', 'SALARY', 'SALARY', ''); 
+cwm_olap_dim_attribute.create_dimension_attribute('RRHH', 'DIM_EMP', 'JOB_TITLE', 'JOB_TITLE', ''); 
+cwm_olap_dim_attribute.add_level_attribute('RRHH', 'DIM_EMP', 'NOMBRECOMPLETO', 'EMPLOYEE', 'NOMBRECOMPLETO'); 
+cwm_olap_dim_attribute.add_level_attribute('RRHH', 'DIM_EMP', 'SALARY', 'EMPLOYEE', 'SALARY'); 
+cwm_olap_dim_attribute.add_level_attribute('RRHH', 'DIM_EMP', 'JOB_TITLE', 'JOB', 'JOB_TITLE'); 
+commit; 
+end; 
+
+
