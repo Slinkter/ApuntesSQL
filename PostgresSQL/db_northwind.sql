@@ -1,3 +1,13 @@
+-- Conectarse a la base de datos 'postgres' (por defecto)
+
+
+-- Ahora sí puedes eliminar northwind
+DROP DATABASE IF EXISTS northwind;
+CREATE DATABASE northwind;
+
+-- Conectarte a la nueva base de datos
+
+
 --
 -- PostgreSQL database dump
 --
@@ -15,10 +25,6 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
-
----
---- drop tables
----
 
 
 DROP TABLE IF EXISTS customer_customer_demo;
