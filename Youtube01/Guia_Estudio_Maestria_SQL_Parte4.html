@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apuntes de Clase - SQL Desde Cero (Parte 4)</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --sidebar-bg: #fdfefe;
+            --text-color: #333;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ecf0f1;
+        }
+
+        .header-box {
+            border: 3px double var(--primary-color);
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-box h1 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header-box p {
+            margin: 5px 0;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Cornell Note Layout */
+        .cornell-container {
+            display: flex;
+            gap: 20px;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .keywords-sidebar {
+            width: 25%;
+            border-right: 2px dashed var(--border-color);
+            padding-right: 20px;
+            background-color: var(--sidebar-bg);
+        }
+
+        .keywords-sidebar h3 {
+            color: var(--secondary-color);
+            border-bottom: 1px solid var(--secondary-color);
+            padding-bottom: 5px;
+        }
+
+        .keywords-sidebar ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+
+        .keywords-sidebar li {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .main-content {
+            width: 75%;
+            padding-left: 10px;
+        }
+
+        h2 { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: var(--secondary-color); margin-top: 25px; }
+        
+        .timestamp {
+            display: inline-block;
+            background-color: #e8f8f5;
+            color: #117a65;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Elements */
+        pre {
+            background-color: #282c34;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            border-left: 5px solid var(--secondary-color);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            background-color: #eaecee;
+            color: #c0392b;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        blockquote.emphasis {
+            border-left: 5px solid var(--accent-color);
+            background-color: #fdedec;
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 0 4px 4px 0;
+        }
+
+        blockquote.emphasis strong { color: var(--accent-color); }
+
+        .analogy {
+            background-color: #fef9e7;
+            border: 1px solid #fadbd8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .analogy::before { content: "💡 Analogía/Concepto Clave:"; font-weight: bold; display: block; margin-bottom: 5px; color: #d35400; }
+
+        .t-note {
+            background-color: #eaf2f8;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+
+        .t-note::before { content: "👨‍💻 Nota del Apuntador:"; font-weight: bold; color: #2980b9; display: block; margin-bottom: 5px; }
+
+        .section-box {
+            background-color: #fff;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .q-level { font-weight: bold; color: #8e44ad; margin-top: 20px; border-bottom: 1px solid #d2b4de; padding-bottom: 5px;}
+        .question { font-weight: bold; color: #2c3e50; margin-top: 15px; }
+        .answer { margin-bottom: 15px; padding-left: 20px; border-left: 3px solid #ecf0f1; }
+    </style>
+</head>
+<body>
+
+    <div class="header-box">
+        <h1>APUNTES DE CLASE — SQL Desde Cero</h1>
+        <p>Final: Parte 4 / 4</p>
+        <p>Temas: Subconsultas, Agrupamientos, Buenas Prácticas y ORMs Backend</p>
+    </div>
+
+    <!-- CORNELL LAYOUT CONTAINER -->
+    <div class="cornell-container">
+        
+        <!-- MARGEN IZQUIERDO: PALABRAS CLAVE -->
+        <div class="keywords-sidebar">
+            <h3>PALABRAS CLAVE POR SECCIÓN</h3>
+            <ul>
+                <li><strong>§ 1. Subconsultas</strong><br> Queries anidadas, Selección escalar, Tablas derivadas (Temporales).</li>
+                <li><strong>§ 2. Agrupamiento Avanzado</strong><br> GROUP BY, HAVING, COALESCE, ROUND. Filtros Post-Agregación.</li>
+                <li><strong>§ 3. Buenas Prácticas (Diseño)</strong><br> UNSIGNED, Hasheo de contraseñas, Soft Delete (Borrado Lógico), Env Vars (.env).</li>
+                <li><strong>§ 4. Node.js Sin ORM</strong><br> Pool de conexiones, Queries en crudo, SQL Injection y Parametrización (?).</li>
+                <li><strong>§ 5. Node.js Con ORM</strong><br> Sequelize, Modelos (Define), Model.create(), Model.findAll(), Destrucción Lógica y Física.</li>
+            </ul>
+        </div>
+
+        <!-- CUERPO PRINCIPAL -->
+        <div class="main-content">
+            <h2>ÍNDICE DE LA PARTE 4</h2>
+            <ol>
+                <li>Subconsultas (Queries dentro de Queries)</li>
+                <li>Agrupamiento y Prevención de Nulos (GROUP BY, HAVING, COALESCE)</li>
+                <li>Buenas Prácticas Arquitectónicas de Base de Datos</li>
+                <li>Integración en la Vida Real: Docker Compose Seguro</li>
+                <li>Backend con Node.js: RAW Queries vs ORM (Sequelize)</li>
+            </ol>
+
+            <!-- SECCIÓN 1 -->
+            <h2>1. Subconsultas (Queries dentro de Queries)</h2>
+            <span class="timestamp">[Continuación temporal... ~02:50:00]</span>
+            
+            <p>Una subconsulta permite procesar datos en un paso previo antes de entregárselos a la consulta principal.</p>
+
+            <h3>Subconsultas en la cláusula SELECT (Escalares)</h3>
+            <p>Se puede inyectar el resultado de una función de agregación atada al registro actual directamente en la proyección.</p>
+<pre><code class="language-sql">SELECT 
+    name AS usuario,
+    (SELECT SUM(total) FROM orders WHERE user_id = u.id) AS total_gastado
+FROM users AS u;</code></pre>
+
+            <h3>Subconsultas en el FROM (Tablas Temporales o Derivadas)</h3>
+            <p>Podemos crear toda una estructura en memoria (tabla virtual) y seleccionarla desde afuera.</p>
+<pre><code class="language-sql">SELECT usuario, total_gastado 
+FROM (
+    -- Esta subconsulta se convierte en una "tabla virtual" llamada "resumen"
+    SELECT u.name AS usuario, SUM(o.total) AS total_gastado
+    FROM users AS u
+    JOIN orders AS o ON u.id = o.user_id
+    GROUP BY u.id, u.name
+) AS resumen
+WHERE total_gastado > 100;</code></pre>
+
+
+            <!-- SECCIÓN 2 -->
+            <h2>2. Agrupamiento y Prevención de Nulos (GROUP BY, HAVING, COALESCE)</h2>
+            <span class="timestamp">[~03:00:00]</span>
+
+            <h3>La diferencia estructural entre WHERE y HAVING</h3>
+            <blockquote class="emphasis">
+                <strong>📌 ÉNFASIS DEL PROFESOR:</strong><br>
+                El <code>WHERE</code> actúa sobre la tabla base <strong>antes</strong> de agrupar, afectando al <code>FROM</code>. El <code>HAVING</code> es una condición que actúa <strong>después</strong> del agrupamiento (sobre el <code>SELECT</code>), permitiendo filtrar los resultados de las matemáticas (ej. <code>SUM</code>, <code>AVG</code>).
+            </blockquote>
+
+<pre><code class="language-sql">SELECT u.name, SUM(o.total) AS gastado
+FROM users u
+JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.name
+HAVING gastado > 100;</code></pre>
+
+            <h3>Función COALESCE()</h3>
+            <p>Al hacer sumatorias cruzadas con LEFT JOIN, los usuarios sin compras devuelven NULL en sus montos matemáticos, lo que puede romper el frontend al sumar. <code>COALESCE</code> actúa como un Fallback de seguridad (un valor por defecto ante el nulo).</p>
+<pre><code class="language-sql">-- Si la sumatoria es NULL, proyectará un 0.00
+SELECT COALESCE(SUM(total), 0.00) AS gastado_seguro FROM orders;</code></pre>
+
+
+            <!-- SECCIÓN 3 -->
+            <h2>3. Buenas Prácticas Arquitectónicas de Base de Datos</h2>
+            <span class="timestamp">[~03:15:00]</span>
+
+            <p>El profesor dedica una sección específica a estándares puros de la industria:</p>
+
+            <ul>
+                <li><strong>UNSIGNED:</strong> Siempre añadir a los IDs. Un <code>INT UNSIGNED</code> evita números negativos y duplica la capacidad de IDs positivos disponibles.</li>
+                <li><strong>Manejo de Contraseñas:</strong> "PROHIBIDO guardar contraseñas en texto plano". Almacenar siempre el HASH (ej. bcrypt) por lo que la longitud del VARCHAR debe ser amplia (255).</li>
+                <li><strong>Soft Delete (Borrado Lógico):</strong> No eliminar información real de producción. Reemplazar la ejecución de <code>DELETE FROM</code> por agregar una columna <code>activo BOOLEAN DEFAULT TRUE</code> y simplemente efectuar un <code>UPDATE</code> a <code>FALSE</code>.</li>
+            </ul>
+
+
+            <!-- SECCIÓN 4 -->
+            <h2>4. Integración en la Vida Real: Docker Compose Seguro</h2>
+            <span class="timestamp">[~03:25:00]</span>
+
+            <p>En el mundo real, los passwords no se teclean en las queries ni se suben a GitHub. Se usa un ecosistema interconectado.</p>
+            
+            <div class="t-note">
+                El profesor explica la importancia de los archivos <code>.env</code> (Variables de Entorno). Se debe añadir al <code>.gitignore</code> y en Docker Compose invocar las variables mediante la interpolación: <code>${MYSQL_ROOT_PASSWORD}</code>. También recomienda subir a GitHub un archivo "template" (ej. <code>.env.example</code>) con los valores vacíos.
+            </div>
+
+            <!-- SECCIÓN 5 -->
+            <h2>5. Backend con Node.js: RAW Queries vs ORM (Sequelize)</h2>
+            <span class="timestamp">[~03:35:00]</span>
+
+            <p>El curso finaliza con dos ejercicios prácticos que exponen un backend Node.js.</p>
+
+            <h3>Opción A: Consultas Crudas (Raw Queries)</h3>
+            <p>Se importan drivers nativos (ej. <code>mysql2</code>). Obliga a escribir SQL a mano y se deben proteger inyecciones mediante queries parametrizadas (los signos de interrogación <code>?</code>):</p>
+<pre><code class="language-javascript">const query = 'INSERT INTO profesores (nombre, email, materia) VALUES (?, ?, ?)';
+await db.query(query, [nombre, email, materia]);</code></pre>
+
+            <h3>Opción B: Uso de ORM (Sequelize)</h3>
+            <p>Un ORM (Object-Relational Mapping) actúa como un puente que mapea clases (POO) a las tablas. Al usar ORM como Sequelize, el backend nunca escribe SQL directamente.</p>
+<pre><code class="language-javascript">// Definición (DDL dinámico):
+const Profesor = sequelize.define('profesores', {
+    nombre: { type: DataTypes.STRING, allowNull: false }
+});
+
+// Inserción (DML dinámico):
+await Profesor.create({ nombre, email, materia });
+
+// Extracción (DQL dinámico):
+const profesores = await Profesor.findAll({ where: { activo: true } });</code></pre>
+
+            <p><em>Beneficios del ORM:</em> Agilidad, código más limpio, y protección intrínseca contra SQL Injection.</p>
+
+        </div>
+    </div> <!-- END CORNELL CONTAINER -->
+
+    <!-- FOOTER SECTIONS -->
+    <div class="section-box">
+        <h2>GLOSARIO TÉCNICO</h2>
+        
+        <p><strong>Subconsulta (Subquery):</strong><br> Consulta anidada que alimenta datos a la consulta externa (ya sea calculando un campo individual o formando una tabla temporal en el <code>FROM</code>).</p>
+        
+        <p><strong>Soft Delete (Borrado Lógico):</strong><br> Arquitectura de base de datos que prefiere mantener la información inhabilitando registros mediante una columna (estado `0` / `false` o fecha `deleted_at`) en lugar de usar un comando <code>DELETE</code>.</p>
+        
+        <p><strong>SQL Injection:</strong><br> <code>[def. ampliada]</code> Vulnerabilidad de ciberseguridad donde un usuario maligno inyecta comandos SQL destructivos en los inputs del frontend (ej. introduciendo <code>'; DROP TABLE users; --</code>). Se mitiga usando parametrización <code>?</code> o librerías ORM.</p>
+        
+        <p><strong>ORM (Object-Relational Mapping):</strong><br> Técnica que sincroniza el lenguaje de programación orientado a objetos (Node.js/JavaScript, Python, Java) con las bases de datos relacionales, ahorrando la escritura manual de Queries SQL.</p>
+    </div>
+
+    <div class="section-box">
+        <h2>PREGUNTAS DE REPASO (Estilo Examen)</h2>
+        
+        <div class="q-level">NIVEL 1 — Comprensión directa</div>
+        <p class="question">P1: ¿Cuál es el riesgo de subir contraseñas en archivos de Docker Compose a GitHub?</p>
+        <p class="answer">R1: Constituye un grave incidente de seguridad, dejando la base de datos abierta al acceso de terceros. Se soluciona obligando el uso de archivos <code>.env</code> inyectados mediante interpolación (<code>${VARIABLE}</code>) y agregando el archivo <code>.env</code> al <code>.gitignore</code>.</p>
+
+        <div class="q-level">NIVEL 2 — Aplicación</div>
+        <p class="question">P2: Un reporte de BI arroja que algunos promedios están corrompidos porque usuarios sin compras devolvieron valores Nulos. ¿Qué función matemática arregla esto?</p>
+        <p class="answer">R2: La función <code>COALESCE()</code>. Modificando el script a <code>COALESCE(AVG(compras), 0)</code> forzamos al motor a procesar los vacíos lógicos como ceros aritméticos.</p>
+
+        <div class="q-level">NIVEL 3 — Análisis / Síntesis</div>
+        <p class="question">P3: Desde un enfoque de mantenibilidad y seguridad de software, ¿cuáles son los beneficios frente a las desventajas de adoptar un ORM (como Sequelize) en lugar de utilizar RAW Queries desde Node.js?</p>
+        <p class="answer">R3: Los beneficios son significativos: aumento en la velocidad de desarrollo (agilidad), tipado estructurado de objetos, protección automática contra SQL Injection y el control simplificado sobre bases de datos cruzadas (MySQL o PostgreSQL). La principal desventaja es una sutil pérdida de performance frente a queries puras o la incapacidad del ORM de generar un Query Planner perfecto en subconsultas matemáticas exageradamente complejas (para lo cual se siguen permitiendo queries crudas).</p>
+    </div>
+
+    <div class="section-box">
+        <h2>EJERCICIOS PRÁCTICOS</h2>
+        
+        <p><strong>Ejercicio 1 — Optimización de Backend (Borrado Lógico)</strong><br>
+        <em>Objetivo:</em> Traducir operaciones físicas a operaciones lógicas y seguras.<br>
+        <em>Enunciado:</em> En el endpoint <code>/eliminar_usuario</code> de tu API Express, los desarrolladores Junior dejaron esta query bruta: <code>DELETE FROM users WHERE email = ?</code>. Tu misión como Senior es evitar la eliminación real de la data implementando borrado lógico sin romper el funcionamiento esperado de "ocultamiento".<br>
+        <em>Solución guiada:</em></p>
+<ol>
+    <li>Paso 1: Se debe efectuar un <code>ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT TRUE;</code> directamente en la BD.</li>
+    <li>Paso 2: En la API Node.js, reescribir la query: <code>UPDATE users SET is_active = false WHERE email = ?</code>.</li>
+    <li>Paso 3: Alterar todos los endpoints GET en el backend, añadiendo la condicional <code>WHERE is_active = true</code>.</li>
+</ol>
+    </div>
+
+    <div class="section-box">
+        <h2>RESUMEN EJECUTIVO (PARTE 4 - FINAL)</h2>
+        <p>Esta cuarta y última etapa interconectó SQL puro con el rol real de un ingeniero Backend:</p>
+        <ul>
+            <li><strong>Inteligencia Lógica:</strong> Dominio de agrupamientos estrictos usando <code>HAVING</code> para evaluar las agregaciones matemáticas y <code>COALESCE</code> para protección de nulls.</li>
+            <li><strong>Estándares Arquitectónicos Corporativos:</strong> <code>UNSIGNED</code> para IDs, encriptación inquebrantable para claves y Soft Deletion nativo a nivel de tabla.</li>
+            <li><strong>Despliegue Full-Stack:</strong> Empaquetado estandarizado con <code>Docker Compose</code> y variables de entorno; contrastando el poder seguro y ágil del ORM (<code>Sequelize</code>) versus las tradicionales queries crudas de librerías simples (<code>mysql2</code>).</li>
+        </ul>
+        <p><strong>Conclusión general para el examen:</strong> Se ha cubierto todo el ciclo de vida de persistencia de una aplicación backend profesional. Entender este último módulo garantiza que no solo sabes "hacer selects", sino estructurar, blindar y proveer la data segura de cara a la red.</p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apuntes de Clase - SQL Desde Cero (Parte 1)</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --sidebar-bg: #fdfefe;
+            --text-color: #333;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ecf0f1;
+        }
+
+        .header-box {
+            border: 3px double var(--primary-color);
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-box h1 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header-box p {
+            margin: 5px 0;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Cornell Note Layout */
+        .cornell-container {
+            display: flex;
+            gap: 20px;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .keywords-sidebar {
+            width: 25%;
+            border-right: 2px dashed var(--border-color);
+            padding-right: 20px;
+            background-color: var(--sidebar-bg);
+        }
+
+        .keywords-sidebar h3 {
+            color: var(--secondary-color);
+            border-bottom: 1px solid var(--secondary-color);
+            padding-bottom: 5px;
+        }
+
+        .keywords-sidebar ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+
+        .keywords-sidebar li {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .main-content {
+            width: 75%;
+            padding-left: 10px;
+        }
+
+        h2 { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: var(--secondary-color); margin-top: 25px; }
+        
+        .timestamp {
+            display: inline-block;
+            background-color: #e8f8f5;
+            color: #117a65;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Elements */
+        pre {
+            background-color: #282c34;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            border-left: 5px solid var(--secondary-color);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            background-color: #eaecee;
+            color: #c0392b;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        blockquote.emphasis {
+            border-left: 5px solid var(--accent-color);
+            background-color: #fdedec;
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 0 4px 4px 0;
+        }
+
+        blockquote.emphasis strong { color: var(--accent-color); }
+
+        .analogy {
+            background-color: #fef9e7;
+            border: 1px solid #fadbd8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .analogy::before { content: "💡 Analogía/Concepto Clave:"; font-weight: bold; display: block; margin-bottom: 5px; color: #d35400; }
+
+        .t-note {
+            background-color: #eaf2f8;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+
+        .t-note::before { content: "👨‍💻 Nota del Apuntador:"; font-weight: bold; color: #2980b9; display: block; margin-bottom: 5px; }
+
+        .section-box {
+            background-color: #fff;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .q-level { font-weight: bold; color: #8e44ad; margin-top: 20px; border-bottom: 1px solid #d2b4de; padding-bottom: 5px;}
+        .question { font-weight: bold; color: #2c3e50; margin-top: 15px; }
+        .answer { margin-bottom: 15px; padding-left: 20px; border-left: 3px solid #ecf0f1; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+</head>
+<body>
+
+    <div class="header-box">
+        <h1>APUNTES DE CLASE — SQL Desde Cero</h1>
+        <p>Parte 1 / 4</p>
+        <p>Temas: Casos de Uso, Motores (DBMS), Jerarquía y DDL</p>
+    </div>
+
+    <!-- CORNELL LAYOUT CONTAINER -->
+    <div class="cornell-container">
+        
+        <!-- MARGEN IZQUIERDO: PALABRAS CLAVE -->
+        <div class="keywords-sidebar">
+            <h3>PALABRAS CLAVE POR SECCIÓN</h3>
+            <ul>
+                <li><strong>§ 1. Intro SQL</strong><br> Declarativo, Consultas, Store Procedures, Propósito No General.</li>
+                <li><strong>§ 2. Relacional vs NoSQL</strong><br> Tablas, Esquema fijo, Claves, UML, Documentos flexibles (JSON/grafos).</li>
+                <li><strong>§ 3. Casos de Uso Reales</strong><br> Desarrollo Web, Análisis de Datos, Ingeniería de Software, Ciencia de Datos, Trazabilidad, Máquina de Estados.</li>
+                <li><strong>§ 4. Motores vs Lenguaje</strong><br> DBMS, MySQL, PostgreSQL, Dialectos, Licencias, Rendimiento.</li>
+                <li><strong>§ 5. Jerarquía</strong><br> Servidor, Motor, BBDD, Tablas, Registros (Filas), Campos (Columnas).</li>
+                <li><strong>§ 6. Entorno</strong><br> DB Engine, TablePlus, Docker.</li>
+                <li><strong>§ 7. DDL y Constraints</strong><br> CREATE, DROP, INT, DECIMAL, VARCHAR, PRIMARY KEY, AUTO_INCREMENT, UNIQUE, CHECK.</li>
+            </ul>
+        </div>
+
+        <!-- CUERPO PRINCIPAL -->
+        <div class="main-content">
+            <h2>ÍNDICE DE LA PARTE 1</h2>
+            <ol>
+                <li>Introducción a SQL</li>
+                <li>Bases de Datos: Relacionales vs No Relacionales</li>
+                <li>¿Para qué se usa SQL? (Casos Prácticos en la Industria)</li>
+                <li>Diferencia entre Lenguaje SQL y Motores DBMS</li>
+                <li>Jerarquía Estructural de las Bases de Datos</li>
+                <li>Configuración del Entorno de Trabajo</li>
+                <li>DDL: Lenguaje de Definición de Datos y Restricciones</li>
+            </ol>
+
+            <!-- SECCIÓN 1 -->
+            <h2>1. Introducción a SQL</h2>
+            <span class="timestamp">[00:00:00 → 00:08:00]</span>
+            
+            <p>El curso inicia destacando la importancia de SQL para interactuar con bases de datos relacionales. Su objetivo es almacenar y manejar grandes cantidades de datos.</p>
+            <p>SQL (Structured Query Language) es el lenguaje estándar diseñado específicamente para <strong>crear, gestionar y consultar bases de datos relacionales</strong>. Permite almacenar, modificar y acceder a información de forma estructurada.</p>
+
+            <blockquote class="emphasis">
+                <strong>📌 ÉNFASIS DEL PROFESOR:</strong><br>
+                SQL <strong>NO</strong> es un lenguaje de propósito general (como Python, Java o JavaScript que se pueden usar para hacer desarrollo web o automatizar cosas en general). Es un lenguaje de tipo "descriptivo" (declarativo), enfocado exclusivamente en consultas a bases de datos.
+            </blockquote>
+            
+            <p>Sin embargo, cumple con las características formales de un lenguaje de programación:</p>
+            <ul>
+                <li>Tiene sintaxis y reglas propias.</li>
+                <li>Permite operaciones lógicas y condicionales (ej. <code>WHERE</code>, <code>CASE</code>, <code>IF</code>).</li>
+                <li>Permite crear scripts y <strong>procedimientos almacenados (Store Procedures)</strong>, que ejecutan secuencias complejas de comandos directamente en la base de datos.</li>
+            </ul>
+
+
+            <!-- SECCIÓN 2 -->
+            <h2>2. Bases de Datos: Relacionales vs No Relacionales</h2>
+            <span class="timestamp">[00:08:00 → 00:15:00]</span>
+            
+            <p>Una Base de Datos (BBDD) es un sistema organizado para almacenar, gestionar y acceder a información de forma eficiente. <strong>La base de datos NO es lo mismo que el lenguaje (SQL) utilizado para consultarla.</strong></p>
+
+            <h3>2.1 Base de Datos Relacional (SQL)</h3>
+            <ul>
+                <li>Organiza la información en <strong>tablas</strong> con <strong>filas y columnas</strong>.</li>
+                <li>Usa <strong>relaciones</strong> entre las tablas mediante claves primarias (Primary Keys) y foráneas (Foreign Keys).</li>
+                <li>Es ideal para datos estructurados y consistentes.</li>
+                <li>Requiere un <strong>esquema fijo</strong> (la estructura estricta que un dato debe cumplir para ser válido).</li>
+            </ul>
+
+            <h3>2.2 Base de Datos No Relacional (NoSQL)</h3>
+            <ul>
+                <li>Almacena datos en <strong>estructuras flexibles</strong> como documentos, pares clave-valor o grafos.</li>
+                <li><strong>No requiere un esquema fijo</strong>, lo que le da muchísima flexibilidad. Un registro puede tener campos totalmente distintos a otro.</li>
+                <li>Ideal para datos grandes, distribuidos y sin estructura definida.</li>
+            </ul>
+
+            <div class="analogy">
+                El profesor compara los pares clave-valor de NoSQL con los "diccionarios" en Python o los "objetos" en JavaScript.
+            </div>
+
+            <!-- SECCIÓN 3 -->
+            <h2>3. ¿Para qué se usa SQL? (Casos Prácticos en la Industria)</h2>
+            <span class="timestamp">[00:15:00 → 00:22:00]</span>
+
+            <p>El profesor detalla los principales roles y escenarios empresariales donde SQL es la herramienta principal:</p>
+
+            <ul>
+                <li><strong>Desarrollo Web:</strong> SQL permite la interacción directa de cara al usuario.
+                    <ul>
+                        <li><em>Ejemplo 1:</em> Listar todos los comentarios que ha hecho un usuario específico en una red social.</li>
+                        <li><em>Ejemplo 2:</em> Mostrar en pantalla únicamente los productos que tienen inventario disponible (en stock) dentro de una tienda online.</li>
+                    </ul>
+                </li>
+                <li><strong>Análisis de Datos:</strong> Obtención de métricas masivas estructuradas.
+                    <ul>
+                        <li><em>Ejemplo 1:</em> Obtener la cantidad exacta de ventas realizadas durante un mes en particular.</li>
+                        <li><em>Ejemplo 2:</em> Listar y agrupar a los clientes que más compran para aplicarles descuentos.</li>
+                    </ul>
+                </li>
+                <li><strong>Ingeniería de Software:</strong> Operaciones de modificación y trazabilidad del sistema.
+                    <ul>
+                        <li><em>Ejemplo 1:</em> <strong>Máquinas de estado:</strong> Actualizar el estado de un pedido modificando su columna de "pendiente" a "enviado".</li>
+                        <li><em>Ejemplo 2:</em> <strong>Logs y Trazabilidad (Bancos):</strong> Registrar el historial de cambios de un documento, asegurando que cada mutación en el sistema deje una huella auditable en una tabla exclusiva de logs.</li>
+                    </ul>
+                </li>
+                <li><strong>Ciencia de Datos:</strong> SQL es extremadamente poderoso para procesar datos de muchísimo volumen de forma veloz.
+                    <ul>
+                        <li><em>Ejemplo:</em> Obtener los valores promedios matemáticos de una métrica específica divididos y agrupados por región geográfica.</li>
+                    </ul>
+                </li>
+            </ul>
+
+
+            <!-- SECCIÓN 4 -->
+            <h2>4. Diferencia entre Lenguaje SQL y Motores DBMS</h2>
+            <span class="timestamp">[00:22:00 → 00:28:00]</span>
+
+            <blockquote class="emphasis">
+                <strong>📌 ÉNFASIS DEL PROFESOR:</strong><br>
+                "¡No confundan SQL con MySQL! SQL es el IDIOMA que le dice a la base de datos qué hacer. MySQL, PostgreSQL, SQL Server y Oracle son los MOTORES (DBMS), es decir, el programa de software físico que almacena los datos y que ENTIENDE el idioma SQL."
+            </blockquote>
+
+            <p>Aunque todos los motores relacionales entienden SQL, cada motor tiene diferencias que los hacen únicos para distintos proyectos:</p>
+            <ul>
+                <li><strong>Diferencias de Rendimiento:</strong> Qué tan rápido y eficiente funciona cada motor en escenarios específicos.</li>
+                <li><strong>Diferencias de Licencias:</strong> Algunos son de código abierto (gratuitos) y otros son empresariales y de pago (ej. Oracle, Microsoft SQL Server).</li>
+                <li><strong>Funciones Adicionales (Dialectos):</strong> SQL es el estándar general, pero cada motor añade pequeñas funcionalidades específicas (ej. manejo avanzado de JSON en PostgreSQL) provocando ligeras diferencias en la forma de escribir las consultas según la marca del DBMS.</li>
+            </ul>
+
+            <!-- SECCIÓN 5 -->
+            <h2>5. Jerarquía Estructural de las Bases de Datos</h2>
+            <span class="timestamp">[00:28:00 → 00:35:00]</span>
+
+            <p>Para entender dónde se alojan los datos, el profesor explica la jerarquía de mayor a menor:</p>
+            
+            <div class="mermaid" style="text-align: center; margin: 20px 0;">
+            graph TD;
+                A[Servidor / Hardware] -->|Aloja| B[Motor DBMS]
+                B -->|Contiene| C[Base de Datos]
+                C -->|Agrupa| D[Tablas]
+                D -->|Estructura| E[Columnas / Campos]
+                D -->|Almacena| F[Filas / Registros]
+                
+                style A fill:#f9e79f,stroke:#f39c12,stroke-width:2px
+                style B fill:#aed6f1,stroke:#2980b9,stroke-width:2px
+                style C fill:#abebc6,stroke:#27ae60,stroke-width:2px
+                style D fill:#f5b041,stroke:#d35400,stroke-width:2px
+            </div>
+
+            <ol>
+                <li><strong>Servidor:</strong> La máquina física o software local que aloja uno o varios motores de base de datos.</li>
+                <li><strong>Base de Datos (Database):</strong> Un conjunto organizado que puede contener múltiples tablas relacionadas. Un servidor puede tener múltiples BBDD.</li>
+                <li><strong>Tablas (Tables):</strong> Estructuras bidimensionales de datos compuestas por filas y columnas (ej. <code>estudiantes</code>, <code>cursos</code>).</li>
+                <li><strong>Registros (Filas):</strong> Cada entrada horizontal en una tabla. Un dato de entidad completo (ej. el estudiante "Juan").</li>
+                <li><strong>Campos (Columnas):</strong> Los atributos verticales de un registro (ej. <code>edad</code>, <code>nombre</code>, <code>email</code>).</li>
+            </ol>
+
+            <!-- SECCIÓN 6 -->
+            <h2>6. Configuración del Entorno de Trabajo</h2>
+            <span class="timestamp">[00:35:00 → 00:50:00]</span>
+
+            <p><strong>Enlace oficial al video:</strong> <a href="https://youtu.be/Fca_kWJJXvo" target="_blank">https://youtu.be/Fca_kWJJXvo</a></p>
+
+            <p>Instalaciones necesarias para curso de SQL:</p>
+            <ul>
+                <li><a href="https://dbngin.com/" target="_blank">DBNGIN</a>: Motor local ligero para bases de datos.</li>
+                <li><a href="https://tableplus.com/" target="_blank">TABLE PLUS</a>: Cliente UI gráfico avanzado.</li>
+                <li><a href="https://www.docker.com/get-started/" target="_blank">DOCKER</a>: Para contenedores de PostgreSQL y MySQL.</li>
+            </ul>
+
+            <p>Utilizaremos en la práctica avanzada (Sección 12):</p>
+            <ul>
+                <li><a href="https://www.google.com/intl/es_es/chrome/" target="_blank">GOOGLE CHROME</a> (Navegador)</li>
+                <li><a href="https://code.visualstudio.com/download" target="_blank">VISUAL STUDIO CODE</a> (Editor Código)</li>
+                <li><a href="https://git-scm.com/" target="_blank">GIT</a> (Manejador de versiones)</li>
+                <li><a href="https://www.postman.com/downloads/" target="_blank">POSTMAN</a> (Cliente de pruebas de API backend)</li>
+            </ul>
+
+            <!-- SECCIÓN 7 -->
+            <h2>7. DDL: Lenguaje de Definición de Datos</h2>
+            <span class="timestamp">[00:50:00 → 01:25:00]</span>
+
+            <p>El DDL define la <strong>estructura</strong> inmutable de las tablas.</p>
+
+            <h3>Creación Básica</h3>
+<pre><code class="language-sql">CREATE DATABASE ecommerce;
+USE ecommerce; /* Selecciona la BD (específico de MySQL) */
+DROP DATABASE ecommerce; /* Peligroso: borra la base de datos entera */</code></pre>
+
+            <h3>Tipos de Datos Tácticos</h3>
+            <ul>
+                <li><code>INT</code>: Números enteros (IDs, stock).</li>
+                <li><code>VARCHAR(n)</code>: Texto corto con límite de caracteres (ej. VARCHAR(255) para emails o nombres).</li>
+                <li><code>TEXT</code>: Texto extremadamente largo (ej. descripciones de productos).</li>
+                <li><code>DECIMAL(precision, scale)</code>: Números fraccionales. <code>DECIMAL(10,2)</code> asegura 10 dígitos y 2 decimales exactos.</li>
+                <li><code>BOOLEAN</code>: Verdadero (1) o Falso (0).</li>
+                <li><code>DATE / DATETIME</code>: Fechas puras o con reloj de tiempo.</li>
+            </ul>
+
+            <h3>Restricciones Críticas (Constraints)</h3>
+            <ul>
+                <li><code>PRIMARY KEY</code>: El identificador único e irrepetible de la fila (el "DNI" del registro).</li>
+                <li><code>AUTO_INCREMENT</code>: Generación numérica secuencial automática para no insertar el ID manualmente.</li>
+                <li><code>NOT NULL</code>: Prohíbe dejar el campo en blanco.</li>
+                <li><code>UNIQUE</code>: Evita duplicados en columnas específicas (ideal para correos electrónicos).</li>
+                <li><code>DEFAULT</code>: Valor automático si se omite en la inserción (ej. <code>DEFAULT 0</code> para stock).</li>
+                <li><code>CHECK</code>: Valida lógica booleana antes de permitir la entrada (ej. <code>CHECK (price > 0)</code>).</li>
+            </ul>
+
+            <strong>Ejemplo Final del profesor (Creando tabla Products):</strong>
+<pre><code class="language-sql">CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) CHECK (price > 0),
+    stock INT DEFAULT 0,
+    created_at DATE DEFAULT CURRENT_DATE
+);</code></pre>
+
+        </div>
+    </div> <!-- END CORNELL CONTAINER -->
+
+    <!-- FOOTER SECTIONS -->
+    <div class="section-box">
+        <h2>GLOSARIO TÉCNICO</h2>
+        
+        <p><strong>SQL (Structured Query Language):</strong><br> Es el lenguaje declarativo estándar para interactuar con bases de datos relacionales.</p>
+
+        <p><strong>DBMS (Database Management System / Motor):</strong><br> El software (programa) como MySQL o PostgreSQL que almacena los archivos en el disco y entiende/ejecuta las instrucciones SQL enviadas.</p>
+        
+        <p><strong>Constraint:</strong><br> Regla estricta aplicada a una columna que el motor forzará para asegurar que el dato sea válido (ej. NOT NULL, UNIQUE).</p>
+    </div>
+
+    <div class="section-box">
+        <h2>PREGUNTAS DE REPASO (Estilo Examen)</h2>
+        
+        <div class="q-level">NIVEL 1 — Comprensión directa</div>
+        <p class="question">P1: Menciona una diferencia clave entre SQL y MySQL basándote en la clase.</p>
+        <p class="answer">R1: SQL es el lenguaje de programación declarativo para hacer consultas. MySQL es el Motor (DBMS) o programa que recibe dicho lenguaje, almacena la información físicamente y la devuelve.</p>
+
+        <div class="q-level">NIVEL 2 — Aplicación</div>
+        <p class="question">P2: En un entorno bancario te solicitan llevar un registro o log auditable (trazabilidad) de todas las transacciones. Según los casos de uso vistos, ¿qué área cubre esto?</p>
+        <p class="answer">R2: Cubre el área de Ingeniería de Software, mediante la utilización de SQL para insertar un historial secuencial e inmutable cada vez que ocurre un cambio en el sistema bancario.</p>
+
+        <div class="q-level">NIVEL 3 — Análisis / Síntesis</div>
+        <p class="question">P3: ¿Por qué en un e-commerce el campo "precio" no debe dejarse sin restricciones y cuál es la combinación técnica que sugirió el profesor para arreglarlo?</p>
+        <p class="answer">R3: Porque no existen precios negativos y el uso de flotantes binarios rompe la precisión de centavos. La combinación técnica requerida es usar <code>DECIMAL(10,2)</code> para precisión exacta, seguido del constraint lógico <code>CHECK (precio > 0)</code> para que el motor rechace automáticamente inserciones defectuosas del backend.</p>
+    </div>
+
+    <div class="section-box">
+        <h2>EJERCICIOS PRÁCTICOS</h2>
+        
+        <p><strong>Ejercicio 1 — Análisis de Casos Reales</strong><br>
+        <em>Enunciado:</em> Identifica si los siguientes casos se resuelven de forma óptima con una Base Relacional (SQL) o No Relacional (NoSQL).<br>
+        1. Almacenar el catálogo de inventario de facturación gubernamental con campos inflexibles.<br>
+        2. Almacenar logs JSON generados aleatoriamente por 10,000 servidores web con distintas propiedades.<br>
+        <em>Solución guiada:</em><br>
+        1. <strong>Relacional (SQL):</strong> Al requerir campos inflexibles y estructurados contablemente, un esquema fijo (tablas/columnas) es el estándar obligatorio.<br>
+        2. <strong>No Relacional (NoSQL):</strong> Los archivos JSON aleatorios y dinámicos que no comparten los mismos campos requieren una estructura de "documentos" flexible que una base relacional rechazaría por no coincidir con un esquema pre-configurado.</p>
+    </div>
+
+    <div class="section-box">
+        <h2>RESUMEN EJECUTIVO (PARTE 1)</h2>
+        <p>La primera parte de esta clase cubrió desde la pura teoría hasta la codificación base de tablas:</p>
+        <ul>
+            <li><strong>Roles del Ecosistema:</strong> Se definió a SQL como el idioma y a softwares como PostgreSQL/MySQL como los motores que leen dicho idioma.</li>
+            <li><strong>Sectores Industriales:</strong> Se demostró cómo impacta SQL en Desarrollo Web (Listado de stock), Ingeniería de Software (Logs/Máquina de estados), Análisis y Ciencia de Datos (Métricas regionales).</li>
+            <li><strong>Modelado Estructural (DDL):</strong> Jerarquización conceptual (Servidor > Base de Datos > Tablas > Filas > Columnas) y creación técnica mediante <code>CREATE TABLE</code> controlando flujos a través de constraints defensivos (<code>NOT NULL</code>, <code>CHECK</code>, <code>UNIQUE</code>, <code>DEFAULT</code>).</li>
+        </ul>
+        <p><strong>Próxima etapa:</strong> Habiendo definido las estructuras inmutables (DDL), la clase avanzará a relacionar dichas tablas utilizando el concepto de Llaves Foráneas (Foreign Keys) e inyectar registros vivos (DML).</p>
+    </div>
+
+</body>
+</html>

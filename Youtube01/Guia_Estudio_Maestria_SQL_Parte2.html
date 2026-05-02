@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apuntes de Clase - SQL Desde Cero (Parte 2)</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --sidebar-bg: #fdfefe;
+            --text-color: #333;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ecf0f1;
+        }
+
+        .header-box {
+            border: 3px double var(--primary-color);
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-box h1 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header-box p {
+            margin: 5px 0;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Cornell Note Layout */
+        .cornell-container {
+            display: flex;
+            gap: 20px;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .keywords-sidebar {
+            width: 25%;
+            border-right: 2px dashed var(--border-color);
+            padding-right: 20px;
+            background-color: var(--sidebar-bg);
+        }
+
+        .keywords-sidebar h3 {
+            color: var(--secondary-color);
+            border-bottom: 1px solid var(--secondary-color);
+            padding-bottom: 5px;
+        }
+
+        .keywords-sidebar ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+
+        .keywords-sidebar li {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .main-content {
+            width: 75%;
+            padding-left: 10px;
+        }
+
+        h2 { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: var(--secondary-color); margin-top: 25px; }
+        
+        .timestamp {
+            display: inline-block;
+            background-color: #e8f8f5;
+            color: #117a65;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Elements */
+        pre {
+            background-color: #282c34;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            border-left: 5px solid var(--secondary-color);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            background-color: #eaecee;
+            color: #c0392b;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        blockquote.emphasis {
+            border-left: 5px solid var(--accent-color);
+            background-color: #fdedec;
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 0 4px 4px 0;
+        }
+
+        blockquote.emphasis strong { color: var(--accent-color); }
+
+        .analogy {
+            background-color: #fef9e7;
+            border: 1px solid #fadbd8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .analogy::before { content: "💡 Analogía/Concepto Clave:"; font-weight: bold; display: block; margin-bottom: 5px; color: #d35400; }
+
+        .t-note {
+            background-color: #eaf2f8;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+
+        .t-note::before { content: "👨‍💻 Nota del Apuntador:"; font-weight: bold; color: #2980b9; display: block; margin-bottom: 5px; }
+
+        .section-box {
+            background-color: #fff;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .q-level { font-weight: bold; color: #8e44ad; margin-top: 20px; border-bottom: 1px solid #d2b4de; padding-bottom: 5px;}
+        .question { font-weight: bold; color: #2c3e50; margin-top: 15px; }
+        .answer { margin-bottom: 15px; padding-left: 20px; border-left: 3px solid #ecf0f1; }
+    </style>
+</head>
+<body>
+
+    <div class="header-box">
+        <h1>APUNTES DE CLASE — SQL Desde Cero</h1>
+        <p>Continuación: Parte 2 / 4</p>
+        <p>Temas: Llaves Foráneas (Relaciones), DML (Insert/Update/Delete) y DQL (Select Básico)</p>
+    </div>
+
+    <!-- CORNELL LAYOUT CONTAINER -->
+    <div class="cornell-container">
+        
+        <!-- MARGEN IZQUIERDO: PALABRAS CLAVE -->
+        <div class="keywords-sidebar">
+            <h3>PALABRAS CLAVE POR SECCIÓN</h3>
+            <ul>
+                <li><strong>§ 1. Foreign Keys</strong><br> User ID, Product ID, Referencias, Identificador único, Integridad Referencial.</li>
+                <li><strong>§ 2. Inserción (DML)</strong><br> INSERT INTO, VALUES, Columnas Calculadas, Default explícito, NULL explícito.</li>
+                <li><strong>§ 3. Modificación y Borrado</strong><br> UPDATE, SET, DELETE, TRUNCATE, DROP, Cláusula WHERE, Auto-incremental no reciclable.</li>
+                <li><strong>§ 4. Consultas (DQL)</strong><br> SELECT, Asterisco, LIKE, Comodines (%), BETWEEN, IN, IS NULL, ORDER BY, LIMIT, DISTINCT, ALIAS (AS).</li>
+                <li><strong>§ 5. Agregación (Intro)</strong><br> COUNT, SUM, AVG. Segmentación, Estadísticas.</li>
+            </ul>
+        </div>
+
+        <!-- CUERPO PRINCIPAL -->
+        <div class="main-content">
+            <h2>ÍNDICE DE LA PARTE 2</h2>
+            <ol>
+                <li>Creación de Tablas Relacionales (Foreign Keys)</li>
+                <li>DML: Inserción de Registros (INSERT)</li>
+                <li>DML: Edición y Borrado Crítico (UPDATE, DELETE, TRUNCATE)</li>
+                <li>DQL: Consultas de Extracción de Datos (SELECT, LIKE, LIMIT)</li>
+                <li>DQL: Introducción a Funciones de Agregación</li>
+            </ol>
+
+            <!-- SECCIÓN 1 -->
+            <h2>1. Creación de Tablas Relacionales (Foreign Keys)</h2>
+            <span class="timestamp">[Continuación temporal... ~01:15:00]</span>
+            
+            <p>El profesor retoma la creación de la última tabla esencial para un E-commerce: <code>orders</code> (compras). El objetivo es entender cómo se vinculan los "documentos únicos" (IDs) de las distintas entidades en una Base de Datos Relacional.</p>
+            
+            <div class="analogy">
+                El profesor utiliza la herramienta Miro para dibujar flechas entre la tabla de Usuarios, Productos y Órdenes. Explica que la llave foránea (Foreign Key) es lo que permite que una compra sepa exactamente quién es el usuario que la efectuó y qué producto llevó, asegurando que no existan compras huérfanas en el sistema.
+            </div>
+
+            <p>Una <code>FOREIGN KEY</code> es una restricción que asegura que el valor introducido en una columna debe existir obligatoriamente en la llave primaria (<code>PRIMARY KEY</code>) de otra tabla.</p>
+
+            <strong>Código Completo de la Tabla Relacional:</strong>
+<pre><code class="language-sql">CREATE TABLE orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT DEFAULT 1,
+    total DECIMAL(10,2),
+    order_date DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);</code></pre>
+            
+            <div class="t-note">
+                El profesor mencionó que el campo <code>total</code> podría ser una <strong>"columna calculada"</strong> (<code>total DECIMAL(10,2) AS (price * quantity)</code>), pero decide dejarlo como un campo normal por ahora para no complicar la sintaxis introductoria. Es fundamental que los campos <code>user_id</code> y <code>product_id</code> compartan exactamente el mismo tipo de dato que sus llaves primarias de origen (en este caso <code>INT</code>).
+            </div>
+
+
+            <!-- SECCIÓN 2 -->
+            <h2>2. DML: Inserción de Registros (INSERT)</h2>
+            <span class="timestamp">[~01:25:00]</span>
+            
+            <p>El profesor transiciona al DML (Data Manipulation Language). Mientras el DDL define la estructura, el DML manipula los datos vivos que habitan esas estructuras.</p>
+
+            <h3>Sintaxis de Inserción Básica</h3>
+<pre><code class="language-sql">INSERT INTO users (name, email, password, cellphone)
+VALUES 
+('Sergie Code', 'info@sergiecode.com', 'secreto123', '+4412345'),
+('Ricardo Darin', 'ricardo@darin.com', 'secreto456', '+1198765'),
+('Jen Ortega', 'jen@ortega.com', 'merlina123', '+11223344');</code></pre>
+
+            <h3>Inserción Parcial y Comportamiento de Nulos/Defaults</h3>
+            <p>Cuando se inserta un registro y se omiten campos, si el campo permite nulos se llena con <code>NULL</code>, y si tiene un constraint <code>DEFAULT</code>, toma ese valor. Si se exige explícitamente pasar por todos los valores (sin declarar las columnas arriba), se debe pasar la palabra clave <code>NULL</code> manualmente.</p>
+            
+            <strong>Ejemplo del profesor:</strong>
+<pre><code class="language-sql">INSERT INTO products (name, description, price, stock)
+VALUES ('Notebook', 'Laptop alta gama', 1000.50, 10);
+
+-- Qué pasa si omitimos columnas permitidas a ser Nulas:
+INSERT INTO products (name, price)
+VALUES ('Mouse', 5.50);
+-- El motor insertará NULL en description y 0 en stock (porque tenía DEFAULT 0).</code></pre>
+
+
+            <!-- SECCIÓN 3 -->
+            <h2>3. DML: Edición y Borrado Crítico (UPDATE, DELETE, TRUNCATE)</h2>
+            <span class="timestamp">[~01:40:00]</span>
+
+            <h3>UPDATE (Actualización)</h3>
+            <p>Sirve para modificar datos existentes de una o múltiples columnas a la vez separándolas por comas.</p>
+
+            <blockquote class="emphasis">
+                <strong>📌 ÉNFASIS DEL PROFESOR (EL PELIGRO DEL WHERE):</strong><br>
+                "¡JAMÁS hagas un UPDATE sin la cláusula WHERE! Si olvidas el WHERE, modificarás todas las filas. Por ejemplo, le cambiarías la contraseña a TODOS los usuarios del sistema por accidente. Es el meme típico de SQL por una razón real."
+            </blockquote>
+
+<pre><code class="language-sql">UPDATE users 
+SET password = 'the_thing_is_my_friend', cellphone = '+150011222'
+WHERE id = 3;</code></pre>
+
+            <h3>DELETE, DROP y TRUNCATE</h3>
+            <p>El profesor establece una diferencia crucial entre las tres formas de eliminar información:</p>
+            <ul>
+                <li><code>DELETE FROM tabla WHERE condicion;</code> → Borra filas específicas. Si omites el WHERE, borra todas las filas pero la estructura de la tabla y sus contadores internos se mantienen.</li>
+                <li><code>TRUNCATE TABLE tabla;</code> → Vacía la tabla por completo y <strong>reinicia el contador del AUTO_INCREMENT</strong> a 1. La tabla sigue existiendo.</li>
+                <li><code>DROP TABLE tabla;</code> → DDL puro. Destruye la tabla por completo. Deja de existir la estructura en la base de datos.</li>
+            </ul>
+
+            <div class="t-note">
+                <strong>Regla de Integridad de IDs Autoincrementales:</strong> El profesor hizo un experimento borrando el producto ID 5. Al crear uno nuevo, el motor generó el ID 8 (continuando la secuencia). <strong>Las bases de datos relacionales NUNCA reciclan IDs de registros borrados</strong>. Si borras el 5, el 5 se pierde para siempre. Esto garantiza la integridad histórica.
+            </div>
+
+            <p><strong>Bloqueo por Foreign Key:</strong> El profesor intentó borrar todos los productos y falló porque algunos productos ya estaban "comprados" en la tabla <code>orders</code>. La Base de Datos rechazó la eliminación para evitar dejar órdenes de compra con productos "fantasmas".</p>
+
+
+            <!-- SECCIÓN 4 -->
+            <h2>4. DQL: Consultas de Extracción de Datos (SELECT)</h2>
+            <span class="timestamp">[~01:50:00]</span>
+
+            <p>DQL (Data Query Language). Consiste primordialmente en el comando <code>SELECT</code> para extraer y consultar información.</p>
+
+            <h3>Operadores y Filtros Múltiples</h3>
+            <p>Se pueden concatenar condiciones complejas usando <code>AND</code> / <code>OR</code>.</p>
+<pre><code class="language-sql">SELECT name, price 
+FROM products 
+WHERE stock >= 10 AND price > 10;</code></pre>
+
+            <h3>Comodines de Texto (LIKE)</h3>
+            <p>Permite buscar patrones dentro de un texto. El porcentaje (<code>%</code>) reemplaza a "cualquier cadena de caracteres".</p>
+<pre><code class="language-sql">SELECT name FROM products WHERE name LIKE '%mo%';</code></pre>
+            <p><strong>Nota del profesor:</strong> <code>LIKE</code> en MySQL no distingue entre mayúsculas y minúsculas (case insensitive) ni es sensible a acentos (automóvil vs automovil) bajo la configuración por defecto de UTF-8.</p>
+
+            <h3>IN, BETWEEN y Valores Nulos</h3>
+            <ul>
+                <li><strong>Conjuntos:</strong> <code>WHERE id IN (1, 2, 3)</code> evalúa si el ID pertenece a esa lista.</li>
+                <li><strong>Rangos:</strong> <code>WHERE price BETWEEN 50 AND 150</code> incluye los bordes 50 y 150.</li>
+                <li><strong>Nulidad:</strong> <code>WHERE description IS NULL</code> (no se usa <code>= NULL</code>).</li>
+            </ul>
+
+            <h3>Orden, Limites y Duplicados</h3>
+            <ul>
+                <li><strong>ORDER BY:</strong> Organiza la salida. <code>ORDER BY price DESC</code> (mayor a menor) o <code>ASC</code> (menor a mayor).</li>
+                <li><strong>LIMIT:</strong> Restringe la cantidad de datos devueltos. <code>LIMIT 3</code> (solo trae los primeros 3 registros). Vital para paginación de software.</li>
+                <li><strong>DISTINCT:</strong> Filtra valores repetidos proyectados. <code>SELECT DISTINCT name FROM products;</code></li>
+                <li><strong>AS (Alias):</strong> Renombra la salida para el backend temporalmente. <code>SELECT name AS producto FROM products;</code></li>
+            </ul>
+
+
+            <!-- SECCIÓN 5 -->
+            <h2>5. DQL: Introducción a Funciones de Agregación</h2>
+            <span class="timestamp">[~02:00:00]</span>
+
+            <p>Las funciones de agregación devuelven un único resultado tras evaluar múltiples filas.</p>
+
+            <ul>
+                <li><strong>COUNT(*):</strong> Cuenta la cantidad de filas resultantes.</li>
+                <li><strong>SUM(columna):</strong> Suma todos los valores numéricos de esa columna. Ejemplo: Ganancia total del día.</li>
+                <li><strong>AVG(columna):</strong> Average (Promedio). Ejemplo: Precio promedio de venta para segmentación de mercado.</li>
+            </ul>
+
+<pre><code class="language-sql">SELECT SUM(total) AS ganancia_total FROM orders;
+SELECT COUNT(*) AS total_productos_stock FROM products WHERE stock >= 1;</code></pre>
+
+        </div>
+    </div> <!-- END CORNELL CONTAINER -->
+
+    <!-- FOOTER SECTIONS -->
+    <div class="section-box">
+        <h2>GLOSARIO TÉCNICO</h2>
+        
+        <p><strong>Foreign Key (Clave Foránea):</strong><br> Una columna en una tabla que actúa como un puntero a la <code>PRIMARY KEY</code> de otra tabla, forzando la integridad de las relaciones.</p>
+        
+        <p><strong>DML (Data Manipulation Language):</strong><br> Subconjunto de SQL que manipula la información (CRUD operativo). Comandos: <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>.</p>
+        
+        <p><strong>DQL (Data Query Language):</strong><br> Lenguaje exclusivo para la consulta de información sin alterarla. Comando base: <code>SELECT</code>.</p>
+        
+        <p><strong>TRUNCATE vs DROP:</strong><br> <code>TRUNCATE</code> vacía los datos pero deja la estructura de la tabla viva. <code>DROP</code> aniquila tanto los datos como la estructura misma de la base de datos.</p>
+
+        <p><strong>Wildcard (Comodín %):</strong><br> Símbolo utilizado con la instrucción <code>LIKE</code> que le indica al motor SQL que no importa cuántos caracteres existan en ese espacio.</p>
+    </div>
+
+    <div class="section-box">
+        <h2>PREGUNTAS DE REPASO (Estilo Examen)</h2>
+        
+        <div class="q-level">NIVEL 1 — Comprensión directa</div>
+        <p class="question">P1: ¿Qué sucede con los números Autoincrementales cuando se elimina un registro mediante la instrucción DELETE?</p>
+        <p class="answer">R1: El número autoincremental no se recicla. Si borras el ID 5, el próximo insert generará el ID 6 (o el siguiente disponible). La secuencia avanza para garantizar que nunca haya choques históricos con datos dependientes.</p>
+        
+        <p class="question">P2: ¿Por qué falló el intento del profesor de borrar todos los datos de la tabla "products"?</p>
+        <p class="answer">R2: Por la protección de la Foreign Key. Dado que existían órdenes en la tabla "orders" que hacían referencia a los IDs de "products", la base de datos abortó la eliminación para prevenir una violación de integridad referencial.</p>
+
+        <div class="q-level">NIVEL 2 — Aplicación</div>
+        <p class="question">P3: Requieres traer de la tabla usuarios aquellos cuyo nombre inicie con "Ser" ignorando cómo terminan. ¿Qué query ejecutarías?</p>
+        <p class="answer">R3: Utilizaría el operador LIKE con el comodín al final: <code>SELECT * FROM users WHERE name LIKE 'Ser%';</code></p>
+
+        <div class="q-level">NIVEL 3 — Análisis / Síntesis</div>
+        <p class="question">P4: Analiza las diferencias arquitectónicas entre vaciar una tabla usando DELETE (sin WHERE) y usar TRUNCATE. ¿Cuál elegirías para reiniciar un entorno de pruebas?</p>
+        <p class="answer">R4: <code>DELETE</code> evalúa fila por fila (siendo más lento y llenando logs de transacciones) y no reinicia el contador de auto_increment. <code>TRUNCATE</code> elimina la data de golpe a nivel de almacenamiento físico y formatea el contador a 1. Para reiniciar un entorno de pruebas limpiamente, <code>TRUNCATE</code> es la herramienta técnica adecuada.</p>
+    </div>
+
+    <div class="section-box">
+        <h2>EJERCICIOS PRÁCTICOS (Basados en el Repositorio Oficial)</h2>
+        
+        <p><strong>Ejercicio 1 — DML (Actualización Crítica)</strong><br>
+        <em>Objetivo:</em> Identificar usuarios y actualizar precios en masa basándonos en condicionales.<br>
+        <em>Enunciado:</em> A causa de la inflación, el negocio ha decidido aumentar el precio de todos sus productos en $10.00, pero únicamente de los productos que actualmente cuestan menos de $100.00. Escribe el DML correspondiente.<br>
+        <em>Solución guiada:</em></p>
+<pre><code class="language-sql">UPDATE products 
+SET price = price + 10.00 
+WHERE price < 100.00;</code></pre>
+        <p><small><em>Nota: SQL permite usar la misma columna en la fórmula matemática del lado derecho del <code>SET</code>.</em></small></p>
+
+        <p><strong>Ejercicio 2 — Evolución de Esquemas (ALTER TABLE)</strong><br>
+        <em>Objetivo:</em> Modificar la estructura de una tabla existente basándonos en la guía oficial del repositorio del profesor.<br>
+        <em>Enunciado:</em> Se requiere que la tabla <code>users</code> cambie de nombre a <code>customers</code>. Además, se le debe agregar una columna <code>phone</code> de tipo VARCHAR(20) y luego renombrarla a <code>cellphone</code> con un límite de 30 caracteres.<br>
+        <em>Solución guiada:</em></p>
+<pre><code class="language-sql">-- 1. Renombrar la tabla
+ALTER TABLE users RENAME TO customers;
+
+-- 2. Agregar nueva columna
+ALTER TABLE customers ADD COLUMN phone VARCHAR(20);
+
+-- 3. Renombrar la columna
+ALTER TABLE customers RENAME COLUMN phone TO cellphone;
+
+-- 4. Modificar el tipo y límite de la columna
+ALTER TABLE customers MODIFY COLUMN cellphone VARCHAR(30) NOT NULL;</code></pre>
+    </div>
+
+    <div class="section-box">
+        <h2>RESUMEN EJECUTIVO (PARTE 2)</h2>
+        <p>Esta segunda parte profundizó en la interconexión de datos y su manipulación activa:</p>
+        <ul>
+            <li><strong>Relacionalidad:</strong> Implementación técnica de las <code>FOREIGN KEYS</code> para atar existencias cruzadas (Usuarios → Compras ← Productos).</li>
+            <li><strong>Operaciones de Riesgo (DML):</strong> Uso del <code>UPDATE</code> y el peligro fatal de ignorar el <code>WHERE</code>, además de comparar <code>DELETE</code>, <code>TRUNCATE</code> y <code>DROP</code>.</li>
+            <li><strong>Inteligencia de Datos (DQL):</strong> Extracción selectiva filtrando mediante <code>LIKE</code>, <code>BETWEEN</code>, ordenando con <code>ORDER BY</code> y limitando la carga con <code>LIMIT</code>.</li>
+        </ul>
+        <p><strong>Para el examen:</strong> Nunca olvidar la regla estricta del <code>WHERE</code>, la diferencia fundamental de reciclar IDs entre Delete y Truncate, y el funcionamiento agnóstico (case-insensitive) del operador <code>LIKE</code>.</p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apuntes de Clase - SQL Desde Cero (Parte 3)</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --sidebar-bg: #fdfefe;
+            --text-color: #333;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ecf0f1;
+        }
+
+        .header-box {
+            border: 3px double var(--primary-color);
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-box h1 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header-box p {
+            margin: 5px 0;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Cornell Note Layout */
+        .cornell-container {
+            display: flex;
+            gap: 20px;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .keywords-sidebar {
+            width: 25%;
+            border-right: 2px dashed var(--border-color);
+            padding-right: 20px;
+            background-color: var(--sidebar-bg);
+        }
+
+        .keywords-sidebar h3 {
+            color: var(--secondary-color);
+            border-bottom: 1px solid var(--secondary-color);
+            padding-bottom: 5px;
+        }
+
+        .keywords-sidebar ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+
+        .keywords-sidebar li {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .main-content {
+            width: 75%;
+            padding-left: 10px;
+        }
+
+        h2 { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: var(--secondary-color); margin-top: 25px; }
+        
+        .timestamp {
+            display: inline-block;
+            background-color: #e8f8f5;
+            color: #117a65;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Elements */
+        pre {
+            background-color: #282c34;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            border-left: 5px solid var(--secondary-color);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            background-color: #eaecee;
+            color: #c0392b;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        blockquote.emphasis {
+            border-left: 5px solid var(--accent-color);
+            background-color: #fdedec;
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 0 4px 4px 0;
+        }
+
+        blockquote.emphasis strong { color: var(--accent-color); }
+
+        .analogy {
+            background-color: #fef9e7;
+            border: 1px solid #fadbd8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .analogy::before { content: "💡 Analogía/Concepto Clave:"; font-weight: bold; display: block; margin-bottom: 5px; color: #d35400; }
+
+        .t-note {
+            background-color: #eaf2f8;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-size: 0.95em;
+        }
+
+        .t-note::before { content: "👨‍💻 Nota del Apuntador:"; font-weight: bold; color: #2980b9; display: block; margin-bottom: 5px; }
+
+        .section-box {
+            background-color: #fff;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .q-level { font-weight: bold; color: #8e44ad; margin-top: 20px; border-bottom: 1px solid #d2b4de; padding-bottom: 5px;}
+        .question { font-weight: bold; color: #2c3e50; margin-top: 15px; }
+        .answer { margin-bottom: 15px; padding-left: 20px; border-left: 3px solid #ecf0f1; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+</head>
+<body>
+
+    <div class="header-box">
+        <h1>APUNTES DE CLASE — SQL Desde Cero</h1>
+        <p>Continuación: Parte 3 / 4</p>
+        <p>Temas: DQL Avanzado, Funciones de Agregación y Uniones (JOINs)</p>
+    </div>
+
+    <!-- CORNELL LAYOUT CONTAINER -->
+    <div class="cornell-container">
+        
+        <!-- MARGEN IZQUIERDO: PALABRAS CLAVE -->
+        <div class="keywords-sidebar">
+            <h3>PALABRAS CLAVE POR SECCIÓN</h3>
+            <ul>
+                <li><strong>§ 1. Filtros Complejos</strong><br> BETWEEN, IN, IS NULL, Múltiples condiciones.</li>
+                <li><strong>§ 2. Limpieza de Resultados</strong><br> DISTINCT, ORDER BY, LIMIT, Alias (AS).</li>
+                <li><strong>§ 3. Agregaciones Matemáticas</strong><br> COUNT, SUM, AVG, MIN, MAX.</li>
+                <li><strong>§ 4. JOINs (Teoría de Conjuntos)</strong><br> Intersecciones, INNER JOIN, Cláusula ON, Alias de Tablas (u, o, p).</li>
+                <li><strong>§ 5. LEFT JOIN</strong><br> Registros Huérfanos, Prioridad de tabla izquierda, Valores NULL derivados.</li>
+            </ul>
+        </div>
+
+        <!-- CUERPO PRINCIPAL -->
+        <div class="main-content">
+            <h2>ÍNDICE DE LA PARTE 3</h2>
+            <ol>
+                <li>DQL Avanzado: Ampliando Filtros Lógicos</li>
+                <li>Control de Salida: Ordenamiento y Alias</li>
+                <li>Funciones Nativas de Agregación</li>
+                <li>Introducción a la Teoría de Conjuntos (JOINs)</li>
+                <li>INNER JOIN vs LEFT JOIN en la Práctica</li>
+            </ol>
+
+            <!-- SECCIÓN 1 -->
+            <h2>1. DQL Avanzado: Ampliando Filtros Lógicos</h2>
+            <span class="timestamp">[Continuación temporal... ~02:05:00]</span>
+            
+            <p>El profesor decide inyectar productos con valores extremos (un "Automóvil" muy caro y "Chicles" extremadamente baratos con miles en stock) para someter a estrés las consultas.</p>
+
+            <h3>Filtros Relacionales y Múltiples (AND / OR)</h3>
+            <p>Podemos exigir que una fila cumpla varias reglas simultáneas para ser proyectada en el resultado.</p>
+<pre><code class="language-sql">SELECT name, price 
+FROM products 
+WHERE stock >= 10 AND price > 10;</code></pre>
+
+            <h3>Operadores Específicos: BETWEEN, IN e IS NULL</h3>
+            <p>Para simplificar sentencias matemáticas largas (ej. <code>precio >= 50 AND precio <= 150</code>), se utilizan operadores semánticos:</p>
+            <ul>
+                <li><strong>Rango (BETWEEN):</strong> <code>WHERE price BETWEEN 50 AND 150</code>. Incluye ambos bordes numéricos.</li>
+                <li><strong>Conjuntos explícitos (IN):</strong> <code>WHERE id IN (1, 2, 3)</code>. Evalúa coincidencia exacta con cualquiera de los ítems de la lista generada.</li>
+                <li><strong>Validación de Nulos (IS NULL):</strong> <code>WHERE description IS NULL</code>. Jamás usar el operador <code>=</code> para igualar a nulo. Opcionalmente: <code>IS NOT NULL</code>.</li>
+            </ul>
+
+
+            <!-- SECCIÓN 2 -->
+            <h2>2. Control de Salida: Ordenamiento y Alias</h2>
+            <span class="timestamp">[~02:15:00]</span>
+
+            <h3>DISTINCT (Evitando redundancias visuales)</h3>
+            <p>Si la base de datos tiene varios registros iguales a nivel de nombre (Ej. varias 'Notebook'), el comando <code>DISTINCT</code> los filtra para traer valores únicos, SIEMPRE Y CUANDO no incluyamos el <code>id</code> (ya que el ID hace que la fila entera sea mecánicamente distinta).</p>
+<pre><code class="language-sql">SELECT DISTINCT name, price FROM products;</code></pre>
+
+            <h3>Aliases de Tablas y Columnas (AS)</h3>
+            <p>El profesor remarca que los alias (<code>AS</code>) se usan extensamente en el desarrollo Backend para mapear datos en inglés (motor) hacia el frontend en español.</p>
+<pre><code class="language-sql">SELECT name AS producto, price AS precio_usd FROM products;</code></pre>
+
+            <!-- SECCIÓN 3 -->
+            <h2>3. Funciones Nativas de Agregación</h2>
+            <span class="timestamp">[~02:25:00]</span>
+            
+            <p>Las bases de datos no solo guardan datos, sino que poseen un poderoso motor matemático nativo. Extraer la data calculada directamente por el motor de base de datos es significativamente más veloz que extraer 100,000 registros al backend y sumarlos con un bucle <code>for</code> en Node.js.</p>
+
+            <ul>
+                <li><strong>COUNT(*):</strong> <code>SELECT COUNT(*) AS total_productos FROM products;</code> Cuenta la cantidad de filas que arroja la consulta. No suma valores internos, solo cuenta existencias.</li>
+                <li><strong>SUM(columna):</strong> <code>SELECT SUM(total) AS ganancia_total FROM orders;</code> Suma matemática de la columna.</li>
+                <li><strong>AVG(columna):</strong> "Average" / Promedio. Útil para segmentación de mercado o inteligencia de negocios. <code>SELECT AVG(price) FROM products;</code></li>
+                <li><strong>MIN() / MAX():</strong> Extraen el techo y el piso de una columna respectivamente.</li>
+            </ul>
+
+            <div class="t-note">
+                El profesor agrupó todas las funciones en una sola consulta para demostrar su poder analítico:<br>
+                <code>SELECT COUNT(*) as cant_prod, AVG(price) as precio_promedio, SUM(stock) as stock_total FROM products;</code>
+            </div>
+
+
+            <!-- SECCIÓN 4 -->
+            <h2>4. Introducción a la Teoría de Conjuntos (JOINs)</h2>
+            <span class="timestamp">[~02:35:00]</span>
+
+            <p>El corazón de SQL reside en las uniones relacionales (JOIN). Se usa cuando la información requerida está diseminada o normalizada en múltiples tablas.</p>
+
+            <div class="analogy">
+                El profesor utiliza un Diagrama de Venn de jugadores de deportes:<br>
+                - Grupo 1 (Fútbol): Messi, Cristiano, <strong>Pedro</strong>.<br>
+                - Grupo 2 (Básquet): Jordan, LeBron, <strong>Pedro</strong>.<br>
+                Pedro juega en ambos equipos. El "Inner Join" representa el cruce en el medio del diagrama: Pedro. Solo él cumple existir en ambas tablas.
+                
+                <div class="mermaid" style="text-align: center; margin-top: 15px;">
+                flowchart LR
+                    subgraph Fútbol
+                        M[Messi]
+                        C[Cristiano]
+                        P[Pedro]
+                    end
+                    subgraph Básquet
+                        P
+                        J[Jordan]
+                        L[LeBron]
+                    end
+                    style P fill:#f1c40f,stroke:#d35400,stroke-width:4px,color:#000
+                </div>
+            </div>
+
+            <h3>INNER JOIN</h3>
+            <p>El <code>INNER JOIN</code> exige <strong>correspondencia estricta</strong>. Devuelve únicamente los registros cuyas llaves (Primary y Foreign) tengan coincidencias en ambas tablas cruzadas.</p>
+
+<pre><code class="language-sql">SELECT u.name AS comprador, o.total 
+FROM users AS u
+INNER JOIN orders AS o ON u.id = o.user_id;</code></pre>
+            
+            <blockquote class="emphasis">
+                <strong>📌 ÉNFASIS DEL PROFESOR:</strong><br>
+                En los JOINs es obligatorio dominar los ALIAS de tabla (<code>users AS u</code>, <code>orders AS o</code>) porque al llamar columnas que se llaman igual (ej. <code>id</code>), el motor lanzará el error de "Columna Ambigua". Debes ser explícito: <code>u.name</code>, <code>u.id</code>, <code>o.id</code>.
+            </blockquote>
+
+
+            <!-- SECCIÓN 5 -->
+            <h2>5. LEFT JOIN en la Práctica</h2>
+            <span class="timestamp">[~02:45:00]</span>
+
+            <p>A diferencia del estricto <code>INNER JOIN</code>, el <code>LEFT JOIN</code> da prioridad absoluta a la tabla definida en el <code>FROM</code> (la izquierda de la operación).</p>
+            <ul>
+                <li>Trae TODOS los registros de la tabla izquierda, existan o no en la tabla derecha.</li>
+                <li>Si el registro izquierdo no tiene coincidencias en la derecha (ej. Un usuario que nunca compró nada), el motor rellena las columnas de órdenes con el valor <code>NULL</code>.</li>
+            </ul>
+
+<pre><code class="language-sql">-- Traer a TODOS los usuarios y sus compras, incluso si no han comprado nada:
+SELECT u.name, o.total 
+FROM users AS u
+LEFT JOIN orders AS o ON u.id = o.user_id;</code></pre>
+
+            <p><strong>Cadenas de JOINs Múltiples:</strong></p>
+            <p>Las consultas pueden anidar tantos <code>JOIN</code> como relaciones existan. Para saber "quién compró qué y cuánto pagó", debemos atravesar 3 tablas: Usuarios, Órdenes y Productos.</p>
+<pre><code class="language-sql">SELECT u.name AS comprador, p.name AS producto, o.total
+FROM orders AS o
+INNER JOIN users AS u ON o.user_id = u.id
+INNER JOIN products AS p ON o.product_id = p.id;</code></pre>
+
+        </div>
+    </div> <!-- END CORNELL CONTAINER -->
+
+    <!-- FOOTER SECTIONS -->
+    <div class="section-box">
+        <h2>GLOSARIO TÉCNICO</h2>
+        
+        <p><strong>INNER JOIN:</strong><br> Tipo de cruce relacional que devuelve únicamente las filas que comparten coincidencia directa entre las llaves designadas en la cláusula <code>ON</code>.</p>
+        
+        <p><strong>LEFT JOIN:</strong><br> Tipo de cruce que fuerza a proyectar absolutamente todas las filas de la primera tabla declarada (izquierda), inyectando datos vacíos (<code>NULL</code>) en los espacios de las columnas cruzadas que no hallaron coincidencia.</p>
+        
+        <p><strong>Alias (AS):</strong><br> Funcionalidad nativa de SQL que permite renombrar temporalmente a nivel de proyección (salida) el identificador de una tabla o columna. Evita ambigüedades técnicas.</p>
+        
+        <p><strong>Columna Ambigua:</strong><br> <code>[def. ampliada]</code> Error reportado por el motor SQL cuando se hace un SELECT de una columna llamada (ej.) "id" habiendo unido dos tablas que poseen una columna con el mismo nombre. Se soluciona obligando el uso de prefijos de alias (<code>u.id</code> o <code>o.id</code>).</p>
+    </div>
+
+    <div class="section-box">
+        <h2>PREGUNTAS DE REPASO (Estilo Examen)</h2>
+        
+        <div class="q-level">NIVEL 1 — Comprensión directa</div>
+        <p class="question">P1: ¿Cuál es el propósito exacto de la cláusula ON dentro de un JOIN?</p>
+        <p class="answer">R1: La cláusula <code>ON</code> establece la condición o "puente" lógico bajo el cual el motor debe entrelazar las dos tablas. Generalmente, iguala la Llave Primaria de una tabla con la Llave Foránea de otra (ej. <code>ON usuarios.id = ordenes.user_id</code>).</p>
+        
+        <p class="question">P2: ¿Para qué sirve el modificador DISTINCT?</p>
+        <p class="answer">R2: Para limpiar el conjunto de resultados (la respuesta de la BBDD) eliminando filas que sean exactamente idénticas en todas las columnas proyectadas por el SELECT.</p>
+
+        <div class="q-level">NIVEL 2 — Aplicación</div>
+        <p class="question">P3: Eres encargado del reporte financiero. Requieres saber cuál fue el monto máximo pagado en una sola orden de compra por un usuario en toda la historia de la plataforma. ¿Qué función matemática usas?</p>
+        <p class="answer">R3: Utilizaría la función de agregación máxima: <code>SELECT MAX(total) FROM orders;</code></p>
+
+        <div class="q-level">NIVEL 3 — Análisis / Síntesis</div>
+        <p class="question">P4: Imagina que en un sistema escolar solicitan un reporte de todos los alumnos registrados y las materias en las que están inscritos. El sistema utiliza un INNER JOIN y el departamento se queja de que "han desaparecido alumnos de la base de datos". ¿Qué falló arquitectónicamente en la query?</p>
+        <p class="answer">R4: El error fue utilizar un <code>INNER JOIN</code>. Al ser una intersección estricta, el motor ignoró y ocultó a todos los alumnos recién registrados que aún no se habían inscrito en ninguna materia. La query correcta debió utilizar un <code>LEFT JOIN</code> (FROM alumnos LEFT JOIN materias), lo cual mostraría a los alumnos sin materias indicando <code>NULL</code> en los campos académicos, sin "desaparecerlos" del reporte.</p>
+    </div>
+
+    <div class="section-box">
+        <h2>EJERCICIOS PRÁCTICOS (Basados en el Repositorio Oficial)</h2>
+        
+        <p><strong>Ejercicio 1 — Análisis de Videojuegos (GameHub)</strong><br>
+        <em>Objetivo:</em> Calcular métricas de tiempo jugado uniendo 3 tablas.<br>
+        <em>Enunciado:</em> Escribe una consulta que liste el título del videojuego y el promedio de horas jugadas por sesión. Ordena el resultado desde el juego con el promedio más alto al más bajo.<br>
+        <em>Solución guiada:</em></p>
+<pre><code class="language-sql">SELECT g.title, ROUND(AVG(s.hours_played), 2) AS promedio_horas
+FROM games g
+JOIN sessions s ON g.id = s.game_id
+GROUP BY g.title
+ORDER BY promedio_horas DESC;</code></pre>
+
+        <p><strong>Ejercicio 2 — Análisis de Restaurantes (FoodieTrack)</strong><br>
+        <em>Objetivo:</em> Encontrar los usuarios más activos del sistema combinando funciones de agregación.<br>
+        <em>Enunciado:</em> Se requiere listar a todos los usuarios junto con la cantidad exacta de reseñas que han escrito en la plataforma. Ordena la lista empezando por los que más reseñas tienen.<br>
+        <em>Solución guiada:</em></p>
+<pre><code class="language-sql">SELECT u.username, COUNT(rv.id) AS cantidad_reseñas
+FROM users u
+JOIN reviews rv ON u.id = rv.user_id
+GROUP BY u.username
+ORDER BY cantidad_reseñas DESC;</code></pre>
+
+        <p><strong>Ejercicio 3 — Uso de HAVING vs WHERE</strong><br>
+        <em>Enunciado:</em> Siguiendo con la plataforma de restaurantes, ahora el CEO solo quiere ver la lista de restaurantes que tengan <strong>más de 1 reseña</strong>.<br>
+        <em>Solución guiada:</em></p>
+<pre><code class="language-sql">SELECT r.name AS restaurante, COUNT(rv.id) AS cantidad_reseñas
+FROM restaurants r
+JOIN reviews rv ON r.id = rv.restaurant_id
+GROUP BY r.name
+HAVING COUNT(rv.id) > 1;</code></pre>
+        <p><small><em>Nota: Usamos <code>HAVING</code> porque <code>COUNT(rv.id)</code> es una función matemática que solo existe después del <code>GROUP BY</code>.</em></small></p>
+
+    </div>
+
+    <div class="section-box">
+        <h2>RESUMEN EJECUTIVO (PARTE 3)</h2>
+        <p>Esta tercera parte exploró las mecánicas analíticas y de vinculación de SQL:</p>
+        <ul>
+            <li><strong>Filtros Avanzados y Control:</strong> Limpieza de consultas mediante <code>DISTINCT</code>, comodines agnósticos (<code>LIKE '%texto%'</code>), operadores de grupo (<code>IN</code>, <code>BETWEEN</code>) y aliases explícitos (<code>AS</code>).</li>
+            <li><strong>Poder Computacional en DB:</strong> Delegar la carga matemática al motor empleando <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code> y <code>MAX</code>.</li>
+            <li><strong>Mentalidad de Conjuntos (JOINs):</strong> La arquitectura vertebral del modelo relacional. Comprender la distinción entre un cruce exigente (<code>INNER</code>) y un cruce de retención de la tabla base (<code>LEFT</code>), fundamental para evitar fallas lógicas en reportes productivos.</li>
+        </ul>
+        <p><strong>Siguiente paso:</strong> El profesor evolucionará las funciones matemáticas integrándolas con agrupaciones de columnas (<code>GROUP BY</code>), sentando las bases para subconsultas profundas y la conexión final con Node.js.</p>
+    </div>
+
+</body>
+</html>

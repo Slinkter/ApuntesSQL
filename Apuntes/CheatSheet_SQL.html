@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheat Sheet - SQL Desde Cero</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            background-color: #ecf0f1;
+        }
+
+        .header-box {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-box h1 { margin: 0; letter-spacing: 2px; }
+        
+        .masonry-grid {
+            display: column;
+            column-count: 2;
+            column-gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .masonry-grid { column-count: 1; }
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            break-inside: avoid;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .card h2 {
+            color: var(--secondary-color);
+            margin-top: 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            font-size: 1.2em;
+            text-transform: uppercase;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th { background-color: #f2f6f8; color: var(--primary-color); }
+        
+        code {
+            font-family: 'Consolas', monospace;
+            background-color: #eaecee;
+            color: #c0392b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="btn-back">← Volver al Índice Maestro</a>
+
+    <div class="header-box">
+        <h1>🚀 CHEAT SHEET DEFINITIVA SQL</h1>
+        <p>Resumen técnico rápido para desarrollo Backend</p>
+    </div>
+
+    <div class="masonry-grid">
+        
+        <!-- Tarjeta 1 -->
+        <div class="card">
+            <h2>Familia de Comandos SQL</h2>
+            <table>
+                <tr><th>Tipo</th><th>Nombre completo</th><th>Qué hace</th><th>Ejemplo</th></tr>
+                <tr><td><strong>DDL</strong></td><td>Data Definition</td><td>Define estructura</td><td><code>CREATE</code>, <code>ALTER</code>, <code>DROP</code></td></tr>
+                <tr><td><strong>DML</strong></td><td>Data Manipulation</td><td>Manipula datos vivos</td><td><code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code></td></tr>
+                <tr><td><strong>DQL</strong></td><td>Data Query</td><td>Consulta datos</td><td><code>SELECT</code></td></tr>
+                <tr><td><strong>DCL</strong></td><td>Data Control</td><td>Gestiona permisos</td><td><code>GRANT</code>, <code>REVOKE</code></td></tr>
+            </table>
+        </div>
+
+        <!-- Tarjeta 2 -->
+        <div class="card">
+            <h2>Tipos de Datos</h2>
+            <table>
+                <tr><th>Tipo</th><th>Uso típico</th><th>Ejemplo</th></tr>
+                <tr><td><code>INT</code></td><td>Números enteros</td><td>Cantidad, ID</td></tr>
+                <tr><td><code>DECIMAL(10,2)</code></td><td>Números exactos</td><td>Precio, saldo</td></tr>
+                <tr><td><code>VARCHAR(n)</code></td><td>Texto corto</td><td>Nombre, email</td></tr>
+                <tr><td><code>TEXT</code></td><td>Texto largo</td><td>Comentarios</td></tr>
+                <tr><td><code>DATE / DATETIME</code></td><td>Fechas y tiempos</td><td>Fecha de registro</td></tr>
+                <tr><td><code>BOOLEAN</code></td><td>Valores lógicos</td><td>Activo/Inactivo</td></tr>
+            </table>
+        </div>
+
+        <!-- Tarjeta 3 -->
+        <div class="card">
+            <h2>Constraints (Limitaciones)</h2>
+            <table>
+                <tr><th>Constraint</th><th>Función</th><th>Ejemplo</th></tr>
+                <tr><td><code>NOT NULL</code></td><td>Obliga a tener valor</td><td><code>email NOT NULL</code></td></tr>
+                <tr><td><code>DEFAULT</code></td><td>Valor por defecto</td><td><code>is_active DEFAULT TRUE</code></td></tr>
+                <tr><td><code>UNIQUE</code></td><td>No permite duplicados</td><td><code>email UNIQUE</code></td></tr>
+                <tr><td><code>CHECK</code></td><td>Valida lógica</td><td><code>CHECK (price > 0)</code></td></tr>
+                <tr><td><code>FOREIGN KEY</code></td><td>Vincula tablas</td><td><code>REFERENCES users(id)</code></td></tr>
+                <tr><td><code>PRIMARY KEY</code></td><td>ID único de fila</td><td><code>id PRIMARY KEY</code></td></tr>
+            </table>
+        </div>
+
+        <!-- Tarjeta 4 -->
+        <div class="card">
+            <h2>Operadores (WHERE)</h2>
+            <table>
+                <tr><th>Operador</th><th>Significado</th><th>Ejemplo</th></tr>
+                <tr><td><code>=, <, ></code></td><td>Comparación</td><td><code>price > 1000</code></td></tr>
+                <tr><td><code><></code> o <code>!=</code></td><td>Distinto</td><td><code>id != 1</code></td></tr>
+                <tr><td><code>BETWEEN</code></td><td>Rango incluyente</td><td><code>price BETWEEN 10 AND 50</code></td></tr>
+                <tr><td><code>LIKE</code></td><td>Coincidencia</td><td><code>name LIKE '%mo%'</code></td></tr>
+                <tr><td><code>IN</code></td><td>Conjunto exacto</td><td><code>id IN (1, 2, 3)</code></td></tr>
+                <tr><td><code>IS NULL</code></td><td>Validación de nulo</td><td><code>phone IS NULL</code></td></tr>
+            </table>
+        </div>
+
+        <!-- Tarjeta 5 -->
+        <div class="card">
+            <h2>Comandos ALTER TABLE</h2>
+            <table>
+                <tr><th>Operación</th><th>Descripción</th></tr>
+                <tr><td><code>ADD COLUMN</code></td><td>Agrega columna nueva.</td></tr>
+                <tr><td><code>DROP COLUMN</code></td><td>Elimina columna.</td></tr>
+                <tr><td><code>RENAME COLUMN</code></td><td>Cambia nombre a columna.</td></tr>
+                <tr><td><code>MODIFY COLUMN</code></td><td>Cambia tipo/restricción.</td></tr>
+                <tr><td><code>ADD CONSTRAINT</code></td><td>Agrega foreign key/unique.</td></tr>
+                <tr><td><code>RENAME TO</code></td><td>Cambia nombre de tabla.</td></tr>
+            </table>
+        </div>
+
+        <!-- Tarjeta 6 -->
+        <div class="card">
+            <h2>Funciones de Agregación</h2>
+            <table>
+                <tr><th>Función</th><th>Descripción</th><th>Ejemplo</th></tr>
+                <tr><td><code>COUNT()</code></td><td>Cuenta registros</td><td><code>COUNT(*)</code></td></tr>
+                <tr><td><code>SUM()</code></td><td>Suma numérica</td><td><code>SUM(price)</code></td></tr>
+                <tr><td><code>AVG()</code></td><td>Promedio</td><td><code>AVG(price)</code></td></tr>
+                <tr><td><code>MIN() / MAX()</code></td><td>Extremos</td><td><code>MAX(price)</code></td></tr>
+            </table>
+        </div>
+
+        <!-- Tarjeta 7 -->
+        <div class="card">
+            <h2>JOINs (Uniones)</h2>
+            <table>
+                <tr><th>Sintaxis Formal</th><th>Sintaxis Abreviada</th><th>Uso</th></tr>
+                <tr><td><code>INNER JOIN</code></td><td><code>JOIN</code></td><td>Intersección estricta</td></tr>
+                <tr><td><code>LEFT OUTER JOIN</code></td><td><code>LEFT JOIN</code></td><td>Retiene toda la tabla Izq.</td></tr>
+                <tr><td><code>RIGHT OUTER JOIN</code></td><td><code>RIGHT JOIN</code></td><td>Retiene toda la tabla Der.</td></tr>
+            </table>
+        </div>
+
+        <!-- Tarjeta 8 -->
+        <div class="card">
+            <h2>Motores (Valores por Defecto)</h2>
+            <table>
+                <tr><th>Motor</th><th>Puerto</th><th>Usuario</th><th>Contraseña</th></tr>
+                <tr><td><strong>PostgreSQL</strong></td><td>5432</td><td><code>postgres</code></td><td>(vacio)</td></tr>
+                <tr><td><strong>MySQL</strong></td><td>3306</td><td><code>root</code></td><td>(vacio)</td></tr>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>
