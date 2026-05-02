@@ -1,0 +1,62 @@
+# Ignore common OS files
+.DS_Store
+Thumbs.db
+*.pem
+.pem
+
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE specific files (VS Code, PyCharm, etc.)
+.vscode/
+.idea/
+
+# Ignore environment variable files (sensitive data)
+.env
+*.env
+
+# Ignore Docker related files if not explicitly tracked
+# docker-compose.yml # This is usually tracked as part of the setup
+
+# Temporary logs and cache files
+*.log
+tmp/
+cache/
+
+# Python virtual environments (common)
+venv/
+env/
+.venv/
+ENV/
+venv3/
+env3/
+virtualenv/
+env.bak/
+venv.bak/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# OS X specific
+.Trashes
+.Spotlight-V100
+.TemporaryItems
+
+# Windows specific
+pagefile.sys
+swapfile.sys
+hiberfil.sys
+pagefile.sys
+~$*.*
+
+# AWS/Cloud specific (if any local configuration is generated)
+# *.pem # Example: If you were generating local key pairs for testing
+
+# Note: This is a general-purpose .gitignore. It can be customized further
+# based on specific project needs (e.g., frontend frameworks, specific build tools).
