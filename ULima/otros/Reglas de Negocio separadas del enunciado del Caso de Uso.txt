@@ -1,0 +1,64 @@
+Reglas de Negocio separadas del enunciado del Caso de Uso, ¿Cómo influyen en el
+diseño de los casos de prueba?
+El enunciado del Caso de Uso debe ser simple y directo. Muchas veces, al tener muchas Reglas de
+Negocio en un Caso de Uso, queda confuso el enunciado. Para esos casos, conviene separar las Reglas
+de Negocio, de esta manera, se nos facilitará el armado del ‘Plan de Pruebas’.
+Hay que reconsiderar que las Reglas de Negocio, en su mayoría, no son propias de los sistemas de
+información sino que constituyen la política, la estrategia y la operatoria de una organización; por lo tanto
+son definibles por sí solas y mantenidas dentro de un motor central de reglas de negocio que presta el
+servicio a los diferentes procesos o sistemas que los requieren.
+Por lo tanto, habrá que considerar, cuándo una regla de negocio es particular y aplicable a un caso de uso
+de un sistema o cuándo una regla de negocio es general y aplica para todos los sistemas o procesos que
+interactúan en una organización, de manera transversal.
+En este caso, si tenemos bien armada la Matriz de Trazabilidad, podremos reutilizar la información
+cargada mediante las correspondientes intersecciones entre condiciones y casos de uso; o bien, reusar la
+mayoría (en el mejor de los casos, todos) de los pasos de prueba que constituyen el caso de prueba ‘más
+representativo’.
+En este tipo de situaciones, ocurre que muchas veces los desarrolladores no analizan exhaustivamente
+las reglas de negocios si se las mantiene separadas del caso de uso, y más tarde “surgen” las anomalías
+al momento de realizar las pruebas.
+Todo esto se evitaría si se planifica una sesión rápida (no más de 20 minutos) con el alcance de la
+prueba, mediante la cual se explica/informa al líder de desarrollo las condiciones de prueba que se
+ejecutarán.
+Si el desarrollador no profundiza en el análisis exhaustivo y/o no se realiza el tipo de sesión rápida antes
+enunciado, el impacto en el código puede llegar a ser importante dependiendo de la regla de negocio no
+tratada.
+En definitiva, la decisión de la incorporación de las mismas depende fundamentalmente del proyecto y de
+los procedimientos de calidad implementados.
+Por otra parte, hay que saber detectar cuando estamos leyendo un Caso de Uso, las evidencias de los
+vicios que tienen muchos Analistas Funcionales, que para no decidir como validar ciertas condiciones, la
+etiquetan como “Reglas de Negocio”, cuando tal vez no lo sean.
+Si bien este otro tipo de situaciones, durante la ejecución de las pruebas estará evidenciándose, es
+recomendable detectarlo antes de tiempo para evitar entre otras cosas, el retrabajo.
+Por ejemplo, la condición: “Un Cliente no puede tener más de 5 Domicilios”, puede dar lugar a las
+siguientes preguntas:
+ En que momento se valida esto? Al modificar el Cliente? Al modificar el Domicilio? Al asociar un
+Domicilio a un Pedido?
+ Qué sucede cuando no se cumple esa regla? Se cancela toda la operación? Se informa el error y
+permite corregir? Se descarta el ultimo Domicilio?
+ Existe alguna clase de proceso que evalúe casos ya existentes, buscando incumplimientos de
+esta (supuesta) regla? Que hace cuando los encuentra?
+Todas estas preguntas, se las deberemos formular a “alguien” del equipo de proyecto ya que a partir deReglas de Negocio separadas del enunciado del Caso de Uso, ¿Cómo influyen en el
+diseño de los casos de prueba?
+las respuestas que obtengamos, estaremos generando más o menos casos de prueba.
+Volviendo al Caso de Uso y las Reglas de Negocios asociadas, mediante la separación planteada se
+obtienen varios beneficios:
+ Hacer cambios de un lado con un impacto mínimo en el otro. Cada lado son; los ‘casos de uso’ y
+las ‘reglas del negocio’. Esto es deseable porque las reglas del negocio cambian más
+frecuentemente que los casos de uso.
+ Compartir reglas del negocio a través de muchos de casos de uso.
+ Definir, analizar y evaluar reglas del negocio antes de, o en paralelo a, el desarrollo de casos de
+uso.
+ Iterar entre el desarrollo de casos de uso y la captura de reglas del negocio.
+ Involucrar a distintas personas del negocio tanto en el desarrollo de casos de uso como en la
+captura de reglas del negocio.
+La metodología RUP tiene diferentes actividades dedicadas al Modelo de Negocio y el UML tiene
+artefactos para representarlas.
+Sin profundizar en RUP, es conveniente tener una grilla con las Reglas de Negocio contra los Casos de
+Uso del Sistema que están involucrados. Esto es útil cuando se decide priorizar la construcción de una
+parte del Sistema con sólo un grupo de Casos de Uso más relevantes o críticos para el Usuario.
+El libro de Craig Larman (UML y Patrones), utiliza las reglas de negocio en la documentación
+suplementaria de requerimientos, las mismas se pueden colocar en el glosario de los objetos de
+información y de las actividades.
+Si desea obtener más información diríjase a nuestro sitio: www.i-sol.com.ar o por mail enviado a Ing.
+Marisa Jatar marisaj@i-sol.com.ar

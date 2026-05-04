@@ -1,0 +1,240 @@
+Ingeniería de
+Datos
+Proceso de Desarrollo de las Bases de Datos en la Empresa
+Nadia Rodríguez
+Rev. 2013-1Agenda
+• Terminología
+• Desarrollo de las BD dentro del Ciclo de
+Vida de los Sistemas de Información
+• Componentes de un Entorno de Base
+de Datos
+• Ventajas, desventajas riesgos y costos
+de las BD
+• Evolución de las Bases de DatosIntroducción
+• Los negocios generan datos…
+• Dato = recurso organizacional para competir
+– Existe necesidad de información en todos los niveles de la
+organización
+• Información = grado de disminución de la
+incertidumbreIntroducción
+• Dato = representación de un mensaje (estructurado o
+no estructurado)
+DEBE SER OBJETIVO
+• Información = significado percibido al recibir un
+mensaje
+PUEDE SER SUBJETIVO !
+*Ambos términos están estrechamente relacionados,
+en la práctica ambos términos son frecuentemente
+intercambiados.El mundo de los Negocios
+y los datos
+• Problemas:
+– Sobrecarga de información
+– Mucha información genérica
+– Mala calidad de los datos
+– Ausencia de información personalizada y/o
+relevante para los distintos perfiles que existen en
+un negocio
+– Falta de retroalimentación oportuna para la
+mejora de los negociosEl mundo de los Negocios
+y los datos
+• Nuevos Requerimientos:
+– Los datos son un activo valioso para los
+negocios
+– Deben ser administrados de manera
+inteligenteEjemplos
+Metadata: Describe las
+propiedades y características
+de los datos y de su contexto.Sistema Tradicional de Procesamiento
+de Archivos...Escenario
+Datos
+DuplicadosDesventajas del Sistema Tradicional
+de Procesamiento de Archivos
+• Dependencia programa/datos
+• Redundancia de datos (Duplicación de
+datos)
+• Limitaciones para compartir datos
+• Mayor tiempo de desarrollo de sistemas
+informáticos y/o programas
+• Requiere de mucho mantenimiento de
+sistemas y/o programasDesventajas del Sistema Tradicional
+de Procesamiento de Archivos
+Problema con la dependencia programa/datos
+• Cada sistema informático y/o programa
+✓ Debe ser actualizado con sus propios datos
+✓ Necesita incluir código para la metadata de cada
+archivo
+✓ Debe tener sus propias rutinas para la lectura,
+inserción, actualización y eliminación de datos
+• Débil coordinación y control centralizado
+• No uso de estándaresDesventajas del Sistema de
+Procesamiento de Archivos
+Problemas con la redundancia de datos
+• Espacio desperdiciado por la duplicación de datos
+• Los mantenimientos causan muchos dolores de cabeza
+• El gran problema:
+– Cuando los datos son cambiados en un archivo,
+podrían causar inconsistencias
+– Se compromete la integridad de datosSolución...Base de Datos
+Coleccion de datos
+almacenados en un
+formato estandar,
+diseñado para que pueda
+ser compartido por
+multiples usuarios
+Requiere de un sistema de
+gestión de base de datos
+Database Management System (DBMS)Sistema de Gestión de
+base de Datos
+Application
+#1
+Application
+#2
+Base de Datos
+contiene datos
+DBMS gestiona los datos como el sistema
+Application
+centralizados y
+#3 operativo gestiona sus recursos de
+compartidos
+hardware
+Software que define una base de datos,
+almacen de los datos, soporte al lenguaje
+de consultas, ingreso de datos y produce
+reportesVentajas de un enfoque orientado
+hacia Base de Datos
+• Independencia programa/datos
+– Los metadatos son almacenados en el DBMS, por lo que las
+aplicaciones no necesitan preocuparse por los formatos de los
+datos
+– Las consultas y actualizaciones son gestionadas por el DBMS
+por lo que los programas no requieren de rutinas de acceso a
+los datos
+– Logros: mejora la productividad en el proceso de desarrollo y
+mantenimiento de programas y/o sistemas informáticos
+• Redundancia mínima de datos
+– Dirigido a mejorar la consistencia e integridadVentajas de un enfoque orientado
+hacia Base de Datos
+• Mejora la compartición de datos
+– Diferentes usuarios obtienen diferentes vistas de datos
+• Reforzamiento de estándares
+– Todos los accesos a datos son realizados de la misma manera
+• Mejoramiento de la calidad de datos
+– Restricciones, reglas de validación de datos
+• Mejor accesibilidad/tiempo de respuesta a los
+datos
+– Uso de un lenguaje estándar de consultas (SQL)
+• Seguridad, Backup/Recovery, Concurrencia
+– La recuperación ante desastres es mas sencillaCostos y riesgos de un enfoque
+orientado hacia Base de Datos
+• Costos iniciales
+– Complejidad y costos de instalación y gestión
+– Costos de conversión
+• Costos permanentes
+– Personal especializado
+– Determinación de procesos de backup y recovery
+• Conflicto organizacional
+– Viejos hábitos difíciles de vencerPor que se requiere de un
+enfoque de Base de Datos?
+• Muchas aplicaciones cambian, pero la
+estuctura de los datos es la misma.
+• Necesidad de:
+– Requerimientos y consultas ad hoc ( a medida).
+– Reducir los tiempos de desarrollo.
+– Compartir datos.
+• Mejorar la calidad de los datos.
+• Empowerment de los usuarios.Construyendo el Sistema
+adecuado: viabilidad
+Hard to value
+• Costs Easy to estimate • Benefits
+– Up-front/one-time – Cost Savings
+• Software ($ millions !) • Software maintenance
+• Hardware • Fewer errors
+• Communications • Less data maintenance
+• Data conversion • Less user training
+• Studies and Design – Increased Value
+• Training • Better access to data
+– On-going costs • Better decisions
+• Personnel • Better communication
+• Software upgrades • More timely reports
+• Supplies • Faster reaction to change
+• Support • New products & services
+• Software & Hardware – Strategic Advantages
+maintenance
+• Lock out competitors
+Fuente: Database Management Systems, Jerry Post, 2003Ciclo de Vida de los
+Sistemas de Información y
+las Bases de DatosImplementación de Sistemas de
+Información y Base de Datos
+• System Development Life cycle - SDLC
+– Proceso de desarrollo detallado, bien
+planificado.
+– Consume tiempo, pero es comprensivo
+– Ciclo de desarrollo largo
+• Prototipo
+– Rapid application development (RAD)Desarrollo de las Bases de Datos dentro del
+Ciclo de Vida de los Sistemas de Información
+(SDLC)
+Identificación Modelamiento de la Empresa
+Planeamiento
+Modelamiento Conceptual de Datos
+Análisis
+Diseño Lógico Diseño Lógico de Base de Datos
+Diseño Físico Diseño y Definición Física de Base de Datos
+Implementación Implementación de Base de Datos
+Mantenimiento Mantenimiento de Base de DatosSistema de Gestión de Base de Datos
+Usuarios/Programadores/DBA
+Sistema de
+Base de Datos
+Programas de aplicación/consultas
+Software del
+DBMS
+Sw para procesar consultas/programas
+Software para tener acceso a los
+datos almacenados
+Base de Datos
+Metadatos
+AlmacenadosComponentes de un Entorno de
+Base de Datos
+Herramientas
+Aplicaciones
+Case
+Base de
+DBMS
+Repositorio
+DatosComponentes de un Entorno de
+Base de Datos
+• Herramienta Case: herramientas usadas para
+diseñar BD y aplicaciones.
+• Aplicación: programa usado para crear, modificar y
+leer en la BD.
+• Repositorio: base de conocimientos en donde se
+guardan definiciones de datos, relaciones, formatos, y
+otros componentes.
+• Base de Datos: colección organizada de datos
+lógicamente relacionada.
+• DBMS: sistema de software empleado para crear,
+mantener y proveer información con acceso controlado.Historia: Base de Datos (BD)
+• 1950s Sistemas de ficheros, tarjetas perforadas
+• 1960s Jerárquicos
+– IDS, IMS (Sistema Sabre)
+• 1970s Redes
+– CODASYL, IDMS
+• 1980s Relational
+– INGRES, ORACLE, DB2, Sybase
+– Paradox, dBase
+• 1990s Orientado al objeto y objecto relacional
+– O2, GemStone, Ontos
+• 199x-2000s Datos en Web, Aplicaciones E-commerce,
+Tecnologías Wireless, Inteligencia Artificial, XML, NoSQLConsideraciones para la
+implementación de una BD
+• Complejidad (?)
+• Tamaño
+• Costo (?)
+• Requerimientos adicionales de HW
+• Impacto ante fallas (?)
+• Recuperación (?)Terminología
+• Transacción
+– Operación completa de lectura o escritura
+sobre la Base de datos
+• Database Administrator (DBA):
+– Administrador de base de datos

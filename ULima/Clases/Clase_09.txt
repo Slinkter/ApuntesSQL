@@ -1,0 +1,220 @@
+Ingeniería de Datos
+Otras Formas Normales y Desnormalización
+Nadia Rodríguez
+2013-1Agenda
+• Forma Normal Boyce-Codd
+• Cuarta Forma Normal
+• Quinta Forma Normal
+• DesnormalizaciónForma Normal Boyce-Codd
+• Una relación esta en la Forma Normal Boyce-
+Codd si y solo si cada atributo determinante en
+una relación es una llave candidata.
+Recordar que:
+– Dependencia Funcional:
+» El valor de un atributo A (determinante) determina el valor
+de otro atributo B, o sea B es funcionalmente dependiente
+de A
+A  B
+– Clave Candidata:
+» Identificador único. Una clave o claves que podrían
+convertirse en la clave primariaForma Normal de Boyce-Codd
+Supuesto:
+• Un estudiante puede tener más de una carrera, para cada carrera un
+estudiante tiene un solo asesor y una nota promedio
+• Un asesor solo puede asesorar una carrera
+Nota
+Código Carrera Asesor
+Promedio
+20041236 Sistemas Lopez 16
+20041236 Contabilidad Salas 16
+20052133 Psicología Pérez 13
+20051782 Contabilidad Rojas 12
+20062023 Sistemas Lopez 15Forma Normal de Boyce-Codd
+• Asesor y Nota Promedio son atributos dependientes de la llave primaria
+compuesta Código y Carrera
+• Existe una segunda dependencia del atributo Asesor al atributo
+Carrera, derivada de la exclusividad que tiene cada Asesor sobre las
+Carreras
+• Por lo tanto el atributo Asesor es un atributo determinante capaz de ser
+parte de la llave primaria
+Código Carrera Asesor Nota Promedio
+Atributo
+DeterminanteForma Normal de Boyce-Codd
+Propuesta de solución:
+• Primer Paso: Intercambiar los atributos Carrera por Asesor, quedando la
+relación pendiente de pasar por la Segunda Forma Normal.
+Codigo Asesor Carrera Nota Promedio
+Dependencia ParcialForma Normal de Boyce-Codd
+• Segundo Paso: Aplicando la Segunda Forma Normal se obtiene
+Codigo Asesor Nota Promedio
+CODIGO ASESOR NOTA_PROMEDIO
+20041236 Lopez 16
+20041236 Salas 12
+20052133 Perez 13
+20051782 Rojas 12
+20062023 Lopez 15
+Asesor Carrera
+ASESOR CARRERA
+Lopez Sistemas
+Salas Contabilidad
+Perez Psicología
+Rojas ContabilidadCuarta Forma Normal
+• Una relación esta en la Cuarta Forma Normal, se
+aplica a partir de la Forma Normal de Boyce-
+Codd y no contiene dependencias multivaluadas.Cuarta Forma Normal
+• Dependencias Multivaluadas son:
+– Dependencias que existen cuando hay por lo
+menos 3 atributos A, B y C
+• Por cada valor A hay un conjunto de valores B,
+• Por cada valor A hay un conjunto de valores C,
+pero
+• B es independiente de C y viceversa.Cuarta Forma Normal
+Curso (A) Profesor (B) Texto (C)
+García
+Drucker
+Administración Arce
+Peters
+Pérez
+Jones
+Finanzas Méndez
+ChangCuarta Forma Normal
+Si completamos la tabla, se obtiene:
+Curso (A) Profesor (B) Texto (C)
+Administración García Drucker
+Administración García Peters
+Administración Arce Drucker
+Administración Arce Peters
+Administración Pérez Drucker
+Administración Pérez Peters
+Finanzas Méndez Jones
+Finanzas Méndez ChangCuarta Forma Normal
+Propuesta de solución:
+• Al eliminar las dependencias multivaluadas, agrupando aquellos atributos
+que tienen dependencia, y separándolos en tablas diferentes, se obtiene:
+Profesor Texto
+Curso (A) Profesor (B) Curso (A) Texto (C)
+Administración García Administración Drucker
+Administración Arce Administración Peters
+Administración Pérez Finanzas Jones
+Finanzas Méndez Finanzas ChangQuinta Forma Normal
+• Elimina dependencias de grupo (join
+dependencies)Quinta Forma Normal
+VENDEDOR MARCA PRODUCTO
+Pérez Toyota Auto
+Pérez Toyota Camioneta
+Pérez Nissan Auto
+Pérez Nissan Camioneta
+Rojas Toyota AutoQuinta Forma Normal
+VENDEDOR MARCA
+Propuesta de solución
+Pérez Toyota
+MARCA PRODUCTO
+Pérez Nissan
+Toyota Auto
+Rojas Toyota
+Toyota Camioneta
+VENDEDOR PRODUCTO
+Nissan Auto
+Pérez Auto
+Nissan Camioneta
+Pérez Camioneta
+Rojas AutoDesnormalización
+• Proceso contrario a la normalización
+• Es el proceso de crear redundancia en
+un modelo normalizado, con el objetivo
+de mejorar los tiempos de respuesta en
+el Sistema de Base de DatosDesnormalización
+• Desventajas
+– Agrega Redundancia
+– Reduce Integridad
+– Hace menos flexible el modelo
+– Se debe compensar con programación de
+código.Técnicas de Desnormalización
+• Grabar valores derivados.
+• Uniendo Entidades.
+• Valores Fijos (Hard Code).
+• Manteniendo Detalle en el Maestro.
+• Repitiendo atributo del detalle en el
+Maestro.
+• Llaves de circuito corto.Desnormalización
+• Grabar valores derivados.Desnormalización
+• Uniendo Entidades
+Modelo
+Modelo
+Desnormalizado
+Normalizado
+Factura Línea Factura Factura
+Nro Factura
+Nro Factura Nro Factura
+Nro Item
+Fecha
+Fecha
+Cod Articulo Cod Cliente
+Cod Cliente
+Cantidad Cod Articulo
+Total Factura
+Precio Unitario Cantidad
+Precio UnitarioDesnormalización
+• Valores Fijos (Hard Code).
+Sexo
+Estudiante
+Cod Estudiante
+Cod Sexo
+Fecha Nacimiento
+Modelo
+Nombre
+Descripción
+Desnormalizado
+Cod Sexo
+Estudiante
+Modelo
+Cod Estudiante
+Normalizado
+Fecha Nacimiento
+Nombre
+Sexo (M/F)Desnormalización
+• Manteniendo Detalle en el Maestro
+Modelo
+Desnormalizado
+Presupuesto
+Presupuesto
+Cod Presupuesto Presupuesto-Mes
+Cod Presupuesto
+Cod Presupesto
+Tipo Presupuesto Tipo Presupuesto
+Mes
+Descripción Descripción
+Importe
+Ingreso/Egreso Ingreso/Egreso
+Importe-Ene
+Modelo
+Importe-Feb
+Normalizado
+Importe-Mar
+.
+.
+.
+Importe-DicDesnormalización
+• Repitiendo atributo del detalle en el Maestro y viceversa.
+Cliente Factura Línea Factura
+Nro Factura
+Cod Cliente Nro Factura
+Nro Item
+Nombre Fecha Fecha
+Direccion Cod Cliente Cod Articulo
+Ult.Nro Factura Cantidad
+Precio UnitarioDesnormalización
+• Llaves de circuito corto.
+Cliente Factura
+Cod Cliente Nro Factura
+Fecha Línea Factura
+Cod Cliente
+Nro Factura
+Nombre
+Nro Item
+Direccion
+Cod Articulo
+Ult.Nro Factura
+Cantidad
+Precio Unitario
+Cod Cliente

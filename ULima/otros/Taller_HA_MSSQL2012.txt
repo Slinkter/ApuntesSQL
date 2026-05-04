@@ -1,0 +1,381 @@
+ALTA DISPONIBILIDAD CON SQL SERVER 2012
+IIIInnnngggg.... FFFFrrrraaaannnncccciiiissssccccoooo RRRRiiiicccccccciiiioooo
+TThhiiss ddooccuummeenntt hhaass bbeeeenn pprreeppaarreedd ffoorr lliimmiitteedd ddiissttrriibbuuttiioonn wwiitthhiinn MMiiccrroossoofftt.. TThhiiss ddooccuummeenntt
+contains materials and information that Microsoft considers confidential, proprietary, and
+significant for the protection of its business. The distribution of this document is limited to
+those solely involved with the program described within.
+Confidential and Proprietary © 2011 Microsoft
+Last Updated: Wednesday, November 13, 2013INTRODUCCIÓN A LA ALTA DISPONIBILIDADIntroducción
+(cid:1) Conceptos generales
+(cid:1) Herramientas de alta disponibilidadINTRODUCCIÓN A LA ALTA DISPONIBILIDAD
+Conceptos GeneralesIntroducción a Disponibilidad de Datos
+Alta Disponibilidad: Solución para minimizar o mitigar el
+impacto de paradas de sistemas
+(cid:1) Idealmente, un sistema de base de datos debería estar
+disponible las 24 horas del día, cada día
+(cid:1) Técnicas y herramientas para incrementar la disponibilidad
+de los sistemas
+(cid:1) Implica redundancia de algún tipoAcuerdos de nivel de servicio (SLA)
+(cid:1)
+Número de 9s % disponibilidad Tiempo de parada anual
+2 99% 3 días y 15 horas
+3 99.9% 8 horas y 45 minutos
+4 99.99% 52 minutos y 34 segundos
+5 99.999% 5 minutos y 15 segundosModos de Espera
+Modo Descripción
+Se mantiene una copia de los datos del servidor primario en
+el secundario.
+HOT
+El nodo secundario provee una copia transaccionalmente
+STANDBY
+consistente de los datos del servidor primario.
+DDeetteecccciióónn aauuttoommááttiiccaa ddee eerrrroorreess yy rreeccuuppeerraacciióónn..
+También se mantiene la copia de los datos en el secundario,
+WARM pero los datos pueden o no pueden ser confirmados
+concurrentemente.
+STANDBY
+El error y recuperación puede no ser automático
+Servidor donde se pueden restaurar los datos.
+COLD
+Se necesita OS apropiado, software y copia de seguridad
+STANDBY
+Puede llevar un tiempo considerable.INTRODUCCIÓN A LA ALTA DISPONIBILIDAD
+Tecnologías de alta disponibilidadTecnologías de alta disponibilidad
+(cid:1) SQL Server provee tecnologías que pueden ayudarlo a crear
+sistemas de base de datos altamente disponibles
+(cid:1) Protección de base de datos contra fallos
+(cid:1) Replicación
+(cid:1) Trasvase de registro de transacciones
+(cid:1)(cid:1) BBaassee ddee ddaattooss rreefflleejjaaddaa
+(cid:1) AlwaysOn
+(cid:1) Protección de instancia contra fallos
+(cid:1) Failover Clustering
+(cid:1) Alguna veces se utiliza una combinación de tecnologías de
+Alta DisponibilidadTecnologías de alta disponibilidad
+Base de datos Failover Always On Travase de registro
+reflejada Clustering de transacciones
+Unidad de falla Grupo de Bases
+Base de datos Servidor Base de datos
+de Datos
+Falla automática Si, con testigo Si Si No
+Réplicas de datos 1 0 4 Ilimitado
+CCoommpplleejjiiddaadd MMeeddiiaa MMeeddiiaa AAllttaa BBaajjaa
+Disponibilidad de la Solo lectura Solo lectura entre
+N/A Solo lectura
+réplica con snapshot restauración
+Perdida de datos Cero (AD) Cero (sync)
+N/A Minutos a Horas
+(RPO) Segundos (AP) Segundos (async)
+Tiempo de Segundos (AD) Segundos a Segundos (sync)
+Horas a días
+recuperación (RTO) Minutos (AP) minutos Minutos (async)
+(cid:1) Backup/restore: apropiado para recuperación de desastres pero no
+para alta disponibilidadTrasvase de registro de transaccionesDefinir el concepto de trasvase de
+registro así como entender su
+funcionamiento. Conocer el
+proceso de configuración de
+ttrraassvvaassee ddee rreeggiissttrroo,, aassíí ccoommoo llaa
+administración del mismo. Simular
+una falla para identificar opciones
+de recuperación
+ovitejbOPrimera parte – temas a tratar
+(cid:1) Vista general de trasvase de registro de transacciones
+(cid:1) Configuración de trasvase de registro de transacciones
+(cid:1) Administración de trasvase de registro de transacciones
+(cid:1) Interoperabilidad con otras características de SQL ServerTRASVASE DE REGISTRO DE TRANSACCIONES
+Vista general de trasvase de registro de
+transaccionesQué es trasvase de registros?
+(cid:1) Warm Stand By
+(cid:1) Datos que puede ser traídos online en caso de falla del
+sistema
+(cid:1) UUnnaa bbaassee ddee ddaattooss ccoommpplleettaa eess rreessttaauurraaddaa aa uunn sseerrvviiddoorr
+secundario, y luego los archivo de registro de transacción de
+la base de datos primaria son aplicados a la base de datos
+secundaria
+(cid:1) Este es un costo relativamente bajo a la solución de la
+disponibilidad de datosCómo Funciona trasvase de registros?Fortalezas y debilidades de trasvase
+(cid:1) Fortalezas
+(cid:1) Maduro y estable
+(cid:1) Múltiples copias de trabajos de respaldo y restauración
+(cid:1) Simple de configurar y gestionar
+(cid:1) No requiere HW especial
+(cid:1)(cid:1) LLaass bbaasseess ddee ddaattooss sseeccuunnddaarriiaass ppuueeddeenn sseerr ccoonnssuullttaaddaass ppeerroo nnoo
+modificadas
+(cid:1) Alertas en caso el trasvase no se complete en un umbral de tiempo
+(cid:1) Alerta en caso el servidor principal deje de funcionar (monitor)
+(cid:1) Debilidades
+(cid:1) Fallo de cliente manual
+(cid:1) Configuración por base de datos
+(cid:1) No protege bases de datos del sistemaTRASVASE DE REGISTRO DE TRANSACCIONES
+Configuración de trasvase de registro de
+transaccionesCómo configurar trasvase de registro
+En el servidor primario habilitar el trasvase de registro
+Configurar la copia de seguridad
+AAggrreeggaarr llaa iinnssttaanncciiaa sseeccuunnddaarriiaa
+Definir inicialización de bases de datos secundaria
+Configurar copia de archivos al servidor secundario
+Configurar restauración de registros en servidor secundarioCómo configurar trasvase de registro
+En el servidor primario habilitar el trasvase de registro
+(cid:1) Utilizar la opción en las PPPPrrrrooooppppiiiieeeeddddaaaaddddeeeessss de base de datos
+(cid:1) Asegurarse que el mmmmooooddddoooo ddddeeee rrrreeeeccccuuuuppppeeeerrrraaaacccciiiióóóónnnn de la base de datos esté
+configurado como ccccoooommmmpppplllleeeettttoooo (FULL)Cómo configurar trasvase de registro
+Configurar la copia de seguridad
+Carpeta Compartida
+Carpeta Local
+(Serv. primario)
+Programar el trabajoCómo configurar trasvase de registro
+Agregar la instancia secundaria
+Agregar instanciasCómo configurar trasvase de registro
+Definir inicialización de bases de datos secundaria
+Inicialización automática Ubicación de archivosCómo configurar trasvase de registro
+Configurar copia de archivos al servidor secundario
+Carpeta Local
+(Serv. secundario)
+Programar el trabajoCómo configurar trasvase de registro
+Configurar restauración de registros en servidor secundario
+Modo de recuperación de la base de datos
+Programar el trabajoTRASVASE DE REGISTRO DE TRANSACCIONES
+Administración de trasvase de registro de
+transaccionesMonitor de trabajos (Agente de SQL Server)
+(cid:1) A través del monitor de trabajos del Agente de SQL Server
+(cid:1) Servidor Principal:
+(cid:1) Servidor Secundario:Reporte de estado de trasvase de registros
+(cid:1) Reportes estándar de la instancia
+(cid:1) Servidor Principal:
+(cid:1) Servidor Secundario:Procedimientos almacenados del sistema
+(cid:1) Monitoreo con Transact-SQL
+(cid:1) Servidor Principal:
+/* EN EL SERVIDOR PRINCIPAL */
+EXEC sp_help_log_shipping_monitor_primary 'perdbprod01',
+'adventureworks2012';
+EEXXEECC sspp__hheellpp__lloogg__sshhiippppiinngg__pprriimmaarryy__ddaattaabbaassee ''aaddvveennttuurreewwoorrkkss22001122'';;
+(cid:1) Servidor Secundario:
+/* EN EL SERVIDOR SECUNDARIO */
+EXEC sp_help_log_shipping_monitor_secondary 'perdbprod01\SQLAD',
+'adventureworks2012';
+EXEC sp_help_log_shipping_secondary_database 'adventureworks2012';Falla manual de trasvase de registro
+(cid:1) En caso de falla en el servidor principal, recuperar manualmente la base
+de datos en el servidor secundario:
+--Recuperar la BD secundaria
+--Ejecutar luego de la falla del principal
+RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;
+(cid:1) Las aplicaciones deben ser redireccionadas manualmente hacia el
+servidor secundarioDeshabilitar trasvase de registro
+(cid:1) Para deshabilitar una instancia secundaria se retira de la sesión de
+trasvase:
+Quitar la instancia secundaria
+(cid:1) Para deshabilitar al trasvase de registro, desmarcar la opción:TRASVASE DE REGISTRO DE TRANSACCIONES
+Interoperabilidad con otras características
+de SQL ServerTrasvase de registros y reflejo
+(cid:1) La base de datos principal en una sesión de creación de reflejo puede
+actuar también como base de datos principal en una configuración de
+trasvase de registros
+(cid:1) En general, al combinar el trasvase de registros y la creación de reflejo
+de la base de datos, la sesión de creación de reflejo se establece antes
+qquuee eell ttrraassvvaassee ddee rreeggiissttrrooss,, aauunnqquuee nnoo eess nneecceessaarriioo
+(cid:1) Las bases de datos secundarias del trasvase de registros deben residir en
+instancias de servidor distintas del servidor principal/primario o el
+servidor reflejado/primarioTrasvase de registros y replicación
+(cid:1) El trasvase de registros se puede usar conjuntamente con la replicación
+(cid:1) La replicación no continúa después de producirse una conmutación por
+error de trasvase de registros
+(cid:1) En la replicación transaccional, el comportamiento del trasvase de
+rreeggiissttrrooss ddeeppeennddee ddee llaa ooppcciióónn ssssssssyyyyyyyynnnnnnnncccccccc wwwwwwwwiiiiiiiitttttttthhhhhhhh bbbbbbbbaaaaaaaacccccccckkkkkkkkuuuuuuuuppppppppRepaso de trasvase de registro
+(cid:1) Vista general de trasvase de registro de transacciones
+(cid:1) Configuración de trasvase de registro de transacciones
+(cid:1) Administración de trasvase de registro de transacciones
+(cid:1) Interoperabilidad con otras características de SQL
+SSeerrvveerrSSEEGGUUNNDDAA PPAARRTTEE
+Bases de datos reflejadas (Mirror)Definir el concepto de reflejo de
+bases de datos así como entender
+su funcionamiento. Conocer el
+proceso de configuración del
+rreefflleejjoo,, aassíí ccoommoo llaa aaddmmiinniissttrraacciióónn
+del mismo. Simular una falla para
+identificar opciones de
+recuperación
+ovitejbOSegunda parte – temas a tratar
+(cid:1) Vista general de bases de datos reflejadas
+(cid:1) Configuración de bases de datos reflejadas
+(cid:1) Administración de bases de datos reflejadas
+(cid:1) Interoperabilidad con otras características de SQL
+SSeerrvveerrBASES DE DATOS REFLEJADAS
+Vista general de bases de datos reflejadasQué es reflejo de base de datos?
+(cid:1) solución de software para incrementar la disponibilidad de la
+base de dato
+(cid:1) Mejora el nivel de disponibilidad que tenían las versiones
+anteriores de SQL Server y provee una alternativa fácil a
+clúster
+(cid:1) Provee una solución tolerante a fallas casi instantánea para
+las bases de datos
+(cid:1) Permite mantener una copia actualizada de una base de
+datos en un servidor aparte para conmutación en caso de
+falla del servidor principalCómo Funciona reflejo de base de datos?
+(cid:1) Mantiene un servidor secundario en standby, el cual tiene un
+copia de la base de datos principal
+(cid:1) Si el servidor principal falla, las aplicaciones redireccionan al
+servidor en secundario
+(cid:1) La conmutación puede instantánea en solo unos segundos
+(cid:1) Los servidores que tienen estas bases de datos principal y
+reflejo se los llama partnerserversCómo Funciona reflejo de base de datos?
+(cid:1) Hot Standby
+(cid:1) disponible desde
+SQL Server 2005
+EEnntteerrpprriissee EEddiittiioonn
+(cid:1) Dos copias de una
+base de datos en
+computadores
+diferentes.Rol de los Servidores
+Contiene la base de datos de producción. Los usuarios
+Servidor
+y aplicaciones se conectan a el normalmente para
+Principal
+realizar sus tareas.
+Contiene la base de datos reflejo. Los usuarios y
+aplicaciones no se conectan a este servidor a menos
+Servidor
+que ocurra una conmutaión y tome la funciona de
+SSeerrvviiddoorr pprriinncciippaall.. EEnn eessttee ccaassoo,, lluueeggoo qquuee llaa
+rreefflleejjoo
+comunicaron ha sido reestablecida con el servidor que
+falló, este puede tomar el rol de servidor reflejo.
+Monitorea los servidores de base de datos principal y
+Servidor reflejo y verifica que ambos servidores estén
+Testigo disponibles. Si el servidor de la base de datos principal
+o reflejo fallan, el servidor testigo puede trabajar con el
+(opcional) servidor que sobreviva para reconectarse o reaccionar
+apropiadamenteRedirección transparente para el cliente
+(cid:1) SQL Native Client Library (SNAC) provisto con SQL Server
+toma ventaja de la redirección transparente para el cliente
+(cid:1) SNAC entiende que el servidor al que esta conectado es el
+principal y guardará en caché el nombre del servidor reflejo
+(cid:1) En el caso de falla del servidor principal, la sesión del cliente
+será perdida. El cliente intentara reconectarse al servidor
+principal. Pero si falla, automáticamente redireccionará la
+conexión al servidor reflejoFortalezas y debilidades de reflejo
+(cid:1) Fortalezas
+(cid:1) Fallo de base de datos y cliente rápido y automático
+(cid:1) No muy complicado de configurar y administrar
+(cid:1) No se requiere HW especial
+(cid:1) Debilidades
+(cid:1) DDDDDDDDeeeeeeeessssssssccccccccoooooooonnnnnnnnttttttttiiiiiiiinnnnnnnnuuuuuuuuaaaaaaaaddddddddoooooooo
+(cid:1) Requiere tres servidores en el modo de alta disponibilidad
+(cid:1) No se puede consultar la base de datos reflejada
+(cid:1) Configuración por base de datos
+(cid:1) No protege bases de datos del sistemaBASES DE DATOS REFLEJADAS
+Configuración de bases de datos reflejadasCómo configurar reflejo de base de datos
+Sincronizar manualmente la base de datos
+Configurar la seguridad de la sesión de reflejo
+DDeeffiinniirr ssii ssee vvaa aa iinncclluuiirr sseerrvviiddoorr tteessttiiggoo
+Configurar los puertos y extremos de cada servidor
+Definir cuentas del servicio
+Establecer el modo de funcionamiento
+Iniciar la sesión de reflejoCómo configurar reflejo de base de datos
+Sincronizar manualmente la base de datos
+(cid:1) Asegurarse que el mmmmooooddddoooo ddddeeee rrrreeeeccccuuuuppppeeeerrrraaaacccciiiióóóónnnn de la base de datos principal
+esté configurado como ccccoooommmmpppplllleeeettttoooo (FULL)
+(cid:1)(cid:1) RReeaalliizzaarr uunnaa ccooppiiaa ddee sseegguurriiddaadd ccoommpplleettaa ccoonn ssuu rreessppeeccttiivvaa ccooppiiaa ddee
+seguridad del registro de transacciones en el servidor principal
+(cid:1) Restaurar la copia de seguridad completa y de registro de transacciones
+en el servidor secundario, dejando la base de datos en eeeessssttttaaaaddddoooo ddddeeee
+rrrreeeeccccuuuuppppeeeerrrraaaacccciiiióóóónnnnCómo configurar reflejo de base de datos
+Configurar la seguridad de la sesión de reflejo
+(cid:1) Utilizar la opción en las PPPPrrrrooooppppiiiieeeeddddaaaaddddeeeessss de base de datos
+Inicio de la configuración de reflejoCómo configurar reflejo de base de datos
+Definir si se va a incluir servidor testigo
+(cid:1) El servidor testigo permite la recuperación automática de la base de
+datos secundaria en caso de fallaCómo configurar reflejo de base de datos
+Configurar los puertos y extremos de cada servidor
+Puertos TCP, habilitar en FirewallCómo configurar reflejo de base de datos
+Definir cuentas del servicio
+(cid:1) Necesario cuando las instancias instancias pertenecen aun dominio y las
+cuentas del servicio son cuentas de dominio:Cómo configurar reflejo de base de datos
+Establecer el modo de funcionamientoOpciones de modo de funcionamiento
+Conmutación Protección completa
+Modo
+automática de pérdida de datos
+Alta
+ddiissppoonniibbiilliiddaadd
+Alta
+protección
+Alto
+rendimientoModos de operación
+•Las transacciones son transmitidas de la base de
+datos principal a la base de datos reflejo, y aplicados
+a la base de datos reflejo antes de ser hechos en la
+base de datos principal.
+SINCRONIZADO
+•Este mecanismo garantiza que no habrá
+transacciones perdidas, a expensas del tiempo
+adicional que requiere completar una transacción.
+••EEssttee mmooddoo ssooppoorrttaa ffaaiilloovveerr mmaannuuaall yy aauuttoommááttiiccoo..
+•Las transacciones son hechas primero en el
+servidor principal antes de la base de datos reflejo.
+•La base de datos reflejo esta en estado de
+desincronizacion perpetuo. Las aplicaciones no son
+DESINCRONIZADO
+demoradas mientras la comunicación con el
+servidor reflejo se produce.
+•Este modo soporta failover manual y se pueden
+perder datosCómo configurar reflejo de base de datos
+Iniciar la sesión de reflejo
+Inicio de la sesión de reflejo
+(cid:1) Antes de iniciar la sesión, asegurarse que la cuenta del servicio tiene
+permisos sobre los extremos, en cada uno de los servidores:
+GRANT CONNECT ON ENDPOINT::[<nombre_extremo>]
+TO [<cuenta_servicio>];Consideraciones
+(cid:1) Idealmente, el servidor principal y el servidor reflejo deben pertenecer al
+mismo dominio
+(cid:1) El servidor reflejo debe tener suficiente memoria y poder de proceso
+para actuar como un sustituto del servidor principal de base de datos
+(cid:1) EEll rreefflleejjoo ddeebbeerrííaa ppooddeerr ssooppoorrttaarr uussuuaarriiooss yy aapplliiccaacciioonneess ssiinn mmaayyoorr
+diferencia notable en la calidad del servicio
+(cid:1) Se recomienda que la estructura de archivos de la base de datos reflejo
+debe coincidir con la base de datos principal
+(cid:1) Ambas bases de datos deben implementar el modelo de recuperación
+completa (MODO RECOVERY = FULL)BASES DE DATOS reflejadaS
+Administración de bases de datos reflejadasMonitror de la sesión de reflejo
+(cid:1) A través del MMMMoooonnnniiiittttoooorrrr ddddeeee RRRReeeefffflllleeeejjjjoooo de base de datos, que se
+invoca desde el menú TTTTaaaarrrreeeeaaaassss de la base de datosConmutación manual (modo sincronizado)
+(cid:1) Puede realizar una conmutación manual para hacer
+actualizaciones de hardware u otras operaciones de
+mantenimiento en el servidor principal
+Opción de conmutación manual
+(cid:1) Si desea utilizar Transact-SQL debe ejecutar esta sentencia
+en el servidor secundario:
+ALTER DATABASE AdventureWorks2012 SET PARTNER FAILOVER;Conmutación en caso de falla
+(cid:1) En presencia de un servidor testigo, la conmutación ocurrirá
+automáticamente si el servidor principal falla
+(cid:1) Sin embargo, si no hay servidor testigo disponible, debe hacer una
+conmutación manual en el servidor secundario:
+USE master;
+ALTER DATABASE AdventureWorks2012 SET PARTNER OFF;
+RREESSTTOORREE DDAATTAABBAASSEE AAddvveennttuurreeWWoorrkkss22001122 WWIITTHH RREECCOOVVEERRYY;;
+(cid:1) Estas sentencias se utilizan en modo sincronizado. En modo
+desincronzado se deberá usar:
+USE master;
+ALTER DATABASE AdventureWorks2012 SET PARTNER
+FORCE_SERVICE_ALLOW_DATA_LOSS;
+RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;Suspender y resumir sesiones reflejo
+(cid:1) Puede suspender temporalmente las sesiones reflejo y luego resumirlas y
+sincronizar las bases de datos:
+ALTER DATABASE AdventureWorks2012 SET PARTNER SUSPEND;
+(cid:1) Suspender una sesión causa que todas las logs de transacción en el
+servidor principal crezcan mientras que cada transacción es logeada y
+aallmmaacceennaaddaa
+(cid:1) Hasta que la sesión reflejo es resumida o terminada, el log de
+transacción del servidor principal no puede ser truncado porque la
+transacción aun tiene que ser aplicada al servidor reflejo:
+ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;Terminar la sesión reflejo
+(cid:1) Puede terminar manualmente la sesión reflejo y terminar la relación
+entre los servidores
+Terminar la sesión de reflejo
+(cid:1) Terminar la sesión deja ambos servidores con una copia independiente
+de la base de datos
+(cid:1) La base de datos reflejo permanecerá en un estado de restauración
+hasta que sea recuperada o borrada manualmenteRepaso de base de datos reflejadas
+(cid:1) Vista general de bases de datos reflejadas
+(cid:1) Configuración de bases de datos reflejadas
+(cid:1) Administración de bases de datos reflejadas
+(cid:1) Interoperabilidad con otras características de SQL
+SSeerrvveerr

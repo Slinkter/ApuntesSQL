@@ -1,0 +1,199 @@
+/* Estilo Base Simplificado - PostgreSQL Training */
+:root {
+    --primary: #336791;
+    --secondary: #4a90d9;
+    --success: #2d6a4f;
+    --warning: #b07d12;
+    --danger: #c0392b;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --border: #dee2e6;
+    --code-bg: #f4f4f4;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--dark);
+    background: #fff;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2, h3 { color: var(--primary); margin-bottom: 1rem; }
+h1 { font-size: 1.8rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem; }
+h2 { font-size: 1.4rem; margin-top: 1.5rem; }
+h3 { font-size: 1.1rem; }
+
+header {
+    text-align: center;
+    padding: 20px;
+    background: var(--primary);
+    color: white;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+header h1 { color: white; border: none; }
+.badge {
+    display: inline-block;
+    background: white;
+    color: var(--primary);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Sections */
+section { margin-bottom: 1.5rem; }
+
+.box {
+    padding: 15px;
+    border-left: 4px solid var(--primary);
+    background: var(--light);
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.box.concept { border-color: var(--primary); }
+.box.example { border-color: var(--secondary); background: #f0f4f8; }
+.box.exercise { border-color: var(--success); background: #e8f5e9; }
+.box.warning { border-color: var(--warning); background: #fff8e1; }
+.box.quiz { border-color: var(--gray); background: #f8f9fa; }
+
+.box h4 { margin-bottom: 8px; color: var(--primary); }
+
+/* Code */
+pre {
+    background: var(--code-bg);
+    padding: 12px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    border: 1px solid var(--border);
+}
+
+code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+    color: #c7254e;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 0.9rem;
+}
+
+th, td {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    text-align: left;
+}
+
+th { background: var(--primary); color: white; }
+tr:nth-child(even) { background: var(--light); }
+
+/* Cards Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.card {
+    padding: 12px;
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+.card strong { color: var(--primary); display: block; margin-bottom: 4px; }
+
+/* Quiz Interactivo */
+.quiz-item {
+    padding: 12px;
+    background: var(--light);
+    border: 1px solid var(--border);
+    margin: 8px 0;
+    border-radius: 4px;
+}
+
+.quiz-item > strong { color: var(--dark); display: block; margin-bottom: 8px; }
+
+.quiz-options { margin-left: 15px; }
+
+.quiz-option {
+    display: block;
+    padding: 6px 10px;
+    margin: 4px 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.quiz-option:hover { background: #e9ecef; }
+
+.answer-toggle {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
+
+.answer-toggle:hover { background: var(--secondary); }
+
+.answer {
+    display: none;
+    padding: 10px;
+    background: #e8f5e9;
+    border-left: 3px solid var(--success);
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+.answer.show { display: block; }
+
+/* Navigation */
+.nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+}
+
+.nav a {
+    color: var(--primary);
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid var(--primary);
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.nav a:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    h1 { font-size: 1.4rem; }
+    .grid { grid-template-columns: 1fr; }
+}
