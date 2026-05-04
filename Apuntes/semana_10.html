@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 10 - Vistas y CTEs</title>
     <link rel="stylesheet" href="estilo-cornell.css">
-</head>
+<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
 <body>
 
 <div class="header-box">
@@ -17,21 +17,21 @@
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>§ CREATE VIEW</strong><br>Tabla virtual</li>
-            <li><strong>§ WITH (CTE)</strong><br>Expresión de tabla</li>
-            <li><strong>§ RECURSIVE</strong><br>CTE recursiva</li>
-            <li><strong>§ Vistas simples</strong><br>Una tabla</li>
-            <li><strong>§ Vistas complejas</strong><br>JOIN, GROUP</li>
+            <li><strong>Â§ CREATE VIEW</strong><br>Tabla virtual</li>
+            <li><strong>Â§ WITH (CTE)</strong><br>ExpresiÃ³n de tabla</li>
+            <li><strong>Â§ RECURSIVE</strong><br>CTE recursiva</li>
+            <li><strong>Â§ Vistas simples</strong><br>Una tabla</li>
+            <li><strong>Â§ Vistas complejas</strong><br>JOIN, GROUP</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
-            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+            <ul><li><a href="index.html">ðŸ  Ãndice</a></li></ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>📌 Objetivos:</strong> Crear vistas, usar CTEs, escribir consultas recursivas.</p>
+            <p><strong>ðŸ“Œ Objetivos:</strong> Crear vistas, usar CTEs, escribir consultas recursivas.</p>
         </div>
 
         <h2>1. Vistas (CREATE VIEW)</h2>
@@ -57,7 +57,7 @@ DROP VIEW vista_empleados_ventas;</pre>
 
         <h2>2. CTEs (WITH)</h2>
         
-        <pre>-- CTE básico
+        <pre>-- CTE bÃ¡sico
 WITH dept_salary AS (
     SELECT department, AVG(salary) as promedio
     FROM employees
@@ -65,7 +65,7 @@ WITH dept_salary AS (
 )
 SELECT * FROM dept_salary WHERE promedio > 50000;
 
--- Múltiples CTEs
+-- MÃºltiples CTEs
 WITH 
     dept_total AS (
         SELECT department, SUM(salary) as total
@@ -80,7 +80,7 @@ FROM dept_total d JOIN dept_count c ON d.department = c.department;</pre>
 
         <h2>3. CTEs Recursivas</h2>
         
-        <pre>-- Recorrer jerarquía de empleados
+        <pre>-- Recorrer jerarquÃ­a de empleados
 WITH RECURSIVE jerarquia AS (
     -- Caso base: CEO (sin manager)
     SELECT id, nombre, manager_id, 1 as nivel
@@ -96,7 +96,7 @@ WITH RECURSIVE jerarquia AS (
 SELECT * FROM jerarquia;</pre>
 
         <div class="box box-concep">
-            <p><strong>📝 Resumen:</strong> Las vistas son tablas virtuales basadas en consultas. Los CTEs (WITH) ofrecen consultas temporales con nombre. Las CTEs recursivas permiten traversar estructuras jerárquicas.</p>
+            <p><strong>ðŸ“ Resumen:</strong> Las vistas son tablas virtuales basadas en consultas. Los CTEs (WITH) ofrecen consultas temporales con nombre. Las CTEs recursivas permiten traversar estructuras jerÃ¡rquicas.</p>
         </div>
     </div>
 </div>
@@ -114,8 +114,8 @@ WHERE e.salary > a.promedio;</pre>
 </div>
 
 <nav class="nav">
-    <a href="semana_09.html">← Semana 09</a>
-    <a href="semana_11.html">Semana 11 →</a>
+    <a href="semana_09.html">â† Semana 09</a>
+    <a href="semana_11.html">Semana 11 â†’</a>
 </nav>
 
 <div class="final-section">
@@ -131,7 +131,7 @@ WHERE e.salary > a.promedio;</pre>
                 </div>
                 <div class="node">CTE
                     <div class="subnode">WITH</div>
-                    <div class="subnode">Múltiples</div>
+                    <div class="subnode">MÃºltiples</div>
                     <div class="subnode">RECURSIVE</div>
                 </div>
             </div>
@@ -139,7 +139,7 @@ WHERE e.salary > a.promedio;</pre>
     </div>
     <div class="additional-material">
         <h3>Material</h3>
-        <ul><li><span class="tag">Práctica</span> <a href="#">Ejercicios CTEs</a></li></ul>
+        <ul><li><span class="tag">PrÃ¡ctica</span> <a href="#">Ejercicios CTEs</a></li></ul>
     </div>
 </div>
 

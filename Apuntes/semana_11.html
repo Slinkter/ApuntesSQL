@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 11 - PL/pgSQL Fundamentos</title>
     <link rel="stylesheet" href="estilo-cornell.css">
-</head>
+<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
 <body>
 
 <div class="header-box">
@@ -17,27 +17,27 @@
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>§ CREATE FUNCTION</strong><br>Crear función</li>
-            <li><strong>§ BEGIN/END</strong><br>Bloque de código</li>
-            <li><strong>§ DECLARE</strong><br>Declarar variables</li>
-            <li><strong>§ RETURN</strong><br>Retornar valor</li>
-            <li><strong>§ IF/THEN/ELSE</strong><br>Condicional</li>
-            <li><strong>§ RETURN NEXT</strong><br>Retornar conjunto</li>
+            <li><strong>Â§ CREATE FUNCTION</strong><br>Crear funciÃ³n</li>
+            <li><strong>Â§ BEGIN/END</strong><br>Bloque de cÃ³digo</li>
+            <li><strong>Â§ DECLARE</strong><br>Declarar variables</li>
+            <li><strong>Â§ RETURN</strong><br>Retornar valor</li>
+            <li><strong>Â§ IF/THEN/ELSE</strong><br>Condicional</li>
+            <li><strong>Â§ RETURN NEXT</strong><br>Retornar conjunto</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
-            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+            <ul><li><a href="index.html">ðŸ  Ãndice</a></li></ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>📌 Objetivos:</strong> Crear funciones y procedimientos en PL/pgSQL, usar variables, control de flujo.</p>
+            <p><strong>ðŸ“Œ Objetivos:</strong> Crear funciones y procedimientos en PL/pgSQL, usar variables, control de flujo.</p>
         </div>
 
-        <h2>1. Estructura de una Función</h2>
+        <h2>1. Estructura de una FunciÃ³n</h2>
         
-        <pre>-- Función básica
+        <pre>-- FunciÃ³n bÃ¡sica
 CREATE OR REPLACE FUNCTION hola_mundo()
 RETURNS TEXT AS $$
 BEGIN
@@ -45,7 +45,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Llamar función
+-- Llamar funciÃ³n
 SELECT hola_mundo();</pre>
 
         <h2>2. Variables y Tipos</h2>
@@ -58,7 +58,7 @@ DECLARE
     edad INTEGER := 30;
     mensaje TEXT;
 BEGIN
-    mensaje := nombre || ' tiene ' || edad || ' años';
+    mensaje := nombre || ' tiene ' || edad || ' aÃ±os';
     RETURN mensaje;
 END;
 $$ LANGUAGE plpgsql;
@@ -92,7 +92,7 @@ END IF;
 IF dept = 'Ventas' THEN
     RETURN 'Comercial';
 ELSIF dept = 'TI' THEN
-    RETURN 'Tecnología';
+    RETURN 'TecnologÃ­a';
 ELSE
     RETURN 'Otro';
 END IF;</pre>
@@ -103,14 +103,14 @@ END IF;</pre>
     WHEN 'Ventas' THEN
         RETURN 'Comercial';
     WHEN 'TI' THEN
-        RETURN 'Tecnología';
+        RETURN 'TecnologÃ­a';
     ELSE
         RETURN 'Otro';
 END CASE;</pre>
 
         <h2>5. Ciclos - LOOP</h2>
         
-        <pre>-- Loop básico
+        <pre>-- Loop bÃ¡sico
 CREATE OR REPLACE FUNCTION contar_hasta(n INTEGER)
 RETURNS TEXT AS $$
 DECLARE
@@ -139,14 +139,14 @@ FOR i IN 1..10 LOOP
 END LOOP;</pre>
 
         <div class="box box-concep">
-            <p><strong>📝 Resumen:</strong> PL/pgSQL permite crear funciones y procedimientos almacenados. Se usan DECLARE para variables, IF/THEN/ELSE para control de flujo, y varios tipos de ciclos (LOOP, WHILE, FOR).</p>
+            <p><strong>ðŸ“ Resumen:</strong> PL/pgSQL permite crear funciones y procedimientos almacenados. Se usan DECLARE para variables, IF/THEN/ELSE para control de flujo, y varios tipos de ciclos (LOOP, WHILE, FOR).</p>
         </div>
     </div>
 </div>
 
 <div class="section-box">
     <h2>EJERCICIO</h2>
-    <p class="question">Crear función que retorne 'Aprobado' si nota >= 11, sino 'Desaprobado'.</p>
+    <p class="question">Crear funciÃ³n que retorne 'Aprobado' si nota >= 11, sino 'Desaprobado'.</p>
     <p class="answer">
     <pre>CREATE OR REPLACE FUNCTION evaluar(nota INTEGER)
 RETURNS TEXT AS $$
@@ -162,8 +162,8 @@ $$ LANGUAGE plpgsql;</pre>
 </div>
 
 <nav class="nav">
-    <a href="semana_10.html">← Semana 10</a>
-    <a href="semana_12.html">Semana 12 →</a>
+    <a href="semana_10.html">â† Semana 10</a>
+    <a href="semana_12.html">Semana 12 â†’</a>
 </nav>
 
 <div class="final-section">

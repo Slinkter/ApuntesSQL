@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 13 - Transacciones y Concurrencia</title>
     <link rel="stylesheet" href="estilo-cornell.css">
-</head>
+<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
 <body>
 
 <div class="header-box">
@@ -17,33 +17,33 @@
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>§ BEGIN/COMMIT</strong><br>Iniciar/Confirmar</li>
-            <li><strong>§ ROLLBACK</strong><br>Deshacer</li>
-            <li><strong>§ Isolation Level</strong><br>Nivel de aislamiento</li>
-            <li><strong>§ LOCK</strong><br>Bloqueo</li>
-            <li><strong>§ MVCC</strong><br>Control multiversión</li>
-            <li><strong>§ SAVEPOINT</strong><br>Punto de guardado</li>
+            <li><strong>Â§ BEGIN/COMMIT</strong><br>Iniciar/Confirmar</li>
+            <li><strong>Â§ ROLLBACK</strong><br>Deshacer</li>
+            <li><strong>Â§ Isolation Level</strong><br>Nivel de aislamiento</li>
+            <li><strong>Â§ LOCK</strong><br>Bloqueo</li>
+            <li><strong>Â§ MVCC</strong><br>Control multiversiÃ³n</li>
+            <li><strong>Â§ SAVEPOINT</strong><br>Punto de guardado</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
-            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+            <ul><li><a href="index.html">ðŸ  Ãndice</a></li></ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>📌 Objetivos:</strong> Comprender transacciones, isolation levels, y manejo de concurrencia.</p>
+            <p><strong>ðŸ“Œ Objetivos:</strong> Comprender transacciones, isolation levels, y manejo de concurrencia.</p>
         </div>
 
         <h2>1. Transacciones</h2>
         
-        <pre>-- Transacción básica
+        <pre>-- TransacciÃ³n bÃ¡sica
 BEGIN;
     UPDATE cuentas SET saldo = saldo - 100 WHERE id = 1;
     UPDATE cuentas SET saldo = saldo + 100 WHERE id = 2;
 COMMIT;
 
--- Deshacer transacción
+-- Deshacer transacciÃ³n
 BEGIN;
     INSERT INTO pedidos (...) VALUES (...);
 ROLLBACK;
@@ -59,28 +59,28 @@ COMMIT;</pre>
         <h2>2. Isolation Levels</h2>
         
         <table>
-            <tr><th>Level</th><th>Descripción</th><th>Problema</th></tr>
+            <tr><th>Level</th><th>DescripciÃ³n</th><th>Problema</th></tr>
             <tr><td>READ UNCOMMITTED</td><td>Lee datos sin confirmar</td><td>Dirty Read</td></tr>
             <tr><td>READ COMMITTED</td><td>Solo lee datos confirmados</td><td>Non-repeatable Read</td></tr>
             <tr><td>REPEATABLE READ</td><td>Resultados consistentes</td><td>Phantom Read</td></tr>
-            <tr><td>SERIALIZABLE</td><td>Ejecución secuencial</td><td>Más lento</td></tr>
+            <tr><td>SERIALIZABLE</td><td>EjecuciÃ³n secuencial</td><td>MÃ¡s lento</td></tr>
         </table>
 
         <pre>-- Setear isolation level
 SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
--- En función
+-- En funciÃ³n
 ALTER FUNCTION mi_funcion() SET isolation_level = SERIALIZABLE;</pre>
 
         <h2>3. MVCC en PostgreSQL</h2>
         
         <div class="box box-concep">
-            <p><strong>Concepto:</strong> MVCC (Multi-Version Concurrency Control) permite que múltiples transacciones trabajen simultáneamente sin bloqueos. Cada transacción ve una "snapshot" de los datos.</p>
+            <p><strong>Concepto:</strong> MVCC (Multi-Version Concurrency Control) permite que mÃºltiples transacciones trabajen simultÃ¡neamente sin bloqueos. Cada transacciÃ³n ve una "snapshot" de los datos.</p>
         </div>
 
         <h2>4. Locking</h2>
         
-        <pre>-- Lock explícito
+        <pre>-- Lock explÃ­cito
 LOCK TABLE empleados IN EXCLUSIVE MODE;
 
 -- Lock con timeout
@@ -92,7 +92,7 @@ SELECT pg_advisory_lock(12345);
 SELECT pg_advisory_unlock(12345);</pre>
 
         <div class="box box-concep">
-            <p><strong>📝 Resumen:</strong> Las transacciones agrupan operaciones atómicamente. Los isolation levels controlan la visibilidad de datos no confirmados. MVCC permite concurrencia sin bloqueos. Los locks sincronizan acceso a recursos.</p>
+            <p><strong>ðŸ“ Resumen:</strong> Las transacciones agrupan operaciones atÃ³micamente. Los isolation levels controlan la visibilidad de datos no confirmados. MVCC permite concurrencia sin bloqueos. Los locks sincronizan acceso a recursos.</p>
         </div>
     </div>
 </div>
@@ -114,8 +114,8 @@ SELECT pg_advisory_unlock(12345);</pre>
 </div>
 
 <nav class="nav">
-    <a href="semana_12.html">← Semana 12</a>
-    <a href="semana_14.html">Semana 14 →</a>
+    <a href="semana_12.html">â† Semana 12</a>
+    <a href="semana_14.html">Semana 14 â†’</a>
 </nav>
 
 <div class="final-section">
@@ -135,7 +135,7 @@ SELECT pg_advisory_unlock(12345);</pre>
                     <div class="subnode">REPEATABLE</div>
                     <div class="subnode">SERIALIZABLE</div>
                 </div>
-                <div class="node">Técnicas
+                <div class="node">TÃ©cnicas
                     <div class="subnode">MVCC</div>
                     <div class="subnode">LOCK</div>
                     <div class="subnode">SAVEPOINT</div>

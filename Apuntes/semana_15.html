@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 15 - Seguridad y Gestión</title>
+    <title>Semana 15 - Seguridad y GestiÃ³n</title>
     <link rel="stylesheet" href="estilo-cornell.css">
-</head>
+<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
 <body>
 
 <div class="header-box">
-    <h1>Seguridad y Gestión</h1>
+    <h1>Seguridad y GestiÃ³n</h1>
     <p>Semana 15 | Usuarios, Roles, Permisos, RLS</p>
 </div>
 
@@ -17,22 +17,22 @@
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>§ CREATE ROLE</strong><br>Crear rol</li>
-            <li><strong>§ GRANT</strong><br>Otorgar permisos</li>
-            <li><strong>§ REVOKE</strong><br>Quitar permisos</li>
-            <li><strong>§ RLS</strong><br>Row Level Security</li>
-            <li><strong>§ Ownership</strong><br>Propiedad</li>
-            <li><strong>§ pg_hba.conf</strong><br>Autenticación</li>
+            <li><strong>Â§ CREATE ROLE</strong><br>Crear rol</li>
+            <li><strong>Â§ GRANT</strong><br>Otorgar permisos</li>
+            <li><strong>Â§ REVOKE</strong><br>Quitar permisos</li>
+            <li><strong>Â§ RLS</strong><br>Row Level Security</li>
+            <li><strong>Â§ Ownership</strong><br>Propiedad</li>
+            <li><strong>Â§ pg_hba.conf</strong><br>AutenticaciÃ³n</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
-            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+            <ul><li><a href="index.html">ðŸ  Ãndice</a></li></ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>📌 Objetivos:</strong> Crear usuarios/roles, gestionar permisos, implementar seguridad a nivel de fila.</p>
+            <p><strong>ðŸ“Œ Objetivos:</strong> Crear usuarios/roles, gestionar permisos, implementar seguridad a nivel de fila.</p>
         </div>
 
         <h2>1. Roles y Usuarios</h2>
@@ -75,11 +75,11 @@ REVOKE INSERT ON empleados FROM developer;</pre>
         <pre>-- Habilitar RLS en tabla
 ALTER TABLE pedidos ENABLE ROW LEVEL SECURITY;
 
--- Política: usuarios ven solo sus pedidos
+-- PolÃ­tica: usuarios ven solo sus pedidos
 CREATE POLICY mis_pedidos ON pedidos
     USING (id_cliente = current_user);
 
--- Política por rol
+-- PolÃ­tica por rol
 CREATE POLICY pedidos_gerente ON pedidos
     FOR ALL
     USING (
@@ -101,7 +101,7 @@ ALTER TABLE pedidos SET SCHEMA ventas;
 GRANT USAGE ON SCHEMA ventas TO analyst;</pre>
 
         <div class="box box-concep">
-            <p><strong>📝 Resumen:</strong> Los roles agrup permisos. GRANT concede acceso, REVOKE lo elimina. RLS filtra filas por usuario. PostgreSQL usa autenticación vía pg_hba.conf y roles con LOGIN.</p>
+            <p><strong>ðŸ“ Resumen:</strong> Los roles agrup permisos. GRANT concede acceso, REVOKE lo elimina. RLS filtra filas por usuario. PostgreSQL usa autenticaciÃ³n vÃ­a pg_hba.conf y roles con LOGIN.</p>
         </div>
     </div>
 </div>
@@ -118,15 +118,15 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public TO lectura;</pre>
 </div>
 
 <nav class="nav">
-    <a href="semana_14.html">← Semana 14</a>
-    <a href="semana_16.html">Semana 16 →</a>
+    <a href="semana_14.html">â† Semana 14</a>
+    <a href="semana_16.html">Semana 16 â†’</a>
 </nav>
 
 <div class="final-section">
     <div class="conceptual-map">
         <h3>Mapa Mental</h3>
         <div class="mindmap-container">
-            <div class="mindmap-central">SEGURIDAD Y GESTIÓN</div>
+            <div class="mindmap-central">SEGURIDAD Y GESTIÃ“N</div>
             <div class="mindmap-branch">
                 <div class="node">Roles
                     <div class="subnode">CREATE ROLE</div>

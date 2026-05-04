@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 12 - PL/pgSQL Avanzado</title>
     <link rel="stylesheet" href="estilo-cornell.css">
-</head>
+<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
 <body>
 
 <div class="header-box">
@@ -17,27 +17,27 @@
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>§ CURSOR</strong><br>Iterar filas</li>
-            <li><strong>§ TRIGGER</strong><br>Evento automático</li>
-            <li><strong>§ RAISE</strong><br>Mensajes</li>
-            <li><strong>§ EXCEPTION</strong><br>Manejo errores</li>
-            <li><strong>§ RETURN TABLE</strong><br>Retornar tabla</li>
-            <li><strong>§ OLD/NEW</strong><br>Row triggers</li>
+            <li><strong>Â§ CURSOR</strong><br>Iterar filas</li>
+            <li><strong>Â§ TRIGGER</strong><br>Evento automÃ¡tico</li>
+            <li><strong>Â§ RAISE</strong><br>Mensajes</li>
+            <li><strong>Â§ EXCEPTION</strong><br>Manejo errores</li>
+            <li><strong>Â§ RETURN TABLE</strong><br>Retornar tabla</li>
+            <li><strong>Â§ OLD/NEW</strong><br>Row triggers</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
-            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+            <ul><li><a href="index.html">ðŸ  Ãndice</a></li></ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>📌 Objetivos:</strong> Usar cursores, crear triggers, manejar excepciones.</p>
+            <p><strong>ðŸ“Œ Objetivos:</strong> Usar cursores, crear triggers, manejar excepciones.</p>
         </div>
 
         <h2>1. Cursores</h2>
         
-        <pre>-- Cursor básico
+        <pre>-- Cursor bÃ¡sico
 CREATE OR REPLACE FUNCTION procesar_empleados()
 RETURNS TEXT AS $$
 DECLARE
@@ -56,7 +56,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Cursor con parámetro
+-- Cursor con parÃ¡metro
 CREATE OR REPLACE FUNCTION buscar_empleado(p_dept VARCHAR)
 RETURNS TABLE(id INTEGER, nombre TEXT) AS $$
 DECLARE
@@ -71,7 +71,7 @@ $$ LANGUAGE plpgsql;</pre>
 
         <h2>2. Triggers</h2>
         
-        <pre>-- Función de trigger
+        <pre>-- FunciÃ³n de trigger
 CREATE OR REPLACE FUNCTION fn_audit_insert()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -114,7 +114,7 @@ BEGIN
     RETURN resultado;
 EXCEPTION
     WHEN division_by_zero THEN
-        RAISE NOTICE 'División por cero';
+        RAISE NOTICE 'DivisiÃ³n por cero';
         RETURN NULL;
     WHEN OTHERS THEN
         RAISE NOTICE 'Error: %', SQLERRM;
@@ -123,7 +123,7 @@ END;
 $$ LANGUAGE plpgsql;</pre>
 
         <div class="box box-concep">
-            <p><strong>📝 Resumen:</strong> Los cursores permiten iterar sobre conjuntos de resultados. Los triggers ejecutan funciones automáticamente en eventos (INSERT/UPDATE/DELETE). Las excepciones manejan errores con TRY/CATCH.</p>
+            <p><strong>ðŸ“ Resumen:</strong> Los cursores permiten iterar sobre conjuntos de resultados. Los triggers ejecutan funciones automÃ¡ticamente en eventos (INSERT/UPDATE/DELETE). Las excepciones manejan errores con TRY/CATCH.</p>
         </div>
     </div>
 </div>
@@ -149,8 +149,8 @@ EXECUTE FUNCTION log_delete_empleado();</pre>
 </div>
 
 <nav class="nav">
-    <a href="semana_11.html">← Semana 11</a>
-    <a href="semana_13.html">Semana 13 →</a>
+    <a href="semana_11.html">â† Semana 11</a>
+    <a href="semana_13.html">Semana 13 â†’</a>
 </nav>
 
 <div class="final-section">

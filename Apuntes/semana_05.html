@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 05 - DML y Consultas Básicas</title>
+    <title>Semana 05 - DML y Consultas BÃ¡sicas</title>
     <link rel="stylesheet" href="estilo-cornell.css">
-</head>
+<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
 <body>
 
 <div class="header-box">
-    <h1>DML y Consultas Básicas</h1>
+    <h1>DML y Consultas BÃ¡sicas</h1>
     <p>Semana 05 | INSERT, UPDATE, DELETE, SELECT</p>
 </div>
 
@@ -17,24 +17,24 @@
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>§ INSERT</strong><br>Añadir filas</li>
-            <li><strong>§ UPDATE</strong><br>Modificar datos</li>
-            <li><strong>§ DELETE</strong><br>Eliminar filas</li>
-            <li><strong>§ SELECT</strong><br>Consultar datos</li>
-            <li><strong>§ WHERE</strong><br>Filtrar condiciones</li>
-            <li><strong>§ DISTINCT</strong><br>Valores únicos</li>
+            <li><strong>Â§ INSERT</strong><br>AÃ±adir filas</li>
+            <li><strong>Â§ UPDATE</strong><br>Modificar datos</li>
+            <li><strong>Â§ DELETE</strong><br>Eliminar filas</li>
+            <li><strong>Â§ SELECT</strong><br>Consultar datos</li>
+            <li><strong>Â§ WHERE</strong><br>Filtrar condiciones</li>
+            <li><strong>Â§ DISTINCT</strong><br>Valores Ãºnicos</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
             <ul>
-                <li><a href="index.html">🏠 Índice del Curso</a></li>
+                <li><a href="index.html">ðŸ  Ãndice del Curso</a></li>
             </ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <p><strong>ðŸ“Œ Objetivos de Aprendizaje</strong></p>
             <ul style="margin: 8px 0 0 20px;">
                 <li>Insertar, actualizar y eliminar datos</li>
                 <li>Consultar datos con SELECT</li>
@@ -43,25 +43,25 @@
             </ul>
         </div>
 
-        <h2>1. DML - Lenguaje de Manipulación de Datos</h2>
+        <h2>1. DML - Lenguaje de ManipulaciÃ³n de Datos</h2>
         
         <ul>
-            <li><strong>INSERT:</strong> Añade nuevas filas a una tabla</li>
+            <li><strong>INSERT:</strong> AÃ±ade nuevas filas a una tabla</li>
             <li><strong>UPDATE:</strong> Modifica valores de filas existentes</li>
             <li><strong>DELETE:</strong> Elimina filas de una tabla</li>
             <li><strong>SELECT:</strong> Consulta y recupera datos</li>
         </ul>
 
-        <h2>2. INSERT - Añadir Datos</h2>
+        <h2>2. INSERT - AÃ±adir Datos</h2>
         
-        <pre>-- Insertar fila específica
+        <pre>-- Insertar fila especÃ­fica
 INSERT INTO empleados (id, nombre, departamento, salario)
-VALUES (1, 'Ana García', 'Ventas', 50000);
+VALUES (1, 'Ana GarcÃ­a', 'Ventas', 50000);
 
--- Insertar múltiples filas
+-- Insertar mÃºltiples filas
 INSERT INTO empleados VALUES 
-(2, 'Luis Pérez', 'Marketing', 55000),
-(3, 'Marta Sánchez', 'Ventas', 52000);</pre>
+(2, 'Luis PÃ©rez', 'Marketing', 55000),
+(3, 'Marta SÃ¡nchez', 'Ventas', 52000);</pre>
 
         <h2>3. UPDATE - Modificar Datos</h2>
         
@@ -70,13 +70,13 @@ UPDATE empleados
 SET salario = 53000
 WHERE id = 1;
 
--- Actualizar múltiples campos
+-- Actualizar mÃºltiples campos
 UPDATE empleados
 SET departamento = 'Desarrollo', salario = 63000
 WHERE id = 4;</pre>
 
         <div class="box box-warning">
-            <p><strong>⚠️ Regla de Oro:</strong> SIEMPRE usa WHERE en UPDATE y DELETE. Sin ella, modificarás/eliminarás TODAS las filas.</p>
+            <p><strong>âš ï¸ Regla de Oro:</strong> SIEMPRE usa WHERE en UPDATE y DELETE. Sin ella, modificarÃ¡s/eliminarÃ¡s TODAS las filas.</p>
         </div>
 
         <h2>4. DELETE - Eliminar Datos</h2>
@@ -84,7 +84,7 @@ WHERE id = 4;</pre>
         <pre>-- Eliminar un registro
 DELETE FROM empleados WHERE id = 2;
 
--- Eliminar varios con condición
+-- Eliminar varios con condiciÃ³n
 DELETE FROM empleados WHERE departamento = 'Marketing';</pre>
 
         <h2>5. SELECT - Consultar Datos</h2>
@@ -92,35 +92,35 @@ DELETE FROM empleados WHERE departamento = 'Marketing';</pre>
         <pre>-- Ver todas las columnas
 SELECT * FROM empleados;
 
--- Ver columnas específicas
+-- Ver columnas especÃ­ficas
 SELECT nombre, departamento, salario FROM empleados;
 
--- Valores únicos (sin duplicados)
+-- Valores Ãºnicos (sin duplicados)
 SELECT DISTINCT departamento FROM empleados;
 
 -- Filtrar con WHERE
 SELECT * FROM empleados WHERE departamento = 'Ventas';
 
--- Operadores de comparación
+-- Operadores de comparaciÃ³n
 SELECT * FROM empleados WHERE salario > 55000;</pre>
 
         <h2>6. Operadores en WHERE</h2>
         
         <table>
-            <tr><th>Operador</th><th>Descripción</th><th>Ejemplo</th></tr>
+            <tr><th>Operador</th><th>DescripciÃ³n</th><th>Ejemplo</th></tr>
             <tr><td>=</td><td>Igual a</td><td>departamento = 'Ventas'</td></tr>
             <tr><td><> o !=</td><td>Diferente</td><td>departamento <> 'TI'</td></tr>
             <tr><td>>, <</td><td>Mayor/Menor</td><td>salario > 50000</td></tr>
-            <tr><td>AND</td><td>Y lógico</td><td>dept='Ventas' AND sal>50000</td></tr>
-            <tr><td>OR</td><td>O lógico</td><td>dept='Ventas' OR dept='TI'</td></tr>
+            <tr><td>AND</td><td>Y lÃ³gico</td><td>dept='Ventas' AND sal>50000</td></tr>
+            <tr><td>OR</td><td>O lÃ³gico</td><td>dept='Ventas' OR dept='TI'</td></tr>
             <tr><td>BETWEEN</td><td>Entre rango</td><td>salario BETWEEN 40000 AND 60000</td></tr>
             <tr><td>IN</td><td>En conjunto</td><td>dept IN ('Ventas','TI')</td></tr>
-            <tr><td>LIKE</td><td>Patrón texto</td><td>nombre LIKE 'A%'</td></tr>
+            <tr><td>LIKE</td><td>PatrÃ³n texto</td><td>nombre LIKE 'A%'</td></tr>
             <tr><td>IS NULL</td><td>Es nulo</td><td>email IS NULL</td></tr>
         </table>
 
         <div class="box box-concep">
-            <p><strong>📝 Resumen:</strong> DML permite manipular los datos de la tabla. INSERT añade filas, UPDATE modifica valores, DELETE elimina filas, y SELECT recupera información. El WHERE es crucial para especificar qué filas afectan las operaciones.</p>
+            <p><strong>ðŸ“ Resumen:</strong> DML permite manipular los datos de la tabla. INSERT aÃ±ade filas, UPDATE modifica valores, DELETE elimina filas, y SELECT recupera informaciÃ³n. El WHERE es crucial para especificar quÃ© filas afectan las operaciones.</p>
         </div>
     </div>
 </div>
@@ -131,7 +131,7 @@ SELECT * FROM empleados WHERE salario > 55000;</pre>
     <p>Dada la tabla EMPLEADOS, realizar: a) Insertar nuevo empleado, b) Aumentar 10% a empleados de Ventas, c) Mostrar nombre y salario de quienes ganan > 55000 o son de TI</p>
     
     <p class="answer">
-    <strong>Solución:</strong><br>
+    <strong>SoluciÃ³n:</strong><br>
     a) INSERT INTO empleados (nombre, departamento, salario) VALUES ('Juan', 'Contabilidad', 45000);<br>
     b) UPDATE empleados SET salario = salario * 1.10 WHERE departamento = 'Ventas';<br>
     c) SELECT nombre, salario FROM empleados WHERE salario > 55000 OR departamento = 'TI';
@@ -142,32 +142,32 @@ SELECT * FROM empleados WHERE salario > 55000;</pre>
     <h2>QUIZ DE REPASO</h2>
     
     <p class="q-level">Nivel 1</p>
-    <p class="question">P1: ¿Qué comando añade filas a una tabla?</p>
+    <p class="question">P1: Â¿QuÃ© comando aÃ±ade filas a una tabla?</p>
     <p class="answer">R1: INSERT</p>
 
     <p class="q-level">Nivel 2</p>
-    <p class="question">P2: ¿Qué sucede si ejecutas UPDATE sin WHERE?</p>
+    <p class="question">P2: Â¿QuÃ© sucede si ejecutas UPDATE sin WHERE?</p>
     <p class="answer">R2: Actualiza TODAS las filas de la tabla</p>
 
     <p class="q-level">Nivel 3</p>
-    <p class="question">P3: ¿Para qué sirve DISTINCT?</p>
+    <p class="question">P3: Â¿Para quÃ© sirve DISTINCT?</p>
     <p class="answer">R3: Elimina valores duplicados del resultado</p>
 </div>
 
 <nav class="nav">
-    <a href="semana_04.html">← Semana 04</a>
-    <a href="semana_06.html">Semana 06 →</a>
+    <a href="semana_04.html">â† Semana 04</a>
+    <a href="semana_06.html">Semana 06 â†’</a>
 </nav>
 
 <div class="final-section">
     <div class="conceptual-map">
         <h3>Mapa Mental</h3>
         <div class="mindmap-container">
-            <div class="mindmap-central">DML - MANIPULACIÓN DE DATOS</div>
+            <div class="mindmap-central">DML - MANIPULACIÃ“N DE DATOS</div>
             <div class="mindmap-branch">
                 <div class="node">INSERT
                     <div class="subnode">VALUES</div>
-                    <div class="subnode">Múltiples filas</div>
+                    <div class="subnode">MÃºltiples filas</div>
                 </div>
                 <div class="node">UPDATE
                     <div class="subnode">SET</div>
@@ -188,8 +188,8 @@ SELECT * FROM empleados WHERE salario > 55000;</pre>
     <div class="additional-material">
         <h3>Material Adicional</h3>
         <ul>
-            <li><span class="tag">Video</span> <a href="#">DML básico - 20 min</a></li>
-            <li><span class="tag">Práctica</span> <a href="#">Ejercicios SELECT</a></li>
+            <li><span class="tag">Video</span> <a href="#">DML bÃ¡sico - 20 min</a></li>
+            <li><span class="tag">PrÃ¡ctica</span> <a href="#">Ejercicios SELECT</a></li>
         </ul>
     </div>
 </div>

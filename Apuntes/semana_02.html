@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 02 - Sistema de Gestión de Base de Datos</title>
+    <title>Semana 02 - Sistema de GestiÃ³n de Base de Datos</title>
     <link rel="stylesheet" href="estilo-cornell.css">
-</head>
+<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
 <body>
 
 <div class="header-box">
-    <h1>Sistema de Gestión de Base de Datos</h1>
+    <h1>Sistema de GestiÃ³n de Base de Datos</h1>
     <p>Semana 02 | DBMS y Modelo Relacional</p>
 </div>
 
@@ -18,55 +18,91 @@
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>§ DBMS</strong><br>Software gestor de datos</li>
-            <li><strong>§ Arquitectura 3 niveles</strong><br>Interno, Conceptual, Externo</li>
-            <li><strong>§ Independencia</strong><br>Datos separados del programa</li>
-            <li><strong>§ ACID</strong><br>Atomicidad, Consistencia, Aislamiento, Durabilidad</li>
-            <li><strong>§ Transacción</strong><br>Unidad lógica de trabajo</li>
-            <li><strong>§ Catálogo</strong><br>Metadatos del sistema</li>
+            <li><strong>Â§ DBMS</strong><br>Software gestor de datos</li>
+            <li><strong>Â§ Arquitectura 3 niveles</strong><br>Interno, Conceptual, Externo</li>
+            <li><strong>Â§ Independencia</strong><br>Datos separados del programa</li>
+            <li><strong>Â§ ACID</strong><br>Atomicidad, Consistencia, Aislamiento, Durabilidad</li>
+            <li><strong>Â§ TransacciÃ³n</strong><br>Unidad lÃ³gica de trabajo</li>
+            <li><strong>Â§ CatÃ¡logo</strong><br>Metadatos del sistema</li>
         </ul>
     </div>
 
     <div class="main-content">
         
-        <h2>1. ¿Qué es un DBMS?</h2>
-        <span class="timestamp">Definición</span>
+        <section class="architect-insight">
+<h4>💡 Insight del Arquitecto</h4>
+<h1>Clase 1.02: Teoría Relacional Pura y el Fin de los Monolitos</h1>
+<p><strong>Instructor:</strong> Principal Data Architect &amp; Senior DBA</p>
+<h2>1. Teoría de Alto Nivel: Más allá de "Filas y Columnas"</h2>
+<p>Si revisamos el material de 2013, la definición de una Base de Datos Relacional era simple: "Es una colección de relaciones o tablas de dos dimensiones para almacenar información". Aunque útil para empezar, esta definición es peligrosa para un arquitecto moderno.</p>
+<p>Una tabla no es una hoja de Excel. El modelo relacional, formulado por Edgar F. Codd y pulido por <strong>C.J. Date</strong>, está fundamentado en la <strong>Teoría de Conjuntos</strong> y la lógica de predicados de primer orden.</p>
+<ul>
+<li><strong>Tuplas vs. Filas:</strong> En matemáticas puras, un conjunto no tiene un orden inherente. Por eso, en SQL, hablar del "siguiente registro" o "el registro anterior" carece de sentido a menos que impongas un ordenamiento explícito (<code>ORDER BY</code>). Asumir un orden físico es un antipatrón clásico que rompe la integridad relacional.</li>
+<li><strong>El Dominio de los Atributos:</strong> En 2013, un atributo (columna) se definía por su tipo de dato básico (<code>VARCHAR2</code>, <code>NUMBER</code>). En 2026, entendemos que el <em>Dominio</em> de una columna debe ser estrictamente definido (ej. usando de dominios personalizados en PostgreSQL o <code>CHECK</code> constraints) para evitar que un salario sea negativo, mucho antes de que la lógica de aplicación intente insertarlo.</li>
+<li><strong>Normalización Estricta vs. Realidad Distribuida:</strong> En el documento "Normalización de Bases de Datos" antiguo vimos hasta 5 formas normales. En la academia, buscar la 3NF o BCNF es el estándar para evitar anomalías de inserción, actualización y borrado. Sin embargo, en arquitecturas <em>Data Intensive</em> (como menciona <strong>Martin Kleppmann</strong>), los picos o uniones (<em>JOINs</em>) masivos sobre 10 tablas altamente normalizadas hundirán el rendimiento de tu CPU. Hoy, aplicamos normalización para asegurar la integridad transaccional (sistemas OLTP puros), pero aplicamos <strong>desnormalización controlada</strong> (usando vistas materializadas, o tipos compuestos como <code>JSONB</code>) para optimizar rutas críticas de lectura.</li>
+</ul>
+<h2>2. Integración SDLC: Anomalías en Sistemas Concurrentes</h2>
+<p>El problema real de un mal diseño relacional no se ve en un esquema de desarrollo con un solo usuario. Se manifiesta en el caos de la concurrencia.</p>
+<p>Imagina un esquema antiguo donde el <code>precio</code> de un producto se copia en la tabla <code>detalle_orden</code> al momento de la venta, pero también dependemos de un campo total precalculado estáticamente en la tabla <code>orden</code>.</p>
+<ul>
+<li>¿Qué pasa si dos transacciones actualizan el mismo registro casi al mismo tiempo (Lost Updates)? En la actualidad, mitigamos esto a nivel de base de datos usando bloqueos explícitos (<code>SELECT ... FOR UPDATE</code>), control optimista de concurrencia con columnas de versión, o delegando a niveles de aislamiento superiores (<code>REPEATABLE READ</code> o <code>SERIALIZABLE</code> en PostgreSQL).</li>
+<li><strong>El Teorema CAP y PACELC:</strong> En sistemas modernos, tu base de datos probablemente no sea un solo servidor. Tendrás réplicas. El Teorema CAP nos dice que ante una partición de red (P), debes elegir entre Consistencia (C) o Disponibilidad (A). El diseño relacional clásico siempre elige la Consistencia de manera predeterminada. Entender esto te ayuda a justificar por qué una base de datos relacional tradicional puede "caerse" o rechazar escrituras antes que servir datos basura, mientras que un clúster de NoSQL de eventual consistencia seguirá aceptando datos (potencialmente conflictivos).</li>
+</ul>
+<h2>3. Laboratorio Interactivo: El Refactor de la Mueblería</h2>
+<p><strong>El Escenario (Rescatado de la Clase 3 de 2013 - "Modelo de Datos de una Muebleria"):</strong>
+En el antiguo sílabo (Página 16), tenías un diagrama complejo con tablas: <code>orden_pedido</code>, <code>cliente</code>, <code>producto_ordenado</code>, <code>producto</code>, <code>orden_trabajo</code>, <code>linea_orden_trabajo</code>, <code>materia_prima</code>, etc. Todo conectado en una telaraña transaccional monolítica.</p>
+<p>En 1999 o 2013, tener 15 tablas para procesar una venta estaba bien. Pero en 2026, si este sistema está en la Nube y la Mueblería procesa miles de pedidos concurrentes, vas a notar que el <em>lock</em> continuo en la tabla de <code>stock</code> en <code>producto</code> (para actualizar inventario por cada ítem vendido) causará tiempos de espera masivos.</p>
+<hr />
+<h3>Reto de Diseño Moderno (Refactorización)</h3>
+<p>Vamos a analizar un punto crítico de ese modelo de la "Mueblería":</p>
+<ul>
+<li>Tienes la tabla <code>producto</code> con el atributo <code>stock</code> dentro.</li>
+<li>Tienes la tabla <code>producto_ordenado</code> (que es el detalle de la compra).</li>
+</ul>
+<p>Cuando un cliente compra 3 sillas, tu backend actualiza <code>producto_ordenado</code> y, en la misma transacción transaccional, hace un <code>UPDATE producto SET stock = stock - 3 WHERE id_producto = 'SILLA1';</code></p>
+<p><strong>Pregunta del Reto:</strong>
+Miles de usuarios intentan comprar la SILLA1 durante una liquidación el mismo segundo. La sentencia <code>UPDATE producto SET stock...</code> creará un <strong>Row-Level Lock</strong> y todas las transacciones se formarán en una fila secuencial en la base de datos, destruyendo el rendimiento de las ventas.</p>
+<p>Como arquitecto de datos, ¿qué <strong>dos enfoques de diseño a nivel de base de datos</strong> propondrías en 2026 para evitar este cuello de botella extremo en el inventario, sin perder la consistencia de que no puedes vender más de lo que tienes?</p>
+<p><em>(Pista: Considera separar las sumas y las restas en registros independientes, o usar colas/eventos).</em></p>
+</section>
+<h2>1. Â¿QuÃ© es un DBMS?</h2>
+        <span class="timestamp">DefiniciÃ³n</span>
         
-        <p>Software que actúa como intermediario entre usuarios y la base de datos. Permite definir, crear y controlar el acceso a los datos.</p>
+        <p>Software que actÃºa como intermediario entre usuarios y la base de datos. Permite definir, crear y controlar el acceso a los datos.</p>
 
         <div class="box box-concep">
-            <p><strong>Función del DBMS:</strong> Abstraer la complejidad del almacenamiento físico y proporcionar herramientas para gestionar datos de manera eficiente y segura.</p>
+            <p><strong>FunciÃ³n del DBMS:</strong> Abstraer la complejidad del almacenamiento fÃ­sico y proporcionar herramientas para gestionar datos de manera eficiente y segura.</p>
         </div>
 
         <h2>2. Arquitectura de Tres Niveles</h2>
         
         <ul>
-            <li><strong>Nivel Interno (Físico):</strong> Cómo se almacenan los datos en disco</li>
-            <li><strong>Nivel Conceptual (Lógico):</strong> Qué datos existen y sus relaciones - visión global</li>
-            <li><strong>Nivel Externo (Vistas):</strong> Cómo cada usuario ve la información</li>
+            <li><strong>Nivel Interno (FÃ­sico):</strong> CÃ³mo se almacenan los datos en disco</li>
+            <li><strong>Nivel Conceptual (LÃ³gico):</strong> QuÃ© datos existen y sus relaciones - visiÃ³n global</li>
+            <li><strong>Nivel Externo (Vistas):</strong> CÃ³mo cada usuario ve la informaciÃ³n</li>
         </ul>
 
         <div class="box box-ejemplo">
-            <p><strong>Analogía:</strong> Es como un edificio: el plano arquitectónico (interno), la descripción formal a constructores (conceptual), y los diferentes departamentos con sus propias vistas del edificio (externo).</p>
+            <p><strong>AnalogÃ­a:</strong> Es como un edificio: el plano arquitectÃ³nico (interno), la descripciÃ³n formal a constructores (conceptual), y los diferentes departamentos con sus propias vistas del edificio (externo).</p>
         </div>
 
         <h2>3. Funciones del DBMS</h2>
         
         <ul>
-            <li><strong>Gestión de Usuarios:</strong> Permisos y control de acceso</li>
-            <li><strong>Gestión de Rendimiento:</strong> Optimización de consultas</li>
-            <li><strong>Backup y Recovery:</strong> Respaldo y restauración</li>
-            <li><strong>Gestión de Transacciones:</strong> Propiedades ACID</li>
+            <li><strong>GestiÃ³n de Usuarios:</strong> Permisos y control de acceso</li>
+            <li><strong>GestiÃ³n de Rendimiento:</strong> OptimizaciÃ³n de consultas</li>
+            <li><strong>Backup y Recovery:</strong> Respaldo y restauraciÃ³n</li>
+            <li><strong>GestiÃ³n de Transacciones:</strong> Propiedades ACID</li>
         </ul>
 
         <h2>4. Propiedades ACID</h2>
         
         <table>
-            <tr><th>Propiedad</th><th>Descripción</th><th>Ejemplo</th></tr>
+            <tr><th>Propiedad</th><th>DescripciÃ³n</th><th>Ejemplo</th></tr>
             <tr><td><strong>Atomicidad</strong></td><td>Todo o nada</td><td>Transferencia bancaria</td></tr>
-            <tr><td><strong>Consistencia</strong><td>Estado válido siempre</td><td>Saldo no negativo</td></tr>
+            <tr><td><strong>Consistencia</strong><td>Estado vÃ¡lido siempre</td><td>Saldo no negativo</td></tr>
             <tr><td><strong>Aislamiento</strong><td>Transacciones independientes</td><td>Concurrentes no se interfieren</td></tr>
-            <tr><td><strong>Durabilidad</strong><td>Cambios permanentes</td><td>即使 sistema falla</td></tr>
+            <tr><td><strong>Durabilidad</strong><td>Cambios permanentes</td><td>å³ä½¿ sistema falla</td></tr>
         </table>
 
         <h2>5. Lenguajes SQL</h2>
@@ -84,7 +120,7 @@
             <li><strong>Procesador de Consultas:</strong> Interpreta y optimiza SQL</li>
             <li><strong>Gestor de Transacciones:</strong> Asegura ACID</li>
             <li><strong>Motor de BD:</strong> Almacena y recupera datos</li>
-            <li><strong>Catálogo del Sistema:</strong> Metadatos (esquemas, tipos, índices)</li>
+            <li><strong>CatÃ¡logo del Sistema:</strong> Metadatos (esquemas, tipos, Ã­ndices)</li>
         </ul>
 
     </div>
@@ -93,11 +129,11 @@
 <div class="section-box">
     <h2>EJERCICIO RESUELTO</h2>
     <p class="question">Enunciado:</p>
-    <p>Un banco transfiere 100 USD de cuenta A a cuenta B. Explica cómo cada propiedad ACID se aplica.</p>
+    <p>Un banco transfiere 100 USD de cuenta A a cuenta B. Explica cÃ³mo cada propiedad ACID se aplica.</p>
     
     <p class="answer">
-    <strong>Atomicidad:</strong> La operación completa (restar A + sumar B) se ejecuta o no se ejecuta en absoluto.<br>
-    <strong>Consistencia:</strong> La suma total (A+B) debe ser igual antes y después.<br>
+    <strong>Atomicidad:</strong> La operaciÃ³n completa (restar A + sumar B) se ejecuta o no se ejecuta en absoluto.<br>
+    <strong>Consistencia:</strong> La suma total (A+B) debe ser igual antes y despuÃ©s.<br>
     <strong>Aislamiento:</strong> Otros usuarios ven estado anterior o posterior, nunca intermedio.<br>
     <strong>Durabilidad:</strong> Una vez commit, los cambios son permanentes.
     </p>
@@ -106,19 +142,19 @@
 <div class="section-box">
     <h2>QUIZ</h2>
     
-    <p class="question">P1: ¿Qué comando pertenece a DDL?</p>
+    <p class="question">P1: Â¿QuÃ© comando pertenece a DDL?</p>
     <p class="answer">R1: CREATE TABLE (define estructura)</p>
 
-    <p class="question">P2: ¿Qué propiedad ACID garantiza que una transacción se ejecute completa o no se ejecute?</p>
+    <p class="question">P2: Â¿QuÃ© propiedad ACID garantiza que una transacciÃ³n se ejecute completa o no se ejecute?</p>
     <p class="answer">R2: Atomicidad</p>
 
-    <p class="question">P3: GRANT es parte de qué lenguaje?</p>
+    <p class="question">P3: GRANT es parte de quÃ© lenguaje?</p>
     <p class="answer">R3: DCL (Data Control Language)</p>
 </div>
 
 <nav class="nav">
-    <a href="semana_01.html">← Semana 01</a>
-    <a href="semana_03.html">Semana 03 →</a>
+    <a href="semana_01.html">â† Semana 01</a>
+    <a href="semana_03.html">Semana 03 â†’</a>
 </nav>
 
 <!-- SECCIONES FINALES -->
@@ -133,8 +169,8 @@
                 <span>Externo</span>
             </div>
             <div class="mindmap-level3">
-                <span>Físico</span>
-                <span>Lógico</span>
+                <span>FÃ­sico</span>
+                <span>LÃ³gico</span>
                 <span>Vistas</span>
             </div>
             <div class="mindmap-level1" style="margin-top:8px;background:var(--secondary)">PROPIEDADES ACID</div>
@@ -151,7 +187,7 @@
         <ul>
             <li><span class="tag">Video</span> <a href="#">Arquitectura DBMS - 20 min</a></li>
             <li><span class="tag">Lectura</span> <a href="#">Transacciones ACID</a></li>
-            <li><span class="tag">Práctica</span> <a href="#">Comandos SQL básicos</a></li>
+            <li><span class="tag">PrÃ¡ctica</span> <a href="#">Comandos SQL bÃ¡sicos</a></li>
         </ul>
     </div>
 </div>
