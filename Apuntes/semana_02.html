@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 02 - Sistema de Gestión de Base de Datos</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+</head>
+<body>
+
+<div class="header-box">
+    <h1>Sistema de Gestión de Base de Datos</h1>
+    <p>Semana 02 | DBMS y Modelo Relacional</p>
+</div>
+
+<div class="cornell-container">
+    
+    <div class="keywords-sidebar">
+        <h3>PALABRAS CLAVE</h3>
+        <ul>
+            <li><strong>§ DBMS</strong><br>Software gestor de datos</li>
+            <li><strong>§ Arquitectura 3 niveles</strong><br>Interno, Conceptual, Externo</li>
+            <li><strong>§ Independencia</strong><br>Datos separados del programa</li>
+            <li><strong>§ ACID</strong><br>Atomicidad, Consistencia, Aislamiento, Durabilidad</li>
+            <li><strong>§ Transacción</strong><br>Unidad lógica de trabajo</li>
+            <li><strong>§ Catálogo</strong><br>Metadatos del sistema</li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        
+        <h2>1. ¿Qué es un DBMS?</h2>
+        <span class="timestamp">Definición</span>
+        
+        <p>Software que actúa como intermediario entre usuarios y la base de datos. Permite definir, crear y controlar el acceso a los datos.</p>
+
+        <div class="box box-concep">
+            <p><strong>Función del DBMS:</strong> Abstraer la complejidad del almacenamiento físico y proporcionar herramientas para gestionar datos de manera eficiente y segura.</p>
+        </div>
+
+        <h2>2. Arquitectura de Tres Niveles</h2>
+        
+        <ul>
+            <li><strong>Nivel Interno (Físico):</strong> Cómo se almacenan los datos en disco</li>
+            <li><strong>Nivel Conceptual (Lógico):</strong> Qué datos existen y sus relaciones - visión global</li>
+            <li><strong>Nivel Externo (Vistas):</strong> Cómo cada usuario ve la información</li>
+        </ul>
+
+        <div class="box box-ejemplo">
+            <p><strong>Analogía:</strong> Es como un edificio: el plano arquitectónico (interno), la descripción formal a constructores (conceptual), y los diferentes departamentos con sus propias vistas del edificio (externo).</p>
+        </div>
+
+        <h2>3. Funciones del DBMS</h2>
+        
+        <ul>
+            <li><strong>Gestión de Usuarios:</strong> Permisos y control de acceso</li>
+            <li><strong>Gestión de Rendimiento:</strong> Optimización de consultas</li>
+            <li><strong>Backup y Recovery:</strong> Respaldo y restauración</li>
+            <li><strong>Gestión de Transacciones:</strong> Propiedades ACID</li>
+        </ul>
+
+        <h2>4. Propiedades ACID</h2>
+        
+        <table>
+            <tr><th>Propiedad</th><th>Descripción</th><th>Ejemplo</th></tr>
+            <tr><td><strong>Atomicidad</strong></td><td>Todo o nada</td><td>Transferencia bancaria</td></tr>
+            <tr><td><strong>Consistencia</strong><td>Estado válido siempre</td><td>Saldo no negativo</td></tr>
+            <tr><td><strong>Aislamiento</strong><td>Transacciones independientes</td><td>Concurrentes no se interfieren</td></tr>
+            <tr><td><strong>Durabilidad</strong><td>Cambios permanentes</td><td>即使 sistema falla</td></tr>
+        </table>
+
+        <h2>5. Lenguajes SQL</h2>
+        
+        <ul>
+            <li><strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP - estructura</li>
+            <li><strong>DML (Data Manipulation):</strong> SELECT, INSERT, UPDATE, DELETE - datos</li>
+            <li><strong>DCL (Data Control):</strong> GRANT, REVOKE - permisos</li>
+            <li><strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK - transacciones</li>
+        </ul>
+
+        <h2>6. Componentes del DBMS</h2>
+        
+        <ul>
+            <li><strong>Procesador de Consultas:</strong> Interpreta y optimiza SQL</li>
+            <li><strong>Gestor de Transacciones:</strong> Asegura ACID</li>
+            <li><strong>Motor de BD:</strong> Almacena y recupera datos</li>
+            <li><strong>Catálogo del Sistema:</strong> Metadatos (esquemas, tipos, índices)</li>
+        </ul>
+
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>EJERCICIO RESUELTO</h2>
+    <p class="question">Enunciado:</p>
+    <p>Un banco transfiere 100 USD de cuenta A a cuenta B. Explica cómo cada propiedad ACID se aplica.</p>
+    
+    <p class="answer">
+    <strong>Atomicidad:</strong> La operación completa (restar A + sumar B) se ejecuta o no se ejecuta en absoluto.<br>
+    <strong>Consistencia:</strong> La suma total (A+B) debe ser igual antes y después.<br>
+    <strong>Aislamiento:</strong> Otros usuarios ven estado anterior o posterior, nunca intermedio.<br>
+    <strong>Durabilidad:</strong> Una vez commit, los cambios son permanentes.
+    </p>
+</div>
+
+<div class="section-box">
+    <h2>QUIZ</h2>
+    
+    <p class="question">P1: ¿Qué comando pertenece a DDL?</p>
+    <p class="answer">R1: CREATE TABLE (define estructura)</p>
+
+    <p class="question">P2: ¿Qué propiedad ACID garantiza que una transacción se ejecute completa o no se ejecute?</p>
+    <p class="answer">R2: Atomicidad</p>
+
+    <p class="question">P3: GRANT es parte de qué lenguaje?</p>
+    <p class="answer">R3: DCL (Data Control Language)</p>
+</div>
+
+<nav class="nav">
+    <a href="semana_01.html">← Semana 01</a>
+    <a href="semana_03.html">Semana 03 →</a>
+</nav>
+
+<!-- SECCIONES FINALES -->
+<div class="final-section">
+    <div class="conceptual-map">
+        <h3>Mapa Conceptual</h3>
+        <div class="mindmap">
+            <div class="mindmap-level1">DBMS - ARQUITECTURA 3 NIVELES</div>
+            <div class="mindmap-level2">
+                <span>Interno</span>
+                <span>Conceptual</span>
+                <span>Externo</span>
+            </div>
+            <div class="mindmap-level3">
+                <span>Físico</span>
+                <span>Lógico</span>
+                <span>Vistas</span>
+            </div>
+            <div class="mindmap-level1" style="margin-top:8px;background:var(--secondary)">PROPIEDADES ACID</div>
+            <div class="mindmap-level3">
+                <span>Atomicidad</span>
+                <span>Consistencia</span>
+                <span>Aislamiento</span>
+                <span>Durabilidad</span>
+            </div>
+        </div>
+    </div>
+    <div class="additional-material">
+        <h3>Material Adicional</h3>
+        <ul>
+            <li><span class="tag">Video</span> <a href="#">Arquitectura DBMS - 20 min</a></li>
+            <li><span class="tag">Lectura</span> <a href="#">Transacciones ACID</a></li>
+            <li><span class="tag">Práctica</span> <a href="#">Comandos SQL básicos</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

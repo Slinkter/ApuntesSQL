@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 12 - PL/pgSQL Avanzado</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+</head>
+<body>
+
+<div class="header-box">
+    <h1>PL/pgSQL - Avanzado</h1>
+    <p>Semana 12 | Cursores, Triggers, Excepciones</p>
+</div>
+
+<div class="cornell-container">
+    <div class="keywords-sidebar">
+        <h3>PALABRAS CLAVE</h3>
+        <ul>
+            <li><strong>§ CURSOR</strong><br>Iterar filas</li>
+            <li><strong>§ TRIGGER</strong><br>Evento automático</li>
+            <li><strong>§ RAISE</strong><br>Mensajes</li>
+            <li><strong>§ EXCEPTION</strong><br>Manejo errores</li>
+            <li><strong>§ RETURN TABLE</strong><br>Retornar tabla</li>
+            <li><strong>§ OLD/NEW</strong><br>Row triggers</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3>RECURSOS</h3>
+            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="box box-note">
+            <p><strong>📌 Objetivos:</strong> Usar cursores, crear triggers, manejar excepciones.</p>
+        </div>
+
+        <h2>1. Cursores</h2>
+        
+        <pre>-- Cursor básico
+CREATE OR REPLACE FUNCTION procesar_empleados()
+RETURNS TEXT AS $$
+DECLARE
+    emp_record RECORD;
+    cur_emp CURSOR FOR SELECT id, nombre, salary FROM employees;
+    total_salary NUMERIC := 0;
+BEGIN
+    OPEN cur_emp;
+    LOOP
+        FETCH cur_emp INTO emp_record;
+        EXIT WHEN NOT FOUND;
+        total_salary := total_salary + emp_record.salary;
+    END LOOP;
+    CLOSE cur_emp;
+    RETURN 'Total: ' || total_salary;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Cursor con parámetro
+CREATE OR REPLACE FUNCTION buscar_empleado(p_dept VARCHAR)
+RETURNS TABLE(id INTEGER, nombre TEXT) AS $$
+DECLARE
+    cur CURSOR(p_dept VARCHAR) FOR 
+        SELECT id, nombre FROM employees WHERE department = p_dept;
+BEGIN
+    FOR emp IN cur(p_dept) LOOP
+        RETURN NEXT emp;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;</pre>
+
+        <h2>2. Triggers</h2>
+        
+        <pre>-- Función de trigger
+CREATE OR REPLACE FUNCTION fn_audit_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO audit_log (tabla, operacion, usuario, fecha)
+    VALUES (TG_TABLE_NAME, TG_OP, current_user, now());
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Crear trigger
+CREATE TRIGGER tr_empleados_insert
+AFTER INSERT ON empleados
+FOR EACH ROW
+EXECUTE FUNCTION fn_audit_insert();
+
+-- Trigger BEFORE (modificar antes de insertar)
+CREATE OR REPLACE FUNCTION fn_validar_salary()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.salary < 0 THEN
+        RAISE EXCEPTION 'Salary no puede ser negativo';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tr_validar_salary
+BEFORE INSERT OR UPDATE ON employees
+FOR EACH ROW
+EXECUTE FUNCTION fn_validar_salary();</pre>
+
+        <h2>3. Manejo de Excepciones</h2>
+        
+        <pre>CREATE OR REPLACE FUNCTION division_segura(a NUMERIC, b NUMERIC)
+RETURNS NUMERIC AS $$
+DECLARE
+    resultado NUMERIC;
+BEGIN
+    resultado := a / b;
+    RETURN resultado;
+EXCEPTION
+    WHEN division_by_zero THEN
+        RAISE NOTICE 'División por cero';
+        RETURN NULL;
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Error: %', SQLERRM;
+        RETURN -1;
+END;
+$$ LANGUAGE plpgsql;</pre>
+
+        <div class="box box-concep">
+            <p><strong>📝 Resumen:</strong> Los cursores permiten iterar sobre conjuntos de resultados. Los triggers ejecutan funciones automáticamente en eventos (INSERT/UPDATE/DELETE). Las excepciones manejan errores con TRY/CATCH.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>EJERCICIO</h2>
+    <p class="question">Crear trigger que registre en log cuando se elimine un empleado.</p>
+    <p class="answer">
+    <pre>CREATE OR REPLACE FUNCTION log_delete_empleado()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO log_eliminados (nombre, fecha)
+    VALUES (OLD.nombre, now());
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tr_empleado_delete
+AFTER DELETE ON empleados
+FOR EACH ROW
+EXECUTE FUNCTION log_delete_empleado();</pre>
+    </p>
+</div>
+
+<nav class="nav">
+    <a href="semana_11.html">← Semana 11</a>
+    <a href="semana_13.html">Semana 13 →</a>
+</nav>
+
+<div class="final-section">
+    <div class="conceptual-map">
+        <h3>Mapa Mental</h3>
+        <div class="mindmap-container">
+            <div class="mindmap-central">PL/pgSQL AVANZADO</div>
+            <div class="mindmap-branch">
+                <div class="node">Cursores
+                    <div class="subnode">DECLARE</div>
+                    <div class="subnode">OPEN/FETCH</div>
+                </div>
+                <div class="node">Triggers
+                    <div class="subnode">BEFORE/AFTER</div>
+                    <div class="subnode">OLD/NEW</div>
+                </div>
+                <div class="node">Excepciones
+                    <div class="subnode">EXCEPTION</div>
+                    <div class="subnode">RAISE</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="additional-material">
+        <h3>Material</h3>
+        <ul><li><span class="tag">Docs</span> <a href="#">Triggers PostgreSQL</a></li></ul>
+    </div>
+</div>
+
+</body>
+</html>

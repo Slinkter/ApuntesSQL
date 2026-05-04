@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 09 - GROUP BY y HAVING</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+</head>
+<body>
+
+<div class="header-box">
+    <h1>GROUP BY y HAVING</h1>
+    <p>Semana 09 | Agrupamientos y Funciones de Agregación</p>
+</div>
+
+<div class="cornell-container">
+    <div class="keywords-sidebar">
+        <h3>PALABRAS CLAVE</h3>
+        <ul>
+            <li><strong>§ GROUP BY</strong><br>Agrupar filas</li>
+            <li><strong>§ HAVING</strong><br>Filtrar grupos</li>
+            <li><strong>§ COUNT</strong><br>Contar filas</li>
+            <li><strong>§ SUM/AVG</strong><br>Sumar/Promediar</li>
+            <li><strong>§ MIN/MAX</strong><br>Mínimo/Máximo</li>
+            <li><strong>§ ROLLUP</strong><br>Subtotales</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3>RECURSOS</h3>
+            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="box box-note">
+            <p><strong>📌 Objetivos:</strong> Agrupar datos, usar funciones de agregación, filtrar grupos con HAVING.</p>
+        </div>
+
+        <h2>1. Funciones de Agregación</h2>
+        
+        <table>
+            <tr><th>Función</th><th>Descripción</th><th>Ejemplo</th></tr>
+            <tr><td>COUNT(*)</td><td>Total de filas</td><td>COUNT(*) = 100</td></tr>
+            <tr><td>SUM(campo)</td><td>Suma de valores</td><td>SUM(salary) = 500000</td></tr>
+            <tr><td>AVG(campo)</td><td>Promedio</td><td>AVG(salary) = 50000</td></tr>
+            <tr><td>MIN(campo)</td><td>Mínimo valor</td><td>MIN(precio) = 10</td></tr>
+            <tr><td>MAX(campo)</td><td>Máximo valor</td><td>MAX(precio) = 1000</td></tr>
+        </table>
+
+        <h2>2. GROUP BY</h2>
+        
+        <pre>-- Contar empleados por departamento
+SELECT department, COUNT(*) as total
+FROM employees
+GROUP BY department;
+
+-- Sumar salarios por departamento
+SELECT department, SUM(salary) as masa_salarial
+FROM employees
+GROUP BY department;
+
+-- Promedio de edad por ciudad
+SELECT city, AVG(age) as edad_promedio
+FROM employees
+GROUP BY city;</pre>
+
+        <h2>3. HAVING - Filtrar Grupos</h2>
+        
+        <pre>-- Departamentos con más de 5 empleados
+SELECT department, COUNT(*) as total
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 5;
+
+-- Ciudades con promedio de salary > 50000
+SELECT city, AVG(salary) as promedio
+FROM employees
+GROUP BY city
+HAVING AVG(salary) > 50000;</pre>
+
+        <div class="box box-warning">
+            <p><strong>Diferencia WHERE vs HAVING:</strong> WHERE filtra FILAS antes de agrupar. HAVing filtra GRUPOS después de GROUP BY.</p>
+        </div>
+
+        <h2>4. ORDER BY con GROUP BY</h2>
+        
+        <pre>-- Ordenar por cantidad (mayor a menor)
+SELECT department, COUNT(*) as total
+FROM employees
+GROUP BY department
+ORDER BY total DESC;</pre>
+
+        <div class="box box-concep">
+            <p><strong>📝 Resumen:</strong> GROUP BY agrupa filas con valores iguales. Las funciones de agregación (COUNT, SUM, AVG, MIN, MAX) operan sobre cada grupo. HAVING filtra grupos, no filas individuales.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>EJERCICIO</h2>
+    <p class="question">Mostrar departamento y promedio de salary de deptartamentos con promedio > 40000.</p>
+    <p class="answer">
+    <pre>SELECT department, AVG(salary) as promedio
+FROM employees
+GROUP BY department
+HAVING AVG(salary) > 40000;</pre>
+    </p>
+</div>
+
+<nav class="nav">
+    <a href="semana_08.html">← Semana 08</a>
+    <a href="semana_10.html">Semana 10 →</a>
+</nav>
+
+<div class="final-section">
+    <div class="conceptual-map">
+        <h3>Mapa Mental</h3>
+        <div class="mindmap-container">
+            <div class="mindmap-central">GROUP BY Y HAVING</div>
+            <div class="mindmap-branch">
+                <div class="node">Agregación
+                    <div class="subnode">COUNT</div>
+                    <div class="subnode">SUM</div>
+                    <div class="subnode">AVG</div>
+                    <div class="subnode">MIN/MAX</div>
+                </div>
+                <div class="node">Filtrado
+                    <div class="subnode">WHERE (filas)</div>
+                    <div class="subnode">HAVING (grupos)</div>
+                </div>
+                <div class="node">Orden
+                    <div class="subnode">ORDER BY</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="additional-material">
+        <h3>Material</h3>
+        <ul>
+            <li><span class="tag">Práctica</span> <a href="#">Ejercicios GROUP BY</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

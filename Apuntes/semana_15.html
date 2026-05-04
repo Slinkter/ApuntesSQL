@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 15 - Seguridad y Gestión</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+</head>
+<body>
+
+<div class="header-box">
+    <h1>Seguridad y Gestión</h1>
+    <p>Semana 15 | Usuarios, Roles, Permisos, RLS</p>
+</div>
+
+<div class="cornell-container">
+    <div class="keywords-sidebar">
+        <h3>PALABRAS CLAVE</h3>
+        <ul>
+            <li><strong>§ CREATE ROLE</strong><br>Crear rol</li>
+            <li><strong>§ GRANT</strong><br>Otorgar permisos</li>
+            <li><strong>§ REVOKE</strong><br>Quitar permisos</li>
+            <li><strong>§ RLS</strong><br>Row Level Security</li>
+            <li><strong>§ Ownership</strong><br>Propiedad</li>
+            <li><strong>§ pg_hba.conf</strong><br>Autenticación</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3>RECURSOS</h3>
+            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="box box-note">
+            <p><strong>📌 Objetivos:</strong> Crear usuarios/roles, gestionar permisos, implementar seguridad a nivel de fila.</p>
+        </div>
+
+        <h2>1. Roles y Usuarios</h2>
+        
+        <pre>-- Crear rol (sin login)
+CREATE ROLE analyst;
+CREATE ROLE developer;
+
+-- Crear usuario (con login)
+CREATE USER juan WITH PASSWORD 'secret123';
+CREATE USER maria LOGIN PASSWORD 'pass456';
+
+-- Modificar rol
+ALTER ROLE juan WITH SUPERUSER;
+ALTER ROLE developer SET default_transaction_isolation = 'read committed';
+
+-- Eliminar
+DROP ROLE analyst;
+DROP USER juan;</pre>
+
+        <h2>2. Permisos con GRANT/REVOKE</h2>
+        
+        <pre>-- Permisos en tabla
+GRANT SELECT ON empleados TO analyst;
+GRANT SELECT, INSERT, UPDATE ON empleados TO developer;
+GRANT ALL ON empleados TO admin;
+
+-- Permisos en esquema
+GRANT USAGE ON SCHEMA public TO analyst;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO developer;
+
+-- Permisos en funciones
+GRANT EXECUTE ON FUNCTION calculate_bonus() TO developer;
+
+-- Quitar permisos
+REVOKE INSERT ON empleados FROM developer;</pre>
+
+        <h2>3. Row Level Security (RLS)</h2>
+        
+        <pre>-- Habilitar RLS en tabla
+ALTER TABLE pedidos ENABLE ROW LEVEL SECURITY;
+
+-- Política: usuarios ven solo sus pedidos
+CREATE POLICY mis_pedidos ON pedidos
+    USING (id_cliente = current_user);
+
+-- Política por rol
+CREATE POLICY pedidos_gerente ON pedidos
+    FOR ALL
+    USING (
+        EXISTS (
+            SELECT 1 FROM usuarios_roles
+            WHERE usuario = current_user AND rol = 'gerente'
+        )
+    );</pre>
+
+        <h2>4. Esquemas</h2>
+        
+        <pre>-- Crear esquema
+CREATE SCHEMA ventas;
+
+-- Mover tabla a esquema
+ALTER TABLE pedidos SET SCHEMA ventas;
+
+-- Acceso a esquema
+GRANT USAGE ON SCHEMA ventas TO analyst;</pre>
+
+        <div class="box box-concep">
+            <p><strong>📝 Resumen:</strong> Los roles agrup permisos. GRANT concede acceso, REVOKE lo elimina. RLS filtra filas por usuario. PostgreSQL usa autenticación vía pg_hba.conf y roles con LOGIN.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>EJERCICIO</h2>
+    <p class="question">Crear usuario 'lectura' que solo pueda SELECT en todas las tablas.</p>
+    <p class="answer">
+    <pre>CREATE USER lectura WITH PASSWORD 'readonly';
+GRANT CONNECT ON DATABASE mi_db TO lectura;
+GRANT USAGE ON SCHEMA public TO lectura;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO lectura;</pre>
+    </p>
+</div>
+
+<nav class="nav">
+    <a href="semana_14.html">← Semana 14</a>
+    <a href="semana_16.html">Semana 16 →</a>
+</nav>
+
+<div class="final-section">
+    <div class="conceptual-map">
+        <h3>Mapa Mental</h3>
+        <div class="mindmap-container">
+            <div class="mindmap-central">SEGURIDAD Y GESTIÓN</div>
+            <div class="mindmap-branch">
+                <div class="node">Roles
+                    <div class="subnode">CREATE ROLE</div>
+                    <div class="subnode">CREATE USER</div>
+                    <div class="subnode">ALTER/DROP</div>
+                </div>
+                <div class="node">Permisos
+                    <div class="subnode">GRANT</div>
+                    <div class="subnode">REVOKE</div>
+                    <div class="subnode">ALL</div>
+                </div>
+                <div class="node">RLS
+                    <div class="subnode">ENABLE</div>
+                    <div class="subnode">POLICY</div>
+                    <div class="subnode">USING</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="additional-material">
+        <h3>Material</h3>
+        <ul><li><span class="tag">Docs</span> <a href="#">Security</a></li></ul>
+    </div>
+</div>
+
+</body>
+</html>

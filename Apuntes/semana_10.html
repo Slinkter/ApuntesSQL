@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 10 - Vistas y CTEs</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+</head>
+<body>
+
+<div class="header-box">
+    <h1>Vistas y CTEs</h1>
+    <p>Semana 10 | Common Table Expressions y Vistas</p>
+</div>
+
+<div class="cornell-container">
+    <div class="keywords-sidebar">
+        <h3>PALABRAS CLAVE</h3>
+        <ul>
+            <li><strong>§ CREATE VIEW</strong><br>Tabla virtual</li>
+            <li><strong>§ WITH (CTE)</strong><br>Expresión de tabla</li>
+            <li><strong>§ RECURSIVE</strong><br>CTE recursiva</li>
+            <li><strong>§ Vistas simples</strong><br>Una tabla</li>
+            <li><strong>§ Vistas complejas</strong><br>JOIN, GROUP</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3>RECURSOS</h3>
+            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="box box-note">
+            <p><strong>📌 Objetivos:</strong> Crear vistas, usar CTEs, escribir consultas recursivas.</p>
+        </div>
+
+        <h2>1. Vistas (CREATE VIEW)</h2>
+        
+        <pre>-- Crear vista simple
+CREATE VIEW vista_empleados_ventas AS
+SELECT id, nombre, salary
+FROM empleados
+WHERE departamento = 'Ventas';
+
+-- Usar la vista
+SELECT * FROM vista_empleados_ventas;
+
+-- Vista con JOIN
+CREATE VIEW vista_resumen_pedidos AS
+SELECT c.nombre as cliente, COUNT(p.id) as total_pedidos, SUM(p.total) as total
+FROM clientes c
+LEFT JOIN pedidos p ON c.id = p.id_cliente
+GROUP BY c.nombre;
+
+-- Eliminar vista
+DROP VIEW vista_empleados_ventas;</pre>
+
+        <h2>2. CTEs (WITH)</h2>
+        
+        <pre>-- CTE básico
+WITH dept_salary AS (
+    SELECT department, AVG(salary) as promedio
+    FROM employees
+    GROUP BY department
+)
+SELECT * FROM dept_salary WHERE promedio > 50000;
+
+-- Múltiples CTEs
+WITH 
+    dept_total AS (
+        SELECT department, SUM(salary) as total
+        FROM employees GROUP BY department
+    ),
+    dept_count AS (
+        SELECT department, COUNT(*) as num_empleados
+        FROM employees GROUP BY department
+    )
+SELECT d.department, d.total, c.num_empleados
+FROM dept_total d JOIN dept_count c ON d.department = c.department;</pre>
+
+        <h2>3. CTEs Recursivas</h2>
+        
+        <pre>-- Recorrer jerarquía de empleados
+WITH RECURSIVE jerarquia AS (
+    -- Caso base: CEO (sin manager)
+    SELECT id, nombre, manager_id, 1 as nivel
+    FROM empleados WHERE manager_id IS NULL
+    
+    UNION ALL
+    
+    -- Caso recursivo
+    SELECT e.id, e.nombre, e.manager_id, j.nivel + 1
+    FROM empleados e
+    JOIN jerarquia j ON e.manager_id = j.id
+)
+SELECT * FROM jerarquia;</pre>
+
+        <div class="box box-concep">
+            <p><strong>📝 Resumen:</strong> Las vistas son tablas virtuales basadas en consultas. Los CTEs (WITH) ofrecen consultas temporales con nombre. Las CTEs recursivas permiten traversar estructuras jerárquicas.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>EJERCICIO</h2>
+    <p class="question">Crear CTE para mostrar empleados con salary mayor al promedio.</p>
+    <p class="answer">
+    <pre>WITH avg_salary AS (
+    SELECT AVG(salary) as promedio FROM employees
+)
+SELECT * FROM employees e, avg_salary a
+WHERE e.salary > a.promedio;</pre>
+    </p>
+</div>
+
+<nav class="nav">
+    <a href="semana_09.html">← Semana 09</a>
+    <a href="semana_11.html">Semana 11 →</a>
+</nav>
+
+<div class="final-section">
+    <div class="conceptual-map">
+        <h3>Mapa Mental</h3>
+        <div class="mindmap-container">
+            <div class="mindmap-central">VISTAS Y CTEs</div>
+            <div class="mindmap-branch">
+                <div class="node">Vistas
+                    <div class="subnode">Simples</div>
+                    <div class="subnode">Complejas</div>
+                    <div class="subnode">CREATE VIEW</div>
+                </div>
+                <div class="node">CTE
+                    <div class="subnode">WITH</div>
+                    <div class="subnode">Múltiples</div>
+                    <div class="subnode">RECURSIVE</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="additional-material">
+        <h3>Material</h3>
+        <ul><li><span class="tag">Práctica</span> <a href="#">Ejercicios CTEs</a></li></ul>
+    </div>
+</div>
+
+</body>
+</html>

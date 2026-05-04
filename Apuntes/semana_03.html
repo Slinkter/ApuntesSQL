@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 03 - Modelo Entidad-Relación</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+</head>
+<body>
+
+<div class="header-box">
+    <h1>Modelo Entidad-Relación</h1>
+    <p>Semana 03 | Ingeniería de Datos</p>
+</div>
+
+<div class="cornell-container">
+    <div class="keywords-sidebar">
+        <h3>PALABRAS CLAVE</h3>
+        <ul>
+            <li><strong>§ Entidad</strong><br>Objeto con existencia propia</li>
+            <li><strong>§ Atributo</strong><br>Características de una entidad</li>
+            <li><strong>§ Relación</strong><br>Asociación entre entidades</li>
+            <li><strong>§ Cardinalidad</strong><br>1:1, 1:N, N:M</li>
+            <li><strong>§ PK / FK</strong><br>Primary / Foreign Key</li>
+            <li><strong>§ Diagrama ER</strong><br>Representación visual</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3>RECURSOS</h3>
+            <ul>
+                <li><a href="index.html">🏠 Índice del Curso</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="box box-note">
+            <p><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <ul style="margin: 8px 0 0 20px;">
+                <li>Comprender entidades, atributos y relaciones</li>
+                <li>Identificar cardinalidad en relaciones</li>
+                <li>Diseñar diagramas ER para modelos de datos</li>
+                <li>Distinguir claves: Primary, Foreign, Candidate</li>
+            </ul>
+        </div>
+
+        <h2>1. Fundamentos del Modelo ER</h2>
+        <span class="timestamp">Conceptos por E.F. Codd (1970)</span>
+        
+        <p>El Modelo Entidad-Relación (ER) fue propuesto por <strong>Peter Chen</strong> en 1976. Se fundamenta en:</p>
+        
+        <ul>
+            <li><strong>Entidad:</strong> Objeto con existencia propia y distinguible. Ej: Cliente, Pedido, Producto</li>
+            <li><strong>Atributo:</strong> Característica o propiedad de una entidad. Ej: Nombre, Edad, Precio</li>
+            <li><strong>Relación:</strong> Asociación o conexión entre entidades. Ej: Cliente REALIZA Pedido</li>
+        </ul>
+
+        <div class="box box-concep">
+            <p><strong>Concepto clave:</strong> Una entidad es un objeto que existe y es distinguible de otros objetos. Los atributos describen las características de las entidades. Las relaciones describen cómo las entidades se asocian entre sí.</p>
+        </div>
+
+        <h2>2. Tipos de Entidades</h2>
+        
+        <ul>
+            <li><strong>Fuertes:</strong> Tienen existencia independiente. Su PK no depende de otra entidad.</li>
+            <li><strong>Débiles:</strong> Su existencia depende de una entidad fuerte. No tienen PK propia.</li>
+        </ul>
+
+        <h2>3. Cardinalidad</h2>
+        
+        <table>
+            <tr><th>Tipo</th><th>Símbolo</th><th>Descripción</th><th>Ejemplo</th></tr>
+            <tr><td>Uno a Uno</td><td>1:1</td><td>Cada elemento de A se relaciona con uno de B</td><td>Empleado - Oficina</td></tr>
+            <tr><td>Uno a Muchos</td><td>1:N</td><td>Un elemento de A con muchos de B</td><td>Cliente - Pedidos</td></tr>
+            <tr><td>Muchos a Muchos</td><td>N:M</td><td>Muchos elementos de A con muchos de B</td><td>Estudiante - Curso</td></tr>
+        </table>
+
+        <h2>4. Claves en el Modelo Relacional</h2>
+        
+        <ul>
+            <li><strong>Primary Key (PK):</strong> Identifica cada tupla de forma única. No puede ser NULL ni duplicada.</li>
+            <li><strong>Foreign Key (FK):</strong> Apunta a una PK en otra tabla. Mantiene integridad referencial.</li>
+            <li><strong>Clave Candidata:</strong> Atributo que podría ser PK. Es única y no nula.</li>
+            <li><strong>Superclave:</strong> Conjunto de atributos que identifican唯一.</li>
+        </ul>
+
+        <h2>5. Álgebra Relacional</h2>
+        
+        <table>
+            <tr><th>Operación</th><th>Símbolo</th><th>Descripción</th><th>SQL Equivalente</th></tr>
+            <tr><td>Selección</td><td>σ</td><td>Filtra filas</td><td>WHERE</td></tr>
+            <tr><td>Proyección</td><td>π</td><td>Selecciona columnas</td><td>SELECT columnas</td></tr>
+            <tr><td>Unión</td><td>∪</td><td>Combina conjuntos</td><td>UNION</td></tr>
+            <tr><td>Join</td><td>⋈</td><td>Combina tablas</td><td>JOIN</td></tr>
+        </table>
+
+        <div class="diagram-ascii">
+┌────────────────────────────────────────────────────┐
+│     DIAGRAMA ER - EJEMPLO DE LIBRERÍA              │
+├────────────────────────────────────────────────────┤
+│    ┌──────────┐       ┌──────────┐                │
+│    │ AUTOR    │       │  LIBRO   │                │
+│    ├──────────┤       ├──────────┤                │
+│    │ PK id    │──N:M──│ PK isbn  │                │
+│    │ nombre   │       │ titulo   │                │
+│    │ pais     │       │ precio   │                │
+│    └──────────┘       └──────────┘                │
+└────────────────────────────────────────────────────┘
+        </div>
+
+        <div class="box box-concep">
+            <p><strong>📝 Resumen:</strong> El modelo ER permite representar el mundo real mediante entidades (objetos), atributos (propiedades) y relaciones (asociaciones). La cardinalidad define cuántos elementos de una entidad se relacionan con otros. Las claves (PK/FK) garantizan la integridad y permiten las relaciones entre tablas.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>EJERCICIO RESUELTO</h2>
+    <p class="question">Enunciado:</p>
+    <p>Diseña el modelo ER para una universidad: Estudiantes, Cursos, Profesores. Un estudiante puede inscribirse en muchos cursos. Un curso puede tener muchos estudiantes. Un profesor puede impartir muchos cursos.</p>
+    
+    <p class="answer">
+    <strong>Solución:</strong><br>
+    - ESTUDIANTE (PK id_estudiante, nombre, email)<br>
+    - CURSO (PK id_curso, nombre, creditos)<br>
+    - PROFESOR (PK id_profesor, nombre, especialidad)<br>
+    - INSCRIPCION (FK id_estudiante, FK id_curso) - relación N:M<br>
+    - IMPARTE (FK id_profesor, FK id_curso) - relación 1:N
+    </p>
+</div>
+
+<div class="section-box">
+    <h2>QUIZ DE REPASO</h2>
+    
+    <p class="q-level">Nivel 1 — Comprensión</p>
+    <p class="question">P1: ¿Qué es una entidad?</p>
+    <p class="answer">R1: Un objeto con existencia propia y distinguible de otros (ej: Cliente, Producto).</p>
+
+    <p class="q-level">Nivel 2 — Aplicación</p>
+    <p class="question">P2: ¿Qué representa una relación 1:N?</p>
+    <p class="answer">R2: Que un elemento de una entidad se relaciona con muchos de otra (ej: Cliente - Pedidos).</p>
+
+    <p class="q-level">Nivel 3 — Análisis</p>
+    <p class="question">P3: ¿Por qué una tabla sin PRIMARY KEY es problemática?</p>
+    <p class="answer">R3: Porque no hay forma única de identificar cada fila, permitiendo duplicados y relaciones ambiguas.</p>
+</div>
+
+<nav class="nav">
+    <a href="semana_02.html">← Semana 02</a>
+    <a href="semana_04.html">Semana 04 →</a>
+</nav>
+
+<div class="final-section">
+    <div class="conceptual-map">
+        <h3>Mapa Mental</h3>
+        <div class="mindmap-container">
+            <div class="mindmap-central">MODELO ENTIDAD-RELACIÓN</div>
+            <div class="mindmap-branch">
+                <div class="node">Entidades
+                    <div class="subnode">Fuertes</div>
+                    <div class="subnode">Débiles</div>
+                </div>
+                <div class="node">Atributos
+                    <div class="subnode">Simples</div>
+                    <div class="subnode">Compuestos</div>
+                    <div class="subnode">Derivados</div>
+                </div>
+                <div class="node">Relaciones
+                    <div class="subnode">1:1</div>
+                    <div class="subnode">1:N</div>
+                    <div class="subnode">N:M</div>
+                </div>
+                <div class="node">Claves
+                    <div class="subnode">PK</div>
+                    <div class="subnode">FK</div>
+                    <div class="subnode">Candidata</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="additional-material">
+        <h3>Material Adicional</h3>
+        <ul>
+            <li><span class="tag">Video</span> <a href="#">Diagramas ER - 20 min</a></li>
+            <li><span class="tag">Lectura</span> <a href="#">Paper original de Chen (1976)</a></li>
+            <li><span class="tag">Práctica</span> <a href="#">Ejercicios de cardinalidad</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

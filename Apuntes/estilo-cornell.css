@@ -1,0 +1,320 @@
+/* Estilo Cornell - PostgreSQL Training */
+:root {
+    --primary: #2c3e50;
+    --secondary: #2980b9;
+    --accent: #e74c3c;
+    --success: #27ae60;
+    --warning: #d35400;
+    --bg: #f8f9fa;
+    --border: #bdc3c7;
+    --radius: 6px;
+    --shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    line-height: 1.7;
+    color: #333;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+    background: #ecf0f1;
+}
+
+/* Header */
+.header-box {
+    border: 2px solid var(--primary);
+    background: #fff;
+    padding: 16px 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.header-box h1 {
+    color: var(--primary);
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.header-box p { font-weight: 600; color: #666; font-size: 0.95rem; }
+
+/* Cornell Layout */
+.cornell-container {
+    display: flex;
+    gap: 24px;
+    background: #fff;
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.keywords-sidebar {
+    width: 200px;
+    min-width: 180px;
+    border-right: 2px dashed var(--border);
+    padding-right: 16px;
+}
+
+.keywords-sidebar h3 {
+    color: var(--secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--secondary);
+}
+
+.keywords-sidebar ul { list-style: none; padding: 0; }
+.keywords-sidebar li { margin-bottom: 10px; font-size: 0.8rem; color: #444; line-height: 1.4; }
+
+.main-content { flex: 1; }
+
+.main-content h2 {
+    color: var(--primary);
+    font-size: 1.2rem;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 6px;
+    margin: 20px 0 12px 0;
+}
+
+.main-content h2:first-child { margin-top: 0; }
+
+.main-content h3 {
+    color: var(--secondary);
+    font-size: 1rem;
+    margin: 16px 0 8px 0;
+}
+
+.main-content p { margin-bottom: 10px; }
+.main-content ul, .main-content ol { margin: 8px 0 12px 20px; }
+.main-content li { margin-bottom: 4px; }
+
+.timestamp {
+    display: inline-block;
+    background: #e8f8f5;
+    color: #117a65;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* Código */
+pre {
+    background: #282c34;
+    color: #f8f8f2;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+    border-left: 3px solid var(--secondary);
+    margin: 10px 0;
+}
+
+code {
+    font-family: 'Consolas', monospace;
+    background: #eaecee;
+    color: #c0392b;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+/* Cajas especiales */
+.box {
+    padding: 14px 16px;
+    margin: 12px 0;
+    border-radius: var(--radius);
+    border-left: 3px solid;
+}
+
+.box-concep { background: #e8f6f3; border-color: var(--success); }
+.box-ejemplo { background: #eaf2f8; border-color: var(--secondary); }
+.box-ejercicio { background: #fef9e7; border-color: var(--warning); }
+.box-warning { background: #fdedec; border-color: var(--accent); }
+.box-note { background: #f8f9fa; border-color: #95a5a6; }
+
+.box p:last-child { margin-bottom: 0; }
+
+blockquote.emphasis {
+    border-left: 3px solid var(--accent);
+    background: #fdedec;
+    padding: 12px 14px;
+    margin: 10px 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.analogy {
+    background: #fef9e7;
+    border: 1px solid #fadbd8;
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    margin: 10px 0;
+}
+
+.section-box {
+    background: #fff;
+    padding: 16px 20px;
+    margin-top: 16px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+/* Tablas */
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.9rem; }
+th, td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; }
+th { background: var(--primary); color: #fff; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+
+/* Quiz */
+.q-level { font-weight: 700; color: #8e44ad; margin: 16px 0 8px 0; font-size: 0.95rem; }
+.question { font-weight: 600; color: var(--primary); margin-top: 10px; }
+.answer { margin: 6px 0 10px 12px; padding-left: 12px; border-left: 2px solid var(--secondary); }
+
+/* Navegación */
+.nav { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+.nav a { color: var(--secondary); text-decoration: none; padding: 8px 14px; border: 1px solid var(--secondary); border-radius: var(--radius); font-size: 0.9rem; transition: all 0.2s; }
+.nav a:hover { background: var(--secondary); color: #fff; }
+
+@media (max-width: 768px) {
+    body { padding: 12px; }
+    .cornell-container { flex-direction: column; gap: 16px; }
+    .keywords-sidebar { width: 100%; min-width: auto; border-right: none; border-bottom: 2px dashed var(--border); padding-bottom: 12px; padding-right: 0; }
+    .main-content { width: 100%; }
+    .header-box { padding: 12px 16px; }
+}
+
+/* === SECCIONES FINALES === */
+.final-section {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.conceptual-map, .additional-material {
+    background: #fff;
+    padding: 16px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.final-section h3 {
+    color: var(--secondary);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--secondary);
+}
+
+/* Mapa Mental - Nodos interconectados */
+.mindmap-container {
+    position: relative;
+    padding: 20px;
+    min-height: 200px;
+}
+
+.mindmap-node {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+    position: relative;
+}
+
+.mindmap-central {
+    background: var(--primary);
+    color: #fff;
+    padding: 14px 24px;
+    font-size: 1rem;
+    display: block;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.mindmap-branch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 12px;
+}
+
+.mindmap-branch .node {
+    background: var(--secondary);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    position: relative;
+}
+
+.mindmap-branch .subnode {
+    background: #ecf0f1;
+    color: #555;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    border: 1px solid var(--border);
+}
+
+/* Diagrama Mental ASCII */
+.diagram-ascii {
+    background: #f8f9fa;
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: var(--radius);
+    font-family: monospace;
+    font-size: 0.75rem;
+    white-space: pre;
+    overflow-x: auto;
+    margin: 10px 0;
+}
+
+/* Material Adicional */
+.additional-material ul {
+    list-style: none;
+    padding: 0;
+}
+
+.additional-material li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.85rem;
+}
+
+.additional-material li:last-child { border-bottom: none; }
+
+.additional-material a {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+.additional-material a:hover { text-decoration: underline; }
+
+.tag {
+    display: inline-block;
+    background: var(--secondary);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    margin-right: 6px;
+}
+
+@media (max-width: 900px) {
+    .final-section { grid-template-columns: 1fr; }
+}

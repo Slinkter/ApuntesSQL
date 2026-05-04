@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 04 - Lenguaje DDL</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+</head>
+<body>
+
+<div class="header-box">
+    <h1>Lenguaje DDL</h1>
+    <p>Semana 04 | CREATE, ALTER, DROP</p>
+</div>
+
+<div class="cornell-container">
+    <div class="keywords-sidebar">
+        <h3>PALABRAS CLAVE</h3>
+        <ul>
+            <li><strong>§ CREATE TABLE</strong><br>Crear tablas</li>
+            <li><strong>§ ALTER TABLE</strong><br>Modificar estructura</li>
+            <li><strong>§ DROP</strong><br>Eliminar objetos</li>
+            <li><strong>§ Constraints</strong><br>PK, FK, UNIQUE, CHECK</li>
+            <li><strong>§ SERIAL</strong><br>Auto-incremento PostgreSQL</li>
+            <li><strong>§ Integridad</strong><br>Referencial, de dominio</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3>RECURSOS</h3>
+            <ul>
+                <li><a href="index.html">🏠 Índice del Curso</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="box box-note">
+            <p><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <ul style="margin: 8px 0 0 20px;">
+                <li>Crear tablas con tipos de datos PostgreSQL</li>
+                <li>Aplicar constraints (PRIMARY KEY, FOREIGN KEY, CHECK)</li>
+                <li>Modificar tablas con ALTER TABLE</li>
+                <li>Comprender integridad referencial y cascade</li>
+            </ul>
+        </div>
+
+        <h2>1. Comandos DDL en PostgreSQL</h2>
+        
+        <ul>
+            <li><strong>CREATE:</strong> Crea objetos (tablas, índices, secuencias)</li>
+            <li><strong>ALTER:</strong> Modifica estructura de objetos existentes</li>
+            <li><strong>DROP:</strong> Elimina objetos de forma permanente</li>
+            <li><strong>TRUNCATE:</strong> Elimina todas las filas (más rápido que DELETE)</li>
+        </ul>
+
+        <h2>2. Tipos de Datos PostgreSQL</h2>
+        
+        <table>
+            <tr><th>Tipo</th><th>Uso</th><th>Ejemplo</th></tr>
+            <tr><td>SERIAL</td><td>Auto-incremento</td><td>1, 2, 3...</td></tr>
+            <tr><td>VARCHAR(n)</td><td>Texto variable</td><td>Nombre hasta n chars</td></tr>
+            <tr><td>NUMERIC(p,s)</td><td>Decimal exacto</td><td>1234.56</td></tr>
+            <tr><td>DATE</td><td>Fecha</td><td>2024-01-15</td></tr>
+            <tr><td>TIMESTAMP</td><td>Fecha y hora</td><td>2024-01-15 14:30:00</td></tr>
+            <tr><td>BOOLEAN</td><td>Verdadero/Falso</td><td>TRUE/FALSE</td></tr>
+        </table>
+
+        <h2>3. Constraints (Restricciones)</h2>
+        
+        <div class="box box-concep">
+            <p><strong>Concepto clave:</strong> Los constraints son reglas que garantizan la integridad de los datos. Se definen al crear la tabla o después con ALTER TABLE.</p>
+        </div>
+
+        <table>
+            <tr><th>Constraint</th><th>Descripción</th><th>Ejemplo</th></tr>
+            <tr><td>PRIMARY KEY</td><td>Identificador único, no nulo</td><td>id SERIAL PRIMARY KEY</td></tr>
+            <tr><td>FOREIGN KEY</td><td>Referencia a otra tabla</td><td>REFERENCES clientes(id)</td></tr>
+            <tr><td>NOT NULL</td><td>El campo es obligatorio</td><td>nombre VARCHAR NOT NULL</td></tr>
+            <tr><td>UNIQUE</td><td>Valores no repetidos</td><td>email VARCHAR UNIQUE</td></tr>
+            <tr><td>CHECK</th><td>Condición personalizada</td><td>CHECK (precio > 0)</td></tr>
+            <tr><td>DEFAULT</td><td>Valor por defecto</td><td>estado VARCHAR DEFAULT 'A'</td></tr>
+        </table>
+
+        <h2>4. Ejemplos Prácticos</h2>
+        
+        <pre>-- Crear tabla con constraints
+CREATE TABLE productos (
+    id          SERIAL PRIMARY KEY,
+    nombre      VARCHAR(100) NOT NULL UNIQUE,
+    descripcion VARCHAR(500),
+    precio      NUMERIC(10,2) NOT NULL CHECK (precio >= 0),
+    stock       INTEGER DEFAULT 0 NOT NULL,
+    categoria   VARCHAR(50)
+);</pre>
+
+        <pre>-- Tabla con Foreign Key y cascade
+CREATE TABLE pedidos (
+    id_pedido   SERIAL PRIMARY KEY,
+    id_cliente  INTEGER NOT NULL,
+    total       NUMERIC(12,2),
+    fecha       DATE DEFAULT CURRENT_DATE,
+    CONSTRAINT fk_cliente 
+        FOREIGN KEY (id_cliente) 
+        REFERENCES clientes(id_cliente)
+        ON DELETE CASCADE
+);</pre>
+
+        <h2>5. ALTER TABLE</h2>
+        
+        <pre>-- Añadir columna
+ALTER TABLE productos ADD COLUMN fecha_creacion TIMESTAMP;
+
+-- Modificar columna
+ALTER TABLE productos ALTER COLUMN nombre TYPE VARCHAR(150);
+
+-- Añadir constraint
+ALTER TABLE productos ADD CONSTRAINT precio_positivo CHECK (precio > 0);
+
+-- Eliminar columna
+ALTER TABLE productos DROP COLUMN descripcion;
+
+-- Eliminar constraint
+ALTER TABLE productos DROP CONSTRAINT precio_positivo;</pre>
+
+        <h2>6. Integridad Referencial</h2>
+        
+        <table>
+            <tr><th>Acción</th><th>Descripción</th></tr>
+            <tr><td>ON DELETE CASCADE</td><td>Elimina hijos automáticamente</td></tr>
+            <tr><td>ON DELETE SET NULL</td><td>Pone la FK en NULL</td></tr>
+            <tr><td>ON DELETE RESTRICT</td><td>Impide eliminar si hay hijos</td></tr>
+            <tr><td>ON DELETE NO ACTION</td><td>No hace nada (genera error)</td></tr>
+        </table>
+
+        <div class="box box-concep">
+            <p><strong>📝 Resumen:</strong> DDL permite definir la estructura de la base de datos. PostgreSQL usa SERIAL para auto-incremento, VARCHAR para texto, NUMERIC para decimales. Los constraints como PRIMARY KEY, FOREIGN KEY y CHECK garantizan la integridad de los datos.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>EJERCICIO RESUELTO</h2>
+    <p class="question">Enunciado:</p>
+    <p>Crear esquema para librería: AUTORES (ID, Nombre), LIBROS (ISBN PK, Titulo, ID_Autor FK, Precio), CLIENTES (ID PK, Email UNIQUE), PRESTAMOS (ID, ID_Cliente FK, ISBN FK).</p>
+    
+    <p class="answer">
+    <strong>Solución:</strong><br>
+    <pre>CREATE TABLE autores (
+    id_autor   SERIAL PRIMARY KEY,
+    nombre     VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE libros (
+    isbn     VARCHAR(13) PRIMARY KEY,
+    titulo   VARCHAR(255) NOT NULL,
+    id_autor INTEGER NOT NULL REFERENCES autores(id_autor),
+    precio   NUMERIC(7,2) CHECK (precio > 0)
+);
+
+CREATE TABLE clientes (
+    id_cliente SERIAL PRIMARY KEY,
+    email      VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE prestamos (
+    id_prestamo SERIAL PRIMARY KEY,
+    id_cliente  INTEGER REFERENCES clientes(id_cliente),
+    isbn        VARCHAR(13) REFERENCES libros(isbn),
+    fecha       DATE DEFAULT CURRENT_DATE
+);</pre>
+    </p>
+</div>
+
+<div class="section-box">
+    <h2>QUIZ DE REPASO</h2>
+    
+    <p class="q-level">Nivel 1 — Comprensión</p>
+    <p class="question">P1: ¿Qué tipo de dato usa PostgreSQL para auto-incremento?</p>
+    <p class="answer">R1: SERIAL (equivale a secuencia automática)</p>
+
+    <p class="q-level">Nivel 2 — Aplicación</p>
+    <p class="question">P2: ¿Cómo evitar eliminar un cliente que tiene pedidos?</p>
+    <p class="answer">R2: Usar ON DELETE RESTRICT en la FK</p>
+
+    <p class="q-level">Nivel 3 — Análisis</p>
+    <p class="question">P3: ¿Qué pasa si intentas insertar un valor duplicado en un campo UNIQUE?</p>
+    <p class="answer">R3: Error de violación de constraint - la operación se rechaza</p>
+</div>
+
+<nav class="nav">
+    <a href="semana_03.html">← Semana 03</a>
+    <a href="semana_05.html">Semana 05 →</a>
+</nav>
+
+<div class="final-section">
+    <div class="conceptual-map">
+        <h3>Mapa Mental</h3>
+        <div class="mindmap-container">
+            <div class="mindmap-central">LENGUAJE DDL</div>
+            <div class="mindmap-branch">
+                <div class="node">CREATE
+                    <div class="subnode">TABLE</div>
+                    <div class="subnode">INDEX</div>
+                    <div class="subnode">SEQUENCE</div>
+                </div>
+                <div class="node">ALTER
+                    <div class="subnode">ADD COLUMN</div>
+                    <div class="subnode">ALTER COLUMN</div>
+                    <div class="subnode">DROP COLUMN</div>
+                </div>
+                <div class="node">DROP
+                    <div class="subnode">TABLE</div>
+                    <div class="subnode">CASCADE</div>
+                    <div class="subnode">RESTRICT</div>
+                </div>
+                <div class="node">Constraints
+                    <div class="subnode">PK</div>
+                    <div class="subnode">FK</div>
+                    <div class="subnode">UNIQUE</div>
+                    <div class="subnode">CHECK</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="additional-material">
+        <h3>Material Adicional</h3>
+        <ul>
+            <li><span class="tag">Video</span> <a href="#">DDL PostgreSQL - 25 min</a></li>
+            <li><span class="tag">Docs</span> <a href="#">PostgreSQL CREATE TABLE</a></li>
+            <li><span class="tag">Práctica</span> <a href="#">Ejercicios DDL</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

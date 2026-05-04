@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 06 - Funciones y Operadores</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+</head>
+<body>
+
+<div class="header-box">
+    <h1>Funciones y Operadores</h1>
+    <p>Semana 06 | COALESCE, NULLIF, CASE, CAST</p>
+</div>
+
+<div class="cornell-container">
+    <div class="keywords-sidebar">
+        <h3>PALABRAS CLAVE</h3>
+        <ul>
+            <li><strong>§ COALESCE</strong><br>Primer valor no nulo</li>
+            <li><strong>§ NULLIF</strong><br>Null si división por cero</li>
+            <li><strong>§ CASE</strong><br>Condicionales</li>
+            <li><strong>§ CAST</strong><br>Conversión de tipos</li>
+            <li><strong>§ Funciones</strong><br>Matemáticas, texto, fecha</li>
+            <li><strong>§ NULL</strong><br>Valor ausente</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3>RECURSOS</h3>
+            <ul><li><a href="index.html">🏠 Índice del Curso</a></li></ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="box box-note">
+            <p><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <ul style="margin: 8px 0 0 20px;">
+                <li>Manejar valores nulos con COALESCE y NULLIF</li>
+                <li>Crear expresiones condicionales con CASE</li>
+                <li>Convertir tipos de datos con CAST</li>
+                <li>Usar funciones de fecha, texto y matemáticas</li>
+            </ul>
+        </div>
+
+        <h2>1. Funciones para Valores Nulos</h2>
+        
+        <h3>COALESCE(valor1, valor2, ...)</h3>
+        <p>Retorna el primer valor no nulo de la lista.</p>
+        <pre>-- Si telefono es NULL, muestra 'No disponible'
+SELECT nombre, COALESCE(telefono, 'No disponible') as contacto
+FROM clientes;
+
+-- Común:默认值 si falta dato
+SELECT nombre, COALESCE(apellido, '') || ' ' || COALESCE(nombre, '') as nombre_completo
+FROM empleados;</pre>
+
+        <h3>NULLIF(valor1, valor2)</h3>
+        <p>Retorna NULL si valor1 = valor2. Útil para evitar división por cero.</p>
+        <pre>-- Si division es 0, retorna NULL (evita error)
+SELECT precio / NULLIF(cantidad, 0) as precio_unitario
+FROM productos;</pre>
+
+        <h2>2. CASE - Expresiones Condicionales</h2>
+        
+        <pre>-- CASE simple
+SELECT nombre, 
+    CASE departamento
+        WHEN 'Ventas' THEN 'Comercial'
+        WHEN 'TI' THEN 'Tecnología'
+        WHEN 'RRHH' THEN 'Personal'
+        ELSE 'Otro'
+    END as area
+FROM empleados;
+
+-- CASE Searched (condiciones)
+SELECT nombre, salary,
+    CASE 
+        WHEN salary < 30000 THEN 'Bajo'
+        WHEN salary < 60000 THEN 'Medio'
+        ELSE 'Alto'
+    END as nivel_salario
+FROM empleados;</pre>
+
+        <h2>3. CAST - Conversión de Tipos</h2>
+        
+        <pre>-- Convertir texto a fecha
+SELECT CAST('2024-01-15' AS DATE);
+
+-- Convertir número a texto
+SELECT CAST(123.45 AS VARCHAR(10));
+
+-- Sintaxis alternativa: ::
+SELECT '2024-01-15'::DATE;
+SELECT 123.45::NUMERIC;</pre>
+
+        <h2>4. Funciones de Fecha</h2>
+        
+        <table>
+            <tr><th>Función</th><th>Descripción</th><th>Ejemplo</th></tr>
+            <tr><td>CURRENT_DATE</td><td>Fecha actual</td><td>2024-01-15</td></tr>
+            <tr><td>CURRENT_TIMESTAMP</td><td>Fecha y hora</td><td>2024-01-15 14:30:00</td></tr>
+            <tr><td>EXTRACT()</td><td>Extraer parte de fecha</td><td>EXTRACT(YEAR FROM fecha)</td></tr>
+            <tr><td>AGE()</td><td>Diferencia entre fechas</td><td>AGE(CURRENT_DATE, fecha_nac)</td></tr>
+            <tr><td>TO_CHAR()</td><td>Formatear fecha</td><td>TO_CHAR(fecha, 'YYYY-MM')</td></tr>
+        </table>
+
+        <h2>5. Funciones de Texto</h2>
+        
+        <table>
+            <tr><th>Función</th><th>Descripción</th><th>Ejemplo</th></tr>
+            <tr><td>UPPER()</td><td>Mayúsculas</td><td>UPPER('hola') → 'HOLA'</td></tr>
+            <tr><td>LOWER()</td><td>Minúsculas</td><td>LOWER('HOLA') → 'hola'</td></tr>
+            <tr><td>LENGTH()</td><td>Longitud</td><td>LENGTH('hola') → 4</td></tr>
+            <tr><td>SUBSTRING()</td><td>Subtexto</td><td>SUBSTRING('hola', 1, 2) → 'ho'</td></tr>
+            <tr><td>TRIM()</td><td>Eliminar espacios</td><td>TRIM(' hola ') → 'hola'</td></tr>
+            <tr><td>CONCAT()</td><td>Concatenar</td><td>CONCAT('a', 'b') → 'ab'</td></tr>
+        </table>
+
+        <div class="box box-concep">
+            <p><strong>📝 Resumen:</strong> COALESCE maneja valores nulos proporcionando alternativas, NULLIF evita errores de división por cero, CASE permite lógica condicional en consultas, y CAST convierte entre tipos de datos.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>EJERCICIO RESUELTO</h2>
+    <p class="question">Mostrar nombre, salary y categoría: < 30000='Bajo', 30000-60000='Medio', > 60000='Alto'</p>
+    <p class="answer">
+    <pre>SELECT nombre, salary,
+    CASE 
+        WHEN salary < 30000 THEN 'Bajo'
+        WHEN salary >= 30000 AND salary < 60000 THEN 'Medio'
+        ELSE 'Alto'
+    END as categoria
+FROM empleados;</pre>
+    </p>
+</div>
+
+<div class="section-box">
+    <h2>QUIZ</h2>
+    <p class="q-level">Nivel 1</p>
+    <p class="question">P1: ¿Qué hace COALESCE(NULL, 'valor')?</p>
+    <p class="answer">R1: Retorna 'valor'</p>
+    <p class="q-level">Nivel 2</p>
+    <p class="question">P2: ¿Para qué sirve NULLIF?</p>
+    <p class="answer">R2: Evitar división por cero retornando NULL</p>
+</div>
+
+<nav class="nav">
+    <a href="semana_05.html">← Semana 05</a>
+    <a href="semana_07.html">Semana 07 →</a>
+</nav>
+
+<div class="final-section">
+    <div class="conceptual-map">
+        <h3>Mapa Mental</h3>
+        <div class="mindmap-container">
+            <div class="mindmap-central">FUNCIONES Y OPERADORES</div>
+            <div class="mindmap-branch">
+                <div class="node">NULL
+                    <div class="subnode">COALESCE</div>
+                    <div class="subnode">NULLIF</div>
+                </div>
+                <div class="node">CASE
+                    <div class="subnode">Simple</div>
+                    <div class="subnode">Searched</div>
+                </div>
+                <div class="node">CAST
+                    <div class="subnode">::tipo</div>
+                    <div class="subnode">CAST()</div>
+                </div>
+                <div class="node">Funciones
+                    <div class="subnode">Fecha</div>
+                    <div class="subnode">Texto</div>
+                    <div class="subnode">Matemáticas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="additional-material">
+        <h3>Material Adicional</h3>
+        <ul>
+            <li><span class="tag">Docs</span> <a href="#">Funciones PostgreSQL</a></li>
+            <li><span class="tag">Práctica</span> <a href="#">Ejercicios funciones</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

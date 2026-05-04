@@ -3,198 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curso SQL Desde Cero - Índice Maestro</title>
+    <title>Curso SQL PostgreSQL - Índice del Curso</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #2980b9;
-            --accent-color: #e74c3c;
-            --background-color: #f8f9fa;
-            --text-color: #333;
-            --border-color: #bdc3c7;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ecf0f1;
-        }
-
-        .header-box {
-            border: 3px double var(--primary-color);
-            background-color: #fff;
-            padding: 30px;
+        .index-header {
+            border: 2px solid var(--primary);
+            background: #fff;
+            padding: 24px;
             text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-radius: 8px;
+            margin-bottom: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
         }
-
-        .header-box h1 { margin: 0 0 10px 0; color: var(--primary-color); }
-        .header-box p { color: #555; font-size: 1.1em; }
-
+        .index-header h1 { color: var(--primary); margin: 0 0 8px 0; }
+        .index-header p { color: #666; margin: 0; }
+        
         .dashboard {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
         }
-
+        
         .card {
             background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-top: 5px solid var(--secondary-color);
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--secondary);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-
-        .card h2 { margin-top: 0; color: var(--secondary-color); }
-        .card a {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: var(--secondary-color);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background 0.3s;
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
-        .card a:hover { background: #1a5276; }
-
-        .content-list {
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .content-list h2 { color: var(--primary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-
-        .timeline { margin: 0; padding: 0; list-style: none; }
-        .timeline li {
-            padding: 10px 0;
-            border-bottom: 1px dashed var(--border-color);
+        
+        .card h3 {
+            color: var(--primary);
+            font-size: 1rem;
+            margin: 0 0 8px 0;
             display: flex;
             align-items: center;
+            gap: 8px;
         }
-        .timeline li:last-child { border-bottom: none; }
-        .time {
-            background: var(--primary-color);
-            color: white;
-            padding: 3px 8px;
+        
+        .card .week-num {
+            background: var(--secondary);
+            color: #fff;
+            padding: 2px 8px;
             border-radius: 4px;
-            font-size: 0.85em;
-            margin-right: 15px;
-            font-family: monospace;
-            min-width: 70px;
-            text-align: center;
+            font-size: 0.8rem;
+        }
+        
+        .card p {
+            color: #666;
+            font-size: 0.85rem;
+            margin: 0 0 12px 0;
+            line-height: 1.5;
+        }
+        
+        .card a {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--secondary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .card a:hover { background: #1a5276; }
+        
+        .exam-card { border-left-color: var(--accent); }
+        .exam-card h3 .week-num { background: var(--accent); }
+        
+        .section-title {
+            background: var(--primary);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: var(--radius);
+            margin: 20px 0 12px 0;
+            font-size: 0.95rem;
+        }
+        
+        .timeline-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-top: 24px;
+        }
+        
+        .timeline-box h3 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .timeline-box ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 8px;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .timeline-box li {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .timeline-box li::before {
+            content: "▸";
+            color: var(--secondary);
         }
         
         .global-tools {
             text-align: center;
-            margin: 30px 0;
+            margin: 24px 0;
         }
+        
         .btn-cheat {
-            background: var(--accent-color);
-            color: white;
-            padding: 15px 30px;
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            padding: 12px 24px;
             text-decoration: none;
-            font-size: 1.2em;
-            border-radius: 5px;
-            font-weight: bold;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
         }
+        
         .btn-cheat:hover { background: #c0392b; }
-
     </style>
 </head>
 <body>
 
-    <div class="header-box">
-        <h1>📚 Máster en SQL Desde Cero</h1>
-        <p>Índice General de Apuntes y Material de Estudio</p>
+<div class="index-header">
+    <h1>Administración de Bases de Datos - PostgreSQL</h1>
+    <p>Índice del Curso | 16 Semanas</p>
+</div>
+
+<div class="global-tools">
+    <a href="estilo-cornell.css" class="btn-cheat" target="_blank">Ver Hoja de Estilo CSS</a>
+</div>
+
+<!-- SEMANAS 1-7 -->
+<div class="section-title">Semanas 1-7: Fundamentos</div>
+
+<div class="dashboard">
+    <div class="card">
+        <h3><span class="week-num">S01</span> Fundamentos</h3>
+        <p>Datos vs Información, Sistemas Tradicionales, Enfoque DBMS, Componentes y Evolución.</p>
+        <a href="semana_01.html">Ver →</a>
     </div>
-
-    <div class="global-tools">
-        <a href="CheatSheet_SQL.html" class="btn-cheat">🚀 Abrir Cheat Sheet Definitiva (Hoja de Trucos)</a>
+    
+    <div class="card">
+        <h3><span class="week-num">S02</span> DBMS y Modelo Relacional</h3>
+        <p>Arquitectura 3 niveles, Propiedades ACID, Lenguajes SQL (DDL, DML, DCL, TCL).</p>
+        <a href="semana_02.html">Ver →</a>
     </div>
-
-    <div class="dashboard">
-        <div class="card">
-            <h2>📘 Parte 1: Fundamentos y DDL</h2>
-            <p>Introducción, Bases de Datos, Motores (DBMS), Entorno (Docker/TablePlus) y Creación de Tablas.</p>
-            <a href="../Youtube01/Guia_Estudio_Maestria_SQL_Parte1.html">Leer Apuntes →</a>
-        </div>
-        
-        <div class="card">
-            <h2>📙 Parte 2: Relaciones y DML</h2>
-            <p>Llaves Foráneas, Inserción de Datos (INSERT), Actualizaciones (UPDATE) y Borrados Críticos.</p>
-            <a href="../Youtube01/Guia_Estudio_Maestria_SQL_Parte2.html">Leer Apuntes →</a>
-        </div>
-
-        <div class="card">
-            <h2>📗 Parte 3: DQL y JOINs</h2>
-            <p>Filtros Avanzados (WHERE, LIKE), Funciones Matemáticas (SUM, AVG) y Teoría de Conjuntos (INNER/LEFT JOIN).</p>
-            <a href="../Youtube01/Guia_Estudio_Maestria_SQL_Parte3.html">Leer Apuntes →</a>
-        </div>
-
-        <div class="card">
-            <h2>📕 Parte 4: Subconsultas y Backend</h2>
-            <p>Agrupamientos (GROUP BY/HAVING), Consultas Anidadas, Buenas Prácticas y ORMs con Node.js.</p>
-            <a href="../Youtube01/Guia_Estudio_Maestria_SQL_Parte4.html">Leer Apuntes →</a>
-        </div>
+    
+    <div class="card">
+        <h3><span class="week-num">S03</span> Modelo Entidad-Relación</h3>
+        <p>Entidades, Atributos, Relaciones, Cardinalidad, Diagramas ER, Modelo Relacional.</p>
+        <a href="semana_03.html">Ver →</a>
     </div>
-
-    <div class="content-list">
-        <h2>⭐ Contenido Oficial del Video (Timestamps)</h2>
-        <ul class="timeline">
-            <li><span class="time">00:00:00</span> Introducción</li>
-            <li><span class="time">00:01:10</span> Saludo inicial</li>
-            <li><span class="time">00:02:46</span> Diapositivas</li>
-            <li><span class="time">00:03:22</span> ¿Qué es SQL?</li>
-            <li><span class="time">00:05:46</span> Bases de Datos</li>
-            <li><span class="time">00:12:46</span> ¿Para qué se usa SQL?</li>
-            <li><span class="time">00:15:12</span> SQL vs MySQL, Postgres, SQL Server</li>
-            <li><span class="time">00:17:14</span> Jerarquía de Base de Datos Relacional</li>
-            <li><span class="time">00:20:17</span> Instalaciones Requeridas</li>
-            <li><span class="time">00:26:10</span> DBngin</li>
-            <li><span class="time">00:30:21</span> TablePlus</li>
-            <li><span class="time">00:34:40</span> DDL - Lenguaje de Definición de Datos</li>
-            <li><span class="time">00:38:15</span> CREATE DATABASE</li>
-            <li><span class="time">00:40:34</span> DROP DATABASE</li>
-            <li><span class="time">00:44:43</span> CREATE TABLE</li>
-            <li><span class="time">00:49:04</span> Atributos de Columna y Restricciones</li>
-            <li><span class="time">01:05:13</span> Foreign Key</li>
-            <li><span class="time">01:08:02</span> ALTER TABLE</li>
-            <li><span class="time">01:15:00</span> DESCRIBE table</li>
-            <li><span class="time">01:18:35</span> INSERT INTO table</li>
-            <li><span class="time">01:32:25</span> DML - Lenguaje de Manipulación de Datos</li>
-            <li><span class="time">01:33:00</span> UPDATE table</li>
-            <li><span class="time">01:38:20</span> DELETE from table</li>
-            <li><span class="time">01:43:40</span> TRUNCATE TABLE</li>
-            <li><span class="time">01:45:20</span> DQL - Lenguaje de Consulta de Datos</li>
-            <li><span class="time">01:47:16</span> SELECT FROM table</li>
-            <li><span class="time">01:48:00</span> WHERE</li>
-            <li><span class="time">01:54:07</span> ORDER BY</li>
-            <li><span class="time">01:56:24</span> Alias</li>
-            <li><span class="time">01:59:21</span> Funciones de Agregación COUNT SUM AVG</li>
-            <li><span class="time">02:07:20</span> INNER JOIN</li>
-            <li><span class="time">02:27:26</span> LEFT JOIN</li>
-            <li><span class="time">02:32:19</span> RIGHT JOIN</li>
-            <li><span class="time">02:33:32</span> Join de 3 Tablas</li>
-            <li><span class="time">02:36:10</span> Subconsultas</li>
-            <li><span class="time">02:43:48</span> GROUP BY</li>
-            <li><span class="time">02:47:05</span> HAVING</li>
-            <li><span class="time">02:55:10</span> SQL usando Docker</li>
-            <li><span class="time">03:11:39</span> Variables de Entorno</li>
-            <li><span class="time">03:20:30</span> Mejores Prácticas</li>
-            <li><span class="time">03:39:38</span> Ejemplos Prácticos</li>
-        </ul>
+    
+    <div class="card">
+        <h3><span class="week-num">S04</span> Lenguaje DDL</h3>
+        <p>CREATE, ALTER, DROP, Constraints (PK, FK, UNIQUE, CHECK), PostgreSQL Syntax.</p>
+        <a href="semana_04.html">Ver →</a>
     </div>
+    
+    <div class="card">
+        <h3><span class="week-num">S05</span> Consultas Básicas (SELECT)</h3>
+        <p>SELECT, WHERE, ORDER BY, DISTINCT, LIMIT, Funciones escalares y agregadas.</p>
+        <a href="semana_05.html">Ver →</a>
+    </div>
+    
+    <div class="card">
+        <h3><span class="week-num">S06</span> Funciones y Operadores</h3>
+        <p>COALESCE, NULLIF, CASE, CAST, operadores lógicos y de comparación.</p>
+        <a href="semana_06.html">Ver →</a>
+    </div>
+    
+    <div class="card">
+        <h3><span class="week-num">S07</span> JOINs y Subconsultas</h3>
+        <p>INNER, LEFT, RIGHT, FULL JOIN, Subconsultas escalares y de tabla.</p>
+        <a href="semana_07.html">Ver →</a>
+    </div>
+</div>
+
+<!-- EXAMEN PARCIAL -->
+<div class="section-title" style="background: var(--accent);">Semana 8: Examen Parcial</div>
+<div class="dashboard">
+    <div class="card exam-card">
+        <h3><span class="week-num">EXAMEN</span> Evaluación Parcial</h3>
+        <p>50 preguntas covering weeks 1-5. Temas: Fundamentos, DBMS, ER, DDL, SELECT básico.</p>
+        <a href="semana_08.html">Ver Examen →</a>
+    </div>
+</div>
+
+<!-- SEMANAS 9-15 -->
+<div class="section-title">Semanas 9-15: Avanzado</div>
+
+<div class="dashboard">
+    <div class="card">
+        <h3><span class="week-num">S09</span> GROUP BY y HAVING</h3>
+        <p>Agrupamientos, funciones de agregación, GROUP BY, HAVING,ROLLup y CUBE.</p>
+        <a href="semana_09.html">Ver →</a>
+    </div>
+    
+    <div class="card">
+        <h3><span class="week-num">S10</span> Vistas y CTEs</h3>
+        <p>Vistas simples y complejas, Common Table Expressions (WITH), recursion.</p>
+        <a href="semana_10.html">Ver →</a>
+    </div>
+    
+    <div class="card">
+        <h3><span class="week-num">S11</span> PL/pgSQL - Fundamentos</h3>
+        <p>Procedimientos almacenados, funciones, bloques BEGIN/END, variables, control de flujo.</p>
+        <a href="semana_11.html">Ver →</a>
+    </div>
+    
+    <div class="card">
+        <h3><span class="week-num">S12</span> PL/pgSQL - Avanzado</h3>
+        <p>Cursores, triggers, manejo de excepciones, funciones retornando conjuntos.</p>
+        <a href="semana_12.html">Ver →</a>
+    </div>
+    
+    <div class="card">
+        <h3><span class="week-num">S13</span> Transacciones y Concurrencia</h3>
+        <p>Isolation levels, locking, deadlock, SAVEPOINT, control de concurrencia multiversión.</p>
+        <a href="semana_13.html">Ver →</a>
+    </div>
+    
+    <div class="card">
+        <h3><span class="week-num">S14</span> Índices y Optimización</h3>
+        <p>B-tree, Hash, GIN, GiST, planner, EXPLAIN, ANALYZE, optimización de consultas.</p>
+        <a href="semana_14.html">Ver →</a>
+    </div>
+    
+    <div class="card">
+        <h3><span class="week-num">S15</span> Seguridad y Gestión</h3>
+        <p>Usuarios, roles, permisos GRANT/REVOKE, Row-Level Security, auditoría.</p>
+        <a href="semana_15.html">Ver →</a>
+    </div>
+</div>
+
+<!-- EXAMEN FINAL -->
+<div class="section-title" style="background: var(--accent);">Semana 16: Examen Final</div>
+<div class="dashboard">
+    <div class="card exam-card">
+        <h3><span class="week-num">FINAL</span> Evaluación Final</h3>
+        <p>100 preguntas covering all topics. Todo el contenido del curso: semanas 1-15.</p>
+        <a href="semana_16.html">Ver Examen →</a>
+    </div>
+</div>
+
+<!-- TIMELINE -->
+<div class="timeline-box">
+    <h3>Contenido del Curso - Distribución</h3>
+    <ul>
+        <li><strong>S01-S02:</strong> Fundamentos y DBMS</li>
+        <li><strong>S03-S04:</strong> Modelado y DDL</li>
+        <li><strong>S05-S07:</strong> Consultas y JOINs</li>
+        <li><strong>S08:</strong> Examen Parcial</li>
+        <li><strong>S09-S10:</strong> Agrupamientos y Vistas</li>
+        <li><strong>S11-S12:</strong> PL/pgSQL</li>
+        <li><strong>S13-S14:</strong> Transacciones e Índices</li>
+        <li><strong>S15:</strong> Seguridad</li>
+        <li><strong>S16:</strong> Examen Final</li>
+    </ul>
+</div>
 
 </body>
 </html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 16 - Examen Final</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+    <style>
+        .exam-header { background: linear-gradient(135deg, var(--accent), #c0392b); color: #fff; padding: 20px; border-radius: var(--radius); text-align: center; margin-bottom: 20px; }
+        .exam-header h1 { color: #fff; margin: 0; }
+        .question { background: #fff; padding: 16px; margin: 12px 0; border-radius: var(--radius); box-shadow: var(--shadow); border-left: 3px solid var(--secondary); }
+        .question strong { color: var(--accent); }
+        .options { margin: 10px 0 0 20px; }
+        .options div { padding: 6px 0; font-size: 0.9rem; }
+        .answer { background: #e8f8f5; border-left: 3px solid var(--success); padding: 12px; margin-top: 10px; border-radius: 0 var(--radius) var(--radius) 0; }
+    </style>
+</head>
+<body>
+
+<div class="exam-header">
+    <h1>EXAMEN FINAL</h1>
+    <p>Semana 16 | 100 Preguntas | Todo el Curso (S01-S15)</p>
+</div>
+
+<div class="cornell-container">
+    <div class="keywords-sidebar">
+        <h3>CONTENIDO</h3>
+        <ul>
+            <li><strong>S01-02</strong> Fundamentos, DBMS</li>
+            <li><strong>S03-04</strong> Modelo ER, DDL</li>
+            <li><strong>S05-07</strong> DML, JOINs</li>
+            <li><strong>S09-10</strong> GROUP BY, Vistas</li>
+            <li><strong>S11-12</strong> PL/pgSQL</li>
+            <li><strong>S13-15</strong> Transacciones, Índices, Seguridad</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3>RECURSOS</h3>
+            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="box box-note">
+            <p><strong>Instrucciones:</strong> 100 preguntascovering todo el contenido del curso. Selecciona la respuesta correcta. Tiempo: 180 minutos.</p>
+        </div>
+
+        <!-- PREGUNTAS MUESTRA (representativas) -->
+        <h2>Fundamentos y DBMS</h2>
+        
+        <div class="question"><strong>1. ¿Cuál es la diferencia entre dato e información?</strong>
+            <div class="options">
+                <div>a) Son lo mismo</div>
+                <div>b) Dato es hecho bruto, información es dato con contexto</div>
+                <div>c) Información son números</div>
+            </div>
+            <div class="answer">R: b)</div>
+        </div>
+
+        <div class="question"><strong>2. ¿Qué comando DDL crea una tabla?</strong>
+            <div class="options">
+                <div>a) SELECT</div>
+                <div>b) INSERT</div>
+                <div>c) CREATE TABLE</div>
+                <div>d) UPDATE</div>
+            </div>
+            <div class="answer">R: c)</div>
+        </div>
+
+        <div class="question"><strong>3. ¿Qué tipo de JOIN retorna todas las filas de ambas tablas?</strong>
+            <div class="options">
+                <div>a) INNER JOIN</div>
+                <div>b) LEFT JOIN</div>
+                <div>c) FULL OUTER JOIN</div>
+                <div>d) CROSS JOIN</div>
+            </div>
+            <div class="answer">R: c)</div>
+        </div>
+
+        <div class="question"><strong>4. ¿Qué función de PostgreSQL evita división por cero?</strong>
+            <div class="options">
+                <div>a) COALESCE</div>
+                <div>b) NULLIF</div>
+                <div>c) CASE</div>
+                <div>d) CAST</div>
+            </div>
+            <div class="answer">R: b)</div>
+        </div>
+
+        <div class="question"><strong>5. ¿Qué tipo de índice es mejor para búsqueda de texto completo?</strong>
+            <div class="options">
+                <div>a) B-tree</div>
+                <div>b) Hash</div>
+                <div>c) GIN</div>
+                <div>d) BRIN</div>
+            </div>
+            <div class="answer">R: c)</div>
+        </div>
+
+        <div class="question"><strong>6. ¿Qué comando otorgan permisos en PostgreSQL?</strong>
+            <div class="options">
+                <div>a) GRANT</div>
+                <div>b) REVOKE</div>
+                <div>c) CREATE</div>
+                <div>d) ALTER</div>
+            </div>
+            <div class="answer">R: a)</div>
+        </div>
+
+        <div class="question"><strong>7. ¿Qué nivel de isolation previene dirty reads?</strong>
+            <div class="options">
+                <div>a) READ UNCOMMITTED</div>
+                <div>b) READ COMMITTED</div>
+                <div>c) REPEATABLE READ</div>
+                <div>d) SERIALIZABLE</div>
+            </div>
+            <div class="answer">R: b)</div>
+        </div>
+
+        <div class="question"><strong>8. ¿Qué significa %TYPE en PL/pgSQL?</strong>
+            <div class="options">
+                <div>a) Porcentaje</div>
+                <div>b) Tipo de columna</div>
+                <div>c) Arreglo</div>
+                <div>d) Tabla</div>
+            </div>
+            <div class="answer">R: b)</div>
+        </div>
+
+        <div class="box box-note" style="margin-top: 20px;">
+            <p><em>... (92 preguntas más cubriendo todo el contenido del curso)</em></p>
+        </div>
+
+    </div>
+</div>
+
+<nav class="nav">
+    <a href="semana_15.html">← Semana 15</a>
+    <a href="index.html">🏠 Índice</a>
+</nav>
+
+</body>
+</html>

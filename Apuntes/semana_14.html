@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 14 - Índices y Optimización</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+</head>
+<body>
+
+<div class="header-box">
+    <h1>Índices y Optimización</h1>
+    <p>Semana 14 | B-tree, Hash, GIN, GiST, EXPLAIN</p>
+</div>
+
+<div class="cornell-container">
+    <div class="keywords-sidebar">
+        <h3>PALABRAS CLAVE</h3>
+        <ul>
+            <li><strong>§ CREATE INDEX</strong><br>Crear índice</li>
+            <li><strong>§ B-tree</strong><br>Índice estándar</li>
+            <li><strong>§ EXPLAIN</strong><br>Plan de ejecución</li>
+            <li><strong>§ ANALYZE</strong><br>Recolectar estadísticas</li>
+            <li><strong>§ GIN/GiST</strong><br>Índices especiales</li>
+            <li><strong>§ CLUSTER</strong><br>Ordenar tabla</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3>RECURSOS</h3>
+            <ul><li><a href="index.html">🏠 Índice</a></li></ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="box box-note">
+            <p><strong>📌 Objetivos:</strong> Crear índices, analizar planes de ejecución, optimizar consultas.</p>
+        </div>
+
+        <h2>1. Tipos de Índices</h2>
+        
+        <table>
+            <tr><th>Tipo</th><th>Uso</th><th>Cuándo usarlo</th></tr>
+            <tr><td>B-tree</td><td>Default, búsqueda exacta y rango</td><td>WHERE, ORDER BY</td></tr>
+            <tr><td>Hash</td><td>Solo igualdad</td><td>WHERE col = valor</td></tr>
+            <tr><td>GIN</td><td>Índice invertido</td><td>Array, JSON, texto completo</td></tr>
+            <tr><td>GiST</td><td>Espacial, texto</td><td>Geometría, rangos</td></tr>
+            <tr><td>BRIN</td><td>Range/minmax</td><td>Tablas grandes secuenciales</td></tr>
+        </table>
+
+        <h2>2. Crear Índices</h2>
+        
+        <pre>-- Índice B-tree (default)
+CREATE INDEX idx_empleados_dept ON empleados(department);
+
+-- Índice único
+CREATE UNIQUE INDEX idx_email ON usuarios(email);
+
+-- Índice compuesto
+CREATE INDEX idx_pedidos_fecha_cliente ON pedidos(fecha, id_cliente);
+
+-- Índice parcial (solo filas específicas)
+CREATE INDEX idx_ventas_2024 ON ventas(fecha) 
+WHERE fecha >= '2024-01-01';
+
+-- Índice sobre expresión
+CREATE INDEX idx_nombre_upper ON empleados(UPPER(nombre));
+
+-- Índice GIN para JSON
+CREATE INDEX idx_datos_json ON tabla USING GIN(datos);</pre>
+
+        <h2>3. EXPLAIN - Analizar Consultas</h2>
+        
+        <pre>-- Ver plan de ejecución (sin ejecutar)
+EXPLAIN SELECT * FROM empleados WHERE department = 'Ventas';
+
+-- Ejecutar y ver tiempo real
+EXPLAIN ANALYZE 
+SELECT * FROM empleados WHERE salary > 50000;
+
+-- Ejemplo de output:
+-- Index Scan using idx_empleados_dept on empleados
+-- (cost=0.00..4.25 rows=1 width=100)
+-- (actual time=0.001..0.002 rows=5 loops=1)</pre>
+
+        <div class="box box-warning">
+            <p><strong>Costo (cost):</strong> Valor estimado de operaciones. Lower es mejor. Format: inicio..total.</p>
+        </div>
+
+        <h2>4. Optimización</h2>
+        
+        <ul>
+            <li><strong>ANALYZE:</strong> Actualizar estadísticas para mejores planes</li>
+            <li><strong>CLUSTER:</strong> Ordenar tabla según índice</li>
+            <li><strong>VACUUM:</strong> Recuperar espacio de filas eliminadas</li>
+            <li><strong>Verificar uso:</strong> pg_stat_user_indexes</li>
+        </ul>
+
+        <pre>-- Actualizar estadísticas
+ANALYZE empleados;
+
+-- Reconstruir índice
+REINDEX INDEX idx_empleados_dept;
+
+-- Vacuum (recuperar espacio)
+VACUUM ANALYZE empleados;</pre>
+
+        <div class="box box-concep">
+            <p><strong>📝 Resumen:</strong> Los índices aceleran búsquedas. B-tree es el más común. EXPLAIN ANALYZE muestra el plan real de ejecución. ANALYZE actualiza estadísticas para mejores decisiones del planner.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>EJERCICIO</h2>
+    <p class="question">Crear índice para optimizar: WHERE nombre LIKE 'A%' ORDER BY fecha</p>
+    <p class="answer">
+    <pre>CREATE INDEX idx_nombre_fecha ON tabla(nombre, fecha);</pre>
+    </p>
+</div>
+
+<nav class="nav">
+    <a href="semana_13.html">← Semana 13</a>
+    <a href="semana_15.html">Semana 15 →</a>
+</nav>
+
+<div class="final-section">
+    <div class="conceptual-map">
+        <h3>Mapa Mental</h3>
+        <div class="mindmap-container">
+            <div class="mindmap-central">ÍNDICES Y OPTIMIZACIÓN</div>
+            <div class="mindmap-branch">
+                <div class="node">Tipos
+                    <div class="subnode">B-tree</div>
+                    <div class="subnode">Hash</div>
+                    <div class="subnode">GIN</div>
+                    <div class="subnode">GiST</div>
+                </div>
+                <div class="node">Herramientas
+                    <div class="subnode">EXPLAIN</div>
+                    <div class="subnode">ANALYZE</div>
+                    <div class="subnode">VACUUM</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="additional-material">
+        <h3>Material</h3>
+        <ul><li><span class="tag">Docs</span> <a href="#">Indexes</a></li></ul>
+    </div>
+</div>
+
+</body>
+</html>

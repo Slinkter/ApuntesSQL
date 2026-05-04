@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 07 - JOINs y Subconsultas</title>
+    <link rel="stylesheet" href="estilo-cornell.css">
+</head>
+<body>
+
+<div class="header-box">
+    <h1>JOINs y Subconsultas</h1>
+    <p>Semana 07 | INNER, LEFT, RIGHT, FULL OUTER</p>
+</div>
+
+<div class="cornell-container">
+    <div class="keywords-sidebar">
+        <h3>PALABRAS CLAVE</h3>
+        <ul>
+            <li><strong>§ INNER JOIN</strong><br>Coincidencia en ambas</li>
+            <li><strong>§ LEFT JOIN</strong><br>Todos de izquierda</li>
+            <li><strong>§ RIGHT JOIN</strong><br>Todos de derecha</li>
+            <li><strong>§ FULL OUTER</strong><br>Todos de ambas</li>
+            <li><strong>§ Subconsulta</strong><br>SELECT dentro de SELECT</li>
+            <li><strong>§ Alias</strong><br>Nombre temporal tabla</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3>RECURSOS</h3>
+            <ul><li><a href="index.html">🏠 Índice del Curso</a></li></ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="box box-note">
+            <p><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <ul style="margin: 8px 0 0 20px;">
+                <li>Combinar tablas con JOINs</li>
+                <li>Diferenciar tipos de JOIN</li>
+                <li>Usar subconsultas escalares y de tabla</li>
+                <li>Optimizar consultas con aliases</li>
+            </ul>
+        </div>
+
+        <h2>1. Tipos de JOIN</h2>
+        
+        <table>
+            <tr><th>Tipo</th><th>Descripción</th><th>Diagrama</th></tr>
+            <tr><td>INNER JOIN</td><td>Solo filas con coincidencia en ambas</td><td>A ∩ B</td></tr>
+            <tr><td>LEFT JOIN</td><td>Todas las de izquierda + coincidencias derecha</td><td>A + (A∩B)</td></tr>
+            <tr><td>RIGHT JOIN</td><td>Todas las de derecha + coincidencias izquierda</td><td>(A∩B) + B</td></tr>
+            <tr><td>FULL OUTER</td><td>Todas las filas de ambas tablas</td><td>A ∪ B</td></tr>
+            <tr><td>CROSS JOIN</td><td>Producto cartesiano (todas combinaciones)</td><td>A × B</td></tr>
+        </table>
+
+        <h2>2. Ejemplos de JOIN</h2>
+        
+        <pre>-- INNER JOIN: solo clientes con pedidos
+SELECT c.nombre, p.total, p.fecha
+FROM clientes c
+INNER JOIN pedidos p ON c.id = p.id_cliente;
+
+-- LEFT JOIN: todos los clientes (también los sin pedidos)
+SELECT c.nombre, p.total
+FROM clientes c
+LEFT JOIN pedidos p ON c.id = p.id_cliente;
+
+-- Múltiples JOINs
+SELECT c.nombre, p.id_pedido, pr.nombre as producto
+FROM clientes c
+JOIN pedidos p ON c.id = p.id_cliente
+JOIN detalles_pedido dp ON p.id_pedido = dp.id_pedido
+JOIN productos pr ON dp.id_producto = pr.id;</pre>
+
+        <h2>3. Subconsultas</h2>
+        
+        <pre>-- Subconsulta escalar (retorna un valor)
+SELECT nombre, salary,
+    (SELECT AVG(salary) FROM empleados) as promedio
+FROM empleados;
+
+-- Subconsulta de tabla (retorna conjunto)
+SELECT nombre
+FROM empleados
+WHERE department_id IN (
+    SELECT id FROM departments WHERE nombre = 'Ventas'
+);
+
+-- Subconsulta en FROM (tabla derivada)
+SELECT dept, total
+FROM (
+    SELECT department as dept, COUNT(*) as total
+    FROM empleados
+    GROUP BY department
+) as resumen
+WHERE total > 5;</pre>
+
+        <h2>4. EXISTS y NOT EXISTS</h2>
+        
+        <pre>-- Clientes que tienen al menos un pedido
+SELECT * FROM clientes c
+WHERE EXISTS (
+    SELECT 1 FROM pedidos p WHERE p.id_cliente = c.id
+);
+
+-- Clientes SIN ningún pedido
+SELECT * FROM clientes c
+WHERE NOT EXISTS (
+    SELECT 1 FROM pedidos p WHERE p.id_cliente = c.id
+);</pre>
+
+        <div class="box box-concep">
+            <p><strong>📝 Resumen:</strong> Los JOINs combinan datos de múltiples tablas. INNER JOIN retorna solo coincidencias, LEFT JOIN incluye todas las filas de la izquierda, RIGHT las de la derecha, y FULL OUTER todas. Las subconsultas permiten consultas dentro de otras para lógica más compleja.</p>
+        </div>
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>EJERCICIO</h2>
+    <p class="question">Mostrar nombre de empleado y nombre de departamento usando JOIN.</p>
+    <p class="answer">
+    <pre>SELECT e.nombre, d.nombre as departamento
+FROM empleados e
+JOIN departamentos d ON e.department_id = d.id;</pre>
+    </p>
+</div>
+
+<div class="section-box">
+    <h2>QUIZ</h2>
+    <p class="question">P1: ¿Qué JOIN usar para ver TODOS los clientes, incluso los sin pedidos?</p>
+    <p class="answer">R1: LEFT JOIN</p>
+    <p class="question">P2: ¿Qué retorna una subconsulta escalar?</p>
+    <p class="answer">R2: Un único valor</p>
+</div>
+
+<nav class="nav">
+    <a href="semana_06.html">← Semana 06</a>
+    <a href="semana_08.html">Semana 08 →</a>
+</nav>
+
+<div class="final-section">
+    <div class="conceptual-map">
+        <h3>Mapa Mental</h3>
+        <div class="mindmap-container">
+            <div class="mindmap-central">JOINs Y SUBCONSULTAS</div>
+            <div class="mindmap-branch">
+                <div class="node">JOIN
+                    <div class="subnode">INNER</div>
+                    <div class="subnode">LEFT</div>
+                    <div class="subnode">RIGHT</div>
+                    <div class="subnode">FULL</div>
+                </div>
+                <div class="node">Subconsultas
+                    <div class="subnode">Escalar</div>
+                    <div class="subnode">Tabla</div>
+                    <div class="subnode">WHERE</div>
+                </div>
+                <div class="node">Operadores
+                    <div class="subnode">IN</div>
+                    <div class="subnode">EXISTS</div>
+                    <div class="subnode">ANY/ALL</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="additional-material">
+        <h3>Material Adicional</h3>
+        <ul>
+            <li><span class="tag">Video</span> <a href="#">JOINs explicados - 25 min</a></li>
+            <li><span class="tag">Práctica</span> <a href="#">Ejercicios JOIN</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
