@@ -5,170 +5,463 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apuntes de Clase - SQL Desde Cero (Parte 2)</title>
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #2980b9;
-            --accent-color: #e74c3c;
-            --background-color: #f8f9fa;
-            --sidebar-bg: #fdfefe;
-            --text-color: #333;
-            --border-color: #bdc3c7;
-        }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    :root {
+        --primary-color: #0f172a;
+        --secondary-color: #2563eb;
+        --accent-color: #ef4444;
+        --background-color: #f8fafc;
+        --sidebar-bg: #ffffff;
+        --text-color: #334155;
+        --border-color: #e2e8f0;
+        --code-bg: #1e293b;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ecf0f1;
-        }
+    body {
+        font-family: 'Inter', sans-serif;
+        line-height: 1.7;
+        color: var(--text-color);
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: var(--background-color);
+    }
 
-        .header-box {
-            border: 3px double var(--primary-color);
-            background-color: #fff;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background: #ffffff;
+        color: var(--secondary-color);
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        transition: all 0.2s;
+        border: 1px solid var(--border-color);
+    }
+    .btn-back:hover {
+        background: #f1f5f9;
+        transform: translateY(-1px);
+    }
 
-        .header-box h1 {
-            margin: 0 0 10px 0;
-            color: var(--primary-color);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+    .header-box {
+        background: linear-gradient(135deg, var(--primary-color), #1e293b);
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+        margin-bottom: 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+    }
 
-        .header-box p {
-            margin: 5px 0;
-            font-weight: bold;
-            color: #555;
-        }
+    .header-box h1 {
+        margin: 0 0 15px 0;
+        color: #ffffff;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
 
-        /* Cornell Note Layout */
-        .cornell-container {
-            display: flex;
-            gap: 20px;
-            background-color: #fff;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-radius: 5px;
-        }
+    .header-box p {
+        margin: 5px 0;
+        font-weight: 500;
+        color: #94a3b8;
+        font-size: 1.1em;
+    }
 
-        .keywords-sidebar {
-            width: 25%;
-            border-right: 2px dashed var(--border-color);
-            padding-right: 20px;
-            background-color: var(--sidebar-bg);
-        }
+    .cornell-container {
+        display: flex;
+        gap: 30px;
+        background-color: #fff;
+        padding: 40px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+    }
 
-        .keywords-sidebar h3 {
-            color: var(--secondary-color);
-            border-bottom: 1px solid var(--secondary-color);
-            padding-bottom: 5px;
-        }
+    .keywords-sidebar {
+        width: 28%;
+        padding-right: 30px;
+        border-right: 1px solid var(--border-color);
+        position: sticky;
+        top: 20px;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+    }
 
-        .keywords-sidebar ul {
-            list-style-type: square;
-            padding-left: 20px;
-        }
+    .keywords-sidebar::-webkit-scrollbar { width: 6px; }
+    .keywords-sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
-        .keywords-sidebar li {
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: #444;
-        }
+    .keywords-sidebar h3 {
+        color: var(--primary-color);
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+    }
 
-        .main-content {
-            width: 75%;
-            padding-left: 10px;
-        }
+    .keywords-sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-        h2 { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; margin-top: 30px; }
-        h3 { color: var(--secondary-color); margin-top: 25px; }
-        
-        .timestamp {
-            display: inline-block;
-            background-color: #e8f8f5;
-            color: #117a65;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    .keywords-sidebar li {
+        margin-bottom: 20px;
+        font-size: 0.95em;
+    }
 
-        /* Elements */
-        pre {
-            background-color: #282c34;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 6px;
-            overflow-x: auto;
-            font-family: 'Consolas', 'Courier New', Courier, monospace;
-            border-left: 5px solid var(--secondary-color);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
+    .keywords-sidebar li strong {
+        display: block;
+        color: var(--secondary-color);
+        margin-bottom: 4px;
+        font-size: 1.05em;
+    }
 
-        code {
-            font-family: 'Consolas', 'Courier New', Courier, monospace;
-            background-color: #eaecee;
-            color: #c0392b;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
+    .main-content { width: 72%; }
 
-        pre code {
-            background-color: transparent;
-            color: inherit;
-            padding: 0;
-        }
+    h2 { 
+        color: var(--primary-color); 
+        margin-top: 40px; 
+        font-weight: 700;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 10px;
+    }
+    
+    h3 { color: #334155; margin-top: 30px; font-weight: 600; }
+    
+    .timestamp {
+        display: inline-flex;
+        background-color: #f1f5f9;
+        color: #64748b;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.85em;
+        font-weight: 600;
+        margin-bottom: 15px;
+        border: 1px solid var(--border-color);
+    }
 
-        blockquote.emphasis {
-            border-left: 5px solid var(--accent-color);
-            background-color: #fdedec;
-            padding: 15px;
-            margin: 20px 0;
-            font-style: italic;
-            border-radius: 0 4px 4px 0;
-        }
+    pre {
+        background-color: var(--code-bg);
+        color: #f8f8f2;
+        padding: 20px;
+        border-radius: 12px;
+        overflow-x: auto;
+        font-size: 0.95em;
+        margin: 20px 0;
+    }
 
-        blockquote.emphasis strong { color: var(--accent-color); }
+    code {
+        background-color: #f1f5f9;
+        color: #db2777;
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
 
-        .analogy {
-            background-color: #fef9e7;
-            border: 1px solid #fadbd8;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-        }
+    pre code { background-color: transparent; color: inherit; padding: 0; }
 
-        .analogy::before { content: "💡 Analogía/Concepto Clave:"; font-weight: bold; display: block; margin-bottom: 5px; color: #d35400; }
+    blockquote.emphasis {
+        border-left: 4px solid var(--secondary-color);
+        background-color: #eff6ff;
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 0 12px 12px 0;
+        color: #1e3a8a;
+    }
 
-        .t-note {
-            background-color: #eaf2f8;
-            border-left: 4px solid #3498db;
-            padding: 10px 15px;
-            margin: 15px 0;
-            font-size: 0.95em;
-        }
+    .analogy {
+        background-color: #fffbeb;
+        border-left: 4px solid #f59e0b;
+        padding: 20px;
+        border-radius: 0 12px 12px 0;
+        margin: 25px 0;
+        color: #92400e;
+    }
+    .analogy::before { content: "💡 Analogía / Concepto Clave"; font-weight: 700; display: block; margin-bottom: 8px; color: #b45309; text-transform: uppercase; font-size: 0.85em;}
 
-        .t-note::before { content: "👨‍💻 Nota del Apuntador:"; font-weight: bold; color: #2980b9; display: block; margin-bottom: 5px; }
+    .t-note {
+        background-color: #f0fdf4;
+        border-left: 4px solid #22c55e;
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 0 12px 12px 0;
+        color: #166534;
+    }
+    .t-note::before { content: "👨‍💻 Nota del Apuntador"; font-weight: 700; color: #15803d; display: block; margin-bottom: 8px; text-transform: uppercase; font-size: 0.85em;}
 
-        .section-box {
-            background-color: #fff;
-            padding: 30px;
-            margin-top: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-radius: 5px;
-        }
+    .section-box {
+        background-color: #fff;
+        padding: 40px;
+        margin-top: 40px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+    }
 
-        .q-level { font-weight: bold; color: #8e44ad; margin-top: 20px; border-bottom: 1px solid #d2b4de; padding-bottom: 5px;}
-        .question { font-weight: bold; color: #2c3e50; margin-top: 15px; }
-        .answer { margin-bottom: 15px; padding-left: 20px; border-left: 3px solid #ecf0f1; }
-    </style>
+    .q-level { 
+        display: inline-block;
+        background: #f1f5f9;
+        color: #475569;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 700;
+        margin-top: 30px;
+        margin-bottom: 10px;
+    }
+    .question { 
+        font-weight: 600; 
+        color: var(--primary-color); 
+        margin-top: 15px; 
+        font-size: 1.1em;
+    }
+    
+    .answer-container { margin-bottom: 25px; }
+    
+    .btn-reveal {
+        background: transparent;
+        color: var(--secondary-color);
+        border: 1px solid var(--secondary-color);
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9em;
+        transition: all 0.2s;
+        margin-top: 10px;
+    }
+    .btn-reveal:hover { background: var(--secondary-color); color: white; }
+    
+    .answer { 
+        margin-top: 15px;
+        padding: 15px 20px; 
+        background: #f8fafc;
+        border-left: 4px solid var(--secondary-color); 
+        border-radius: 0 8px 8px 0;
+        display: none;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    .answer.visible { display: block; }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1024px) {
+        .cornell-container { flex-direction: column; padding: 25px; }
+        .keywords-sidebar { width: 100%; border-right: none; border-bottom: 2px dashed var(--border-color); padding-right: 0; padding-bottom: 20px; margin-bottom: 20px; position: static; max-height: none; }
+        .main-content { width: 100%; padding-left: 0; }
+    }
+
+    /* Index & CheatSheet overrides */
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        background: #fff;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        border-top: 5px solid var(--secondary-color);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+
+    .card h2 { margin-top: 0; border: none; padding-bottom: 0; color: var(--secondary-color); }
+    .card a {
+        display: inline-flex;
+        align-items: center;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: var(--secondary-color);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+    .card a:hover { background: #1d4ed8; }
+
+    .content-list {
+        background: #fff;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .timeline { margin: 0; padding: 0; list-style: none; }
+    .timeline li {
+        padding: 15px 0;
+        border-bottom: 1px dashed var(--border-color);
+        display: flex;
+        align-items: center;
+    }
+    .timeline li:last-child { border-bottom: none; }
+    .time {
+        background: var(--primary-color);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.85em;
+        margin-right: 15px;
+        font-family: 'Fira Code', monospace;
+        min-width: 70px;
+        text-align: center;
+    }
+    
+    .global-tools { text-align: center; margin: 30px 0; }
+    .btn-cheat {
+        background: var(--accent-color);
+        color: white;
+        padding: 15px 30px;
+        text-decoration: none;
+        font-size: 1.1em;
+        border-radius: 8px;
+        font-weight: 700;
+        display: inline-block;
+        box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
+        transition: all 0.2s;
+    }
+    .btn-cheat:hover { background: #dc2626; transform: translateY(-2px); }
+
+    /* CheatSheet specifics */
+    .masonry-grid {
+        column-count: 2;
+        column-gap: 25px;
+    }
+    @media (max-width: 900px) { .masonry-grid { column-count: 1; } }
+    .masonry-grid .card { break-inside: avoid; margin-bottom: 25px; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95em;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    th { background-color: #f8fafc; color: var(--primary-color); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+
+    
+    /* Tooltip Styles */
+    .tech-term {
+        position: relative;
+        display: inline-block;
+        border-bottom: 2px dotted var(--secondary-color);
+        color: var(--secondary-color);
+        cursor: help;
+        font-weight: 600;
+        transition: color 0.2s;
+    }
+    .tech-term:hover { color: var(--primary-color); }
+    .tech-term .tooltip-text {
+        visibility: hidden;
+        width: 220px;
+        background-color: var(--primary-color);
+        color: #fff;
+        text-align: center;
+        border-radius: 8px;
+        padding: 8px 12px;
+        position: absolute;
+        z-index: 10;
+        bottom: 130%;
+        left: 50%;
+        margin-left: -110px;
+        opacity: 0;
+        transition: opacity 0.3s, bottom 0.3s;
+        font-size: 0.85em;
+        font-weight: 500;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+        pointer-events: none;
+        line-height: 1.4;
+    }
+    .tech-term .tooltip-text::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -6px;
+        border-width: 6px;
+        border-style: solid;
+        border-color: var(--primary-color) transparent transparent transparent;
+    }
+    .tech-term:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+        bottom: 150%;
+    }
+
+    /* Navigation Bar Styles */
+    .bottom-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 2px solid var(--border-color);
+    }
+    
+    .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 24px;
+        background: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+    
+    .nav-btn:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .nav-btn.disabled {
+        background: #cbd5e1;
+        color: #94a3b8;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+    
+    .nav-index {
+        color: var(--secondary-color);
+        font-weight: 700;
+        text-decoration: none;
+        padding: 10px;
+    }
+    
+    .nav-index:hover { text-decoration: underline; }
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+<script>hljs.highlightAll();</script>
 </head>
 <body>
 
@@ -198,10 +491,10 @@
             <h2>ÍNDICE DE LA PARTE 2</h2>
             <ol>
                 <li>Creación de Tablas Relacionales (Foreign Keys)</li>
-                <li>DML: Inserción de Registros (INSERT)</li>
-                <li>DML: Edición y Borrado Crítico (UPDATE, DELETE, TRUNCATE)</li>
-                <li>DQL: Consultas de Extracción de Datos (SELECT, LIKE, LIMIT)</li>
-                <li>DQL: Introducción a Funciones de Agregación</li>
+                <li><span class="tech-term">DML<span class="tooltip-text">Data Manipulation Language: Manipula registros vivos (INSERT, UPDATE, DELETE)</span></span>: Inserción de Registros (INSERT)</li>
+                <li><span class="tech-term">DML<span class="tooltip-text">Data Manipulation Language: Manipula registros vivos (INSERT, UPDATE, DELETE)</span></span>: Edición y Borrado Crítico (UPDATE, DELETE, TRUNCATE)</li>
+                <li><span class="tech-term">DQL<span class="tooltip-text">Data Query Language: Extrae información sin alterarla (SELECT)</span></span>: Consultas de Extracción de Datos (SELECT, LIKE, LIMIT)</li>
+                <li><span class="tech-term">DQL<span class="tooltip-text">Data Query Language: Extrae información sin alterarla (SELECT)</span></span>: Introducción a Funciones de Agregación</li>
             </ol>
 
             <!-- SECCIÓN 1 -->
@@ -214,18 +507,18 @@
                 El profesor utiliza la herramienta Miro para dibujar flechas entre la tabla de Usuarios, Productos y Órdenes. Explica que la llave foránea (Foreign Key) es lo que permite que una compra sepa exactamente quién es el usuario que la efectuó y qué producto llevó, asegurando que no existan compras huérfanas en el sistema.
             </div>
 
-            <p>Una <code>FOREIGN KEY</code> es una restricción que asegura que el valor introducido en una columna debe existir obligatoriamente en la llave primaria (<code>PRIMARY KEY</code>) de otra tabla.</p>
+            <p>Una <code><span class="tech-term">FOREIGN KEY<span class="tooltip-text">Clave Foránea: Vincula una tabla con el identificador de otra</span></span></code> es una restricción que asegura que el valor introducido en una columna debe existir obligatoriamente en la llave primaria (<code><span class="tech-term">PRIMARY KEY<span class="tooltip-text">Clave Primaria: Identificador único e irrepetible (el DNI de la fila)</span></span></code>) de otra tabla.</p>
 
             <strong>Código Completo de la Tabla Relacional:</strong>
 <pre><code class="language-sql">CREATE TABLE orders (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT <span class="tech-term">PRIMARY KEY<span class="tooltip-text">Clave Primaria: Identificador único e irrepetible (el DNI de la fila)</span></span>,
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity INT DEFAULT 1,
     total DECIMAL(10,2),
     order_date DATE DEFAULT CURRENT_DATE,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    <span class="tech-term">FOREIGN KEY<span class="tooltip-text">Clave Foránea: Vincula una tabla con el identificador de otra</span></span> (user_id) REFERENCES users(id),
+    <span class="tech-term">FOREIGN KEY<span class="tooltip-text">Clave Foránea: Vincula una tabla con el identificador de otra</span></span> (product_id) REFERENCES products(id)
 );</code></pre>
             
             <div class="t-note">
@@ -234,10 +527,10 @@
 
 
             <!-- SECCIÓN 2 -->
-            <h2>2. DML: Inserción de Registros (INSERT)</h2>
+            <h2>2. <span class="tech-term">DML<span class="tooltip-text">Data Manipulation Language: Manipula registros vivos (INSERT, UPDATE, DELETE)</span></span>: Inserción de Registros (INSERT)</h2>
             <span class="timestamp">[~01:25:00]</span>
             
-            <p>El profesor transiciona al DML (Data Manipulation Language). Mientras el DDL define la estructura, el DML manipula los datos vivos que habitan esas estructuras.</p>
+            <p>El profesor transiciona al <span class="tech-term">DML<span class="tooltip-text">Data Manipulation Language: Manipula registros vivos (INSERT, UPDATE, DELETE)</span></span> (Data Manipulation Language). Mientras el <span class="tech-term">DDL<span class="tooltip-text">Data Definition Language: Define la estructura inmutable (CREATE, DROP, ALTER)</span></span> define la estructura, el <span class="tech-term">DML<span class="tooltip-text">Data Manipulation Language: Manipula registros vivos (INSERT, UPDATE, DELETE)</span></span> manipula los datos vivos que habitan esas estructuras.</p>
 
             <h3>Sintaxis de Inserción Básica</h3>
 <pre><code class="language-sql">INSERT INTO users (name, email, password, cellphone)
@@ -260,7 +553,7 @@ VALUES ('Mouse', 5.50);
 
 
             <!-- SECCIÓN 3 -->
-            <h2>3. DML: Edición y Borrado Crítico (UPDATE, DELETE, TRUNCATE)</h2>
+            <h2>3. <span class="tech-term">DML<span class="tooltip-text">Data Manipulation Language: Manipula registros vivos (INSERT, UPDATE, DELETE)</span></span>: Edición y Borrado Crítico (UPDATE, DELETE, TRUNCATE)</h2>
             <span class="timestamp">[~01:40:00]</span>
 
             <h3>UPDATE (Actualización)</h3>
@@ -280,7 +573,7 @@ WHERE id = 3;</code></pre>
             <ul>
                 <li><code>DELETE FROM tabla WHERE condicion;</code> → Borra filas específicas. Si omites el WHERE, borra todas las filas pero la estructura de la tabla y sus contadores internos se mantienen.</li>
                 <li><code>TRUNCATE TABLE tabla;</code> → Vacía la tabla por completo y <strong>reinicia el contador del AUTO_INCREMENT</strong> a 1. La tabla sigue existiendo.</li>
-                <li><code>DROP TABLE tabla;</code> → DDL puro. Destruye la tabla por completo. Deja de existir la estructura en la base de datos.</li>
+                <li><code>DROP TABLE tabla;</code> → <span class="tech-term">DDL<span class="tooltip-text">Data Definition Language: Define la estructura inmutable (CREATE, DROP, ALTER)</span></span> puro. Destruye la tabla por completo. Deja de existir la estructura en la base de datos.</li>
             </ul>
 
             <div class="t-note">
@@ -291,10 +584,10 @@ WHERE id = 3;</code></pre>
 
 
             <!-- SECCIÓN 4 -->
-            <h2>4. DQL: Consultas de Extracción de Datos (SELECT)</h2>
+            <h2>4. <span class="tech-term">DQL<span class="tooltip-text">Data Query Language: Extrae información sin alterarla (SELECT)</span></span>: Consultas de Extracción de Datos (SELECT)</h2>
             <span class="timestamp">[~01:50:00]</span>
 
-            <p>DQL (Data Query Language). Consiste primordialmente en el comando <code>SELECT</code> para extraer y consultar información.</p>
+            <p><span class="tech-term">DQL<span class="tooltip-text">Data Query Language: Extrae información sin alterarla (SELECT)</span></span> (Data Query Language). Consiste primordialmente en el comando <code>SELECT</code> para extraer y consultar información.</p>
 
             <h3>Operadores y Filtros Múltiples</h3>
             <p>Se pueden concatenar condiciones complejas usando <code>AND</code> / <code>OR</code>.</p>
@@ -324,7 +617,7 @@ WHERE stock >= 10 AND price > 10;</code></pre>
 
 
             <!-- SECCIÓN 5 -->
-            <h2>5. DQL: Introducción a Funciones de Agregación</h2>
+            <h2>5. <span class="tech-term">DQL<span class="tooltip-text">Data Query Language: Extrae información sin alterarla (SELECT)</span></span>: Introducción a Funciones de Agregación</h2>
             <span class="timestamp">[~02:00:00]</span>
 
             <p>Las funciones de agregación devuelven un único resultado tras evaluar múltiples filas.</p>
@@ -345,11 +638,11 @@ SELECT COUNT(*) AS total_productos_stock FROM products WHERE stock >= 1;</code><
     <div class="section-box">
         <h2>GLOSARIO TÉCNICO</h2>
         
-        <p><strong>Foreign Key (Clave Foránea):</strong><br> Una columna en una tabla que actúa como un puntero a la <code>PRIMARY KEY</code> de otra tabla, forzando la integridad de las relaciones.</p>
+        <p><strong>Foreign Key (Clave Foránea):</strong><br> Una columna en una tabla que actúa como un puntero a la <code><span class="tech-term">PRIMARY KEY<span class="tooltip-text">Clave Primaria: Identificador único e irrepetible (el DNI de la fila)</span></span></code> de otra tabla, forzando la integridad de las relaciones.</p>
         
-        <p><strong>DML (Data Manipulation Language):</strong><br> Subconjunto de SQL que manipula la información (CRUD operativo). Comandos: <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>.</p>
+        <p><strong><span class="tech-term">DML<span class="tooltip-text">Data Manipulation Language: Manipula registros vivos (INSERT, UPDATE, DELETE)</span></span> (Data Manipulation Language):</strong><br> Subconjunto de SQL que manipula la información (CRUD operativo). Comandos: <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>.</p>
         
-        <p><strong>DQL (Data Query Language):</strong><br> Lenguaje exclusivo para la consulta de información sin alterarla. Comando base: <code>SELECT</code>.</p>
+        <p><strong><span class="tech-term">DQL<span class="tooltip-text">Data Query Language: Extrae información sin alterarla (SELECT)</span></span> (Data Query Language):</strong><br> Lenguaje exclusivo para la consulta de información sin alterarla. Comando base: <code>SELECT</code>.</p>
         
         <p><strong>TRUNCATE vs DROP:</strong><br> <code>TRUNCATE</code> vacía los datos pero deja la estructura de la tabla viva. <code>DROP</code> aniquila tanto los datos como la estructura misma de la base de datos.</p>
 
@@ -378,9 +671,9 @@ SELECT COUNT(*) AS total_productos_stock FROM products WHERE stock >= 1;</code><
     <div class="section-box">
         <h2>EJERCICIOS PRÁCTICOS (Basados en el Repositorio Oficial)</h2>
         
-        <p><strong>Ejercicio 1 — DML (Actualización Crítica)</strong><br>
+        <p><strong>Ejercicio 1 — <span class="tech-term">DML<span class="tooltip-text">Data Manipulation Language: Manipula registros vivos (INSERT, UPDATE, DELETE)</span></span> (Actualización Crítica)</strong><br>
         <em>Objetivo:</em> Identificar usuarios y actualizar precios en masa basándonos en condicionales.<br>
-        <em>Enunciado:</em> A causa de la inflación, el negocio ha decidido aumentar el precio de todos sus productos en $10.00, pero únicamente de los productos que actualmente cuestan menos de $100.00. Escribe el DML correspondiente.<br>
+        <em>Enunciado:</em> A causa de la inflación, el negocio ha decidido aumentar el precio de todos sus productos en $10.00, pero únicamente de los productos que actualmente cuestan menos de $100.00. Escribe el <span class="tech-term">DML<span class="tooltip-text">Data Manipulation Language: Manipula registros vivos (INSERT, UPDATE, DELETE)</span></span> correspondiente.<br>
         <em>Solución guiada:</em></p>
 <pre><code class="language-sql">UPDATE products 
 SET price = price + 10.00 
@@ -408,12 +701,19 @@ ALTER TABLE customers MODIFY COLUMN cellphone VARCHAR(30) NOT NULL;</code></pre>
         <h2>RESUMEN EJECUTIVO (PARTE 2)</h2>
         <p>Esta segunda parte profundizó en la interconexión de datos y su manipulación activa:</p>
         <ul>
-            <li><strong>Relacionalidad:</strong> Implementación técnica de las <code>FOREIGN KEYS</code> para atar existencias cruzadas (Usuarios → Compras ← Productos).</li>
-            <li><strong>Operaciones de Riesgo (DML):</strong> Uso del <code>UPDATE</code> y el peligro fatal de ignorar el <code>WHERE</code>, además de comparar <code>DELETE</code>, <code>TRUNCATE</code> y <code>DROP</code>.</li>
-            <li><strong>Inteligencia de Datos (DQL):</strong> Extracción selectiva filtrando mediante <code>LIKE</code>, <code>BETWEEN</code>, ordenando con <code>ORDER BY</code> y limitando la carga con <code>LIMIT</code>.</li>
+            <li><strong>Relacionalidad:</strong> Implementación técnica de las <code><span class="tech-term">FOREIGN KEYS<span class="tooltip-text">Clave Foránea: Vincula una tabla con el identificador de otra</span></span></code> para atar existencias cruzadas (Usuarios → Compras ← Productos).</li>
+            <li><strong>Operaciones de Riesgo (<span class="tech-term">DML<span class="tooltip-text">Data Manipulation Language: Manipula registros vivos (INSERT, UPDATE, DELETE)</span></span>):</strong> Uso del <code>UPDATE</code> y el peligro fatal de ignorar el <code>WHERE</code>, además de comparar <code>DELETE</code>, <code>TRUNCATE</code> y <code>DROP</code>.</li>
+            <li><strong>Inteligencia de Datos (<span class="tech-term">DQL<span class="tooltip-text">Data Query Language: Extrae información sin alterarla (SELECT)</span></span>):</strong> Extracción selectiva filtrando mediante <code>LIKE</code>, <code>BETWEEN</code>, ordenando con <code>ORDER BY</code> y limitando la carga con <code>LIMIT</code>.</li>
         </ul>
         <p><strong>Para el examen:</strong> Nunca olvidar la regla estricta del <code>WHERE</code>, la diferencia fundamental de reciclar IDs entre Delete y Truncate, y el funcionamiento agnóstico (case-insensitive) del operador <code>LIKE</code>.</p>
     </div>
 
+
+    <div class="bottom-nav">
+        <a href="Guia_Estudio_Maestria_SQL_Parte1.html">← Anterior</a>
+        <a href="index.html" class="nav-index">🏠 Volver al Menú Principal</a>
+        <a href="Guia_Estudio_Maestria_SQL_Parte3.html" class="nav-btn">Siguiente →</a>
+    </div>
+    
 </body>
 </html>
