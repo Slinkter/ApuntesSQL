@@ -413,6 +413,42 @@
         bottom: 150%;
     }
 
+    
+    .architect-tip {
+        background: linear-gradient(to right, #f8fafc, #f1f5f9);
+        border-left: 5px solid #8b5cf6;
+        padding: 20px 25px;
+        margin: 30px 0;
+        border-radius: 0 12px 12px 0;
+        position: relative;
+    }
+    .architect-tip::before {
+        content: "🧠 Senior Insight (Arquitectura)";
+        display: block;
+        color: #6d28d9;
+        font-weight: 800;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        letter-spacing: 0.5px;
+    }
+    .error-case {
+        background-color: #fef2f2;
+        border-left: 5px solid #ef4444;
+        padding: 20px 25px;
+        margin: 30px 0;
+        border-radius: 0 12px 12px 0;
+    }
+    .error-case::before {
+        content: "🚨 Error Común (Lo que NO debes hacer)";
+        display: block;
+        color: #b91c1c;
+        font-weight: 800;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
     /* Navigation Bar Styles */
     .bottom-nav {
         display: flex;
@@ -660,6 +696,10 @@ DROP DATABASE ecommerce; /* Peligroso: borra la base de datos entera */</code></
             <h3>Tipos de Datos Tácticos</h3>
             <ul>
                 <li><code>INT</code>: Números enteros (IDs, stock).</li>
+            <div class="architect-tip">
+                Para tablas con transacciones masivas, usar <code>SERIAL</code> o <code>BIGSERIAL</code> (en PostgreSQL) es más eficiente para el B-Tree de los índices que generar <code>UUIDs v4</code> aleatorios. Si la seguridad requiere ocultar secuencias en APIs públicas, los arquitectos prefieren <strong>UUID v7</strong> (ordenables por tiempo) para evitar la fragmentación severa del disco.
+            </div>
+    
                 <li><code>VARCHAR(n)</code>: Texto corto con límite de caracteres (ej. VARCHAR(255) para emails o nombres).</li>
                 <li><code>TEXT</code>: Texto extremadamente largo (ej. descripciones de productos).</li>
                 <li><code>DECIMAL(precision, scale)</code>: Números fraccionales. <code>DECIMAL(10,2)</code> asegura 10 dígitos y 2 decimales exactos.</li>

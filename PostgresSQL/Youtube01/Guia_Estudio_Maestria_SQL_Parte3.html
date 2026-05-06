@@ -413,6 +413,42 @@
         bottom: 150%;
     }
 
+    
+    .architect-tip {
+        background: linear-gradient(to right, #f8fafc, #f1f5f9);
+        border-left: 5px solid #8b5cf6;
+        padding: 20px 25px;
+        margin: 30px 0;
+        border-radius: 0 12px 12px 0;
+        position: relative;
+    }
+    .architect-tip::before {
+        content: "🧠 Senior Insight (Arquitectura)";
+        display: block;
+        color: #6d28d9;
+        font-weight: 800;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        letter-spacing: 0.5px;
+    }
+    .error-case {
+        background-color: #fef2f2;
+        border-left: 5px solid #ef4444;
+        padding: 20px 25px;
+        margin: 30px 0;
+        border-radius: 0 12px 12px 0;
+    }
+    .error-case::before {
+        content: "🚨 Error Común (Lo que NO debes hacer)";
+        display: block;
+        color: #b91c1c;
+        font-weight: 800;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
     /* Navigation Bar Styles */
     .bottom-nav {
         display: flex;
@@ -682,6 +718,18 @@ GROUP BY r.name
 HAVING COUNT(rv.id) > 1;</code></pre>
         <p><small><em>Nota: Usamos <code>HAVING</code> porque <code>COUNT(rv.id)</code> es una función matemática que solo existe después del <code>GROUP BY</code>.</em></small></p>
 
+    
+        <h3 style="color: #ef4444; border-bottom: 2px solid #fca5a5; margin-top:40px; padding-bottom:10px;">🥷 Reto Ninja (Nivel Arquitecto)</h3>
+        <p class="question">Se te pide un reporte analítico crítico: Muestra el nombre de los restaurantes que tienen <strong>MÁS de 5 reseñas</strong>, pero cuyo promedio de calificación sea <strong>MENOR a 8.0</strong>. Además, debes excluir previamente cualquier restaurante de "Buenos Aires" de la evaluación para no afectar el cálculo de CPU.</p>
+        <div class="answer">
+<pre><code class="language-sql">SELECT r.name AS restaurante, COUNT(rv.id) AS total_reseñas, ROUND(AVG(rv.rating), 2) AS promedio
+FROM restaurants r
+JOIN reviews rv ON r.id = rv.restaurant_id
+WHERE r.city != 'Buenos Aires'
+GROUP BY r.name
+HAVING COUNT(rv.id) > 5 AND AVG(rv.rating) < 8.0;</code></pre>
+            <p><strong>🧠 Explicación Senior:</strong> Primero filtramos la ciudad usando <code>WHERE</code> (<em>antes de agrupar</em>, lo que salva uso de RAM en el servidor). Luego unimos, agrupamos por nombre, y finalmente usamos <code>HAVING</code> para las reglas matemáticas sobre las agregaciones combinadas.</p>
+        </div>
     </div>
 
     <div class="section-box">

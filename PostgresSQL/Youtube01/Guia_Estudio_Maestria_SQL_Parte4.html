@@ -413,6 +413,42 @@
         bottom: 150%;
     }
 
+    
+    .architect-tip {
+        background: linear-gradient(to right, #f8fafc, #f1f5f9);
+        border-left: 5px solid #8b5cf6;
+        padding: 20px 25px;
+        margin: 30px 0;
+        border-radius: 0 12px 12px 0;
+        position: relative;
+    }
+    .architect-tip::before {
+        content: "🧠 Senior Insight (Arquitectura)";
+        display: block;
+        color: #6d28d9;
+        font-weight: 800;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        letter-spacing: 0.5px;
+    }
+    .error-case {
+        background-color: #fef2f2;
+        border-left: 5px solid #ef4444;
+        padding: 20px 25px;
+        margin: 30px 0;
+        border-radius: 0 12px 12px 0;
+    }
+    .error-case::before {
+        content: "🚨 Error Común (Lo que NO debes hacer)";
+        display: block;
+        color: #b91c1c;
+        font-weight: 800;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
     /* Navigation Bar Styles */
     .bottom-nav {
         display: flex;
@@ -638,6 +674,19 @@ const profesores = await Profesor.findAll({ where: { activo: true } });</code></
     <li>Paso 2: En la API Node.js, reescribir la query: <code>UPDATE users SET is_active = false WHERE email = ?</code>.</li>
     <li>Paso 3: Alterar todos los endpoints GET en el backend, añadiendo la condicional <code>WHERE is_active = true</code>.</li>
 </ol>
+    
+        <h3 style="color: #ef4444; border-bottom: 2px solid #fca5a5; margin-top:40px; padding-bottom:10px;">🥷 Reto Ninja (Optimización de Rendimiento)</h3>
+        <p class="question">El siguiente query (visto en la Sección 1) tarda demasiado en ejecutarse en producción porque procesa información ineficientemente con subconsultas. Como Arquitecto, ¿cómo optimizas esta consulta usando JOINs y aseguras el concepto de Borrado Lógico ("is_active = TRUE")?</p>
+        <pre><code class="language-sql">-- Mala práctica (N+1 problem)
+SELECT name, (SELECT SUM(total) FROM orders WHERE user_id = u.id) as gastado FROM users u;</code></pre>
+        <div class="answer">
+<pre><code class="language-sql">SELECT u.name, COALESCE(SUM(o.total), 0) AS gastado
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE u.is_active = TRUE
+GROUP BY u.id, u.name;</code></pre>
+            <p><strong>🧠 Explicación Senior:</strong> Las subconsultas escalares en el <code>SELECT</code> se ejecutan <em>N veces</em> (una por cada fila del usuario), matando el rendimiento del servidor (N+1 query problem). Reescribir usando <code>LEFT JOIN</code> + <code>GROUP BY</code> delega la optimización matemática al <em>Query Planner</em> del motor. El <code>WHERE u.is_active = TRUE</code> respeta el borrado lógico descartando registros inútiles antes de agrupar.</p>
+        </div>
     </div>
 
     <div class="section-box">

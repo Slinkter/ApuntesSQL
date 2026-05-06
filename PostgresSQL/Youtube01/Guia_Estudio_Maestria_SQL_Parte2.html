@@ -413,6 +413,42 @@
         bottom: 150%;
     }
 
+    
+    .architect-tip {
+        background: linear-gradient(to right, #f8fafc, #f1f5f9);
+        border-left: 5px solid #8b5cf6;
+        padding: 20px 25px;
+        margin: 30px 0;
+        border-radius: 0 12px 12px 0;
+        position: relative;
+    }
+    .architect-tip::before {
+        content: "🧠 Senior Insight (Arquitectura)";
+        display: block;
+        color: #6d28d9;
+        font-weight: 800;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        letter-spacing: 0.5px;
+    }
+    .error-case {
+        background-color: #fef2f2;
+        border-left: 5px solid #ef4444;
+        padding: 20px 25px;
+        margin: 30px 0;
+        border-radius: 0 12px 12px 0;
+    }
+    .error-case::before {
+        content: "🚨 Error Común (Lo que NO debes hacer)";
+        display: block;
+        color: #b91c1c;
+        font-weight: 800;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
     /* Navigation Bar Styles */
     .bottom-nav {
         display: flex;
@@ -563,6 +599,14 @@ VALUES ('Mouse', 5.50);
                 <strong>📌 ÉNFASIS DEL PROFESOR (EL PELIGRO DEL WHERE):</strong><br>
                 "¡JAMÁS hagas un UPDATE sin la cláusula WHERE! Si olvidas el WHERE, modificarás todas las filas. Por ejemplo, le cambiarías la contraseña a TODOS los usuarios del sistema por accidente. Es el meme típico de SQL por una razón real."
             </blockquote>
+            <div class="error-case">
+                <pre><code class="language-sql">-- Esto cambia TODOS los registros de la tabla
+UPDATE users SET is_active = false; 
+
+-- Consola: 105,432 rows affected. (¡Acabas de destruir la BD productiva!)</code></pre>
+                <p>Las plataformas ORM de alto nivel suelen tener un "Safe Mode" que lanza una excepción si intentas ejecutar un UPDATE sin un condicional.</p>
+            </div>
+    
 
 <pre><code class="language-sql">UPDATE users 
 SET password = 'the_thing_is_my_friend', cellphone = '+150011222'
@@ -580,7 +624,14 @@ WHERE id = 3;</code></pre>
                 <strong>Regla de Integridad de IDs Autoincrementales:</strong> El profesor hizo un experimento borrando el producto ID 5. Al crear uno nuevo, el motor generó el ID 8 (continuando la secuencia). <strong>Las bases de datos relacionales NUNCA reciclan IDs de registros borrados</strong>. Si borras el 5, el 5 se pierde para siempre. Esto garantiza la integridad histórica.
             </div>
 
-            <p><strong>Bloqueo por Foreign Key:</strong> El profesor intentó borrar todos los productos y falló porque algunos productos ya estaban "comprados" en la tabla <code>orders</code>. La Base de Datos rechazó la eliminación para evitar dejar órdenes de compra con productos "fantasmas".</p>
+            <p><strong>Bloqueo por Foreign Key:</strong> El profesor intentó borrar todos los productos y falló porque algunos productos ya estaban "comprados" en la tabla <code>orders</code>. La Base de Datos rechazó la eliminación para evitar dejar órdenes de compra con productos "fantasmas".
+            <div class="error-case">
+                <pre><code class="language-sql">DELETE FROM products WHERE id = 5;
+-- ERROR: update or delete on table "products" violates foreign key constraint 
+-- "fk_product_id" on table "orders".
+-- DETAIL: Key (id)=(5) is still referenced from table "orders".</code></pre>
+            </div>
+    </p>
 
 
             <!-- SECCIÓN 4 -->
