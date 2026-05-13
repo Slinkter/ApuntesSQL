@@ -1,59 +1,54 @@
-# GEMINI.md
+# ApuntesSQL - PostgreSQL Architecture & Mastery
 
-## Project Overview
-**ApuntesSQL** is a structured knowledge base and educational repository designed to transform a database practitioner into a **Senior Lead Data Architect** (Principal Engineer level). The project refactors legacy database materials (university resources, Oracle-based exercises) into a modern, comprehensive curriculum focused on **PostgreSQL (v15+)**, relational theory, and data architecture internals.
+Este proyecto es una plataforma educativa integral para la maestría en **PostgreSQL**, diseñada bajo estándares de ingeniería de alto rendimiento para el año 2026. Combina material histórico refactorizado con teoría relacional avanzada y prácticas modernas de arquitectura de datos.
 
-### Strategic Mission
-The goal is to provide a masterclass in data engineering that covers the "internals," relational science, and modern data architecture. It emphasizes high-performance infrastructure, critical systems, and the integration of databases into the SDLC.
+## 🚀 Propósito y Filosofía
+Transformar el conocimiento fragmentado en una base sólida de **Data Architecture**. El enfoque no es solo aprender SQL, sino entender los *internals* del motor (páginas de 8KB, MVCC, WAL) y la teoría relacional pura (C.J. Date).
 
-## Instructional Mandates (Core Personas)
-When interacting with this repository, toggle between these two expert personas:
+## 🛠️ Stack Tecnológico
+- **Database Engine:** PostgreSQL 15+ (v15, v16+)
+- **Standards:** SQL ANSI 2023, PL/pgSQL
+- **Documentation:** Markdown, Mermaid.js (ER Diagrams)
+- **Frontend (Apuntes):** HTML/CSS Cornell Style para legibilidad académica.
 
-1.  **Principal Data Architect & Senior DBA:** (Main Persona) Tone: Professional, technical, direct, and mentor-like (ex-IBM/Oracle). Focus: Deep theory, architecture, and SDLC integration.
-2.  **ArquiDB (Auditor):** Tone: Strict, analytical, and standards-focused. Focus: Verifying PostgreSQL 15+ compliance, catching legacy Oracle syntax, and ensuring technical rigor in laboratory materials.
+## 📂 Estructura del Proyecto
+```bash
+.
+├── ULima/                   # Material académico y apuntes refactorizados
+│   ├── Apuntes/             # Material educativo central (HTML/Markdown)
+│   │   ├── 01_Fundamentos/  # Física del dato, Teoría Relacional, SDLC
+│   │   ├── 02_Postgres_Internals/ # Internals, Tipos tácticos, Normalización
+│   │   └── 03_Escalabilidad/ # Indexación, Query Planner, CDC, HTAP
+│   ├── Clases/              # PDFs y TXTs de sesiones originales
+│   └── otros/               # Documentación complementaria y ejercicios
+├── PostgresSQL/             # Recursos de laboratorio y dataset
+│   ├── 1.basico.md          # Guía práctica de SQL Básico
+│   ├── 2.intermedio.md      # SQL Intermedio y Agrupaciones
+│   ├── 3.avanzado.md        # Ventanas, CTEs, PL/pgSQL
+│   ├── db_northwind.sql     # Dataset oficial para ejercicios
+│   └── Youtube01/           # Recursos adicionales de video tutoriales
+├── Credenciales/            # Configuración y Guías de Despliegue
+│   └── Guia_Despliegue_Docker_AWS.md # Guía de infraestructura Cloud
+└── README.md                # Punto de entrada original
+```
 
-### Content Philosophy
-Every lesson must include:
-- **High-Level Theory:** Deep conceptual explanation (e.g., WAL, MVCC, Heap pages).
-- **SDLC Integration:** Designing for CI/CD, Observability, and Migrations.
-- **Laboratory:** Hands-on exercises refactoring legacy logic into modern implementations.
+## 📖 Plan Maestro (16 Semanas)
+1.  **Fundamentos (S01-S07):** DBMS, ERD, DDL, DML, Joins y Subconsultas.
+2.  **Examen Parcial (S08):** Validación de fundamentos.
+3.  **Avanzado (S09-S15):** Group By, CTEs, PL/pgSQL, Transacciones, Índices y Seguridad.
+4.  **Examen Final (S16):** Evaluación integral.
 
-## Directory Structure
-- **`Apuntes/`**: Core curriculum directory.
-    - **`01_Fundamentos/`**: Phase 1 - Relational theory, hardware constraints (I/O), and SDLC.
-    - **`02_Postgres_Internals/`**: Phase 2 - Heap, MVCC, WAL, and Query Planner.
-    - **`03_Escalabilidad/`**: Phase 3 - Indexing (GIN, GiST, BRIN), partitioning, and HTAP/CDC.
-    - **`semana_XX.html`**: The HTML-based output for students.
-    - **`inject.py`**: Script to inject Markdown insights into HTML files.
-- **`PostgresSQL/`**: Laboratory resources and exercises.
-    - `db_northwind.sql`: Base dataset for practice.
-    - `1.basico.md`, `2.intermedio.md`, `3.avanzado.md`: Progressive challenges.
-- **`ULima/`**: Legacy university resources (PDFs/Scripts) used as raw input for refactoring.
-- **`Lab/`**: Infrastructure and deployment guides (Docker, AWS).
-- **`Credenciales/`**: Visual guides for infrastructure setup.
+## 🧪 Laboratorio: Northwind en PostgreSQL
+El proyecto utiliza una versión adaptada de la base de datos **Northwind** para PostgreSQL.
+- **Ubicación:** `PostgresSQL/db_northwind.sql`
+- **Modelado:** `PostgresSQL/1.basico.md` incluye el diagrama ER en formato Mermaid.
 
-## Key Workflows
-### Building and Publishing
-Lessons are written in Markdown within the numbered phase directories and then injected into HTML files using the `inject.py` script.
-- **Command:** `python Apuntes/inject.py` (ensure paths are correct relative to root).
+## ⚙️ Desarrollo y Auditoría
+- **Auditoría:** Se sigue el estándar definido en `prompt_auditoria.md` para garantizar calidad técnica (vía ArquiDB).
+- **Convenciones:** 
+    - Priorizar `JSONB` sobre `JSON`.
+    - Usar `SERIAL`/`BIGSERIAL` para IDs secuenciales (o `UUID v7`).
+    - Explicar siempre el impacto en I/O de cada consulta (`EXPLAIN ANALYZE`).
 
-### Quality Control (Audit)
-The project maintains a high standard of PostgreSQL compliance.
-- **`AUDITORIA_REPORTE.md`**: Tracks the migration status from Oracle/Legacy syntax to PostgreSQL 15+.
-- **`prompt_auditoria.md`**: Defines the rules for the "ArquiDB" auditor persona.
-
-## Technical Standards (PostgreSQL 15+)
-Adhere to these syntax and architecture mandates:
-- **Data Types:** Use `SERIAL`/`BIGSERIAL`, `INTEGER`, `NUMERIC`, `JSONB`, `UUID`, `BOOLEAN`, `TIMESTAMP WITH TIME ZONE`.
-- **Naming:** Snake_case for tables/columns. Avoid Oracle's `VARCHAR2`, `NUMBER(p,s)`, or `DATE` (when time is needed).
-- **Functions:** Use `COALESCE` (not `NVL`), `CURRENT_TIMESTAMP` (not `SYSDATE`), `RETURNING` clauses, and `ON CONFLICT` for upserts.
-- **PL/pgSQL:** Triggers require two steps: a trigger function and the trigger definition.
-
-## Security Warning
-- **Sensitive Data:** The repository contains hardcoded passwords in `README.md` and historically tracked credential files.
-- **Policy:** NEVER log, print, or commit secrets. The `.gitignore` is configured to block common credential patterns, but manual vigilance is required.
-
-## Roadmap / TODO
-1.  **Critical Fixes:** Refactor `semana_04.html` and `semana_16.html` to eliminate Oracle syntax (per `AUDITORIA_REPORTE.md`).
-2.  **Phase 3 Completion:** Flesh out detailed classes in `03_Escalabilidad` (Partitioning, Sharding, CDC).
-3.  **Automation:** Implement pgTAP or similar for automated SQL exercise validation.
+---
+*Mantenido por el Senior Data Solutions Architect.*
