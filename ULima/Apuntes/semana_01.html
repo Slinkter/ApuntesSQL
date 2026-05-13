@@ -4,105 +4,217 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 01 - Fundamentos de Información</title>
-    <link rel="stylesheet" href="estilo-cornell.css">
-    <link rel="stylesheet" href="base-moderno.css">
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
 
-<div class="header-box">
-    <h1>Fundamentos de Administración de Información</h1>
-    <p>Semana 01 | Ingeniería de Datos</p>
-</div>
+<header class="header">
+    <h1 class="header__title">Fundamentos de Administración de Información</h1>
+    <p class="header__subtitle">Semana 01 | Ingeniería de Datos | ULima 2013-2</p>
+</header>
 
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>PALABRAS CLAVE</h3>
-        <ul>
-            <li><strong>§ Datos vs Info</strong><br>Hecho bruto vs dato con contexto</li>
-            <li><strong>§ Sistema Tradicional</strong><br>Archivos, redundancia, inconsistencia</li>
-            <li><strong>§ DBMS</strong><br>Software gestor de BD</li>
-            <li><strong>§ Metadatos</strong><br>Datos sobre datos</li>
-            <li><strong>§ ACID</strong><br>Atomicidad, Consistencia, Aislamiento, Durabilidad</li>
-            <li><strong>§ Pilares</strong><br>Disponibilidad, Integridad, Seguridad</li>
+<div class="cornell">
+    <aside class="sidebar">
+        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>§ Datos vs Info</strong>Hecho bruto vs dato con contexto</li>
+            <li class="sidebar__item"><strong>§ Sistema Tradicional</strong>Archivos, redundancia, inconsistencia</li>
+            <li class="sidebar__item"><strong>§ DBMS</strong>Software gestor de BD</li>
+            <li class="sidebar__item"><strong>§ Metadatos</strong>Datos sobre datos</li>
+            <li class="sidebar__item"><strong>§ ACID</strong>Atomicidad, Consistencia, Aislamiento, Durabilidad</li>
+            <li class="sidebar__item"><strong>§ SDLC</strong>Ciclo de vida del desarrollo</li>
+            <li class="sidebar__item"><strong>§ DBA</strong>Administrador de BD</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">🏠 Índice del Curso</a></li>
-                <li><a href="estilo-cornell.css">🎨 Estilo CSS</a></li>
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">🏠 Índice del Curso</a></li>
+                <li class="sidebar__item"><a href="semana_02.html" class="sidebar__link">→ Semana 02</a></li>
             </ul>
         </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
-        <div class="box box-note">
-            <p><strong>📌 Objetivos de Aprendizaje</strong></p>
-            <ul style="margin: 8px 0 0 20px;">
-                <li>Diferenciar dato, información y conocimiento</li>
-                <li>Identificar problemas de sistemas tradicionales de archivos</li>
-                <li>Explicar las ventajas del enfoque de bases de datos</li>
-                <li>Describir los componentes del entorno de una BD</li>
+    <main class="main">
+        <div class="box box--note">
+            <p class="main__text"><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Diferenciar dato, información y conocimiento</li>
+                <li class="main__list-item">Identificar problemas de sistemas tradicionales de archivos</li>
+                <li class="main__list-item">Explicar las ventajas del enfoque de bases de datos</li>
+                <li class="main__list-item">Describir los componentes del entorno de una BD</li>
+                <li class="main__list-item">Comprender el ciclo de vida SDLC de una BD</li>
             </ul>
         </div>
 
         <section class="architect-insight">
-            <h4>💡 Insight del Arquitecto: Física del Dato</h4>
-            <p><strong>El Cuello de Botella del I/O:</strong> Como arquitectos, debemos entender que la RAM es rápida pero volátil; el disco (SSD/NVMe) es persistente pero lento. El trabajo de PostgreSQL es minimizar el tiempo de CPU esperando al disco mediante el <em>Heap</em> y el <em>Shared Buffers</em>.</p>
-            <p><strong>MVCC y Vacuum:</strong> Postgres no sobreescribe; crea nuevas versiones (Dead Tuples). Entender el <em>Bloat</em> (hinchazón) y la gestión del <em>Autovacuum</em> es crucial para el diseño de sistemas de alto rendimiento.</p>
-            <p><strong>El concepto clave:</strong> WAL (Write-Ahead Logging) garantiza la persistencia. Los cambios van primero a la RAM (Dirty Page) y luego al WAL secuencial, permitiendo commits rápidos antes del Checkpoint asíncrono.</p>
+            <h4 class="main__title--sub">💡 Insight del Arquitecto: El Valor del Dato</h4>
+            <p class="main__text"><strong>Los datos son un activo estratégico:</strong> En 2013 (cuando se creó este material), las empresas comenzaban a entender que los datos son un recurso competitivo. Hoy, en 2026, esto es absolutamente crítico. C.J. Date nos recuerda que una base de datos no es solo un "lugar donde guardar cosas" — es la representación formal de la realidad del negocio.</p>
+            <p class="main__text"><strong>La clave:</strong> Datos → Información → Conocimiento → Decisión. Sin el primer paso, no hay nada.</p>
         </section>
 
-        <h2>1. Del Dato al Conocimiento</h2>
-        <span class="timestamp">Conceptos Fundamentales</span>
+        <h2 class="main__title">1. Del Dato al Conocimiento</h2>
+        <span class="tag">Conceptos Fundamentales</span>
         
-        <ul>
-            <li><strong>Dato:</strong> Representación simbólica de un hecho. <em>Objetivo, sin contexto.</em> Ej: <code>3.50</code></li>
-            <li><strong>Información:</strong> Dato procesado con contexto. <em>Reduce incertidumbre.</em> Ej: "El precio del producto es 3.50"</li>
-            <li><strong>Conocimiento:</strong> Información analizada para tomar decisiones. Ej: "El precio subió 75% en 3 años, debemos ajustar estrategia"</li>
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Dato:</strong> Representación simbólica de un hecho. <em>Objetivo, sin contexto.</em> Ej: <code class="code--inline">3.50</code></li>
+            <li class="main__list-item"><strong>Información:</strong> Dato procesado con contexto. <em>Reduce incertidumbre.</em> Ej: "El precio del producto es 3.50"</li>
+            <li class="main__list-item"><strong>Conocimiento:</strong> Información analizada para tomar decisiones. Ej: "El precio subió 75% en 3 años, debemos ajustar estrategia"</li>
         </ul>
 
-        <div class="box box-concep">
-            <p><strong>Concepto clave:</strong> Los datos son el insumo básico. La información surge al procesarlos. El conocimiento emerge al analizar la información para la toma de decisiones.</p>
+        <div class="box box--concept">
+            <p class="main__text"><strong>Concepto clave:</strong> Los datos son el insumo básico. La información surge al procesarlos. El conocimiento emerge al analizar la información para la toma de decisiones.</p>
         </div>
 
-        <h2>2. El Problema: Sistemas Tradicionales de Archivos</h2>
-        <span class="timestamp">Antes del enfoque de BD</span>
+        <h2 class="main__title">2. El Problema: Sistemas Tradicionales de Archivos</h2>
+        <span class="tag">Antes del enfoque de BD</span>
         
-        <p>Antes de las bases de datos, cada aplicación tenía sus propios archivos:</p>
+        <p class="main__text">Antes de las bases de datos, cada aplicación tenía sus propios archivos:</p>
         
-        <ul>
-            <li><strong>Redundancia:</strong> Misma información duplicada en múltiples archivos</li>
-            <li><strong>Dependencia programa-dato:</strong> Código tied to estructura física</li>
-            <li><strong>Inconsistencia:</strong> Actualizar en un lugar pero no en otro</li>
-            <li><strong>Acceso limitado:</strong> Sin forma estándar de compartir datos</li>
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Redundancia:</strong> Misma información duplicada en múltiples archivos</li>
+            <li class="main__list-item"><strong>Dependencia programa-dato:</strong> Código tied to estructura física</li>
+            <li class="main__list-item"><strong>Inconsistencia:</strong> Actualizar en un lugar pero no en otro</li>
+            <li class="main__list-item"><strong>Acceso limitado:</strong> Sin forma estándar de compartir datos</li>
+            <li class="main__list-item"><strong>Mayor tiempo de desarrollo:</strong> Cada sistema reinventa la wheel</li>
         </ul>
 
-        <h2>3. La Solución: Enfoque de Base de Datos</h2>
+        <h2 class="main__title">3. La Solución: Enfoque de Base de Datos</h2>
         
-        <div class="box box-ejemplo">
-            <p><strong>Analogía:</strong> El DBMS actúa como un bibliotecario experto que conoce la ubicación exacta de cada libro (dato) y puede recuperarlo rápidamente sin que el usuario necesite saber dónde está físicamente almacenado.</p>
+        <div class="box box--example">
+            <p class="main__text"><strong>Analogía:</strong> El DBMS actúa como un bibliotecario experto que conoce la ubicación exacta de cada libro (dato) y puede recuperarlo rápidamente sin que el usuario necesite saber dónde está físicamente almacenado.</p>
         </div>
 
-        <ul>
-            <li><strong>Base de Datos:</strong> Colección de datos lógicamente relacionados</li>
-            <li><strong>DBMS:</strong> Software intermediario entre usuarios y datos</li>
-            <li><strong>Independencia:</strong> Cambios físicos no afectan aplicaciones</li>
-            <li><strong>Seguridad:</strong> Control de acceso centralizado</li>
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Base de Datos:</strong> Colección de datos lógicamente relacionados</li>
+            <li class="main__list-item"><strong>DBMS:</strong> Software intermediario entre usuarios y datos</li>
+            <li class="main__list-item"><strong>Independencia:</strong> Cambios físicos no afectan aplicaciones</li>
+            <li class="main__list-item"><strong>Seguridad:</strong> Control de acceso centralizado</li>
+            <li class="main__list-item"><strong>Metadatos:</strong> Datos sobre los datos (esquemas, restricciones)</li>
         </ul>
 
-        <h2>4. Componentes del Entorno de BD</h2>
+        <h2 class="main__title">4. Componentes del Entorno de BD</h2>
         
-        <table>
-            <tr><th>Componente</th><th>Función</th></tr>
-            <tr><td><strong>CASE</strong></td><td>Herramientas de diseño</td></tr>
-            <tr><td><strong>Repositorio</strong></td><td>Almacena metadatos</td></tr>
-            <tr><td><strong>DBMS</strong></td><td>Software de gestión</td></tr>
-            <tr><td><strong>Base de Datos</strong></td><td>Colección de datos</td></tr>
-            <tr><td><strong>Aplicaciones</strong></td><td>Programas que usan la BD</td></tr>
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Componente</th>
+                    <th class="table__th">Función</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>CASE</strong></td>
+                    <td class="table__td">Herramientas de diseño asistidas por computadora</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Repositorio</strong></td>
+                    <td class="table__td">Almacena metadatos y definiciones</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>DBMS</strong></td>
+                    <td class="table__td">Software de gestión de la base de datos</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Base de Datos</strong></td>
+                    <td class="table__td">Colección de datos organizados</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Aplicaciones</strong></td>
+                    <td class="table__td">Programas que acceden a los datos</td>
+                </tr>
+            </tbody>
         </table>
+
+        <h2 class="main__title">5. Ciclo de Vida SDLC</h2>
         
-        <!-- ... resto del contenido ... -->
-    </div>
+        <div class="box box--note">
+            <p class="main__text"><strong>Las 5 fases del desarrollo de BD:</strong></p>
+            <ol class="main__list">
+                <li class="main__list-item"><strong>Identificación:</strong> Determinar necesidades del negocio</li>
+                <li class="main__list-item"><strong>Análisis:</strong> Modelamiento conceptual (DER)</li>
+                <li class="main__list-item"><strong>Diseño Lógico:</strong> Transformar a modelo relacional</li>
+                <li class="main__list-item"><strong>Diseño Físico:</strong> Definir almacenamiento e índices</li>
+                <li class="main__list-item"><strong>Implementación:</strong> Crear BD, cargar datos, probar</li>
+            </ol>
+        </div>
+
+        <h2 class="main__title">6. Atributos del DBA</h2>
+        
+        <ul class="main__list">
+            <li class="main__list-item">Instalación y configuración del DBMS</li>
+            <li class="main__list-item">Creación y mantenimiento de BD</li>
+            <li class="main__list-item">Gestión de seguridad y permisos</li>
+            <li class="main__list-item">Backup y recovery</li>
+            <li class="main__list-item">Monitoreo de rendimiento</li>
+            <li class="main__list-item">Optimización de consultas</li>
+        </ul>
+
+        <h2 class="main__title">7. Evolución de las Bases de Datos</h2>
+        
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Década</th>
+                    <th class="table__th">Tipo</th>
+                    <th class="table__th">Ejemplos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">1950s</td>
+                    <td class="table__td">Sistemas de archivos</td>
+                    <td class="table__td">Tarjetas perforadas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">1960s</td>
+                    <td class="table__td">Jerárquicos</td>
+                    <td class="table__td">IDS, IMS, Sistema Sabre</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">1970s</td>
+                    <td class="table__td">Red</td>
+                    <td class="table__td">CODASYL, IDMS</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">1980s</td>
+                    <td class="table__td">Relacionales</td>
+                    <td class="table__td">Oracle, DB2, MySQL</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">1990s</td>
+                    <td class="table__td">Orientados a objeto</td>
+                    <td class="table__td">O2, GemStone</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">2000s+</td>
+                    <td class="table__td">NoSQL, NewSQL</td>
+                    <td class="table__td">MongoDB, Cassandra, CockroachDB</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box--warning">
+            <p class="main__text"><strong>⚠️ Nota del Arquitecto:</strong> Este material original usaba sintaxis Oracle (VARCHAR2, NUMBER). En PostgreSQL moderno, usamos VARCHAR, INTEGER, SERIAL, etc. ¡Estate atento a estas diferencias!</p>
+        </div>
+
+        <hr style="margin: 24px 0; border: 0; border-top: 1px solid var(--color-border);">
+
+        <section class="laboratorio">
+            <h3 class="main__title--sub">🔬 Laboratorio: Reflexión</h3>
+            <p class="main__text">Considera una empresa que maneja sus datos en hojas de cálculo Excel. Identifica:</p>
+            <ol class="main__list">
+                <li class="main__list-item">3 problemas que enfrenta cuando varios empleados editan el mismo archivo</li>
+                <li class="main__list-item">2 situaciones donde la redundancia de datos causa inconsistencias</li>
+                <li class="main__list-item">1 ejemplo de cómo un DBMS resolvería esos problemas</li>
+            </ol>
+        </section>
+
+        <nav class="nav">
+            <a href="index.html" class="nav__link">« Volver al Índice</a>
+            <a href="semana_02.html" class="nav__link">Siguiente Semana »</a>
+        </nav>
+    </main>
 </div>
+
 </body>
 </html>
