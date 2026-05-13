@@ -1,288 +1,248 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
+<head><link rel="stylesheet" href="master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 04 - Lenguaje DDL</title>
-    <link rel="stylesheet" href="estilo-cornell.css">
-<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
+    <title>Semana 04 - DML y Consultas B�sicas</title>
+    
+    
+</head>
 <body>
 
 <div class="header-box">
-    <h1>Lenguaje DDL</h1>
-    <p>Semana 04 | CREATE, ALTER, DROP</p>
+    <h1>Lenguaje de Manipulaci�n de Datos (DML)</h1>
+    <p>Semana 04 | Ingenier�a de Datos | ULima 2013-2</p>
 </div>
 
 <div class="cornell-container">
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>Â§ CREATE TABLE</strong><br>Crear tablas</li>
-            <li><strong>Â§ ALTER TABLE</strong><br>Modificar estructura</li>
-            <li><strong>Â§ DROP</strong><br>Eliminar objetos</li>
-            <li><strong>Â§ Constraints</strong><br>PK, FK, UNIQUE, CHECK</li>
-            <li><strong>Â§ SERIAL</strong><br>Auto-incremento PostgreSQL</li>
-            <li><strong>Â§ Integridad</strong><br>Referencial, de dominio</li>
+            <li><strong>� SELECT</strong><br>Consultar datos</li>
+            <li><strong>� INSERT</strong><br>Insertar datos</li>
+            <li><strong>� UPDATE</strong><br>Actualizar datos</li>
+            <li><strong>� DELETE</strong><br>Eliminar datos</li>
+            <li><strong>� WHERE</strong><br>Condiciones</li>
+            <li><strong>� DISTINCT</strong><br>Valores �nicos</li>
+            <li><strong>� ORDER BY</strong><br>Ordenar resultados</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
             <ul>
-                <li><a href="index.html">ðŸ  Ãndice del Curso</a></li>
+                <li><a href="index.html">?? �ndice del Curso</a></li>
+                <li><a href="semana_03.html">? Semana 03</a></li>
+                <li><a href="semana_05.html">? Semana 05</a></li>
             </ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>ðŸ“Œ Objetivos de Aprendizaje</strong></p>
+            <p><strong>?? Objetivos de Aprendizaje</strong></p>
             <ul style="margin: 8px 0 0 20px;">
-                <li>Crear tablas con tipos de datos PostgreSQL</li>
-                <li>Aplicar constraints (PRIMARY KEY, FOREIGN KEY, CHECK)</li>
-                <li>Modificar tablas con ALTER TABLE</li>
-                <li>Comprender integridad referencial y cascade</li>
+                <li>Insertar datos en tablas</li>
+                <li>Actualizar datos existentes</li>
+                <li>Eliminar datos de tablas</li>
+                <li>Realizar consultas b�sicas con SELECT</li>
+                <li>Filtrar y ordenar resultados</li>
             </ul>
         </div>
 
         <section class="architect-insight">
-<h4>💡 Insight del Arquitecto</h4>
-<h1>Clase 1.04: Migrations-as-Code y el SDLC del Dato</h1>
-<p><strong>Instructor:</strong> Principal Data Architect &amp; Senior DBA</p>
-<h2>1. Teoría de Alto Nivel: El Caos del DDL Manual</h2>
-<p>En 2013, el ciclo de vida de un esquema de base de datos solía lucir así:</p>
-<ol>
-<li>El desarrollador creaba las tablas en su base de datos local (con clics o scripts DDL en una consola gráfica).</li>
-<li>Se exportaba un gigantesco archivo <code>schema.sql</code>.</li>
-<li>El día del pase a Producción, el DBA ejecutaba ese script (o un archivo <code>alter.sql</code> con suerte) sobre la base de datos productiva.</li>
-<li>Si fallaba, el rollback era un desastre manual que paralizaba al equipo.</li>
-</ol>
-<p>Este enfoque no escala. En un entorno moderno (2026), con integración continua (CI) y entrega continua (CD), la base de datos ya no puede ser un componente "fuera de banda". El esquema de la base de datos <strong>es código</strong>, y debe ser tratado con el mismo rigor que tu código funcional: versionado, probado, documentado y desplegado de manera determinista.</p>
-<h3>Migrations-as-Code (Esquemas como Código)</h3>
-<p>Las migraciones son archivos atómicos (usualmente SQL o XML/YAML según la herramienta) que describen un cambio incremental en la base de datos.
-Herramientas estándar de la industria (Flyway, Liquibase, o los ORMs como Prisma, Alembic o TypeORM) implementan esto manteniendo una tabla especial de metadatos (ej. <code>flyway_schema_history</code>) dentro de la propia base de datos.</p>
-<p>Cuando la aplicación inicia y su pipeline corre:</p>
-<ol>
-<li>Verifica la tabla de historial de la BD para saber en qué versión está.</li>
-<li>Escanea el repositorio por migraciones nuevas o no aplicadas.</li>
-<li>Aplica únicamente los deltas faltantes (los <em>Up scripts</em>).</li>
-</ol>
-<h2>2. Integración SDLC: Patrones de Evolución Sin Tiempo de Inactividad (Zero Downtime)</h2>
-<p>En 2013 podías decir: "La aplicación estará en mantenimiento de 2 a 4 AM para actualizar la base de datos". Hoy, un e-commerce global no puede hacer eso.</p>
-<p>Tus migraciones deben permitir el <em>Zero-Downtime Deployment</em> (ZDD).
-Imagina que quieres cambiar el nombre de la columna <code>direccion</code> a <code>direccion_completa</code>.</p>
-<ul>
-<li>
-<p><strong>El Antipatrón (2013):</strong> Ejecutar <code>ALTER TABLE clientes RENAME COLUMN direccion TO direccion_completa;</code>.</p>
-<ul>
-<li><em>Resultado:</em> En el milisegundo en que aplicas esto, la versión antigua de tu aplicación que sigue corriendo explotará porque no encuentra <code>direccion</code>.</li>
-</ul>
-</li>
-<li>
-<p><strong>La Arquitectura Evolutiva (2026 - Patrón Expand/Contract):</strong></p>
-<ol>
-<li><strong>Fase 1 (Expand):</strong> Creación de una migración para agregar la <em>nueva</em> columna <code>direccion_completa</code>. Dejar la antigua intacta.</li>
-<li><strong>Fase 2 (Aplicación):</strong> Modificar la aplicación para que empiece a escribir en <em>ambas</em> columnas (Dual Write) pero siga leyendo de la antigua. Desplegar.</li>
-<li><strong>Fase 3 (Migración de Datos):</strong> Un script asíncrono en background copia los miles de registros pasados de la columna vieja a la nueva.</li>
-<li><strong>Fase 4 (Cambio de lectura):</strong> La aplicación cambia a leer de la nueva columna <code>direccion_completa</code>.</li>
-<li><strong>Fase 5 (Contract):</strong> Semanas después, una nueva migración ejecuta <code>ALTER TABLE clientes DROP COLUMN direccion;</code>.</li>
-</ol>
-</li>
-</ul>
-<h2>3. Reto Teórico: Infraestructura Inmutable</h2>
-<p><strong>Pensamiento Arquitectónico:</strong>
-Observa la carpeta <code>ULima/Clases</code> original. Seguro que tenías un "Script_ejemplo_warehouse.txt" (lo vi en la carpeta <code>otros</code>). Ese modelo de "ejecuta este archivo enorme" crea servidores "Floco de Nieve" (Snowflake Servers), servidores donde nadie sabe exactamente la historia de cómo llegaron a estar configurados así.</p>
-<p><strong>El Reto:</strong>
-Acabas de escribir una migración en SQL para añadir una restricción crítica (Constraint) a tu tabla de <code>pagos</code>:
-<code>ALTER TABLE pagos ADD CONSTRAINT pago_positivo CHECK (monto &gt; 0);</code></p>
-<p>Tus pruebas locales pasan. Haces el commit y el sistema de CI/CD lo despliega a Producción. Sin embargo, la migración <strong>falla rotundamente en Producción y rompe el pipeline</strong>. ¿Por qué una migración de DDL válida (funciona en local/pruebas) fallaría al llegar a Producción de manera inesperada? ¿Qué lección te enseña esto sobre modelar tu base de datos?</p>
-<p><em>(Piensa en la relación entre los datos existentes y las nuevas reglas).</em></p>
-</section>
-<h2>1. Comandos DDL en PostgreSQL</h2>
-        
-        <ul>
-            <li><strong>CREATE:</strong> Crea objetos (tablas, Ã­ndices, secuencias)</li>
-            <li><strong>ALTER:</strong> Modifica estructura de objetos existentes</li>
-            <li><strong>DROP:</strong> Elimina objetos de forma permanente</li>
-            <li><strong>TRUNCATE:</strong> Elimina todas las filas (mÃ¡s rÃ¡pido que DELETE)</li>
-        </ul>
+            <h4>?? Insight del Arquitecto: DML en PostgreSQL</h4>
+            <p><strong>Diferencias con Oracle/SQL Server:</strong></p>
+            <ul>
+                <li><code>LIMIT</code> vs <code>TOP</code> (SQL Server) o <code>ROWNUM</code> (Oracle)</li>
+                <li><code>LIMIT 10 OFFSET 20</code> para paginaci�n</li>
+                <li><code>RETURNING *</code> para obtener datos insertados</li>
+                <li><code>INSERT ... ON CONFLICT</code> (upsert)</li>
+                <li><code>TRUNCATE</code> vs DELETE (m�s r�pido para vaciar tablas)</li>
+            </ul>
+        </section>
 
-        <h2>2. Tipos de Datos PostgreSQL</h2>
+        <h2>1. Inserci�n de Datos (INSERT)</h2>
         
-        <table>
-            <tr><th>Tipo</th><th>Uso</th><th>Ejemplo</th></tr>
-            <tr><td>SERIAL</td><td>Auto-incremento</td><td>1, 2, 3...</td></tr>
-            <tr><td>VARCHAR(n)</td><td>Texto variable</td><td>Nombre hasta n chars</td></tr>
-            <tr><td>NUMERIC(p,s)</td><td>Decimal exacto</td><td>1234.56</td></tr>
-            <tr><td>DATE</td><td>Fecha</td><td>2024-01-15</td></tr>
-            <tr><td>TIMESTAMP</td><td>Fecha y hora</td><td>2024-01-15 14:30:00</td></tr>
-            <tr><td>BOOLEAN</td><td>Verdadero/Falso</td><td>TRUE/FALSE</td></tr>
-        </table>
-
-        <h2>3. Constraints (Restricciones)</h2>
-        
-        <div class="box box-concep">
-            <p><strong>Concepto clave:</strong> Los constraints son reglas que garantizan la integridad de los datos. Se definen al crear la tabla o despuÃ©s con ALTER TABLE.</p>
+        <div class="box box-ejemplo">
+            <p><strong>Sintaxis b�sica:</strong></p>
+            <pre style="background: #2c3e50; color: #ecf0f1; padding: 10px; border-radius: 4px;">
+INSERT INTO tabla (columna1, columna2, ...)
+VALUES (valor1, valor2, ...);</pre>
         </div>
 
-        <table>
-            <tr><th>Constraint</th><th>DescripciÃ³n</th><th>Ejemplo</th></tr>
-            <tr><td>PRIMARY KEY</td><td>Identificador Ãºnico, no nulo</td><td>id SERIAL PRIMARY KEY</td></tr>
-            <tr><td>FOREIGN KEY</td><td>Referencia a otra tabla</td><td>REFERENCES clientes(id)</td></tr>
-            <tr><td>NOT NULL</td><td>El campo es obligatorio</td><td>nombre VARCHAR NOT NULL</td></tr>
-            <tr><td>UNIQUE</td><td>Valores no repetidos</td><td>email VARCHAR UNIQUE</td></tr>
-            <tr><td>CHECK</th><td>CondiciÃ³n personalizada</td><td>CHECK (precio > 0)</td></tr>
-            <tr><td>DEFAULT</td><td>Valor por defecto</td><td>estado VARCHAR DEFAULT 'A'</td></tr>
-        </table>
+        <h3>Ejemplos:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Insertar todos los campos (en orden)
+INSERT INTO cliente 
+VALUES (1, 'JUAN', 'PEREZ', '01-4414896');
 
-        <h2>4. Ejemplos PrÃ¡cticos</h2>
-        
-        <pre>-- Crear tabla con constraints
-CREATE TABLE productos (
-    id          SERIAL PRIMARY KEY,
-    nombre      VARCHAR(100) NOT NULL UNIQUE,
-    descripcion VARCHAR(500),
-    precio      NUMERIC(10,2) NOT NULL CHECK (precio >= 0),
-    stock       INTEGER DEFAULT 0 NOT NULL,
-    categoria   VARCHAR(50)
-);</pre>
+-- Insertar campos espec�ficos
+INSERT INTO cliente (nombre, apellido, email) 
+VALUES ('MARIA', 'GARCIA', 'maria@email.com');
 
-        <pre>-- Tabla con Foreign Key y cascade
-CREATE TABLE pedidos (
-    id_pedido   SERIAL PRIMARY KEY,
-    id_cliente  INTEGER NOT NULL,
-    total       NUMERIC(12,2),
-    fecha       DATE DEFAULT CURRENT_DATE,
-    CONSTRAINT fk_cliente 
-        FOREIGN KEY (id_cliente) 
-        REFERENCES clientes(id_cliente)
-        ON DELETE CASCADE
-);</pre>
+-- Insertar m�ltiples filas
+INSERT INTO producto (nombre, precio) VALUES
+    ('Laptop', 1500.00),
+    ('Mouse', 25.50),
+    ('Teclado', 45.00);
 
-        <h2>5. ALTER TABLE</h2>
-        
-        <pre>-- AÃ±adir columna
-ALTER TABLE productos ADD COLUMN fecha_creacion TIMESTAMP;
-
--- Modificar columna
-ALTER TABLE productos ALTER COLUMN nombre TYPE VARCHAR(150);
-
--- AÃ±adir constraint
-ALTER TABLE productos ADD CONSTRAINT precio_positivo CHECK (precio > 0);
-
--- Eliminar columna
-ALTER TABLE productos DROP COLUMN descripcion;
-
--- Eliminar constraint
-ALTER TABLE productos DROP CONSTRAINT precio_positivo;</pre>
-
-        <h2>6. Integridad Referencial</h2>
-        
-        <table>
-            <tr><th>AcciÃ³n</th><th>DescripciÃ³n</th></tr>
-            <tr><td>ON DELETE CASCADE</td><td>Elimina hijos automÃ¡ticamente</td></tr>
-            <tr><td>ON DELETE SET NULL</td><td>Pone la FK en NULL</td></tr>
-            <tr><td>ON DELETE RESTRICT</td><td>Impide eliminar si hay hijos</td></tr>
-            <tr><td>ON DELETE NO ACTION</td><td>No hace nada (genera error)</td></tr>
-        </table>
+-- Insertar con RETURNING (PostgreSQL)
+INSERT INTO cliente (nombre, apellido) 
+VALUES ('PEDRO', 'LOPEZ')
+RETURNING id_cliente, nombre;</pre>
 
         <div class="box box-concep">
-            <p><strong>ðŸ“ Resumen:</strong> DDL permite definir la estructura de la base de datos. PostgreSQL usa SERIAL para auto-incremento, VARCHAR para texto, NUMERIC para decimales. Los constraints como PRIMARY KEY, FOREIGN KEY y CHECK garantizan la integridad de los datos.</p>
+            <p><strong>Regla:</strong> Los campos con restricci�n NOT NULL deben ingresarse. Los dem�s pueden ser NULL o usar DEFAULT.</p>
         </div>
-    </div>
-</div>
 
-<div class="section-box">
-    <h2>EJERCICIO RESUELTO</h2>
-    <p class="question">Enunciado:</p>
-    <p>Crear esquema para librerÃ­a: AUTORES (ID, Nombre), LIBROS (ISBN PK, Titulo, ID_Autor FK, Precio), CLIENTES (ID PK, Email UNIQUE), PRESTAMOS (ID, ID_Cliente FK, ISBN FK).</p>
-    
-    <p class="answer">
-    <strong>SoluciÃ³n:</strong><br>
-    <pre>CREATE TABLE autores (
-    id_autor   SERIAL PRIMARY KEY,
-    nombre     VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE libros (
-    isbn     VARCHAR(13) PRIMARY KEY,
-    titulo   VARCHAR(255) NOT NULL,
-    id_autor INTEGER NOT NULL REFERENCES autores(id_autor),
-    precio   NUMERIC(7,2) CHECK (precio > 0)
-);
-
-CREATE TABLE clientes (
-    id_cliente SERIAL PRIMARY KEY,
-    email      VARCHAR(255) UNIQUE NOT NULL
-);
-
-CREATE TABLE prestamos (
-    id_prestamo SERIAL PRIMARY KEY,
-    id_cliente  INTEGER REFERENCES clientes(id_cliente),
-    isbn        VARCHAR(13) REFERENCES libros(isbn),
-    fecha       DATE DEFAULT CURRENT_DATE
-);</pre>
-    </p>
-</div>
-
-<div class="section-box">
-    <h2>QUIZ DE REPASO</h2>
-    
-    <p class="q-level">Nivel 1 â€” ComprensiÃ³n</p>
-    <p class="question">P1: Â¿QuÃ© tipo de dato usa PostgreSQL para auto-incremento?</p>
-    <p class="answer">R1: SERIAL (equivale a secuencia automÃ¡tica)</p>
-
-    <p class="q-level">Nivel 2 â€” AplicaciÃ³n</p>
-    <p class="question">P2: Â¿CÃ³mo evitar eliminar un cliente que tiene pedidos?</p>
-    <p class="answer">R2: Usar ON DELETE RESTRICT en la FK</p>
-
-    <p class="q-level">Nivel 3 â€” AnÃ¡lisis</p>
-    <p class="question">P3: Â¿QuÃ© pasa si intentas insertar un valor duplicado en un campo UNIQUE?</p>
-    <p class="answer">R3: Error de violaciÃ³n de constraint - la operaciÃ³n se rechaza</p>
-</div>
-
-<nav class="nav">
-    <a href="semana_03.html">â† Semana 03</a>
-    <a href="semana_05.html">Semana 05 â†’</a>
-</nav>
-
-<div class="final-section">
-    <div class="conceptual-map">
-        <h3>Mapa Mental</h3>
-        <div class="mindmap-container">
-            <div class="mindmap-central">LENGUAJE DDL</div>
-            <div class="mindmap-branch">
-                <div class="node">CREATE
-                    <div class="subnode">TABLE</div>
-                    <div class="subnode">INDEX</div>
-                    <div class="subnode">SEQUENCE</div>
-                </div>
-                <div class="node">ALTER
-                    <div class="subnode">ADD COLUMN</div>
-                    <div class="subnode">ALTER COLUMN</div>
-                    <div class="subnode">DROP COLUMN</div>
-                </div>
-                <div class="node">DROP
-                    <div class="subnode">TABLE</div>
-                    <div class="subnode">CASCADE</div>
-                    <div class="subnode">RESTRICT</div>
-                </div>
-                <div class="node">Constraints
-                    <div class="subnode">PK</div>
-                    <div class="subnode">FK</div>
-                    <div class="subnode">UNIQUE</div>
-                    <div class="subnode">CHECK</div>
-                </div>
-            </div>
+        <h2>2. Actualizaci�n de Datos (UPDATE)</h2>
+        
+        <div class="box box-ejemplo">
+            <p><strong>Sintaxis:</strong></p>
+            <pre style="background: #2c3e50; color: #ecf0f1; padding: 10px; border-radius: 4px;">
+UPDATE tabla
+SET columna1 = nuevo_valor, columna2 = nuevo_valor
+WHERE condici�n;</pre>
         </div>
-    </div>
-    <div class="additional-material">
-        <h3>Material Adicional</h3>
-        <ul>
-            <li><span class="tag">Video</span> <a href="#">DDL PostgreSQL - 25 min</a></li>
-            <li><span class="tag">Docs</span> <a href="#">PostgreSQL CREATE TABLE</a></li>
-            <li><span class="tag">PrÃ¡ctica</span> <a href="#">Ejercicios DDL</a></li>
-        </ul>
+
+        <h3>Ejemplos:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Actualizar un campo espec�fico
+UPDATE cliente
+SET telefono = '01-4367788'
+WHERE id_cliente = 1;
+
+-- Actualizar m�ltiples campos
+UPDATE producto
+SET precio = precio * 1.10, stock = stock - 5
+WHERE id_producto = 10;
+
+-- Actualizar con c�lculo
+UPDATE orden_pedido
+SET numero_embarques = numero_embarques + 1
+WHERE estado = 'pendiente';</pre>
+
+        <div class="box box-warning">
+            <p><strong>?? Peligro:</strong> Si omites el WHERE, se actualizan TODAS las filas. Siempre prueba con SELECT primero:</p>
+            <pre style="background: #f8f9fa; padding: 10px;">SELECT * FROM tabla WHERE condici�n;  -- verificar primero
+UPDATE tabla SET ... WHERE condici�n;  -- luego actualizar</pre>
+        </div>
+
+        <h2>3. Eliminaci�n de Datos (DELETE)</h2>
+        
+        <div class="box box-ejemplo">
+            <p><strong>Sintaxis:</strong></p>
+            <pre style="background: #2c3e50; color: #ecf0f1; padding: 10px; border-radius: 4px;">
+DELETE FROM tabla
+WHERE condici�n;</pre>
+        </div>
+
+        <h3>Ejemplos:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Eliminar un registro espec�fico
+DELETE FROM orden_pedido
+WHERE numero_orden = 555;
+
+-- Eliminar varios registros
+DELETE FROM cliente
+WHERE tipo = 'INACTIVO' AND fecha_registro < '2020-01-01';
+
+-- Eliminar todos los registros (�cuidado!)
+DELETE FROM tabla_temp;  -- elimina todas las filas
+
+-- Usar TRUNCATE (m�s eficiente en PostgreSQL)
+TRUNCATE TABLE tabla_temp RESTART IDENTITY;</pre>
+
+        <h2>4. Consulta de Datos (SELECT)</h2>
+        
+        <h3>Formas b�sicas:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Seleccionar todas las columnas
+SELECT * FROM cliente;
+
+-- Seleccionar columnas espec�ficas
+SELECT nombre, apellido, email FROM cliente;
+
+-- Usar alias
+SELECT nombre AS "Nombre del Cliente", 
+       precio AS "Precio Unitario"
+FROM producto;
+
+-- DISTINCT: valores �nicos
+SELECT DISTINCT tipo FROM cliente;
+
+-- ORDER BY: ordenar resultados
+SELECT * FROM producto
+ORDER BY precio DESC;  -- DESC = descendente
+
+SELECT * FROM cliente
+ORDER BY apellido ASC, nombre ASC;  -- m�ltiples criterios</pre>
+
+        <h2>5. Filtrado con WHERE</h2>
+        
+        <table>
+            <tr><th>Operador</th><th>Descripci�n</th></tr>
+            <tr><td>=</td><td>Igual a</td></tr>
+            <tr><td><> o !=</td><td>Diferente de</td></tr>
+            <tr><td>> &lt;</td><td>Mayor/Menor que</td></tr>
+            <tr><td>>= &lt;=</td><td>Mayor/Menor o igual</td></tr>
+            <tr><td>BETWEEN</td><td>Entre rango (inclusive)</td></tr>
+            <tr><td>LIKE</td><td>Patr�n de texto</td></tr>
+            <tr><td>IN</td><td>Est� en lista</td></tr>
+            <tr><td>IS NULL / IS NOT NULL</td><td>Verificar nulos</td></tr>
+        </table>
+
+        <h3>Ejemplos de WHERE:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Filtrar por igualdad
+SELECT * FROM producto WHERE precio = 100;
+
+-- Filtrar por rango
+SELECT * FROM producto 
+WHERE precio BETWEEN 50 AND 200;
+
+-- Patrones con LIKE
+SELECT * FROM cliente 
+WHERE nombre LIKE 'J%';  -- comienza con J
+
+SELECT * FROM producto 
+WHERE nombre LIKE '%lap%';  -- contiene "lap"
+
+-- Lista con IN
+SELECT * FROM cliente 
+WHERE tipo IN ('PREMIUM', 'VIP');
+
+-- Verificar nulos
+SELECT * FROM cliente 
+WHERE email IS NOT NULL;
+
+-- Combinaciones AND/OR
+SELECT * FROM producto
+WHERE precio > 100 AND stock > 0;</pre>
+
+        <div class="box box-concep">
+            <p><strong>Operador LIKE:</strong> % = cualquier??, _ = un caracter. Ej: 'J__n' = nombres de 4 letras starting con J.</p>
+        </div>
+
+        <hr>
+
+        <section class="laboratorio">
+            <h3>?? Laboratorio: DML Pr�ctico</h3>
+            <p>Para la BD de tienda, ejecuta:</p>
+            <ol style="margin-left: 20px;">
+                <li>Inserta 3 clientes nuevos</li>
+                <li>Inserta 5 productos con precios diferentes</li>
+                <li>Actualiza el precio de un producto espec�fico</li>
+                <li>Lista todos los productos que cuestan m�s de 50</li>
+                <li>Lista clientes ordenados por nombre</li>
+                <li>Elimina un cliente que no tenga pedidos</li>
+            </ol>
+        </section>
+
     </div>
 </div>
 
 </body>
 </html>
+
+
+

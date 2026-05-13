@@ -1,156 +1,214 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
+<head><link rel="stylesheet" href="master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 15 - Seguridad y Gesti√É¬≥n</title>
-    <link rel="stylesheet" href="estilo-cornell.css">
-<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
+    <title>Semana 15 - TÛpicos Avanzados de Base de Datos</title>
+    
+    
+</head>
 <body>
 
 <div class="header-box">
-    <h1>Seguridad y Gesti√É¬≥n</h1>
-    <p>Semana 15 | Usuarios, Roles, Permisos, RLS</p>
+    <h1>TÛpicos Avanzados de Base de Datos</h1>
+    <p>Semana 15 | IngenierÌa de Datos | ULima 2013-2</p>
 </div>
 
 <div class="cornell-container">
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>√Ç¬ß CREATE ROLE</strong><br>Crear rol</li>
-            <li><strong>√Ç¬ß GRANT</strong><br>Otorgar permisos</li>
-            <li><strong>√Ç¬ß REVOKE</strong><br>Quitar permisos</li>
-            <li><strong>√Ç¬ß RLS</strong><br>Row Level Security</li>
-            <li><strong>√Ç¬ß Ownership</strong><br>Propiedad</li>
-            <li><strong>√Ç¬ß pg_hba.conf</strong><br>Autenticaci√É¬≥n</li>
+            <li><strong>ß Replication</strong><br>ReplicaciÛn de datos</li>
+            <li><strong>ß Partitioning</strong><br>Particionamiento</li>
+            <li><strong>ß Indexing</strong><br>Õndices especializados</li>
+            <li><strong>ß Security</strong><br>Seguridad en BD</li>
+            <li><strong>ß NoSQL</strong><br>Bases de datos NoSQL</li>
+            <li><strong>ß NewSQL</strong><br>Nuevas bases SQL</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
-            <ul><li><a href="index.html">√∞≈∏¬è¬† √É¬çndice</a></li></ul>
+            <ul>
+                <li><a href="index.html">?? Õndice del Curso</a></li>
+                <li><a href="semana_14.html">? Semana 14</a></li>
+                <li><a href="semana_16.html">? Semana 16: EXAMEN FINAL</a></li>
+            </ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>√∞≈∏‚Äú≈í Objetivos:</strong> Crear usuarios/roles, gestionar permisos, implementar seguridad a nivel de fila.</p>
+            <p><strong>?? Objetivos de Aprendizaje</strong></p>
+            <ul style="margin: 8px 0 0 20px;">
+                <li>Comprender replicaciÛn de bases de datos</li>
+                <li>Entender particionamiento de tablas</li>
+                <li>Conocer tipos de Ìndices y cu·ndo usarlos</li>
+                <li>Explorar bases de datos NoSQL</li>
+                <li>Comprender tendencias modernas en BD</li>
+            </ul>
         </div>
 
-        <h2>1. Roles y Usuarios</h2>
+        <section class="architect-insight">
+            <h4>?? Insight del Arquitecto: El Futuro de las BD</h4>
+            <p><strong>El panorama en 2026:</strong> Ya no hay una soluciÛn ˙nica. El enfoque polÌglota de persistencia (polyglot persistence) es la norma. Las organizaciones usan m˙ltiples tipos de BD seg˙n el caso de uso: PostgreSQL/MySQL para transaccional, MongoDB/Cassandra para documentos y datos masivos, Redis para cachÈ, Elastic para b˙squeda.</p>
+        </section>
+
+        <h2>1. ReplicaciÛn de Bases de Datos</h2>
         
-        <pre>-- Crear rol (sin login)
-CREATE ROLE analyst;
-CREATE ROLE developer;
-
--- Crear usuario (con login)
-CREATE USER juan WITH PASSWORD 'secret123';
-CREATE USER maria LOGIN PASSWORD 'pass456';
-
--- Modificar rol
-ALTER ROLE juan WITH SUPERUSER;
-ALTER ROLE developer SET default_transaction_isolation = 'read committed';
-
--- Eliminar
-DROP ROLE analyst;
-DROP USER juan;</pre>
-
-        <h2>2. Permisos con GRANT/REVOKE</h2>
-        
-        <pre>-- Permisos en tabla
-GRANT SELECT ON empleados TO analyst;
-GRANT SELECT, INSERT, UPDATE ON empleados TO developer;
-GRANT ALL ON empleados TO admin;
-
--- Permisos en esquema
-GRANT USAGE ON SCHEMA public TO analyst;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO developer;
-
--- Permisos en funciones
-GRANT EXECUTE ON FUNCTION calculate_bonus() TO developer;
-
--- Quitar permisos
-REVOKE INSERT ON empleados FROM developer;</pre>
-
-        <h2>3. Row Level Security (RLS)</h2>
-        
-        <pre>-- Habilitar RLS en tabla
-ALTER TABLE pedidos ENABLE ROW LEVEL SECURITY;
-
--- Pol√É¬≠tica: usuarios ven solo sus pedidos
-CREATE POLICY mis_pedidos ON pedidos
-    USING (id_cliente = current_user);
-
--- Pol√É¬≠tica por rol
-CREATE POLICY pedidos_gerente ON pedidos
-    FOR ALL
-    USING (
-        EXISTS (
-            SELECT 1 FROM usuarios_roles
-            WHERE usuario = current_user AND rol = 'gerente'
-        )
-    );</pre>
-
-        <h2>4. Esquemas</h2>
-        
-        <pre>-- Crear esquema
-CREATE SCHEMA ventas;
-
--- Mover tabla a esquema
-ALTER TABLE pedidos SET SCHEMA ventas;
-
--- Acceso a esquema
-GRANT USAGE ON SCHEMA ventas TO analyst;</pre>
-
         <div class="box box-concep">
-            <p><strong>√∞≈∏‚Äú¬ù Resumen:</strong> Los roles agrup permisos. GRANT concede acceso, REVOKE lo elimina. RLS filtra filas por usuario. PostgreSQL usa autenticaci√É¬≥n v√É¬≠a pg_hba.conf y roles con LOGIN.</p>
+            <p><strong>ReplicaciÛn:</strong> Proceso de copiar y mantener datos en m˙ltiples servidores para redundancia y rendimiento.</p>
         </div>
-    </div>
-</div>
 
-<div class="section-box">
-    <h2>EJERCICIO</h2>
-    <p class="question">Crear usuario 'lectura' que solo pueda SELECT en todas las tablas.</p>
-    <p class="answer">
-    <pre>CREATE USER lectura WITH PASSWORD 'readonly';
-GRANT CONNECT ON DATABASE mi_db TO lectura;
-GRANT USAGE ON SCHEMA public TO lectura;
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO lectura;</pre>
-    </p>
-</div>
+        <h3>Tipos de ReplicaciÛn:</h3>
+        <table>
+            <tr><th>Tipo</th><th>DescripciÛn</th></tr>
+            <tr><td><strong>Maestro-Esclavo</strong></td><td>1 maestro escribe, m˙ltiples esclavos leen</td></tr>
+            <tr><td><strong>Maestro-Maestro</strong></td><td>M˙ltiples maestros permiten escritura</td></tr>
+            <tr><td><strong>SÌncrona</strong></td><td>Confirma escritura en todos los nodos</td></tr>
+            <tr><td><strong>AsÌncrona</strong></td><td>Confirma escritura local, replica despuÈs</td></tr>
+        </table>
 
-<nav class="nav">
-    <a href="semana_14.html">√¢‚Ä†¬ê Semana 14</a>
-    <a href="semana_16.html">Semana 16 √¢‚Ä†‚Äô</a>
-</nav>
+        <h3>En PostgreSQL:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- ReplicaciÛn lÛgica (PostgreSQL 10+)
+-- Permite replicar a diferentes versiones
 
-<div class="final-section">
-    <div class="conceptual-map">
-        <h3>Mapa Mental</h3>
-        <div class="mindmap-container">
-            <div class="mindmap-central">SEGURIDAD Y GESTI√É‚ÄúN</div>
-            <div class="mindmap-branch">
-                <div class="node">Roles
-                    <div class="subnode">CREATE ROLE</div>
-                    <div class="subnode">CREATE USER</div>
-                    <div class="subnode">ALTER/DROP</div>
-                </div>
-                <div class="node">Permisos
-                    <div class="subnode">GRANT</div>
-                    <div class="subnode">REVOKE</div>
-                    <div class="subnode">ALL</div>
-                </div>
-                <div class="node">RLS
-                    <div class="subnode">ENABLE</div>
-                    <div class="subnode">POLICY</div>
-                    <div class="subnode">USING</div>
-                </div>
-            </div>
+-- ReplicaciÛn fÌsica
+-- Copia exacta del cluster
+
+-- Streaming Replication
+-- Replication slots, WAL shipping</pre>
+
+        <h2>2. Particionamiento de Tablas</h2>
+        
+        <div class="box box-ejemplo">
+            <p><strong>Partitioning:</strong> Dividir una tabla grande en partes m·s pequeÒas (particiones) que se pueden gestionar independientemente.</p>
         </div>
-    </div>
-    <div class="additional-material">
-        <h3>Material</h3>
-        <ul><li><span class="tag">Docs</span> <a href="#">Security</a></li></ul>
+
+        <h3>Tipos de Particionamiento:</h3>
+        <ul>
+            <li><strong>Por Rango (Range):</strong> Por intervalos de valores (ej: por fecha)</li>
+            <li><strong>Por Lista (List):</strong> Por valores especÌficos (ej: por regiÛn)</li>
+            <li><strong>Por Hash (Hash):</strong> DistribuciÛn uniforme</li>
+        </ul>
+
+        <h3>Ejemplo en PostgreSQL:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Particionar tabla de pedidos por fecha
+CREATE TABLE pedido (
+    id SERIAL,
+    fecha DATE NOT NULL,
+    cliente_id INTEGER,
+    total NUMERIC
+) PARTITION BY RANGE (fecha);
+
+-- Crear particiones
+CREATE TABLE pedido_2024 PARTITION OF pedido
+    FOR VALUES FROM ('2024-01-01') TO ('2025-01-01');
+
+CREATE TABLE pedido_2025 PARTITION OF pedido
+    FOR VALUES FROM ('2025-01-01') TO ('2026-01-01');</pre>
+
+        <h2>3. Õndices Especializados</h2>
+        
+        <table>
+            <tr><th>Tipo de Õndice</th><th>Uso</th></tr>
+            <tr><td><strong>B-Tree</strong></td><td>General, equality, range queries (default)</td></tr>
+            <tr><td><strong>GiST</strong></td><td> Datos geomÈtricos, texto completo</td></tr>
+            <tr><td><strong>GIN</strong></td><td>Õndice invertido, arrays, JSONB, texto</td></tr>
+            <tr><td><strong>BRIN</strong><td>Datos secuenciales, time series</td></tr>
+            <tr><td><strong>Hash</strong></td><td>Equality simple (no para range)</td></tr>
+        </table>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Õndice GIN para b˙squeda de texto
+CREATE INDEX idx_producto_nombre_gin 
+    ON producto USING gin(to_tsvector('spanish', nombre));
+
+-- Õndice para JSONB
+CREATE INDEX idx_datos_jsonb 
+    ON orders USING gin(datos);
+
+-- Õndice compuesto
+CREATE INDEX idx_venta_fecha_producto 
+    ON venta(fecha, producto_id);</pre>
+
+        <h2>4. Seguridad en Bases de Datos</h2>
+        
+        <ul>
+            <li><strong>Control de Acceso:</strong> Roles, permisos GRANT/REVOKE</li>
+            <li><strong>EncriptaciÛn:</strong> En tr·nsito (SSL/TLS), en disco (PGP)</li>
+            <li><strong>Row Level Security (RLS):</strong> Filtrar filas por usuario</li>
+            <li><strong>AuditorÌa:</strong> Logs de acceso y modificaciones</li>
+            <li><strong>Backup encriptado:</strong> Proteger respaldos</li>
+        </ul>
+
+        <h3>RLS en PostgreSQL:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Habilitar RLS en tabla
+ALTER TABLE pedido ENABLE ROW LEVEL SECURITY;
+
+-- PolÌtica: cada cliente ve solo sus pedidos
+CREATE POLICY ver_propio_pedido ON pedido
+    FOR SELECT
+    USING (cliente_id = current_user);</pre>
+
+        <h2>5. Bases de Datos NoSQL</h2>
+        
+        <table>
+            <tr><th>Tipo</th><th>Ejemplos</th><th>Uso Ideal</th></tr>
+            <tr><td>Documentos</td><td>MongoDB, CouchDB</td><td>Cat·logos, contenido flexible</td></tr>
+            <tr><td>Clave-Valor</td><td>Redis, DynamoDB</td><td>Cache, sesiones</td></tr>
+            <tr><td>Familia de Columnas</td><td>Cassandra, HBase</td><td>Escritura masiva, time series</td></tr>
+            <tr><td>Grafos</td><td>Neo4j</td><td>Redes, recomendaciones</td></tr>
+        </table>
+
+        <h3>CaracterÌsticas NoSQL:</h3>
+        <ul>
+            <li>Esquema flexible (schemaless)</li>
+            <li>Escalabilidad horizontal f·cil</li>
+            <li>Consistencia eventual (BASE vs ACID)</li>
+            <li>Alta disponibilidad</li>
+        </ul>
+
+        <h2>6. NewSQL yTendencias Modernas</h2>
+        
+        <ul>
+            <li><strong>NewSQL:</strong> Combina ACID de RDBMS con escalabilidad de NoSQL
+                <br><em>Ej: CockroachDB, TiDB, Google Spanner</em></li>
+            <li><strong>HTAP:</strong> Hybrid Transactional/Analytical Processing
+                <br><em>Ej: SingleStore, Apache Druid</em></li>
+            <li><strong>Vector Databases:</strong> Para ML e IA
+                <br><em>Ej: Pinecone, Milvus, pgvector</em></li>
+            <li><strong>Time Series:</strong> IoT, mÈtricas
+                <br><em>Ej: TimescaleDB, InfluxDB</em></li>
+        </ul>
+
+        <h2>7. PostgreSQL Moderno (v15+)</h2>
+        
+        <ul>
+            <li>ReplicaciÛn lÛgica a nivel de tabla</li>
+            <li>Parallel queries mejoradas</li>
+            <li>JSON path m·s r·pido</li>
+            <li>pg_stat_statements para monitoreo</li>
+            <li>Extension <strong>pgvector</strong> para embeddings</li>
+        </ul>
+
+        <hr>
+
+        <section class="laboratorio">
+            <h3>?? Laboratorio: InvestigaciÛn</h3>
+            <ol style="margin-left: 20px;">
+                <li>Investiga un caso de uso donde usarÌas una base de datos NoSQL vs relacional</li>
+                <li>øCu·ndo conviene usar particionamiento vs replicaciÛn?</li>
+                <li>øCÛmo implementarÌas seguridad a nivel de fila en PostgreSQL?</li>
+            </ol>
+        </section>
+
     </div>
 </div>
 
 </body>
 </html>
+
+
+

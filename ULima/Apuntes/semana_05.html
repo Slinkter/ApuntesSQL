@@ -1,198 +1,256 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
+<head><link rel="stylesheet" href="master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 05 - DML y Consultas BÃ¡sicas</title>
-    <link rel="stylesheet" href="estilo-cornell.css">
-<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
+    <title>Semana 05 - Funciones SQL y M�s Consultas</title>
+    
+    
+</head>
 <body>
 
 <div class="header-box">
-    <h1>DML y Consultas BÃ¡sicas</h1>
-    <p>Semana 05 | INSERT, UPDATE, DELETE, SELECT</p>
+    <h1>Funciones SQL y Consultas Avanzadas</h1>
+    <p>Semana 05 | Ingenier�a de Datos | ULima 2013-2</p>
 </div>
 
 <div class="cornell-container">
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>Â§ INSERT</strong><br>AÃ±adir filas</li>
-            <li><strong>Â§ UPDATE</strong><br>Modificar datos</li>
-            <li><strong>Â§ DELETE</strong><br>Eliminar filas</li>
-            <li><strong>Â§ SELECT</strong><br>Consultar datos</li>
-            <li><strong>Â§ WHERE</strong><br>Filtrar condiciones</li>
-            <li><strong>Â§ DISTINCT</strong><br>Valores Ãºnicos</li>
+            <li><strong>� Funciones</strong><br>Agregaci�n, fecha, texto</li>
+            <li><strong>� COUNT/SUM/AVG</strong><br>Funciones de grupo</li>
+            <li><strong>� GROUP BY</strong><br>Agrupar resultados</li>
+            <li><strong>� HAVING</strong><br>Filtrar grupos</li>
+            <li><strong>� LIKE/IN/BETWEEN</strong><br>Filtros avanzados</li>
+            <li><strong>� CASE</strong><br>Condicionales</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
             <ul>
-                <li><a href="index.html">ðŸ  Ãndice del Curso</a></li>
+                <li><a href="index.html">?? �ndice del Curso</a></li>
+                <li><a href="semana_04.html">? Semana 04</a></li>
+                <li><a href="semana_06.html">? Semana 06</a></li>
             </ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>ðŸ“Œ Objetivos de Aprendizaje</strong></p>
+            <p><strong>?? Objetivos de Aprendizaje</strong></p>
             <ul style="margin: 8px 0 0 20px;">
-                <li>Insertar, actualizar y eliminar datos</li>
-                <li>Consultar datos con SELECT</li>
-                <li>Filtrar con WHERE y operadores</li>
-                <li>Comprender la importancia del WHERE en UPDATE/DELETE</li>
+                <li>Utilizar funciones de agregaci�n</li>
+                <li>Agrupar datos con GROUP BY</li>
+                <li>Filtrar grupos con HAVING</li>
+                <li>Usar funciones de fecha y texto</li>
+                <li>Crear expresiones condicionales con CASE</li>
             </ul>
         </div>
 
-        <h2>1. DML - Lenguaje de ManipulaciÃ³n de Datos</h2>
-        
-        <ul>
-            <li><strong>INSERT:</strong> AÃ±ade nuevas filas a una tabla</li>
-            <li><strong>UPDATE:</strong> Modifica valores de filas existentes</li>
-            <li><strong>DELETE:</strong> Elimina filas de una tabla</li>
-            <li><strong>SELECT:</strong> Consulta y recupera datos</li>
-        </ul>
+        <section class="architect-insight">
+            <h4>?? Insight del Arquitecto: Funciones en PostgreSQL</h4>
+            <p><strong>PostgreSQL tiene funciones integradas poderosas:</strong></p>
+            <ul>
+                <li><code>COALESCE(valor, valor_defecto)</code> - maneja nulos elegantemente</li>
+                <li><code>NULLIF(a, b)</code> - retorna null si a = b, �til para evitar divisi�n por cero</li>
+                <li><code>GREATEST(a, b, ...)</code> - retorna el mayor</li>
+                <li><code>LEAST(a, b, ...)</code> - retorna el menor</li>
+            </ul>
+        </section>
 
-        <h2>2. INSERT - AÃ±adir Datos</h2>
-        
-        <pre>-- Insertar fila especÃ­fica
-INSERT INTO empleados (id, nombre, departamento, salario)
-VALUES (1, 'Ana GarcÃ­a', 'Ventas', 50000);
-
--- Insertar mÃºltiples filas
-INSERT INTO empleados VALUES 
-(2, 'Luis PÃ©rez', 'Marketing', 55000),
-(3, 'Marta SÃ¡nchez', 'Ventas', 52000);</pre>
-
-        <h2>3. UPDATE - Modificar Datos</h2>
-        
-        <pre>-- Actualizar un registro
-UPDATE empleados
-SET salario = 53000
-WHERE id = 1;
-
--- Actualizar mÃºltiples campos
-UPDATE empleados
-SET departamento = 'Desarrollo', salario = 63000
-WHERE id = 4;</pre>
-
-        <div class="box box-warning">
-            <p><strong>âš ï¸ Regla de Oro:</strong> SIEMPRE usa WHERE en UPDATE y DELETE. Sin ella, modificarÃ¡s/eliminarÃ¡s TODAS las filas.</p>
-        </div>
-
-        <h2>4. DELETE - Eliminar Datos</h2>
-        
-        <pre>-- Eliminar un registro
-DELETE FROM empleados WHERE id = 2;
-
--- Eliminar varios con condiciÃ³n
-DELETE FROM empleados WHERE departamento = 'Marketing';</pre>
-
-        <h2>5. SELECT - Consultar Datos</h2>
-        
-        <pre>-- Ver todas las columnas
-SELECT * FROM empleados;
-
--- Ver columnas especÃ­ficas
-SELECT nombre, departamento, salario FROM empleados;
-
--- Valores Ãºnicos (sin duplicados)
-SELECT DISTINCT departamento FROM empleados;
-
--- Filtrar con WHERE
-SELECT * FROM empleados WHERE departamento = 'Ventas';
-
--- Operadores de comparaciÃ³n
-SELECT * FROM empleados WHERE salario > 55000;</pre>
-
-        <h2>6. Operadores en WHERE</h2>
+        <h2>1. Funciones de Agregaci�n</h2>
+        <span class="timestamp">COUNT, SUM, AVG, MIN, MAX</span>
         
         <table>
-            <tr><th>Operador</th><th>DescripciÃ³n</th><th>Ejemplo</th></tr>
-            <tr><td>=</td><td>Igual a</td><td>departamento = 'Ventas'</td></tr>
-            <tr><td><> o !=</td><td>Diferente</td><td>departamento <> 'TI'</td></tr>
-            <tr><td>>, <</td><td>Mayor/Menor</td><td>salario > 50000</td></tr>
-            <tr><td>AND</td><td>Y lÃ³gico</td><td>dept='Ventas' AND sal>50000</td></tr>
-            <tr><td>OR</td><td>O lÃ³gico</td><td>dept='Ventas' OR dept='TI'</td></tr>
-            <tr><td>BETWEEN</td><td>Entre rango</td><td>salario BETWEEN 40000 AND 60000</td></tr>
-            <tr><td>IN</td><td>En conjunto</td><td>dept IN ('Ventas','TI')</td></tr>
-            <tr><td>LIKE</td><td>PatrÃ³n texto</td><td>nombre LIKE 'A%'</td></tr>
-            <tr><td>IS NULL</td><td>Es nulo</td><td>email IS NULL</td></tr>
+            <tr><th>Funci�n</th><th>Descripci�n</th><th>Ejemplo</th></tr>
+            <tr><td>COUNT(*)</td><td>Cuenta todas las filas</td><td>COUNT(*) = 100</td></tr>
+            <tr><td>COUNT(columna)</td><td>Cuenta no nulos</td><td>COUNT(email) = 85</td></tr>
+            <tr><td>SUM(columna)</td><td>Suma valores</td><td>SUM(precio) = 15000</td></tr>
+            <tr><td>AVG(columna)</td><td>Promedio</td><td>AVG(edad) = 28.5</td></tr>
+            <tr><td>MIN(columna)</td><td>M�nimo</td><td>MIN(precio) = 10</td></tr>
+            <tr><td>MAX(columna)</td><td>M�ximo</td><td>MAX(precio) = 5000</td></tr>
         </table>
 
+        <h3>Ejemplos:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Contar total de registros
+SELECT COUNT(*) FROM cliente;
+
+-- Contar valores �nicos
+SELECT COUNT(DISTINCT tipo) FROM cliente;
+
+-- Sumar precios
+SELECT SUM(precio) FROM producto;
+
+-- Promedio de stock
+SELECT AVG(stock) FROM producto;
+
+-- Valores extremos
+SELECT MIN(precio), MAX(precio) FROM producto;
+
+-- M�ltiples funciones
+SELECT 
+    COUNT(*) AS total_productos,
+    SUM(stock) AS stock_total,
+    AVG(precio) AS precio_promedio
+FROM producto;</pre>
+
+        <h2>2. La cl�usula GROUP BY</h2>
+        
+        <div class="box box-ejemplo">
+            <p><strong>GROUP BY:</strong> Agrupa filas con valores iguales para aplicar funciones de agregaci�n.</p>
+        </div>
+
+        <h3>Ejemplos:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Contar clientes por tipo
+SELECT tipo, COUNT(*) AS cantidad
+FROM cliente
+GROUP BY tipo;
+
+-- Ventas por producto
+SELECT id_producto, SUM(cantidad) AS total_vendido
+FROM detalle_pedido
+GROUP BY id_producto;
+
+-- Promedio de precio por categor�a
+SELECT categoria, AVG(precio) AS precio_promedio
+FROM producto
+GROUP BY categoria
+ORDER BY precio_promedio DESC;
+
+-- M�ltiples columnas en GROUP BY
+SELECT categoria, proveedor, COUNT(*) AS productos
+FROM producto
+GROUP BY categoria, proveedor;</pre>
+
+        <div class="box box-warning">
+            <p><strong>Regla:</strong> Toda columna en el SELECT que NO es funci�n de agregaci�n DEBE estar en el GROUP BY.</p>
+        </div>
+
+        <h2>3. La cl�usula HAVING</h2>
+        
         <div class="box box-concep">
-            <p><strong>ðŸ“ Resumen:</strong> DML permite manipular los datos de la tabla. INSERT aÃ±ade filas, UPDATE modifica valores, DELETE elimina filas, y SELECT recupera informaciÃ³n. El WHERE es crucial para especificar quÃ© filas afectan las operaciones.</p>
+            <p><strong>HAVING:</strong> Filtra grupos despu�s de GROUP BY (equivale a WHERE pero para grupos).</p>
         </div>
-    </div>
-</div>
 
-<div class="section-box">
-    <h2>EJERCICIO RESUELTO</h2>
-    <p class="question">Enunciado:</p>
-    <p>Dada la tabla EMPLEADOS, realizar: a) Insertar nuevo empleado, b) Aumentar 10% a empleados de Ventas, c) Mostrar nombre y salario de quienes ganan > 55000 o son de TI</p>
-    
-    <p class="answer">
-    <strong>SoluciÃ³n:</strong><br>
-    a) INSERT INTO empleados (nombre, departamento, salario) VALUES ('Juan', 'Contabilidad', 45000);<br>
-    b) UPDATE empleados SET salario = salario * 1.10 WHERE departamento = 'Ventas';<br>
-    c) SELECT nombre, salario FROM empleados WHERE salario > 55000 OR departamento = 'TI';
-    </p>
-</div>
+        <h3>Ejemplos:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Productos con m�s de 5 unidades vendidas
+SELECT id_producto, SUM(cantidad) AS total
+FROM detalle_pedido
+GROUP BY id_producto
+HAVING SUM(cantidad) > 5;
 
-<div class="section-box">
-    <h2>QUIZ DE REPASO</h2>
-    
-    <p class="q-level">Nivel 1</p>
-    <p class="question">P1: Â¿QuÃ© comando aÃ±ade filas a una tabla?</p>
-    <p class="answer">R1: INSERT</p>
+-- Clientes con m�s de 3 pedidos
+SELECT id_cliente, COUNT(*) AS num_pedidos
+FROM orden_pedido
+GROUP BY id_cliente
+HAVING COUNT(*) > 3
+ORDER BY num_pedidos DESC;
 
-    <p class="q-level">Nivel 2</p>
-    <p class="question">P2: Â¿QuÃ© sucede si ejecutas UPDATE sin WHERE?</p>
-    <p class="answer">R2: Actualiza TODAS las filas de la tabla</p>
+-- Diferencia WHERE vs HAVING
+SELECT categoria, AVG(precio) AS promedio
+FROM producto
+WHERE activo = TRUE          -- filtra FILAS antes de agrupar
+GROUP BY categoria
+HAVING AVG(precio) > 100;    -- filtra GRUPOS despu�s de agregar</pre>
 
-    <p class="q-level">Nivel 3</p>
-    <p class="question">P3: Â¿Para quÃ© sirve DISTINCT?</p>
-    <p class="answer">R3: Elimina valores duplicados del resultado</p>
-</div>
+        <h2>4. Funciones de Fecha</h2>
+        
+        <table>
+            <tr><th>Funci�n</th><th>Descripci�n</th><th>Ejemplo</th></tr>
+            <tr><td>CURRENT_DATE</td><td>Fecha actual</td><td>2026-05-13</td></tr>
+            <tr><td>CURRENT_TIMESTAMP</td><td>Fecha y hora</td><td>2026-05-13 10:30:00</td></tr>
+            <tr><td>EXTRACT(year FROM fecha)</td><td>Extraer componente</td><td>2026</td></tr>
+            <tr><td>AGE(fecha)</td><td>Diferencia de tiempo</td><td>2 years 3 months</td></tr>
+            <tr><td>TO_CHAR(fecha, 'YYYY-MM-DD')</td><td>Formatear</td><td>"2026-05-13"</td></tr>
+        </table>
 
-<nav class="nav">
-    <a href="semana_04.html">â† Semana 04</a>
-    <a href="semana_06.html">Semana 06 â†’</a>
-</nav>
+        <h3>Ejemplos:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Extraer a�o
+SELECT EXTRACT(YEAR FROM fecha_pedido) AS anio
+FROM orden_pedido;
 
-<div class="final-section">
-    <div class="conceptual-map">
-        <h3>Mapa Mental</h3>
-        <div class="mindmap-container">
-            <div class="mindmap-central">DML - MANIPULACIÃ“N DE DATOS</div>
-            <div class="mindmap-branch">
-                <div class="node">INSERT
-                    <div class="subnode">VALUES</div>
-                    <div class="subnode">MÃºltiples filas</div>
-                </div>
-                <div class="node">UPDATE
-                    <div class="subnode">SET</div>
-                    <div class="subnode">WHERE</div>
-                </div>
-                <div class="node">DELETE
-                    <div class="subnode">FROM</div>
-                    <div class="subnode">WHERE</div>
-                </div>
-                <div class="node">SELECT
-                    <div class="subnode">DISTINCT</div>
-                    <div class="subnode">WHERE</div>
-                    <div class="subnode">ORDER BY</div>
-                </div>
-            </div>
+-- Filtrar por mes
+SELECT * FROM orden_pedido
+WHERE EXTRACT(MONTH FROM fecha_pedido) = 5;
+
+-- Diferencia de fechas
+SELECT AGE(CURRENT_DATE, fecha_nacimiento) AS edad
+FROM empleado;
+
+-- Formatear fecha
+SELECT TO_CHAR(fecha_pedido, 'DD/MM/YYYY') AS fecha_formateada
+FROM orden_pedido;</pre>
+
+        <h2>5. Funciones de Texto</h2>
+        
+        <table>
+            <tr><th>Funci�n</th><th>Descripci�n</th><th>Ejemplo</th></tr>
+            <tr><td>LENGTH(cadena)</td><td>Longitud</td><td>LENGTH('Hola') = 4</td></tr>
+            <tr><td>UPPER(cadena)</td><td>May�sculas</td><td>UPPER('hola') = 'HOLA'</td></tr>
+            <tr><td>LOWER(cadena)</td><td>Min�sculas</td><td>LOWER('HOLA') = 'hola'</td></tr>
+            <tr><td>TRIM(cadena)</td><td>Quitar espacios</td><td>TRIM(' hola ') = 'hola'</td></tr>
+            <tr><td>SUBSTRING(cadena, inicio, largo)</td><td>Subcadena</td><td>SUBSTR('Hola',1,2) = 'Ho'</td></tr>
+            <tr><td>CONCAT(c1, c2, ...)</td><td>Concatenar</td><td>CONCAT('A','B') = 'AB'</td></tr>
+            <tr><td>REPLACE(cadena, buscar, replace)</td><td>Reemplazar</td><td>REPLACE('A-B','-',':') = 'A:B'</td></tr>
+        </table>
+
+        <h2>6. Expresiones Condicionales (CASE)</h2>
+        
+        <div class="box box-ejemplo">
+            <p><strong>CASE:</strong> Equivalente al IF-THEN-ELSE en SQL.</p>
         </div>
-    </div>
-    <div class="additional-material">
-        <h3>Material Adicional</h3>
-        <ul>
-            <li><span class="tag">Video</span> <a href="#">DML bÃ¡sico - 20 min</a></li>
-            <li><span class="tag">PrÃ¡ctica</span> <a href="#">Ejercicios SELECT</a></li>
-        </ul>
+
+        <h3>Ejemplos:</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- CASE simple
+SELECT nombre,
+    CASE tipo
+        WHEN 'A' THEN 'Premium'
+        WHEN 'B' THEN 'Est�ndar'
+        WHEN 'C' THEN 'B�sico'
+        ELSE 'Otro'
+    END AS categoria
+FROM cliente;
+
+-- CASE con condiciones
+SELECT producto,
+    CASE 
+        WHEN precio > 1000 THEN 'Caro'
+        WHEN precio > 500 THEN 'Medio'
+        ELSE 'Barato'
+    END AS rango_precio
+FROM producto;
+
+-- CASE en agregaci�n
+SELECT 
+    SUM(CASE WHEN estado = 'COMPLETADO' THEN 1 ELSE 0 END) AS completados,
+    SUM(CASE WHEN estado = 'PENDIENTE' THEN 1 ELSE 0 END) AS pendientes
+FROM orden_pedido;</pre>
+
+        <hr>
+
+        <section class="laboratorio">
+            <h3>?? Laboratorio: Funciones de Agregaci�n</h3>
+            <p>Para la BD de tienda, resuelve:</p>
+            <ol style="margin-left: 20px;">
+                <li>�Cu�ntos productos hay en cada categor�a?</li>
+                <li>�Cu�l es el producto m�s caro?</li>
+                <li>�Cu�ntos pedidos se hicieron este mes?</li>
+                <li>Lista categor�as con m�s de 5 productos</li>
+                <li>Muestra los clientes con "Juan" en cualquier parte del nombre</li>
+                <li>Crea una consulta que clasifique clientes por n�mero de pedidos</li>
+            </ol>
+        </section>
+
     </div>
 </div>
 
 </body>
 </html>
+
+
+

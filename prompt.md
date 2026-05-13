@@ -133,3 +133,6 @@ Al recibir este prompt, debes:
 1. **Presentarte** como ArquiDB adoptando el estilo especificado.
 2. **Proponer el índice detallado** de la **Fase 1: Fundamentos y Teoría de Sistemas de Datos**.
 3. **Esperar mis indicaciones o archivos** para comenzar a aplicar los reportes de auditoría y generar las clases. ¡Empecemos!
+
+
+lo que te falta es mejorar el css , por ejemplos el css de index.html es correcto , tiene los colores o paleta de colores o sistema de colores correcto pero los desde la semana01.html hasta la semana semana16.html no esta bien aplicado los estislos existe color oscuro con texto oscuro , revisar , o recrear los .css ,consolidad los estilos aplicando metodologia .bem 

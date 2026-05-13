@@ -1,196 +1,214 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
+<head><link rel="stylesheet" href="master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 02 - Sistema de GestiÃ³n de Base de Datos</title>
-    <link rel="stylesheet" href="estilo-cornell.css">
-<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
+    <title>Semana 02 - Modelo Relacional y DBMS</title>
+    
+</head>
 <body>
 
-<div class="header-box">
-    <h1>Sistema de GestiÃ³n de Base de Datos</h1>
-    <p>Semana 02 | DBMS y Modelo Relacional</p>
-</div>
+<header class="header">
+    <h1 class="header__title">Modelo Relacional y Funciones del DBMS</h1>
+</header>
 
-<div class="cornell-container">
-    
-    <div class="keywords-sidebar">
-        <h3>PALABRAS CLAVE</h3>
-        <ul>
-            <li><strong>Â§ DBMS</strong><br>Software gestor de datos</li>
-            <li><strong>Â§ Arquitectura 3 niveles</strong><br>Interno, Conceptual, Externo</li>
-            <li><strong>Â§ Independencia</strong><br>Datos separados del programa</li>
-            <li><strong>Â§ ACID</strong><br>Atomicidad, Consistencia, Aislamiento, Durabilidad</li>
-            <li><strong>Â§ TransacciÃ³n</strong><br>Unidad lÃ³gica de trabajo</li>
-            <li><strong>Â§ CatÃ¡logo</strong><br>Metadatos del sistema</li>
+<div class="cornell">
+    <aside class="sidebar">
+        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
+        <ul class="sidebar__list">
+            <li class="sidebar__list-item"><strong>§ Modelo Relacional</strong><br>Tablas, filas, columnas</li>
+            <li class="sidebar__list-item"><strong>§ Esquema</strong><br>Interno, conceptual, externo</li>
+            <li class="sidebar__list-item"><strong>§ Independencia</strong><br>Lógica y física de datos</li>
+            <li class="sidebar__list-item"><strong>§ PK/FK</strong><br>Primary Key, Foreign Key</li>
+            <li class="sidebar__list-item"><strong>§ ACID</strong><br>Propiedades de transacción</li>
+            <li class="sidebar__list-item"><strong>§ Optimizador</strong><br>Basado en reglas/costo</li>
         </ul>
-    </div>
+        <div class="sidebar__section">
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__list-item"><a href="index.html">🏠 Índice del Curso</a></li>
+                <li class="sidebar__list-item"><a href="semana_01.html">← Semana 01</a></li>
+                <li class="sidebar__list-item"><a href="semana_03.html">→ Semana 03</a></li>
+            </ul>
+        </div>
+    </aside>
 
-    <div class="main-content">
-        
+    <main class="main">
+        <div class="box box--note">
+            <p class="main__text"><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Comprender la arquitectura de tres niveles de una BD</li>
+                <li class="main__list-item">Explicar el modelo relacional y su terminología</li>
+                <li class="main__list-item">Identificar los componentes del DBMS</li>
+                <li class="main__list-item">Entender las propiedades ACID de las transacciones</li>
+                <li class="main__list-item">Diseñar esquemas de BD usando la metodología Pratt-Adamski</li>
+            </ul>
+        </div>
+
         <section class="architect-insight">
-<h4>💡 Insight del Arquitecto</h4>
-<h1>Clase 1.02: Teoría Relacional Pura y el Fin de los Monolitos</h1>
-<p><strong>Instructor:</strong> Principal Data Architect &amp; Senior DBA</p>
-<h2>1. Teoría de Alto Nivel: Más allá de "Filas y Columnas"</h2>
-<p>Si revisamos el material de 2013, la definición de una Base de Datos Relacional era simple: "Es una colección de relaciones o tablas de dos dimensiones para almacenar información". Aunque útil para empezar, esta definición es peligrosa para un arquitecto moderno.</p>
-<p>Una tabla no es una hoja de Excel. El modelo relacional, formulado por Edgar F. Codd y pulido por <strong>C.J. Date</strong>, está fundamentado en la <strong>Teoría de Conjuntos</strong> y la lógica de predicados de primer orden.</p>
-<ul>
-<li><strong>Tuplas vs. Filas:</strong> En matemáticas puras, un conjunto no tiene un orden inherente. Por eso, en SQL, hablar del "siguiente registro" o "el registro anterior" carece de sentido a menos que impongas un ordenamiento explícito (<code>ORDER BY</code>). Asumir un orden físico es un antipatrón clásico que rompe la integridad relacional.</li>
-<li><strong>El Dominio de los Atributos:</strong> En 2013, un atributo (columna) se definía por su tipo de dato básico (<code>VARCHAR2</code>, <code>NUMBER</code>). En 2026, entendemos que el <em>Dominio</em> de una columna debe ser estrictamente definido (ej. usando de dominios personalizados en PostgreSQL o <code>CHECK</code> constraints) para evitar que un salario sea negativo, mucho antes de que la lógica de aplicación intente insertarlo.</li>
-<li><strong>Normalización Estricta vs. Realidad Distribuida:</strong> En el documento "Normalización de Bases de Datos" antiguo vimos hasta 5 formas normales. En la academia, buscar la 3NF o BCNF es el estándar para evitar anomalías de inserción, actualización y borrado. Sin embargo, en arquitecturas <em>Data Intensive</em> (como menciona <strong>Martin Kleppmann</strong>), los picos o uniones (<em>JOINs</em>) masivos sobre 10 tablas altamente normalizadas hundirán el rendimiento de tu CPU. Hoy, aplicamos normalización para asegurar la integridad transaccional (sistemas OLTP puros), pero aplicamos <strong>desnormalización controlada</strong> (usando vistas materializadas, o tipos compuestos como <code>JSONB</code>) para optimizar rutas críticas de lectura.</li>
-</ul>
-<h2>2. Integración SDLC: Anomalías en Sistemas Concurrentes</h2>
-<p>El problema real de un mal diseño relacional no se ve en un esquema de desarrollo con un solo usuario. Se manifiesta en el caos de la concurrencia.</p>
-<p>Imagina un esquema antiguo donde el <code>precio</code> de un producto se copia en la tabla <code>detalle_orden</code> al momento de la venta, pero también dependemos de un campo total precalculado estáticamente en la tabla <code>orden</code>.</p>
-<ul>
-<li>¿Qué pasa si dos transacciones actualizan el mismo registro casi al mismo tiempo (Lost Updates)? En la actualidad, mitigamos esto a nivel de base de datos usando bloqueos explícitos (<code>SELECT ... FOR UPDATE</code>), control optimista de concurrencia con columnas de versión, o delegando a niveles de aislamiento superiores (<code>REPEATABLE READ</code> o <code>SERIALIZABLE</code> en PostgreSQL).</li>
-<li><strong>El Teorema CAP y PACELC:</strong> En sistemas modernos, tu base de datos probablemente no sea un solo servidor. Tendrás réplicas. El Teorema CAP nos dice que ante una partición de red (P), debes elegir entre Consistencia (C) o Disponibilidad (A). El diseño relacional clásico siempre elige la Consistencia de manera predeterminada. Entender esto te ayuda a justificar por qué una base de datos relacional tradicional puede "caerse" o rechazar escrituras antes que servir datos basura, mientras que un clúster de NoSQL de eventual consistencia seguirá aceptando datos (potencialmente conflictivos).</li>
-</ul>
-<h2>3. Laboratorio Interactivo: El Refactor de la Mueblería</h2>
-<p><strong>El Escenario (Rescatado de la Clase 3 de 2013 - "Modelo de Datos de una Muebleria"):</strong>
-En el antiguo sílabo (Página 16), tenías un diagrama complejo con tablas: <code>orden_pedido</code>, <code>cliente</code>, <code>producto_ordenado</code>, <code>producto</code>, <code>orden_trabajo</code>, <code>linea_orden_trabajo</code>, <code>materia_prima</code>, etc. Todo conectado en una telaraña transaccional monolítica.</p>
-<p>En 1999 o 2013, tener 15 tablas para procesar una venta estaba bien. Pero en 2026, si este sistema está en la Nube y la Mueblería procesa miles de pedidos concurrentes, vas a notar que el <em>lock</em> continuo en la tabla de <code>stock</code> en <code>producto</code> (para actualizar inventario por cada ítem vendido) causará tiempos de espera masivos.</p>
-<hr />
-<h3>Reto de Diseño Moderno (Refactorización)</h3>
-<p>Vamos a analizar un punto crítico de ese modelo de la "Mueblería":</p>
-<ul>
-<li>Tienes la tabla <code>producto</code> con el atributo <code>stock</code> dentro.</li>
-<li>Tienes la tabla <code>producto_ordenado</code> (que es el detalle de la compra).</li>
-</ul>
-<p>Cuando un cliente compra 3 sillas, tu backend actualiza <code>producto_ordenado</code> y, en la misma transacción transaccional, hace un <code>UPDATE producto SET stock = stock - 3 WHERE id_producto = 'SILLA1';</code></p>
-<p><strong>Pregunta del Reto:</strong>
-Miles de usuarios intentan comprar la SILLA1 durante una liquidación el mismo segundo. La sentencia <code>UPDATE producto SET stock...</code> creará un <strong>Row-Level Lock</strong> y todas las transacciones se formarán en una fila secuencial en la base de datos, destruyendo el rendimiento de las ventas.</p>
-<p>Como arquitecto de datos, ¿qué <strong>dos enfoques de diseño a nivel de base de datos</strong> propondrías en 2026 para evitar este cuello de botella extremo en el inventario, sin perder la consistencia de que no puedes vender más de lo que tienes?</p>
-<p><em>(Pista: Considera separar las sumas y las restas en registros independientes, o usar colas/eventos).</em></p>
-</section>
-<h2>1. Â¿QuÃ© es un DBMS?</h2>
-        <span class="timestamp">DefiniciÃ³n</span>
-        
-        <p>Software que actÃºa como intermediario entre usuarios y la base de datos. Permite definir, crear y controlar el acceso a los datos.</p>
+            <h4 class="main__title--sub">💡 Insight del Arquitecto: La Teoría de Codd</h4>
+            <p class="main__text"><strong>El modelo relacional:</strong> En 1970, Edgar F. Codd (IBM) publicó su trabajo fundamental "A Relational Model of Data for Large Shared Data Banks". Este modelo se basa en la teoría de conjuntos y lógica de predicados — no en punteros físicos como los modelos jerárquicos o de red.</p>
+            <p class="main__text"><strong>Por qué importa:</strong> El modelo relacional es independiente del hardware y del software. El lenguaje declarativo (SQL) permite al usuario especificar QUÉ quiere, no CÓMO obtenerlo. Esto es posible gracias al optimizador del DBMS.</p>
+        </section>
 
-        <div class="box box-concep">
-            <p><strong>FunciÃ³n del DBMS:</strong> Abstraer la complejidad del almacenamiento fÃ­sico y proporcionar herramientas para gestionar datos de manera eficiente y segura.</p>
+        <h2 class="main__title">1. Arquitectura de tres niveles</h2>
+        <span class="timestamp">Niveles de abstracción</span>
+        
+        <div class="box box--concept">
+            <p class="main__text"><strong>Arquitectura ANSI/SPARC:</strong> Tres niveles de abstracción que proporcionan independencia de datos.</p>
         </div>
 
-        <h2>2. Arquitectura de Tres Niveles</h2>
-        
-        <ul>
-            <li><strong>Nivel Interno (FÃ­sico):</strong> CÃ³mo se almacenan los datos en disco</li>
-            <li><strong>Nivel Conceptual (LÃ³gico):</strong> QuÃ© datos existen y sus relaciones - visiÃ³n global</li>
-            <li><strong>Nivel Externo (Vistas):</strong> CÃ³mo cada usuario ve la informaciÃ³n</li>
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Nivel Interno (Físico):</strong>
+                <ul class="main__list">
+                    <li class="main__list-item">Describe la estructura física de almacenamiento</li>
+                    <li class="main__list-item">Estrategias de indexación, paths de acceso</li>
+                    <li class="main__list-item">¿Cómo se guardan los datos en disco?</li>
+                </ul>
+            </li>
+            <li class="main__list-item"><strong>Nivel Conceptual (Lógico):</strong>
+                <ul class="main__list">
+                    <li class="main__list-item">Describe la estructura de TODA la base de datos</li>
+                    <li class="main__list-item">Integridad, seguridad, relaciones entre datos</li>
+                    <li class="main__list-item">¿Qué datos existen y cómo se relacionan?</li>
+                </ul>
+            </li>
+            <li class="main__list-item"><strong>Nivel Externo (Vistas):</strong>
+                <ul class="main__list">
+                    <li class="main__list-item">Múltiples vistas de diferentes usuarios</li>
+                    <li class="main__list-item">Cada aplicación ve solo lo que necesita</li>
+                    <li class="main__list-item">¿Qué ve cada usuario específico?</li>
+                </ul>
+            </li>
         </ul>
 
-        <div class="box box-ejemplo">
-            <p><strong>AnalogÃ­a:</strong> Es como un edificio: el plano arquitectÃ³nico (interno), la descripciÃ³n formal a constructores (conceptual), y los diferentes departamentos con sus propias vistas del edificio (externo).</p>
-        </div>
-
-        <h2>3. Funciones del DBMS</h2>
+        <h2 class="main__title">2. Independencia de Datos</h2>
         
-        <ul>
-            <li><strong>GestiÃ³n de Usuarios:</strong> Permisos y control de acceso</li>
-            <li><strong>GestiÃ³n de Rendimiento:</strong> OptimizaciÃ³n de consultas</li>
-            <li><strong>Backup y Recovery:</strong> Respaldo y restauraciÃ³n</li>
-            <li><strong>GestiÃ³n de Transacciones:</strong> Propiedades ACID</li>
-        </ul>
-
-        <h2>4. Propiedades ACID</h2>
-        
-        <table>
-            <tr><th>Propiedad</th><th>DescripciÃ³n</th><th>Ejemplo</th></tr>
-            <tr><td><strong>Atomicidad</strong></td><td>Todo o nada</td><td>Transferencia bancaria</td></tr>
-            <tr><td><strong>Consistencia</strong><td>Estado vÃ¡lido siempre</td><td>Saldo no negativo</td></tr>
-            <tr><td><strong>Aislamiento</strong><td>Transacciones independientes</td><td>Concurrentes no se interfieren</td></tr>
-            <tr><td><strong>Durabilidad</strong><td>Cambios permanentes</td><td>å³ä½¿ sistema falla</td></tr>
+        <table class="table">
+            <tr class="table__tr"><th class="table__th">Tipo</th><th class="table__th">Descripción</th><th class="table__th">Ejemplo</th></tr>
+            <tr class="table__tr">
+                <td class="table__td"><strong>Física</strong></td>
+                <td class="table__td">Cambios en el almacenamiento no afectan el nivel conceptual</td>
+                <td class="table__td">Cambiar de HDD a SSD, agregar índice</td>
+            </tr>
+            <tr class="table__tr">
+                <td class="table__td"><strong>Lógica</strong></td>
+                <td class="table__td">Cambios en el esquema conceptual no afectan aplicaciones</td>
+                <td class="table__td">Agregar una columna, nueva tabla</td>
+            </tr>
         </table>
 
-        <h2>5. Lenguajes SQL</h2>
+        <h2 class="main__title">3. Terminología del Modelo Relacional</h2>
+        <span class="timestamp">Conceptos fundamentales</span>
         
-        <ul>
-            <li><strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP - estructura</li>
-            <li><strong>DML (Data Manipulation):</strong> SELECT, INSERT, UPDATE, DELETE - datos</li>
-            <li><strong>DCL (Data Control):</strong> GRANT, REVOKE - permisos</li>
-            <li><strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK - transacciones</li>
-        </ul>
-
-        <h2>6. Componentes del DBMS</h2>
-        
-        <ul>
-            <li><strong>Procesador de Consultas:</strong> Interpreta y optimiza SQL</li>
-            <li><strong>Gestor de Transacciones:</strong> Asegura ACID</li>
-            <li><strong>Motor de BD:</strong> Almacena y recupera datos</li>
-            <li><strong>CatÃ¡logo del Sistema:</strong> Metadatos (esquemas, tipos, Ã­ndices)</li>
-        </ul>
-
-    </div>
-</div>
-
-<div class="section-box">
-    <h2>EJERCICIO RESUELTO</h2>
-    <p class="question">Enunciado:</p>
-    <p>Un banco transfiere 100 USD de cuenta A a cuenta B. Explica cÃ³mo cada propiedad ACID se aplica.</p>
-    
-    <p class="answer">
-    <strong>Atomicidad:</strong> La operaciÃ³n completa (restar A + sumar B) se ejecuta o no se ejecuta en absoluto.<br>
-    <strong>Consistencia:</strong> La suma total (A+B) debe ser igual antes y despuÃ©s.<br>
-    <strong>Aislamiento:</strong> Otros usuarios ven estado anterior o posterior, nunca intermedio.<br>
-    <strong>Durabilidad:</strong> Una vez commit, los cambios son permanentes.
-    </p>
-</div>
-
-<div class="section-box">
-    <h2>QUIZ</h2>
-    
-    <p class="question">P1: Â¿QuÃ© comando pertenece a DDL?</p>
-    <p class="answer">R1: CREATE TABLE (define estructura)</p>
-
-    <p class="question">P2: Â¿QuÃ© propiedad ACID garantiza que una transacciÃ³n se ejecute completa o no se ejecute?</p>
-    <p class="answer">R2: Atomicidad</p>
-
-    <p class="question">P3: GRANT es parte de quÃ© lenguaje?</p>
-    <p class="answer">R3: DCL (Data Control Language)</p>
-</div>
-
-<nav class="nav">
-    <a href="semana_01.html">â† Semana 01</a>
-    <a href="semana_03.html">Semana 03 â†’</a>
-</nav>
-
-<!-- SECCIONES FINALES -->
-<div class="final-section">
-    <div class="conceptual-map">
-        <h3>Mapa Conceptual</h3>
-        <div class="mindmap">
-            <div class="mindmap-level1">DBMS - ARQUITECTURA 3 NIVELES</div>
-            <div class="mindmap-level2">
-                <span>Interno</span>
-                <span>Conceptual</span>
-                <span>Externo</span>
-            </div>
-            <div class="mindmap-level3">
-                <span>FÃ­sico</span>
-                <span>LÃ³gico</span>
-                <span>Vistas</span>
-            </div>
-            <div class="mindmap-level1" style="margin-top:8px;background:var(--secondary)">PROPIEDADES ACID</div>
-            <div class="mindmap-level3">
-                <span>Atomicidad</span>
-                <span>Consistencia</span>
-                <span>Aislamiento</span>
-                <span>Durabilidad</span>
-            </div>
+        <div class="box box--example">
+            <p class="main__text"><strong>Ejemplo de tabla:</strong></p>
+            <table class="table">
+                <tr class="table__tr"><th class="table__th">id_cliente</th><th class="table__th">nombre</th><th class="table__th">tipo</th><th class="table__th">zip</th></tr>
+                <tr class="table__tr"><td class="table__td">001</td><td class="table__td">PEDRO</td><td class="table__td">A</td><td class="table__td">L33</td></tr>
+                <tr class="table__tr"><td class="table__td">007</td><td class="table__td">JUAN</td><td class="table__td">A</td><td class="table__td">L45</td></tr>
+                <tr class="table__tr"><td class="table__td">012</td><td class="table__td">ANA</td><td class="table__td">C</td><td class="table__td">L33</td></tr>
+            </table>
         </div>
-    </div>
-    <div class="additional-material">
-        <h3>Material Adicional</h3>
-        <ul>
-            <li><span class="tag">Video</span> <a href="#">Arquitectura DBMS - 20 min</a></li>
-            <li><span class="tag">Lectura</span> <a href="#">Transacciones ACID</a></li>
-            <li><span class="tag">PrÃ¡ctica</span> <a href="#">Comandos SQL bÃ¡sicos</a></li>
+
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Relación (Tabla):</strong> Colección de tuplas (filas) con atributos (columnas)</li>
+            <li class="main__list-item"><strong>Tupla (Fila):</strong> Un registro específico de la tabla</li>
+            <li class="main__list-item"><strong>Atributo (Columna):</strong> Una propiedad de la entidad</li>
+            <li class="main__list-item"><strong>Dominio:</strong> Conjunto de valores permitidos para un atributo</li>
+            <li class="main__list-item"><strong>Grado:</strong> Número de atributos</li>
+            <li class="main__list-item"><strong>Cardinalidad:</strong> Número de tuplas</li>
         </ul>
-    </div>
+
+        <h2 class="main__title">4. Claves en el Modelo Relacional</h2>
+        
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Primary Key (PK):</strong>
+                <ul class="main__list">
+                    <li class="main__list-item">Identifica cada fila de manera única</li>
+                    <li class="main__list-item">No puede ser NULL</li>
+                    <li class="main__list-item">Debe ser única</li>
+                    <li class="main__list-item"> ideally inmutable (no cambia en el tiempo)</li>
+                </ul>
+            </li>
+            <li class="main__list-item"><strong>Foreign Key (FK):</strong>
+                <ul class="main__list">
+                    <li class="main__list-item">Establece relación entre tablas</li>
+                    <li class="main__list-item">Referencia a una PK de otra tabla</li>
+                    <li class="main__list-item">Mantiene integridad referencial</li>
+                </ul>
+            </li>
+            <li class="main__list-item"><strong>Clave Candidata:</strong> Atributo(s) que podrían ser PK</li>
+        </ul>
+
+        <h2 class="main__title">5. Restricciones de Integridad</h2>
+        
+        <table class="table">
+            <tr class="table__tr"><th class="table__th">Restricción</th><th class="table__th">Descripción</th></tr>
+            <tr class="table__tr"><td class="table__td">NOT NULL</td><td class="table__td">El atributo no puede tener valor nulo</td></tr>
+            <tr class="table__tr"><td class="table__td">UNIQUE</td><td class="table__td">Todos los valores deben ser distintos</td></tr>
+            <tr class="table__tr"><td class="table__td">CHECK</td><td class="table__td">Condición booleana debe cumplirse</td></tr>
+            <tr class="table__tr"><td class="table__td">DEFAULT</td><td class="table__td">Valor por defecto si no se especifica</td></tr>
+            <tr class="table__tr"><td class="table__td">PRIMARY KEY</td><td class="table__td">Combina NOT NULL + UNIQUE</td></tr>
+            <tr class="table__tr"><td class="table__td">FOREIGN KEY</td><td class="table__td">Referencia a otra tabla</td></tr>
+        </table>
+
+        <h2 class="main__title">6. Transacciones y Propiedades ACID</h2>
+        
+        <div class="box box--concept">
+            <p class="main__text"><strong>Transacción:</strong> Conjunto de operaciones que se ejecutan como una unidad lógica de trabajo.</p>
+        </div>
+
+        <ul class="main__list">
+            <li class="main__list-item"><strong>A</strong>tomicity: Todo o nada — si una parte falla, toda la transacción se deshace</li>
+            <li class="main__list-item"><strong>C</strong>onsistency: La BD pasa de un estado válido a otro estado válido</li>
+            <li class="main__list-item"><strong>I</strong>solation: Las transacciones concurrentes no se afectan entre sí</li>
+            <li class="main__list-item"><strong>D</strong>urability: Una vez committeada, los cambios persisten incluso si hay falla</li>
+        </ul>
+
+        <div class="box box--warning">
+            <p class="main__text"><strong>⚠️ Importante en PostgreSQL:</strong> Los comandos DDL (CREATE, ALTER, DROP) en PostgreSQL son transaccionales. Puedes hacer ROLLBACK de un CREATE TABLE si está dentro de una transacción.</p>
+        </div>
+
+        <h2 class="main__title">7. Componentes del DBMS</h2>
+        
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Gestor de Datos:</strong> Lee/escribe datos en disco</li>
+            <li class="main__list-item"><strong>Gestor de Transacciones:</strong> Controla ACID</li>
+            <li class="main__list-item"><strong>Gestor de Concurrencia:</strong> Maneja bloqueos</li>
+            <li class="main__list-item"><strong>Gestor de Recuperación:</strong> Backup/Recovery, WAL</li>
+            <li class="main__list-item"><strong>Optimizador de Consultas:</strong> Determina el mejor plan de ejecución</li>
+            <li class="main__list-item"><strong>Gestor de Catálogo:</strong> Almacena metadatos</li>
+        </ul>
+
+        <h2 class="main__title">8. Metodología de Diseño Pratt-Adamski</h2>
+        
+        <ol class="main__list">
+            <li class="main__list-item">Representar las vistas de usuarios como relaciones</li>
+            <li class="main__list-item">Normalizar las relaciones (1FN, 2FN, 3FN, BCNF)</li>
+            <li class="main__list-item">Representar todas las claves</li>
+            <li class="main__list-item">Determinar restricciones especiales</li>
+            <li class="main__list-item">Combinar resultados en el diseño final</li>
+        </ol>
+
+        <hr>
+
+        <section class="laboratorio">
+            <h3 class="main__title--sub">🔬 Laboratorio: Diseño Conceptual</h3>
+            <p class="main__text">Para un sistema de biblioteca:</p>
+            <ol class="main__list">
+                <li class="main__list-item">Identifica las entidades principales (Libro, Usuario, Préstamo)</li>
+                <li class="main__list-item">Define los atributos de cada entidad</li>
+                <li class="main__list-item">Identifica las claves primarias</li>
+                <li class="main__list-item">Dibuja las relaciones entre entidades</li>
+            </ol>
+        </section>
+
+    </main>
 </div>
 
 </body>
 </html>
+
+
+

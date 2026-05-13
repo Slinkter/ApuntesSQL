@@ -1,189 +1,233 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
+<head><link rel="stylesheet" href="master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 06 - Funciones y Operadores</title>
-    <link rel="stylesheet" href="estilo-cornell.css">
-<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
+    <title>Semana 06 - Modelamiento Entidad-RelaciÛn</title>
+    
+    
+</head>
 <body>
 
 <div class="header-box">
-    <h1>Funciones y Operadores</h1>
-    <p>Semana 06 | COALESCE, NULLIF, CASE, CAST</p>
+    <h1>Modelamiento de Datos: Modelo Entidad-RelaciÛn</h1>
+    <p>Semana 06 | IngenierÌa de Datos | ULima 2013-2</p>
 </div>
 
 <div class="cornell-container">
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>√Ç¬ß COALESCE</strong><br>Primer valor no nulo</li>
-            <li><strong>√Ç¬ß NULLIF</strong><br>Null si divisi√É¬≥n por cero</li>
-            <li><strong>√Ç¬ß CASE</strong><br>Condicionales</li>
-            <li><strong>√Ç¬ß CAST</strong><br>Conversi√É¬≥n de tipos</li>
-            <li><strong>√Ç¬ß Funciones</strong><br>Matem√É¬°ticas, texto, fecha</li>
-            <li><strong>√Ç¬ß NULL</strong><br>Valor ausente</li>
+            <li><strong>ß Entidad</strong><br>Objeto del mundo real</li>
+            <li><strong>ß Atributo</strong><br>Propiedad de una entidad</li>
+            <li><strong>ß RelaciÛn</strong><br>AsociaciÛn entre entidades</li>
+            <li><strong>ß Cardinalidad</strong><br>1:1, 1:N, N:N</li>
+            <li><strong>ß PK/FK</strong><br>Clave primaria/for·nea</li>
+            <li><strong>ß DER</strong><br>Diagrama Entidad-RelaciÛn</li>
+            <li><strong>ß Supertipo/Subtipo</strong><br>Herencia de entidades</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
-            <ul><li><a href="index.html">√∞≈∏¬è¬† √É¬çndice del Curso</a></li></ul>
+            <ul>
+                <li><a href="index.html">?? Õndice del Curso</a></li>
+                <li><a href="semana_05.html">? Semana 05</a></li>
+                <li><a href="semana_07.html">? Semana 07</a></li>
+            </ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>√∞≈∏‚Äú≈í Objetivos de Aprendizaje</strong></p>
+            <p><strong>?? Objetivos de Aprendizaje</strong></p>
             <ul style="margin: 8px 0 0 20px;">
-                <li>Manejar valores nulos con COALESCE y NULLIF</li>
-                <li>Crear expresiones condicionales con CASE</li>
-                <li>Convertir tipos de datos con CAST</li>
-                <li>Usar funciones de fecha, texto y matem√É¬°ticas</li>
+                <li>Identificar entidades y atributos en un dominio</li>
+                <li>Determinar claves primarias</li>
+                <li>Modelar relaciones entre entidades</li>
+                <li>Aplicar cardinalidad (1:1, 1:N, N:N)</li>
+                <li>Construir diagramas Entidad-RelaciÛn</li>
+                <li>Entender entidades dÈbiles y fuertes</li>
             </ul>
         </div>
 
-        <h2>1. Funciones para Valores Nulos</h2>
+        <section class="architect-insight">
+            <h4>?? Insight del Arquitecto: Modelamiento en 2026</h4>
+            <p><strong>El modelamiento E-R sigue siendo fundamental:</strong> Aunque surgieron nuevos paradigmas (NoSQL, Graph Databases), el modelo E-R de Peter Chen (1976) sigue siendo la base del diseÒo de datos relacionales. En 2026, herramientas como dbdiagram.io, DBeaver, y PostgreSQL's schema inspector hacen el modelado m·s accesible.</p>
+        </section>
+
+        <h2>1. Conceptos Fundamentales</h2>
         
-        <h3>COALESCE(valor1, valor2, ...)</h3>
-        <p>Retorna el primer valor no nulo de la lista.</p>
-        <pre>-- Si telefono es NULL, muestra 'No disponible'
-SELECT nombre, COALESCE(telefono, 'No disponible') as contacto
-FROM clientes;
+        <ul>
+            <li><strong>Entidad:</strong> Objeto del mundo real que existe y es distinguible
+                <ul>
+                    <li><em>Tipo entidad:</em> ColecciÛn de entidades similares (ej: CLIENTE)</li>
+                    <li><em>Instancia:</em> Una entidad especÌfica (ej: Juan PÈrez)</li>
+                </ul>
+            </li>
+            <li><strong>Atributo:</strong> Propiedad o caracterÌstica de una entidad
+                <ul>
+                    <li><em>Simple:</em> No divisible (edad)</li>
+                    <li><em>Compuesto:</em> Divisible (direcciÛn ? ciudad, calle)</li>
+                    <li><em>Multivalorado:</em> Varios valores (telÈfonos)</li>
+                    <li><em>Derivado:</strong> Calculado (edad desde fecha_nacimiento)</li>
+                </ul>
+            </li>
+            <li><strong>RelaciÛn:</strong> AsociaciÛn entre entidades</li>
+        </ul>
 
--- Com√É¬∫n:√©¬ªÀú√®¬Æ¬§√•‚Ç¨¬º si falta dato
-SELECT nombre, COALESCE(apellido, '') || ' ' || COALESCE(nombre, '') as nombre_completo
-FROM empleados;</pre>
-
-        <h3>NULLIF(valor1, valor2)</h3>
-        <p>Retorna NULL si valor1 = valor2. √É≈°til para evitar divisi√É¬≥n por cero.</p>
-        <pre>-- Si division es 0, retorna NULL (evita error)
-SELECT precio / NULLIF(cantidad, 0) as precio_unitario
-FROM productos;</pre>
-
-        <h2>2. CASE - Expresiones Condicionales</h2>
+        <h2>2. Claves en el Modelamiento</h2>
         
-        <pre>-- CASE simple
-SELECT nombre, 
-    CASE departamento
-        WHEN 'Ventas' THEN 'Comercial'
-        WHEN 'TI' THEN 'Tecnolog√É¬≠a'
-        WHEN 'RRHH' THEN 'Personal'
-        ELSE 'Otro'
-    END as area
-FROM empleados;
+        <div class="box box-ejemplo">
+            <p><strong>Clave Primaria (PK):</strong> Atributo o conjunto de atributos que identifica??amente cada instancia de una entidad.</p>
+        </div>
 
--- CASE Searched (condiciones)
-SELECT nombre, salary,
-    CASE 
-        WHEN salary < 30000 THEN 'Bajo'
-        WHEN salary < 60000 THEN 'Medio'
-        ELSE 'Alto'
-    END as nivel_salario
-FROM empleados;</pre>
+        <ul>
+            <li><strong>CaracterÌsticas:</strong>
+                <ul>
+                    <li>No puede ser NULL</li>
+                    <li>Debe ser ˙nica</li>
+                    <li>Ideally inmutable (no cambia)</li>
+                    <li>Simple (un atributo) o Compuesta (varios)</li>
+                </ul>
+            </li>
+            <li><strong>Clave For·nea (FK):</strong> Atributo que referencia la PK de otra tabla, estableciendo la relaciÛn</li>
+        </ul>
 
-        <h2>3. CAST - Conversi√É¬≥n de Tipos</h2>
-        
-        <pre>-- Convertir texto a fecha
-SELECT CAST('2024-01-15' AS DATE);
-
--- Convertir n√É¬∫mero a texto
-SELECT CAST(123.45 AS VARCHAR(10));
-
--- Sintaxis alternativa: ::
-SELECT '2024-01-15'::DATE;
-SELECT 123.45::NUMERIC;</pre>
-
-        <h2>4. Funciones de Fecha</h2>
+        <h2>3. Cardinalidad de Relaciones</h2>
         
         <table>
-            <tr><th>Funci√É¬≥n</th><th>Descripci√É¬≥n</th><th>Ejemplo</th></tr>
-            <tr><td>CURRENT_DATE</td><td>Fecha actual</td><td>2024-01-15</td></tr>
-            <tr><td>CURRENT_TIMESTAMP</td><td>Fecha y hora</td><td>2024-01-15 14:30:00</td></tr>
-            <tr><td>EXTRACT()</td><td>Extraer parte de fecha</td><td>EXTRACT(YEAR FROM fecha)</td></tr>
-            <tr><td>AGE()</td><td>Diferencia entre fechas</td><td>AGE(CURRENT_DATE, fecha_nac)</td></tr>
-            <tr><td>TO_CHAR()</td><td>Formatear fecha</td><td>TO_CHAR(fecha, 'YYYY-MM')</td></tr>
-        </table>
-
-        <h2>5. Funciones de Texto</h2>
-        
-        <table>
-            <tr><th>Funci√É¬≥n</th><th>Descripci√É¬≥n</th><th>Ejemplo</th></tr>
-            <tr><td>UPPER()</td><td>May√É¬∫sculas</td><td>UPPER('hola') √¢‚Ä†‚Äô 'HOLA'</td></tr>
-            <tr><td>LOWER()</td><td>Min√É¬∫sculas</td><td>LOWER('HOLA') √¢‚Ä†‚Äô 'hola'</td></tr>
-            <tr><td>LENGTH()</td><td>Longitud</td><td>LENGTH('hola') √¢‚Ä†‚Äô 4</td></tr>
-            <tr><td>SUBSTRING()</td><td>Subtexto</td><td>SUBSTRING('hola', 1, 2) √¢‚Ä†‚Äô 'ho'</td></tr>
-            <tr><td>TRIM()</td><td>Eliminar espacios</td><td>TRIM(' hola ') √¢‚Ä†‚Äô 'hola'</td></tr>
-            <tr><td>CONCAT()</td><td>Concatenar</td><td>CONCAT('a', 'b') √¢‚Ä†‚Äô 'ab'</td></tr>
+            <tr><th>Tipo</th><th>DescripciÛn</th><th>Ejemplo</th></tr>
+            <tr>
+                <td><strong>1:1</strong> (Uno a Uno)</td>
+                <td>Cada entidad se relaciona con exactamente una entidad del otro lado</td>
+                <td>Empleado ? Departamento (cada empleado tiene 1 dept)</td>
+            </tr>
+            <tr>
+                <td><strong>1:N</strong> (Uno a Muchos)</td>
+                <td>Una entidad se relaciona con muchas del otro lado</td>
+                <td>Cliente ? Pedidos (un cliente tiene muchos pedidos)</td>
+            </tr>
+            <tr>
+                <td><strong>N:N</strong> (Muchos a Muchos)</td>
+                <td>Muchas entidades se relacionan con muchas del otro lado</td>
+                <td>Estudiante ? Curso (estudiante puede llevar muchos cursos)</td>
+            </tr>
         </table>
 
         <div class="box box-concep">
-            <p><strong>√∞≈∏‚Äú¬ù Resumen:</strong> COALESCE maneja valores nulos proporcionando alternativas, NULLIF evita errores de divisi√É¬≥n por cero, CASE permite l√É¬≥gica condicional en consultas, y CAST convierte entre tipos de datos.</p>
+            <p><strong>NotaciÛn:</strong></p>
+            <ul>
+                <li>1 ? Una (solo una)</li>
+                <li>N ? Muchas (cero o m·s)</li>
+                <li>(0,1) ? Cero o uno</li>
+                <li>(1,N) ? Uno a muchos</li>
+            </ul>
         </div>
-    </div>
-</div>
 
-<div class="section-box">
-    <h2>EJERCICIO RESUELTO</h2>
-    <p class="question">Mostrar nombre, salary y categor√É¬≠a: < 30000='Bajo', 30000-60000='Medio', > 60000='Alto'</p>
-    <p class="answer">
-    <pre>SELECT nombre, salary,
-    CASE 
-        WHEN salary < 30000 THEN 'Bajo'
-        WHEN salary >= 30000 AND salary < 60000 THEN 'Medio'
-        ELSE 'Alto'
-    END as categoria
-FROM empleados;</pre>
-    </p>
-</div>
+        <h2>4. Entidades Fuertes vs DÈbiles</h2>
+        
+        <table>
+            <tr><th>Tipo</th><th>DescripciÛn</th><th>IdentificaciÛn</th></tr>
+            <tr>
+                <td><strong>Fuerte</strong></td>
+                <td>Existe independientemente de otras entidades</td>
+                <td>Tiene su propia PK</td>
+            </tr>
+            <tr>
+                <td><strong>DÈbil</strong></td>
+                <td>Depende existencialmente de otra entidad</td>
+                <td>No tiene PK propia, usa FK + otro atributo</td>
+            </tr>
+        </table>
 
-<div class="section-box">
-    <h2>QUIZ</h2>
-    <p class="q-level">Nivel 1</p>
-    <p class="question">P1: √Ç¬øQu√É¬© hace COALESCE(NULL, 'valor')?</p>
-    <p class="answer">R1: Retorna 'valor'</p>
-    <p class="q-level">Nivel 2</p>
-    <p class="question">P2: √Ç¬øPara qu√É¬© sirve NULLIF?</p>
-    <p class="answer">R2: Evitar divisi√É¬≥n por cero retornando NULL</p>
-</div>
-
-<nav class="nav">
-    <a href="semana_05.html">√¢‚Ä†¬ê Semana 05</a>
-    <a href="semana_07.html">Semana 07 √¢‚Ä†‚Äô</a>
-</nav>
-
-<div class="final-section">
-    <div class="conceptual-map">
-        <h3>Mapa Mental</h3>
-        <div class="mindmap-container">
-            <div class="mindmap-central">FUNCIONES Y OPERADORES</div>
-            <div class="mindmap-branch">
-                <div class="node">NULL
-                    <div class="subnode">COALESCE</div>
-                    <div class="subnode">NULLIF</div>
-                </div>
-                <div class="node">CASE
-                    <div class="subnode">Simple</div>
-                    <div class="subnode">Searched</div>
-                </div>
-                <div class="node">CAST
-                    <div class="subnode">::tipo</div>
-                    <div class="subnode">CAST()</div>
-                </div>
-                <div class="node">Funciones
-                    <div class="subnode">Fecha</div>
-                    <div class="subnode">Texto</div>
-                    <div class="subnode">Matem√É¬°ticas</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="additional-material">
-        <h3>Material Adicional</h3>
+        <h3>Ejemplo:</h3>
         <ul>
-            <li><span class="tag">Docs</span> <a href="#">Funciones PostgreSQL</a></li>
-            <li><span class="tag">Pr√É¬°ctica</span> <a href="#">Ejercicios funciones</a></li>
+            <li><strong>Entidad Fuerte:</strong> CLIENTE (existe por sÌ misma)</li>
+            <li><strong>Entidad DÈbil:</strong> LÕNEA_FACTURA (no existe sin FACTURA)</li>
         </ul>
+
+        <h2>5. Tipos de Atributos de RelaciÛn</h2>
+        
+        <ul>
+            <li><strong>RelaciÛn Unaria:</strong> RelaciÛn de una entidad consigo misma
+                <br><em>Ej: Empleado ? reporta a ? Empleado (jefe-subordinado)</em></li>
+            <li><strong>RelaciÛn Binaria:</strong> Entre dos entidades (la m·s com˙n)</li>
+            <li><strong>RelaciÛn Ternaria:</strong> Entre tres entidades
+                <br><em>Ej:Proveedor ? Producto ? AlmacÈn</em></li>
+        </ul>
+
+        <h2>6. Entidades Asociativas</h2>
+        
+        <div class="box box-ejemplo">
+            <p><strong>Entidad Asociativa:</strong> Cuando una relaciÛn N:N necesita atributos. Se convierte en una nueva entidad con claves for·neas a las originales.</p>
+        </div>
+
+        <h3>Ejemplo: Estudiante ? Curso ? InscripciÛn</h3>
+        <ul>
+            <li>Estudiante (id_est, nombre, ...) PK: id_est</li>
+            <li>Curso (id_curso, nombre, ...) PK: id_curso</li>
+            <li>InscripciÛn (id_est, id_curso, fecha_insc, ...) 
+                <br>PK: (id_est, id_curso)
+                <br>FK: id_est ? Estudiante
+                <br>FK: id_curso ? Curso</li>
+        </ul>
+
+        <h2>7. Supertipos y Subtipos (Herencia)</h2>
+        
+        <div class="box box-concep">
+            <p><strong>GeneralizaciÛn/EspecializaciÛn:</strong> Cuando entidades comparten atributos comunes pero tienen atributos especÌficos.</p>
+        </div>
+
+        <h3>Ejemplo: PERSONA ? EMPLEADO / CLIENTE</h3>
+        <ul>
+            <li><strong>Supertipo:</strong> PERSONA (id, nombre, direcciÛn, telÈfono)</li>
+            <li><strong>Subtipo:</strong> EMPLEADO (hereda id, nombre, ...) + especÌfico (cargo, departamento, salary)</li>
+            <li><strong>Subtipo:</strong> CLIENTE (hereda id, nombre, ...) + especÌfico (lÌmite_credito, tipo)</li>
+        </ul>
+
+        <h2>8. Reglas de Negocio</h2>
+        
+        <div class="box box-ejemplo">
+            <p><strong>Regla de Negocio:</strong> Enunciado que define o limita alg˙n aspecto del negocio.</p>
+        </div>
+
+        <ul>
+            <li><strong>CaracterÌsticas:</strong>
+                <ul>
+                    <li>Declarativa (QU…, no C”MO)</li>
+                    <li>Precisa y clara</li>
+                    <li>AtÛmica (no divisible)</li>
+                    <li>Consistente</li>
+                </ul>
+            </li>
+            <li><strong>Ejemplos:</strong>
+                <ul>
+                    <li>"Un cliente puede tener m˙ltiples pedidos"</li>
+                    <li>"Cada pedido debe tener al menos un producto"</li>
+                    <li>"El precio no puede ser negativo"</li>
+                </ul>
+            </li>
+        </ul>
+
+        <hr>
+
+        <section class="laboratorio">
+            <h3>?? Laboratorio: Modelamiento E-R</h3>
+            <p>DiseÒa el modelo E-R para un sistema de universidad:</p>
+            <ol style="margin-left: 20px;">
+                <li>Identifica las entidades: Estudiante, Profesor, Curso, Carrera, MatrÌcula</li>
+                <li>Define los atributos de cada entidad (incluye PK)</li>
+                <li>Determina las relaciones entre entidades (cardinalidad)</li>
+                <li>Identifica entidades dÈbiles si las hay</li>
+                <li>Considera si hay herencia (supertipos/subtipos)</li>
+                <li>Dibuja el DER en papel o herramienta</li>
+            </ol>
+        </section>
+
     </div>
 </div>
 
 </body>
 </html>
+
+
+

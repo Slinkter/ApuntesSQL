@@ -1,200 +1,284 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
+<head><link rel="stylesheet" href="master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 11 - PL/pgSQL Fundamentos</title>
-    <link rel="stylesheet" href="estilo-cornell.css">
-<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
+    <title>Semana 11 - ProgramaciÛn PL/SQL y Procedimientos</title>
+    
+    
+</head>
 <body>
 
 <div class="header-box">
-    <h1>PL/pgSQL - Fundamentos</h1>
-    <p>Semana 11 | Procedimientos y Funciones</p>
+    <h1>ProgramaciÛn en Base de Datos: PL/pgSQL</h1>
+    <p>Semana 11 | IngenierÌa de Datos | ULima 2013-2</p>
 </div>
 
 <div class="cornell-container">
     <div class="keywords-sidebar">
         <h3>PALABRAS CLAVE</h3>
         <ul>
-            <li><strong>√Ç¬ß CREATE FUNCTION</strong><br>Crear funci√É¬≥n</li>
-            <li><strong>√Ç¬ß BEGIN/END</strong><br>Bloque de c√É¬≥digo</li>
-            <li><strong>√Ç¬ß DECLARE</strong><br>Declarar variables</li>
-            <li><strong>√Ç¬ß RETURN</strong><br>Retornar valor</li>
-            <li><strong>√Ç¬ß IF/THEN/ELSE</strong><br>Condicional</li>
-            <li><strong>√Ç¬ß RETURN NEXT</strong><br>Retornar conjunto</li>
+            <li><strong>ß PL/pgSQL</strong><br>Lenguaje procedural de PostgreSQL</li>
+            <li><strong>ß FunciÛn</strong><br>Retorna valor</li>
+            <li><strong>ß Procedimiento</strong><br>Ejecuta acciones</li>
+            <li><strong>ß Trigger</strong><br>Evento autom·tico</li>
+            <li><strong>ß Cursor</strong><br>Conjunto de resultados</li>
+            <li><strong>ß RAISE</strong><br>Mensajes y errores</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3>RECURSOS</h3>
-            <ul><li><a href="index.html">√∞≈∏¬è¬† √É¬çndice</a></li></ul>
+            <ul>
+                <li><a href="index.html">?? Õndice del Curso</a></li>
+                <li><a href="semana_10.html">? Semana 10</a></li>
+                <li><a href="semana_12.html">? Semana 12</a></li>
+            </ul>
         </div>
     </div>
 
     <div class="main-content">
         <div class="box box-note">
-            <p><strong>√∞≈∏‚Äú≈í Objetivos:</strong> Crear funciones y procedimientos en PL/pgSQL, usar variables, control de flujo.</p>
+            <p><strong>?? Objetivos de Aprendizaje</strong></p>
+            <ul style="margin: 8px 0 0 20px;">
+                <li>Comprender la estructura de bloques PL/pgSQL</li>
+                <li>Crear funciones y procedimientos almacenados</li>
+                <li>Manejar variables y tipos de datos</li>
+                <li>Usar estructuras de control (IF, LOOP)</li>
+            </ul>
         </div>
 
-        <h2>1. Estructura de una Funci√É¬≥n</h2>
+        <section class="architect-insight">
+            <h4>?? Insight del Arquitecto: PL/pgSQL vs PL/SQL</h4>
+            <p><strong>PostgreSQL usa PL/pgSQL (no PL/SQL de Oracle):</strong></p>
+            <ul>
+                <li>Sintaxis similar pero no idÈntica</li>
+                <li>Funciones con RETURN, no RETURNING (en funciones)</li>
+                <li>CREATE OR REPLACE funciona para funciones</li>
+                <li>Soporta triggers con eventos especÌficos</li>
+                <li>RETURN NEXT para retornar conjuntos</li>
+            </ul>
+        </section>
+
+        <h2>1. Estructura de un Bloque PL/pgSQL</h2>
         
-        <pre>-- Funci√É¬≥n b√É¬°sica
-CREATE OR REPLACE FUNCTION hola_mundo()
-RETURNS TEXT AS $$
+        <pre style="background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 6px; overflow-x: auto;">
+[DECLARE
+    -- Declaraciones: variables, tipos, cursores]
 BEGIN
-    RETURN 'Hola Mundo';
-END;
-$$ LANGUAGE plpgsql;
+    -- Sentencias ejecutables
+    -- LÛgica del programa
+[EXCEPTION
+    -- Manejo de errores]
+END;</pre>
 
--- Llamar funci√É¬≥n
-SELECT hola_mundo();</pre>
-
-        <h2>2. Variables y Tipos</h2>
+        <h2>2. DeclaraciÛn de Variables</h2>
         
-        <pre>-- Declarar variables
-CREATE OR REPLACE FUNCTION ejemplo_variables()
-RETURNS TEXT AS $$
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Variables simples
 DECLARE
-    nombre VARCHAR(100) := 'Juan';
-    edad INTEGER := 30;
-    mensaje TEXT;
+    v_nombre VARCHAR(50);
+    v_precio NUMERIC(10,2) := 0;
+    v_fecha DATE DEFAULT CURRENT_DATE;
+    v_contador INTEGER;
+    
+    -- Tipos basados en columnas
+    v_nombre_cliente cliente.nombre%TYPE;
+    
+    -- Tipos basados en filas (registro)
+    v_cliente cliente%ROWTYPE;
+    
+    -- Tipo definido por el usuario
+    TYPE t_direccion IS RECORD (
+        calle VARCHAR(100),
+        ciudad VARCHAR(50),
+        pais VARCHAR(30)
+    );
+    v_direccion t_direccion;
 BEGIN
-    mensaje := nombre || ' tiene ' || edad || ' a√É¬±os';
-    RETURN mensaje;
-END;
-$$ LANGUAGE plpgsql;
+    -- CÛdigo
+END;</pre>
 
--- Tipos de datos (columna de tabla)
-CREATE OR REPLACE FUNCTION obtener_nombre(id_emp INTEGER)
-RETURNS TEXT AS $$
-DECLARE
-    nombre_emp employees.nombre%TYPE;
-BEGIN
-    SELECT nombre INTO nombre_emp FROM employees WHERE id = id_emp;
-    RETURN nombre_emp;
-END;
-$$ LANGUAGE plpgsql;</pre>
-
-        <h2>3. Control de Flujo - IF</h2>
+        <h2>3. Estructuras de Control</h2>
         
-        <pre>-- IF simple
-IF salary > 50000 THEN
-    RETURN 'Alto';
-END IF;
-
--- IF/ELSE
-IF edad >= 18 THEN
-    RETURN 'Mayor de edad';
+        <h3>IF-ELSIF-ELSE</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+IF v_precio > 100 THEN
+    v_categoria := 'CARO';
+ELSIF v_precio > 50 THEN
+    v_categoria := 'MEDIO';
 ELSE
-    RETURN 'Menor de edad';
-END IF;
-
--- IF/ELSIF/ELSE
-IF dept = 'Ventas' THEN
-    RETURN 'Comercial';
-ELSIF dept = 'TI' THEN
-    RETURN 'Tecnolog√É¬≠a';
-ELSE
-    RETURN 'Otro';
+    v_categoria := 'BARATO';
 END IF;</pre>
 
-        <h2>4. CASE</h2>
-        
-        <pre>CASE departamento
-    WHEN 'Ventas' THEN
-        RETURN 'Comercial';
-    WHEN 'TI' THEN
-        RETURN 'Tecnolog√É¬≠a';
+        <h3>CASE</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+CASE v_estado
+    WHEN 'A' THEN
+        v_descripcion := 'Activo';
+    WHEN 'I' THEN
+        v_descripcion := 'Inactivo';
     ELSE
-        RETURN 'Otro';
+        v_descripcion := 'Desconocido';
 END CASE;</pre>
 
-        <h2>5. Ciclos - LOOP</h2>
+        <h3>LOOP</h3>
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Loop simple
+LOOP
+    -- Sentencias
+    EXIT WHEN condicion;
+END LOOP;
+
+-- FOR con rango
+FOR i IN 1..10 LOOP
+    RAISE NOTICE 'IteraciÛn: %', i;
+END LOOP;
+
+-- FOR con consulta
+FOR registro IN SELECT * FROM cliente LOOP
+    RAISE NOTICE 'Cliente: %', registro.nombre;
+END LOOP;</pre>
+
+        <h2>4. Funciones en PostgreSQL</h2>
         
-        <pre>-- Loop b√É¬°sico
-CREATE OR REPLACE FUNCTION contar_hasta(n INTEGER)
-RETURNS TEXT AS $$
-DECLARE
-    i INTEGER := 0;
-    resultado TEXT := '';
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- FunciÛn simple
+CREATE OR REPLACE FUNCTION calcular_igv(precio NUMERIC)
+RETURNS NUMERIC AS $$
 BEGIN
-    LOOP
-        i := i + 1;
-        resultado := resultado || i || ' ';
-        IF i >= n THEN
-            EXIT;
-        END IF;
-    END LOOP;
-    RETURN resultado;
+    RETURN precio * 0.18;
 END;
 $$ LANGUAGE plpgsql;
 
--- WHILE
-WHILE i < n LOOP
-    i := i + 1;
-END LOOP;
-
--- FOR (rango)
-FOR i IN 1..10 LOOP
-    resultado := resultado || i;
-END LOOP;</pre>
-
-        <div class="box box-concep">
-            <p><strong>√∞≈∏‚Äú¬ù Resumen:</strong> PL/pgSQL permite crear funciones y procedimientos almacenados. Se usan DECLARE para variables, IF/THEN/ELSE para control de flujo, y varios tipos de ciclos (LOOP, WHILE, FOR).</p>
-        </div>
-    </div>
-</div>
-
-<div class="section-box">
-    <h2>EJERCICIO</h2>
-    <p class="question">Crear funci√É¬≥n que retorne 'Aprobado' si nota >= 11, sino 'Desaprobado'.</p>
-    <p class="answer">
-    <pre>CREATE OR REPLACE FUNCTION evaluar(nota INTEGER)
-RETURNS TEXT AS $$
+-- FunciÛn con return de tabla
+CREATE OR REPLACE FUNCTION get_clientes_activos()
+RETURNS TABLE(
+    id INTEGER,
+    nombre VARCHAR(100)
+) AS $$
 BEGIN
-    IF nota >= 11 THEN
-        RETURN 'Aprobado';
-    ELSE
-        RETURN 'Desaprobado';
+    RETURN QUERY 
+        SELECT c.id, c.nombre 
+        FROM cliente c 
+        WHERE c.activo = true;
+END;
+$$ LANGUAGE plpgsql;
+
+-- FunciÛn con manejo de errores
+CREATE OR REPLACE FUNCTION dividir(a NUMERIC, b NUMERIC)
+RETURNS NUMERIC AS $$
+BEGIN
+    IF b = 0 THEN
+        RAISE EXCEPTION 'DivisiÛn por cero no permitida';
     END IF;
+    RETURN a / b;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Error: %', SQLERRM;
+        RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;</pre>
-    </p>
-</div>
 
-<nav class="nav">
-    <a href="semana_10.html">√¢‚Ä†¬ê Semana 10</a>
-    <a href="semana_12.html">Semana 12 √¢‚Ä†‚Äô</a>
-</nav>
+        <h2>5. Procedimientos (CREATE PROCEDURE)</h2>
+        
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Procedimiento para actualizar stock
+CREATE OR REPLACE PROCEDURE actualizar_stock(
+    p_producto_id INTEGER,
+    p_cantidad INTEGER
+) AS $$
+BEGIN
+    UPDATE producto
+    SET stock = stock + p_cantidad
+    WHERE id = p_producto_id;
+    
+    RAISE NOTICE 'Stock actualizado para producto %', p_producto_id;
+END;
+$$ LANGUAGE plpgsql;
 
-<div class="final-section">
-    <div class="conceptual-map">
-        <h3>Mapa Mental</h3>
-        <div class="mindmap-container">
-            <div class="mindmap-central">PL/pgSQL FUNDAMENTOS</div>
-            <div class="mindmap-branch">
-                <div class="node">Estructura
-                    <div class="subnode">CREATE FUNCTION</div>
-                    <div class="subnode">DECLARE</div>
-                    <div class="subnode">BEGIN/END</div>
-                </div>
-                <div class="node">Control
-                    <div class="subnode">IF/ELSE</div>
-                    <div class="subnode">CASE</div>
-                    <div class="subnode">LOOP</div>
-                </div>
-                <div class="node">Tipos
-                    <div class="subnode">VARCHAR</div>
-                    <div class="subnode">INTEGER</div>
-                    <div class="subnode">%TYPE</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="additional-material">
-        <h3>Material</h3>
-        <ul><li><span class="tag">Docs</span> <a href="#">PL/pgSQL Docs</a></li></ul>
+-- Llamar procedimiento
+CALL actualizar_stock(10, 5);</pre>
+
+        <h2>6. Cursores</h2>
+        
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Cursor explÌcito
+DECLARE
+    c_cliente CURSOR FOR 
+        SELECT nombre, email FROM cliente 
+        WHERE activo = true;
+    v_registro RECORD;
+BEGIN
+    OPEN c_cliente;
+    LOOP
+        FETCH c_cliente INTO v_registro;
+        EXIT WHEN NOT FOUND;
+        RAISE NOTICE 'Cliente: % - %', 
+            v_registro.nombre, v_registro.email;
+    END LOOP;
+    CLOSE c_cliente;
+END;
+
+-- Cursor con par·metros
+DECLARE
+    c_pedidos CURSOR(p_cliente_id INTEGER) FOR
+        SELECT * FROM pedido 
+        WHERE cliente_id = p_cliente_id;
+BEGIN
+    -- Abrir con par·metro
+    OPEN c_pedidos(5);
+    -- ...
+END;</pre>
+
+        <h2>7. Funciones ⁄tiles</h2>
+        
+        <table>
+            <tr><th>FunciÛn</th><th>DescripciÛn</th></tr>
+            <tr><td>COALESCE(a,b,...)</td><td>Retorna primer no nulo</td></tr>
+            <tr><td>NULLIF(a,b)</td><td>Retorna null si a=b</td></tr>
+            <tr><td>GREATEST(a,b,...)</td><td>Retorna mayor</td></tr>
+            <tr><td>LEAST(a,b,...)</td><td>Retorna menor</td></tr>
+        </table>
+
+        <h2>8. Errores y Excepciones</h2>
+        
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+-- Tipos de RAISE
+RAISE NOTICE 'Mensaje informativo';
+RAISE WARNING 'Advertencia';
+RAISE EXCEPTION 'Error fatal';
+
+-- Con variables
+RAISE NOTICE 'El cliente % tiene % pedidos', v_nombre, v_contador;
+
+-- Manejo de excepciones
+BEGIN
+    -- operaciÛn que puede fallar
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE NOTICE 'No se encontrÛ el registro';
+    WHEN TOO_MANY_ROWS THEN
+        RAISE NOTICE 'Se devolvieron m˙ltiples filas';
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Error: %', SQLERRM;
+END;</pre>
+
+        <hr>
+
+        <section class="laboratorio">
+            <h3>?? Laboratorio: PL/pgSQL</h3>
+            <ol style="margin-left: 20px;">
+                <li>Crea una funciÛn que reciba un ID de cliente y retorne el total de sus pedidos</li>
+                <li>Crea un procedimiento que insertee un nuevo cliente</li>
+                <li>Crea una funciÛn que actualice el precio de productos seg˙n un porcentaje</li>
+                <li>Crea un procedimiento que liste clientes con sus pedidos usando cursor</li>
+            </ol>
+        </section>
+
     </div>
 </div>
 
 </body>
 </html>
+
+
+

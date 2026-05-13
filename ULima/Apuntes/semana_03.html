@@ -1,248 +1,214 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
+<head><link rel="stylesheet" href="master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 03 - Modelo Entidad-RelaciÃ³n</title>
-    <link rel="stylesheet" href="estilo-cornell.css">
-<link rel=""stylesheet"" href=""base-moderno.css"">`n</head>
+    <title>Semana 03 - DDL y Esquema Relacional</title>
+    
+</head>
 <body>
 
-<div class="header-box">
-    <h1>Modelo Entidad-RelaciÃ³n</h1>
-    <p>Semana 03 | IngenierÃ­a de Datos</p>
-</div>
+<header class="header">
+    <h1 class="header__title">Lenguaje de Definicin de Datos (DDL)</h1>
+</header>
 
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>PALABRAS CLAVE</h3>
-        <ul>
-            <li><strong>Â§ Entidad</strong><br>Objeto con existencia propia</li>
-            <li><strong>Â§ Atributo</strong><br>CaracterÃ­sticas de una entidad</li>
-            <li><strong>Â§ RelaciÃ³n</strong><br>AsociaciÃ³n entre entidades</li>
-            <li><strong>Â§ Cardinalidad</strong><br>1:1, 1:N, N:M</li>
-            <li><strong>Â§ PK / FK</strong><br>Primary / Foreign Key</li>
-            <li><strong>Â§ Diagrama ER</strong><br>RepresentaciÃ³n visual</li>
+<div class="cornell">
+    <aside class="sidebar">
+        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
+        <ul class="sidebar__list">
+            <li class="sidebar__list-item"><strong> CREATE TABLE</strong><br>Crear tablas</li>
+            <li class="sidebar__list-item"><strong> ALTER TABLE</strong><br>Modificar tablas</li>
+            <li class="sidebar__list-item"><strong> DROP TABLE</strong><br>Eliminar tablas</li>
+            <li class="sidebar__list-item"><strong> PRIMARY KEY</strong><br>Clave primaria</li>
+            <li class="sidebar__list-item"><strong> FOREIGN KEY</strong><br>Clave fornea</li>
+            <li class="sidebar__list-item"><strong> Constraints</strong><br>RESTRICCIONES</li>
+            <li class="sidebar__list-item"><strong> Tipos de datos</strong><br>VARCHAR, NUMBER, DATE</li>
         </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">ðŸ  Ãndice del Curso</a></li>
+        <div class="sidebar__section">
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__list-item"><a href="index.html">🏠 Índice del Curso</a></li>
+                <li class="sidebar__list-item"><a href="semana_02.html">← Semana 02</a></li>
+                <li class="sidebar__list-item"><a href="semana_04.html">→ Semana 04</a></li>
             </ul>
         </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
-        <div class="box box-note">
-            <p><strong>ðŸ“Œ Objetivos de Aprendizaje</strong></p>
-            <ul style="margin: 8px 0 0 20px;">
-                <li>Comprender entidades, atributos y relaciones</li>
-                <li>Identificar cardinalidad en relaciones</li>
-                <li>DiseÃ±ar diagramas ER para modelos de datos</li>
-                <li>Distinguir claves: Primary, Foreign, Candidate</li>
+    <main class="main">
+        <div class="box box--note">
+            <p class="main__text"><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Crear tablas con tipos de datos apropiados</li>
+                <li class="main__list-item">Definir restricciones de integridad</li>
+                <li class="main__list-item">Modificar tablas con ALTER TABLE</li>
+                <li class="main__list-item">Eliminar tablas correctamente</li>
+                <li class="main__list-item">Entender la diferencia entre Oracle y PostgreSQL</li>
             </ul>
         </div>
 
         <section class="architect-insight">
-<h4>💡 Insight del Arquitecto</h4>
-<h1>Clase 1.03: Tipología de Bases de Datos en la Era Cloud</h1>
-<p><strong>Instructor:</strong> Principal Data Architect &amp; Senior DBA</p>
-<h2>1. Teoría de Alto Nivel: El Fin de una Era Monocasco</h2>
-<p>Si observas todo el plan de estudios original de 2013, la única base de datos que existía en el universo era la Relacional (RDBMS), y la herramienta para todo problema era SQL.</p>
-<p>En 2026, intentar resolver cada problema de arquitectura de software únicamente con PostgreSQL es un claro antipatrón (el famoso "Golden Hammer"). Hoy entendemos que los sistemas distribuidos requieren herramientas especializadas según los patrones de lectura y escritura de la aplicación.</p>
-<h3>El Espectro de Motores de Persistencia Modernos</h3>
-<ol>
-<li>
-<p><strong>Bases de Datos Relacionales (RDBMS): PostgreSQL, MySQL</strong></p>
-<ul>
-<li><strong>Su Fuerza:</strong> Integridad transaccional absoluta (ACID), operaciones estructuradas complejas (JOINs masivos) y madurez de su ecosistema. En Postgres 15+ tienes capacidades analíticas y documentales con JSONB que difuminan la línea entre RDBMS y NoSQL.</li>
-<li><strong>Su Debilidad Histórica:</strong> Escalabilidad horizontal nativa. Aunque existen extensiones como Citus para sharding, lidiar con escalado escribiendo a través de múltiples nodos geográficos sigue siendo complejo.</li>
-</ul>
-</li>
-<li>
-<p><strong>NoSQL Orientado a Documentos (MongoDB, Couchbase)</strong></p>
-<ul>
-<li><strong>Su Fuerza:</strong> Flexibilidad pura (<em>Schema-on-read</em>). Perfecto para catálogos de productos donde cada ítem tiene atributos diferentes y el volumen de datos obliga a distribuir rápidamente sin las fricciones de bloqueo de un esquema rígido. Si la aplicación cambia de versión frecuentemente, no necesitas planificar complicadas migraciones de tablas DDL.</li>
-</ul>
-</li>
-<li>
-<p><strong>NoSQL de Familias de Columnas (Cassandra, ScyllaDB)</strong></p>
-<ul>
-<li><strong>Su Fuerza:</strong> Ingesta MASIVA y escalado multi-datacenter maestro-maestro (Masterless). Excelente para casos de uso IoT (Telemetría de millones de sensores).</li>
-<li><strong>El Precio a Pagar:</strong> Debes modelar tu base de datos basándote EXACTAMENTE en la consulta que harás (Modelado Basado en Query). No hay "JOINs" en disco eficientes, toda la desnormalización debe ocurrir en el diseño.</li>
-</ul>
-</li>
-<li>
-<p><strong>Graph Databases (Neo4j)</strong></p>
-<ul>
-<li><strong>Su Fuerza:</strong> Relaciones altamente conectadas (Rutas logísticas, Análisis de Fraude, Redes Sociales). Si tienes en un RDBMS tablas con referencias a sí mismas, obligando consultas recursivas ineficientes de 10 niveles de profundidad, un recorrido por grafos (Cypher) lo hará exponencialmente más rápido.</li>
-</ul>
-</li>
-<li>
-<p><strong>NewSQL y Vector Databases (CockroachDB / Pinecone, pgvector)</strong></p>
-<ul>
-<li><strong>El Estado del Arte 2026:</strong> Los NewSQL nacen para arreglar el gran defecto del RDBMS: brindan semántica SQL y compatibilidad ACID, pero distribuyen los datos y toleran fallos de nodos en arquitecturas nativas de Cloud (Kubernetes). Y por otra parte, la explosión de Inteligencia Artificial obliga al almacenamiento de <em>Embeddings</em>, integrando bases de datos puramente vectoriales o capacidades híbridas directamente en el motor.</li>
-</ul>
-</li>
-</ol>
-<h2>2. Integración SDLC: La Arquitectura Políglota</h2>
-<p>En un Ciclo de Desarrollo Moderno, tu microservicio "A" usa Postgres, tu microservicio "B" de analítica de logs usa Elasticsearch, y tu microservicio "C" para los carritos de compras usa Redis.</p>
-<p>Tu trabajo como Data Architect no es saber escribir la sentencia de <code>CREATE TABLE</code> más compleja, sino diseñar el <strong>Data Mesh</strong>: cómo los eventos y transacciones cruzan de forma resiliente estas tecnologías divergentes.</p>
-<h2>3. Reto de Arquitectura Políglota (Laboratorio)</h2>
-<p><strong>El Escenario:</strong>
-Piensa en el trabajo final de 2013 (crear reportes de bodega con procedimientos almacenados en una sola DB).</p>
-<p>Imagina que hoy te contrata Netflix. Su modelo de datos no puede vivir en un solo Oracle. Ellos manejan:</p>
-<ol>
-<li><strong>Perfiles de Usuarios y Pagos:</strong> (Súper crítico, no puedes perder facturas, millones de operaciones de cobros por mes).</li>
-<li><strong>Catálogo de Películas:</strong> (Altamente distribuido globalmente, los clientes buscan por múltiples metadatos y categorías cambiantes).</li>
-<li><strong>El Motor de Recomendaciones:</strong> (Relaciona lo que ven tus amigos y gente como tú, para recomendar qué ver a continuación en tiempo real).</li>
-</ol>
-<p><strong>El Reto de Decisión Arquitectónica:</strong>
-Asigna a cada caso de uso anterior (1, 2 y 3) una Categoría de Base de Datos moderna (RDBMS, Documental, Grafos, Familias de Columnas, en memoria, etc.) y justifica por qué el enfoque clásico de 2013 (ponerlo todo en tablas relacionales con <em>triggers</em>) generaría un desastre masivo a escala global.</p>
-</section>
-<h2>1. Fundamentos del Modelo ER</h2>
-        <span class="timestamp">Conceptos por E.F. Codd (1970)</span>
-        
-        <p>El Modelo Entidad-RelaciÃ³n (ER) fue propuesto por <strong>Peter Chen</strong> en 1976. Se fundamenta en:</p>
-        
-        <ul>
-            <li><strong>Entidad:</strong> Objeto con existencia propia y distinguible. Ej: Cliente, Pedido, Producto</li>
-            <li><strong>Atributo:</strong> CaracterÃ­stica o propiedad de una entidad. Ej: Nombre, Edad, Precio</li>
-            <li><strong>RelaciÃ³n:</strong> AsociaciÃ³n o conexiÃ³n entre entidades. Ej: Cliente REALIZA Pedido</li>
-        </ul>
+            <h4 class="main__title--sub">💡 Insight del Arquitecto: Diseo Fsico en 2026</h4>
+            <p class="main__text"><strong>PostgreSQL vs Oracle:</strong> El material original usaba sintaxis Oracle (VARCHAR2, NUMBER). En PostgreSQL moderno usamos:</p>
+            <ul class="main__list">
+                <li class="main__list-item"><code>VARCHAR(n)</code> en lugar de VARCHAR2(n)</li>
+                <li class="main__list-item"><code>INTEGER</code> o <code>SERIAL</code> en lugar de NUMBER</li>
+                <li class="main__list-item"><code>TIMESTAMP</code> o <code>DATE</code> para fechas</li>
+                <li class="main__list-item"><code>BOOLEAN</code> para valores lgicos</li>
+                <li class="main__list-item"><code>JSONB</code> para documentos</li>
+            </ul>
+        </section>
 
-        <div class="box box-concep">
-            <p><strong>Concepto clave:</strong> Una entidad es un objeto que existe y es distinguible de otros objetos. Los atributos describen las caracterÃ­sticas de las entidades. Las relaciones describen cÃ³mo las entidades se asocian entre sÃ­.</p>
-        </div>
-
-        <h2>2. Tipos de Entidades</h2>
+        <h2 class="main__title">1. Tipos de Datos del Modelo Relacional</h2>
+        <span class="timestamp">PostgreSQL</span>
         
-        <ul>
-            <li><strong>Fuertes:</strong> Tienen existencia independiente. Su PK no depende de otra entidad.</li>
-            <li><strong>DÃ©biles:</strong> Su existencia depende de una entidad fuerte. No tienen PK propia.</li>
-        </ul>
-
-        <h2>3. Cardinalidad</h2>
-        
-        <table>
-            <tr><th>Tipo</th><th>SÃ­mbolo</th><th>DescripciÃ³n</th><th>Ejemplo</th></tr>
-            <tr><td>Uno a Uno</td><td>1:1</td><td>Cada elemento de A se relaciona con uno de B</td><td>Empleado - Oficina</td></tr>
-            <tr><td>Uno a Muchos</td><td>1:N</td><td>Un elemento de A con muchos de B</td><td>Cliente - Pedidos</td></tr>
-            <tr><td>Muchos a Muchos</td><td>N:M</td><td>Muchos elementos de A con muchos de B</td><td>Estudiante - Curso</td></tr>
+        <table class="table">
+            <tr class="table__tr"><th class="table__th">Tipo</th><th class="table__th">Descripcin</th><th class="table__th">Ejemplo</th></tr>
+            <tr class="table__tr"><td class="table__td">VARCHAR(n)</td><td class="table__td">Cadena variable hasta n caracteres</td><td class="table__td">nombre VARCHAR(100)</td></tr>
+            <tr class="table__tr"><td class="table__td">CHAR(n)</td><td class="table__td">Cadena fija de n caracteres</td><td class="table__td">codigo CHAR(5)</td></tr>
+            <tr class="table__tr"><td class="table__td">INTEGER</td><td class="table__td">Entero de 4 bytes</td><td class="table__td">edad INTEGER</td></tr>
+            <tr class="table__tr"><td class="table__td">BIGINT</td><td class="table__td">Entero de 8 bytes</td><td class="table__td">BigSerial</td></tr>
+            <tr class="table__tr"><td class="table__td">NUMERIC(p,s)</td><td class="table__td">Punto fijo exacto</td><td class="table__td">precio NUMERIC(10,2)</td></tr>
+            <tr class="table__tr"><td class="table__td">DATE</td><td class="table__td">Fecha sin hora</td><td class="table__td">fecha_nac DATE</td></tr>
+            <tr class="table__tr"><td class="table__td">TIMESTAMP</td><td class="table__td">Fecha con hora</td><td class="table__td">fecha_alta TIMESTAMP</td></tr>
+            <tr class="table__tr"><td class="table__td">BOOLEAN</td><td class="table__td">Verdadero/Falso</td><td class="table__td">activo BOOLEAN</td></tr>
+            <tr class="table__tr"><td class="table__td">SERIAL</td><td class="table__td">Auto-incremento</td><td class="table__td">id SERIAL PRIMARY KEY</td></tr>
+            <tr class="table__tr"><td class="table__td">UUID</td><td class="table__td">Identificador nico</td><td class="table__td">codigo UUID DEFAULT gen_random_uuid()</td></tr>
         </table>
 
-        <h2>4. Claves en el Modelo Relacional</h2>
+        <h2 class="main__title">2. Creacin de Tablas</h2>
         
-        <ul>
-            <li><strong>Primary Key (PK):</strong> Identifica cada tupla de forma Ãºnica. No puede ser NULL ni duplicada.</li>
-            <li><strong>Foreign Key (FK):</strong> Apunta a una PK en otra tabla. Mantiene integridad referencial.</li>
-            <li><strong>Clave Candidata:</strong> Atributo que podrÃ­a ser PK. Es Ãºnica y no nula.</li>
-            <li><strong>Superclave:</strong> Conjunto de atributos que identificanå”¯ä¸€.</li>
-        </ul>
+        <div class="box box--example">
+            <p class="main__text"><strong>Sintaxis PostgreSQL:</strong></p>
+            <pre class="code">
+CREATE TABLE nombre_tabla (
+    columna1 tipo_dato [RESTRICCIONES],
+    columna2 tipo_dato [RESTRICCIONES],
+    ...
+    [RESTRICCIONES_DE_TABLA]
+);</pre>
+        </div>
 
-        <h2>5. Ãlgebra Relacional</h2>
+        <h3 class="main__title--sub">Ejemplo: Tabla CLIENTE</h3>
+        <pre class="code">
+-- PostgreSQL
+CREATE TABLE cliente (
+    id_cliente SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    telefono VARCHAR(20),
+    fecha_registro DATE DEFAULT CURRENT_DATE,
+    activo BOOLEAN DEFAULT TRUE
+);</pre>
+
+        <div class="box box--warning">
+            <p class="main__text"><strong>⚠️ Equivalencias Oracle → PostgreSQL:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">NUMBER → INTEGER o NUMERIC</li>
+                <li class="main__list-item">VARCHAR2 → VARCHAR</li>
+                <li class="main__list-item">NUMBER(7) PRIMARY KEY → SERIAL PRIMARY KEY</li>
+            </ul>
+        </div>
+
+        <h2 class="main__title">3. Restricciones (Constraints)</h2>
         
-        <table>
-            <tr><th>OperaciÃ³n</th><th>SÃ­mbolo</th><th>DescripciÃ³n</th><th>SQL Equivalente</th></tr>
-            <tr><td>SelecciÃ³n</td><td>Ïƒ</td><td>Filtra filas</td><td>WHERE</td></tr>
-            <tr><td>ProyecciÃ³n</td><td>Ï€</td><td>Selecciona columnas</td><td>SELECT columnas</td></tr>
-            <tr><td>UniÃ³n</td><td>âˆª</td><td>Combina conjuntos</td><td>UNION</td></tr>
-            <tr><td>Join</td><td>â‹ˆ</td><td>Combina tablas</td><td>JOIN</td></tr>
+        <h3 class="main__title--sub">Restricciones de Columna</h3>
+        <table class="table">
+            <tr class="table__tr"><th class="table__th">Restriccin</th><th class="table__th">Descripcin</th></tr>
+            <tr class="table__tr"><td class="table__td">NOT NULL</td><td class="table__td">Obligatorio - no permite valores nulos</td></tr>
+            <tr class="table__tr"><td class="table__td">UNIQUE</td><td class="table__td">Valores no pueden repetirse</td></tr>
+            <tr class="table__tr"><td class="table__td">DEFAULT valor</td><td class="table__td">Valor por defecto</td></tr>
+            <tr class="table__tr"><td class="table__td">CHECK (condicin)</td><td class="table__td">Validacin personalizada</td></tr>
         </table>
 
-        <div class="diagram-ascii">
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚     DIAGRAMA ER - EJEMPLO DE LIBRERÃA              â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”       â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                â”‚
-â”‚    â”‚ AUTOR    â”‚       â”‚  LIBRO   â”‚                â”‚
-â”‚    â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤       â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤                â”‚
-â”‚    â”‚ PK id    â”‚â”€â”€N:Mâ”€â”€â”‚ PK isbn  â”‚                â”‚
-â”‚    â”‚ nombre   â”‚       â”‚ titulo   â”‚                â”‚
-â”‚    â”‚ pais     â”‚       â”‚ precio   â”‚                â”‚
-â”‚    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜       â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-        </div>
-
-        <div class="box box-concep">
-            <p><strong>ðŸ“ Resumen:</strong> El modelo ER permite representar el mundo real mediante entidades (objetos), atributos (propiedades) y relaciones (asociaciones). La cardinalidad define cuÃ¡ntos elementos de una entidad se relacionan con otros. Las claves (PK/FK) garantizan la integridad y permiten las relaciones entre tablas.</p>
-        </div>
-    </div>
-</div>
-
-<div class="section-box">
-    <h2>EJERCICIO RESUELTO</h2>
-    <p class="question">Enunciado:</p>
-    <p>DiseÃ±a el modelo ER para una universidad: Estudiantes, Cursos, Profesores. Un estudiante puede inscribirse en muchos cursos. Un curso puede tener muchos estudiantes. Un profesor puede impartir muchos cursos.</p>
+        <h3 class="main__title--sub">Restricciones de Tabla</h3>
+        <pre class="code">
+CREATE TABLE orden_pedido (
+    numero_orden INTEGER,
+    fecha_colocacion DATE,
+    fecha_llenado DATE,
+    numero_embarques INTEGER,
+    id_cliente INTEGER,
     
-    <p class="answer">
-    <strong>SoluciÃ³n:</strong><br>
-    - ESTUDIANTE (PK id_estudiante, nombre, email)<br>
-    - CURSO (PK id_curso, nombre, creditos)<br>
-    - PROFESOR (PK id_profesor, nombre, especialidad)<br>
-    - INSCRIPCION (FK id_estudiante, FK id_curso) - relaciÃ³n N:M<br>
-    - IMPARTE (FK id_profesor, FK id_curso) - relaciÃ³n 1:N
-    </p>
-</div>
+    -- Restricciones de tabla
+    PRIMARY KEY (numero_orden),
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);</pre>
 
-<div class="section-box">
-    <h2>QUIZ DE REPASO</h2>
-    
-    <p class="q-level">Nivel 1 â€” ComprensiÃ³n</p>
-    <p class="question">P1: Â¿QuÃ© es una entidad?</p>
-    <p class="answer">R1: Un objeto con existencia propia y distinguible de otros (ej: Cliente, Producto).</p>
-
-    <p class="q-level">Nivel 2 â€” AplicaciÃ³n</p>
-    <p class="question">P2: Â¿QuÃ© representa una relaciÃ³n 1:N?</p>
-    <p class="answer">R2: Que un elemento de una entidad se relaciona con muchos de otra (ej: Cliente - Pedidos).</p>
-
-    <p class="q-level">Nivel 3 â€” AnÃ¡lisis</p>
-    <p class="question">P3: Â¿Por quÃ© una tabla sin PRIMARY KEY es problemÃ¡tica?</p>
-    <p class="answer">R3: Porque no hay forma Ãºnica de identificar cada fila, permitiendo duplicados y relaciones ambiguas.</p>
-</div>
-
-<nav class="nav">
-    <a href="semana_02.html">â† Semana 02</a>
-    <a href="semana_04.html">Semana 04 â†’</a>
-</nav>
-
-<div class="final-section">
-    <div class="conceptual-map">
-        <h3>Mapa Mental</h3>
-        <div class="mindmap-container">
-            <div class="mindmap-central">MODELO ENTIDAD-RELACIÃ“N</div>
-            <div class="mindmap-branch">
-                <div class="node">Entidades
-                    <div class="subnode">Fuertes</div>
-                    <div class="subnode">DÃ©biles</div>
-                </div>
-                <div class="node">Atributos
-                    <div class="subnode">Simples</div>
-                    <div class="subnode">Compuestos</div>
-                    <div class="subnode">Derivados</div>
-                </div>
-                <div class="node">Relaciones
-                    <div class="subnode">1:1</div>
-                    <div class="subnode">1:N</div>
-                    <div class="subnode">N:M</div>
-                </div>
-                <div class="node">Claves
-                    <div class="subnode">PK</div>
-                    <div class="subnode">FK</div>
-                    <div class="subnode">Candidata</div>
-                </div>
-            </div>
+        <h2 class="main__title">4. Clave Fornea con Opciones</h2>
+        
+        <div class="box box--concept">
+            <p class="main__text"><strong>Opciones de FOREIGN KEY:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item"><code>ON DELETE CASCADE:</code> Elimina filas hijos automticamente</li>
+                <li class="main__list-item"><code>ON DELETE SET NULL:</code> Pone NULL en la FK</li>
+                <li class="main__list-item"><code>ON DELETE RESTRICT:</code> Impide eliminar si hay hijos</li>
+                <li class="main__list-item"><code>ON UPDATE CASCADE:</code> Actualiza automticamente</li>
+            </ul>
         </div>
-    </div>
-    <div class="additional-material">
-        <h3>Material Adicional</h3>
-        <ul>
-            <li><span class="tag">Video</span> <a href="#">Diagramas ER - 20 min</a></li>
-            <li><span class="tag">Lectura</span> <a href="#">Paper original de Chen (1976)</a></li>
-            <li><span class="tag">PrÃ¡ctica</span> <a href="#">Ejercicios de cardinalidad</a></li>
-        </ul>
-    </div>
+
+        <h2 class="main__title">5. Alteracin de Tablas</h2>
+        
+        <pre class="code">
+-- Agregar columna
+ALTER TABLE cliente ADD COLUMN observaciones TEXT;
+
+-- Modificar columna
+ALTER TABLE cliente ALTER COLUMN telefono TYPE VARCHAR(30);
+
+-- Agregar restriccin
+ALTER TABLE cliente ADD CONSTRAINT email_check 
+    CHECK (email LIKE '%@%.%');
+
+-- Eliminar columna
+ALTER TABLE cliente DROP COLUMN observaciones;
+
+-- Eliminar restriccin
+ALTER TABLE cliente DROP CONSTRAINT email_check;</pre>
+
+        <h2 class="main__title">6. Eliminacin de Tablas</h2>
+        
+        <pre class="code">
+-- Eliminar tabla (solo si no hay dependencias)
+DROP TABLE nombre_tabla;
+
+-- Eliminar con todas las restricciones de FK
+DROP TABLE nombre_tabla CASCADE;
+
+-- Eliminar solo si existe
+DROP TABLE IF EXISTS nombre_tabla;</pre>
+
+        <h2 class="main__title">7. Otros Objetos de BD</h2>
+        
+        <table class="table">
+            <tr class="table__tr"><th class="table__th">Objeto</th><th class="table__th">Descripcin</th></tr>
+            <tr class="table__tr"><td class="table__td"><strong>VIEW</strong></td><td class="table__td">Consulta almacenada virtual</td></tr>
+            <tr class="table__tr"><td class="table__td"><strong>SEQUENCE</strong></td><td class="table__td">Generador de nmeros secuenciales</td></tr>
+            <tr class="table__tr"><td class="table__td"><strong>INDEX</strong></td><td class="table__td">Estructura para bsquedas rpidas</td></tr>
+            <tr class="table__tr"><td class="table__td"><strong>SYNONYM</strong></td><td class="table__td">Nombre alternativo (no en PostgreSQL)</td></tr>
+        </table>
+
+        <hr>
+
+        <section class="laboratorio">
+            <h3 class="main__title--sub">🔬 Laboratorio: DDL en PostgreSQL</h3>
+            <p class="main__text">Crea el siguiente esquema para una tienda:</p>
+            <ol class="main__list">
+                <li class="main__list-item">Tabla <strong>producto</strong>: id (SERIAL PK), nombre, precio, stock</li>
+                <li class="main__list-item">Tabla <strong>pedido</strong>: id (SERIAL PK), fecha, total, id_cliente (FK)</li>
+                <li class="main__list-item">Tabla <strong>detalle_pedido</strong>: id_pedido (FK), id_producto (FK), cantidad, subtotal</li>
+                <li class="main__list-item">Aade constraint CHECK para que precio > 0</li>
+                <li class="main__list-item">Aade constraint para que cantidad > 0</li>
+            </ol>
+        </section>
+
+    </main>
 </div>
 
 </body>
 </html>
+
+
+
