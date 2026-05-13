@@ -1,233 +1,62 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="stylesheet" href="master.css">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 06 - Modelamiento Entidad-RelaciÛn</title>
-    
-    
+    <title>Semana 06 - Forma Normal de Boyce-Codd (BCNF)</title>
+    <link rel="stylesheet" href="master.css">
 </head>
 <body>
 
-<div class="header-box">
-    <h1>Modelamiento de Datos: Modelo Entidad-RelaciÛn</h1>
-    <p>Semana 06 | IngenierÌa de Datos | ULima 2013-2</p>
+<div class="header">
+    <h1 class="header__title">Boyce-Codd Normal Form (BCNF)</h1>
+    <p class="header__subtitle">Semana 06 | Normalizaci√≥n Avanzada</p>
 </div>
 
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>PALABRAS CLAVE</h3>
-        <ul>
-            <li><strong>ß Entidad</strong><br>Objeto del mundo real</li>
-            <li><strong>ß Atributo</strong><br>Propiedad de una entidad</li>
-            <li><strong>ß RelaciÛn</strong><br>AsociaciÛn entre entidades</li>
-            <li><strong>ß Cardinalidad</strong><br>1:1, 1:N, N:N</li>
-            <li><strong>ß PK/FK</strong><br>Clave primaria/for·nea</li>
-            <li><strong>ß DER</strong><br>Diagrama Entidad-RelaciÛn</li>
-            <li><strong>ß Supertipo/Subtipo</strong><br>Herencia de entidades</li>
+<div class="cornell">
+    <aside class="sidebar">
+        <h2 class="sidebar__title">Conceptos Clave</h2>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>Determinante</strong> Un atributo del cual depende funcionalmente otro.</li>
+            <li class="sidebar__item"><strong>BCNF</strong> Refinamiento de la 3FN.</li>
+            <li class="sidebar__item"><strong>Clave Candidata</strong> Superclave m√≠nima.</li>
         </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">?? Õndice del Curso</a></li>
-                <li><a href="semana_05.html">? Semana 05</a></li>
-                <li><a href="semana_07.html">? Semana 07</a></li>
-            </ul>
-        </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
-        <div class="box box-note">
-            <p><strong>?? Objetivos de Aprendizaje</strong></p>
-            <ul style="margin: 8px 0 0 20px;">
-                <li>Identificar entidades y atributos en un dominio</li>
-                <li>Determinar claves primarias</li>
-                <li>Modelar relaciones entre entidades</li>
-                <li>Aplicar cardinalidad (1:1, 1:N, N:N)</li>
-                <li>Construir diagramas Entidad-RelaciÛn</li>
-                <li>Entender entidades dÈbiles y fuertes</li>
-            </ul>
+    <main class="main">
+        <h2 class="main__title">1. ¬øQu√© es la BCNF?</h2>
+        <p class="main__text">La Forma Normal de Boyce-Codd es una versi√≥n ligeramente m√°s fuerte de la Tercera Forma Normal (3FN). Se utiliza para manejar anomal√≠as que la 3FN no puede resolver cuando hay claves candidatas compuestas que se solapan.</p>
+        
+        <div class="box box--note">
+            <p><strong>Regla de Boyce-Codd:</strong> Una tabla est√° en BCNF si y solo si cada determinante es una clave candidata.</p>
         </div>
 
-        <section class="architect-insight">
-            <h4>?? Insight del Arquitecto: Modelamiento en 2026</h4>
-            <p><strong>El modelamiento E-R sigue siendo fundamental:</strong> Aunque surgieron nuevos paradigmas (NoSQL, Graph Databases), el modelo E-R de Peter Chen (1976) sigue siendo la base del diseÒo de datos relacionales. En 2026, herramientas como dbdiagram.io, DBeaver, y PostgreSQL's schema inspector hacen el modelado m·s accesible.</p>
-        </section>
-
-        <h2>1. Conceptos Fundamentales</h2>
-        
-        <ul>
-            <li><strong>Entidad:</strong> Objeto del mundo real que existe y es distinguible
-                <ul>
-                    <li><em>Tipo entidad:</em> ColecciÛn de entidades similares (ej: CLIENTE)</li>
-                    <li><em>Instancia:</em> Una entidad especÌfica (ej: Juan PÈrez)</li>
-                </ul>
-            </li>
-            <li><strong>Atributo:</strong> Propiedad o caracterÌstica de una entidad
-                <ul>
-                    <li><em>Simple:</em> No divisible (edad)</li>
-                    <li><em>Compuesto:</em> Divisible (direcciÛn ? ciudad, calle)</li>
-                    <li><em>Multivalorado:</em> Varios valores (telÈfonos)</li>
-                    <li><em>Derivado:</strong> Calculado (edad desde fecha_nacimiento)</li>
-                </ul>
-            </li>
-            <li><strong>RelaciÛn:</strong> AsociaciÛn entre entidades</li>
+        <h2 class="main__title--sub">2. El Problema de la 3FN</h2>
+        <p class="main__text">Existen casos donde una tabla est√° en 3FN pero a√∫n presenta redundancia. Esto sucede cuando:</p>
+        <ul class="main__list">
+            <li class="main__list-item">Existen m√∫ltiples claves candidatas.</li>
+            <li class="main__list-item">Dichas claves candidatas son compuestas.</li>
+            <li class="main__list-item">Las claves candidatas se solapan (tienen atributos en com√∫n).</li>
         </ul>
 
-        <h2>2. Claves en el Modelamiento</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Clave Primaria (PK):</strong> Atributo o conjunto de atributos que identifica??amente cada instancia de una entidad.</p>
+        <div class="architect-insight">
+            <p><strong>Insight del Arquitecto:</strong> Si un atributo no clave determina a parte de una clave compuesta, estamos ante una anomal√≠a de BCNF. Debemos extraer esa relaci√≥n a una tabla maestra.</p>
         </div>
 
-        <ul>
-            <li><strong>CaracterÌsticas:</strong>
-                <ul>
-                    <li>No puede ser NULL</li>
-                    <li>Debe ser ˙nica</li>
-                    <li>Ideally inmutable (no cambia)</li>
-                    <li>Simple (un atributo) o Compuesta (varios)</li>
-                </ul>
-            </li>
-            <li><strong>Clave For·nea (FK):</strong> Atributo que referencia la PK de otra tabla, estableciendo la relaciÛn</li>
-        </ul>
+        <h2 class="main__title--sub">3. Procedimiento de Descomposici√≥n</h2>
+        <p class="main__text">Para normalizar a BCNF:</p>
+        <ol class="main__list">
+            <li class="main__list-item">Identificar todas las dependencias funcionales.</li>
+            <li class="main__list-item">Identificar los determinantes que no son claves candidatas.</li>
+            <li class="main__list-item">Descomponer la relaci√≥n original en dos nuevas relaciones, aislando la dependencia infractora.</li>
+        </ol>
 
-        <h2>3. Cardinalidad de Relaciones</h2>
-        
-        <table>
-            <tr><th>Tipo</th><th>DescripciÛn</th><th>Ejemplo</th></tr>
-            <tr>
-                <td><strong>1:1</strong> (Uno a Uno)</td>
-                <td>Cada entidad se relaciona con exactamente una entidad del otro lado</td>
-                <td>Empleado ? Departamento (cada empleado tiene 1 dept)</td>
-            </tr>
-            <tr>
-                <td><strong>1:N</strong> (Uno a Muchos)</td>
-                <td>Una entidad se relaciona con muchas del otro lado</td>
-                <td>Cliente ? Pedidos (un cliente tiene muchos pedidos)</td>
-            </tr>
-            <tr>
-                <td><strong>N:N</strong> (Muchos a Muchos)</td>
-                <td>Muchas entidades se relacionan con muchas del otro lado</td>
-                <td>Estudiante ? Curso (estudiante puede llevar muchos cursos)</td>
-            </tr>
-        </table>
-
-        <div class="box box-concep">
-            <p><strong>NotaciÛn:</strong></p>
-            <ul>
-                <li>1 ? Una (solo una)</li>
-                <li>N ? Muchas (cero o m·s)</li>
-                <li>(0,1) ? Cero o uno</li>
-                <li>(1,N) ? Uno a muchos</li>
-            </ul>
+        <div class="nav">
+            <a href="semana_05.html" class="nav__link">‚Üê Semana 05</a>
+            <a href="semana_07.html" class="nav__link">Semana 07 ‚Üí</a>
         </div>
-
-        <h2>4. Entidades Fuertes vs DÈbiles</h2>
-        
-        <table>
-            <tr><th>Tipo</th><th>DescripciÛn</th><th>IdentificaciÛn</th></tr>
-            <tr>
-                <td><strong>Fuerte</strong></td>
-                <td>Existe independientemente de otras entidades</td>
-                <td>Tiene su propia PK</td>
-            </tr>
-            <tr>
-                <td><strong>DÈbil</strong></td>
-                <td>Depende existencialmente de otra entidad</td>
-                <td>No tiene PK propia, usa FK + otro atributo</td>
-            </tr>
-        </table>
-
-        <h3>Ejemplo:</h3>
-        <ul>
-            <li><strong>Entidad Fuerte:</strong> CLIENTE (existe por sÌ misma)</li>
-            <li><strong>Entidad DÈbil:</strong> LÕNEA_FACTURA (no existe sin FACTURA)</li>
-        </ul>
-
-        <h2>5. Tipos de Atributos de RelaciÛn</h2>
-        
-        <ul>
-            <li><strong>RelaciÛn Unaria:</strong> RelaciÛn de una entidad consigo misma
-                <br><em>Ej: Empleado ? reporta a ? Empleado (jefe-subordinado)</em></li>
-            <li><strong>RelaciÛn Binaria:</strong> Entre dos entidades (la m·s com˙n)</li>
-            <li><strong>RelaciÛn Ternaria:</strong> Entre tres entidades
-                <br><em>Ej:Proveedor ? Producto ? AlmacÈn</em></li>
-        </ul>
-
-        <h2>6. Entidades Asociativas</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Entidad Asociativa:</strong> Cuando una relaciÛn N:N necesita atributos. Se convierte en una nueva entidad con claves for·neas a las originales.</p>
-        </div>
-
-        <h3>Ejemplo: Estudiante ? Curso ? InscripciÛn</h3>
-        <ul>
-            <li>Estudiante (id_est, nombre, ...) PK: id_est</li>
-            <li>Curso (id_curso, nombre, ...) PK: id_curso</li>
-            <li>InscripciÛn (id_est, id_curso, fecha_insc, ...) 
-                <br>PK: (id_est, id_curso)
-                <br>FK: id_est ? Estudiante
-                <br>FK: id_curso ? Curso</li>
-        </ul>
-
-        <h2>7. Supertipos y Subtipos (Herencia)</h2>
-        
-        <div class="box box-concep">
-            <p><strong>GeneralizaciÛn/EspecializaciÛn:</strong> Cuando entidades comparten atributos comunes pero tienen atributos especÌficos.</p>
-        </div>
-
-        <h3>Ejemplo: PERSONA ? EMPLEADO / CLIENTE</h3>
-        <ul>
-            <li><strong>Supertipo:</strong> PERSONA (id, nombre, direcciÛn, telÈfono)</li>
-            <li><strong>Subtipo:</strong> EMPLEADO (hereda id, nombre, ...) + especÌfico (cargo, departamento, salary)</li>
-            <li><strong>Subtipo:</strong> CLIENTE (hereda id, nombre, ...) + especÌfico (lÌmite_credito, tipo)</li>
-        </ul>
-
-        <h2>8. Reglas de Negocio</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Regla de Negocio:</strong> Enunciado que define o limita alg˙n aspecto del negocio.</p>
-        </div>
-
-        <ul>
-            <li><strong>CaracterÌsticas:</strong>
-                <ul>
-                    <li>Declarativa (QU…, no C”MO)</li>
-                    <li>Precisa y clara</li>
-                    <li>AtÛmica (no divisible)</li>
-                    <li>Consistente</li>
-                </ul>
-            </li>
-            <li><strong>Ejemplos:</strong>
-                <ul>
-                    <li>"Un cliente puede tener m˙ltiples pedidos"</li>
-                    <li>"Cada pedido debe tener al menos un producto"</li>
-                    <li>"El precio no puede ser negativo"</li>
-                </ul>
-            </li>
-        </ul>
-
-        <hr>
-
-        <section class="laboratorio">
-            <h3>?? Laboratorio: Modelamiento E-R</h3>
-            <p>DiseÒa el modelo E-R para un sistema de universidad:</p>
-            <ol style="margin-left: 20px;">
-                <li>Identifica las entidades: Estudiante, Profesor, Curso, Carrera, MatrÌcula</li>
-                <li>Define los atributos de cada entidad (incluye PK)</li>
-                <li>Determina las relaciones entre entidades (cardinalidad)</li>
-                <li>Identifica entidades dÈbiles si las hay</li>
-                <li>Considera si hay herencia (supertipos/subtipos)</li>
-                <li>Dibuja el DER en papel o herramienta</li>
-            </ol>
-        </section>
-
-    </div>
+    </main>
 </div>
 
 </body>
 </html>
-
-
-

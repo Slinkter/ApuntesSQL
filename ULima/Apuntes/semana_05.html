@@ -1,256 +1,86 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="stylesheet" href="master.css">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 05 - Funciones SQL y M·s Consultas</title>
-    
-    
+    <title>Semana 05 - Normalizaci√≥n de Bases de Datos (1FN - 3FN)</title>
+    <link rel="stylesheet" href="master.css">
 </head>
 <body>
 
-<div class="header-box">
-    <h1>Funciones SQL y Consultas Avanzadas</h1>
-    <p>Semana 05 | IngenierÌa de Datos | ULima 2013-2</p>
+<div class="header">
+    <h1 class="header__title">Normalizaci√≥n de Bases de Datos</h1>
+    <p class="header__subtitle">Semana 05 | Teor√≠a Relacional | Ingenier√≠a de Datos</p>
 </div>
 
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>PALABRAS CLAVE</h3>
-        <ul>
-            <li><strong>ß Funciones</strong><br>AgregaciÛn, fecha, texto</li>
-            <li><strong>ß COUNT/SUM/AVG</strong><br>Funciones de grupo</li>
-            <li><strong>ß GROUP BY</strong><br>Agrupar resultados</li>
-            <li><strong>ß HAVING</strong><br>Filtrar grupos</li>
-            <li><strong>ß LIKE/IN/BETWEEN</strong><br>Filtros avanzados</li>
-            <li><strong>ß CASE</strong><br>Condicionales</li>
+<div class="cornell">
+    <aside class="sidebar">
+        <h2 class="sidebar__title">Conceptos Clave</h2>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>Normalizaci√≥n</strong> Proceso de organizar datos para reducir redundancia.</li>
+            <li class="sidebar__item"><strong>1FN</strong> Eliminar grupos repetitivos.</li>
+            <li class="sidebar__item"><strong>2FN</strong> Dependencia funcional completa.</li>
+            <li class="sidebar__item"><strong>3FN</strong> Eliminar dependencias transitivas.</li>
+            <li class="sidebar__item"><strong>Anomal√≠as</strong> Errores al insertar, borrar o actualizar.</li>
         </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">?? Õndice del Curso</a></li>
-                <li><a href="semana_04.html">? Semana 04</a></li>
-                <li><a href="semana_06.html">? Semana 06</a></li>
-            </ul>
-        </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
-        <div class="box box-note">
-            <p><strong>?? Objetivos de Aprendizaje</strong></p>
-            <ul style="margin: 8px 0 0 20px;">
-                <li>Utilizar funciones de agregaciÛn</li>
-                <li>Agrupar datos con GROUP BY</li>
-                <li>Filtrar grupos con HAVING</li>
-                <li>Usar funciones de fecha y texto</li>
-                <li>Crear expresiones condicionales con CASE</li>
-            </ul>
+    <main class="main">
+        <h2 class="main__title">1. ¬øQu√© es la Normalizaci√≥n?</h2>
+        <p class="main__text">La normalizaci√≥n es una t√©cnica formal para el dise√±o de bases de datos que consiste en descomponer tablas complejas en tablas m√°s simples, siguiendo reglas llamadas "Formas Normales".</p>
+        
+        <div class="architect-insight">
+            <p><strong>Insight del Arquitecto:</strong> El objetivo principal no es solo ahorrar espacio, sino garantizar la integridad referencial y evitar anomal√≠as en el ciclo de vida del dato.</p>
         </div>
 
-        <section class="architect-insight">
-            <h4>?? Insight del Arquitecto: Funciones en PostgreSQL</h4>
-            <p><strong>PostgreSQL tiene funciones integradas poderosas:</strong></p>
-            <ul>
-                <li><code>COALESCE(valor, valor_defecto)</code> - maneja nulos elegantemente</li>
-                <li><code>NULLIF(a, b)</code> - retorna null si a = b, ˙til para evitar divisiÛn por cero</li>
-                <li><code>GREATEST(a, b, ...)</code> - retorna el mayor</li>
-                <li><code>LEAST(a, b, ...)</code> - retorna el menor</li>
-            </ul>
-        </section>
-
-        <h2>1. Funciones de AgregaciÛn</h2>
-        <span class="timestamp">COUNT, SUM, AVG, MIN, MAX</span>
+        <h2 class="main__title--sub">2. Primera Forma Normal (1FN)</h2>
+        <p class="main__text">Una tabla est√° en 1FN si y solo si:</p>
+        <ul class="main__list">
+            <li class="main__list-item">Todos los atributos son at√≥micos (no hay grupos repetitivos).</li>
+            <li class="main__list-item">Existe una clave primaria definida.</li>
+        </ul>
         
-        <table>
-            <tr><th>FunciÛn</th><th>DescripciÛn</th><th>Ejemplo</th></tr>
-            <tr><td>COUNT(*)</td><td>Cuenta todas las filas</td><td>COUNT(*) = 100</td></tr>
-            <tr><td>COUNT(columna)</td><td>Cuenta no nulos</td><td>COUNT(email) = 85</td></tr>
-            <tr><td>SUM(columna)</td><td>Suma valores</td><td>SUM(precio) = 15000</td></tr>
-            <tr><td>AVG(columna)</td><td>Promedio</td><td>AVG(edad) = 28.5</td></tr>
-            <tr><td>MIN(columna)</td><td>MÌnimo</td><td>MIN(precio) = 10</td></tr>
-            <tr><td>MAX(columna)</td><td>M·ximo</td><td>MAX(precio) = 5000</td></tr>
-        </table>
-
-        <h3>Ejemplos:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Contar total de registros
-SELECT COUNT(*) FROM cliente;
-
--- Contar valores ˙nicos
-SELECT COUNT(DISTINCT tipo) FROM cliente;
-
--- Sumar precios
-SELECT SUM(precio) FROM producto;
-
--- Promedio de stock
-SELECT AVG(stock) FROM producto;
-
--- Valores extremos
-SELECT MIN(precio), MAX(precio) FROM producto;
-
--- M˙ltiples funciones
-SELECT 
-    COUNT(*) AS total_productos,
-    SUM(stock) AS stock_total,
-    AVG(precio) AS precio_promedio
-FROM producto;</pre>
-
-        <h2>2. La cl·usula GROUP BY</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>GROUP BY:</strong> Agrupa filas con valores iguales para aplicar funciones de agregaciÛn.</p>
+        <div class="box box--example">
+            <p><strong>Ejemplo:</strong> Si una tabla de "Usuarios" tiene campos como <code>url1</code>, <code>url2</code>, <code>url3</code>, est√° violando la 1FN. Se debe crear una tabla separada para las URLs.</p>
         </div>
 
-        <h3>Ejemplos:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Contar clientes por tipo
-SELECT tipo, COUNT(*) AS cantidad
-FROM cliente
-GROUP BY tipo;
+        <h2 class="main__title--sub">3. Segunda Forma Normal (2FN)</h2>
+        <p class="main__text">Para estar en 2FN, una tabla debe:</p>
+        <ul class="main__list">
+            <li class="main__list-item">Estar en 1FN.</li>
+            <li class="main__list-item">Cada atributo no clave debe depender funcionalmente de la totalidad de la clave primaria (no solo de una parte si la clave es compuesta).</li>
+        </ul>
 
--- Ventas por producto
-SELECT id_producto, SUM(cantidad) AS total_vendido
-FROM detalle_pedido
-GROUP BY id_producto;
+        <h2 class="main__title--sub">4. Tercera Forma Normal (3FN)</h2>
+        <p class="main__text">Una tabla est√° en 3FN si:</p>
+        <ul class="main__list">
+            <li class="main__list-item">Est√° en 2FN.</li>
+            <li class="main__list-item">No existen dependencias transitivas (un campo no clave depende de otro campo no clave).</li>
+        </ul>
 
--- Promedio de precio por categorÌa
-SELECT categoria, AVG(precio) AS precio_promedio
-FROM producto
-GROUP BY categoria
-ORDER BY precio_promedio DESC;
-
--- M˙ltiples columnas en GROUP BY
-SELECT categoria, proveedor, COUNT(*) AS productos
-FROM producto
-GROUP BY categoria, proveedor;</pre>
-
-        <div class="box box-warning">
-            <p><strong>Regla:</strong> Toda columna en el SELECT que NO es funciÛn de agregaciÛn DEBE estar en el GROUP BY.</p>
+        <div class="table">
+            <div class="table__th">Nivel</div>
+            <div class="table__th">Regla de Oro</div>
+            <div class="table__tr">
+                <div class="table__td">1FN</div>
+                <div class="table__td">Atomaticidad y PK</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">2FN</div>
+                <div class="table__td">Dependencia de la PK completa</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">3FN</div>
+                <div class="table__td">Nada de dependencias entre no-claves</div>
+            </div>
         </div>
 
-        <h2>3. La cl·usula HAVING</h2>
-        
-        <div class="box box-concep">
-            <p><strong>HAVING:</strong> Filtra grupos despuÈs de GROUP BY (equivale a WHERE pero para grupos).</p>
+        <div class="nav">
+            <a href="semana_04.html" class="nav__link">‚Üê Semana 04</a>
+            <a href="semana_06.html" class="nav__link">Semana 06 ‚Üí</a>
         </div>
-
-        <h3>Ejemplos:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Productos con m·s de 5 unidades vendidas
-SELECT id_producto, SUM(cantidad) AS total
-FROM detalle_pedido
-GROUP BY id_producto
-HAVING SUM(cantidad) > 5;
-
--- Clientes con m·s de 3 pedidos
-SELECT id_cliente, COUNT(*) AS num_pedidos
-FROM orden_pedido
-GROUP BY id_cliente
-HAVING COUNT(*) > 3
-ORDER BY num_pedidos DESC;
-
--- Diferencia WHERE vs HAVING
-SELECT categoria, AVG(precio) AS promedio
-FROM producto
-WHERE activo = TRUE          -- filtra FILAS antes de agrupar
-GROUP BY categoria
-HAVING AVG(precio) > 100;    -- filtra GRUPOS despuÈs de agregar</pre>
-
-        <h2>4. Funciones de Fecha</h2>
-        
-        <table>
-            <tr><th>FunciÛn</th><th>DescripciÛn</th><th>Ejemplo</th></tr>
-            <tr><td>CURRENT_DATE</td><td>Fecha actual</td><td>2026-05-13</td></tr>
-            <tr><td>CURRENT_TIMESTAMP</td><td>Fecha y hora</td><td>2026-05-13 10:30:00</td></tr>
-            <tr><td>EXTRACT(year FROM fecha)</td><td>Extraer componente</td><td>2026</td></tr>
-            <tr><td>AGE(fecha)</td><td>Diferencia de tiempo</td><td>2 years 3 months</td></tr>
-            <tr><td>TO_CHAR(fecha, 'YYYY-MM-DD')</td><td>Formatear</td><td>"2026-05-13"</td></tr>
-        </table>
-
-        <h3>Ejemplos:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Extraer aÒo
-SELECT EXTRACT(YEAR FROM fecha_pedido) AS anio
-FROM orden_pedido;
-
--- Filtrar por mes
-SELECT * FROM orden_pedido
-WHERE EXTRACT(MONTH FROM fecha_pedido) = 5;
-
--- Diferencia de fechas
-SELECT AGE(CURRENT_DATE, fecha_nacimiento) AS edad
-FROM empleado;
-
--- Formatear fecha
-SELECT TO_CHAR(fecha_pedido, 'DD/MM/YYYY') AS fecha_formateada
-FROM orden_pedido;</pre>
-
-        <h2>5. Funciones de Texto</h2>
-        
-        <table>
-            <tr><th>FunciÛn</th><th>DescripciÛn</th><th>Ejemplo</th></tr>
-            <tr><td>LENGTH(cadena)</td><td>Longitud</td><td>LENGTH('Hola') = 4</td></tr>
-            <tr><td>UPPER(cadena)</td><td>May˙sculas</td><td>UPPER('hola') = 'HOLA'</td></tr>
-            <tr><td>LOWER(cadena)</td><td>Min˙sculas</td><td>LOWER('HOLA') = 'hola'</td></tr>
-            <tr><td>TRIM(cadena)</td><td>Quitar espacios</td><td>TRIM(' hola ') = 'hola'</td></tr>
-            <tr><td>SUBSTRING(cadena, inicio, largo)</td><td>Subcadena</td><td>SUBSTR('Hola',1,2) = 'Ho'</td></tr>
-            <tr><td>CONCAT(c1, c2, ...)</td><td>Concatenar</td><td>CONCAT('A','B') = 'AB'</td></tr>
-            <tr><td>REPLACE(cadena, buscar, replace)</td><td>Reemplazar</td><td>REPLACE('A-B','-',':') = 'A:B'</td></tr>
-        </table>
-
-        <h2>6. Expresiones Condicionales (CASE)</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>CASE:</strong> Equivalente al IF-THEN-ELSE en SQL.</p>
-        </div>
-
-        <h3>Ejemplos:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- CASE simple
-SELECT nombre,
-    CASE tipo
-        WHEN 'A' THEN 'Premium'
-        WHEN 'B' THEN 'Est·ndar'
-        WHEN 'C' THEN 'B·sico'
-        ELSE 'Otro'
-    END AS categoria
-FROM cliente;
-
--- CASE con condiciones
-SELECT producto,
-    CASE 
-        WHEN precio > 1000 THEN 'Caro'
-        WHEN precio > 500 THEN 'Medio'
-        ELSE 'Barato'
-    END AS rango_precio
-FROM producto;
-
--- CASE en agregaciÛn
-SELECT 
-    SUM(CASE WHEN estado = 'COMPLETADO' THEN 1 ELSE 0 END) AS completados,
-    SUM(CASE WHEN estado = 'PENDIENTE' THEN 1 ELSE 0 END) AS pendientes
-FROM orden_pedido;</pre>
-
-        <hr>
-
-        <section class="laboratorio">
-            <h3>?? Laboratorio: Funciones de AgregaciÛn</h3>
-            <p>Para la BD de tienda, resuelve:</p>
-            <ol style="margin-left: 20px;">
-                <li>øCu·ntos productos hay en cada categorÌa?</li>
-                <li>øCu·l es el producto m·s caro?</li>
-                <li>øCu·ntos pedidos se hicieron este mes?</li>
-                <li>Lista categorÌas con m·s de 5 productos</li>
-                <li>Muestra los clientes con "Juan" en cualquier parte del nombre</li>
-                <li>Crea una consulta que clasifique clientes por n˙mero de pedidos</li>
-            </ol>
-        </section>
-
-    </div>
+    </main>
 </div>
 
 </body>
 </html>
-
-
-

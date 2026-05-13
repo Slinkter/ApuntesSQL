@@ -1,151 +1,251 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Curso SQL PostgreSQL - Índice del Curso</title>
-    <link rel="stylesheet" href="master.css">
-</head>
-<body>
+    <link rel="stylesheet" href="master.css" />
+  </head>
+  <body>
+    <div class="header">
+      <h1 class="header__title">
+        Administración de Bases de Datos - PostgreSQL
+      </h1>
+      <p class="header__subtitle">Índice del Curso | 16 Semanas</p>
+    </div>
 
-<div class="header">
-    <h1 class="header__title">Administración de Bases de Datos - PostgreSQL</h1>
-    <p class="header__subtitle">Índice del Curso | 16 Semanas</p>
-</div>
+    <!-- SEMANAS 1-7 -->
+    <div class="section-title">Semanas 1-7: Fundamentos y Normalización</div>
 
-<div class="global-tools">
-    <a href="master.css" class="btn-cheat" target="_blank">Ver Hoja de Estilo CSS</a>
-</div>
-
-<!-- SEMANAS 1-7 -->
-<div class="section-title">Semanas 1-7: Fundamentos</div>
-
-<div class="dashboard">
-    <div class="card">
+    <div class="dashboard">
+      <div class="card">
         <h3><span class="week-num">S01</span> Fundamentos</h3>
-        <p>Datos vs Información, Sistemas Tradicionales, Enfoque DBMS, Componentes y Evolución.</p>
+        <p>
+          Datos vs Información, Sistemas Tradicionales, Enfoque DBMS,
+          Componentes y Evolución.
+        </p>
         <a href="semana_01.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S02</span> DBMS y Modelo Relacional</h3>
-        <p>Arquitectura 3 niveles, Propiedades ACID, Lenguajes SQL (DDL, DML, DCL, TCL).</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S02</span> DBMS y Diseño</h3>
+        <p>
+          Arquitectura 3 niveles, Propiedades ACID, Ciclo de Vida del Software
+          de BD.
+        </p>
         <a href="semana_02.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S03</span> Modelo Entidad-Relación</h3>
-        <p>Entidades, Atributos, Relaciones, Cardinalidad, Diagramas ER, Modelo Relacional.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S03</span> Internals & Física</h3>
+        <p>
+          Arquitectura de PostgreSQL, Procesos de Memoria, Almacenamiento en
+          Disco (Páginas 8KB).
+        </p>
         <a href="semana_03.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S04</span> Lenguaje DDL</h3>
-        <p>CREATE, ALTER, DROP, Constraints (PK, FK, UNIQUE, CHECK), PostgreSQL Syntax.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S04</span> Álgebra Relacional & DDL</h3>
+        <p>
+          Operaciones del álgebra relacional, Lenguaje DDL (CREATE, ALTER,
+          DROP), Constraints.
+        </p>
         <a href="semana_04.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S05</span> Consultas Básicas (SELECT)</h3>
-        <p>SELECT, WHERE, ORDER BY, DISTINCT, LIMIT, Funciones escalares y agregadas.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S05</span> Normalización I</h3>
+        <p>
+          Teoría Relacional, 1FN, 2FN, 3FN, Dependencias Funcionales y
+          Anomalías.
+        </p>
         <a href="semana_05.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S06</span> Funciones y Operadores</h3>
-        <p>COALESCE, NULLIF, CASE, CAST, operadores lógicos y de comparación.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S06</span> Normalización II</h3>
+        <p>
+          Forma Normal de Boyce-Codd (BCNF), Determinantes y Claves Candidatas
+          compuestas.
+        </p>
         <a href="semana_06.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S07</span> JOINs y Subconsultas</h3>
-        <p>INNER, LEFT, RIGHT, FULL JOIN, Subconsultas escalares y de tabla.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S07</span> SQL Básico (DML)</h3>
+        <p>
+          SELECT, WHERE, ORDER BY, Consultas de una sola tabla e introducción al
+          DML.
+        </p>
         <a href="semana_07.html">Ver →</a>
+      </div>
     </div>
-</div>
 
-<!-- EXAMEN PARCIAL -->
-<div class="section-title section-title--exam">Semana 8: Examen Parcial</div>
-<div class="dashboard">
-    <div class="card exam-card">
+    <!-- EXAMEN PARCIAL -->
+    <div class="section-title section-title--exam">
+      Semana 8: Examen Parcial
+    </div>
+    <div class="dashboard">
+      <div class="card exam-card">
         <h3><span class="week-num">EXAMEN</span> Evaluación Parcial</h3>
-        <p>50 preguntas covering weeks 1-5. Temas: Fundamentos, DBMS, ER, DDL, SELECT básico.</p>
+        <p>
+          Validación de fundamentos, modelado relacional y normalización hasta
+          BCNF.
+        </p>
         <a href="semana_08.html">Ver Examen →</a>
+      </div>
     </div>
-</div>
 
-<!-- SEMANAS 9-15 -->
-<div class="section-title">Semanas 9-15: Avanzado</div>
+    <!-- SEMANAS 9-15 -->
+    <div class="section-title">Semanas 9-15: Avanzado y Programación</div>
 
-<div class="dashboard">
-    <div class="card">
-        <h3><span class="week-num">S09</span> GROUP BY y HAVING</h3>
-        <p>Agrupamientos, funciones de agregación, GROUP BY, HAVING,ROLLup y CUBE.</p>
+    <div class="dashboard">
+      <div class="card">
+        <h3><span class="week-num">S09</span> Normalización III</h3>
+        <p>
+          4FN (MVD), 5FN (Proyección-Unión) y Desnormalización Estratégica para
+          HTAP.
+        </p>
         <a href="semana_09.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S10</span> Vistas y CTEs</h3>
-        <p>Vistas simples y complejas, Common Table Expressions (WITH), recursion.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S10</span> JOINs y Subconsultas</h3>
+        <p>
+          Operaciones de unión de tablas, INNER, LEFT, RIGHT, FULL OUTER y
+          Subconsultas correlacionadas.
+        </p>
         <a href="semana_10.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S11</span> PL/pgSQL - Fundamentos</h3>
-        <p>Procedimientos almacenados, funciones, bloques BEGIN/END, variables, control de flujo.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S11</span> Agregaciones y Vistas</h3>
+        <p>
+          GROUP BY, HAVING, Vistas de datos, CTEs (Common Table Expressions) y
+          CTE Recursivos.
+        </p>
         <a href="semana_11.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S12</span> PL/pgSQL - Avanzado</h3>
-        <p>Cursores, triggers, manejo de excepciones, funciones retornando conjuntos.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S12</span> PL/pgSQL Intro</h3>
+        <p>
+          Programación en el servidor: Bloques anónimos, Funciones, Parámetros y
+          Control de flujo.
+        </p>
         <a href="semana_12.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S13</span> Transacciones y Concurrencia</h3>
-        <p>Isolation levels, locking, deadlock, SAVEPOINT, control de concurrencia multiversión.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S13</span> Triggers y SPs</h3>
+        <p>
+          Procedimientos Almacenados avanzados y disparadores (Triggers) para
+          auditoría y lógica.
+        </p>
         <a href="semana_13.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S14</span> Índices y Optimización</h3>
-        <p>B-tree, Hash, GIN, GiST, planner, EXPLAIN, ANALYZE, optimización de consultas.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S14</span> Transacciones</h3>
+        <p>
+          Control de Concurrencia (MVCC), Niveles de Aislamiento (Isolation),
+          WAL y Bloqueos (Locks).
+        </p>
         <a href="semana_14.html">Ver →</a>
-    </div>
-    
-    <div class="card">
-        <h3><span class="week-num">S15</span> Seguridad y Gestión</h3>
-        <p>Usuarios, roles, permisos GRANT/REVOKE, Row-Level Security, auditoría.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="week-num">S15</span> Índices y Seguridad</h3>
+        <p>
+          B-Tree, GIN, GiST, Query Planner, EXPLAIN ANALYZE, GRANT/REVOKE y
+          Roles.
+        </p>
         <a href="semana_15.html">Ver →</a>
+      </div>
     </div>
-</div>
 
-<!-- EXAMEN FINAL -->
-<div class="section-title section-title--exam">Semana 16: Examen Final</div>
-<div class="dashboard">
-    <div class="card exam-card">
+    <!-- EXAMEN FINAL -->
+    <div class="section-title section-title--exam">Semana 16: Examen Final</div>
+    <div class="dashboard">
+      <div class="card exam-card">
         <h3><span class="week-num">FINAL</span> Evaluación Final</h3>
-        <p>100 preguntas covering all topics. Todo el contenido del curso: semanas 1-15.</p>
+        <p>
+          Evaluación integral de arquitectura de datos y dominio del lenguaje
+          SQL ANSI 2023.
+        </p>
         <a href="semana_16.html">Ver Examen →</a>
+      </div>
     </div>
-</div>
 
-<!-- TIMELINE -->
-<div class="timeline-box">
-    <h3>Contenido del Curso - Distribución</h3>
-    <ul>
-        <li><strong>S01-S02:</strong> Fundamentos y DBMS</li>
-        <li><strong>S03-S04:</strong> Modelado y DDL</li>
-        <li><strong>S05-S07:</strong> Consultas y JOINs</li>
-        <li><strong>S08:</strong> Examen Parcial</li>
-        <li><strong>S09-S10:</strong> Agrupamientos y Vistas</li>
-        <li><strong>S11-S12:</strong> PL/pgSQL</li>
-        <li><strong>S13-S14:</strong> Transacciones e Índices</li>
-        <li><strong>S15:</strong> Seguridad</li>
-        <li><strong>S16:</strong> Examen Final</li>
-    </ul>
-</div>
+    <!-- CONTENIDO EXTRA -->
+    <div class="section-title section-title--extra">
+      Laboratorios: PostgreSQL Mastery (Extra)
+    </div>
+    <p class="section-description">
+      Material complementario avanzado para la maestría en PostgreSQL.
+    </p>
+    <div class="dashboard">
+      <div class="card card--mastery">
+        <h3>Consultas y Filtros</h3>
+        <p>Práctica intensiva de SELECT, WHERE y ORDER BY con casos reales.</p>
+        <a href="extra_sql_consultas_basicas.html">Explorar Lab →</a>
+      </div>
+      <div class="card card--mastery">
+        <h3>Funciones y Operadores</h3>
+        <p>
+          Dominio de funciones escalares, CAST, CASE y manipulación de datos.
+        </p>
+        <a href="extra_sql_funciones.html">Explorar Lab →</a>
+      </div>
+      <div class="card card--mastery">
+        <h3>Agrupamiento (GROUP BY)</h3>
+        <p>Ejercicios complejos de agregación para reportes y analítica.</p>
+        <a href="extra_sql_agrupamiento.html">Explorar Lab →</a>
+      </div>
+      <div class="card card--mastery">
+        <h3>Vistas y CTEs</h3>
+        <p>Estructuración de consultas complejas usando WITH y Vistas.</p>
+        <a href="extra_sql_vistas_ctes.html">Explorar Lab →</a>
+      </div>
+      <div class="card card--mastery">
+        <h3>PL/pgSQL Fundamentos</h3>
+        <p>Módulos de programación y lógica procedural en el servidor.</p>
+        <a href="extra_plpgsql_intro.html">Explorar Lab →</a>
+      </div>
+      <div class="card card--mastery">
+        <h3>PL/pgSQL Avanzado</h3>
+        <p>Cursores, Triggers y automatización compleja.</p>
+        <a href="extra_plpgsql_adv.html">Explorar Lab →</a>
+      </div>
+      <div class="card card--mastery">
+        <h3>Optimización</h3>
+        <p>Estrategias de indexación y mejora de rendimiento.</p>
+        <a href="extra_optimizacion.html">Explorar Lab →</a>
+      </div>
+      <div class="card card--mastery">
+        <h3>Seguridad Avanzada</h3>
+        <p>Auditoría, RLS y gestión profunda de permisos.</p>
+        <a href="extra_seguridad_adv.html">Explorar Lab →</a>
+      </div>
+    </div>
 
-</body>
+    <div class="timeline-box">
+      <h3>Plan Maestro de Formación (16 Semanas)</h3>
+      <ul>
+        <li>
+          <strong>Fase 1 (S01-S06):</strong> Teoría Relacional y Normalización
+          (El ADN del dato).
+        </li>
+        <li>
+          <strong>Fase 2 (S07-S11):</strong> Lenguaje SQL Avanzado (DML y
+          Agregaciones).
+        </li>
+        <li>
+          <strong>Fase 3 (S12-S15):</strong> Ingeniería de Backend y Performance
+          (PL/pgSQL y MVCC).
+        </li>
+      </ul>
+    </div>
+  </body>
 </html>

@@ -1,221 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="stylesheet" href="master.css">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 09 - Formas Normales Avanzadas y DesnormalizaciÛn</title>
-    
-    
+    <title>Semana 09 - 4FN, 5FN y Desnormalizaci√≥n</title>
+    <link rel="stylesheet" href="master.css">
 </head>
 <body>
 
-<div class="header-box">
-    <h1>Formas Normales Avanzadas y DesnormalizaciÛn</h1>
-    <p>Semana 09 | IngenierÌa de Datos | ULima 2013-2</p>
+<div class="header">
+    <h1 class="header__title">Formas Normales Superiores</h1>
+    <p class="header__subtitle">Semana 09 | Arquitectura de Datos Avanzada</p>
 </div>
 
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>PALABRAS CLAVE</h3>
-        <ul>
-            <li><strong>ß BCNF</strong><br>Forma Normal Boyce-Codd</li>
-            <li><strong>ß 4FN</strong><br>Cuarta Forma Normal</li>
-            <li><strong>ß 5FN</strong><br>Quinta Forma Normal</li>
-            <li><strong>ß Dep. Multivaluada</strong><br>Dependencia de valores m˙ltiples</li>
-            <li><strong>ß DesnormalizaciÛn</strong><br>Agregar redundancia controlada</li>
-            <li><strong>ß Dep. Transitiva</strong><br>Dependencia indirecta</li>
+<div class="cornell">
+    <aside class="sidebar">
+        <h2 class="sidebar__title">Conceptos Clave</h2>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>MVD</strong> Dependencias Multivaluadas.</li>
+            <li class="sidebar__item"><strong>4FN</strong> Eliminar dependencias multivaluadas.</li>
+            <li class="sidebar__item"><strong>5FN</strong> Forma Normal de Proyecci√≥n-Uni√≥n.</li>
+            <li class="sidebar__item"><strong>Desnormalizaci√≥n</strong> Romper reglas por rendimiento.</li>
         </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">?? Õndice del Curso</a></li>
-                <li><a href="semana_08.html">? Semana 08</a></li>
-                <li><a href="semana_10.html">? Semana 10</a></li>
-            </ul>
-        </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
-        <div class="box box-note">
-            <p><strong>?? Objetivos de Aprendizaje</strong></p>
-            <ul style="margin: 8px 0 0 20px;">
-                <li>Comprender la Forma Normal Boyce-Codd (BCNF)</li>
-                <li>Aplicar la Cuarta Forma Normal (4FN)</li>
-                <li>Comprender la Quinta Forma Normal (5FN)</li>
-                <li>Entender cu·ndo y cÛmo desnormalizar</li>
-                <li>Evaluar el tradeoff rendimiento vs integridad</li>
-            </ul>
-        </div>
-
-        <section class="architect-insight">
-            <h4>?? Insight del Arquitecto: M·s All· de 3FN</h4>
-            <p><strong>øRealmente necesitas BCNF?</strong> En la pr·ctica, la mayorÌa de las bases de datos OLTP se diseÒan hasta 3FN. Las formas normales superiores (BCNF, 4FN, 5FN) son m·s relevantes en sistemas especializados. El foco debe estar en entender cu·ndo agregar redundancia intencional (desnormalizaciÛn) para mejorar rendimiento, especialmente en Data Warehouses.</p>
-        </section>
-
-        <h2>1. Forma Normal Boyce-Codd (BCNF)</h2>
+    <main class="main">
+        <h2 class="main__title">1. Cuarta Forma Normal (4FN)</h2>
+        <p class="main__text">La 4FN se ocupa de las dependencias multivaluadas (MVD). Una dependencia multivaluada ocurre cuando la presencia de una o m√°s filas en una tabla implica la presencia de otras filas.</p>
         
-        <div class="box box-concep">
-            <p><strong>DefiniciÛn:</strong> Una relaciÛn est· en BCNF si todo determinante es una clave candidata.</p>
+        <div class="box box--example">
+            <p><strong>Ejemplo:</strong> Si una tabla tiene (Empleado, Proyecto, Hobby) y un empleado tiene varios proyectos y varios hobbies independientes, se genera una explosi√≥n combinatoria. La 4FN exige separar (Empleado, Proyecto) y (Empleado, Hobby).</p>
         </div>
 
-        <h3>Ejemplo: Estudiantes y Carreras</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Tabla: Notas
--- PK: (cÛdigo_estudiante, carrera)
--- Cada estudiante puede tener varias carreras
--- Cada carrera tiene un solo asesor
+        <h2 class="main__title--sub">2. Quinta Forma Normal (5FN)</h2>
+        <p class="main__text">Tambi√©n conocida como "Project-Join Normal Form" (PJ/NF). Se alcanza cuando una tabla no puede ser descompuesta en tablas m√°s peque√±as sin perder informaci√≥n al intentar reconstruirla mediante JOINs.</p>
+        
+        <div class="box box--note">
+            <p><strong>Dato Curioso:</strong> La 5FN es considerada "esot√©rica" en la pr√°ctica diaria, pero es vital en sistemas de Big Data y Data Warehousing de alta complejidad para asegurar que no existan redundancias l√≥gicas ocultas.</p>
+        </div>
 
-| cÛdigo | carrera   | asesor  | nota |
-|--------|-----------|---------|------|
-| 20041  | Sistemas  | LÛpez   | 16   |
-| 20041  | Contab.  | Salas   | 16   |
-| 20052  | PsicologÌa| PÈrez   | 13   |
-| 20051  | Contab.  | Rojas   | 12   |
-
--- Problema: Asesor determina carrera (cada asesor es ˙nico de una carrera)
--- Pero Asesor NO es clave primaria
-
--- SoluciÛn en BCNF:
-Tabla1: Estudiante_Carrera(cÛdigo, carrera, nota)
-Tabla2: Asesor(carrera, asesor)</pre>
-
-        <h3>Caso donde BCNF ? 3FN:</h3>
-        <ul>
-            <li>Cuando hay m˙ltiples claves candidatas</li>
-            <li>Y existe un determinante que no es clave primaria</li>
+        <h2 class="main__title--sub">3. Desnormalizaci√≥n Estrat√©gica</h2>
+        <p class="main__text">En el mundo real (especialmente en sistemas OLAP o de reportes), a veces decidimos "desnormalizar" intencionalmente.</p>
+        
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Raz√≥n:</strong> Mejorar el rendimiento de lectura (evitar JOINs costosos).</li>
+            <li class="main__list-item"><strong>Riesgo:</strong> Posibles inconsistencias y mayor espacio en disco.</li>
+            <li class="main__list-item"><strong>Uso com√∫n:</strong> Tablas de hechos en Data Warehouses (Star Schema).</li>
         </ul>
 
-        <h2>2. Cuarta Forma Normal (4FN)</h2>
-        
-        <div class="box box-concep">
-            <p><strong>DefiniciÛn:</strong> Una relaciÛn est· en 4FN si est· en BCNF y no contiene dependencias multivaluadas.</p>
+        <div class="nav">
+            <a href="semana_08.html" class="nav__link">‚Üê Semana 08 (Examen)</a>
+            <a href="semana_10.html" class="nav__link">Semana 10 ‚Üí</a>
         </div>
-
-        <h3>Dependencia Multivaluada:</h3>
-        <p>Existe cuando para cada valor de A, hay un conjunto de valores de B Y un conjunto de valores de C, pero B y C son independientes entre sÌ.</p>
-
-        <h3>Ejemplo: Cursos, Profesores, Textos</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Tabla: Curso_Profesor_Texto (no en 4FN)
--- Un curso tiene m˙ltiples profesores Y m˙ltiples textos
-
-| curso       | profesor | texto    |
-|-------------|----------|----------|
-| Admin       | GarcÌa   | Drucker  |
-| Admin       | GarcÌa   | Peters   |
-| Admin       | Arce     | Drucker  |
-| Admin       | Arce     | Peters   |
-| Admin       | PÈrez    | Drucker  |
-| Admin       | PÈrez    | Peters   |
-| Finanzas    | MÈndez   | Jones    |
-| Finanzas    | MÈndez   | Chang    |
-
--- Si agregamos un profesor, debemos agregar TODAS las combinaciones con textos
--- Los profesores y textos son independientes!
-
--- SoluciÛn en 4FN:
-Curso_Profesor(curso, profesor)
-Curso_Texto(curso, texto)</pre>
-
-        <h2>3. Quinta Forma Normal (5FN)</h2>
-        
-        <div class="box box-concep">
-            <p><strong>DefiniciÛn:</strong> Una relaciÛn est· en 5FN si est· en 4FN y no contiene dependencias de group/join (tambiÈn llamadas dependencias de proyecciÛn-union).</p>
-        </div>
-
-        <h3>Dependencia de Join:</h3>
-        <p>Una tabla puede ser reconstruida unionizando tres o m·s tablas m·s pequeÒas.</p>
-
-        <h3>Ejemplo: Vendedor-Marca-Producto</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Tabla original: Vendedor_Marca_Producto
-| vendedor | marca   | producto |
-|----------|---------|----------|
-| PÈrez    | Toyota  | Auto     |
-| PÈrez    | Toyota  | Camioneta|
-| PÈrez    | Nissan  | Auto     |
-| PÈrez    | Nissan  | Camioneta|
-| Rojas    | Toyota  | Auto     |
-
--- Parece que se puede separar en 3 tablas...
--- Pero si las unis obtienes la original, est· en 5FN
--- Si NO puedes reconstructir correctamente, NO est· en 5FN
-
--- SoluciÛn (si aplica):
-Vendedor_Marca(vendedor, marca)
-Marca_Producto(marca, producto)
-Vendedor_Producto(vendedor, producto)</pre>
-
-        <h2>4. Resumen de Formas Normales</h2>
-        
-        <table>
-            <tr><th>F.N.</th><th>Problema que resuelve</th><th>CondiciÛn</th></tr>
-            <tr><td>1FN</td><td>Grupos repetitivos</td><td>Valores atÛmicos</td></tr>
-            <tr><td>2FN</td><td>Dependencias parciales</td><td>En 1FN + sin dep. parciales</td></tr>
-            <tr><td>3FN</td><td>Dependencias transitivas</td><td>En 2FN + sin dep. transitivas</td></tr>
-            <tr><td>BCNF</td><td>Determinantes no clave</td><td>En 3FN + todo determinante es clave</td></tr>
-            <tr><td>4FN</td><td>Dependencias multivaluadas</td><td>En BCNF + sin dep. multivaluadas</td></tr>
-            <tr><td>5FN</td><td>Dependencias de join</td><td>En 4FN + sin dep. de join</td></tr>
-        </table>
-
-        <h2>5. DesnormalizaciÛn</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>DesnormalizaciÛn:</strong> Proceso de crear redundancia controlada para mejorar rendimiento de consultas.</p>
-        </div>
-
-        <h3>Cu·ndo Desnormalizar:</h3>
-        <ul>
-            <li>Sistemas OLAP (Data Warehouse)</li>
-            <li>Lecturas frecuentes, escrituras pocas</li>
-            <li>Consultas complejas con muchos JOINs</li>
-            <li>Cuando la normalizaciÛn causa problemas de rendimiento</li>
-        </ul>
-
-        <h3>TÈcnicas de DesnormalizaciÛn:</h3>
-        <table>
-            <tr><th>TÈcnica</th><th>DescripciÛn</th></tr>
-            <tr><td>Valores Derivados</td><td>Guardar c·lculos (total, subtotal)</td></tr>
-            <tr><td>Unir Entidades</td><td>Combinar tablas relacionadas</td></tr>
-            <tr><td>Valores Fijos</td><td>Hard code de cat·logos pequeÒos</td></tr>
-            <tr><td>Repetir Atributos</td><td>Copiar datos de detalle a maestro</td></tr>
-            <tr><td>Llaves de Corto Circuito</td><td>Agregar FK directa para evitar JOIN</td></tr>
-        </table>
-
-        <h3>Ejemplo de DesnormalizaciÛn:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Normalizado:
-Factura(id, id_cliente, fecha, total)
-Detalle(id_factura, id_producto, cantidad, precio_unitario)
-
--- Desnormalizado (agregando campo derivado):
-Factura(id, id_cliente, fecha, total, nombre_cliente)
--- Se evita un JOIN para mostrar el nombre del cliente
-
--- Con precauciÛn:
--- Necesitas disparadores o aplicaciÛn para mantener consistencia
--- Si cambia el nombre del cliente, actualizar TODAS las facturas</pre>
-
-        <div class="box box-warning">
-            <p><strong>?? Trade-off:</strong> DesnormalizaciÛn mejora lectura pero complica escritura. Usa solo cuando el beneficio de rendimiento supera el costo de mantener consistencia.</p>
-        </div>
-
-        <hr>
-
-        <section class="laboratorio">
-            <h3>?? Laboratorio: Formas Normales Superiores</h3>
-            <ol style="margin-left: 20px;">
-                <li>Identifica si la siguiente relaciÛn est· en BCNF: <br>Empleado_Proyecto(proyecto, empleado, habilidad)<br>Un empleado puede estar en varios proyectos y tener varias habilidades (independientes)</li>
-                <li>PropÛn la?? (descomposiciÛn) si no est· en 4FN</li>
-                <li>Da un ejemplo de dÛnde aplicarÌas desnormalizaciÛn en un sistema real</li>
-            </ol>
-        </section>
-
-    </div>
+    </main>
 </div>
 
 </body>
 </html>
-
-
-
