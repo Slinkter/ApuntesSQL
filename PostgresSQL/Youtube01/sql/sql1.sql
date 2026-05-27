@@ -45,7 +45,33 @@ select * from products where price > 100;
 
 SELECT * FROM products WHERE stock >= 10;
 
-SELECT name FROM products WHERE name != 'notebook';
+SELECT name, price, stock
+FROM products
+Where
+    stock >= 10
+    and price > 10
+ORDER BY stock ASC;
+
+select name from products 
+where name != 'mouse' 
+ORDER BY name ASC;
+
+SELECT name FROM products 
+WHERE name != 'notebook';
+
+SELECT products.name,products.price,products.stock  FROM products
+WHERE products.price BETWEEN 10 AND 50 
+ORDER BY products.price ASC;
+
+
+SELECT products.name FROM products 
+WHERE products.name LIKE "%op";
+
+SELECT products.name FROM products 
+WHERE products.id in (1,2,3);
+
+SELECT * FROM products 
+WHERE products.description IS NULL;
 
 select name, stock, price
 from products
@@ -68,5 +94,3 @@ WHERE
     products.id = 10;
 
 SHOW CREATE TABLE products;
-
-    
