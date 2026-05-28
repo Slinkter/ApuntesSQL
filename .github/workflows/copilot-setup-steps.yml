@@ -1,0 +1,76 @@
+name: "Copilot Setup Steps"
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # MUST be named exactly `copilot-setup-steps`
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 59
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Start Postgres (docker, seeded with db_northwind.sql)
+        run: |
+          set -euo pipefail
+          echo "Pulling postgres image..."
+          docker pull postgres:16-alpine
+
+          # Ensure the SQL file exists in the checkout
+          if [ ! -f "$GITHUB_WORKSPACE/PostgresSQL/db_northwind.sql" ]; then
+            echo "ERROR: Postgres SQL seed file not found: PostgresSQL/db_northwind.sql"
+            exit 1
+          fi
+
+          echo "Starting Postgres container (copilot_pg)..."
+          docker run --rm --name copilot_pg -e POSTGRES_USER=slinkter -e POSTGRES_PASSWORD=slinkter -e POSTGRES_DB=northwind -p 5432:5432 -v "$GITHUB_WORKSPACE/PostgresSQL/db_northwind.sql":/docker-entrypoint-initdb.d/db_northwind.sql -d postgres:16-alpine
+
+          echo "Waiting for Postgres to be ready (30s timeout)..."
+          for i in $(seq 1 30); do
+            if docker logs copilot_pg 2>&1 | grep -q "database system is ready to accept connections"; then
+              echo "Postgres ready"
+              break
+            fi
+            sleep 1
+          done
+
+          docker logs --tail 50 copilot_pg || true
+
+      - name: Set up Node.js (for Playwright & static server)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Playwright and http-server
+        run: |
+          npm init -y
+          npm i -D playwright http-server
+          # Install browsers (may require apt deps; playwright attempts to install required libs)
+          npx playwright install --with-deps || true
+
+      - name: Start static server for ULima/Apuntes (port 3000)
+        run: |
+          # Start simple static server in background so Copilot can access http://localhost:3000
+          npx http-server ULima/Apuntes -p 3000 -c-1 >/tmp/http-server.log 2>&1 &
+          sleep 1
+          echo "Static server logs (first lines):"
+          head -n 40 /tmp/http-server.log || true
+
+      - name: Show status
+        run: |
+          echo "List running containers:" && docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}' || true
+          echo "Postgres logs (last 30 lines):" && docker logs --tail 30 copilot_pg || true
+          echo "Static server running on port 3000 (root: ULima/Apuntes)"
+
+      - name: Keep environment snapshot variable
+        run: echo "COPILOT_ENV_READY=true" >> $GITHUB_ENV
