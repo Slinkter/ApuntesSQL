@@ -3,30 +3,30 @@ Base de Datos Relacionales
 DML y Consultas Básicas
 Nadia Rodríguez
 2013-1Agenda
-• Lenguajes de Base de Datos Relacional
-• Lenguaje de Manipulación de Datos (DML)
-• Instrucciones DML
+- Lenguajes de Base de Datos Relacional
+- Lenguaje de Manipulación de Datos (DML)
+- Instrucciones DML
 – INSERT
 – UPDATE
 – DELETE
-• SELECTTransacciones con la BDR
-• Sentencias DML que realizan un cambio
+- SELECTTransacciones con la BDR
+- Sentencias DML que realizan un cambio
 consistente en los datos
-• Sentencias Lenguaje de Definición de Datos
+- Sentencias Lenguaje de Definición de Datos
 (DDL)
-• Sentencias Lenguaje de Control de Datos
+- Sentencias Lenguaje de Control de Datos
 (DCL)Lenguajes de la BDR
-• Recuperación de datos
+- Recuperación de datos
 – SELECT
-• Lenguaje de Manipulación de Datos (DML)
+- Lenguaje de Manipulación de Datos (DML)
 – INSERT, UPDATE, DELETE
-• Lenguaje de definición de Datos (DDL)
+- Lenguaje de definición de Datos (DDL)
 – CREATE, ALTER, DROP, RENAME
-• Lenguaje de Control de Datos (DCL)
+- Lenguaje de Control de Datos (DCL)
 – GRANT, REVOKE
 – Control de transacción
-• COMMIT, ROLLBACK, SAVEPOINTINSERT
-• Añade o inserta una nueva fila a una tabla
+- COMMIT, ROLLBACK, SAVEPOINTINSERT
+- Añade o inserta una nueva fila a una tabla
 564 04-MAR-03 02-MAR-03 2 76544
 Numero_orden Fecha_colocaci Fecha_llenado Numero_ Id_cliente
 on Embarques
@@ -41,11 +41,11 @@ on Embarques
 564 04-MAR-03 02-MAR-03 2 76544INSERT
 INSERT INTO table [column, column...]
 VALUES (column, column ...);
-• Todos los campos NOT NULL deben ingresarse
-• Se puede especificar la elección de los campos a
+- Todos los campos NOT NULL deben ingresarse
+- Se puede especificar la elección de los campos a
 ingresar en cada registro, pero debe considerarse la
 restricción de dominio NOT NULL (obligatoria)
-• El valor NULL para un campo es valido siempre y
+- El valor NULL para un campo es valido siempre y
 cuando tenga restricción de dominio NOT NULLEjemplos de INSERT
 Insertar la orden de pedido # 555 para el cliente JOSE PARDO.
 CREATE TABLE cliente
@@ -63,7 +63,7 @@ INSERT INTO cliente
 VALUES (1, ‘JOSE’, ‘PARDO’, ’01-4414896’);
 INSERT INTO orden_pedido
 VALUES (555, ‘25-OCT-07’, ’05-OCT-07’, 5, 1);UPDATE
-• Modifica el valor de un campo existente
+- Modifica el valor de un campo existente
 Numerp_or fecha_colo Fecha_llen Numero_E Id_cliente
 den cació ado mbarques
 024 12-MAY-89 10-MAY-89 1 08456
@@ -78,11 +78,11 @@ den cació ado mbarques
 UPDATE table
 SET column = new_value | calculation
 [WHERE condition {AND|or} condition...]
-• Actualiza en todas las filas de un campo dado
+- Actualiza en todas las filas de un campo dado
 perteneciente a una tabla, asignándole un valor
 predeterminado o el resultado de una operación aritmética
 sobre otro(s) campo(s)
-• Puede elegirse solo algunas filas de una tabla para
+- Puede elegirse solo algunas filas de una tabla para
 actualizarlas con la cláusula WHERE a través de una o
 mas condiciones enlazadas por los conectores lógicos
 AND|OR|NOTEjemplos de UPDATE
@@ -94,7 +94,7 @@ El nuevo número de teléfono del cliente JOSE PARDO es 01-4367788
 UPDATE cliente
 SET telefono = ’01-4367788’
 WHERE codigo_cliente = 1;DELETE
-• Elimina una o más filas de una tabla
+- Elimina una o más filas de una tabla
 564 04-MAR-03 02-MAR-03 2 76544
 Numerp_or fecha_colo Fecha_llen Numero_E Id_cliente
 den cació ado mbarques
@@ -109,26 +109,26 @@ den cació ado mbarques
 990 04-JUL-98 02-JUL-98 3 12373DELETE
 DELETE FROM table
 [WHERE condition {AND|or} condition...]
-• Elimina una o más filas de una tabla
-• Puede elegirse solo algunas filas de una tabla
+- Elimina una o más filas de una tabla
+- Puede elegirse solo algunas filas de una tabla
 para eliminarlas con la cláusula WHERE a través
 de una o mas condiciones enlazadas por los
 conectores lógicos AND|OR|NOTEjemplo de DELETE
 El cliente ha decidido eliminar su orden de pedido # 555.
 DELETE FROM orden_pedido
 WHERE numero_orden = 555;SELECT
-• Permite consultar la data contenida en una tabla
+- Permite consultar la data contenida en una tabla
 SELECT ALL|*|DISTINCT|(column, column...)
 FROM table
 [WHERE condition {AND|or} condition...]
-• Muestra todas la filas de una tabla
-• Puede elegirse mostrar solo algunas filas de una tabla
+- Muestra todas la filas de una tabla
+- Puede elegirse mostrar solo algunas filas de una tabla
 con la cláusula WHERE a través de una o mas
 condiciones enlazadas por los conectores lógicos
 AND|OR|NOT
-• Se utiliza ALL o * para mostrar todos los campos o
+- Se utiliza ALL o * para mostrar todos los campos o
 columnas de una tabla
-• Se utiliza DISTINCT para mostrar valores diferentes,
+- Se utiliza DISTINCT para mostrar valores diferentes,
 sin duplicadosEjemplos de SELECT
 SELECT ALL FROM orden_pedido;
 SELECT * FROM cliente;

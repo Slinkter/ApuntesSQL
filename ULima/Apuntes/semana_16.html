@@ -1,218 +1,449 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="stylesheet" href="master.css">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 16 - Repaso Examen Final</title>
-    
-    
+    <title>Semana 16 - Examen Final (Mock)</title>
+    <link rel="stylesheet" href="master.css">
 </head>
 <body>
 
-<div class="header-box">
-    <h1>?? Repaso Final: Examen de Ingeniería de Datos</h1>
-    <p>Semana 16 | Ingeniería de Datos | ULima 2013-2</p>
-</div>
+<header class="header">
+    <h1 class="header__title">Examen Final: Arquitectura de Datos</h1>
+    <p class="header__subtitle">Semana 16 | Evaluacion Integral (Semanas 09-15) | ULima 2013-2</p>
+</header>
 
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>CONTENIDO DEL EXAMEN</h3>
-        <ul>
-            <li><strong>Semanas 1-7</strong><br>Parcial</li>
-            <li><strong>Semanas 9-15</strong><br>Final</li>
-            <li><strong>Todo el curso</strong><br>Conceptos integrados</li>
+<div class="cornell">
+    <aside class="sidebar">
+        <h3 class="sidebar__title">ESTRUCTURA DEL EXAMEN</h3>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>Teoria Avanzada</strong>10 preguntas (normalizacion, OLAP, HA)</li>
+            <li class="sidebar__item"><strong>PL/SQL</strong>3 ejercicios: procedimiento, funcion, trigger</li>
+            <li class="sidebar__item"><strong>Consultas</strong>5 ejercicios de SQL complejo</li>
+            <li class="sidebar__item"><strong>Data Warehouse</strong>2 ejercicios de diseno Star Schema</li>
+            <li class="sidebar__item"><strong>Solucionario</strong>Clave de respuestas al final</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">?? Índice del Curso</a></li>
-                <li><a href="semana_08.html">Repaso Parcial</a></li>
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Indice del Curso</a></li>
+                <li class="sidebar__item"><a href="semana_15.html" class="sidebar__link">Semana 15</a></li>
+                <li class="sidebar__item"><a href="semana_09.html" class="sidebar__link">Semana 09 - 4FN, 5FN</a></li>
+                <li class="sidebar__item"><a href="semana_13.html" class="sidebar__link">Semana 13 - PL/SQL</a></li>
+                <li class="sidebar__item"><a href="semana_14.html" class="sidebar__link">Semana 14 - DW</a></li>
             </ul>
         </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
-        <div class="box box-note" style="border-left: 5px solid #e74c3c; background: #f8d7da;">
-            <p><strong>?? IMPORTANTE:</strong> El examen final es COMPREHENSIVO. Cubre todo el curso (semanas 1-15).</p>
+    <main class="main">
+
+        <span class="tag">EXAMEN</span>
+        <h2 class="main__title">Evaluacion Final: Arquitectura de Datos (Semanas 09-15)</h2>
+
+        <div class="box box--warning">
+            <p><strong>Instrucciones:</strong> Resuelve las cuatro secciones. El tiempo estimado es de 120 minutos. Puntaje total: 100 puntos. Teoria: 40 pts (4 c/u). PL/SQL: 20 pts. Consultas: 25 pts (5 c/u). Data Warehouse: 15 pts.</p>
         </div>
 
         <section class="architect-insight">
-            <h4>?? Tips del Arquitecto para el Examen Final</h4>
-            <ol>
-                <li><strong>Repasa las prácticas anteriores</strong> - los ejercicios se repiten</li>
-                <li><strong>Domina SQL</strong> - es la herramienta más importante</li>
-                <li><strong>Entiende el modelo E-R</strong> - fundamental para diseño</li>
-                <li><strong>Repasa normalización</strong> - saber hasta 3FN mínimo</li>
-                <li><strong>PL/pgSQL</strong> - funciones y triggers son comunes</li>
-            </ol>
+            <h4 class="main__title--sub">Consejos del Arquitecto</h4>
+            <ul class="main__list">
+                <li class="main__list-item">Lee todas las preguntas antes de empezar.</li>
+                <li class="main__list-item">En PL/SQL, verifica la sintaxis: cada bloque necesita BEGIN...END.</li>
+                <li class="main__list-item">En consultas, piensa en el orden de ejecucion: FROM > WHERE > GROUP BY > HAVING > SELECT > ORDER BY.</li>
+                <li class="main__list-item">En DW, identifica primero las medidas (numericas) y luego las dimensiones.</li>
+            </ul>
         </section>
 
-        <h2>1. Resumen Completo del Curso</h2>
-        
-        <h3>Primera Parte: Fundamentos (Semanas 1-7)</h3>
-        <ul>
-            <li>Datos vs Información vs Conocimiento</li>
-            <li>Sistemas de archivos vs DBMS</li>
-            <li>Arquitectura de 3 niveles</li>
-            <li>Modelo Relacional, PK, FK</li>
-            <li>DDL: CREATE, ALTER, DROP</li>
-            <li>DML: INSERT, UPDATE, DELETE, SELECT</li>
-            <li>Funciones de agregación y GROUP BY</li>
-            <li>Modelamiento E-R: entidades, atributos, relaciones</li>
-            <li>Normalización: 1FN, 2FN, 3FN</li>
-        </ul>
+        <!-- ==================== SECCION 1: TEORIA ==================== -->
+        <h2 class="main__title">Seccion 1: Teoria Avanzada (40 puntos)</h2>
 
-        <h3>Segunda Parte: Avanzado (Semanas 9-15)</h3>
-        <ul>
-            <li>Formas Normales Avanzadas: BCNF, 4FN, 5FN</li>
-            <li>Desnormalización</li>
-            <li>JOINs: INNER, LEFT, RIGHT, CROSS, SELF</li>
-            <li>Subconsultas y consultas correlacionadas</li>
-            <li>PL/pgSQL: funciones, procedimientos, cursores</li>
-            <li>Triggers: auditoría, validaciones</li>
-            <li>Data Warehouse: esquema estrella, ETL</li>
-            <li>Tópicos: replicación, particionamiento, índices</li>
-        </ul>
+        <div class="q-level">NIVEL BASICO (1-4)</div>
 
-        <h2>2. Ejercicios Integrados</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 1: Diseño y Normalización</strong></p>
-            <p>Dada una factura con múltiples items, diseña el modelo E-R y normaliza hasta 3FN.</p>
+        <strong class="question">1. (4 pts) Cual es la diferencia fundamental entre BCNF y 3FN? Proporciona un ejemplo donde una tabla este en 3FN pero no en BCNF.</strong>
+        <div class="answer"><em>Responde aqui:</em></div>
+
+        <strong class="question">2. (4 pts) Que es una dependencia multivaluada? Proporciona un ejemplo que ilustre por que la 4FN es necesaria.</strong>
+        <div class="answer"><em>Responde aqui:</em></div>
+
+        <strong class="question">3. (4 pts) Explica el concepto de desnormalizacion. En que contexto es beneficiosa y cuales son sus riesgos?</strong>
+        <div class="answer"><em>Responde aqui:</em></div>
+
+        <strong class="question">4. (4 pts) Cual es la diferencia entre OLTP y OLAP? Menciona dos caracteristicas distintivas de cada uno.</strong>
+        <div class="answer"><em>Responde aqui:</em></div>
+
+        <div class="q-level">NIVEL INTERMEDIO (5-7)</div>
+
+        <strong class="question">5. (4 pts) Compara Star Schema vs Snowflake Schema. Menciona ventajas y desventajas de cada uno para un Data Warehouse de ventas.</strong>
+        <div class="answer"><em>Responde aqui:</em></div>
+
+        <strong class="question">6. (4 pts) Explica ROLAP, MOLAP y HOLAP. En que escenario recomendarias MOLAP sobre ROLAP?</strong>
+        <div class="answer"><em>Responde aqui:</em></div>
+
+        <strong class="question">7. (4 pts) Define los modos de espera HOT, WARM y COLD standby. Asocia cada uno con una tecnologia de SQL Server.</strong>
+        <div class="answer"><em>Responde aqui:</em></div>
+
+        <div class="q-level">NIVEL AVANZADO (8-10)</div>
+
+        <strong class="question">8. (4 pts) Que es la 5FN (Project-Join Normal Form)? Por que se considera esoterica y en que contextos cobra relevancia?</strong>
+        <div class="answer"><em>Responde aqui:</em></div>
+
+        <strong class="question">9. (4 pts) Explica la diferencia entre RPO y RTO. Como impactan estas metricas en la eleccion de una tecnologia HA (Log Shipping vs Mirroring)?</strong>
+        <div class="answer"><em>Responde aqui:</em></div>
+
+        <strong class="question">10. (4 pts) Que es un indice Bitmap y por que es preferible en Data Warehousing sobre un indice B-tree tradicional?</strong>
+        <div class="answer"><em>Responde aqui:</em></div>
+
+        <!-- ==================== SECCION 2: PL/SQL ==================== -->
+        <h2 class="main__title">Seccion 2: PL/SQL (20 puntos)</h2>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 1: Procedimiento con IN/OUT (7 pts)</strong></p>
+            <p>Escribe un procedimiento almacenado llamado <code>obtener_estadisticas_empleado</code> que reciba como parametro IN el ID de un departamento y retorne (OUT) el numero total de empleados, el salario promedio y el salario maximo de ese departamento.</p>
         </div>
 
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 2: SQL Avanzado</strong></p>
-            <p>Escribe una consulta que muestre los top 5 clientes por ventas, con su número de pedidos.</p>
+        <pre>
+-- Escribe tu solucion aqui:
+
+
+
+
+
+
+</pre>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 2: Funcion con retorno (7 pts)</strong></p>
+            <p>Crea una funcion llamada <code>categoria_cliente</code> que reciba el ID de un cliente y retorne un VARCHAR con su categoria basada en el total de compras: 'VIP' si > 10000, 'Regular' si entre 1000 y 10000, 'Basico' si menor a 1000.</p>
         </div>
 
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 3: PL/pgSQL</strong></p>
-            <p>Crea una función que retorne el historial de precios de un producto.</p>
+        <pre>
+-- Escribe tu solucion aqui:
+
+
+
+
+
+
+</pre>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 3: Trigger con :NEW / :OLD (6 pts)</strong></p>
+            <p>Crea un trigger <code>trg_auditar_precio</code> que se dispare BEFORE UPDATE del precio en la tabla <code>producto</code>. Debe verificar que el nuevo precio no sea mas del 50% superior al anterior. Si lo es, debe lanzar un error con <code>raise_application_error</code>.</p>
         </div>
 
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 4: Trigger</strong></p>
-            <p>Crea un trigger para auditar cambios de precio.</p>
+        <pre>
+-- Escribe tu solucion aqui:
+
+
+
+
+
+
+</pre>
+
+        <!-- ==================== SECCION 3: CONSULTAS ==================== -->
+        <h2 class="main__title">Seccion 3: Consultas Complejas (25 puntos)</h2>
+
+        <p class="main__text">Usa el siguiente esquema:</p>
+        <pre>
+cliente(id, nombre, email, ciudad, fecha_registro, activo)
+producto(id, nombre, categoria, precio, stock)
+pedido(id, cliente_id, fecha, total)
+detalle_pedido(id, pedido_id, producto_id, cantidad, precio_unitario)</pre>
+
+        <strong class="question">1. (5 pts) Escribe una consulta que muestre el top 5 de clientes con mayor gasto total, incluyendo su numero de pedidos y el promedio por pedido. Solo clientes activos.</strong>
+        <div class="answer"><em>Escribe aqui:</em></div>
+
+        <strong class="question">2. (5 pts) Escribe una consulta que muestre para cada categoria de producto: cantidad total vendida, ingreso total y el producto mas vendido de esa categoria.</strong>
+        <div class="answer"><em>Escribe aqui:</em></div>
+
+        <strong class="question">3. (5 pts) Usando una subconsulta correlacionada, encuentra los clientes cuyo gasto total supera el promedio de gasto de todos los clientes de su misma ciudad.</strong>
+        <div class="answer"><em>Escribe aqui:</em></div>
+
+        <strong class="question">4. (5 pts) Muestra el mes con mayores ventas de cada ano. Usa funciones de ventana (ROW_NUMBER).</strong>
+        <div class="answer"><em>Escribe aqui:</em></div>
+
+        <strong class="question">5. (5 pts) Encuentra los productos que nunca han sido vendidos (usa NOT EXISTS o LEFT JOIN).</strong>
+        <div class="answer"><em>Escribe aqui:</em></div>
+
+        <!-- ==================== SECCION 4: DATA WAREHOUSE ==================== -->
+        <h2 class="main__title">Seccion 4: Data Warehouse (15 puntos)</h2>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 1: Diseno de Star Schema (8 pts)</strong></p>
+            <p>Una cadena de tiendas necesita analizar sus ventas. Requiere reportes por tienda, por producto, por fecha y por vendedor. Las metricas a analizar son: cantidad de unidades vendidas, monto total de venta, descuento aplicado y ganancia neta. Disena el esquema estrella identificando tablas de hechos y tablas de dimension, con sus columnas principales.</p>
         </div>
 
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 5: Data Warehouse</strong></p>
-            <p>Diseña el esquema estrella para un sistema de ????????? de ventas.</p>
+        <pre>
+-- Tablas de Dimension:
+
+
+
+
+
+
+
+-- Tabla de Hechos:
+
+
+
+
+
+</pre>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 2: Identificacion de componentes (7 pts)</strong></p>
+            <p>Identifica en el esquema del ejercicio anterior:</p>
+            <ul class="main__list">
+                <li class="main__list-item">Cuales son las medidas (facts / measures)?</li>
+                <li class="main__list-item">Cuales son las dimensiones?</li>
+                <li class="main__list-item">Que granularidad tiene la tabla de hechos?</li>
+                <li class="main__list-item">Cuales serian las claves primarias de cada dimension?</li>
+            </ul>
         </div>
 
-        <h2>3. Consulta SQL Completa de Ejemplo</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Consulta compleja: Top clientes con más pedidos y mayor gasto
-SELECT 
-    c.id,
-    c.nombre,
-    c.email,
-    COUNT(p.id) AS total_pedidos,
-    COALESCE(SUM(p.total), 0) AS gasto_total,
-    COALESCE(AVG(p.total), 0) AS promedio_pedido,
-    MAX(p.fecha) AS ultimo_pedido
-FROM cliente c
-LEFT JOIN pedido p ON c.id = p.cliente_id
-WHERE c.activo = true
-GROUP BY c.id, c.nombre, c.email
-HAVING COUNT(p.id) > 0
-ORDER BY gasto_total DESC
-LIMIT 10;</pre>
+        <pre>
+-- Responde aqui:
 
-        <h2>4. Funciones PL/pgSQL de Repaso</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Función con manejo de errores
-CREATE OR REPLACE FUNCTION buscar_cliente(p_nombre VARCHAR)
-RETURNS TABLE(id INTEGER, nombre VARCHAR) AS $$
-BEGIN
-    RETURN QUERY 
-        SELECT c.id, c.nombre 
-        FROM cliente c 
-        WHERE c.nombre ILIKE '%' || p_nombre || '%';
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE NOTICE 'Error en búsqueda: %', SQLERRM;
-        RETURN;
-END;
-$$ LANGUAGE plpgsql;</pre>
 
-        <h2>5. Trigger de Auditoría Completo</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Tabla de auditoría
-CREATE TABLE log_cambios (
-    id SERIAL PRIMARY KEY,
-    tabla VARCHAR(50),
-    operacion VARCHAR(10),
-    registro_id INTEGER,
-    usuario VARCHAR(50),
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    datos JSONB
-);
 
--- Función trigger genérica
-CREATE OR REPLACE FUNCTION auditar_cambio()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF TG_OP = 'INSERT' THEN
-        INSERT INTO log_cambios (tabla, operacion, registro_id, usuario, datos)
-        VALUES (TG_TABLE_NAME, 'INSERT', NEW.id, current_user, to_jsonb(NEW));
-        RETURN NEW;
-    ELSIF TG_OP = 'UPDATE' THEN
-        INSERT INTO log_cambios (tabla, operacion, registro_id, usuario, datos)
-        VALUES (TG_TABLE_NAME, 'UPDATE', NEW.id, current_user, to_jsonb(NEW));
-        RETURN NEW;
-    ELSIF TG_OP = 'DELETE' THEN
-        INSERT INTO log_cambios (tabla, operacion, registro_id, usuario, datos)
-        VALUES (TG_TABLE_NAME, 'DELETE', OLD.id, current_user, to_jsonb(OLD));
-        RETURN OLD;
-    END IF;
-    RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
 
--- Aplicar a cualquier tabla
-CREATE TRIGGER audit_cliente
-    AFTER INSERT OR UPDATE OR DELETE ON cliente
-    FOR EACH ROW EXECUTE FUNCTION auditar_cambio();</pre>
 
-        <h2>6. Tabla de Equivalencias Final</h2>
-        
-        <table>
-            <tr><th>Concepto</th><th>Oracle</th><th>PostgreSQL</th></tr>
-            <tr><td>Auto-incremento</td><td>SEQUENCE</td><td>SERIAL</td></tr>
-            <tr><td>Cadena</td><td>VARCHAR2</td><td>VARCHAR</td></tr>
-            <tr><td>Entero</td><td>NUMBER</td><td>INTEGER</td></tr>
-            <tr><td>Limitar</td><td>ROWNUM</td><td>LIMIT</td></tr>
-            <tr><td>Pagination</td><td>ROWNUM</td><td>LIMIT OFFSET</td></tr>
-            <tr><td>Fecha actual</td><td>SYSDATE</td><td>CURRENT_DATE</td></tr>
-            <tr><td>Función</td><td>CREATE OR REPLACE</td><td>CREATE OR REPLACE</td></tr>
-            <tr><td>Procedimiento</td><td>CREATE PROCEDURE</td><td>CREATE PROCEDURE</td></tr>
-            <tr><td>Trigger</td><td>CREATE TRIGGER</td><td>CREATE TRIGGER</td></tr>
-        </table>
+
+</pre>
 
         <hr>
 
-        <div class="box box-note" style="background: #d4edda; border-left: 5px solid #28a745;">
-            <p><strong>¡Felicidades por completar el curso!</strong></p>
-            <p>Has aprendido los fundamentos de la ingeniería de datos. Ahora dominas:</p>
-            <ul>
-                <li>Diseño de bases de datos relacionales</li>
-                <li>SQL avanzado y programación</li>
-                <li>Conceptos de Data Warehouse</li>
-                <li>Tendencias modernas en BD</li>
+        <!-- ==================== SOLUCIONARIO ==================== -->
+        <div class="box box--warning">
+            <h3 class="main__title--sub">Solucionario Completo</h3>
+            <span class="tag">Clave de respuestas</span>
+
+            <p><strong>Seccion 1: Teoria Avanzada</strong></p>
+
+            <p><strong>1. BCNF vs 3FN:</strong> 3FN permite dependencias transitivas donde el determinante no es clave candidata. BCNF exige que TODO determinante sea clave candidata. Ejemplo: Tabla <code>Profesor(curso, profesor, oficina)</code> donde un profesor dicta un curso y cada profesor tiene una oficina. Esta en 3FN (atributo no clave depende de otro no clave), pero no en BCNF porque <code>curso -> profesor</code> pero <code>profesor -> oficina</code> y <code>profesor</code> no es clave candidata.</p>
+
+            <p><strong>2. Dependencia multivaluada (MVD):</strong> Ocurre cuando la presencia de una fila implica la presencia de otras filas independientes. Ejemplo: <code>Empleado(nombre, proyecto, hobby)</code>. Un empleado puede tener varios proyectos y varios hobbies independientes. Se genera producto cartesiano. Solucion 4FN: separar en <code>Emp_Proyecto(nombre, proyecto)</code> y <code>Emp_Hobby(nombre, hobby)</code>.</p>
+
+            <p><strong>3. Desnormalizacion:</strong> Agregar redundancia intencional para mejorar rendimiento de lecturas (evitar JOINs). Contexto: Data Warehouses, sistemas OLAP, reportes. Riesgos: inconsistencias, mayor espacio, mantenimiento complejo.</p>
+
+            <p><strong>4. OLTP vs OLAP:</strong> OLTP = muchas transacciones simples, datos actualizados, usuarios operativos. OLAP = consultas complejas, datos historicos y agregados, usuarios analiticos/toma de decisiones.</p>
+
+            <p><strong>5. Star vs Snowflake:</strong> Star: desnormalizado, menos tablas, consultas rapidas, mas redundancia. Snowflake: normalizado, mas tablas, consultas lentas, menos redundancia. Star es preferido en DW por rendimiento.</p>
+
+            <p><strong>6. ROLAP vs MOLAP vs HOLAP:</strong> ROLAP = datos en BD relacional, escalable, lento. MOLAP = datos en cubo propietario, rapido, menos escalable. HOLAP = hibrido (detalle relacional, agregaciones en cubo). MOLAP recomendado cuando el rendimiento de consultas es critico y los datos cambian poco.</p>
+
+            <p><strong>7. Modos Standby:</strong> HOT = Mirroring/AlwaysOn (failover automatico, consistencia transaccional). WARM = Log Shipping (failover manual, posible perdida de datos). COLD = Backup/Restore (requiere restauracion completa, lento).</p>
+
+            <p><strong>8. 5FN (PJ/NF):</strong> Una tabla esta en 5FN si no puede descomponerse en tablas mas pequenas sin perder informacion al reconstruir con JOINs. Esoterica porque pocos casos practicos la requieren. Relevante en sistemas con restricciones de join complejas y Big Data.</p>
+
+            <p><strong>9. RPO vs RTO:</strong> RPO = perdida maxima de datos aceptable. RTO = tiempo maximo de recuperacion. Mirroring: RPO bajo (segundos o cero), RTO bajo (segundos). Log Shipping: RPO alto (minutos-horas), RTO alto (horas-dias).</p>
+
+            <p><strong>10. Indice Bitmap:</strong> Usa bits para representar valores de columnas con baja cardinalidad. Mas eficiente en espacio y velocidad para consultas ad-hoc en DW. B-tree es mejor para alta cardinalidad y busquedas puntuales.</p>
+
+            <p><strong>Seccion 2: PL/SQL</strong></p>
+
+            <p><strong>Ejercicio 1 - Procedimiento:</strong></p>
+            <pre>
+CREATE OR REPLACE PROCEDURE obtener_estadisticas_empleado(
+    p_dept_id IN NUMBER,
+    p_total OUT NUMBER,
+    p_promedio OUT NUMBER,
+    p_maximo OUT NUMBER
+)
+IS
+BEGIN
+    SELECT COUNT(*), AVG(salario), MAX(salario)
+    INTO p_total, p_promedio, p_maximo
+    FROM empleado
+    WHERE departamento_id = p_dept_id;
+END obtener_estadisticas_empleado;</pre>
+
+            <p><strong>Ejercicio 2 - Funcion:</strong></p>
+            <pre>
+CREATE OR REPLACE FUNCTION categoria_cliente(
+    p_cliente_id IN NUMBER
+)
+RETURN VARCHAR2
+IS
+    v_total_compras NUMBER;
+BEGIN
+    SELECT COALESCE(SUM(p.total), 0)
+    INTO v_total_compras
+    FROM pedido p
+    WHERE p.cliente_id = p_cliente_id;
+
+    IF v_total_compras > 10000 THEN
+        RETURN 'VIP';
+    ELSIF v_total_compras >= 1000 THEN
+        RETURN 'Regular';
+    ELSE
+        RETURN 'Basico';
+    END IF;
+END categoria_cliente;</pre>
+
+            <p><strong>Ejercicio 3 - Trigger:</strong></p>
+            <pre>
+CREATE OR REPLACE TRIGGER trg_auditar_precio
+    BEFORE UPDATE OF precio ON producto
+    FOR EACH ROW
+BEGIN
+    IF :NEW.precio > :OLD.precio * 1.5 THEN
+        raise_application_error(-20001,
+            'El incremento de precio no puede exceder el 50%');
+    END IF;
+END trg_auditar_precio;</pre>
+
+            <p><strong>Seccion 3: Consultas</strong></p>
+
+            <p><strong>1. Top 5 clientes por gasto:</strong></p>
+            <pre>
+SELECT c.id, c.nombre, c.email,
+       COUNT(DISTINCT p.id) AS total_pedidos,
+       COALESCE(SUM(p.total), 0) AS gasto_total,
+       COALESCE(AVG(p.total), 0) AS promedio_pedido
+FROM cliente c
+INNER JOIN pedido p ON c.id = p.cliente_id
+WHERE c.activo = true
+GROUP BY c.id, c.nombre, c.email
+ORDER BY gasto_total DESC
+LIMIT 5;</pre>
+
+            <p><strong>2. Ventas por categoria:</strong></p>
+            <pre>
+SELECT pr.categoria,
+       SUM(dp.cantidad) AS cantidad_vendida,
+       SUM(dp.cantidad * dp.precio_unitario) AS ingreso_total,
+       (SELECT dp2.producto_id
+        FROM detalle_pedido dp2
+        INNER JOIN producto pr2 ON dp2.producto_id = pr2.id
+        WHERE pr2.categoria = pr.categoria
+        GROUP BY dp2.producto_id
+        ORDER BY SUM(dp2.cantidad) DESC
+        LIMIT 1) AS producto_mas_vendido
+FROM producto pr
+INNER JOIN detalle_pedido dp ON pr.id = dp.producto_id
+GROUP BY pr.categoria;</pre>
+
+            <p><strong>3. Subconsulta correlacionada:</strong></p>
+            <pre>
+SELECT c.id, c.nombre, c.ciudad,
+       SUM(p.total) AS gasto_total
+FROM cliente c
+INNER JOIN pedido p ON c.id = p.cliente_id
+GROUP BY c.id, c.nombre, c.ciudad
+HAVING SUM(p.total) > (
+    SELECT AVG(gasto_ciudad)
+    FROM (
+        SELECT SUM(p2.total) AS gasto_ciudad
+        FROM cliente c2
+        INNER JOIN pedido p2 ON c2.id = p2.cliente_id
+        WHERE c2.ciudad = c.ciudad
+        GROUP BY c2.id
+    ) sub
+);</pre>
+
+            <p><strong>4. Mes con mayores ventas por ano:</strong></p>
+            <pre>
+WITH ventas_mensuales AS (
+    SELECT EXTRACT(YEAR FROM p.fecha) AS anio,
+           EXTRACT(MONTH FROM p.fecha) AS mes,
+           SUM(p.total) AS total_ventas,
+           ROW_NUMBER() OVER (
+               PARTITION BY EXTRACT(YEAR FROM p.fecha)
+               ORDER BY SUM(p.total) DESC
+           ) AS rn
+    FROM pedido p
+    GROUP BY EXTRACT(YEAR FROM p.fecha),
+             EXTRACT(MONTH FROM p.fecha)
+)
+SELECT anio, mes, total_ventas
+FROM ventas_mensuales
+WHERE rn = 1
+ORDER BY anio;</pre>
+
+            <p><strong>5. Productos nunca vendidos:</strong></p>
+            <pre>
+SELECT pr.id, pr.nombre, pr.categoria
+FROM producto pr
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM detalle_pedido dp
+    WHERE dp.producto_id = pr.id
+);</pre>
+
+            <p><strong>Seccion 4: Data Warehouse</strong></p>
+
+            <p><strong>Ejercicio 1 - Star Schema:</strong></p>
+            <pre>
+-- Tablas de Dimension
+CREATE TABLE DIM_TIENDA (
+    tienda_key INTEGER PRIMARY KEY,
+    id_tienda INTEGER,
+    nombre VARCHAR(100),
+    direccion VARCHAR(200),
+    ciudad VARCHAR(50),
+    region VARCHAR(50)
+);
+
+CREATE TABLE DIM_PRODUCTO (
+    producto_key INTEGER PRIMARY KEY,
+    id_producto INTEGER,
+    nombre VARCHAR(100),
+    categoria VARCHAR(50),
+    subcategoria VARCHAR(50),
+    precio_actual NUMERIC(10,2)
+);
+
+CREATE TABLE DIM_TIEMPO (
+    tiempo_key INTEGER PRIMARY KEY,
+    fecha DATE,
+    dia_semana VARCHAR(20),
+    mes INTEGER,
+    nombre_mes VARCHAR(20),
+    trimestre INTEGER,
+    anio INTEGER
+);
+
+CREATE TABLE DIM_VENDEDOR (
+    vendedor_key INTEGER PRIMARY KEY,
+    id_vendedor INTEGER,
+    nombre VARCHAR(100),
+    tienda_id INTEGER,
+    fecha_contratacion DATE
+);
+
+-- Tabla de Hechos
+CREATE TABLE FACT_VENTAS (
+    tienda_key INTEGER REFERENCES DIM_TIENDA(tienda_key),
+    producto_key INTEGER REFERENCES DIM_PRODUCTO(producto_key),
+    tiempo_key INTEGER REFERENCES DIM_TIEMPO(tiempo_key),
+    vendedor_key INTEGER REFERENCES DIM_VENDEDOR(vendedor_key),
+    unidades_vendidas INTEGER,
+    monto_total NUMERIC(12,2),
+    descuento NUMERIC(12,2),
+    ganancia_neta NUMERIC(12,2)
+);</pre>
+
+            <p><strong>Ejercicio 2 - Identificacion:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item"><strong>Medidas (Facts):</strong> unidades_vendidas, monto_total, descuento, ganancia_neta.</li>
+                <li class="main__list-item"><strong>Dimensiones:</strong> Tienda, Producto, Tiempo, Vendedor.</li>
+                <li class="main__list-item"><strong>Granularidad:</strong> Una fila por cada venta individual (transaccion).</li>
+                <li class="main__list-item"><strong>Claves primarias:</strong> tienda_key (DIM_TIENDA), producto_key (DIM_PRODUCTO), tiempo_key (DIM_TIEMPO), vendedor_key (DIM_VENDEDOR).</li>
             </ul>
-            <p><strong>¡Éxito en el examen final!</strong> ??</p>
         </div>
 
-    </div>
+        <div class="box box--note">
+            <p><strong>Fin del examen.</strong> Revisa todas tus respuestas antes de entregar. Asegurate de que los bloques PL/SQL tengan la sintaxis correcta y que las consultas SQL se ejecuten sin errores sintacticos.</p>
+        </div>
+
+        <nav class="nav">
+            <a href="semana_15.html" class="nav__link">Semana 15 - HA</a>
+            <a href="index.html" class="nav__link">Indice del Curso</a>
+        </nav>
+    </main>
 </div>
 
 </body>
 </html>
-
-
-

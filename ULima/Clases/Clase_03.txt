@@ -3,15 +3,15 @@ Bases de Datos Relacionales:
 Lenguaje de Definición de Datos
 Nadia Rodríguez
 2013-1Agenda
-• Base de Datos Relacionales BDR
+- Base de Datos Relacionales BDR
 – Concepto Características
 – Objetos de la BDR
 – Terminología de Base de Datos Relacionales
-• Lenguaje de Definición de Datos (DDL)
+- Lenguaje de Definición de Datos (DDL)
 – Creación de Tablas
 – Alteración de Tablas
 – Eliminación de TablasBase de Datos Relacional
-• Es una colección de relaciones o tablas de
+- Es una colección de relaciones o tablas de
 dos dimensiones para almacenar
 informaciónModelo Relacional
 Cliente
@@ -33,13 +33,13 @@ Nro_Orden Fecha_Orden Fecha_Atencion CantEmb ID_Cliente
 100235 02/02/2003 07/072003 2 OO3
 330978 23/08/2003 15/09/2003 4 OO12Propiedades de las Bases de
 Datos Relacionales
-• Puede ser accedido y modificado por
+- Puede ser accedido y modificado por
 sentencias del Lenguaje estructurado de
 Consultas (Structure Query Language -
 SQL)
-• Contiene una colección de tablas sin
+- Contiene una colección de tablas sin
 punteros físicos
-• Utiliza un conjunto de operadoresObjetos de la Base de Datos
+- Utiliza un conjunto de operadoresObjetos de la Base de Datos
 Objeto Descripción
 Tabla Unidad básica de almacenamiento;
 compuesta de filas y columnas
@@ -51,7 +51,7 @@ consultas
 Sinómimo Asigna nombres alternativos a los
 objetosTerminología Base Datos
 Relacional
-• Cada tabla tiene filas y columnas.
+- Cada tabla tiene filas y columnas.
 Tabla PERSONA (Relación)
 ID NAME PHONE DEPT_ID
 Fila (Tupla)
@@ -62,15 +62,15 @@ Fila (Tupla)
 Primary Key
 Columna (Atributo)
 Foreign Key
-• Se puede manipular datos de las filas usando comandos SQL.Reglas de Nomenclatura
+- Se puede manipular datos de las filas usando comandos SQL.Reglas de Nomenclatura
 para Nombrar Objetos
-• Debe comenzar con una letra
-• Puede tener una longitud de 1 a 30 caracteres
-• Debe contener sólamente los caracteres A–Z, a–
+- Debe comenzar con una letra
+- Puede tener una longitud de 1 a 30 caracteres
+- Debe contener sólamente los caracteres A–Z, a–
 z, 0–9, _, $, y #
-• No debe ser igual al nombre de otro objeto
+- No debe ser igual al nombre de otro objeto
 dentro del mismo usuario del DBMS
-• No debe ser una palabra reservada del DBMSTipo de datos
+- No debe ser una palabra reservada del DBMSTipo de datos
 Tipo de dato Descripción
 VARCHAR2(size) Caracteres de longitud variable
 CHAR(size) Caracteres de longitud fija
@@ -82,44 +82,44 @@ de 2 GB
 Datos en binario de longitud variable
 BLOB
 hasta de 4 GBRestricciones de la Base de Datos
-• Integridad
+- Integridad
 – El Primary Key no pude ser NULL y su valor debe ser único.
 – Los valores de las Foreign Key deben relacionarse con una llave
 primaria (PK)
-• De Columna
+- De Columna
 – Los valores que ingresan a una columna deben ser del mismo tipo
 que la definición del dato.
 – Esta dada por los diferentes tipos de datos.
-• Definidas por el usuario
+- Definidas por el usuario
 – Los valores de las columnas deben tener validaciones de acuerdo con
 las reglas de negocio.Restricciones de la Base de Datos
-• Restricciones de Integridad
+- Restricciones de Integridad
 – PRIMARY KEY
 – FOREIGN KEY
-• Restricciones de Columna
+- Restricciones de Columna
 – NULL
 – NOT NULL
 – UNIQUE
 – CHECKPRIMARY KEY
-• Sólo se permite la definición de un Primary
+- Sólo se permite la definición de un Primary
 Key por cada tabla
-• Garantiza que no hayan filas duplicadas en
+- Garantiza que no hayan filas duplicadas en
 la tabla
-• No se permiten valores nulos
-• Automáticamente crea un índice UNIQUEFOREIGN KEY
-• Designa una columna o combinación de
+- No se permiten valores nulos
+- Automáticamente crea un índice UNIQUEFOREIGN KEY
+- Designa una columna o combinación de
 columnas como un Foreign Key
-• Establece una relación entre el Primary
+- Establece una relación entre el Primary
 Key en la misma tabla o con otras tablas
-• Debe existir un valor en la tabla Padre a
+- Debe existir un valor en la tabla Padre a
 donde hace referencia el Foreign KeyFOREIGN KEY palabras claves
-• FOREIGN KEY
+- FOREIGN KEY
 – En la tabla hijo se define qué columna tiene la
 restricción con un valor foráneo
-• REFERENCES
+- REFERENCES
 – Identifica a la tabla padre y la columna que es Primary
 Key en dicha tabla
-• ON DELETE CASCADE
+- ON DELETE CASCADE
 – Permite la eliminación automática de las filas de la tabla
 hijo (dependiente) si se elimina la fila de la tabla padre
 (principal )Creación de Tablas
@@ -184,11 +184,11 @@ numero_embarques NUMBER(5),
 id_cliente NUMBER(7),
 PRIMARY KEY (numero_orden),
 FOREIGN KEY (id_cliente) REFERENCES CLIENTE);Alteración de Tablas
-• Agrega una columna
-• Modifica una columna ya existente
-• Define el valor por defecto para una nueva
+- Agrega una columna
+- Modifica una columna ya existente
+- Define el valor por defecto para una nueva
 columna
-• Elimina una columna existenteAlteración de Tablas
+- Elimina una columna existenteAlteración de Tablas
 ALTER TABLE table
 ADD (column datatype [DEFAULT expr]
 [column_constraint];

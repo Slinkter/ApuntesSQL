@@ -2,13 +2,13 @@ Ingeniería de Datos
 SQL Embebido
 Nadia Rodríguez
 2012-2PL/SQL
-• Estructura de un Programa PL/SQL
-• Declaración de variables
+- Estructura de un Programa PL/SQL
+- Declaración de variables
 – Cursores
-• Procedimientos
-• Funciones
-• Triggers
-• PaquetesEstructura de un Programa
+- Procedimientos
+- Funciones
+- Triggers
+- PaquetesEstructura de un Programa
 PL/SQL
 DECLARE – Opcional
 Variables, restricciones, cursores y excepciones
@@ -19,13 +19,13 @@ Sentencias de control PL/SQL
 EXCEPTION – Opcional
 Acciones a ejecutar cuando ocurren errores
 END; – ObligatorioSentencia de Control PL/SQL
-• Sentencias condicionales basadas en condiciones
+- Sentencias condicionales basadas en condiciones
 Booleanas
 – IF
-• Control de Tratamientos Repetitivos Básicos
+- Control de Tratamientos Repetitivos Básicos
 – FOR
 – WHILE
-• Manejo de excepciones para manejar errores del
+- Manejo de excepciones para manejar errores del
 DBMS o las excepciones definidas por el usuario.
 – EXCEPTIONEstructuras de Control
 IF condicion1 THEN WHILE condition
@@ -93,25 +93,25 @@ NEXT_DAY(10-JUN-08’, ‘TUESDAY’) 17-JUN-08
 LAST_DAY(’01-FEB-08’) 29-FEB-08
 ROUND(SYSDATE, ‘YEAR’ | ‘MONTH’) ?
 TRUNC(SYSDATE, ‘YEAR’ | ‘MONTH’) ?Conversiones de Datos
-• Conversión implícita y explícita de datos
-• Funciones de Conversión:
+- Conversión implícita y explícita de datos
+- Funciones de Conversión:
 – TO_CHAR
-• TO_CHAR (55000, ‘$99,999.00’)
-• TO_CHAR (trunc(sysdate), ‘DD MONTH YYYY’)
+- TO_CHAR (55000, ‘$99,999.00’)
+- TO_CHAR (trunc(sysdate), ‘DD MONTH YYYY’)
 – TO_DATE
-• TO_DATE (‘25/12/2007’, ‘DD/MM/YYYY’)
-• TO_DATE (01-Jan-90’, ‘DD-Mon-RR’)
+- TO_DATE (‘25/12/2007’, ‘DD/MM/YYYY’)
+- TO_DATE (01-Jan-90’, ‘DD-Mon-RR’)
 – TO_NUMBER
-• TO_NUMBER(‘0100’)
-• TO_NUMBER(‘1000.10’)Otras Funciones
-• NVL(col|expr1, expr2)
-• NVL2(col|expr1, expr2, expr3)
-• DECODE(col|expresion,
+- TO_NUMBER(‘0100’)
+- TO_NUMBER(‘1000.10’)Otras Funciones
+- NVL(col|expr1, expr2)
+- NVL2(col|expr1, expr2, expr3)
+- DECODE(col|expresion,
 busqueda1, resultado1,
 busqueda2, resultado2,
 ………….,……….….,
 default)Errores Predefinidos
-• Excepciones predefinidas del DBMS:
+- Excepciones predefinidas del DBMS:
 – NO_DATA_FOUND
 – TOO_MANY_ROWS
 – INVALID_CURSOR
@@ -125,11 +125,11 @@ No
 Yes
 VACIO?
 DECLARE OPEN FETCH CLOSE
-• Crear el • Abrir el • Cargar el • Pregunta si • Cerrar el
+- Crear el - Abrir el - Cargar el - Pregunta si - Cerrar el
 cursor cursor valor de la existen más cursor
 dentro del fila en curso filas
 programa del cursor a
-• Regresa al
+- Regresa al
 las variables
 FETCH si
 hay más
@@ -143,13 +143,13 @@ trae una fila.
 %ROWCOUNT Numérico Tiene el número total de filas que han
 retornado el cursor hasta ese
 momento.Programas PL/SQL
-• Existen tres categorías principales:
+- Existen tres categorías principales:
 – Programas simples
 – Procedimientos que ejecutan acciones
 – Funciones que calculan un valor
 – Paquetes que agrupan lógicamente procedimientos
 y funciones
-• Pueden estar almacenados en la Base de datos o
+- Pueden estar almacenados en la Base de datos o
 desarrollados dentro de una aplicación o
 subprograma.Programa Simple utilizando Cursor –
 Usando FETCH
@@ -256,12 +256,12 @@ RETURN tipo_dato
 IS
 Bloque_pl/sql;
 Retorna un valor al ambiente de donde fue llamado
-◼
+-
 Se debe especificar el tipo de dato que debe retornar
-◼
+-
 en la declaración de la función.
 Incluye al final del bloque PL/SQL la cláusula RETURN.
-◼Creación de una Función
+-Creación de una Función
 CREATE OR REPLACE FUNCTION impuesto
 (v_valor IN NUMBER)
 RETURN NUMBER

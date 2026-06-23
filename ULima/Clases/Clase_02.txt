@@ -2,20 +2,20 @@ Ingeniería de Datos
 Modelo Relacional
 Nadia Rodríguez
 2013-1Agenda
-• Modelamiento Conceptual
-• Funciones del DBMS
-• Terminología de Base de Datos
+- Modelamiento Conceptual
+- Funciones del DBMS
+- Terminología de Base de Datos
 Relacional
-• Metodología de Diseño de Bases de
+- Metodología de Diseño de Bases de
 Datos
-• Implementación de Bases de DatosModelamiento ConceptualImplementación de Base de Datos Relacional
+- Implementación de Bases de DatosModelamiento ConceptualImplementación de Base de Datos Relacional
 y Sistemas de Información
-• System Development Life cycle - SDLC
+- System Development Life cycle - SDLC
 – Proceso de desarrollo detallado, bien
 planificado.
 – Consume tiempo, pero es comprensivo
 – Ciclo de desarrollo largo
-• Prototipo
+- Prototipo
 – Rapid application development (RAD)System Development Life cycle -
 SDLC
 Project Identification Comprender la situación de negocio que ha originado la necesidad de mejorar
@@ -44,42 +44,42 @@ Datos (esquema externo)
 Nivel Externo
 Nivel Conceptual
 Nivel InternoArquitectura de una Base de Datos
-• Nivel interno tiene un esquema interno, que describe
+- Nivel interno tiene un esquema interno, que describe
 la estructura física de almacenamiento de la base de
 datos.
 – Estrategia de almacenamiento
 – Caminos de acceso
-• Nivel conceptual tiene un esquema conceptual, que
+- Nivel conceptual tiene un esquema conceptual, que
 describe la estructura de toda la base de datos para
 una comunidad de usuarios
 – La visión global de los datos, deberá incluirse la descripción de
 todos los datos e interrelaciones entre éstos, así como las
 restricciones de integridad y seguridad
-• Nivel externo o de vistas incluye varios esquemas
+- Nivel externo o de vistas incluye varios esquemas
 externos o vistas de usuarioIndependencia de los Datos
 Capacidad para modificar el esquema en un nivel del
 sistema de base de datos sin tener que modificar el
 esquema del nivel inmediato superior
 Independencia de Datos
-
+-
 Independencia Lógica
-
+-
 Estructura lógica
-▪
+-
 Añadir, borrar o cambiar campos, registros o relaciones
-▪
+-
 Independencia Física
-
+-
 Estructura física
-▪
+-
 Características de campos, ubicación de registros en la DB,
-▪
+-
 esquemas de encriptaciónEsquemas de la Base de Datos
-• Físico (Interno)
+- Físico (Interno)
 – Estructuras físicas
-• Conceptual
+- Conceptual
 – Modelos de Datos
-• Externo
+- Externo
 – Vistas de usuarios
 – Listas de Esquemas conceptuales
 – Pueden estar determinados por la matrices
@@ -126,36 +126,36 @@ Datos
 (DMBS)
 Base de Datos AlmacenadaDBMS: Database Management
 System
-▪Producto de software a través del cual los
+-Producto de software a través del cual los
 usuarios interactúan con la base de datos
 Planillas
 DBMS
 Facturación
 DATABASE
 Usuarios onlineFunciones del DBMSFunciones del DBMS
-•Administración de Usuarios
-•Permisos, privilegios, recursos
-•Administración de Performance
-•Throughput, instancia, almacenamiento, memoria,
+-Administración de Usuarios
+-Permisos, privilegios, recursos
+-Administración de Performance
+-Throughput, instancia, almacenamiento, memoria,
 bloqueos, errores, etc.
-•Administración de transacciones
-•Almacenamiento, visualización y actualización de
+-Administración de transacciones
+-Almacenamiento, visualización y actualización de
 datos
-•Control de concurrencia, gestión de bloqueos commit,
+-Control de concurrencia, gestión de bloqueos commit,
 rollback
-•Encriptación de datosFunciones del DBMS
-•Administración de Backup y Recovery
-•Backup, restore y recovery
-•Gestión de archivos Log
-•Soporte y utilitarios
-•Autorización de servicios
-•Integración de datos: API, protocolos de comunicación
-•Servicios integrados
-•Migración y carga masiva de datos
-•Replicación de datos, procesamiento en lote (batch) y
+-Encriptación de datosFunciones del DBMS
+-Administración de Backup y Recovery
+-Backup, restore y recovery
+-Gestión de archivos Log
+-Soporte y utilitarios
+-Autorización de servicios
+-Integración de datos: API, protocolos de comunicación
+-Servicios integrados
+-Migración y carga masiva de datos
+-Replicación de datos, procesamiento en lote (batch) y
 en líneaFunciones...
 Soporte para comunicaciones de datos
-❑
+-
 (Transaction Processing Monitor -TPM)
 PGM1
 TPM DBMS DB
@@ -174,38 +174,38 @@ Foreign Key
 Los valores que pueden tener los atributos están sujetos a
 restricciones de integridad y dominioTerminología Base Datos Relacional
 -Restricciones de Valores de Atributos-
-• El modelo de datos incluye varios tipos de
+- El modelo de datos incluye varios tipos de
 restricciones o reglas de negocio:
 – Restricciones de Dominio
-• Todos los valores de un atributo de una entidad
+- Todos los valores de un atributo de una entidad
 deben estar comprendidos en el mismo dominio.
 – Restricciones de Integridad
-• Cada entidad tiene una PK y los valores de una
+- Cada entidad tiene una PK y los valores de una
 PK tienen que ser válidos, especialmente NO
 NULOS.
-• Cada valor de una FK debe coincidir con el valor
+- Cada valor de una FK debe coincidir con el valor
 de la PK de otra entidad.Terminología Base Datos Relacional
 -Primary Key (PK)-
-• Es un atributo o una combinación de
+- Es un atributo o una combinación de
 atributos que identifica de manera
 única un registro en una relación
-• Características
+- Características
 – No cambian de valor
 – No deben ser nulas
 – Sustituye llaves compuestas muy largas
 por una declaración simpleTerminología Base Datos Relacional
 -Foreign Key (FK)-
-• Es un atributo en una entidad que es la
+- Es un atributo en una entidad que es la
 PK o forma parte de la PK de otra
 entidad.
-• Esta restricción implementará la
+- Esta restricción implementará la
 asociación entre tablas en las Bases
 de Datos RelacionalesRestricciones de Dominio
-• NULL
-• NOT NULL
-• CHECK
-• UNIQUE
-• DEFAULTTerminología Base Datos Relacional
+- NULL
+- NOT NULL
+- CHECK
+- UNIQUE
+- DEFAULTTerminología Base Datos Relacional
 Objetos de la Base de Datos
 Objeto Descripción
 Tabla Unidad básica de almacenamiento;
@@ -218,26 +218,26 @@ consultas
 Sinónimo Asigna nombres alternativos a los
 objetosTerminología de Base de Datos
 Relacional
-❑Indices
-➢Key: Simple o Compuesto
-➢Unicos o no-unicos (unique or nonunique)
-➢Cluster
-➢Mecanismos más comunes
-▪Hash Access (RID)
-▪B+ Trees
-❑Optimizador
-▪Basado en reglas / Basado en Costo de Proceso
-❑API (Application Programming Interface)Terminología Base Datos Relacional
+-Indices
+-Key: Simple o Compuesto
+-Unicos o no-unicos (unique or nonunique)
+-Cluster
+-Mecanismos más comunes
+-Hash Access (RID)
+-B+ Trees
+-Optimizador
+-Basado en reglas / Basado en Costo de Proceso
+-API (Application Programming Interface)Terminología Base Datos Relacional
 Reglas de Nomenclatura de Nombres
-• Debe comenzar con una letra
-• Puede tener una longitud de 1 a 30
+- Debe comenzar con una letra
+- Puede tener una longitud de 1 a 30
 caracteres
-• Debe contener solamente los
+- Debe contener solamente los
 caracteres A–Z, a–z, 0–9, _, $, y #
-• No debe ser igual al nombre de otro
+- No debe ser igual al nombre de otro
 objeto dentro del mismo usuario del
 DBMS
-• No debe ser una palabra reservada del
+- No debe ser una palabra reservada del
 DBMSTerminología Base Datos Relacional
 Tipo de datos
 Tipo de dato Descripción
@@ -252,9 +252,9 @@ Datos en binario de longitud variable hasta de
 BLOB
 4 GBTransacción y Control de
 Concurrencia y RecuperaciónTransacción
-• Concepto
+- Concepto
 – Cualquier operación de lectura o escritura realizada en la base de datos
-• Propiedades
+- Propiedades
 – A Atomicidad (Atomicity)
 – C Preservación de Consistencia (Consistency Preservation)
 – I Independencia/Aislamiento (Isolation/Independence)
@@ -273,48 +273,48 @@ READ, WRITE
 terminada
 falladaMetodología de
 Diseño de Base de DatosRequerimientos
-❑Funcionales
+-Funcionales
 Todos los reportes que deban ser producidos
-➢
+-
 Todas las consultas
-➢
+-
 Todas las salidas que deben ser enviadas a
-➢
+-
 otros sistemas
 Todas las transacciones de update
-➢
+-
 Todos los cálculos
-➢
+-
 Todos los sinónimos de atributos
-➢Generalidades
-❑Ambiente
-➢Usuario vs Requerimientos
-➢Diseñador de DB vs SoporteRequerimientos (cont.)
-❑Físicos
+-Generalidades
+-Ambiente
+-Usuario vs Requerimientos
+-Diseñador de DB vs SoporteRequerimientos (cont.)
+-Físicos
 Número de ocurrencias de cada entidad
-➢
+-
 Frecuencia de generación de reportes
-➢
+-
 Número de líneas de c/reporte
-➢
+-
 Tiempo de respuesta para c/consulta
-➢
+-
 Tiempo de respuesta para c/update
-➢
+-
 Condiciones especiales de seguridad
-➢Consideraciones
-❑Diseño Completo vs Todos los Requerimientos
-❑Diseño Físico vs DBMS Específico
-❑Eficiencia del Sistema
+-Consideraciones
+-Diseño Completo vs Todos los Requerimientos
+-Diseño Físico vs DBMS Específico
+-Eficiencia del Sistema
 Espacio
-➢
+-
 Tiempo de Respuesta
-➢
+-
 Tiempo de Proceso
-➢
-❑Redundancia vs Normalización
+-
+-Redundancia vs Normalización
 Documentar restricciones
-ƒMetodología Pratt - Adamski
+-Metodología Pratt - Adamski
 1. Representar las vistas de usuarios como
 un conjunto de relaciones
 2. Normalizar las relaciones
@@ -323,8 +323,8 @@ un conjunto de relaciones
 5. Combinar el resultado de los pasos
 previos dentro del diseño
 Supuestos:
-▪ Los requerimientos son conocidos
-▪ Se documentará durante el proceso de diseñoFases del Diseño de Base de Datos
+- Los requerimientos son conocidos
+- Se documentará durante el proceso de diseñoFases del Diseño de Base de Datos
 Minimundo
 Recolección y Análisis
 de Requerimientos
@@ -345,12 +345,12 @@ Esquema interno [DBMS]
 Programas de AplicaciónDespliegue de Bases de Datos
 -Metodologia de Prototipo-Gestión de Proyectos
 -Personal involucrado-
-• Analistas de Sistemas
-• Analistas de base de datos
-• Usuarios
-• Programadores
-• Administrador de Base de Datos
-• Administrador de redes, documentadores,
+- Analistas de Sistemas
+- Analistas de base de datos
+- Usuarios
+- Programadores
+- Administrador de Base de Datos
+- Administrador de redes, documentadores,
 testersGestión de Proyectos
 -Diagrama de Gantt-
 Muestra tiempos estimados de las tareasGestión de Proyectos

@@ -1,214 +1,507 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="stylesheet" href="master.css">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 08 - Repaso Examen Parcial</title>
-    
-    
+    <title>Semana 08 - Examen Parcial</title>
+    <link rel="stylesheet" href="master.css">
 </head>
 <body>
 
-<div class="header-box">
-    <h1>?? Repaso: Examen Parcial (Semanas 1-7)</h1>
-    <p>Semana 08 | Ingeniería de Datos | ULima 2013-2</p>
+<div class="header">
+    <h1 class="header__title">Examen Parcial</h1>
+    <p class="header__subtitle">Semana 08 | Cobertura: Semanas 01-07 | Ingenieria de Datos</p>
 </div>
 
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>TEMAS DEL PARCIAL</h3>
-        <ul>
-            <li><strong>§ Fundamentos BD</strong><br>Semana 1</li>
-            <li><strong>§ Modelo Relacional</strong><br>Semana 2</li>
-            <li><strong>§ DDL</strong><br>Semana 3</li>
-            <li><strong>§ DML</strong><br>Semana 4-5</li>
-            <li><strong>§ Modelamiento E-R</strong><br>Semana 6</li>
-            <li><strong>§ Normalización</strong><br>Semana 7</li>
+<div class="cornell">
+    <aside class="sidebar">
+        <h2 class="sidebar__title">Temas Evaluados</h2>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>Fundamentos BD</strong> Semana 01</li>
+            <li class="sidebar__item"><strong>Modelo Relacional</strong> Semana 02</li>
+            <li class="sidebar__item"><strong>DDL</strong> Semana 03</li>
+            <li class="sidebar__item"><strong>DML</strong> Semana 04-05</li>
+            <li class="sidebar__item"><strong>Modelamiento E-R</strong> Semana 06</li>
+            <li class="sidebar__item"><strong>Normalizacion</strong> Semana 07</li>
         </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">?? Índice del Curso</a></li>
-                <li><a href="semana_07.html">? Semana 07</a></li>
-                <li><a href="semana_09.html">Semana 09 ?</a></li>
+        <h2 class="sidebar__title">Recursos</h2>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><a class="sidebar__link" href="index.html">Indice del Curso</a></li>
+            <li class="sidebar__item"><a class="sidebar__link" href="semana_07.html">Semana 07</a></li>
+            <li class="sidebar__item"><a class="sidebar__link" href="semana_09.html">Semana 09</a></li>
+        </ul>
+    </aside>
+
+    <main class="main">
+        <div class="box box--warning">
+            <p><strong>Instrucciones:</strong> El examen parcial cubre las semanas 01-07. Consta de 4 secciones con un total de 100 puntos. Dispone de 90 minutos para completarlo. No se permite material de consulta. Escriba clara y legiblemente. Puntaje minimo aprobatorio: 60.</p>
+        </div>
+
+        <div class="architect-insight">
+            <p><strong>Tips para el Examen:</strong> (1) Lea la pregunta completa antes de responder. (2) En modelamiento E-R, identifique primero las entidades y luego las relaciones. (3) En normalizacion, marque las dependencias funcionales paso a paso. (4) En SQL, escriba las consultas con indentacion clara.</p>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- SECCION 1: TEORIA -->
+        <!-- ============================================================= -->
+        <span class="tag">EXAMEN</span>
+        <h2 class="main__title">Seccion 1: Teoria (30 puntos)</h2>
+        <p class="main__text">Instrucciones: Seleccione la respuesta correcta. Cada pregunta vale 3 puntos.</p>
+
+        <div class="q-level">Pregunta 1 - Fundamentos BD</div>
+        <strong class="question">Cual es la principal diferencia entre dato e informacion?</strong>
+        <div class="answer">
+            a) El dato es cuantitativo y la informacion es cualitativa<br>
+            b) El dato es un hecho bruto sin contexto; la informacion es el dato procesado con significado util<br>
+            c) El dato se almacena en tablas; la informacion en reportes<br>
+            d) No hay diferencia significativa
+        </div>
+
+        <div class="q-level">Pregunta 2 - SDLC</div>
+        <strong class="question">En el ciclo de vida de un sistema (SDLC), en que fase se construye el modelo entidad-relacion conceptual?</strong>
+        <div class="answer">
+            a) identificacion y seleccion del proyecto<br>
+            b) Analisis<br>
+            c) Diseno logico<br>
+            d) Implementacion
+        </div>
+
+        <div class="q-level">Pregunta 3 - ACID</div>
+        <strong class="question">Cual propiedad ACID garantiza que una transaccion se ejecute completamente o no se ejecute en absoluto?</strong>
+        <div class="answer">
+            a) Atomicidad<br>
+            b) Consistencia<br>
+            c) Aislamiento<br>
+            d) Durabilidad
+        </div>
+
+        <div class="q-level">Pregunta 4 - Arquitectura 3 Niveles</div>
+        <strong class="question">En la arquitectura de 3 niveles ANSI/SPARC, el nivel que describe como se almacenan fisicamente los datos en el disco es:</strong>
+        <div class="answer">
+            a) Nivel Externo<br>
+            b) Nivel Conceptual<br>
+            c) Nivel Interno<br>
+            d) Nivel Logico
+        </div>
+
+        <div class="q-level">Pregunta 5 - Claves</div>
+        <strong class="question">Una clave foranea (FK) es:</strong>
+        <div class="answer">
+            a) Un atributo que identifica de forma unica una fila en la misma tabla<br>
+            b) Un atributo en una tabla que es clave primaria en otra tabla, utilizada para establecer relaciones<br>
+            c) Una clave que puede tener valores NULL<br>
+            d) Una clave compuesta por mas de un atributo
+        </div>
+
+        <div class="q-level">Pregunta 6 - Tipos de BD</div>
+        <strong class="question">Cual de los siguientes NO es un tipo de base de datos segun su modelo?</strong>
+        <div class="answer">
+            a) Base de datos relacional<br>
+            b) Base de datos orientada a objetos<br>
+            c) Base de datos de archivos planos<br>
+            d) Base de datos deductiva
+        </div>
+
+        <div class="q-level">Pregunta 7 - DBMS</div>
+        <strong class="question">Cual de las siguientes es una funcion principal de un DBMS?</strong>
+        <div class="answer">
+            a) Compilar codigo fuente<br>
+            b) Gestionar el almacenamiento, recuperacion y seguridad de los datos<br>
+            c) Disenar interfaces de usuario<br>
+            d) Conectar dispositivos de red
+        </div>
+
+        <div class="q-level">Pregunta 8 - Independencia de Datos</div>
+        <strong class="question">La independencia logica de datos significa que:</strong>
+        <div class="answer">
+            a) Los cambios en el esquema fisico no afectan al esquema conceptual<br>
+            b) Los cambios en el esquema conceptual no afectan a las vistas del usuario (esquema externo)<br>
+            c) Los datos son independientes del hardware<br>
+            d) Las aplicaciones pueden acceder a los datos sin necesidad de SQL
+        </div>
+
+        <div class="q-level">Pregunta 9 - Modelo Relacional</div>
+        <strong class="question">En el modelo relacional, una "tupla" corresponde a:</strong>
+        <div class="answer">
+            a) Una columna de una tabla<br>
+            b) Una fila o registro de una tabla<br>
+            c) Una relacion entre tablas<br>
+            d) Una restriccion de integridad
+        </div>
+
+        <div class="q-level">Pregunta 10 - DDL vs DML</div>
+        <strong class="question">Cual de los siguientes comandos pertenece al Lenguaje de Definicion de Datos (DDL)?</strong>
+        <div class="answer">
+            a) INSERT<br>
+            b) UPDATE<br>
+            c) ALTER<br>
+            d) SELECT
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- SECCION 2: MODELAMIENTO E-R -->
+        <!-- ============================================================= -->
+        <span class="tag">EXAMEN</span>
+        <h2 class="main__title">Seccion 2: Modelamiento E-R (25 puntos)</h2>
+
+        <div class="q-level">Ejercicio 1 (12 puntos)</div>
+        <strong class="question">Construya el Diagrama Entidad-Relacion (DER) basado en las siguientes reglas de negocio. Identifique entidades, relaciones, cardinalidad (minima y maxima) y atributos clave.</strong>
+        <div class="box box--note">
+            <p><strong>Reglas de Negocio - Sistema de Pedidos:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Un cliente puede realizar uno o varios pedidos.</li>
+                <li class="main__list-item">Cada pedido pertenece a un unico cliente y debe tener al menos un cliente asociado.</li>
+                <li class="main__list-item">Un pedido contiene uno o varios productos y un producto puede aparecer en cero o varios pedidos.</li>
+                <li class="main__list-item">Cada linea de pedido registra la cantidad y el precio unitario del producto en ese pedido.</li>
+                <li class="main__list-item">Un producto pertenece a una categoria.</li>
+                <li class="main__list-item">Cada categoria puede tener cero o muchos productos.</li>
             </ul>
         </div>
-    </div>
 
-    <div class="main-content">
-        <div class="box box-note" style="border-left: 5px solid #e74c3c;">
-            <p><strong>?? IMPORTANTE:</strong> El examen parcial cubre las semanas 1-7. Asegúrate de dominar los conceptos teóricos Y las prácticas en SQL.</p>
-        </div>
-
-        <section class="architect-insight">
-            <h4>?? Tips del Arquitecto para el Examen</h4>
-            <ol>
-                <li><strong>Lee la pregunta completa</strong> antes de responder</li>
-                <li><strong>Distingue entre Oracle y PostgreSQL</strong> - el examen puede usar cualquiera</li>
-                <li><strong>Para normalización</strong>: dibuja las tablas y marca las claves</li>
-                <li><strong>Para E-R</strong>: practica con ejercicios similares al laboratorio</li>
-                <li><strong>Para SQL</strong>: escribe las consultas paso a paso</li>
-            </ol>
-        </section>
-
-        <h2>1. Resumen de Conceptos Clave</h2>
-        
-        <h3>Fundamentos (Semana 1)</h3>
-        <ul>
-            <li>Dato vs Información vs Conocimiento</li>
-            <li>Sistemas tradicionales vs enfoque BD</li>
-            <li>Ventajas del DBMS: independencia, redundancia mínima, seguridad</li>
-            <li>Componentes del entorno BD: CASE, Repositorio, DBMS, Aplicaciones</li>
-            <li>Ciclo SDLC: Identificación ? Análisis ? Diseño Lógico ? Diseño Físico ? Implementación</li>
-        </ul>
-
-        <h3>Modelo Relacional (Semana 2)</h3>
-        <ul>
-            <li>Arquitectura de 3 niveles: Interno, Conceptual, Externo</li>
-            <li>Independencia de datos: Física y Lógica</li>
-            <li>Terminología: relación, tupla, atributo, dominio</li>
-            <li>Claves: PK, FK, candidatas</li>
-            <li>Propiedades ACID de transacciones</li>
-        </ul>
-
-        <h3>DDL (Semana 3)</h3>
-        <ul>
-            <li>CREATE TABLE, ALTER TABLE, DROP TABLE</li>
-            <li>Tipos de datos: VARCHAR, INTEGER, DATE, BOOLEAN, SERIAL</li>
-            <li>Constraints: NOT NULL, UNIQUE, CHECK, PRIMARY KEY, FOREIGN KEY</li>
-            <li>Opciones FK: ON DELETE CASCADE/SET NULL/RESTRICT</li>
-        </ul>
-
-        <h3>DML y SQL (Semanas 4-5)</h3>
-        <ul>
-            <li>INSERT, UPDATE, DELETE con WHERE</li>
-            <li>SELECT con filtros, ORDER BY, DISTINCT</li>
-            <li>Funciones de agregación: COUNT, SUM, AVG, MIN, MAX</li>
-            <li>GROUP BY y HAVING</li>
-            <li>Funciones de fecha y texto</li>
-            <li>CASE para condiciones</li>
-        </ul>
-
-        <h3>Modelamiento E-R (Semana 6)</h3>
-        <ul>
-            <li>Entidades: fuertes vs débiles</li>
-            <li>Atributos: simples, compuestos, multivaluados, derivados</li>
-            <li>Cardinalidad: 1:1, 1:N, N:N</li>
-            <li>Relaciones: unarias, binarias, ternarias</li>
-            <li>Entidades asociativas para resolver N:N</li>
-            <li>Supertipos y subtipos (herencia)</li>
-        </ul>
-
-        <h3>Normalización (Semana 7)</h3>
-        <ul>
-            <li>1FN: valores atómicos, sin grupos repetitivos</li>
-            <li>2FN: sin dependencias parciales (para claves compuestas)</li>
-            <li>3FN: sin dependencias transitivas</li>
-            <li>Anomalías: inserción, eliminación, modificación</li>
-            <li>Dependencia funcional: A ? B</li>
-        </ul>
-
-        <h2>2. Ejercicios de Repaso</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 1: SQL</strong></p>
-            <p>Dada la tabla EMPLEADO(id, nombre, departamento, salario, fecha_ingreso):</p>
-            <ol style="margin-left: 20px;">
-                <li>Inserta un nuevo empleado</li>
-                <li>Actualiza el salario de los del departamento 'TI' en 10%</li>
-                <li>Lista los empleados con salario mayor al promedio</li>
-                <li>Cuenta cuántos empleados hay por departamento</li>
-                <li>Lista los empleados con más de 5 años en la empresa</li>
-            </ol>
-        </div>
-
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 2: Normalización</strong></p>
-            <p>Normaliza hasta 3FN la siguiente tabla PEDIDOS:</p>
-            <table>
-                <tr><th>pedido_id</th><th>fecha</th><th>cliente_ruc</th><th>cliente_nombre</th><th>cliente_direccion</th><th>producto_id</th><th>producto_nombre</th><th>categoria</th><th>cantidad</th></tr>
-            </table>
-        </div>
-
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 3: Modelamiento E-R</strong></p>
-            <p>Crea el DER para un sistema de biblioteca donde:</p>
-            <ul>
-                <li>Un socio puede prestar varios libros</li>
-                <li>Un libro puede ser prestado a varios socios (en diferentes fechas)</li>
-                <li>Cada préstamo tiene fecha de inicio y devolución</li>
+        <div class="q-level">Ejercicio 2 (13 puntos)</div>
+        <strong class="question">Dado el siguiente enunciado, disene el DER indicando claramente si existen supertipos/subtipos:</strong>
+        <div class="box box--note">
+            <p><strong>Reglas de Negocio - Sistema de Recursos Humanos:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">La empresa tiene empleados que pueden ser de tipo "Administrativo" o "Tecnico".</li>
+                <li class="main__list-item">Todos los empleados tienen un codigo, nombre, direccion y fecha de ingreso.</li>
+                <li class="main__list-item">Los empleados administrativos tienen un cargo y un sueldo fijo.</li>
+                <li class="main__list-item">Los empleados tecnicos tienen una especialidad y una tarifa por hora.</li>
+                <li class="main__list-item">Un empleado tecnico puede trabajar en uno o varios proyectos.</li>
+                <li class="main__list-item">Cada proyecto tiene un codigo, nombre y fecha de inicio.</li>
+                <li class="main__list-item">Un proyecto puede tener asignados varios tecnicos y debe tener al menos uno.</li>
+                <li class="main__list-item">Se registra la cantidad de horas que cada tecnico trabaja en cada proyecto.</li>
             </ul>
         </div>
 
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 4: DDL</strong></p>
-            <p>Crea las tablas para un sistema de facturación:</p>
-            <ul>
-                <li>Cliente (id, nombre, RUC, dirección)</li>
-                <li>Factura (id, fecha, id_cliente, total)</li>
-                <li>Detalle (id_factura, id_producto, cantidad, precio)</li>
-                <li>Producto (id, nombre, precio, stock)</li>
-            </ul>
+        <!-- ============================================================= -->
+        <!-- SECCION 3: NORMALIZACION -->
+        <!-- ============================================================= -->
+        <span class="tag">EXAMEN</span>
+        <h2 class="main__title">Seccion 3: Normalizacion (25 puntos)</h2>
+
+        <div class="q-level">Ejercicio 1 (12 puntos)</div>
+        <strong class="question">Dada la siguiente tabla NO normalizada, identifique las dependencias funcionales y normalice hasta 3FN. Muestre todas las tablas resultantes con sus claves primarias y foraneas.</strong>
+        <div class="table">
+            <div class="table__tr">
+                <div class="table__th">cod_matricula</div>
+                <div class="table__th">cod_alumno</div>
+                <div class="table__th">nom_alumno</div>
+                <div class="table__th">cod_curso</div>
+                <div class="table__th">nom_curso</div>
+                <div class="table__th">creditos</div>
+                <div class="table__th">ciclo</div>
+                <div class="table__th">nota</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">M001</div>
+                <div class="table__td">A001</div>
+                <div class="table__td">Maria Lopez</div>
+                <div class="table__td">C101</div>
+                <div class="table__td">BD Relacionales</div>
+                <div class="table__td">4</div>
+                <div class="table__td">2024-I</div>
+                <div class="table__td">18</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">M001</div>
+                <div class="table__td">A001</div>
+                <div class="table__td">Maria Lopez</div>
+                <div class="table__td">C102</div>
+                <div class="table__td">Analisis de Datos</div>
+                <div class="table__td">3</div>
+                <div class="table__td">2024-I</div>
+                <div class="table__td">16</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">M002</div>
+                <div class="table__td">A002</div>
+                <div class="table__td">Carlos Ruiz</div>
+                <div class="table__td">C101</div>
+                <div class="table__td">BD Relacionales</div>
+                <div class="table__td">4</div>
+                <div class="table__td">2024-I</div>
+                <div class="table__td">15</div>
+            </div>
+        </div>
+        <p class="main__text">Sugerencia: Primero identifique la clave primaria, luego las dependencias parciales y transitivas.</p>
+
+        <div class="q-level">Ejercicio 2 (13 puntos)</div>
+        <strong class="question">Analice la siguiente tabla "Libros_Prestamos" y normalice hasta 3FN:</strong>
+        <div class="table">
+            <div class="table__tr">
+                <div class="table__th">prestamo_id</div>
+                <div class="table__th">fecha_prestamo</div>
+                <div class="table__th">socio_id</div>
+                <div class="table__th">socio_nombre</div>
+                <div class="table__th">socio_telefono</div>
+                <div class="table__th">libro_id</div>
+                <div class="table__th">libro_titulo</div>
+                <div class="table__th">libro_autor</div>
+                <div class="table__th">fecha_devolucion</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">P001</div>
+                <div class="table__td">10/01/2025</div>
+                <div class="table__td">S001</div>
+                <div class="table__td">Ana Torres</div>
+                <div class="table__td">999-8881</div>
+                <div class="table__td">L101</div>
+                <div class="table__td">Cien Anos de Soledad</div>
+                <div class="table__td">G. Garcia Marquez</div>
+                <div class="table__td">25/01/2025</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">P001</div>
+                <div class="table__td">10/01/2025</div>
+                <div class="table__td">S001</div>
+                <div class="table__td">Ana Torres</div>
+                <div class="table__td">999-8881</div>
+                <div class="table__td">L102</div>
+                <div class="table__td">Don Quijote</div>
+                <div class="table__td">M. de Cervantes</div>
+                <div class="table__td">25/01/2025</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">P002</div>
+                <div class="table__td">12/01/2025</div>
+                <div class="table__td">S002</div>
+                <div class="table__td">Luis Gomez</div>
+                <div class="table__td">999-8882</div>
+                <div class="table__td">L101</div>
+                <div class="table__td">Cien Anos de Soledad</div>
+                <div class="table__td">G. Garcia Marquez</div>
+                <div class="table__td">30/01/2025</div>
+            </div>
         </div>
 
-        <h2>3. Consultas SQL de Práctica</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- 1. Productos más vendidos por categoría
-SELECT c.nombre, p.nombre, SUM(d.cantidad) as total
-FROM categoria c
-JOIN producto p ON c.id = p.categoria_id
-JOIN detalle_pedido d ON p.id = d.producto_id
-GROUP BY c.nombre, p.nombre
-ORDER BY total DESC;
+        <!-- ============================================================= -->
+        <!-- SECCION 4: SQL -->
+        <!-- ============================================================= -->
+        <span class="tag">EXAMEN</span>
+        <h2 class="main__title">Seccion 4: SQL (20 puntos)</h2>
 
--- 2. Clientes sin pedidos en los últimos 6 meses
-SELECT c.*
-FROM cliente c
-WHERE NOT EXISTS (
-    SELECT 1 FROM pedido p 
-    WHERE p.cliente_id = c.id 
-    AND p.fecha > CURRENT_DATE - INTERVAL '6 months'
+        <div class="q-level">Ejercicio 1 - DDL (5 puntos)</div>
+        <strong class="question">Escriba las sentencias CREATE TABLE para el siguiente esquema (incluyendo PK, FK, NOT NULL, CHECK):</strong>
+        <div class="answer">
+            <p>Tabla: DEPARTAMENTO (cod_depto CHAR(3) PK, nombre VARCHAR(50) NOT NULL, presupuesto DECIMAL(10,2) CHECK presupuesto &gt; 0)</p>
+            <p>Tabla: EMPLEADO (cod_emp INT PK, nombre VARCHAR(100) NOT NULL, salario DECIMAL(8,2), cod_depto CHAR(3) FK rarr DEPARTAMENTO, con ON DELETE CASCADE)</p>
+        </div>
+
+        <div class="q-level">Ejercicio 2 - INSERT (3 puntos)</div>
+        <strong class="question">Inserte 2 departamentos y 3 empleados usando una sola transaccion. Muestre la sintaxis correcta de INSERT.</strong>
+
+        <div class="q-level">Ejercicio 3 - UPDATE (3 puntos)</div>
+        <strong class="question">Actualice el salario de todos los empleados del departamento 'TI' incrementandolo en un 15%.</strong>
+
+        <div class="q-level">Ejercicio 4 - DELETE (3 puntos)</div>
+        <strong class="question">Elimine todos los empleados cuyo salario sea menor a 1500 y que pertenezcan al departamento 'VENTAS'.</strong>
+
+        <div class="q-level">Ejercicio 5 - SELECT con JOIN (6 puntos)</div>
+        <strong class="question">Dado el esquema anterior y la tabla PROYECTO(cod_proy INT PK, nombre VARCHAR(100), cod_depto CHAR(3) FK), escriba una consulta SELECT que liste el nombre del empleado, su departamento, y el nombre del proyecto en el que trabaja para aquellos empleados cuyo salario supere el promedio de la empresa. Ordene por salario descendente.</strong>
+
+        <!-- ============================================================= -->
+        <!-- SOLUCIONARIO -->
+        <!-- ============================================================= -->
+        <span class="tag">EXAMEN</span>
+        <h2 class="main__title" style="color: var(--danger);">Solucionario</h2>
+
+        <div class="box box--warning">
+            <p><strong>Importante:</strong> Este solucionario es para el docente. No distribuya a los estudiantes antes del examen.</p>
+        </div>
+
+        <h2 class="main__title--sub">Seccion 1: Teoria - Respuestas</h2>
+        <div class="table">
+            <div class="table__tr">
+                <div class="table__th">Pregunta</div>
+                <div class="table__th">Respuesta</div>
+                <div class="table__th">Explicacion</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">1</div>
+                <div class="table__td">b</div>
+                <div class="table__td">El dato es un hecho bruto; la informacion es dato procesado con contexto y significado. (Sem 01)</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">2</div>
+                <div class="table__td">c</div>
+                <div class="table__td">En la fase de diseno logico se construye el modelo conceptual (DER) independiente del DBMS. (Sem 01)</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">3</div>
+                <div class="table__td">a</div>
+                <div class="table__td">Atomicidad: la transaccion se ejecuta en su totalidad o se revierte completamente (todo o nada). (Sem 02)</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">4</div>
+                <div class="table__td">c</div>
+                <div class="table__td">Nivel Interno: describe la estructura fisica de almacenamiento (archivos, indices, bloques). (Sem 02)</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">5</div>
+                <div class="table__td">b</div>
+                <div class="table__td">FK es un atributo que referencia la PK de otra tabla para establecer relaciones. (Sem 02)</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">6</div>
+                <div class="table__td">c</div>
+                <div class="table__td">"Archivos planos" no es un modelo de BD, es un enfoque tradicional de almacenamiento. Modelos: relacional, orientado a objetos, deductivo, etc. (Sem 01)</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">7</div>
+                <div class="table__td">b</div>
+                <div class="table__td">El DBMS gestiona almacenamiento, recuperacion, seguridad, concurrencia, etc. (Sem 01)</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">8</div>
+                <div class="table__td">b</div>
+                <div class="table__td">Independencia logica: cambios en el esquema conceptual no afectan las vistas externas. (Sem 02)</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">9</div>
+                <div class="table__td">b</div>
+                <div class="table__td">Tupla = fila/registro en una tabla relacional. (Sem 02)</div>
+            </div>
+            <div class="table__tr">
+                <div class="table__td">10</div>
+                <div class="table__td">c</div>
+                <div class="table__td">ALTER pertenece a DDL (Data Definition Language). INSERT, UPDATE, SELECT son DML. (Sem 03)</div>
+            </div>
+        </div>
+
+        <h2 class="main__title--sub">Seccion 2: Modelamiento E-R - Soluciones</h2>
+
+        <p class="main__text"><strong>Ejercicio 1: Sistema de Pedidos</strong></p>
+        <div class="diagram-ascii">Entidades: CLIENTE, PEDIDO, LINEA_PEDIDO, PRODUCTO, CATEGORIA
+
+Relaciones:
+CLIENTE --- 1:N --- PEDIDO (min=1,max=N)
+PEDIDO --- 1:N --- LINEA_PEDIDO (min=1,max=N)
+PRODUCTO --- 1:N --- LINEA_PEDIDO (min=0,max=N)
+CATEGORIA --- 1:N --- PRODUCTO (min=0,max=N)
+
+PKs:
+CLIENTE(cliente_id)
+PEDIDO(pedido_id)
+LINEA_PEDIDO(pedido_id, producto_id) -- PK compuesta
+PRODUCTO(producto_id)
+CATEGORIA(categoria_id)
+
+FKs:
+PEDIDO.cliente_id rarr CLIENTE.cliente_id
+LINEA_PEDIDO.pedido_id rarr PEDIDO.pedido_id
+LINEA_PEDIDO.producto_id rarr PRODUCTO.producto_id
+PRODUCTO.categoria_id rarr CATEGORIA.categoria_id</div>
+
+        <p class="main__text"><strong>Ejercicio 2: Recursos Humanos con Supertipo/Subtipo</strong></p>
+        <div class="diagram-ascii">SUPERTIPO: EMPLEADO (cod_emp PK, nombre, direccion, fecha_ingreso)
+  |--- ISA (discriminador: tipo)
+  |--- SUBTIPO: ADMINISTRATIVO (cargo, sueldo_fijo)
+  |--- SUBTIPO: TECNICO (especialidad, tarifa_hora)
+
+Relacion adicional:
+TECNICO --- N:N --- PROYECTO
+  Se resuelve con entidad asociativa:
+  ASIGNACION (cod_tecnico FK, cod_proy FK, horas)
+
+PROYECTO(cod_proy PK, nombre, fecha_inicio)</div>
+
+        <h2 class="main__title--sub">Seccion 3: Normalizacion - Soluciones</h2>
+
+        <p class="main__text"><strong>Ejercicio 1: Matriculas</strong></p>
+        <p class="main__text">PK original: <code>(cod_matricula, cod_curso)</code> - cada fila representa un curso dentro de una matricula.</p>
+        <p class="main__text"><strong>Dependencias funcionales:</strong></p>
+        <ul class="main__list">
+            <li class="main__list-item">cod_matricula rarr cod_alumno, nom_alumno, ciclo (dependencia parcial respecto a PK compuesta)</li>
+            <li class="main__list-item">cod_alumno rarr nom_alumno (dependencia transitiva desde cod_matricula)</li>
+            <li class="main__list-item">cod_curso rarr nom_curso, creditos (dependencia parcial respecto a PK compuesta)</li>
+        </ul>
+
+        <p class="main__text"><strong>Despues de 2FN y 3FN:</strong></p>
+        <pre>MATRICULA (cod_matricula PK, cod_alumno FK, ciclo)
+ALUMNO (cod_alumno PK, nom_alumno)
+CURSO (cod_curso PK, nom_curso, creditos)
+DETALLE_MATRICULA (cod_matricula FK, cod_curso FK, nota)
+  -- PK compuesta: (cod_matricula, cod_curso)</pre>
+
+        <p class="main__text"><strong>Ejercicio 2: Libros_Prestamos</strong></p>
+        <p class="main__text">PK: <code>(prestamo_id, libro_id)</code></p>
+        <p class="main__text"><strong>Dependencias identificadas:</strong></p>
+        <ul class="main__list">
+            <li class="main__list-item">prestamo_id rarr socio_id, socio_nombre, socio_telefono, fecha_prestamo (parcial)</li>
+            <li class="main__list-item">socio_id rarr socio_nombre, socio_telefono (transitiva)</li>
+            <li class="main__list-item">libro_id rarr libro_titulo, libro_autor (parcial)</li>
+        </ul>
+
+        <p class="main__text"><strong>Despues de 3FN (5 tablas):</strong></p>
+        <pre>PRESTAMO (prestamo_id PK, socio_id FK, fecha_prestamo, fecha_devolucion)
+SOCIO (socio_id PK, socio_nombre, socio_telefono)
+LIBRO (libro_id PK, libro_titulo, libro_autor)
+DETALLE_PRESTAMO (prestamo_id FK, libro_id FK) -- PK compuesta
+-- Nota: fecha_devolucion depende de prestamo_id, no del libro individual</pre>
+
+        <h2 class="main__title--sub">Seccion 4: SQL - Soluciones</h2>
+
+        <p class="main__text"><strong>Ejercicio 1 - DDL:</strong></p>
+        <pre>CREATE TABLE departamento (
+    cod_depto CHAR(3) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    presupuesto DECIMAL(10,2) CHECK (presupuesto > 0)
 );
 
--- 3. Top 5 productos por ingresos
-SELECT p.nombre, SUM(d.cantidad * d.precio) as ingresos
-FROM producto p
-JOIN detalle_pedido d ON p.id = d.producto_id
-GROUP BY p.nombre
-ORDER BY ingresos DESC
-LIMIT 5;</pre>
+CREATE TABLE empleado (
+    cod_emp INT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    salario DECIMAL(8,2),
+    cod_depto CHAR(3),
+    FOREIGN KEY (cod_depto) REFERENCES departamento(cod_depto)
+    ON DELETE CASCADE
+);</pre>
 
-        <h2>4. Tabla de Equivalencias Oracle ? PostgreSQL</h2>
-        
-        <table>
-            <tr><th>Concepto</th><th>Oracle</th><th>PostgreSQL</th></tr>
-            <tr><td>Auto-incremento</td><td>SEQUENCE + TRIGGER</td><td>SERIAL</td></tr>
-            <tr><td>Cadena variable</td><td>VARCHAR2(n)</td><td>VARCHAR(n)</td></tr>
-            <tr><td>Entero</td><td>NUMBER(n)</td><td>INTEGER</td></tr>
-            <tr><td>Limitar resultados</td><td>ROWNUM</td><td>LIMIT</td></tr>
-            <tr><td>Fecha actual</td><td>SYSDATE</td><td>CURRENT_DATE</td></tr>
-            <tr><td>Concatenar</td><td>|| o CONCAT</td><td>|| o CONCAT</td></tr>
-            <tr><td>Top N</td><td>WHERE ROWNUM <= n</td><td>LIMIT n</td></tr>
-        </table>
+        <p class="main__text"><strong>Ejercicio 2 - INSERT:</strong></p>
+        <pre>BEGIN;
 
-        <hr>
+INSERT INTO departamento VALUES
+    ('TI', 'Tecnologia Informatica', 50000.00),
+    ('VEN', 'Ventas Corporativas', 35000.00);
 
-        <div class="box box-note" style="background: #d4edda; border-left: 5px solid #28a745;">
-            <p><strong>¡Éxito en el examen!</strong> Recuerda:</p>
-            <ul>
-                <li>Llegar temprano</li>
-                <li>Llevar calculadora (si está permitida)</li>
-                <li>Revisar cada respuesta</li>
-                <li>Si no sabes una respuesta, explica tu razonamiento</li>
-            </ul>
+INSERT INTO empleado (cod_emp, nombre, salario, cod_depto) VALUES
+    (1, 'Ana Torres', 4500.00, 'TI'),
+    (2, 'Luis Gomez', 3200.00, 'TI'),
+    (3, 'Pedro Diaz', 1800.00, 'VEN');
+
+COMMIT;</pre>
+
+        <p class="main__text"><strong>Ejercicio 3 - UPDATE:</strong></p>
+        <pre>UPDATE empleado
+SET salario = salario * 1.15
+WHERE cod_depto = (SELECT cod_depto FROM departamento WHERE nombre = 'TI');</pre>
+
+        <p class="main__text"><strong>Ejercicio 4 - DELETE:</strong></p>
+        <pre>DELETE FROM empleado
+WHERE salario &lt; 1500
+  AND cod_depto = (SELECT cod_depto FROM departamento WHERE nombre = 'VENTAS');</pre>
+
+        <p class="main__text"><strong>Ejercicio 5 - SELECT con JOIN:</strong></p>
+        <pre>SELECT e.nombre AS empleado,
+       d.nombre AS departamento,
+       p.nombre AS proyecto
+FROM empleado e
+JOIN departamento d ON e.cod_depto = d.cod_depto
+LEFT JOIN proyecto p ON d.cod_depto = p.cod_depto
+WHERE e.salario > (SELECT AVG(salario) FROM empleado)
+ORDER BY e.salario DESC;</pre>
+
+        <div class="box box--warning">
+            <p><strong>Fin del solucionario.</strong> Puntaje total: 100. Puntaje minimo aprobatorio: 60. Revise que cada respuesta este correctamente justificada.</p>
         </div>
 
-    </div>
+        <div class="nav">
+            <a href="semana_07.html" class="nav__link">Semana 07</a>
+            <a href="semana_09.html" class="nav__link">Semana 09</a>
+        </div>
+    </main>
 </div>
 
 </body>
 </html>
-
-
-

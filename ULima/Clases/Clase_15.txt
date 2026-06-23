@@ -3,15 +3,15 @@ Data Warehouse
 Rosario Guzmán, Milo Flores
 Fernando Arimana, Pedro Wong
 Junio 2006Agenda
-• Introducción
-• Concepto de Data Warehouse, Data Mart
-• Arquitectura
-• Tipos de implementación
-• Extracción, transformación y carga de datos - ETL
-• Metadatos
-• Cubos de datos
-• Explotación de datos
-• BeneficiosInfraestructura e-Business
+- Introducción
+- Concepto de Data Warehouse, Data Mart
+- Arquitectura
+- Tipos de implementación
+- Extracción, transformación y carga de datos - ETL
+- Metadatos
+- Cubos de datos
+- Explotación de datos
+- BeneficiosInfraestructura e-Business
 Banca
 . . . .
 y Seguros Ventas Gobierno Telecom
@@ -78,7 +78,7 @@ largo de la Organización.Data Mart
 data mart n. Areas de Almacenamientos de Grupos de Trabajo o
 Departamentales que son Pequeños en tamaño y Especializados en
 Funciones. El Data Mart contiene Data Informacional que es ajustada a las
-▪Click here to type bulleted text
+-Click here to type bulleted text
 Necesidades de Departamentos de Trabajo Específicos. También ofrece
 Mejoras de Performance.
 En otras palabras .....
@@ -91,21 +91,21 @@ No Volatil: Información permanente,
 Integrada: Amplia y ConsistenteDiferencias entre Sistemas Operacionales y
 Sistemas Analíticos
 Sistemas Operacionales
-Ejecuta el negocio
-Empleado por
+-Ejecuta el negocio
+-Empleado por
 í
 –Oficinistas/administradores Sistemas Anal ticos
-Data Actualizada al segundo
-Altos Volúmenes de Transacciones
-Administra el negocio
+-Data Actualizada al segundo
+-Altos Volúmenes de Transacciones
+-Administra el negocio
 simples
-Empleado por
-Rápido tiempo de respuesta
+-Empleado por
+-Rápido tiempo de respuesta
 –Decision makers
 –Empleados con experiencia
-Detallado y sumarizado
-Integrado
-HistóricoArquitecturaArquitectura Referencial
+-Detallado y sumarizado
+-Integrado
+-HistóricoArquitecturaArquitectura Referencial
 MMeettaa DDaattaa MMaannaaggeemmeenntt
 OOppeerraattiioonnaall
 SSoouurrccee DDaattaa EExxttrraacctt TTrraannssffoorrmm DDaattaa WWaarreehhoouussee AApppplliiccaattiioonnss
@@ -225,35 +225,35 @@ D i m e n s i o n
 D i m e n s i o n
 C o l o r
 A ñ oCubos de Datos
-• Los metadatos en data warehouse se representan a
+- Los metadatos en data warehouse se representan a
 través de “cubo de datos” multidimensionales.
-• Componentes:
+- Componentes:
 – Dimensiones
-• Ej: parte p, proveedor s, cliente c
+- Ej: parte p, proveedor s, cliente c
 – Hechos o Fact (Medidas de interés)
-• Ej: ventas totales
+- Ej: ventas totales
 – Cubo de Datos 3-D
-• Ej: para cada celda (p,s,c),ventas totales de p que fueron
+- Ej: para cada celda (p,s,c),ventas totales de p que fueron
 compradas a s y fueron vendidas a cDefiniciones
-• Tablas Fact
+- Tablas Fact
 – Tambien conocidas como Tablas de Hecho, estas son las tablas
 centrales en un esquema estrella de un modelo DW. Los tablas
 fact representan el conocimiento del negocio y sus datos
 generalmente son numéricos y/o añadidos para ser analizados.
-• Tablas Dimensión
+- Tablas Dimensión
 – También conocidas como Tablas de la Referencia, contienen
 los datos relativamente estáticos en el DW. Una dimensión es
 una estructura, integrada a menudo por unas o más jerarquías,
 que categoriza datos.
 – Jerarquías
-• Las jerarquías son las estructuras lógicas que utilizan niveles pedidos
+- Las jerarquías son las estructuras lógicas que utilizan niveles pedidos
 como los medios de ordenamiento de datos.Índices
-▪ Índices Bitmap
+- Índices Bitmap
 – Ideales para búsquedas en gran cantidad datos y consultas ad hoc,
 reduce substancialmente del uso del espacio comparado con a
 otras técnicas de la indexación y su mantenimiento es muy
 eficiente durante consultas DML en paralelo y cargas de datos.
-▪ Índices del B-tree
+- Índices del B-tree
 – Un índice del b-tree ordena los datos como un árbol inverso. El
 nivel mas bajo del índice mantiene los valores reales de los datos y
 los punteros a las filas correspondientes. Este es utilizado
@@ -277,15 +277,15 @@ SEMESTRE_ID
 PROVINCIA_ID
 MES_ID
 TIENDA_ID¿Qué es una Dimensión?
-• Una dimensión describe
+- Una dimensión describe
 ALL
 las relaciones entre
 datos.
 Year
-• Definido por la
+- Definido por la
 referenciación de tablas
 en la Base de Datos.
-Season Week Quarter • Puede ser usada en una
+Season Week Quarter - Puede ser usada en una
 BD normalizada o
 desnormalizada.
 Month Nombre del mes
@@ -439,31 +439,31 @@ MOLAP
 Other
 AggregationsExplotación de DatosExplotación de Datos
 ✓Query Ad hoc – Consultas Ad hoc
-• Proceso Iterativo de Preguntas y Respuestas
-• Herramienta que asiste a experto a encontrar información valiosa
+- Proceso Iterativo de Preguntas y Respuestas
+- Herramienta que asiste a experto a encontrar información valiosa
 ✓OLAP - Análisis Multidimensional
-• Preguntas Multidimensionales/Respuestas Multidimensionales
-• Consultas Complejas - Herramienta que ayuda al usuario experto
+- Preguntas Multidimensionales/Respuestas Multidimensionales
+- Consultas Complejas - Herramienta que ayuda al usuario experto
 ✓Data Mining - Minería de Datos
-• Herramienta que automáticamente busca tendencias y patrones
-• Herramienta que aprende y desarrolla experiencia
-• Puede ser la base para análisis detalladoData Mining
-• Es el proceso que permite al usuario conocer la
+- Herramienta que automáticamente busca tendencias y patrones
+- Herramienta que aprende y desarrolla experiencia
+- Puede ser la base para análisis detalladoData Mining
+- Es el proceso que permite al usuario conocer la
 escencia y las relaciones entre sus datos.
-• Data mining descubre patrones y tendencias en el
+- Data mining descubre patrones y tendencias en el
 contenido de la información almacenada en el
 warehouse a través de las diferentes técnicas que
 utiliza.Proceso de Data MiningTipos de Minería
 ✓ Minería de Descubrimiento - Encontrar patrones en Datos que
 pueden ser usados para guiar decisiones.
-• Minimiza dirección de la minería
-• Analiza todo el almacén de datos
-• Mineria de "fácil". Algunas veces la más valiosa.
+- Minimiza dirección de la minería
+- Analiza todo el almacén de datos
+- Mineria de "fácil". Algunas veces la más valiosa.
 ✓ Minería Predictiva - Usar resultados conocidos para crear
 modelos que puedan predecir valores futuros.
-• Extensiva dirección del minador
-• Aprende del muestras para aplicar la populación
-• Minería "Dura". Un experto usuario es requerido.Técnicas Data Mining
+- Extensiva dirección del minador
+- Aprende del muestras para aplicar la populación
+- Minería "Dura". Un experto usuario es requerido.Técnicas Data Mining
 Response
 Fraud
 Delinquency
@@ -490,15 +490,15 @@ tienen una media de ROI de 139%.
 ✓El tiempo total de generación de reportes se reduce de 10 a 1
 Source: IDCBeneficios
 ✓ Desde perspectiva IT
-• Arquitectura flexible de data warehousing que me permita cambiar
+- Arquitectura flexible de data warehousing que me permita cambiar
 cuando lo necesite
-• Presupuestos limitados
-• Procesos que automáticamente actualicen los datos del data
+- Presupuestos limitados
+- Procesos que automáticamente actualicen los datos del data
 warehousing
-• Desgaste del area de IT por requerimientos de usuarios
+- Desgaste del area de IT por requerimientos de usuarios
 ✓ Desde perpectiva de usuarios finales
-• Tener una vista global de los datos de la organización, no
+- Tener una vista global de los datos de la organización, no
 importando de donde provenga la información
-• Tener una herramienta fácil de usar
-• Tener la capacidad de generar reportes de manera independiente
-• Acceso desde internet o intranet
+- Tener una herramienta fácil de usar
+- Tener la capacidad de generar reportes de manera independiente
+- Acceso desde internet o intranet

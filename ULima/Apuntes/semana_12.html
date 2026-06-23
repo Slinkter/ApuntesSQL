@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 12 - PL/SQL: Bloques, Variables y Cursores</title>
+    <link rel="stylesheet" href="master.css">
+</head>
+<body>
+<header class="header">
+    <h1 class="header__title">PL/SQL: Estructura, Variables y Cursores</h1>
+    <p class="header__subtitle">Semana 12 | Ingenieria de Datos | ULima 2013-2</p>
+</header>
+
+<div class="cornell">
+    <aside class="sidebar">
+        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>&sect; PL/SQL</strong>Lenguaje procedural embebido en el motor de BD (Oracle / PostgreSQL PL/pgSQL).</li>
+            <li class="sidebar__item"><strong>&sect; Bloque PL/SQL</strong>Unidad basica: DECLARE + BEGIN + EXCEPTION + END.</li>
+            <li class="sidebar__item"><strong>&sect; %TYPE</strong>Declara variable con el tipo de una columna existente.</li>
+            <li class="sidebar__item"><strong>&sect; %ROWTYPE</strong>Declara registro con la estructura completa de una tabla.</li>
+            <li class="sidebar__item"><strong>&sect; Cursor</strong>Puntero a un conjunto de resultados para recorrer fila por fila.</li>
+            <li class="sidebar__item"><strong>&sect; FETCH</strong>Instruccion que carga la fila actual del cursor en variables.</li>
+        </ul>
+        <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-sidebar);border-radius:var(--radius-md);">
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio</a></li>
+                <li class="sidebar__item"><a href="semana_11.html" class="sidebar__link">Semana 11</a></li>
+                <li class="sidebar__item"><a href="semana_13.html" class="sidebar__link">Siguiente</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="box box--note">
+            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Comprender la estructura de un bloque PL/SQL: DECLARE, BEGIN, EXCEPTION, END.</li>
+                <li class="main__list-item">Declarar variables usando tipado directo, %TYPE y %ROWTYPE.</li>
+                <li class="main__list-item">Usar estructuras de control: IF, LOOP, WHILE, FOR.</li>
+                <li class="main__list-item">Implementar cursores implicitos y explicitos para procesamiento fila a fila.</li>
+            </ul>
+        </div>
+
+        <section class="architect-insight">
+            <h4 class="main__title--sub">Insight del Arquitecto</h4>
+            <p class="main__text">PL/SQL (y su equivalente en PostgreSQL, PL/pgSQL) permite mover la logica de negocio al servidor de base de datos. Esto reduce el trafico de red y centraliza las reglas. Sin embargo, use este poder con responsabilidad: la logica compleja en la base de datos es mas dificil de versionar, probar y escalar horizontalmente. Reserve PL/SQL para operaciones intensivas en datos (ETL, validacion de integridad, auditoria).</p>
+        </section>
+
+        <h2 class="main__title">1. Estructura de un Programa PL/SQL</h2>
+        <p class="main__text">Todo programa PL/SQL se compone de cuatro secciones, aunque solo BEGIN y END son obligatorias:</p>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Seccion</th>
+                    <th class="table__th">Obligatorio</th>
+                    <th class="table__th">Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><code>DECLARE</code></td>
+                    <td class="table__td">Opcional</td>
+                    <td class="table__td">Variables, restricciones, cursores y excepciones definidas por el usuario</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>BEGIN</code></td>
+                    <td class="table__td">Obligatorio</td>
+                    <td class="table__td">Sentencias SQL y sentencias de control PL/SQL</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>EXCEPTION</code></td>
+                    <td class="table__td">Opcional</td>
+                    <td class="table__td">Acciones a ejecutar cuando ocurren errores</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>END;</code></td>
+                    <td class="table__td">Obligatorio</td>
+                    <td class="table__td">Cierra el bloque</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box--example">
+            <p class="main__text"><strong>Ejemplo: Bloque anonimo basico</strong></p>
+        </div>
+        <pre><code>DECLARE
+  v_mensaje VARCHAR2(50) := 'Hola, PL/SQL!';
+BEGIN
+  DBMS_OUTPUT.PUT_LINE(v_mensaje);
+END;
+/</code></pre>
+
+        <h2 class="main__title">2. Declaracion de Variables</h2>
+        <p class="main__text">Las variables se declaran en la seccion DECLARE con la siguiente sintaxis:</p>
+        <pre><code>identificador [CONSTANT] tipo_dato [NOT NULL] [:= | DEFAULT expr];</code></pre>
+
+        <h3 class="main__title--sub">Ejemplos de declaracion</h3>
+        <pre><code>DECLARE
+  v_estado_civil     CHAR(1);
+  v_total_sal        NUMBER(9,2) := 0;
+  v_fecha_orden      DATE := SYSDATE + 7;
+  v_valido           BOOLEAN NOT NULL := TRUE;
+  v_cod_cuenta       VARCHAR2(5) NOT NULL := 'AP001';
+  v_credito_limite   CONSTANT NUMBER := 5000.00;
+  v_estado           BOOLEAN DEFAULT FALSE;
+BEGIN
+  NULL;  -- sentencia que no hace nada (placeholder)
+END;
+/</code></pre>
+
+        <h3 class="main__title--sub">Tipos Especiales: %TYPE y %ROWTYPE</h3>
+        <p class="main__text">PL/SQL ofrece tipos derivados que se adaptan automaticamente a la estructura de la base de datos:</p>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>%TYPE</strong> Hereda el tipo de dato de una columna existente.</p>
+            <pre><code>v_debito  cuenta.credito%TYPE;  -- mismo tipo que cuenta.credito</code></pre>
+        </div>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>%ROWTYPE</strong> Hereda la estructura completa de una tabla (todas sus columnas).</p>
+            <pre><code>v_dept_reg  dept%ROWTYPE;
+-- v_dept_reg.deptno, v_dept_reg.dname, v_dept_reg.loc disponibles</code></pre>
+        </div>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>Registros definidos por el usuario (RECORD)</strong></p>
+            <pre><code>TYPE emp_record_type IS RECORD (
+  apellido  VARCHAR2(25),
+  cargo_id  VARCHAR2(10),
+  salario   NUMBER(8,2)
+);</code></pre>
+        </div>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>Tablas PL/SQL (arrays asociativos)</strong></p>
+            <pre><code>TYPE dept_table_type IS TABLE OF
+  emp.apellido%TYPE
+  INDEX BY BINARY_INTEGER;</code></pre>
+        </div>
+
+        <h2 class="main__title">3. Estructuras de Control</h2>
+
+        <h3 class="main__title--sub">Condicional: IF</h3>
+        <pre><code>IF condicion1 THEN
+  secuencia_de_instrucciones1;
+ELSIF condicion2 THEN
+  secuencia_de_instrucciones2;
+ELSE
+  secuencia_de_instrucciones3;
+END IF;</code></pre>
+
+        <h3 class="main__title--sub">Bucles</h3>
+        <div class="box box--example">
+            <p class="main__text"><strong>LOOP basico con EXIT WHEN</strong></p>
+        </div>
+        <pre><code>LOOP
+  secuencia_de_instrucciones;
+  EXIT WHEN condicion;
+END LOOP;</code></pre>
+
+        <div class="box box--example">
+            <p class="main__text"><strong>WHILE LOOP</strong></p>
+        </div>
+        <pre><code>WHILE condicion LOOP
+  secuencia_de_instrucciones;
+END LOOP;</code></pre>
+
+        <div class="box box--example">
+            <p class="main__text"><strong>FOR LOOP (con y sin REVERSE)</strong></p>
+        </div>
+        <pre><code>FOR contador IN 1..10 LOOP
+  secuencia_de_instrucciones;
+END LOOP;
+
+FOR contador IN REVERSE 10..1 LOOP
+  secuencia_de_instrucciones;
+END LOOP;</code></pre>
+
+        <h2 class="main__title">4. Cursores</h2>
+        <p class="main__text">Un cursor es un puntero a un conjunto de resultados. Permite procesar fila por fila cuando se necesita logica procedural que no puede expresarse en SQL puro.</p>
+
+        <h3 class="main__title--sub">Cursores Implicitos</h3>
+        <p class="main__text">Toda sentencia SQL en PL/SQL tiene un cursor implicito asociado. Sus atributos permiten monitorear la operacion:</p>
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Atributo</th>
+                    <th class="table__th">Tipo</th>
+                    <th class="table__th">Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><code>%ISOPEN</code></td>
+                    <td class="table__td">Booleano</td>
+                    <td class="table__td">TRUE si el cursor esta abierto</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>%NOTFOUND</code></td>
+                    <td class="table__td">Booleano</td>
+                    <td class="table__td">TRUE si el ultimo FETCH no trajo filas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>%FOUND</code></td>
+                    <td class="table__td">Booleano</td>
+                    <td class="table__td">TRUE mientras el ultimo FETCH trae una fila</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>%ROWCOUNT</code></td>
+                    <td class="table__td">Numerico</td>
+                    <td class="table__td">Total de filas retornadas hasta el momento</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="main__title--sub">Cursores Explicitos: Ciclo de Vida</h3>
+        <div class="box box--concept">
+            <p class="main__text">El ciclo completo de un cursor explicito tiene 4 pasos:</p>
+            <table class="table">
+                <thead>
+                    <tr class="table__tr">
+                        <th class="table__th">Paso</th>
+                        <th class="table__th">Comando</th>
+                        <th class="table__th">Descripcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table__tr">
+                        <td class="table__td">1</td>
+                        <td class="table__td"><code>DECLARE CURSOR</code></td>
+                        <td class="table__td">Crear el cursor con la sentencia SELECT</td>
+                    </tr>
+                    <tr class="table__tr">
+                        <td class="table__td">2</td>
+                        <td class="table__td"><code>OPEN</code></td>
+                        <td class="table__td">Abrir el cursor (ejecuta el SELECT)</td>
+                    </tr>
+                    <tr class="table__tr">
+                        <td class="table__td">3</td>
+                        <td class="table__td"><code>FETCH</code></td>
+                        <td class="table__td">Cargar la fila actual en variables</td>
+                    </tr>
+                    <tr class="table__tr">
+                        <td class="table__td">4</td>
+                        <td class="table__td"><code>CLOSE</code></td>
+                        <td class="table__td">Cerrar el cursor</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="main__title--sub">Programa Simple con Cursor (FETCH explicito)</h3>
+        <pre><code>DECLARE
+  CURSOR ejecursor IS
+    SELECT nombre, salario FROM empleado
+    WHERE salario &lt; 5000;
+  v_nombre  empleado.nombre%TYPE;
+  v_salario empleado.salario%TYPE;
+BEGIN
+  OPEN ejecursor;
+  LOOP
+    FETCH ejecursor INTO v_nombre, v_salario;
+    EXIT WHEN ejecursor%NOTFOUND;
+    INSERT INTO TEMP VALUES (v_nombre, v_salario);
+  END LOOP;
+  CLOSE ejecursor;
+END;
+/</code></pre>
+
+        <h3 class="main__title--sub">Programa Simple con Cursor (FOR LOOP simplificado)</h3>
+        <p class="main__text">El FOR LOOP simplifica el manejo: abre, fetchea y cierra automaticamente el cursor.</p>
+        <pre><code>DECLARE
+  CURSOR ejecursor IS
+    SELECT nombre, salario FROM empleado
+    WHERE salario &lt; 5000;
+BEGIN
+  FOR ejecursor_rec IN ejecursor LOOP
+    INSERT INTO TEMP
+    VALUES (ejecursor_rec.nombre, ejecursor_rec.salario);
+  END LOOP;
+END;
+/</code></pre>
+
+        <div class="box box--example">
+            <p class="main__text"><strong>Diferencia clave:</strong> Con FETCH explicito controlamos manualmente apertura, lectura y cierre. Con FOR LOOP, PL/SQL maneja automaticamente el ciclo de vida del cursor. El FOR LOOP es mas seguro (no hay riesgo de olvidar CLOSE) y mas legible.</p>
+        </div>
+
+        <h3 class="main__title--sub">Excepciones Predefinidas</h3>
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Excepcion</th>
+                    <th class="table__th">Causa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><code>NO_DATA_FOUND</code></td>
+                    <td class="table__td">SELECT INTO no retorna filas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>TOO_MANY_ROWS</code></td>
+                    <td class="table__td">SELECT INTO retorna mas de una fila</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>DUP_VAL_ON_INDEX</code></td>
+                    <td class="table__td">Insercion de valor duplicado en columna unica</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>ZERO_DIVIDE</code></td>
+                    <td class="table__td">Division entre cero</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>INVALID_CURSOR</code></td>
+                    <td class="table__td">Operacion ilegal sobre un cursor</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>CURSOR_ALREADY_OPEN</code></td>
+                    <td class="table__td">Intento de abrir un cursor ya abierto</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>VALUE_ERROR</code></td>
+                    <td class="table__td">Error de conversion o truncamiento</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <span class="tag">PL/SQL</span>
+
+        <section class="architect-insight">
+            <h4 class="main__title--sub">Insight del Arquitecto</h4>
+            <p class="main__text">En PostgreSQL, PL/pgSQL ofrece el mismo paradigma con sintaxis ligeramente diferente: <code>DECLARE</code> usa <code>$function$</code> o <code>LANGUAGE plpgsql</code>, los cursores se declaran con <code>CURSOR FOR</code> y el FOR LOOP con <code>FOR registro IN consulta LOOP</code>. La principal ventaja sobre Oracle PL/SQL es que PostgreSQL permite <code>RETURN QUERY</code> para devolver conjuntos directamente desde funciones. Siempre prefiera operaciones basadas en conjuntos (SET-based) sobre cursores: un solo UPDATE con WHERE suele ser mas rapido que un cursor con 10,000 FETCHs.</p>
+        </section>
+
+        <nav class="nav">
+            <a href="index.html" class="nav__link">Volver al Indice</a>
+            <a href="semana_13.html" class="nav__link">Siguiente Semana</a>
+        </nav>
+    </main>
+</div>
+</body>
+</html>

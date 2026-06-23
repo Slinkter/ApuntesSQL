@@ -1,70 +1,70 @@
 Conceptos
-◼ Business Intelligence: Conjunto de
+- Business Intelligence: Conjunto de
 productos y servicios que permiten a los
 usuarios finales accesar y analizar de
 manera rápida y sencilla, la información para
 la toma de decisiones de negocio a nivel
 operativo, táctico y estratégico.
-◼ Data warehouse: Repositorio centralizado
+- Data warehouse: Repositorio centralizado
 de datos.
-◼ Cubos: Estructura de almacenamiento de
+- Cubos: Estructura de almacenamiento de
 datos que facilita la realización de consultas
 grandes en tiempos óptimos.CubosConceptos de diseño
-◼ Fact table (tabla de hechos): Almacena eventos
+- Fact table (tabla de hechos): Almacena eventos
 (por ejemplo, las ventas). Contiene las métricas que
 miden la efectividad de las operaciones del negocio.
-◼ Fact (hecho): Es una fila de la fact table. Representa
+- Fact (hecho): Es una fila de la fact table. Representa
 un evento específico.
-◼ Measures (medidas): Valores cuantitativos que
+- Measures (medidas): Valores cuantitativos que
 almacenan las métricas del negocio. Están
 representados por columnas numéricas en la fact
 table.
-◼ Dimensión: Es una entidad de negocios respecto de
+- Dimensión: Es una entidad de negocios respecto de
 la cual se deben calcular las métricas. Ejemplos:
 clientes, productos, tiempo.
-◼ Dimension Table (tabla de dimensión): Tablas que
+- Dimension Table (tabla de dimensión): Tablas que
 almacenan las dimensiones.Dimensiones
-◼ Es un criterio utilizado para cruzar la
+- Es un criterio utilizado para cruzar la
 información.
-◼ La medida “Ventas”, por sí sola, carece de
+- La medida “Ventas”, por sí sola, carece de
 sentido. ¿Quiero ver las ventas por producto?
 ¿por tiempo? ¿por distribuidor?
-◼ Cada uno de estos criterios produce una
+- Cada uno de estos criterios produce una
 dimensión.Dimensiones y niveles
-◼ Una dimensión tiene múltiples niveles de agrupación. Por
+- Una dimensión tiene múltiples niveles de agrupación. Por
 ejemplo, la dimensión “Ubigeo” debe poder disgregarse en
 países, departamentos, provincia, distrito.
-◼ Cada uno de estos niveles de agregación define un nivel.
-◼ En el ejemplo antes mencionado, los niveles de la dimensión
+- Cada uno de estos niveles de agregación define un nivel.
+- En el ejemplo antes mencionado, los niveles de la dimensión
 “Ubigeo” son:
 . País
 .. Departamento
 …Provincia
 ….Distrito
-◼ Cada nivel tiene ocurrencias. Por ejemplo, “Lima” es una
+- Cada nivel tiene ocurrencias. Por ejemplo, “Lima” es una
 ocurrencia del nivel Departamento. A estas ocurrencias se les
 llama miembros (members).Tablas de dimensión
-◼ Las dimensiones se
+- Las dimensiones se
 almacenan en tablas.
 PRODUCTO_DIM
-◼ Generalmente, cada nivel
+- Generalmente, cada nivel
 representa una columna en Producto_Key
 la tabla de dimensión.
 IDProducto
-◼ Una tabla de dimensión
+- Una tabla de dimensión
 posee una columna clave, Familia
 comúnmente auto-generada.
 Subfamilia
 Por ejemplo, una clave
 Identity de SQL Server. Marca
-◼ Además, una tabla de
+- Además, una tabla de
 Presentación
 dimensión contiene
 columnas que almacenan
 los IDs de cada registro en
 sus sistemas de origen.Relación entre tabla de hechos y tablas
 de dimensión
-◼ La tabla de
+- La tabla de
 hechos tiene
 relaciones
 de foreign
@@ -73,10 +73,10 @@ cada una de
 las tablas de
 dimensiónEl modelo estrella (STAR)El modelo copo de nieve
 (SNOWFLAKE)
-◼ En el modelo STAR, cada nivel corresponde
+- En el modelo STAR, cada nivel corresponde
 con una columna adicional en una sola tabla
 de dimensión.
-◼ En el modelo SNOWFLAKE, cada nivel
+- En el modelo SNOWFLAKE, cada nivel
 corresponde con una nueva tabla de
 dimensión.Apariencia del modelo SNOWFLAKEModelo STAR vs SNOWFLAKE
 STAR SNOWFLAKE

@@ -9,7 +9,7 @@ Practica Calificada #3
 Código: _________ Nombre
 Modelo de Datos
 A partir del modelo de datos, construir las siguientes consultas (2 ptos c/u):
-11.- Mostrar la cantidad de películas que fueron estrenadas en el año 2012. Tenga en cuenta que el campo
+1.- Mostrar la cantidad de películas que fueron estrenadas en el año 2012. Tenga en cuenta que el campo
 FechaEstreno es un tipo de dato DATE. Paralelizar la consulta con 4 hilos de ejecución.
 SQL>
 select /*+ PARALLEL(p,4) */ count(*)
@@ -39,7 +39,7 @@ group by #semana
 order by total desc
 )
 where rownum<=1;
-24.- Por cada película, liste el titulo de distribución y la cantidad de directores que han participado en ella.
+4.- Por cada película, liste el titulo de distribución y la cantidad de directores que han participado en ella.
 SQL>
 select tituloDistri, count(*)
 from pelicula p join director_pelicula dp
@@ -65,7 +65,7 @@ from pelicula p join actor_pelicula ap
 on p.idpelicula = ap.idpelicula
 join actor a on a.idactor = ap.idactor
 where p.TituloOrig = 'Ben-Hur';
-38.- Liste el Titulo Original de cada película del Genero 'TERROR' que haya tenido más de 5 clasificaciones
+8.- Liste el Titulo Original de cada película del Genero 'TERROR' que haya tenido más de 5 clasificaciones
 con el valor de EXCELENTE.
 SQL>
 select p.TituloOrig, count(*)
@@ -81,7 +81,7 @@ SQL>
 select p.tituloorig
 from pelicula p join funcion f on p.idpelicula = f.idpelicula
 where to_char(dia,'YYYYMMDD')='20131030' and horaInicio=18 and horaFinal=22;
-410.- Basado en la siguiente consulta:
+10.- Basado en la siguiente consulta:
 select historicoj_.ID_, historicoj_.PROCINST_ as "PROCINST2_169_",
 historicoj_.CLASS_ as "CLASS3_169_",historicoj_.VERSION_ as "VERSION4_169_",
 historicoj_.NAME_ as "NAME5_169_",

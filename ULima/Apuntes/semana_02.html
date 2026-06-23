@@ -1,214 +1,343 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="stylesheet" href="master.css">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 02 - Modelo Relacional y DBMS</title>
-    
+    <title>Semana 02 - Introduccion a las BD y su Ciclo de Vida</title>
+    <link rel="stylesheet" href="master.css">
 </head>
 <body>
-
 <header class="header">
-    <h1 class="header__title">Modelo Relacional y Funciones del DBMS</h1>
+    <h1 class="header__title">Introduccion a las Bases de Datos y su Ciclo de Vida</h1>
+    <p class="header__subtitle">Semana 02 | Ingenieria de Datos | ULima 2013-2</p>
 </header>
 
 <div class="cornell">
     <aside class="sidebar">
         <h3 class="sidebar__title">PALABRAS CLAVE</h3>
         <ul class="sidebar__list">
-            <li class="sidebar__list-item"><strong>§ Modelo Relacional</strong><br>Tablas, filas, columnas</li>
-            <li class="sidebar__list-item"><strong>§ Esquema</strong><br>Interno, conceptual, externo</li>
-            <li class="sidebar__list-item"><strong>§ Independencia</strong><br>Lógica y física de datos</li>
-            <li class="sidebar__list-item"><strong>§ PK/FK</strong><br>Primary Key, Foreign Key</li>
-            <li class="sidebar__list-item"><strong>§ ACID</strong><br>Propiedades de transacción</li>
-            <li class="sidebar__list-item"><strong>§ Optimizador</strong><br>Basado en reglas/costo</li>
+            <li class="sidebar__item"><strong>§ DBMS / SGDB</strong>Software que gestiona, define y manipula la BD</li>
+            <li class="sidebar__item"><strong>§ Arquitectura 3 niveles</strong>Interno, Conceptual, Externo (ANSI/SPARC)</li>
+            <li class="sidebar__item"><strong>§ Independencia de datos</strong>Logica y Fisica</li>
+            <li class="sidebar__item"><strong>§ PK / FK</strong>Primary Key, Foreign Key</li>
+            <li class="sidebar__item"><strong>§ ACID</strong>Atomicidad, Consistencia, Aislamiento, Durabilidad</li>
+            <li class="sidebar__item"><strong>§ Tipos de BD</strong>Jerarquicas, Red, Relacionales, Objetos, Documentos, Dimensionales</li>
+            <li class="sidebar__item"><strong>§ Metodologia Pratt-Adamski</strong>5 pasos para diseno relacional</li>
         </ul>
-        <div class="sidebar__section">
+        <div class="box box--note" style="margin-top:1.5rem;padding:1rem;">
             <h3 class="sidebar__title">RECURSOS</h3>
             <ul class="sidebar__list">
-                <li class="sidebar__list-item"><a href="index.html">🏠 Índice del Curso</a></li>
-                <li class="sidebar__list-item"><a href="semana_01.html">← Semana 01</a></li>
-                <li class="sidebar__list-item"><a href="semana_03.html">→ Semana 03</a></li>
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio &mdash; Indice del Curso</a></li>
+                <li class="sidebar__item"><a href="semana_01.html" class="sidebar__link">Semana Anterior</a></li>
+                <li class="sidebar__item"><a href="semana_03.html" class="sidebar__link">Siguiente Semana</a></li>
             </ul>
         </div>
     </aside>
 
     <main class="main">
         <div class="box box--note">
-            <p class="main__text"><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
             <ul class="main__list">
-                <li class="main__list-item">Comprender la arquitectura de tres niveles de una BD</li>
-                <li class="main__list-item">Explicar el modelo relacional y su terminología</li>
-                <li class="main__list-item">Identificar los componentes del DBMS</li>
+                <li class="main__list-item">Comprender la arquitectura de tres niveles de una base de datos</li>
+                <li class="main__list-item">Identificar los diferentes tipos de bases de datos y sus usos</li>
+                <li class="main__list-item">Explicar las funciones del DBMS y sus componentes internos</li>
                 <li class="main__list-item">Entender las propiedades ACID de las transacciones</li>
-                <li class="main__list-item">Diseñar esquemas de BD usando la metodología Pratt-Adamski</li>
+                <li class="main__list-item">Aplicar las fases de diseno de bases de datos</li>
             </ul>
         </div>
 
         <section class="architect-insight">
-            <h4 class="main__title--sub">💡 Insight del Arquitecto: La Teoría de Codd</h4>
-            <p class="main__text"><strong>El modelo relacional:</strong> En 1970, Edgar F. Codd (IBM) publicó su trabajo fundamental "A Relational Model of Data for Large Shared Data Banks". Este modelo se basa en la teoría de conjuntos y lógica de predicados — no en punteros físicos como los modelos jerárquicos o de red.</p>
-            <p class="main__text"><strong>Por qué importa:</strong> El modelo relacional es independiente del hardware y del software. El lenguaje declarativo (SQL) permite al usuario especificar QUÉ quiere, no CÓMO obtenerlo. Esto es posible gracias al optimizador del DBMS.</p>
+            <h4 class="main__title--sub">Insight del Arquitecto: La Abstraccion en Tres Niveles</h4>
+            <p class="main__text"><strong>Arquitectura ANSI/SPARC:</strong> Propuesta en 1975, establece que un sistema de BD debe separar la vision del usuario (externo), la vision logica global (conceptual) y la realidad fisica (interno). Esta separacion es la base de la independencia de datos.</p>
+            <p class="main__text"><strong>Por que importa:</strong> Permite cambiar el almacenamiento fisico sin reescribir aplicaciones. En PostgreSQL, esto se traduce en la capacidad de agregar indices o cambiar tablespaces sin modificar una sola linea de codigo de aplicacion.</p>
         </section>
 
-        <h2 class="main__title">1. Arquitectura de tres niveles</h2>
-        <span class="timestamp">Niveles de abstracción</span>
-        
+        <h2 class="main__title">1. Datos, Informacion y Base de Datos</h2>
+        <span class="tag">Repaso conceptual</span>
+
         <div class="box box--concept">
-            <p class="main__text"><strong>Arquitectura ANSI/SPARC:</strong> Tres niveles de abstracción que proporcionan independencia de datos.</p>
+            <p class="main__text"><strong>Dato vs Informacion:</strong> Los datos son las unidades basicas de la informacion no procesada, que por si solos no ofrecen significado. Requieren de un analisis de su contexto para interpretar su significado. La informacion es el resultado del procesamiento de los datos, que nos entrega un resultado significativo para tomar decisiones.</p>
         </div>
 
+        <p class="main__text"><strong>Que es una Base de Datos?</strong></p>
         <ul class="main__list">
-            <li class="main__list-item"><strong>Nivel Interno (Físico):</strong>
-                <ul class="main__list">
-                    <li class="main__list-item">Describe la estructura física de almacenamiento</li>
-                    <li class="main__list-item">Estrategias de indexación, paths de acceso</li>
-                    <li class="main__list-item">¿Cómo se guardan los datos en disco?</li>
-                </ul>
-            </li>
-            <li class="main__list-item"><strong>Nivel Conceptual (Lógico):</strong>
-                <ul class="main__list">
-                    <li class="main__list-item">Describe la estructura de TODA la base de datos</li>
-                    <li class="main__list-item">Integridad, seguridad, relaciones entre datos</li>
-                    <li class="main__list-item">¿Qué datos existen y cómo se relacionan?</li>
-                </ul>
-            </li>
-            <li class="main__list-item"><strong>Nivel Externo (Vistas):</strong>
-                <ul class="main__list">
-                    <li class="main__list-item">Múltiples vistas de diferentes usuarios</li>
-                    <li class="main__list-item">Cada aplicación ve solo lo que necesita</li>
-                    <li class="main__list-item">¿Qué ve cada usuario específico?</li>
-                </ul>
-            </li>
+            <li class="main__list-item">Conjunto de datos persistentes utilizado por los sistemas de aplicaciones de una empresa.</li>
+            <li class="main__list-item">Coleccion de datos interrelacionados creados con un DBMS.</li>
+            <li class="main__list-item">Conjunto auto descriptivo de datos integrados.</li>
+            <li class="main__list-item">Sirve para almacenar datos que luego pueden ser recuperados al hacer una consulta y convertirse en informacion.</li>
         </ul>
 
-        <h2 class="main__title">2. Independencia de Datos</h2>
-        
+        <h2 class="main__title">2. Caracteristicas de una Base de Datos</h2>
+
+        <ul class="main__list">
+            <li class="main__list-item"><strong>CRUD:</strong> Create, Read, Update, Delete.</li>
+            <li class="main__list-item"><strong>Consistencia:</strong> Los datos deberian ser los mismos en el transcurso del tiempo si no ha tenido modificaciones.</li>
+            <li class="main__list-item"><strong>Validez:</strong> Datos validados.</li>
+            <li class="main__list-item"><strong>Correccion facil de errores.</strong></li>
+            <li class="main__list-item"><strong>Velocidad</strong> en las operaciones.</li>
+            <li class="main__list-item"><strong>ACID:</strong> Atomicidad, Consistencia, Aislamiento, Durabilidad.</li>
+            <li class="main__list-item"><strong>Persistencia y Copias de Seguridad.</strong></li>
+            <li class="main__list-item"><strong>Portabilidad:</strong> Descargar datos relevantes de forma sencilla.</li>
+            <li class="main__list-item"><strong>Seguridad.</strong></li>
+        </ul>
+
+        <h2 class="main__title">3. Arquitectura de Tres Niveles</h2>
+        <span class="tag">ANSI/SPARC</span>
+
         <table class="table">
-            <tr class="table__tr"><th class="table__th">Tipo</th><th class="table__th">Descripción</th><th class="table__th">Ejemplo</th></tr>
-            <tr class="table__tr">
-                <td class="table__td"><strong>Física</strong></td>
-                <td class="table__td">Cambios en el almacenamiento no afectan el nivel conceptual</td>
-                <td class="table__td">Cambiar de HDD a SSD, agregar índice</td>
-            </tr>
-            <tr class="table__tr">
-                <td class="table__td"><strong>Lógica</strong></td>
-                <td class="table__td">Cambios en el esquema conceptual no afectan aplicaciones</td>
-                <td class="table__td">Agregar una columna, nueva tabla</td>
-            </tr>
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Nivel</th>
+                    <th class="table__th">Descripcion</th>
+                    <th class="table__th">Pregunta clave</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Interno (Fisico)</strong></td>
+                    <td class="table__td">Describe la estructura fisica de almacenamiento: estrategia de almacenamiento, caminos de acceso, indices.</td>
+                    <td class="table__td">Como se guardan los datos en disco?</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Conceptual</strong></td>
+                    <td class="table__td">Describe la estructura de toda la base de datos para una comunidad de usuarios: vision global de los datos, interrelaciones, restricciones de integridad y seguridad.</td>
+                    <td class="table__td">Que datos existen y como se relacionan?</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Externo (Vistas)</strong></td>
+                    <td class="table__td">Incluye varios esquemas externos o vistas de usuario. Cada usuario ve solo los datos que necesita.</td>
+                    <td class="table__td">Que ve cada usuario?</td>
+                </tr>
+            </tbody>
         </table>
 
-        <h2 class="main__title">3. Terminología del Modelo Relacional</h2>
-        <span class="timestamp">Conceptos fundamentales</span>
-        
+        <h2 class="main__title">4. Independencia de Datos</h2>
+
+        <p class="main__text">Capacidad para modificar el esquema en un nivel del sistema de base de datos sin tener que modificar el esquema del nivel inmediato superior.</p>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Tipo</th>
+                    <th class="table__th">Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Independencia Logica</strong></td>
+                    <td class="table__td">Anadir, borrar o cambiar campos, registros o relaciones sin afectar aplicaciones existentes.</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Independencia Fisica</strong></td>
+                    <td class="table__td">Cambiar caracteristicas fisicas, ubicacion de registros, esquemas de encriptacion sin afectar el nivel conceptual.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">5. Tipos de Bases de Datos</h2>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Tipo</th>
+                    <th class="table__th">Caracteristicas</th>
+                    <th class="table__th">Ejemplos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Archivos Planos</strong></td>
+                    <td class="table__td">Archivos de texto sin ayuda para busqueda ni calculos. Utiles para informacion sencilla que raramente cambia.</td>
+                    <td class="table__td">CSV, TXT</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Jerarquicas</strong></td>
+                    <td class="table__td">Estructura de arbol. Funcionan bien si los datos tienen naturaleza jerarquica.</td>
+                    <td class="table__td">IMS, XML, Registro de Windows</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Relacionales</strong></td>
+                    <td class="table__td">Tablas con filas y columnas. Relaciones entre atributos comunes. Lenguaje SQL.</td>
+                    <td class="table__td">Oracle, MSSQL, DB2, MySQL, PostgreSQL</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Redes</strong></td>
+                    <td class="table__td">Nodos conectados mediante enlaces. Utiles para rutas mas cortas y flujos de red.</td>
+                    <td class="table__td">Neo4J, CODASYL</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Objetos (OODBMS)</strong></td>
+                    <td class="table__td">Abstracciones llamadas objetos. Bueno si la arquitectura de programacion usa objetos.</td>
+                    <td class="table__td">O2, GemStone</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Objeto-Relacional (ORDBMS)</strong></td>
+                    <td class="table__td">hibrido entre Relacional y Objetos.</td>
+                    <td class="table__td">PostgreSQL, Oracle</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Orientada a Documentos</strong></td>
+                    <td class="table__td">Documentos como registros no rigidos. Util para e-commerce.</td>
+                    <td class="table__td">MongoDB</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Dimensionales</strong></td>
+                    <td class="table__td"> dimensiones en lugar de tablas. Busqueda de patrones en datos.</td>
+                    <td class="table__td">Data Warehouses (OLAP)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">6. Funciones del DBMS</h2>
+
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Definicion de Datos (DDL):</strong> Crear, organizar y manipular la estructura de la base de datos.</li>
+            <li class="main__list-item"><strong>Manipulacion de Datos (DML):</strong> Consultas, inserciones, actualizaciones y eliminaciones.</li>
+            <li class="main__list-item"><strong>Administracion de Usuarios:</strong> Permisos, privilegios y recursos.</li>
+            <li class="main__list-item"><strong>Administracion de Performance:</strong> Throughput, instancia, almacenamiento, memoria, bloqueos.</li>
+            <li class="main__list-item"><strong>Control de Concurrencia:</strong> Gestion de bloqueos, commit y rollback.</li>
+            <li class="main__list-item"><strong>Encriptacion de datos.</strong></li>
+            <li class="main__list-item"><strong>Administracion de Backup y Recovery:</strong> Backup, restore, recovery, archivos Log.</li>
+            <li class="main__list-item"><strong>Optimizacion del desempeno.</strong></li>
+            <li class="main__list-item"><strong>Administrar el diccionario de datos.</strong></li>
+        </ul>
+
+        <h2 class="main__title">7. Terminologia del Modelo Relacional</h2>
+
         <div class="box box--example">
-            <p class="main__text"><strong>Ejemplo de tabla:</strong></p>
+            <p class="main__text"><strong>Ejemplo de tabla PERSONA (Relacion):</strong></p>
             <table class="table">
-                <tr class="table__tr"><th class="table__th">id_cliente</th><th class="table__th">nombre</th><th class="table__th">tipo</th><th class="table__th">zip</th></tr>
-                <tr class="table__tr"><td class="table__td">001</td><td class="table__td">PEDRO</td><td class="table__td">A</td><td class="table__td">L33</td></tr>
-                <tr class="table__tr"><td class="table__td">007</td><td class="table__td">JUAN</td><td class="table__td">A</td><td class="table__td">L45</td></tr>
-                <tr class="table__tr"><td class="table__td">012</td><td class="table__td">ANA</td><td class="table__td">C</td><td class="table__td">L33</td></tr>
+                <thead>
+                    <tr class="table__tr">
+                        <th class="table__th">ID (PK)</th>
+                        <th class="table__th">NAME</th>
+                        <th class="table__th">PHONE</th>
+                        <th class="table__th">DEPT_ID (FK)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table__tr"><td class="table__td">201</td><td class="table__td">Unisports</td><td class="table__td">55-2066101</td><td class="table__td">12</td></tr>
+                    <tr class="table__tr"><td class="table__td">202</td><td class="table__td">Simms Athletics</td><td class="table__td">81-20101</td><td class="table__td">14</td></tr>
+                    <tr class="table__tr"><td class="table__td">203</td><td class="table__td">Delhi Sports</td><td class="table__td">91-10351</td><td class="table__td">14</td></tr>
+                    <tr class="table__tr"><td class="table__td">204</td><td class="table__td">Womansport</td><td class="table__td">1-206-104-0103</td><td class="table__td">11</td></tr>
+                </tbody>
             </table>
         </div>
 
         <ul class="main__list">
-            <li class="main__list-item"><strong>Relación (Tabla):</strong> Colección de tuplas (filas) con atributos (columnas)</li>
-            <li class="main__list-item"><strong>Tupla (Fila):</strong> Un registro específico de la tabla</li>
-            <li class="main__list-item"><strong>Atributo (Columna):</strong> Una propiedad de la entidad</li>
-            <li class="main__list-item"><strong>Dominio:</strong> Conjunto de valores permitidos para un atributo</li>
-            <li class="main__list-item"><strong>Grado:</strong> Número de atributos</li>
-            <li class="main__list-item"><strong>Cardinalidad:</strong> Número de tuplas</li>
+            <li class="main__list-item"><strong>Relacion (Tabla):</strong> Unidad basica de almacenamiento compuesta de filas y columnas.</li>
+            <li class="main__list-item"><strong>Tupla (Fila):</strong> Un registro especifico que representa una entidad.</li>
+            <li class="main__list-item"><strong>Atributo (Columna):</strong> Una propiedad de la entidad (nombre, telefono, etc.).</li>
+            <li class="main__list-item"><strong>Dominio:</strong> Conjunto de valores permitidos para un atributo.</li>
+            <li class="main__list-item"><strong>Primary Key (PK):</strong> Atributo o combinacion que identifica de manera unica un registro. No nula, inmutable, unica.</li>
+            <li class="main__list-item"><strong>Foreign Key (FK):</strong> Atributo que referencia la PK de otra entidad para implementar asociaciones entre tablas.</li>
         </ul>
 
-        <h2 class="main__title">4. Claves en el Modelo Relacional</h2>
-        
-        <ul class="main__list">
-            <li class="main__list-item"><strong>Primary Key (PK):</strong>
-                <ul class="main__list">
-                    <li class="main__list-item">Identifica cada fila de manera única</li>
-                    <li class="main__list-item">No puede ser NULL</li>
-                    <li class="main__list-item">Debe ser única</li>
-                    <li class="main__list-item"> ideally inmutable (no cambia en el tiempo)</li>
-                </ul>
-            </li>
-            <li class="main__list-item"><strong>Foreign Key (FK):</strong>
-                <ul class="main__list">
-                    <li class="main__list-item">Establece relación entre tablas</li>
-                    <li class="main__list-item">Referencia a una PK de otra tabla</li>
-                    <li class="main__list-item">Mantiene integridad referencial</li>
-                </ul>
-            </li>
-            <li class="main__list-item"><strong>Clave Candidata:</strong> Atributo(s) que podrían ser PK</li>
-        </ul>
+        <h2 class="main__title">8. Restricciones de Dominio</h2>
 
-        <h2 class="main__title">5. Restricciones de Integridad</h2>
-        
         <table class="table">
-            <tr class="table__tr"><th class="table__th">Restricción</th><th class="table__th">Descripción</th></tr>
-            <tr class="table__tr"><td class="table__td">NOT NULL</td><td class="table__td">El atributo no puede tener valor nulo</td></tr>
-            <tr class="table__tr"><td class="table__td">UNIQUE</td><td class="table__td">Todos los valores deben ser distintos</td></tr>
-            <tr class="table__tr"><td class="table__td">CHECK</td><td class="table__td">Condición booleana debe cumplirse</td></tr>
-            <tr class="table__tr"><td class="table__td">DEFAULT</td><td class="table__td">Valor por defecto si no se especifica</td></tr>
-            <tr class="table__tr"><td class="table__td">PRIMARY KEY</td><td class="table__td">Combina NOT NULL + UNIQUE</td></tr>
-            <tr class="table__tr"><td class="table__td">FOREIGN KEY</td><td class="table__td">Referencia a otra tabla</td></tr>
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Restriccion</th>
+                    <th class="table__th">Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr"><td class="table__td"><strong>NULL</strong></td><td class="table__td">Permite valores nulos</td></tr>
+                <tr class="table__tr"><td class="table__td"><strong>NOT NULL</strong></td><td class="table__td">No permite valores nulos</td></tr>
+                <tr class="table__tr"><td class="table__td"><strong>CHECK</strong></td><td class="table__td">Condicion booleana personalizada</td></tr>
+                <tr class="table__tr"><td class="table__td"><strong>UNIQUE</strong></td><td class="table__td">Valores deben ser distintos entre si</td></tr>
+                <tr class="table__tr"><td class="table__td"><strong>DEFAULT</strong></td><td class="table__td">Valor por defecto si no se especifica</td></tr>
+            </tbody>
         </table>
 
-        <h2 class="main__title">6. Transacciones y Propiedades ACID</h2>
-        
+        <h2 class="main__title">9. Transacciones y ACID</h2>
+
         <div class="box box--concept">
-            <p class="main__text"><strong>Transacción:</strong> Conjunto de operaciones que se ejecutan como una unidad lógica de trabajo.</p>
+            <p class="main__text"><strong>Transaccion:</strong> Cualquier operacion de lectura o escritura realizada en la base de datos. Pasa por estados: activa, parcialmente comprometida, fallida, terminada, comprometida (COMMIT) o deshecha (ROLLBACK).</p>
         </div>
 
         <ul class="main__list">
-            <li class="main__list-item"><strong>A</strong>tomicity: Todo o nada — si una parte falla, toda la transacción se deshace</li>
-            <li class="main__list-item"><strong>C</strong>onsistency: La BD pasa de un estado válido a otro estado válido</li>
-            <li class="main__list-item"><strong>I</strong>solation: Las transacciones concurrentes no se afectan entre sí</li>
-            <li class="main__list-item"><strong>D</strong>urability: Una vez committeada, los cambios persisten incluso si hay falla</li>
+            <li class="main__list-item"><strong>A</strong>tomicidad: Todo o nada. Si una parte falla, toda la transaccion se deshace.</li>
+            <li class="main__list-item"><strong>C</strong>onsistencia: La BD pasa de un estado valido a otro estado valido.</li>
+            <li class="main__list-item"><strong>I</strong>ndependencia/Aislamiento: Las transacciones concurrentes no se afectan entre si.</li>
+            <li class="main__list-item"><strong>D</strong>urabilidad: Una vez committeada, los cambios persisten incluso si hay falla.</li>
         </ul>
 
-        <div class="box box--warning">
-            <p class="main__text"><strong>⚠️ Importante en PostgreSQL:</strong> Los comandos DDL (CREATE, ALTER, DROP) en PostgreSQL son transaccionales. Puedes hacer ROLLBACK de un CREATE TABLE si está dentro de una transacción.</p>
-        </div>
+        <h2 class="main__title">10. Fases del Diseno de Base de Datos</h2>
 
-        <h2 class="main__title">7. Componentes del DBMS</h2>
-        
-        <ul class="main__list">
-            <li class="main__list-item"><strong>Gestor de Datos:</strong> Lee/escribe datos en disco</li>
-            <li class="main__list-item"><strong>Gestor de Transacciones:</strong> Controla ACID</li>
-            <li class="main__list-item"><strong>Gestor de Concurrencia:</strong> Maneja bloqueos</li>
-            <li class="main__list-item"><strong>Gestor de Recuperación:</strong> Backup/Recovery, WAL</li>
-            <li class="main__list-item"><strong>Optimizador de Consultas:</strong> Determina el mejor plan de ejecución</li>
-            <li class="main__list-item"><strong>Gestor de Catálogo:</strong> Almacena metadatos</li>
-        </ul>
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Fase</th>
+                    <th class="table__th">Actividades</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Diseno Conceptual</strong></td>
+                    <td class="table__td">Recoleccion: identificacion de requerimientos, entidades y atributos. Refinamiento: cardinalidad, frecuencia de consultas, relaciones simples. Normalizacion.</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Diseno Logico</strong></td>
+                    <td class="table__td">Determinar relaciones entre entidades. Asegurar que los requerimientos puedan ser soportados. Depende del tipo de DBMS.</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Diseno Fisico</strong></td>
+                    <td class="table__td">Representacion fisica de entidades y atributos (tablas) a ser implementados en un DBMS especifico.</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h2 class="main__title">8. Metodología de Diseño Pratt-Adamski</h2>
-        
+        <h2 class="main__title">11. Metodologia Pratt-Adamski</h2>
+
         <ol class="main__list">
-            <li class="main__list-item">Representar las vistas de usuarios como relaciones</li>
-            <li class="main__list-item">Normalizar las relaciones (1FN, 2FN, 3FN, BCNF)</li>
-            <li class="main__list-item">Representar todas las claves</li>
-            <li class="main__list-item">Determinar restricciones especiales</li>
-            <li class="main__list-item">Combinar resultados en el diseño final</li>
+            <li class="main__list-item">Representar las vistas de usuarios como un conjunto de relaciones.</li>
+            <li class="main__list-item">Normalizar las relaciones.</li>
+            <li class="main__list-item">Representar todas las claves (PK, FK).</li>
+            <li class="main__list-item">Determinar cualquier restriccion especial.</li>
+            <li class="main__list-item">Combinar el resultado de los pasos previos dentro del diseno final.</li>
         </ol>
 
-        <hr>
+        <div class="box box--note">
+            <p class="main__text"><strong>Supuestos:</strong> Los requerimientos son conocidos y se documentara durante el proceso de diseno.</p>
+        </div>
 
-        <section class="laboratorio">
-            <h3 class="main__title--sub">🔬 Laboratorio: Diseño Conceptual</h3>
+        <h2 class="main__title">12. Objetos de la Base de Datos</h2>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Objeto</th>
+                    <th class="table__th">Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr"><td class="table__td"><strong>Tabla</strong></td><td class="table__td">Unidad basica de almacenamiento; compuesta de filas y columnas</td></tr>
+                <tr class="table__tr"><td class="table__td"><strong>Vista</strong></td><td class="table__td">Representacion logica de los datos de una o mas tablas</td></tr>
+                <tr class="table__tr"><td class="table__td"><strong>Secuencia</strong></td><td class="table__td">Genera valores de clave primaria secuenciales</td></tr>
+                <tr class="table__tr"><td class="table__td"><strong>Indice</strong></td><td class="table__td">Mejora la performance de consultas (B+Tree, Hash)</td></tr>
+                <tr class="table__tr"><td class="table__td"><strong>Sinonimo</strong></td><td class="table__td">Nombres alternativos para objetos</td></tr>
+            </tbody>
+        </table>
+
+        <div class="box box--exercise">
+            <p class="main__text"><strong>Laboratorio: Diseno Conceptual</strong></p>
             <p class="main__text">Para un sistema de biblioteca:</p>
             <ol class="main__list">
-                <li class="main__list-item">Identifica las entidades principales (Libro, Usuario, Préstamo)</li>
-                <li class="main__list-item">Define los atributos de cada entidad</li>
-                <li class="main__list-item">Identifica las claves primarias</li>
-                <li class="main__list-item">Dibuja las relaciones entre entidades</li>
+                <li class="main__list-item">Identifica las entidades principales (Libro, Usuario, Prestamo).</li>
+                <li class="main__list-item">Define los atributos de cada entidad.</li>
+                <li class="main__list-item">Identifica las claves primarias.</li>
+                <li class="main__list-item">Identifica las relaciones entre entidades.</li>
             </ol>
-        </section>
+        </div>
 
+        <nav class="nav">
+            <a href="semana_01.html" class="nav__link">Semana Anterior</a>
+            <a href="index.html" class="nav__link">Volver al Indice</a>
+            <a href="semana_03.html" class="nav__link">Siguiente Semana</a>
+        </nav>
     </main>
 </div>
-
 </body>
 </html>
-
-
-

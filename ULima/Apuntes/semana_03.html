@@ -1,214 +1,293 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="stylesheet" href="master.css">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 03 - DDL y Esquema Relacional</title>
-    
+    <title>Semana 03 - Bases de Datos Relacionales (BDR)</title>
+    <link rel="stylesheet" href="master.css">
 </head>
 <body>
-
 <header class="header">
-    <h1 class="header__title">Lenguaje de Definicin de Datos (DDL)</h1>
+    <h1 class="header__title">Bases de Datos Relacionales: Conceptos y Objetos</h1>
+    <p class="header__subtitle">Semana 03 | Ingenieria de Datos | ULima 2013-2</p>
 </header>
 
 <div class="cornell">
     <aside class="sidebar">
         <h3 class="sidebar__title">PALABRAS CLAVE</h3>
         <ul class="sidebar__list">
-            <li class="sidebar__list-item"><strong> CREATE TABLE</strong><br>Crear tablas</li>
-            <li class="sidebar__list-item"><strong> ALTER TABLE</strong><br>Modificar tablas</li>
-            <li class="sidebar__list-item"><strong> DROP TABLE</strong><br>Eliminar tablas</li>
-            <li class="sidebar__list-item"><strong> PRIMARY KEY</strong><br>Clave primaria</li>
-            <li class="sidebar__list-item"><strong> FOREIGN KEY</strong><br>Clave fornea</li>
-            <li class="sidebar__list-item"><strong> Constraints</strong><br>RESTRICCIONES</li>
-            <li class="sidebar__list-item"><strong> Tipos de datos</strong><br>VARCHAR, NUMBER, DATE</li>
+            <li class="sidebar__item"><strong>§ BDR</strong>Base de Datos Relacional: tablas 2D, sin punteros fisicos</li>
+            <li class="sidebar__item"><strong>§ Relacion</strong>Tabla con filas (tuplas) y columnas (atributos)</li>
+            <li class="sidebar__item"><strong>§ Primary Key</strong>Identificador unico, no nulo, inmutable</li>
+            <li class="sidebar__item"><strong>§ Foreign Key</strong>Referencia a PK de otra tabla</li>
+            <li class="sidebar__item"><strong>§ Restricciones</strong>Integridad, columna, dominio, definidas por usuario</li>
+            <li class="sidebar__item"><strong>§ Tipo de dato</strong>VARCHAR, NUMBER, DATE, BLOB</li>
+            <li class="sidebar__item"><strong>§ SQL</strong>Lenguaje estructurado de consultas</li>
         </ul>
-        <div class="sidebar__section">
+        <div class="box box--note" style="margin-top:1.5rem;padding:1rem;">
             <h3 class="sidebar__title">RECURSOS</h3>
             <ul class="sidebar__list">
-                <li class="sidebar__list-item"><a href="index.html">🏠 Índice del Curso</a></li>
-                <li class="sidebar__list-item"><a href="semana_02.html">← Semana 02</a></li>
-                <li class="sidebar__list-item"><a href="semana_04.html">→ Semana 04</a></li>
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio &mdash; Indice del Curso</a></li>
+                <li class="sidebar__item"><a href="semana_02.html" class="sidebar__link">Semana Anterior</a></li>
+                <li class="sidebar__item"><a href="semana_04.html" class="sidebar__link">Siguiente Semana</a></li>
             </ul>
         </div>
     </aside>
 
     <main class="main">
         <div class="box box--note">
-            <p class="main__text"><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
             <ul class="main__list">
-                <li class="main__list-item">Crear tablas con tipos de datos apropiados</li>
-                <li class="main__list-item">Definir restricciones de integridad</li>
-                <li class="main__list-item">Modificar tablas con ALTER TABLE</li>
-                <li class="main__list-item">Eliminar tablas correctamente</li>
-                <li class="main__list-item">Entender la diferencia entre Oracle y PostgreSQL</li>
+                <li class="main__list-item">Comprender el modelo relacional y sus propiedades fundamentales</li>
+                <li class="main__list-item">Identificar los objetos de una base de datos relacional</li>
+                <li class="main__list-item">Aplicar las reglas de nomenclatura para nombrar objetos</li>
+                <li class="main__list-item">Conocer los tipos de datos y restricciones del modelo</li>
+                <li class="main__list-item">Diferenciar restricciones de integridad, columna y definidas por usuario</li>
             </ul>
         </div>
 
         <section class="architect-insight">
-            <h4 class="main__title--sub">💡 Insight del Arquitecto: Diseo Fsico en 2026</h4>
-            <p class="main__text"><strong>PostgreSQL vs Oracle:</strong> El material original usaba sintaxis Oracle (VARCHAR2, NUMBER). En PostgreSQL moderno usamos:</p>
-            <ul class="main__list">
-                <li class="main__list-item"><code>VARCHAR(n)</code> en lugar de VARCHAR2(n)</li>
-                <li class="main__list-item"><code>INTEGER</code> o <code>SERIAL</code> en lugar de NUMBER</li>
-                <li class="main__list-item"><code>TIMESTAMP</code> o <code>DATE</code> para fechas</li>
-                <li class="main__list-item"><code>BOOLEAN</code> para valores lgicos</li>
-                <li class="main__list-item"><code>JSONB</code> para documentos</li>
-            </ul>
+            <h4 class="main__title--sub">Insight del Arquitecto: El Fundamento Relacional</h4>
+            <p class="main__text"><strong>El modelo relacional de Codd (1970):</strong> La genialidad de Codd fue eliminar los punteros fisicos. En los modelos jerarquico y de red, los datos se navegaban mediante punteros. El modelo relacional usa SOLO valores de atributos para establecer relaciones, lo que le da una elegancia matematica basada en teoria de conjuntos y logica de predicados.</p>
+            <p class="main__text"><strong>Implicancia practica:</strong> Puedes cambiar completamente la estructura fisica de almacenamiento (de HDD a SSD, de fila a columnar) sin cambiar las consultas SQL. Eso es independencia de datos en accion.</p>
         </section>
 
-        <h2 class="main__title">1. Tipos de Datos del Modelo Relacional</h2>
-        <span class="timestamp">PostgreSQL</span>
-        
-        <table class="table">
-            <tr class="table__tr"><th class="table__th">Tipo</th><th class="table__th">Descripcin</th><th class="table__th">Ejemplo</th></tr>
-            <tr class="table__tr"><td class="table__td">VARCHAR(n)</td><td class="table__td">Cadena variable hasta n caracteres</td><td class="table__td">nombre VARCHAR(100)</td></tr>
-            <tr class="table__tr"><td class="table__td">CHAR(n)</td><td class="table__td">Cadena fija de n caracteres</td><td class="table__td">codigo CHAR(5)</td></tr>
-            <tr class="table__tr"><td class="table__td">INTEGER</td><td class="table__td">Entero de 4 bytes</td><td class="table__td">edad INTEGER</td></tr>
-            <tr class="table__tr"><td class="table__td">BIGINT</td><td class="table__td">Entero de 8 bytes</td><td class="table__td">BigSerial</td></tr>
-            <tr class="table__tr"><td class="table__td">NUMERIC(p,s)</td><td class="table__td">Punto fijo exacto</td><td class="table__td">precio NUMERIC(10,2)</td></tr>
-            <tr class="table__tr"><td class="table__td">DATE</td><td class="table__td">Fecha sin hora</td><td class="table__td">fecha_nac DATE</td></tr>
-            <tr class="table__tr"><td class="table__td">TIMESTAMP</td><td class="table__td">Fecha con hora</td><td class="table__td">fecha_alta TIMESTAMP</td></tr>
-            <tr class="table__tr"><td class="table__td">BOOLEAN</td><td class="table__td">Verdadero/Falso</td><td class="table__td">activo BOOLEAN</td></tr>
-            <tr class="table__tr"><td class="table__td">SERIAL</td><td class="table__td">Auto-incremento</td><td class="table__td">id SERIAL PRIMARY KEY</td></tr>
-            <tr class="table__tr"><td class="table__td">UUID</td><td class="table__td">Identificador nico</td><td class="table__td">codigo UUID DEFAULT gen_random_uuid()</td></tr>
-        </table>
+        <h2 class="main__title">1. Base de Datos Relacional (BDR)</h2>
+        <span class="tag">Definicion</span>
 
-        <h2 class="main__title">2. Creacin de Tablas</h2>
-        
-        <div class="box box--example">
-            <p class="main__text"><strong>Sintaxis PostgreSQL:</strong></p>
-            <pre class="code">
-CREATE TABLE nombre_tabla (
-    columna1 tipo_dato [RESTRICCIONES],
-    columna2 tipo_dato [RESTRICCIONES],
-    ...
-    [RESTRICCIONES_DE_TABLA]
-);</pre>
+        <div class="box box--concept">
+            <p class="main__text"><strong>Base de Datos Relacional:</strong> Es una coleccion de relaciones o tablas de dos dimensiones para almacenar informacion. Puede ser accedida y modificada por sentencias del Lenguaje Estructurado de Consultas (SQL). Contiene una coleccion de tablas sin punteros fisicos y utiliza un conjunto de operadores relacionales.</p>
         </div>
 
-        <h3 class="main__title--sub">Ejemplo: Tabla CLIENTE</h3>
-        <pre class="code">
--- PostgreSQL
-CREATE TABLE cliente (
-    id_cliente SERIAL PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    apellido VARCHAR(50) NOT NULL,
-    email VARCHAR(100) UNIQUE,
-    telefono VARCHAR(20),
-    fecha_registro DATE DEFAULT CURRENT_DATE,
-    activo BOOLEAN DEFAULT TRUE
-);</pre>
+        <h2 class="main__title">2. Propiedades de las BDR</h2>
+
+        <ul class="main__list">
+            <li class="main__list-item">Acceso y modificacion mediante SQL (Structure Query Language).</li>
+            <li class="main__list-item">Coleccion de tablas sin punteros fisicos &mdash; las relaciones se establecen por valores de atributos.</li>
+            <li class="main__list-item">Utiliza un conjunto de operadores relacionales (seleccion, proyeccion, union, join, etc.).</li>
+            <li class="main__list-item">Cada tabla tiene filas (tuplas) y columnas (atributos).</li>
+            <li class="main__list-item">Se puede manipular datos de las filas usando comandos SQL.</li>
+        </ul>
+
+        <h2 class="main__title">3. Objetos de la Base de Datos Relacional</h2>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Objeto</th>
+                    <th class="table__th">Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Tabla</strong></td>
+                    <td class="table__td">Unidad basica de almacenamiento; compuesta de filas y columnas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Vista</strong></td>
+                    <td class="table__td">Representacion logica de los datos de una o mas tablas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Secuencia</strong></td>
+                    <td class="table__td">Genera valores de clave primaria secuenciales</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Indice</strong></td>
+                    <td class="table__td">Mejora el performance de algunas consultas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Sinonimo</strong></td>
+                    <td class="table__td">Asigna nombres alternativos a los objetos</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">4. Terminologia Relacional</h2>
+
+        <div class="box box--example">
+            <p class="main__text"><strong>Ejemplo: Tabla CLIENTE</strong></p>
+            <table class="table">
+                <thead>
+                    <tr class="table__tr">
+                        <th class="table__th">ID_Cliente (PK)</th>
+                        <th class="table__th">Nombre</th>
+                        <th class="table__th">Tipo</th>
+                        <th class="table__th">ZIP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table__tr"><td class="table__td">001</td><td class="table__td">PEDRO</td><td class="table__td">A</td><td class="table__td">L33</td></tr>
+                    <tr class="table__tr"><td class="table__td">007</td><td class="table__td">JUAN</td><td class="table__td">A</td><td class="table__td">L45</td></tr>
+                    <tr class="table__tr"><td class="table__td">012</td><td class="table__td">ANA</td><td class="table__td">C</td><td class="table__td">L33</td></tr>
+                    <tr class="table__tr"><td class="table__td">003</td><td class="table__td">IVAN</td><td class="table__td">B</td><td class="table__td">L41</td></tr>
+                    <tr class="table__tr"><td class="table__td">015</td><td class="table__td">INES</td><td class="table__td">A</td><td class="table__td">L33</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="box box--example">
+            <p class="main__text"><strong>Ejemplo: Tabla ORDEN_PEDIDO</strong></p>
+            <table class="table">
+                <thead>
+                    <tr class="table__tr">
+                        <th class="table__th">Nro_Orden (PK)</th>
+                        <th class="table__th">Fecha_Orden</th>
+                        <th class="table__th">Fecha_Atencion</th>
+                        <th class="table__th">CantEmb</th>
+                        <th class="table__th">ID_Cliente (FK)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table__tr"><td class="table__td">150045</td><td class="table__td">01/10/2003</td><td class="table__td">10/10/2003</td><td class="table__td">3</td><td class="table__td">015</td></tr>
+                    <tr class="table__tr"><td class="table__td">140235</td><td class="table__td">02/02/2003</td><td class="table__td">07/07/2003</td><td class="table__td">2</td><td class="table__td">003</td></tr>
+                    <tr class="table__tr"><td class="table__td">230978</td><td class="table__td">23/08/2003</td><td class="table__td">15/09/2003</td><td class="table__td">4</td><td class="table__td">001</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Relacion (Tabla):</strong> Estructura bidimensional que almacena datos de una entidad.</li>
+            <li class="main__list-item"><strong>Tupla (Fila):</strong> Cada registro individual. Ej: la fila de PEDRO.</li>
+            <li class="main__list-item"><strong>Atributo (Columna):</strong> Caracteristica de la entidad. Ej: Nombre, Tipo, ZIP.</li>
+            <li class="main__list-item"><strong>Primary Key (PK):</strong> Columna o combinacion que identifica de manera unica cada tupla. Subrayada en el diagrama.</li>
+            <li class="main__list-item"><strong>Foreign Key (FK):</strong> Columna que referencia la PK de otra tabla. Implementa la asociacion entre tablas.</li>
+        </ul>
+
+        <h2 class="main__title">5. Reglas de Nomenclatura de Objetos</h2>
 
         <div class="box box--warning">
-            <p class="main__text"><strong>⚠️ Equivalencias Oracle → PostgreSQL:</strong></p>
+            <p class="main__text"><strong>Reglas estandar ANSI para nombrar objetos en una BD:</strong></p>
             <ul class="main__list">
-                <li class="main__list-item">NUMBER → INTEGER o NUMERIC</li>
-                <li class="main__list-item">VARCHAR2 → VARCHAR</li>
-                <li class="main__list-item">NUMBER(7) PRIMARY KEY → SERIAL PRIMARY KEY</li>
+                <li class="main__list-item">Debe comenzar con una letra.</li>
+                <li class="main__list-item">Puede tener una longitud de 1 a 30 caracteres.</li>
+                <li class="main__list-item">Debe contener solamente los caracteres A-Z, a-z, 0-9, _, $ y #.</li>
+                <li class="main__list-item">No debe ser igual al nombre de otro objeto dentro del mismo usuario del DBMS.</li>
+                <li class="main__list-item">No debe ser una palabra reservada del DBMS.</li>
             </ul>
         </div>
 
-        <h2 class="main__title">3. Restricciones (Constraints)</h2>
-        
-        <h3 class="main__title--sub">Restricciones de Columna</h3>
+        <h2 class="main__title">6. Tipos de Datos del Modelo Relacional</h2>
+
+        <p class="main__text">La especificacion original del material usa sintaxis Oracle. A continuacion se presentan los equivalentes:</p>
+
         <table class="table">
-            <tr class="table__tr"><th class="table__th">Restriccin</th><th class="table__th">Descripcin</th></tr>
-            <tr class="table__tr"><td class="table__td">NOT NULL</td><td class="table__td">Obligatorio - no permite valores nulos</td></tr>
-            <tr class="table__tr"><td class="table__td">UNIQUE</td><td class="table__td">Valores no pueden repetirse</td></tr>
-            <tr class="table__tr"><td class="table__td">DEFAULT valor</td><td class="table__td">Valor por defecto</td></tr>
-            <tr class="table__tr"><td class="table__td">CHECK (condicin)</td><td class="table__td">Validacin personalizada</td></tr>
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Tipo (Oracle)</th>
+                    <th class="table__th">Descripcion</th>
+                    <th class="table__th">Equivalente PostgreSQL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><code>VARCHAR2(size)</code></td>
+                    <td class="table__td">Cadena de longitud variable hasta 4000 caracteres</td>
+                    <td class="table__td"><code>VARCHAR(n)</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>CHAR(size)</code></td>
+                    <td class="table__td">Cadena de longitud fija</td>
+                    <td class="table__td"><code>CHAR(n)</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>NUMBER</code></td>
+                    <td class="table__td">Numerico de punto flotante</td>
+                    <td class="table__td"><code>INTEGER / NUMERIC</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>NUMBER(p,s)</code></td>
+                    <td class="table__td">Numerico de punto fijo hasta 16 digitos</td>
+                    <td class="table__td"><code>NUMERIC(p,s)</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>DATE</code></td>
+                    <td class="table__td">Fecha y tiempo +/- 4712</td>
+                    <td class="table__td"><code>DATE / TIMESTAMP</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>LONG</code></td>
+                    <td class="table__td">Cadena variable hasta 2 GB</td>
+                    <td class="table__td"><code>TEXT</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>BLOB</code></td>
+                    <td class="table__td">Datos binarios hasta 4 GB</td>
+                    <td class="table__td"><code>BYTEA</code></td>
+                </tr>
+            </tbody>
         </table>
 
-        <h3 class="main__title--sub">Restricciones de Tabla</h3>
-        <pre class="code">
-CREATE TABLE orden_pedido (
-    numero_orden INTEGER,
-    fecha_colocacion DATE,
-    fecha_llenado DATE,
-    numero_embarques INTEGER,
-    id_cliente INTEGER,
-    
-    -- Restricciones de tabla
-    PRIMARY KEY (numero_orden),
-    FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);</pre>
+        <h2 class="main__title">7. Restricciones de la Base de Datos</h2>
+        <span class="tag">Integridad y Validacion</span>
 
-        <h2 class="main__title">4. Clave Fornea con Opciones</h2>
-        
+        <h3 class="main__title--sub">7.1 Restricciones de Integridad</h3>
+
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Integridad de Entidad (PRIMARY KEY):</strong> El Primary Key no puede ser NULL y su valor debe ser unico. Solo se permite una PK por tabla. Garantiza que no hayan filas duplicadas. Automaticamente crea un indice UNIQUE.</li>
+            <li class="main__list-item"><strong>Integridad Referencial (FOREIGN KEY):</strong> Los valores de las Foreign Key deben relacionarse con una llave primaria (PK). Establece una relacion entre la PK en la misma tabla o con otras tablas. Debe existir un valor en la tabla Padre a donde hace referencia la FK.</li>
+        </ul>
+
         <div class="box box--concept">
-            <p class="main__text"><strong>Opciones de FOREIGN KEY:</strong></p>
+            <p class="main__text"><strong>Palabras clave de FOREIGN KEY:</strong></p>
             <ul class="main__list">
-                <li class="main__list-item"><code>ON DELETE CASCADE:</code> Elimina filas hijos automticamente</li>
-                <li class="main__list-item"><code>ON DELETE SET NULL:</code> Pone NULL en la FK</li>
-                <li class="main__list-item"><code>ON DELETE RESTRICT:</code> Impide eliminar si hay hijos</li>
-                <li class="main__list-item"><code>ON UPDATE CASCADE:</code> Actualiza automticamente</li>
+                <li class="main__list-item"><code>FOREIGN KEY</code> &mdash; En la tabla hijo se define que columna tiene la restriccion.</li>
+                <li class="main__list-item"><code>REFERENCES</code> &mdash; Identifica a la tabla padre y la columna PK.</li>
+                <li class="main__list-item"><code>ON DELETE CASCADE</code> &mdash; Elimina automaticamente filas hijo si se elimina la fila padre.</li>
             </ul>
         </div>
 
-        <h2 class="main__title">5. Alteracin de Tablas</h2>
-        
-        <pre class="code">
--- Agregar columna
-ALTER TABLE cliente ADD COLUMN observaciones TEXT;
+        <h3 class="main__title--sub">7.2 Restricciones de Columna (Dominio)</h3>
 
--- Modificar columna
-ALTER TABLE cliente ALTER COLUMN telefono TYPE VARCHAR(30);
-
--- Agregar restriccin
-ALTER TABLE cliente ADD CONSTRAINT email_check 
-    CHECK (email LIKE '%@%.%');
-
--- Eliminar columna
-ALTER TABLE cliente DROP COLUMN observaciones;
-
--- Eliminar restriccin
-ALTER TABLE cliente DROP CONSTRAINT email_check;</pre>
-
-        <h2 class="main__title">6. Eliminacin de Tablas</h2>
-        
-        <pre class="code">
--- Eliminar tabla (solo si no hay dependencias)
-DROP TABLE nombre_tabla;
-
--- Eliminar con todas las restricciones de FK
-DROP TABLE nombre_tabla CASCADE;
-
--- Eliminar solo si existe
-DROP TABLE IF EXISTS nombre_tabla;</pre>
-
-        <h2 class="main__title">7. Otros Objetos de BD</h2>
-        
         <table class="table">
-            <tr class="table__tr"><th class="table__th">Objeto</th><th class="table__th">Descripcin</th></tr>
-            <tr class="table__tr"><td class="table__td"><strong>VIEW</strong></td><td class="table__td">Consulta almacenada virtual</td></tr>
-            <tr class="table__tr"><td class="table__td"><strong>SEQUENCE</strong></td><td class="table__td">Generador de nmeros secuenciales</td></tr>
-            <tr class="table__tr"><td class="table__td"><strong>INDEX</strong></td><td class="table__td">Estructura para bsquedas rpidas</td></tr>
-            <tr class="table__tr"><td class="table__td"><strong>SYNONYM</strong></td><td class="table__td">Nombre alternativo (no en PostgreSQL)</td></tr>
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Restriccion</th>
+                    <th class="table__th">Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>NULL / NOT NULL</strong></td>
+                    <td class="table__td">Especifica si el atributo puede tener valores nulos</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>UNIQUE</strong></td>
+                    <td class="table__td">Todos los valores en la columna deben ser distintos</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>CHECK</strong></td>
+                    <td class="table__td">Condicion booleana que debe cumplir cada valor ingresado</td>
+                </tr>
+            </tbody>
         </table>
 
-        <hr>
+        <p class="main__text">Los valores que ingresan a una columna deben ser del mismo tipo que la definicion del dato (restriccion de dominio por tipo de dato).</p>
 
-        <section class="laboratorio">
-            <h3 class="main__title--sub">🔬 Laboratorio: DDL en PostgreSQL</h3>
-            <p class="main__text">Crea el siguiente esquema para una tienda:</p>
+        <h3 class="main__title--sub">7.3 Restricciones Definidas por el Usuario</h3>
+
+        <p class="main__text">Los valores de las columnas deben tener validaciones de acuerdo con las reglas de negocio. Por ejemplo: "el salario no puede ser menor al minimo legal", "la fecha de atencion debe ser posterior a la fecha de orden".</p>
+
+        <div class="box box--note">
+            <p class="main__text"><strong>Resumen de restricciones:</strong> Las restricciones de integridad mantienen la correccion de los datos (PK no nula, FK valida). Las restricciones de columna controlan los valores permitidos (NULL, UNIQUE, CHECK). Las restricciones definidas por el usuario implementan reglas de negocio especificas.</p>
+        </div>
+
+        <div class="box box--exercise">
+            <p class="main__text"><strong>Laboratorio: Identificacion de Restricciones</strong></p>
+            <p class="main__text">Dado el siguiente esquema de base de datos para una muebleria con las tablas: <code>cliente</code>, <code>orden_pedido</code>, <code>producto</code>, <code>producto_ordenado</code>:</p>
             <ol class="main__list">
-                <li class="main__list-item">Tabla <strong>producto</strong>: id (SERIAL PK), nombre, precio, stock</li>
-                <li class="main__list-item">Tabla <strong>pedido</strong>: id (SERIAL PK), fecha, total, id_cliente (FK)</li>
-                <li class="main__list-item">Tabla <strong>detalle_pedido</strong>: id_pedido (FK), id_producto (FK), cantidad, subtotal</li>
-                <li class="main__list-item">Aade constraint CHECK para que precio > 0</li>
-                <li class="main__list-item">Aade constraint para que cantidad > 0</li>
+                <li class="main__list-item">Identifica todas las Primary Keys.</li>
+                <li class="main__list-item">Identifica todas las Foreign Keys.</li>
+                <li class="main__list-item">Propone 2 restricciones CHECK basadas en reglas de negocio.</li>
+                <li class="main__list-item">Indica que columnas deberian ser NOT NULL.</li>
             </ol>
-        </section>
+        </div>
 
+        <nav class="nav">
+            <a href="semana_02.html" class="nav__link">Semana Anterior</a>
+            <a href="index.html" class="nav__link">Volver al Indice</a>
+            <a href="semana_04.html" class="nav__link">Siguiente Semana</a>
+        </nav>
     </main>
 </div>
-
 </body>
 </html>
-
-
-

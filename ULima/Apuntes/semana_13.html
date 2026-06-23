@@ -1,193 +1,371 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="stylesheet" href="master.css">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 13 - Repaso Práctica Calificada 3</title>
-    
-    
+    <title>Semana 13 - Procedimientos, Funciones, Triggers, Paquetes</title>
+    <link rel="stylesheet" href="master.css">
 </head>
 <body>
 
-<div class="header-box">
-    <h1>?? Repaso: Práctica Calificada 3 (Semanas 9-12)</h1>
-    <p>Semana 13 | Ingeniería de Datos | ULima 2013-2</p>
-</div>
+<header class="header">
+    <h1 class="header__title">Procedimientos, Funciones, Triggers y Paquetes</h1>
+    <p class="header__subtitle">Semana 13 | Programacion PL/SQL Avanzada | ULima 2013-2</p>
+</header>
 
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>TEMAS DE LA PRÁCTICA</h3>
-        <ul>
-            <li><strong>§ Formas Normales</strong><br>Semana 9</li>
-            <li><strong>§ JOIN y Subconsultas</strong><br>Semana 10</li>
-            <li><strong>§ PL/pgSQL</strong><br>Semana 11</li>
-            <li><strong>§ Triggers</strong><br>Semana 12</li>
+<div class="cornell">
+    <aside class="sidebar">
+        <h3 class="sidebar__title">TEMAS CLAVE</h3>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>Procedimientos</strong>Bloques con IN/OUT/IN OUT</li>
+            <li class="sidebar__item"><strong>Funciones</strong>Retornan un valor</li>
+            <li class="sidebar__item"><strong>Triggers</strong>:NEW / :OLD y eventos DML</li>
+            <li class="sidebar__item"><strong>Paquetes</strong>Agrupacion logica de subprogramas</li>
+            <li class="sidebar__item"><strong>Cursores</strong>FETCH, FOR LOOP, atributos</li>
+            <li class="sidebar__item"><strong>Variables</strong>Sustitucion con & y &&</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">?? Índice del Curso</a></li>
-                <li><a href="semana_12.html">? Semana 12</a></li>
-                <li><a href="semana_14.html">? Semana 14</a></li>
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Indice del Curso</a></li>
+                <li class="sidebar__item"><a href="semana_12.html" class="sidebar__link">Semana 12</a></li>
+                <li class="sidebar__item"><a href="semana_14.html" class="sidebar__link">Semana 14</a></li>
             </ul>
         </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
-        <div class="box box-note" style="border-left: 5px solid #e74c3c;">
-            <p><strong>?? IMPORTANTE:</strong> La PC3 cubre semanas 9-12. Repasa procedimientos, funciones y triggers.</p>
+    <main class="main">
+        <div class="box box--note">
+            <p><strong>Objetivos:</strong> Comprender y crear procedimientos almacenados, funciones, triggers y paquetes en PL/SQL. Dominar el uso de cursores, parametros y variables de sustitucion.</p>
         </div>
 
-        <h2>1. Resumen de Conceptos</h2>
-        
-        <h3>Formas Normales (Semana 9)</h3>
-        <ul>
-            <li>BCNF: Todo determinante es clave candidata</li>
-            <li>4FN: Sin dependencias multivaluadas</li>
-            <li>5FN: Sin dependencias de join</li>
-            <li>Desnormalización: Agregar redundancia para rendimiento</li>
-        </ul>
+        <section class="architect-insight">
+            <h4 class="main__title--sub">Insight del Arquitecto: PL/SQL como Herramienta de Poder</h4>
+            <p class="main__text">Los subprogramas almacenados (procedimientos, funciones, paquetes) son el corazon de la logica de negocio en la base de datos. Mientras que el SQL puro es declarativo, PL/SQL permite programacion imperativa: condiciones, loops, manejo de excepciones. Un buen arquitecto sabe cuando usar cada uno. Los triggers, por otro lado, deben usarse con cuidado -- un trigger mal disenado puede destruir el rendimiento de una base de datos completa.</p>
+        </section>
 
-        <h3>JOINs y Subconsultas (Semana 10)</h3>
-        <ul>
-            <li>INNER, LEFT, RIGHT, CROSS JOIN</li>
-            <li>Self JOIN para relaciones recursivas</li>
-            <li>Subconsultas en WHERE, FROM, SELECT</li>
-            <li>EXISTS, IN, ANY, ALL</li>
-        </ul>
+        <h2 class="main__title">1. Cursores en PL/SQL</h2>
+        <span class="tag">Recorrido de filas</span>
 
-        <h3>PL/pgSQL (Semana 11)</h3>
-        <ul>
-            <li>Bloques: DECLARE, BEGIN, EXCEPTION, END</li>
-            <li>Variables: tipos simples, %TYPE, %ROWTYPE</li>
-            <li>Control: IF, CASE, LOOP, FOR</li>
-            <li>Funciones: RETURNS, RETURN QUERY</li>
-        </ul>
+        <p class="main__text">Un cursor permite recuperar filas de una consulta SELECT una por una y procesarlas individualmente.</p>
 
-        <h3>Triggers (Semana 12)</h3>
-        <ul>
-            <li>NEW y OLD en triggers de fila</li>
-            <li>BEFORE vs AFTER</li>
-            <li>FOR EACH ROW vs STATEMENT</li>
-            <li>Auditoría y validaciones</li>
-        </ul>
-
-        <h2>2. Ejercicios de Repaso</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 1: Funciones</strong></p>
-            <p>Crea una función que reciba un rango de fechas y retorne el total de ventas en ese período.</p>
-        </div>
-
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
-CREATE OR REPLACE FUNCTION ventas_por_periodo(
-    p_fecha_inicio DATE,
-    p_fecha_fin DATE
-)
-RETURNS NUMERIC AS $$
+        <h3 class="main__title--sub">Cursor Manual con FETCH</h3>
+        <pre>
 DECLARE
-    v_total NUMERIC := 0;
+    CURSOR ejecursor IS
+        SELECT nombre, salario FROM empleado
+        WHERE salario < 5000;
+    v_nombre empleado.nombre%TYPE;
+    v_salario empleado.salario%TYPE;
 BEGIN
-    SELECT COALESCE(SUM(total), 0)
-    INTO v_total
-    FROM pedido
-    WHERE fecha BETWEEN p_fecha_inicio AND p_fecha_fin;
-    
-    RETURN v_total;
-END;
-$$ LANGUAGE plpgsql;</pre>
+    OPEN ejecursor;
+    LOOP
+        FETCH ejecursor INTO v_nombre, v_salario;
+        EXIT WHEN ejecursor%NOTFOUND;
+        INSERT INTO TEMP VALUES (v_nombre, v_salario);
+    END LOOP;
+    CLOSE ejecursor;
+END;</pre>
 
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 2: Procedimiento</strong></p>
-            <p>Crea un procedimiento que transfiera productos entre almacenes.</p>
+        <h3 class="main__title--sub">Cursor con FOR LOOP (Automatico)</h3>
+        <pre>
+DECLARE
+    CURSOR ejecursor IS
+        SELECT nombre, salario FROM empleado
+        WHERE salario < 5000;
+BEGIN
+    FOR ejecursor_rec IN ejecursor LOOP
+        INSERT INTO TEMP
+        VALUES (ejecursor_rec.nombre, ejecursor_rec.salario);
+    END LOOP;
+END;</pre>
+
+        <h3 class="main__title--sub">Atributos del Cursor</h3>
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Atributo</th>
+                    <th class="table__th">Tipo</th>
+                    <th class="table__th">Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">%ISOPEN</td>
+                    <td class="table__td">Booleano</td>
+                    <td class="table__td">TRUE si el cursor esta abierto</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">%FOUND</td>
+                    <td class="table__td">Booleano</td>
+                    <td class="table__td">TRUE mientras el ultimo FETCH trae una fila</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">%NOTFOUND</td>
+                    <td class="table__td">Booleano</td>
+                    <td class="table__td">TRUE cuando el ultimo FETCH no trae filas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">%ROWCOUNT</td>
+                    <td class="table__td">Numerico</td>
+                    <td class="table__td">Total de filas recuperadas hasta el momento</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">2. Procedimientos Almacenados</h2>
+        <span class="tag">CREATE OR REPLACE PROCEDURE</span>
+
+        <p class="main__text">Un procedimiento ejecuta una accion. Puede tener parametros de entrada (IN), salida (OUT) o ambos (IN OUT).</p>
+
+        <div class="box box--concept">
+            <p><strong>Sintaxis general:</strong></p>
+            <pre>
+CREATE OR REPLACE PROCEDURE &lt;nombre&gt;
+    [(parametro, ...)]
+IS
+    -- declaraciones
+BEGIN
+    -- logica
+    [EXCEPTION]
+END;</pre>
         </div>
 
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
-CREATE OR REPLACE PROCEDURE transferir_producto(
-    p_producto_id INTEGER,
-    p_origen_id INTEGER,
-    p_destino_id INTEGER,
-    p_cantidad INTEGER
-) AS $$
-BEGIN
-    -- Verificar stock en origen
-    UPDATE inventario
-    SET cantidad = cantidad - p_cantidad
-    WHERE producto_id = p_producto_id 
-      AND almacen_id = p_origen_id;
-    
-    -- Agregar al destino
-    UPDATE inventario
-    SET cantidad = cantidad + p_cantidad
-    WHERE producto_id = p_producto_id 
-      AND almacen_id = p_destino_id;
-    
-    RAISE NOTICE 'Transferencia completada: % unidades', p_cantidad;
-END;
-$$ LANGUAGE plpgsql;</pre>
-
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicio 3: Trigger de auditoría</strong></p>
-            <p>Crea un trigger que registre cambios en la tabla producto.</p>
+        <h3 class="main__title--sub">Ejemplo 1: Actualizar Salario</h3>
+        <div class="box box--example">
+            <p><strong>Procedimiento con parametro IN:</strong> Actualiza el salario de un empleado por su ID.</p>
         </div>
-
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
-CREATE TABLE historial_producto (
-    id SERIAL PRIMARY KEY,
-    producto_id INTEGER,
-    accion VARCHAR(10),
-    campo_modificado VARCHAR(50),
-    valor_anterior TEXT,
-    valor_nuevo TEXT,
-    usuario VARCHAR(50),
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE OR REPLACE FUNCTION auditar_producto()
-RETURNS TRIGGER AS $$
+        <pre>
+CREATE OR REPLACE PROCEDURE cambio_salario
+    (v_id_emp IN NUMBER,
+     v_nuevo_salario IN NUMBER)
+IS
 BEGIN
-    IF TG_OP = 'UPDATE' THEN
-        IF OLD.precio <> NEW.precio THEN
-            INSERT INTO historial_producto 
-                (producto_id, accion, campo_modificado, valor_anterior, valor_nuevo, usuario)
-            VALUES (NEW.id, 'UPDATE', 'precio', OLD.precio::text, NEW.precio::text, current_user);
-        END IF;
-        IF OLD.stock <> NEW.stock THEN
-            INSERT INTO historial_producto 
-                (producto_id, accion, campo_modificado, valor_anterior, valor_nuevo, usuario)
-            VALUES (NEW.id, 'UPDATE', 'stock', OLD.stock::text, NEW.stock::text, current_user);
-        END IF;
+    UPDATE empleado
+    SET salario = v_nuevo_salario
+    WHERE cod_empleado = v_id_emp;
+    COMMIT;
+END cambio_salario;
+
+-- Ejecucion:
+EXECUTE cambio_salario(7839, 12000);</pre>
+
+        <h3 class="main__title--sub">Ejemplo 2: Con Manejo de Excepciones</h3>
+        <div class="box box--example">
+            <p><strong>Procedimiento con validacion:</strong> Incrementa el salario si existe, lanza excepcion si es nulo.</p>
+        </div>
+        <pre>
+CREATE OR REPLACE PROCEDURE actualiza_salario
+    (v_id_emp NUMBER, incremento NUMBER)
+IS
+    salario_actual NUMBER;
+    salario_olvidado EXCEPTION;
+BEGIN
+    SELECT salary INTO salario_actual
+    FROM employees
+    WHERE employee_id = v_id_emp;
+
+    IF salario_actual IS NULL THEN
+        RAISE salario_olvidado;
+    ELSE
+        UPDATE employees
+        SET salary = salary + incremento
+        WHERE employee_id = v_id_emp;
     END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_auditar_producto
-    AFTER UPDATE ON producto
-    FOR EACH ROW
-    EXECUTE FUNCTION auditar_producto();</pre>
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        INSERT INTO emp_audit
+        VALUES (v_id_emp, 'Empleado no existe');
+    WHEN salario_olvidado THEN
+        INSERT INTO emp_audit
+        VALUES (v_id_emp, 'Salario es nulo');
+END actualiza_salario;</pre>
 
-        <h2>3. Preguntas Tipo Examen</h2>
-        
-        <ol style="margin-left: 20px;">
-            <li>¿Cuál es la diferencia entre una función y un procedimiento en PostgreSQL?</li>
-            <li>Explica las variables NEW y OLD en un trigger de UPDATE</li>
-            <li>¿Cuándo usarías BEFORE vs AFTER en un trigger?</li>
-            <li>¿Qué es una subconsulta correlacionada?</li>
-            <li>Normaliza hasta 3FN: Empleado(proyecto, habilidad, telefono)</li>
-        </ol>
+        <h2 class="main__title">3. Funciones</h2>
+        <span class="tag">RETURN valor</span>
 
-        <hr>
+        <p class="main__text">Una funcion es similar a un procedimiento, pero obligatoriamente retorna un valor al entorno llamante mediante la clausula RETURN.</p>
 
-        <div class="box box-note" style="background: #d4edda; border-left: 5px solid #28a745;">
-            <p><strong>¡Éxito en la práctica!</strong></p>
+        <div class="box box--concept">
+            <p><strong>Sintaxis general:</strong></p>
+            <pre>
+CREATE OR REPLACE FUNCTION &lt;nombre&gt;
+    [(parametro, ...)]
+RETURN tipo_dato
+IS
+    -- declaraciones
+BEGIN
+    -- logica
+    RETURN valor;
+    [EXCEPTION]
+END;</pre>
         </div>
 
-    </div>
+        <h3 class="main__title--sub">Ejemplo 1: Calculo de Impuesto</h3>
+        <pre>
+CREATE OR REPLACE FUNCTION impuesto
+    (v_valor IN NUMBER)
+RETURN NUMBER
+IS
+BEGIN
+    RETURN (v_valor * 0.30);
+END impuesto;
+
+-- Uso en consulta:
+SELECT salary, impuesto(salary) AS IMPUESTO
+FROM employees
+WHERE employee_id = 100;</pre>
+
+        <h3 class="main__title--sub">Ejemplo 2: Validacion de Salario</h3>
+        <pre>
+CREATE OR REPLACE FUNCTION salario_ok
+    (v_salario NUMBER, v_jobid NUMBER)
+RETURN NUMBER
+IS
+    min_sal NUMBER;
+    max_sal NUMBER;
+BEGIN
+    SELECT min_salary, max_salary
+    INTO min_sal, max_sal
+    FROM jobs
+    WHERE job_id = v_jobid;
+
+    IF (v_salario >= min_sal) AND (v_salario <= max_sal) THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END salario_ok;</pre>
+
+        <h2 class="main__title">4. Triggers (Disparadores)</h2>
+        <span class="tag">BEFORE / AFTER Â· FOR EACH ROW</span>
+
+        <p class="main__text">Un trigger es un bloque PL/SQL que se ejecuta automaticamente cuando ocurre un evento DML (INSERT, UPDATE, DELETE) sobre una tabla.</p>
+
+        <div class="box box--concept">
+            <p><strong>Sintaxis general:</strong></p>
+            <pre>
+CREATE OR REPLACE TRIGGER &lt;nombre&gt;
+    BEFORE|AFTER INSERT|UPDATE|DELETE [OF columna] ON tabla
+    FOR EACH ROW
+    [WHEN condicion]
+DECLARE
+    -- variables
+BEGIN
+    -- logica
+    -- :NEW.columna  -- valor nuevo
+    -- :OLD.columna  -- valor anterior
+END;</pre>
+        </div>
+
+        <h3 class="main__title--sub">Ejemplo: Validacion de Rango Salarial</h3>
+        <div class="box box--example">
+            <p><strong>Trigger BEFORE:</strong> Verifica que el salario nuevo este dentro del rango del cargo y que el incremento no exceda el 10%.</p>
+        </div>
+        <pre>
+CREATE OR REPLACE TRIGGER chequea_salario
+    BEFORE INSERT OR UPDATE OF salary, job_id ON employees
+    FOR EACH ROW
+    WHEN (new.job_id != 'AD_PRES')
+DECLARE
+    minsal NUMBER;
+    maxsal NUMBER;
+BEGIN
+    SELECT min_salary, max_salary
+    INTO minsal, maxsal
+    FROM jobs
+    WHERE job_id = :new.job_id;
+
+    IF (:new.salary < minsal OR :new.salary > maxsal) THEN
+        raise_application_error(-20225, 'Salario fuera de rango');
+    ELSIF (:new.salary < :old.salary) THEN
+        raise_application_error(-20320, 'Incremento negativo');
+    ELSIF (:new.salary > 1.1 * :old.salary) THEN
+        raise_application_error(-20325, 'Incremento excede el 10%');
+    END IF;
+END chequea_salario;</pre>
+
+        <h2 class="main__title">5. Paquetes (Packages)</h2>
+        <span class="tag">Agrupacion de subprogramas</span>
+
+        <p class="main__text">Un paquete agrupa logicamente procedimientos y funciones relacionados. Tiene dos partes: la especificacion (interfaz publica) y el cuerpo (implementacion).</p>
+
+        <div class="box box--concept">
+            <p><strong>Estructura:</strong></p>
+        </div>
+        <pre>
+-- Especificacion (interfaz publica)
+CREATE PACKAGE emp_acciones AS
+    PROCEDURE contrata_empleado(
+        ename VARCHAR2, job VARCHAR2, mgr NUMBER,
+        catpago NUMBER, sal NUMBER, deptno NUMBER);
+    PROCEDURE despide_empleado(emp_id NUMBER);
+END emp_acciones;
+
+-- Cuerpo (implementacion)
+CREATE PACKAGE BODY emp_acciones AS
+    PROCEDURE contrata_empleado(
+        ename VARCHAR2, job VARCHAR2, mgr NUMBER,
+        catpago NUMBER, sal NUMBER, deptno NUMBER) IS
+    BEGIN
+        INSERT INTO empleado
+        VALUES (empno_seq.NEXTVAL, ename, job, mgr,
+                SYSDATE, catpago, sal, deptno);
+    END contrata_empleado;
+
+    PROCEDURE despide_empleado(emp_id NUMBER) IS
+    BEGIN
+        DELETE FROM empleado
+        WHERE cod_empleado = emp_id;
+    END despide_empleado;
+END emp_acciones;</pre>
+
+        <h2 class="main__title">6. Variables de Sustitucion</h2>
+        <span class="tag">& y && en SQL*Plus</span>
+
+        <p class="main__text">SQL*Plus permite usar variables de sustitucion para ingresar valores en tiempo de ejecucion.</p>
+
+        <div class="box box--example">
+            <p><strong>& (un solo uso):</strong> Pide el valor cada vez que aparece.</p>
+        </div>
+        <pre>
+SELECT nombre
+FROM empleado
+WHERE cod_empleado = &cod_empleado;</pre>
+
+        <div class="box box--example">
+            <p><strong>&& (reutilizable):</strong> Pide el valor solo la primera vez y lo reutiliza.</p>
+        </div>
+        <pre>
+SELECT nombre, &&nombre_columna
+FROM empleado
+ORDER BY &nombre_columna;</pre>
+
+        <h2 class="main__title">7. Ejercicios de Repaso</h2>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 1:</strong> Crea una funcion que reciba un codigo de empleado y retorne su nombre completo concatenado.</p>
+        </div>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 2:</strong> Crea un procedimiento que transfiera un empleado de un departamento a otro, registrando el cambio en una tabla de auditoria.</p>
+        </div>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 3:</strong> Crea un trigger AFTER UPDATE que registre en una tabla de log los cambios de salario con el valor anterior y nuevo.</p>
+        </div>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 4:</strong> Crea un paquete GESTION_EMPLEADOS que contenga un procedimiento para contratar y otro para despedir empleados.</p>
+        </div>
+
+        <nav class="nav">
+            <a href="semana_12.html" class="nav__link">Semana 12</a>
+            <a href="semana_14.html" class="nav__link">Semana 14 - Data Warehouse</a>
+        </nav>
+    </main>
 </div>
 
 </body>
 </html>
-
-
-

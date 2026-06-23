@@ -1,224 +1,275 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="stylesheet" href="master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 01 - Fundamentos de Información</title>
-    
+    <title>Semana 01 - Fundamentos de Administracion de Informacion</title>
+    <link rel="stylesheet" href="master.css">
 </head>
 <body>
-
 <header class="header">
-    <h1 class="header__title">Fundamentos de Administración de Información</h1>
-    <p class="header__subtitle">Semana 01 | Ingeniería de Datos | ULima 2013-2</p>
+    <h1 class="header__title">Fundamentos de Administracion de Informacion</h1>
+    <p class="header__subtitle">Semana 01 | Ingenieria de Datos | ULima 2013-2</p>
 </header>
 
 <div class="cornell">
     <aside class="sidebar">
         <h3 class="sidebar__title">PALABRAS CLAVE</h3>
         <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>§ Datos vs Info</strong>Hecho bruto vs dato con contexto</li>
+            <li class="sidebar__item"><strong>§ Dato vs Informacion</strong>Hecho bruto vs dato con contexto</li>
             <li class="sidebar__item"><strong>§ Sistema Tradicional</strong>Archivos, redundancia, inconsistencia</li>
             <li class="sidebar__item"><strong>§ DBMS</strong>Software gestor de BD</li>
             <li class="sidebar__item"><strong>§ Metadatos</strong>Datos sobre datos</li>
             <li class="sidebar__item"><strong>§ ACID</strong>Atomicidad, Consistencia, Aislamiento, Durabilidad</li>
-            <li class="sidebar__item"><strong>§ SDLC</strong>Ciclo de vida del desarrollo</li>
-            <li class="sidebar__item"><strong>§ DBA</strong>Administrador de BD</li>
+            <li class="sidebar__item"><strong>§ SDLC</strong>Ciclo de vida del desarrollo de sistemas</li>
+            <li class="sidebar__item"><strong>§ DBA</strong>Administrador de Base de Datos</li>
         </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+        <div class="box box--note" style="margin-top:1.5rem;padding:1rem;">
             <h3 class="sidebar__title">RECURSOS</h3>
             <ul class="sidebar__list">
-                <li class="sidebar__item"><a href="index.html" class="sidebar__link">🏠 Índice del Curso</a></li>
-                <li class="sidebar__item"><a href="semana_02.html" class="sidebar__link">→ Semana 02</a></li>
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio &mdash; Indice del Curso</a></li>
+                <li class="sidebar__item"><span class="sidebar__link" style="color:var(--text-muted)">Semana Anterior (Inicio)</span></li>
+                <li class="sidebar__item"><a href="semana_02.html" class="sidebar__link">Siguiente Semana</a></li>
             </ul>
         </div>
     </aside>
 
     <main class="main">
         <div class="box box--note">
-            <p class="main__text"><strong>📌 Objetivos de Aprendizaje</strong></p>
+            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
             <ul class="main__list">
-                <li class="main__list-item">Diferenciar dato, información y conocimiento</li>
+                <li class="main__list-item">Diferenciar dato, informacion y conocimiento</li>
                 <li class="main__list-item">Identificar problemas de sistemas tradicionales de archivos</li>
                 <li class="main__list-item">Explicar las ventajas del enfoque de bases de datos</li>
                 <li class="main__list-item">Describir los componentes del entorno de una BD</li>
-                <li class="main__list-item">Comprender el ciclo de vida SDLC de una BD</li>
+                <li class="main__list-item">Comprender el ciclo de vida SDLC aplicado a BD</li>
             </ul>
         </div>
 
         <section class="architect-insight">
-            <h4 class="main__title--sub">💡 Insight del Arquitecto: El Valor del Dato</h4>
-            <p class="main__text"><strong>Los datos son un activo estratégico:</strong> En 2013 (cuando se creó este material), las empresas comenzaban a entender que los datos son un recurso competitivo. Hoy, en 2026, esto es absolutamente crítico. C.J. Date nos recuerda que una base de datos no es solo un "lugar donde guardar cosas" — es la representación formal de la realidad del negocio.</p>
-            <p class="main__text"><strong>La clave:</strong> Datos → Información → Conocimiento → Decisión. Sin el primer paso, no hay nada.</p>
+            <h4 class="main__title--sub">Insight del Arquitecto: El Valor del Dato</h4>
+            <p class="main__text"><strong>Los datos son un activo estrategico:</strong> En 2013 las empresas comenzaban a entender que los datos son un recurso competitivo. C.J. Date nos recuerda que una base de datos no es solo un lugar donde guardar cosas &mdash; es la representacion formal de la realidad del negocio.</p>
+            <p class="main__text"><strong>La clave:</strong> Datos &rarr; Informacion &rarr; Conocimiento &rarr; Decision. Sin el primer paso, no hay nada.</p>
         </section>
 
         <h2 class="main__title">1. Del Dato al Conocimiento</h2>
         <span class="tag">Conceptos Fundamentales</span>
-        
+
+        <p class="main__text">Los negocios generan datos permanentemente. El dato es un recurso organizacional para competir. Existe necesidad de informacion en todos los niveles de la organizacion.</p>
+
         <ul class="main__list">
-            <li class="main__list-item"><strong>Dato:</strong> Representación simbólica de un hecho. <em>Objetivo, sin contexto.</em> Ej: <code class="code--inline">3.50</code></li>
-            <li class="main__list-item"><strong>Información:</strong> Dato procesado con contexto. <em>Reduce incertidumbre.</em> Ej: "El precio del producto es 3.50"</li>
-            <li class="main__list-item"><strong>Conocimiento:</strong> Información analizada para tomar decisiones. Ej: "El precio subió 75% en 3 años, debemos ajustar estrategia"</li>
+            <li class="main__list-item"><strong>Dato:</strong> Representacion simbolica de un hecho. <em>Objetivo, sin contexto.</em> Ej: <code>3.50</code></li>
+            <li class="main__list-item"><strong>Informacion:</strong> Dato procesado con contexto. <em>Reduce incertidumbre.</em> Ej: "El precio del producto es 3.50"</li>
+            <li class="main__list-item"><strong>Conocimiento:</strong> Informacion analizada para tomar decisiones. Ej: "El precio subio 75% en 3 anos, debemos ajustar estrategia"</li>
         </ul>
 
         <div class="box box--concept">
-            <p class="main__text"><strong>Concepto clave:</strong> Los datos son el insumo básico. La información surge al procesarlos. El conocimiento emerge al analizar la información para la toma de decisiones.</p>
+            <p class="main__text"><strong>Concepto clave:</strong> Los datos son el insumo basico. La informacion surge al procesarlos. El conocimiento emerge al analizar la informacion para la toma de decisiones.</p>
         </div>
 
-        <h2 class="main__title">2. El Problema: Sistemas Tradicionales de Archivos</h2>
+        <h2 class="main__title">2. El Problema: Sistema Tradicional de Archivos</h2>
         <span class="tag">Antes del enfoque de BD</span>
-        
-        <p class="main__text">Antes de las bases de datos, cada aplicación tenía sus propios archivos:</p>
-        
+
+        <p class="main__text">Cada aplicacion tenia sus propios archivos, generando los siguientes problemas:</p>
+
+        <div class="box box--warning">
+            <p class="main__text"><strong>Dependencia programa/datos:</strong> Cada sistema debe actualizarse con sus propios datos, incluir codigo para la metadata de cada archivo y tener sus propias rutinas de CRUD. Esto produce debil coordinacion y control centralizado.</p>
+        </div>
+
         <ul class="main__list">
-            <li class="main__list-item"><strong>Redundancia:</strong> Misma información duplicada en múltiples archivos</li>
-            <li class="main__list-item"><strong>Dependencia programa-dato:</strong> Código tied to estructura física</li>
-            <li class="main__list-item"><strong>Inconsistencia:</strong> Actualizar en un lugar pero no en otro</li>
-            <li class="main__list-item"><strong>Acceso limitado:</strong> Sin forma estándar de compartir datos</li>
-            <li class="main__list-item"><strong>Mayor tiempo de desarrollo:</strong> Cada sistema reinventa la wheel</li>
+            <li class="main__list-item"><strong>Redundancia de datos:</strong> Duplicacion de la misma informacion en multiples archivos. Espacio desperdiciado y mantenimiento costoso.</li>
+            <li class="main__list-item"><strong>Inconsistencia:</strong> Cuando los datos cambian en un archivo pero no en otro, se compromete la integridad de los datos.</li>
+            <li class="main__list-item"><strong>Limitaciones para compartir datos:</strong> No hay forma estandar de acceso entre distintas aplicaciones.</li>
+            <li class="main__list-item"><strong>Mayor tiempo de desarrollo:</strong> Cada sistema reinventa las rutinas de acceso a datos.</li>
+            <li class="main__list-item"><strong>Sin estandares:</strong> No hay coordinacion ni control centralizado sobre los datos.</li>
         </ul>
 
-        <h2 class="main__title">3. La Solución: Enfoque de Base de Datos</h2>
-        
+        <h2 class="main__title">3. La Solucion: Enfoque de Base de Datos</h2>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>Base de Datos:</strong> Coleccion de datos almacenados en un formato estandar, disenado para que pueda ser compartido por multiples usuarios.</p>
+        </div>
+
         <div class="box box--example">
-            <p class="main__text"><strong>Analogía:</strong> El DBMS actúa como un bibliotecario experto que conoce la ubicación exacta de cada libro (dato) y puede recuperarlo rápidamente sin que el usuario necesite saber dónde está físicamente almacenado.</p>
+            <p class="main__text"><strong>Analogia:</strong> El DBMS actua como un bibliotecario experto que conoce la ubicacion exacta de cada libro (dato) y puede recuperarlo rapidamente sin que el usuario necesite saber donde esta fisicamente almacenado.</p>
         </div>
 
+        <p class="main__text"><strong>Ventajas del enfoque de Base de Datos:</strong></p>
         <ul class="main__list">
-            <li class="main__list-item"><strong>Base de Datos:</strong> Colección de datos lógicamente relacionados</li>
-            <li class="main__list-item"><strong>DBMS:</strong> Software intermediario entre usuarios y datos</li>
-            <li class="main__list-item"><strong>Independencia:</strong> Cambios físicos no afectan aplicaciones</li>
-            <li class="main__list-item"><strong>Seguridad:</strong> Control de acceso centralizado</li>
-            <li class="main__list-item"><strong>Metadatos:</strong> Datos sobre los datos (esquemas, restricciones)</li>
+            <li class="main__list-item"><strong>Independencia programa/datos:</strong> Los metadatos se almacenan en el DBMS. Las aplicaciones no necesitan preocuparse por formatos de datos. Las consultas y actualizaciones son gestionadas por el DBMS.</li>
+            <li class="main__list-item"><strong>Redundancia minima:</strong> Se reduce la duplicacion, mejorando consistencia e integridad.</li>
+            <li class="main__list-item"><strong>Mejor comparticion de datos:</strong> Diferentes usuarios obtienen diferentes vistas de los datos.</li>
+            <li class="main__list-item"><strong>Reforzamiento de estandares:</strong> Todos los accesos a datos se realizan de la misma manera.</li>
+            <li class="main__list-item"><strong>Mejor calidad de datos:</strong> Restricciones, reglas de validacion.</li>
+            <li class="main__list-item"><strong>Accesibilidad:</strong> Uso de un lenguaje estandar de consultas (SQL).</li>
+            <li class="main__list-item"><strong>Seguridad, Backup/Recovery, Concurrencia:</strong> La recuperacion ante desastres es mas sencilla.</li>
         </ul>
 
-        <h2 class="main__title">4. Componentes del Entorno de BD</h2>
-        
+        <h2 class="main__title">4. Costos y Riesgos</h2>
+
         <table class="table">
             <thead>
                 <tr class="table__tr">
-                    <th class="table__th">Componente</th>
-                    <th class="table__th">Función</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>CASE</strong></td>
-                    <td class="table__td">Herramientas de diseño asistidas por computadora</td>
-                </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Repositorio</strong></td>
-                    <td class="table__td">Almacena metadatos y definiciones</td>
-                </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>DBMS</strong></td>
-                    <td class="table__td">Software de gestión de la base de datos</td>
-                </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Base de Datos</strong></td>
-                    <td class="table__td">Colección de datos organizados</td>
-                </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Aplicaciones</strong></td>
-                    <td class="table__td">Programas que acceden a los datos</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2 class="main__title">5. Ciclo de Vida SDLC</h2>
-        
-        <div class="box box--note">
-            <p class="main__text"><strong>Las 5 fases del desarrollo de BD:</strong></p>
-            <ol class="main__list">
-                <li class="main__list-item"><strong>Identificación:</strong> Determinar necesidades del negocio</li>
-                <li class="main__list-item"><strong>Análisis:</strong> Modelamiento conceptual (DER)</li>
-                <li class="main__list-item"><strong>Diseño Lógico:</strong> Transformar a modelo relacional</li>
-                <li class="main__list-item"><strong>Diseño Físico:</strong> Definir almacenamiento e índices</li>
-                <li class="main__list-item"><strong>Implementación:</strong> Crear BD, cargar datos, probar</li>
-            </ol>
-        </div>
-
-        <h2 class="main__title">6. Atributos del DBA</h2>
-        
-        <ul class="main__list">
-            <li class="main__list-item">Instalación y configuración del DBMS</li>
-            <li class="main__list-item">Creación y mantenimiento de BD</li>
-            <li class="main__list-item">Gestión de seguridad y permisos</li>
-            <li class="main__list-item">Backup y recovery</li>
-            <li class="main__list-item">Monitoreo de rendimiento</li>
-            <li class="main__list-item">Optimización de consultas</li>
-        </ul>
-
-        <h2 class="main__title">7. Evolución de las Bases de Datos</h2>
-        
-        <table class="table">
-            <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Década</th>
                     <th class="table__th">Tipo</th>
                     <th class="table__th">Ejemplos</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="table__tr">
+                    <td class="table__td"><strong>Costos iniciales</strong></td>
+                    <td class="table__td">Software, hardware, comunicaciones, conversion de datos, estudios, diseno, capacitacion</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Costos permanentes</strong></td>
+                    <td class="table__td">Personal especializado (DBA), upgrades de software, mantenimiento, soporte</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Riesgos</strong></td>
+                    <td class="table__td">Complejidad de instalacion, conflictos organizacionales, determinacion de procesos de backup</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">5. Componentes del Entorno de BD</h2>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Componente</th>
+                    <th class="table__th">Funcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Herramientas CASE</strong></td>
+                    <td class="table__td">Herramientas usadas para disenar BD y aplicaciones</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Aplicacion</strong></td>
+                    <td class="table__td">Programa usado para crear, modificar y leer en la BD</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Repositorio</strong></td>
+                    <td class="table__td">Base de conocimientos donde se guardan definiciones de datos, relaciones y formatos</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Base de Datos</strong></td>
+                    <td class="table__td">Coleccion organizada de datos logicamente relacionados</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>DBMS</strong></td>
+                    <td class="table__td">Software empleado para crear, mantener y proveer informacion con acceso controlado</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">6. Ciclo de Vida SDLC y Desarrollo de BD</h2>
+        <span class="tag">System Development Life Cycle</span>
+
+        <p class="main__text">El desarrollo de bases de datos sigue las fases del SDLC, mapeando cada etapa a actividades especificas de BD:</p>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Fase SDLC</th>
+                    <th class="table__th">Actividad de BD</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">Identificacion y Planeamiento</td>
+                    <td class="table__td">Modelamiento de la empresa, identificacion del negocio</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Analisis</td>
+                    <td class="table__td">Modelamiento conceptual de datos (DER)</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Diseno Logico</td>
+                    <td class="table__td">Diseno logico de la base de datos (modelo relacional)</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Diseno Fisico</td>
+                    <td class="table__td">Diseno y definicion fisica de la base de datos</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Implementacion</td>
+                    <td class="table__td">Implementacion de la base de datos (DDL, carga de datos)</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Mantenimiento</td>
+                    <td class="table__td">Mantenimiento de la base de datos</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">7. Evolucion de las Bases de Datos</h2>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Decada</th>
+                    <th class="table__th">Modelo</th>
+                    <th class="table__th">Ejemplos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
                     <td class="table__td">1950s</td>
-                    <td class="table__td">Sistemas de archivos</td>
+                    <td class="table__td">Sistemas de ficheros</td>
                     <td class="table__td">Tarjetas perforadas</td>
                 </tr>
                 <tr class="table__tr">
                     <td class="table__td">1960s</td>
-                    <td class="table__td">Jerárquicos</td>
-                    <td class="table__td">IDS, IMS, Sistema Sabre</td>
+                    <td class="table__td">Jerarquicos</td>
+                    <td class="table__td">IDS, IMS (Sistema Sabre)</td>
                 </tr>
                 <tr class="table__tr">
                     <td class="table__td">1970s</td>
-                    <td class="table__td">Red</td>
+                    <td class="table__td">Redes</td>
                     <td class="table__td">CODASYL, IDMS</td>
                 </tr>
                 <tr class="table__tr">
                     <td class="table__td">1980s</td>
                     <td class="table__td">Relacionales</td>
-                    <td class="table__td">Oracle, DB2, MySQL</td>
+                    <td class="table__td">INGRES, Oracle, DB2, Sybase</td>
                 </tr>
                 <tr class="table__tr">
                     <td class="table__td">1990s</td>
-                    <td class="table__td">Orientados a objeto</td>
-                    <td class="table__td">O2, GemStone</td>
+                    <td class="table__td">Objeto y Objeto-Relacional</td>
+                    <td class="table__td">O2, GemStone, Ontos</td>
                 </tr>
                 <tr class="table__tr">
                     <td class="table__td">2000s+</td>
-                    <td class="table__td">NoSQL, NewSQL</td>
+                    <td class="table__td">Web, NoSQL, NewSQL</td>
                     <td class="table__td">MongoDB, Cassandra, CockroachDB</td>
                 </tr>
             </tbody>
         </table>
 
-        <div class="box box--warning">
-            <p class="main__text"><strong>⚠️ Nota del Arquitecto:</strong> Este material original usaba sintaxis Oracle (VARCHAR2, NUMBER). En PostgreSQL moderno, usamos VARCHAR, INTEGER, SERIAL, etc. ¡Estate atento a estas diferencias!</p>
+        <h2 class="main__title">8. Terminologia Clave</h2>
+
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Transaccion:</strong> Operacion completa de lectura o escritura sobre la base de datos.</li>
+            <li class="main__list-item"><strong>Database Administrator (DBA):</strong> Administrador de base de datos responsable de la gestion centralizada.</li>
+            <li class="main__list-item"><strong>Metadata:</strong> Describe las propiedades y caracteristicas de los datos y de su contexto.</li>
+        </ul>
+
+        <div class="box box--exercise">
+            <p class="main__text"><strong>Laboratorio: Reflexion sobre Datos</strong></p>
+            <p class="main__text">Considera una empresa que maneja sus datos en hojas de calculo Excel. Identifica:</p>
+            <ol class="main__list">
+                <li class="main__list-item">3 problemas que enfrenta cuando varios empleados editan el mismo archivo.</li>
+                <li class="main__list-item">2 situaciones donde la redundancia de datos causa inconsistencias.</li>
+                <li class="main__list-item">1 ejemplo de como un DBMS resolveria esos problemas.</li>
+            </ol>
         </div>
 
-        <hr style="margin: 24px 0; border: 0; border-top: 1px solid var(--color-border);">
-
-        <section class="laboratorio">
-            <h3 class="main__title--sub">🔬 Laboratorio: Reflexión</h3>
-            <p class="main__text">Considera una empresa que maneja sus datos en hojas de cálculo Excel. Identifica:</p>
-            <ol class="main__list">
-                <li class="main__list-item">3 problemas que enfrenta cuando varios empleados editan el mismo archivo</li>
-                <li class="main__list-item">2 situaciones donde la redundancia de datos causa inconsistencias</li>
-                <li class="main__list-item">1 ejemplo de cómo un DBMS resolvería esos problemas</li>
-            </ol>
-        </section>
-
         <nav class="nav">
-            <a href="index.html" class="nav__link">« Volver al Índice</a>
-            <a href="semana_02.html" class="nav__link">Siguiente Semana »</a>
+            <a href="index.html" class="nav__link">Volver al Indice</a>
+            <a href="semana_02.html" class="nav__link">Siguiente Semana</a>
         </nav>
     </main>
 </div>
-
 </body>
 </html>
-
-
-

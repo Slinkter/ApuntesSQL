@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 14 - Data Warehouse</title>
+    <link rel="stylesheet" href="master.css">
+</head>
+<body>
+
+<header class="header">
+    <h1 class="header__title">Data Warehouse y Business Intelligence</h1>
+    <p class="header__subtitle">Semana 14 | Arquitectura de Datos | ULima 2013-2</p>
+</header>
+
+<div class="cornell">
+    <aside class="sidebar">
+        <h3 class="sidebar__title">CONCEPTOS CLAVE</h3>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>BI</strong>Business Intelligence</li>
+            <li class="sidebar__item"><strong>DW</strong>Data Warehouse</li>
+            <li class="sidebar__item"><strong>Data Mart</strong>Subconjunto departamental</li>
+            <li class="sidebar__item"><strong>ETL</strong>Extraccion, Transformacion, Carga</li>
+            <li class="sidebar__item"><strong>OLAP</strong>Analisis multidimensional</li>
+            <li class="sidebar__item"><strong>ROLAP / MOLAP / HOLAP</strong>Implementaciones de cubos</li>
+            <li class="sidebar__item"><strong>Star Schema</strong>Modelo estrella</li>
+            <li class="sidebar__item"><strong>Snowflake</strong>Modelo copo de nieve</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Indice del Curso</a></li>
+                <li class="sidebar__item"><a href="semana_13.html" class="sidebar__link">Semana 13</a></li>
+                <li class="sidebar__item"><a href="semana_15.html" class="sidebar__link">Semana 15</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="box box--note">
+            <p><strong>Objetivos:</strong> Comprender los fundamentos de Data Warehousing y Business Intelligence. Diferenciar sistemas OLTP de OLAP. Disenar esquemas estrella y copo de nieve. Conocer el proceso ETL y los tipos de implementacion de cubos OLAP.</p>
+        </div>
+
+        <section class="architect-insight">
+            <h4 class="main__title--sub">Insight del Arquitecto: El DW como Centro de Decisiones</h4>
+            <p class="main__text">Bill Inmon, padre del Data Warehousing, define el Data Warehouse como "una coleccion de datos orientada a temas, integrada, no volatil y variante en el tiempo, disenada para soportar la toma de decisiones". A diferencia de una base de datos operacional (OLTP) que optimiza transacciones, el DW optimiza consultas analiticas. El 80% del esfuerzo en un proyecto DW esta en el proceso ETL, no en el modelado.</p>
+        </section>
+
+        <h2 class="main__title">1. Business Intelligence (BI)</h2>
+        <span class="tag">Inteligencia de Negocios</span>
+
+        <p class="main__text">Conjunto de productos y servicios que permiten a los usuarios finales acceder y analizar de manera rapida y sencilla la informacion para la toma de decisiones de negocio a nivel operativo, tactico y estrategico.</p>
+
+        <div class="box box--concept">
+            <p><strong>Componentes clave del BI:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item"><strong>Data Warehouse:</strong> Repositorio centralizado de datos.</li>
+                <li class="main__list-item"><strong>Data Mart:</strong> Subconjunto departamental (ventas, finanzas, RRHH).</li>
+                <li class="main__list-item"><strong>Cubos OLAP:</strong> Estructura multidimensional para consultas rapidas.</li>
+                <li class="main__list-item"><strong>ETL:</strong> Proceso de extraccion, transformacion y carga.</li>
+                <li class="main__list-item"><strong>Metadatos:</strong> Datos sobre los datos del warehouse.</li>
+            </ul>
+        </div>
+
+        <h2 class="main__title">2. Sistemas OLTP vs OLAP</h2>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Caracteristica</th>
+                    <th class="table__th">Sistemas Operacionales (OLTP)</th>
+                    <th class="table__th">Sistemas Analiticos (OLAP)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">Proposito</td>
+                    <td class="table__td">Ejecutar el negocio</td>
+                    <td class="table__td">Administrar el negocio</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Usuarios</td>
+                    <td class="table__td">Oficinistas, administrativos</td>
+                    <td class="table__td">Decision makers, analistas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Actualizacion</td>
+                    <td class="table__td">Al segundo</td>
+                    <td class="table__td">Periodica (diaria, semanal)</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Volumen</td>
+                    <td class="table__td">Altos volumenes de transacciones simples</td>
+                    <td class="table__td">Consultas complejas sobre grandes volumenes</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Datos</td>
+                    <td class="table__td">Detallados, actuales</td>
+                    <td class="table__td">Detallados, sumarizados e historicos</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Integracion</td>
+                    <td class="table__td">Por aplicacion</td>
+                    <td class="table__td">Integrado y consistente</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">3. Arquitectura del Data Warehouse</h2>
+
+        <p class="main__text">La arquitectura de referencia incluye las siguientes capas:</p>
+
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Fuentes de datos:</strong> Sistemas operacionales (ERP, CRM), archivos planos, fuentes externas.</li>
+            <li class="main__list-item"><strong>Extraccion e Integracion:</strong> Proceso ETL: extraer, limpiar, transformar, integrar.</li>
+            <li class="main__list-item"><strong>Almacenamiento:</strong> Data Warehouse corporativo + Data Marts departamentales.</li>
+            <li class="main__list-item"><strong>Aplicaciones:</strong> OLAP, reporting, Data Mining, EIS.</li>
+            <li class="main__list-item"><strong>Metadatos:</strong> Repositorio central de definiciones y linaje de datos.</li>
+        </ul>
+
+        <div class="box box--note">
+            <p><strong>Nota:</strong> Existen dos enfoques de implementacion:</p>
+            <ul class="main__list">
+                <li class="main__list-item"><strong>Top-Down (Inmon):</strong> Primero el DW corporativo, luego los Data Marts.</li>
+                <li class="main__list-item"><strong>Bottom-Up (Kimball):</strong> Primero los Data Marts, luego se integran en el DW.</li>
+            </ul>
+        </div>
+
+        <h2 class="main__title">4. Modelo Estrella (Star Schema)</h2>
+        <span class="tag">Fact Table + Dimension Tables</span>
+
+        <p class="main__text">El modelo estrella es el esquema mas utilizado en Data Warehousing. Consta de una tabla central de hechos (fact table) rodeada de tablas de dimension (dimension tables).</p>
+
+        <div class="box box--concept">
+            <p><strong>Componentes:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item"><strong>Tabla de Hechos (Fact Table):</strong> Almacena eventos de negocio (ventas, transacciones). Contiene medidas numericas (cantidad, monto) y foreign keys a las dimensiones.</li>
+                <li class="main__list-item"><strong>Tablas de Dimension:</strong> Entidades de negocio (clientes, productos, tiempo, geografia). Contienen atributos descriptivos.</li>
+                <li class="main__list-item"><strong>Medidas (Measures):</strong> Valores cuantitativos que miden la efectividad del negocio.</li>
+            </ul>
+        </div>
+
+        <div class="box box--example">
+            <p><strong>Ejemplo: Esquema Estrella de Ventas</strong></p>
+            <pre>
+-- Tabla de Dimension: Producto
+CREATE TABLE DIM_PRODUCTO (
+    producto_key INTEGER PRIMARY KEY,
+    id_producto INTEGER,
+    nombre VARCHAR(100),
+    categoria VARCHAR(50),
+    subcategoria VARCHAR(50),
+    marca VARCHAR(50),
+    precio_actual NUMERIC(10,2)
+);
+
+-- Tabla de Dimension: Tiempo
+CREATE TABLE DIM_TIEMPO (
+    tiempo_key INTEGER PRIMARY KEY,
+    fecha DATE,
+    dia_semana VARCHAR(20),
+    mes INTEGER,
+    nombre_mes VARCHAR(20),
+    trimestre INTEGER,
+    anio INTEGER
+);
+
+-- Tabla de Dimension: Cliente
+CREATE TABLE DIM_CLIENTE (
+    cliente_key INTEGER PRIMARY KEY,
+    id_cliente INTEGER,
+    nombre VARCHAR(100),
+    ciudad VARCHAR(50),
+    region VARCHAR(50),
+    pais VARCHAR(50),
+    segmento VARCHAR(30)
+);
+
+-- Tabla de Hechos: Ventas
+CREATE TABLE FACT_VENTAS (
+    producto_key INTEGER REFERENCES DIM_PRODUCTO,
+    cliente_key INTEGER REFERENCES DIM_CLIENTE,
+    tiempo_key INTEGER REFERENCES DIM_TIEMPO,
+    vendedor_key INTEGER REFERENCES DIM_VENDEDOR,
+    cantidad_vendida INTEGER,
+    monto_total NUMERIC(12,2),
+    costo_total NUMERIC(12,2),
+    ganancia NUMERIC(12,2)
+);</pre>
+        </div>
+
+        <h2 class="main__title">5. Modelo Copo de Nieve (Snowflake Schema)</h2>
+
+        <p class="main__text">En el modelo Snowflake, las dimensiones se normalizan en multiples tablas, una por cada nivel jerarquico. Esto reduce redundancia pero aumenta la complejidad de las consultas.</p>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Caracteristica</th>
+                    <th class="table__th">STAR (Estrella)</th>
+                    <th class="table__th">SNOWFLAKE (Copo de Nieve)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">Entendimiento del modelo</td>
+                    <td class="table__td">Sencillo</td>
+                    <td class="table__td">Mayor dificultad</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Numero de tablas</td>
+                    <td class="table__td">Menor</td>
+                    <td class="table__td">Mayor</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Complejidad de consulta</td>
+                    <td class="table__td">Baja</td>
+                    <td class="table__td">Alta</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Rendimiento</td>
+                    <td class="table__td">Rapida</td>
+                    <td class="table__td">Lenta</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Redundancia</td>
+                    <td class="table__td">Alta (desnormalizado)</td>
+                    <td class="table__td">Baja (normalizado)</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Espacio de almacenamiento</td>
+                    <td class="table__td">Mayor</td>
+                    <td class="table__td">Menor</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">6. Proceso ETL</h2>
+        <span class="tag">Extraccion, Transformacion, Carga</span>
+
+        <p class="main__text">El proceso ETL consume aproximadamente el 80% del tiempo y recursos en un proyecto Data Warehouse (segun Bill Inmon).</p>
+
+        <h3 class="main__title--sub">Fases del ETL</h3>
+
+        <ol class="main__list">
+            <li class="main__list-item"><strong>Extraccion:</strong> Obtener datos de fuentes heterogeneas (Bases de datos, archivos planos, sistemas legacy, fuentes externas).</li>
+            <li class="main__list-item"><strong>Transformacion:</strong> Limpiar, filtrar, validar, calcular, agregar, convertir tipos, aplicar reglas de negocio.</li>
+            <li class="main__list-item"><strong>Carga:</strong> Insertar los datos transformados en el Data Warehouse (full refresh, carga incremental, historico).</li>
+        </ol>
+
+        <div class="box box--example">
+            <p><strong>Herramientas ETL comunes:</strong> Warehouse Manager, SQL Server Integration Services (SSIS), Oracle Warehouse Builder, Pentaho, Talend, Informatica.</p>
+        </div>
+
+        <h2 class="main__title">7. Tipos de Cubos OLAP</h2>
+        <span class="tag">ROLAP vs MOLAP vs HOLAP</span>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Tipo</th>
+                    <th class="table__th">Descripcion</th>
+                    <th class="table__th">Ventajas</th>
+                    <th class="table__th">Desventajas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>ROLAP</strong></td>
+                    <td class="table__td">Almacena datos en tablas relacionales. Las agregaciones se calculan sobre la marcha.</td>
+                    <td class="table__td">Escalable, datos en tiempo real, usa SQL estandar.</td>
+                    <td class="table__td">Rendimiento mas lento en consultas complejas.</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>MOLAP</strong></td>
+                    <td class="table__td">Almacena datos en una estructura multidimensional propietaria (cubo precalculado).</td>
+                    <td class="table__td">Rendimiento excelente, consultas rapidas, indices optimizados.</td>
+                    <td class="table__td">Menos escalable, datos no en tiempo real, espacio adicional.</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>HOLAP</strong></td>
+                    <td class="table__td">Combina ROLAP y MOLAP: datos detallados en BD relacional, agregaciones en cubo.</td>
+                    <td class="table__td">Balance entre rendimiento y escalabilidad.</td>
+                    <td class="table__td">Mayor complejidad de administracion.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">8. Creacion de Dimensiones en Oracle</h2>
+        <span class="tag">CREATE DIMENSION</span>
+
+        <p class="main__text">Oracle permite definir dimensiones y jerarquias directamente en el diccionario de datos.</p>
+
+        <div class="box box--example">
+            <p><strong>Ejemplo: Dimension Tiempo con Jerarquias</strong></p>
+        </div>
+        <pre>
+CREATE DIMENSION time_dim
+    LEVEL time_key IS time.time_key
+    LEVEL month IS time.month
+    LEVEL quarter IS time.quarter
+    LEVEL year IS time.year
+    LEVEL week IS time.week
+    LEVEL fiscal_qtr IS time.fiscal_qtr
+
+    HIERARCHY calendar_rollup (
+        time_key CHILD OF
+        month CHILD OF
+        quarter CHILD OF year
+    )
+
+    HIERARCHY fiscal_rollup (
+        time_key CHILD OF week
+    )
+
+    ATTRIBUTE time_key DETERMINES
+        (day_number_in_month, day_number_in_year)
+    ATTRIBUTE week DETERMINES week_number_of_year
+    ATTRIBUTE month DETERMINES full_month_name;</pre>
+
+        <div class="box box--example">
+            <p><strong>Ejemplo: Dimension Empleado (desde script de ejemplo)</strong></p>
+        </div>
+        <pre>
+CREATE DIMENSION DIM_EMP
+    LEVEL employee IS (DIM_EMPLEADO.employee_id)
+    LEVEL job IS (DIM_EMPLEADO.job_id)
+
+    HIERARCHY job_id (
+        employee CHILD OF job
+    )
+
+    ATTRIBUTE employee DETERMINES
+        (DIM_EMPLEADO.nombreCompleto, DIM_EMPLEADO.salary)
+    ATTRIBUTE job DETERMINES
+        (DIM_EMPLEADO.job_title);</pre>
+
+        <h2 class="main__title">9. Fact Table: Ejemplo RRHH</h2>
+
+        <div class="box box--example">
+            <p><strong>Creacion de tablas dimension y hecho para un Data Warehouse de RRHH</strong></p>
+        </div>
+        <pre>
+-- Dimension Empleado
+CREATE TABLE DIM_EMPLEADO (
+    employee_id NUMBER(6) PRIMARY KEY,
+    nombreCompleto VARCHAR(50),
+    salary NUMBER(8,2),
+    job_id VARCHAR(10),
+    job_title VARCHAR(35)
+);
+
+-- Dimension Departamento
+CREATE TABLE DIM_DEPARTAMENTO (
+    department_id NUMBER(4) PRIMARY KEY,
+    department_name VARCHAR(30),
+    city_id NUMBER(4),
+    city VARCHAR(30),
+    country_id CHAR(2),
+    country_name VARCHAR(40)
+);
+
+-- Dimension Tiempo
+CREATE TABLE DIM_TIEMPO (
+    tiempo_id NUMBER PRIMARY KEY,
+    numMes NUMBER,
+    numAnio NUMBER
+);
+
+-- Tabla de Hechos RRHH
+CREATE TABLE FACT_RRHH (
+    employee_id NUMBER(6) REFERENCES DIM_EMPLEADO(employee_id),
+    department_id NUMBER(4) REFERENCES DIM_DEPARTAMENTO(department_id),
+    tiempo_id NUMBER REFERENCES DIM_TIEMPO(tiempo_id),
+    CostoTotal NUMBER,
+    TotalEmpleado NUMBER
+);</pre>
+
+        <h2 class="main__title">10. Indices en Data Warehouse</h2>
+
+        <ul class="main__list">
+            <li class="main__list-item"><strong>Indices Bitmap:</strong> Ideales para columnas con baja cardinalidad (genero, estado, categoria). Muy eficientes en consultas ad-hoc sobre grandes volumenes. Reducen uso de espacio comparado con B-tree.</li>
+            <li class="main__list-item"><strong>Indices B-tree:</strong> Arbol invertido, optimo para busquedas de alta selectividad. Utilizado para acceso a consultas tipicas con alta cardinalidad.</li>
+        </ul>
+
+        <h2 class="main__title">11. Beneficios del Data Warehouse</h2>
+
+        <div class="box box--concept">
+            <p><strong>Desde la perspectiva de TI:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Arquitectura flexible que permite cambios.</li>
+                <li class="main__list-item">Actualizacion automatica de datos.</li>
+                <li class="main__list-item">Reduccion de carga sobre sistemas operacionales.</li>
+            </ul>
+            <p><strong>Desde la perspectiva de usuarios de negocio:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Vista global de los datos de la organizacion.</li>
+                <li class="main__list-item">Herramientas faciles de usar.</li>
+                <li class="main__list-item">Capacidad de generar reportes independientemente.</li>
+                <li class="main__list-item">Acceso via intranet/internet.</li>
+            </ul>
+        </div>
+
+        <div class="box box--warning">
+            <p><strong>Importante:</strong> Segun estudios de IDC, las organizaciones que implementan soluciones analiticas logran un ROI promedio de 112%, con periodos de recuperacion de menos de un ano en el 49% de los casos. El costo de generacion de reportes se reduce aproximadamente en un 60%.</p>
+        </div>
+
+        <h2 class="main__title">12. Ejercicios Propuestos</h2>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 1:</strong> Disena un esquema estrella para un sistema de pedidos en linea. Identifica las tablas de hechos y dimensiones necesarias.</p>
+        </div>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 2:</strong> Explica las diferencias entre los enfoques Top-Down (Inmon) y Bottom-Up (Kimball) para la implementacion de un Data Warehouse.</p>
+        </div>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 3:</strong> Dado el siguiente requerimiento: "Analizar ventas por producto, por region y por mes", disena las tablas DIM y FACT correspondientes.</p>
+        </div>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 4:</strong> Investiga y explica cual es la diferencia entre un Data Warehouse y un Data Lake. Menciona casos de uso para cada uno.</p>
+        </div>
+
+        <nav class="nav">
+            <a href="semana_13.html" class="nav__link">Semana 13</a>
+            <a href="semana_15.html" class="nav__link">Semana 15 - Alta Disponibilidad</a>
+        </nav>
+    </main>
+</div>
+
+</body>
+</html>

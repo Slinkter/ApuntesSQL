@@ -2,21 +2,21 @@ Ingeniería de Datos
 Modelamiento de Datos en la Empresa
 Nadia Rodríguez
 2013-1Agenda
-• Arquitecturas de los Sistemas de Información
-• Modelamiento de Datos
-• Tipos de Modelo de Datos
-• Modelo Entidad-Relación
+- Arquitecturas de los Sistemas de Información
+- Modelamiento de Datos
+- Tipos de Modelo de Datos
+- Modelo Entidad-Relación
 – Entidades
 – Relaciones
 – Llaves
 – Entidades Fuertes vs Entidades Débiles
 – Entidades Asociativas
-• El Diagrama Entidad-Relación (DER)
-• SuperTipos y SubTiposArquitectura de los Sistemas de
+- El Diagrama Entidad-Relación (DER)
+- SuperTipos y SubTiposArquitectura de los Sistemas de
 Información (ISA)
-• Plano organizacional de sus sistemas de
+- Plano organizacional de sus sistemas de
 información.
-• Contiene:
+- Contiene:
 – Datos (Modelo de Datos Empresarial – DER
 simplificado)
 – Procesos – diagramas de flujos de datos,
@@ -26,10 +26,10 @@ descomposición de procesos, etc.
 – Eventos e hitos (cuando los procesos son ejecutados)
 – EscenariosDesarrollo del modelo
 empresarial
-• Descomposición de procesos o
+- Descomposición de procesos o
 funciones del negocio
-• Modelo empresarial de datos
-• Planeamiento de matricesDesarrollo del modelo
+- Modelo empresarial de datos
+- Planeamiento de matricesDesarrollo del modelo
 empresarial
 Descomposición de procesos o funciones del negocio
 C1 Environment
@@ -104,97 +104,97 @@ Order Shipment X X X X X X
 Sales Summarization X X X X X
 Production Operations X X X X X X X
 Finance and Accounting X X X X X X X XModelo de datos empresarial
-• Especificar el alcance y contenido
+- Especificar el alcance y contenido
 general
-• Abstracción de alto nivel de los datos
+- Abstracción de alto nivel de los datos
 organizacionales
-• Diagrama entidad/relación
-• Descripciones de los tipos de entidades
-• Relaciones entre entidades
-• Reglas de negocioMetodologia de prototipo: proceso de despliegue de
+- Diagrama entidad/relación
+- Descripciones de los tipos de entidades
+- Relaciones entre entidades
+- Reglas de negocioMetodologia de prototipo: proceso de despliegue de
 una base de datosMetodologia de prototipo: proceso de despliegue de
 una base de datosMetodologia de prototipo: proceso de despliegue de
 una base de datosMetodologia de prototipo: proceso de despliegue de
 una base de datosModelamiento...Modelamiento de Datos
-• Muchos especialistas concuerdan en
+- Muchos especialistas concuerdan en
 que el modelamiento de datos es la
 parte más importante del proceso de
 desarrollo de un sistema de informaciónRazones del Modelamiento de
 Datos (cont.)
-• La realidad y las reglas del negocio capturadas
+- La realidad y las reglas del negocio capturadas
 durante el proceso de modelamiento de datos son
 esenciales para asegurar la integridad de la data en
 un sistema.
-• El objetivo de un SI es proveer la información que
+- El objetivo de un SI es proveer la información que
 pueda soportar todo tipo de consultas, análisis,
 reportes, etc. necesarios para el funcionamiento de la
 organización.
-• Los datos tiende a ser más estable que los procesos
+- Los datos tiende a ser más estable que los procesos
 del negocio, por ello un sistema que es diseñado
 orientado hacia los datos, tiende a tener una mayor
 vida útil.¿Qué es un Modelo de Datos?
-• Es una abstracción del mundo real
-• Es la representación de cómo
+- Es una abstracción del mundo real
+- Es la representación de cómo
 organizamos la información.
-• Es la expresión de las reglas de
+- Es la expresión de las reglas de
 negocio de una organización.¿Qué son las Reglas de Negocio?
-• Es un enunciado que define o limita
+- Es un enunciado que define o limita
 algún aspecto del negocio con la
 finalidad de controlar o influir en la
 conducción adecuada del negocio
-• Define la forma en que creamos,
+- Define la forma en que creamos,
 actualizamos y removemos la
 información en la empresa.Características de una buena
 Regla de Negocio
-• Declarativa: Describe el QUE, no el COMO
-• Precisa: Clara, un mismo significado para todos
-• Atómica: Una regla define un único enunciado, y es
+- Declarativa: Describe el QUE, no el COMO
+- Precisa: Clara, un mismo significado para todos
+- Atómica: Una regla define un único enunciado, y es
 indivisible
-• Consistente: No contiene enunciados inconsistentes
+- Consistente: No contiene enunciados inconsistentes
 y no contradice otras reglas
-• Expresa: Usa lenguaje natural estructurado
-• Distinta: No es redundante, pero podria referirse a
+- Expresa: Usa lenguaje natural estructurado
+- Distinta: No es redundante, pero podria referirse a
 otras reglas
-• Orientada al negocio: Es enunciada en términos
+- Orientada al negocio: Es enunciada en términos
 orientados al negocio y no en términos tecnicos.Modelo Entidad/Relación
-• Es una representación conceptual detallada
+- Es una representación conceptual detallada
 de los datos de la organización.
-• Muestra entidades, sus atributos, las
+- Muestra entidades, sus atributos, las
 relaciones y las característica de estas
 relaciones.
-• El modelo entidad/relación es el modelo
+- El modelo entidad/relación es el modelo
 conceptual más utilizado para el diseño
 conceptual de bases de datos. Fue
 introducido por Peter Chen en 1976.Entidad
 – Tipo entidad – coleccion de entidades
 (frecuentemente corresponde a una tabla)
-• Ej. Empleado, Automóvil, Reservación, Curso, etc.
+- Ej. Empleado, Automóvil, Reservación, Curso, etc.
 – Instancia de una entidad - persona, lugar,
 objeto, evento, concepto (frecuentemente
 corresponde a una fila en una tabla)
-• Ej. Pedro Picapiedra, Renault, reservación la función de
+- Ej. Pedro Picapiedra, Renault, reservación la función de
 cine de las 5:00pm, Ing. de datos, etc.Entidad: Denominación
-• Se identifican con un sustantivo en singular
+- Se identifican con un sustantivo en singular
 – Ej. Cliente (no clientes).
-• Su identificación debe ser única, concisa y
+- Su identificación debe ser única, concisa y
 descriptiva para la organización.
 – Ej. Una orden de compra de la empresa hacia un
 proveedor no puede denominarse igual a una
 orden de compra de un cliente hacia la empresa.
-• El nombre usado para una entidad debe ser
+- El nombre usado para una entidad debe ser
 el mismo en todos los DER en los cuales
 aparece dicha entidad en la empresa.Entidad: Clasificación
-• Entidad Fuerte
+- Entidad Fuerte
 Es aquella que existe independientemente de la
 existencia de otra entidad. Ej. Factura
-• Entidad Débil
+- Entidad Débil
 Es aquella cuya existencia depende de la
 existencia de otra entidad. Ej. Línea de Factura
-• Entidad Asociativa
+- Entidad Asociativa
 Es una entidad que nace de la asociación de dos
 entidades y que contiene atributos que relacionan
 ambas entidadesEntidad: Clasificación
-• Entidad Recursiva
+- Entidad Recursiva
 Es aquella que tiene una dependencia así misma.
 Ej. EmpleadoRelación
 – Es una asociación entre una o más
@@ -202,76 +202,76 @@ entidades que es de interés para la
 organización.
 – Es el vinculo funcional que existe entre dos
 o más entidades.
-• Ej. La relación entre las entidades alumno y
+- Ej. La relación entre las entidades alumno y
 curso es que un alumno puede llevar uno o
 más cursos (vinculo funcional) y un curso
 puede ser llevado por uno, ninguno o más
 alumnos (vinculo funcional).Cardinalidad de Relaciones
-• 1– a – 1
+- 1– a – 1
 – Cada entidad en la relación tiene exactamente
 una entidad relacionada
-• 1– a – N
+- 1– a – N
 – Una entidad en un lado de la relación se asocia
 con muchas entidades en el otro lado de la
 relación
-• N – a – N
+- N – a – N
 – Las entidades en cada lado de la relación pueden
 tener muchas entidades relacionadasCardinalidad de Restricciones
-• Es el numero de instancias de una entidad que puede o
+- Es el numero de instancias de una entidad que puede o
 debe estar asociada con una instancia de otra entidad.
-• Cardinalidad Mínima
+- Cardinalidad Mínima
 – Si es cero, entonces es opcional
 – Si es uno o mas, entonces es mandatoria
-• Cardinalidad Máxima
+- Cardinalidad Máxima
 – El numero máximoRelación: Grados
-• Relación Unaria
+- Relación Unaria
 – Es la que existe en una misma entidad
-• 1-1
-• 1-N
-• Relación Binaria
+- 1-1
+- 1-N
+- Relación Binaria
 – Es la que existe entre dos entidades
-• 1-1
-• 1-N
-• N-N
-• Relación Ternaria
+- 1-1
+- 1-N
+- N-N
+- Relación Ternaria
 – Es la que existe entre 3 entidades
-• Ej. Proveedor-Almacén-ArtículoAtributos: Clave Primaria
+- Ej. Proveedor-Almacén-ArtículoAtributos: Clave Primaria
 Primary Key (PK)
-• Es un atributo o una combinación de
+- Es un atributo o una combinación de
 atributos que identifica de manera única
 un registro en una relación
-• Puede ser:
-• Simple : Ej. Nro Factura
-• Compuesta: Ej. DirecciónAtributos: Características de
+- Puede ser:
+- Simple : Ej. Nro Factura
+- Compuesta: Ej. DirecciónAtributos: Características de
 las Claves Primarias
-• No cambian de valor
-• No deben ser nulas
-• Son únicas
-• Sustituye llaves compuestas muy largas
+- No cambian de valor
+- No deben ser nulas
+- Son únicas
+- Sustituye llaves compuestas muy largas
 por una declaración simpleAtributos: Clave Primaria
 Compuesta
-• Es una PK que esta compuesta por
+- Es una PK que esta compuesta por
 más de un atributo
-• Ejemplo:
+- Ejemplo:
 Identificador de Línea de Factura
 (Número de Factura,Código de Artículo)Atributos: Clave Foránea o
 Ajena Foreign Key (FK)
-• Es un atributo en una entidad que es la
+- Es un atributo en una entidad que es la
 PK o forma parte de la PK de otra
 entidad.
-• Esta restricción implementará la
+- Esta restricción implementará la
 asociación entre tablas en las Bases de
 Datos RelacionalesAtributos: Restricciones de
 Integridad
-• El modelo de datos incluye varios tipos de
+- El modelo de datos incluye varios tipos de
 restricciones o reglas de negocio:
 – Restricciones de Dominio
-• Todos los valores de un atributo de una entidad deben
+- Todos los valores de un atributo de una entidad deben
 estar comprendidos en el mismo dominio.
 – Restricciones de Integridad
-• Cada entidad tiene una PK y los valores de una PK
+- Cada entidad tiene una PK y los valores de una PK
 tienen que ser válidos, especialmente NO NULOS.
-• Cada valor de una FK debe coincidir con el valor de la
+- Cada valor de una FK debe coincidir con el valor de la
 PK de otra entidad.Modelo de Datos
 producto
 orden_pedido
@@ -321,11 +321,11 @@ nombre_maq
 ubicacion_maq
 tipoModelo de Datos:
 Construcción del DER
-• Graficar las entidades fuertes
-• Graficar las entidades débiles
-• Graficar las relaciones binarias
-• Graficar las entidades asociativas
-• Graficar las relaciones unariasModelo de Datos
+- Graficar las entidades fuertes
+- Graficar las entidades débiles
+- Graficar las relaciones binarias
+- Graficar las entidades asociativas
+- Graficar las relaciones unariasModelo de Datos
 Notación Ingeniería de Información : Genérica
 A asociada a Uno y Solo Un B A B
 A asociada a Cero o Un B A B
@@ -387,12 +387,12 @@ Agregación
 Mecanismo usado en un modelo E-R para permitir expresar relaciones entre
 relacionesModelo Entidad Relación Extendido:
 Supertipos y Subtipos
-• Supertipos
+- Supertipos
 – Entidades que se se pueden subdividir en 2 o mas
 Subtipos, donde sus instancias son a las vez
 miembros de los Subtipos como de los
 Supertipos.
-• Subtipos
+- Subtipos
 – Guardan atributos que los diferencian entre si,
 pero a la vez tienen atributos comunes heredados
 del Supertipo al que pertenecen.Modelo Entidad Relación Extendido:

@@ -2,16 +2,16 @@ Ingeniería de Datos
 Normalización
 Nadia Rodríguez
 Rev. 2013-1Agenda
-• Primera forma normal
-• Segunda forma normal
-• Tercera forma normalNormalización
-• Valida y mejora el diseño lógico que
+- Primera forma normal
+- Segunda forma normal
+- Tercera forma normalNormalización
+- Valida y mejora el diseño lógico que
 satisface ciertas restricciones, el cual evita
 la duplicación innecesaria de datos.
-• Proceso de descomposición de relaciones
+- Proceso de descomposición de relaciones
 con anomalías para producir relaciones
 bien-estructuradas más pequeñas.
-• No siempre provoca el mejor rendimiento
+- No siempre provoca el mejor rendimiento
 en los RDBMS.Ejemplo Redundancia de Datos
 VUELO
 vuelo# fecha aerolinea avion#
@@ -21,15 +21,15 @@ DL242 10/25/08 Delta o-ge-98722
 AA121 10/24/08 American p-rw-84663
 AA121 10/25/08 American q-yg-98237
 AA411 10/28/08 American h-fe-65748
-• Redundancia: La aerolínea se repite para el
+- Redundancia: La aerolínea se repite para el
 mismo número de vuelo.
-• Inconsistencia: Cuando el nombre de la
+- Inconsistencia: Cuando el nombre de la
 aerolínea cambia para un número de vuelo,
 ésta debe ser cambiada en varias filas.Relaciones bien estructuradas
-• Contiene mínima redundancia y permite que los
+- Contiene mínima redundancia y permite que los
 usuarios añadan, eliminen y actualicen registros
 (filas) sin causar inconsistencias.
-• La meta es evitar anomalías
+- La meta es evitar anomalías
 – Anomalías de inserción – la adición de nuevas filas
 obliga a los usuarios a crear datos duplicados o
 simplemente no es posible
@@ -46,24 +46,24 @@ Codigo_Docente Curso_Capacitacion Fecha_Ingreso Salario
 44000 DB2 25/10/2007 1,800
 45000 Excel Avanzado 12/08/2007 2,700
 45000 Java 19/09/2007 2,700
-• Anomalias de inserción: Que pasa si quiero insertar un
+- Anomalias de inserción: Que pasa si quiero insertar un
 código de docente pero el docente todavía no ha tomado
 ningún curso de capacitación?
-• Anomalías de eliminación: Que pasa si se borra la fila o
+- Anomalías de eliminación: Que pasa si se borra la fila o
 registro del código de docente 43000?
-• Anomalías de modificación: Que pasa si el docente con
+- Anomalías de modificación: Que pasa si el docente con
 código 42000 recibe un aumento de salario?Dependencia Funcional y Claves
-• Dependencia Funcional:
+- Dependencia Funcional:
 – El valor de un atributo A (determinante) determina el
 valor de otro atributo B, o sea B es funcionalmente
 dependiente de A
-A  B
-• Clave Candidata:
+A → B
+- Clave Candidata:
 – Identificador único. Una clave o claves que podrían
 convertirse en la clave primaria
-• Ej. Tanto el código de empleado como el DNI, ambas son
+- Ej. Tanto el código de empleado como el DNI, ambas son
 claves candidatas de la entidad Empleado
-• Cada campo no clave es funcionalmente dependiente de cada
+- Cada campo no clave es funcionalmente dependiente de cada
 clave candidataEjemplo de Normalización
 Factura
 RUC___________ Nombre______________
@@ -80,9 +80,9 @@ Construir la gran tabla
 Nro_Factura RUC_Cliente Nombre_Cliente Direccion_Cliente Total Fecha Cod_Articulo Desc_Articulo Cant Prec_Unitario Prec_Total
 1240001 0000125 JUAN PEREZ PAZ Arica 325. Lince 2250 20/08/2007 010 Lapicero Azul punta fina 100 2.5 250
 1240001 0000125 JUAN PEREZ PAZ Arica 325. Lince 2250 20/08/2007 753 Cuaderno rayado A4 200 10 2000Primera Forma Normal
-• Eliminar atributos multivaluados
+- Eliminar atributos multivaluados
 (grupos repetitivos)
-• Cada atributo debe ser atómicoEjemplo de Atomicidad
+- Cada atributo debe ser atómicoEjemplo de Atomicidad
 HORARIO_VUELOS
 vuelo# dias aerolinea hsalida origen hllegada destino
 DL242 MO WE FR DELTA 10:40 ATL 12:30 BOS
@@ -120,7 +120,7 @@ Nro factura Cod Artículo Descripción Artículo Cantidad Precio Unitario Precio
 Nro_Factura Cod_Articulo Desc_Articulo Cant Prec_Unitario Prec_Total
 1240001 010 Lapicero Azul punta fina 100 2.5 250
 1240001 753 Cuaderno rayado A4 200 10 2000Segunda Forma Normal
-• Dependencias Funcionales
+- Dependencias Funcionales
 – Cada atributo no clave debe estar determinado
 por toda la clave primaria (dependencia
 funcional total) y no parte de ésta (dependencia
@@ -145,7 +145,7 @@ Cod Artículo Descripción Artículo Precio Unitario
 Cod_ArticuloDesc_Articulo Prec_Unitario
 010 Lapicero Azul punta fina 2.5
 753 Cuaderno rayado A4 10Tercera Forma Normal
-• Dependencias transitivas
+- Dependencias transitivas
 – Un atributo no clave determina funcionalmente
 a otro u otros atributos no claveTercera Forma Normal
 Dependencias Transitivas

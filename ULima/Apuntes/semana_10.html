@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 10 - JOINs y Subconsultas</title>
+    <link rel="stylesheet" href="master.css">
+</head>
+<body>
+<header class="header">
+    <h1 class="header__title">JOINs y Subconsultas</h1>
+    <p class="header__subtitle">Semana 10 | Ingenieria de Datos | ULima 2013-2</p>
+</header>
+
+<div class="cornell">
+    <aside class="sidebar">
+        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>&sect; JOIN</strong>Union de dos o mas tablas mediante valores relacionados.</li>
+            <li class="sidebar__item"><strong>&sect; Equijoin</strong>JOIN con operador de igualdad (=).</li>
+            <li class="sidebar__item"><strong>&sect; Non-Equijoin</strong>JOIN con operador de rango (BETWEEN, &gt;, &lt;).</li>
+            <li class="sidebar__item"><strong>&sect; Self Join</strong>JOIN de una tabla consigo misma (relacion recursiva).</li>
+            <li class="sidebar__item"><strong>&sect; Outer Join</strong>Incluye filas sin correspondencia (LEFT / RIGHT).</li>
+            <li class="sidebar__item"><strong>&sect; Subconsulta</strong>Consulta anidada dentro de otra consulta.</li>
+        </ul>
+        <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-sidebar);border-radius:var(--radius-md);">
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio</a></li>
+                <li class="sidebar__item"><a href="semana_09.html" class="sidebar__link">Semana 09</a></li>
+                <li class="sidebar__item"><a href="semana_11.html" class="sidebar__link">Siguiente</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="box box--note">
+            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Comprender el concepto de JOIN y el producto cartesiano.</li>
+                <li class="main__list-item">Dominar los 4 tipos de JOIN: equijoin, non-equijoin, self join y outer join.</li>
+                <li class="main__list-item">Distinguir entre subconsultas de fila simple y fila multiple.</li>
+                <li class="main__list-item">Aplicar subconsultas con funciones de grupo.</li>
+            </ul>
+        </div>
+
+        <section class="architect-insight">
+            <h4 class="main__title--sub">Insight del Arquitecto</h4>
+            <p class="main__text">Los JOINs son el corazon del modelo relacional. Conocer cuando usar cada tipo (y como el optimizador los ejecuta) marca la diferencia entre consultas que responden en milisegundos y las que colapsan el servidor. Las subconsultas son elegantes pero no siempre eficientes; en PostgreSQL moderno, muchas subconsultas pueden reescribirse como JOINs o con <code>LATERAL</code> para mejor rendimiento.</p>
+        </section>
+
+        <h2 class="main__title">1. Concepto de JOIN</h2>
+        <p class="main__text">Un JOIN se emplea para consultar datos que se encuentran en mas de una tabla. Las filas se enlazan empleando valores comunes, tipicamente entre la clave primaria (PK) y la clave foranea (FK). Sin una condicion de JOIN, se genera un <strong>producto cartesiano</strong> (todas las combinaciones posibles).</p>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>Cross Join (Producto Cartesiano):</strong></p>
+            <pre><code>SELECT *
+FROM   tabla1 CROSS JOIN tabla2;
+-- Equivale a: SELECT * FROM tabla1, tabla2;</code></pre>
+            <p class="main__text">Si tabla1 tiene M filas y tabla2 tiene N filas, el resultado tiene M &times; N filas. Raramente util por si solo; es la base sobre la que se aplica la condicion de JOIN.</p>
+        </div>
+
+        <h2 class="main__title">2. Variables Tupla (Alias)</h2>
+        <p class="main__text">Simplifican las consultas mediante alias en los nombres de tablas. Son obligatorias cuando hay nombres de columna identicos entre tablas.</p>
+        <pre><code>SELECT C.nombre, OP.numero_orden, OP.numero_embarques
+FROM   orden_pedido OP JOIN cliente C
+  ON   OP.id_cliente = C.id_cliente;</code></pre>
+
+        <h2 class="main__title">3. Tipos de JOIN</h2>
+
+        <h3 class="main__title--sub">Equijoin</h3>
+        <p class="main__text">Resulta cuando el valor de una columna corresponde explicitamente al valor de alguna columna de otra tabla, usando el operador <code>=</code>.</p>
+        <pre><code>SELECT table1.column, table2.column
+FROM   table1 JOIN table2
+  ON   table1.column1 = table2.column2;
+
+-- Ejemplo practico
+SELECT C.nombre, OP.numero_orden, OP.numero_embarques
+FROM   orden_pedido OP JOIN cliente C
+  ON   OP.id_cliente = C.id_cliente;</code></pre>
+
+        <div class="box box--example">
+            <p class="main__text">Cada nombre de columna debe ser precedido por el nombre de la tabla (o su alias). Si las columnas tienen el mismo nombre en ambas tablas, el alias es obligatorio.</p>
+        </div>
+
+        <h3 class="main__title--sub">Non-Equijoin</h3>
+        <p class="main__text">Resulta cuando la condicion de JOIN utiliza un operador diferente a la igualdad: <code>BETWEEN</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&lt;&gt;</code>.</p>
+        <pre><code>SELECT L.nombre_linea
+FROM   producto P JOIN linea_producto L
+  ON   P.precio BETWEEN L.meta_venta_min AND L.meta_venta_max
+  AND  P.idprod = L.idprod;</code></pre>
+
+        <h3 class="main__title--sub">Self Join</h3>
+        <p class="main__text">Utilizado para unir filas de una misma tabla con relacion recursiva. Se simulan dos tablas en el FROM creando 2 alias diferentes para la misma tabla.</p>
+        <pre><code>SELECT E.nombre || 'trabaja para ' || J.nombre
+FROM   empleado E JOIN empleado J
+  ON   E.cod_jefe = J.cod_emp;
+
+-- Explicacion: E es el empleado, J es su jefe.
+-- E.cod_jefe = J.cod_emp relaciona cada empleado con su jefe.</code></pre>
+
+        <div class="box box--warning">
+            <p class="main__text"><strong>Precaucion:</strong> En Self Join siempre use alias obligatorios. Sin alias, el SQL no puede distinguir entre las dos instancias de la misma tabla.</p>
+        </div>
+
+        <h3 class="main__title--sub">Outer Join</h3>
+        <p class="main__text">Se utiliza para ver filas que normalmente no se presentan mediante una condicion INNER JOIN. El operador puede ser <code>LEFT</code> o <code>RIGHT</code>, segun el lado del JOIN que no tenga un valor coincidente.</p>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>Sintaxis basica</strong></p>
+        </div>
+        <pre><code>SELECT table1.column, table2.column
+FROM   table1 LEFT OUTER JOIN table2
+  ON   table1.column1 = table2.column2;
+-- Incluye todas las filas de table1, aunque no tengan correspondencia en table2</code></pre>
+
+        <p class="main__text"><strong>Ejemplo LEFT JOIN:</strong> Todos los clientes, incluso aquellos sin ordenes de pedido.</p>
+        <pre><code>SELECT nombre, numero_orden, numero_embarques
+FROM   cliente LEFT OUTER JOIN orden_pedido
+  ON   cliente.id_cliente = orden_pedido.id_cliente;</code></pre>
+
+        <p class="main__text"><strong>Ejemplo RIGHT JOIN:</strong> Equivalente al anterior, intercambiando el orden de las tablas.</p>
+        <pre><code>SELECT nombre, numero_orden, numero_embarques
+FROM   orden_pedido RIGHT OUTER JOIN cliente
+  ON   cliente.id_cliente = orden_pedido.id_cliente;</code></pre>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Tipo de JOIN</th>
+                    <th class="table__th">Descripcion</th>
+                    <th class="table__th">Filas sin match</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">INNER JOIN</td>
+                    <td class="table__td">Solo filas que coinciden en ambas tablas</td>
+                    <td class="table__td">Excluidas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">LEFT OUTER JOIN</td>
+                    <td class="table__td">Todas las filas de la tabla izquierda</td>
+                    <td class="table__td">Tabla derecha = NULL</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">RIGHT OUTER JOIN</td>
+                    <td class="table__td">Todas las filas de la tabla derecha</td>
+                    <td class="table__td">Tabla izquierda = NULL</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">FULL OUTER JOIN</td>
+                    <td class="table__td">Todas las filas de ambas tablas</td>
+                    <td class="table__td">Lado sin match = NULL</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">4. Subconsultas</h2>
+        <p class="main__text">Una subconsulta es una consulta anidada dentro de otra consulta (principal o externa). Se ejecutan primero y su resultado es usado por la consulta principal a traves de las clausulas <code>WHERE</code> o <code>HAVING</code>.</p>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>Sintaxis general</strong></p>
+        </div>
+        <pre><code>SELECT select_list
+FROM   table
+WHERE  expr operator (
+  SELECT select_list
+  FROM   table
+);</code></pre>
+
+        <h3 class="main__title--sub">Reglas para Subconsultas</h3>
+        <ul class="main__list">
+            <li class="main__list-item">Se usan cuando una consulta esta basada en valores desconocidos.</li>
+            <li class="main__list-item">Deben estar encerradas entre parentesis <code>()</code>.</li>
+            <li class="main__list-item">Dos clases de operadores: de fila simple (<code>= &gt; &gt;= &lt; &lt;= &lt;&gt;</code>) y de fila multiple (<code>IN, NOT IN</code>).</li>
+            <li class="main__list-item">El operador debe aparecer al lado izquierdo de la subconsulta.</li>
+            <li class="main__list-item">No pueden contener una clausula <code>ORDER BY</code> (a menos que usen <code>OFFSET/FETCH</code> en versiones modernas).</li>
+            <li class="main__list-item">Las subconsultas son procesadas primero; luego la consulta principal usa el resultado.</li>
+        </ul>
+
+        <h3 class="main__title--sub">Procesamiento de Subconsultas Anidadas</h3>
+        <p class="main__text">Ejemplo paso a paso:</p>
+        <pre><code>SELECT numero_embarques
+FROM   orden_pedido
+WHERE  id_cliente = (
+  SELECT id_cliente
+  FROM   cliente
+  WHERE  nombre = 'JUAN'
+);
+
+-- 1. La subconsulta se ejecuta primero:
+--    SELECT id_cliente FROM cliente WHERE nombre = 'JUAN'  → retorna 990
+-- 2. El resultado (990) se pasa a la consulta principal:
+--    SELECT numero_embarques FROM orden_pedido WHERE id_cliente = 990</code></pre>
+
+        <h3 class="main__title--sub">Subconsultas de Fila Simple</h3>
+        <p class="main__text">La subconsulta retorna una sola fila. Solo usa operadores de fila simple: <code>= &gt; &gt;= &lt; &lt;= &lt;&gt;</code>.</p>
+        <pre><code>-- Cliente que ha generado el maximo numero de embarques
+SELECT id_cliente
+FROM   orden_pedido
+WHERE  numero_embarques = (
+  SELECT MAX(numero_embarques)
+  FROM   orden_pedido
+);</code></pre>
+
+        <div class="box box--example">
+            <p class="main__text">Si la subconsulta retorna mas de una fila y se usa un operador de fila simple, el motor lanza un error: <code>ORA-01427: single-row subquery returns more than one row</code>. En PostgreSQL: <code>ERROR: more than one row returned by a subquery used as an expression</code>.</p>
+        </div>
+
+        <h3 class="main__title--sub">Subconsultas de Fila Multiple</h3>
+        <p class="main__text">La subconsulta retorna varias filas de resultado. Se usan operadores de conjunto:</p>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Operador</th>
+                    <th class="table__th">Significado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><code>IN</code></td>
+                    <td class="table__td">Igual a cualquier miembro de la lista</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>NOT IN</code></td>
+                    <td class="table__td">No igual a ningun miembro de la lista</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <pre><code>-- Clientes NACIONALES o INTERNACIONALES con ordenes de pedido
+SELECT numero_embarques
+FROM   orden_pedido
+WHERE  id_cliente IN (
+  SELECT id_cliente
+  FROM   cliente
+  WHERE  tipo = 'NAC' OR tipo = 'INT'
+);</code></pre>
+
+        <span class="tag">Subconsultas</span>
+
+        <section class="architect-insight">
+            <h4 class="main__title--sub">Insight del Arquitecto</h4>
+            <p class="main__text">En PostgreSQL, las subconsultas en <code>WHERE</code> se ejecutan una vez (subconsultas no correlacionadas) y se cachean. Para subconsultas correlacionadas, considera reescribirlas como JOINs con <code>LATERAL</code> o usar funciones ventana (<code>ROW_NUMBER()</code>) para mejor rendimiento en conjuntos grandes. Siempre verifica el plan con <code>EXPLAIN ANALYZE</code>.</p>
+        </section>
+
+        <nav class="nav">
+            <a href="index.html" class="nav__link">Volver al Indice</a>
+            <a href="semana_11.html" class="nav__link">Siguiente Semana</a>
+        </nav>
+    </main>
+</div>
+</body>
+</html>

@@ -3,57 +3,381 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 09 - 4FN, 5FN y Desnormalización</title>
+    <title>Semana 09 - BCNF, 4FN, 5FN y Desnormalizacion</title>
     <link rel="stylesheet" href="master.css">
 </head>
 <body>
-
-<div class="header">
-    <h1 class="header__title">Formas Normales Superiores</h1>
-    <p class="header__subtitle">Semana 09 | Arquitectura de Datos Avanzada</p>
-</div>
+<header class="header">
+    <h1 class="header__title">Formas Normales Superiores y Desnormalizacion</h1>
+    <p class="header__subtitle">Semana 09 | Ingenieria de Datos | ULima 2013-2</p>
+</header>
 
 <div class="cornell">
     <aside class="sidebar">
-        <h2 class="sidebar__title">Conceptos Clave</h2>
+        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
         <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>MVD</strong> Dependencias Multivaluadas.</li>
-            <li class="sidebar__item"><strong>4FN</strong> Eliminar dependencias multivaluadas.</li>
-            <li class="sidebar__item"><strong>5FN</strong> Forma Normal de Proyección-Unión.</li>
-            <li class="sidebar__item"><strong>Desnormalización</strong> Romper reglas por rendimiento.</li>
+            <li class="sidebar__item"><strong>&sect; BCNF</strong>Forma Normal Boyce-Codd: todo determinante debe ser clave candidata.</li>
+            <li class="sidebar__item"><strong>&sect; MVD</strong>Dependencia Multivaluada: relacion 1:N independiente entre atributos.</li>
+            <li class="sidebar__item"><strong>&sect; 4FN</strong>Elimina dependencias multivaluadas separando tablas.</li>
+            <li class="sidebar__item"><strong>&sect; 5FN</strong>Elimina dependencias de join (join dependencies).</li>
+            <li class="sidebar__item"><strong>&sect; Desnormalizacion</strong>Proceso contrario: crear redundancia controlada por rendimiento.</li>
         </ul>
+        <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-sidebar);border-radius:var(--radius-md);">
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio</a></li>
+                <li class="sidebar__item"><a href="semana_08.html" class="sidebar__link">Semana 08</a></li>
+                <li class="sidebar__item"><a href="semana_10.html" class="sidebar__link">Siguiente</a></li>
+            </ul>
+        </div>
     </aside>
 
     <main class="main">
-        <h2 class="main__title">1. Cuarta Forma Normal (4FN)</h2>
-        <p class="main__text">La 4FN se ocupa de las dependencias multivaluadas (MVD). Una dependencia multivaluada ocurre cuando la presencia de una o más filas en una tabla implica la presencia de otras filas.</p>
-        
-        <div class="box box--example">
-            <p><strong>Ejemplo:</strong> Si una tabla tiene (Empleado, Proyecto, Hobby) y un empleado tiene varios proyectos y varios hobbies independientes, se genera una explosión combinatoria. La 4FN exige separar (Empleado, Proyecto) y (Empleado, Hobby).</p>
-        </div>
-
-        <h2 class="main__title--sub">2. Quinta Forma Normal (5FN)</h2>
-        <p class="main__text">También conocida como "Project-Join Normal Form" (PJ/NF). Se alcanza cuando una tabla no puede ser descompuesta en tablas más pequeñas sin perder información al intentar reconstruirla mediante JOINs.</p>
-        
         <div class="box box--note">
-            <p><strong>Dato Curioso:</strong> La 5FN es considerada "esotérica" en la práctica diaria, pero es vital en sistemas de Big Data y Data Warehousing de alta complejidad para asegurar que no existan redundancias lógicas ocultas.</p>
+            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Comprender la Forma Normal Boyce-Codd y su diferencia con 3FN.</li>
+                <li class="main__list-item">Identificar dependencias multivaluadas y aplicar 4FN.</li>
+                <li class="main__list-item">Conocer la 5FN como forma normal proyectiva-join.</li>
+                <li class="main__list-item">Aplicar tecnicas de desnormalizacion estrategica en escenarios OLAP.</li>
+            </ul>
         </div>
 
-        <h2 class="main__title--sub">3. Desnormalización Estratégica</h2>
-        <p class="main__text">En el mundo real (especialmente en sistemas OLAP o de reportes), a veces decidimos "desnormalizar" intencionalmente.</p>
-        
+        <section class="architect-insight">
+            <h4 class="main__title--sub">Insight del Arquitecto</h4>
+            <p class="main__text">En la practica, BCNF es el objetivo minimo para bases de datos operacionales (OLTP). La 4FN aparece cuando modelamos entidades con atributos multivaluados independientes (como telefonos y direcciones). La 5FN suele ser innecesaria, pero la usamos al disenar almacenes de datos con esquemas de estrella. La desnormalizacion, bien aplicada, convierte un modelo teorico en uno performante.</p>
+        </section>
+
+        <h2 class="main__title">1. Forma Normal Boyce-Codd (BCNF)</h2>
+        <p class="main__text">Una relacion esta en BCNF si y solo si <strong>cada atributo determinante es una clave candidata</strong>. BCNF es una version mas estricta de 3FN: elimina las dependencias funcionales donde un atributo no-clave determina a otro atributo no-clave, incluso si no hay transitividad.</p>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>Recordatorio:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item"><strong>Dependencia Funcional:</strong> A &rarr; B significa que el valor de A determina el valor de B.</li>
+                <li class="main__list-item"><strong>Clave Candidata:</strong> Identificador unico; una o mas columnas que podrian ser la clave primaria.</li>
+            </ul>
+        </div>
+
+        <h3 class="main__title--sub">Caso Practico: Estudiante - Carrera - Asesor</h3>
+        <p class="main__text">Supuesto del negocio:</p>
         <ul class="main__list">
-            <li class="main__list-item"><strong>Razón:</strong> Mejorar el rendimiento de lectura (evitar JOINs costosos).</li>
-            <li class="main__list-item"><strong>Riesgo:</strong> Posibles inconsistencias y mayor espacio en disco.</li>
-            <li class="main__list-item"><strong>Uso común:</strong> Tablas de hechos en Data Warehouses (Star Schema).</li>
+            <li class="main__list-item">Un estudiante puede tener mas de una carrera.</li>
+            <li class="main__list-item">Para cada carrera, un estudiante tiene un solo asesor y una nota promedio.</li>
+            <li class="main__list-item">Un asesor solo puede asesorar una carrera.</li>
         </ul>
 
-        <div class="nav">
-            <a href="semana_08.html" class="nav__link">← Semana 08 (Examen)</a>
-            <a href="semana_10.html" class="nav__link">Semana 10 →</a>
+        <p class="main__text"><strong>Tabla inicial (no BCNF):</strong></p>
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Codigo</th>
+                    <th class="table__th">Carrera</th>
+                    <th class="table__th">Asesor</th>
+                    <th class="table__th">Nota Promedio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">20041236</td>
+                    <td class="table__td">Sistemas</td>
+                    <td class="table__td">Lopez</td>
+                    <td class="table__td">16</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">20041236</td>
+                    <td class="table__td">Contabilidad</td>
+                    <td class="table__td">Salas</td>
+                    <td class="table__td">16</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">20052133</td>
+                    <td class="table__td">Psicologia</td>
+                    <td class="table__td">Perez</td>
+                    <td class="table__td">13</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">20051782</td>
+                    <td class="table__td">Contabilidad</td>
+                    <td class="table__td">Rojas</td>
+                    <td class="table__td">12</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">20062023</td>
+                    <td class="table__td">Sistemas</td>
+                    <td class="table__td">Lopez</td>
+                    <td class="table__td">15</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="main__text">Existe una <strong>segunda dependencia</strong>: Asesor &rarr; Carrera (cada asesor asesora una sola carrera). Por tanto, Asesor es un <strong>atributo determinante</strong> que deberia ser parte de la clave primaria. La tabla no esta en BCNF.</p>
+
+        <h3 class="main__title--sub">Solucion BCNF (2 pasos)</h3>
+        <p class="main__text"><strong>Paso 1:</strong> Intercambiar Carrera por Asesor, generando una dependencia parcial.</p>
+        <pre><code>Codigo   Asesor   Carrera   Nota_Promedio
+-------- -------- --------- --------------
+20041236 Lopez   Sistemas  16
+20041236 Salas   Contab.   16
+20052133 Perez   Psic.     13
+20051782 Rojas   Contab.   12
+20062023 Lopez   Sistemas  15</code></pre>
+
+        <p class="main__text"><strong>Paso 2:</strong> Aplicar 2FN para eliminar la dependencia parcial:</p>
+        <pre><code>-- Tabla: ESTUDIANTE_ASESOR
+CODIGO   ASESOR   NOTA_PROMEDIO
+-------  -------- -------------
+20041236 Lopez   16
+20041236 Salas   12
+20052133 Perez   13
+20051782 Rojas   12
+20062023 Lopez   15
+
+-- Tabla: ASESOR_CARRERA
+ASESOR   CARRERA
+-------  ---------
+Lopez    Sistemas
+Salas    Contabilidad
+Perez    Psicologia
+Rojas    Contabilidad</code></pre>
+
+        <div class="box box--note">
+            <p class="main__text"><strong>Conclusion BCNF:</strong> La clave primaria compuesta (Codigo, Carrera) tenia un determinante no clave (Asesor &rarr; Carrera). Al separar en dos tablas, cada determinante es clave candidata en su propia tabla.</p>
         </div>
+
+        <h2 class="main__title">2. Cuarta Forma Normal (4FN)</h2>
+        <p class="main__text">Una relacion esta en 4FN si esta en BCNF y <strong>no contiene dependencias multivaluadas (MVD)</strong>. Una MVD ocurre cuando hay al menos 3 atributos A, B, C tales que: por cada valor de A hay un conjunto de valores B y un conjunto de valores C, pero B es independiente de C y viceversa.</p>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>Notacion MVD:</strong> A &rarr;&rarr; B | A &rarr;&rarr; C (A determina multivalentemente a B y C, independientes entre si)</p>
+        </div>
+
+        <h3 class="main__title--sub">Caso Practico: Curso - Profesor - Texto</h3>
+        <p class="main__text">Un curso (A) tiene varios profesores (B) y varios textos (C). Profesor y Texto son independientes: cualquier profesor puede usar cualquier texto del curso.</p>
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Curso (A)</th>
+                    <th class="table__th">Profesor (B)</th>
+                    <th class="table__th">Texto (C)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">Administracion</td>
+                    <td class="table__td">Garcia</td>
+                    <td class="table__td">Drucker</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Administracion</td>
+                    <td class="table__td">Garcia</td>
+                    <td class="table__td">Peters</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Administracion</td>
+                    <td class="table__td">Arce</td>
+                    <td class="table__td">Drucker</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Administracion</td>
+                    <td class="table__td">Arce</td>
+                    <td class="table__td">Peters</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Administracion</td>
+                    <td class="table__td">Perez</td>
+                    <td class="table__td">Drucker</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Administracion</td>
+                    <td class="table__td">Perez</td>
+                    <td class="table__td">Peters</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Finanzas</td>
+                    <td class="table__td">Mendez</td>
+                    <td class="table__td">Jones</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Finanzas</td>
+                    <td class="table__td">Mendez</td>
+                    <td class="table__td">Chang</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="main__text">Se genera una <strong>explosion combinatoria</strong> (producto cartesiano entre profesores y textos por cada curso). Para eliminar la MVD, separamos en dos tablas:</p>
+
+        <div class="box box--example">
+            <p class="main__text"><strong>Solucion 4FN:</strong></p>
+        </div>
+
+        <pre><code>-- Tabla: CURSO_PROFESOR
+Curso (A)        Profesor (B)
+---------------  ------------
+Administracion   Garcia
+Administracion   Arce
+Administracion   Perez
+Finanzas         Mendez
+
+-- Tabla: CURSO_TEXTO
+Curso (A)        Texto (C)
+---------------  ------------
+Administracion   Drucker
+Administracion   Peters
+Finanzas         Jones
+Finanzas         Chang</code></pre>
+
+        <div class="box box--note">
+            <p class="main__text"><strong>Conclusion 4FN:</strong> Al separar los atributos independientes (Profesor y Texto) en tablas distintas, eliminamos la redundancia combinatoria. La 4FN es especialmente util al modelar relaciones N:N con atributos independientes.</p>
+        </div>
+
+        <h2 class="main__title">3. Quinta Forma Normal (5FN)</h2>
+        <p class="main__text">Una relacion esta en 5FN (tambien llamada <strong>Project-Join Normal Form</strong> o PJ/NF) cuando no puede ser descompuesta en tablas mas pequenas sin perder informacion al reconstruirla mediante JOINs. Elimina <strong>dependencias de join</strong> (join dependencies).</p>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>Join Dependency:</strong> Ocurre cuando una tabla es igual a la reunion (JOIN) de varias de sus proyecciones. Si al hacer JOIN de las proyecciones se pierden o generan filas espurias, hay una dependencia de join que 5FN debe resolver.</p>
+        </div>
+
+        <h3 class="main__title--sub">Caso Practico: Vendedor - Marca - Producto</h3>
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">VENDEDOR</th>
+                    <th class="table__th">MARCA</th>
+                    <th class="table__th">PRODUCTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">Perez</td>
+                    <td class="table__td">Toyota</td>
+                    <td class="table__td">Auto</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Perez</td>
+                    <td class="table__td">Toyota</td>
+                    <td class="table__td">Camioneta</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Perez</td>
+                    <td class="table__td">Nissan</td>
+                    <td class="table__td">Auto</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Perez</td>
+                    <td class="table__td">Nissan</td>
+                    <td class="table__td">Camioneta</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Rojas</td>
+                    <td class="table__td">Toyota</td>
+                    <td class="table__td">Auto</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="main__text">Si descomponemos en tres tablas binarias:</p>
+        <pre><code>-- VENDEDOR-MARCA
+VENDEDOR   MARCA
+-------    ------
+Perez      Toyota
+Perez      Nissan
+Rojas      Toyota
+
+-- MARCA-PRODUCTO
+MARCA      PRODUCTO
+------     --------
+Toyota     Auto
+Toyota     Camioneta
+Nissan     Auto
+Nissan     Camioneta
+
+-- VENDEDOR-PRODUCTO
+VENDEDOR   PRODUCTO
+-------    --------
+Perez      Auto
+Perez      Camioneta
+Rojas      Auto</code></pre>
+
+        <div class="box box--example">
+            <p class="main__text">Al hacer JOIN de las tres proyecciones, se reconstruye exactamente la tabla original sin filas espurias. La tabla original esta en 5FN porque la descomposicion es <strong>sin perdida</strong> y cada proyeccion captura una restriccion del negocio.</p>
+        </div>
+
+        <span class="tag">5FN / PJNF</span>
+        <p class="main__text">En la practica, la 5FN es raramente necesaria. Se utiliza en sistemas con restricciones join complejas, tipicamente en modelado dimensional de alta precision (Data Vault 2.0, Anchor Modeling).</p>
+
+        <h2 class="main__title">4. Desnormalizacion Estrategica</h2>
+        <p class="main__text">La desnormalizacion es el <strong>proceso contrario a la normalizacion</strong>: crear redundancia controlada en un modelo normalizado para mejorar los tiempos de respuesta en el sistema de base de datos. Se aplica principalmente en entornos OLAP, Data Warehousing y sistemas de alta concurrencia de lectura.</p>
+
+        <div class="box box--warning">
+            <p class="main__text"><strong>Desventajas de la Desnormalizacion</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Agrega redundancia de datos.</li>
+                <li class="main__list-item">Reduce la integridad referencial.</li>
+                <li class="main__list-item">Hace menos flexible el modelo.</li>
+                <li class="main__list-item">Requiere compensar con logica de programacion (triggers, reglas de negocio).</li>
+            </ul>
+        </div>
+
+        <h3 class="main__title--sub">Tecnicas de Desnormalizacion</h3>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>a) Grabar Valores Derivados</strong></p>
+            <p class="main__text">Almacenar calculos (totales, promedios, conteos) directamente en la tabla maestra para evitar recalcular cada vez. Ejemplo: <code>Total_Factura</code> en lugar de calcular <code>SUM(Precio * Cantidad)</code> en cada consulta.</p>
+        </div>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>b) Uniendo Entidades</strong></p>
+            <p class="main__text">Fusionar tablas relacionadas en una sola. En lugar de <code>Factura</code> + <code>Linea_Factura</code>, crear una tabla desnormalizada que contenga tanto los datos de la factura como los items repetidos por fila.</p>
+<pre><code>-- Modelo Normalizado
+Factura (Nro, Fecha, Cod_Cliente)
+Linea_Factura (Nro_Factura, Nro_Item, Cod_Articulo, Cantidad, Precio)
+
+-- Modelo Desnormalizado
+Factura_Unica (Nro, Fecha, Cod_Cliente, Cod_Articulo, Cantidad, Precio, Total_Factura)</code></pre>
+        </div>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>c) Valores Fijos (Hard Code)</strong></p>
+            <p class="main__text">Incorporar valores fijos directamente en la tabla en lugar de normalizar en tablas parametricas. Ejemplo: guardar <code>Sexo (M/F)</code> como columna directa en <code>Estudiante</code> en vez de tener una tabla <code>Sexo</code> separada.</p>
+<pre><code>-- Normalizado: Estudiante (Cod, Fecha_Nac, Nombre, Cod_Sexo) + Sexo (Cod, Descripcion)
+-- Desnormalizado: Estudiante (Cod, Fecha_Nac, Nombre, Sexo)</code></pre>
+        </div>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>d) Manteniendo Detalle en el Maestro</strong></p>
+            <p class="main__text">Convertir filas de detalle en columnas del maestro. Ejemplo: Presupuesto con 12 columnas (Importe_Ene ... Importe_Dic) en vez de 12 filas en una tabla Presupuesto_Mes.</p>
+<pre><code>-- Normalizado: Presupuesto_Mes (Cod_Presupuesto, Tipo, Descripcion, Mes, Importe)
+-- Desnormalizado: Presupuesto (Cod, Tipo, Descripcion, Ene, Feb, Mar, ..., Dic)</code></pre>
+        </div>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>e) Repitiendo Atributo del Detalle en el Maestro (y viceversa)</strong></p>
+            <p class="main__text">Copiar un atributo del detalle en el maestro para evitar JOINs. Ejemplo: <code>Ult.Nro_Factura</code> en la tabla <code>Cliente</code> para conocer rapidamente la ultima factura sin consultar la tabla detalle.</p>
+<pre><code>-- Maestro con atributo de detalle
+Cliente (Cod, Nombre, Direccion, Ult.Nro_Factura)</code></pre>
+        </div>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>f) Llaves de Circuito Corto</strong></p>
+            <p class="main__text">Incluir la clave del abuelo en la tabla del nieto para evitar recorrer la jerarquia completa de JOINs. Ejemplo: incluir <code>Cod_Cliente</code> directamente en <code>Linea_Factura</code> en vez de navegar <code>Linea &rarr; Factura &rarr; Cliente</code>.</p>
+<pre><code>-- Normal: Linea (Nro_Factura, Item) → Factura (Nro, Cod_Cliente) → Cliente
+-- Corto:  Linea (Nro_Factura, Item, Cod_Cliente)</code></pre>
+        </div>
+
+        <span class="tag">Desnormalizacion</span>
+
+        <section class="architect-insight">
+            <h4 class="main__title--sub">Insight del Arquitecto</h4>
+            <p class="main__text">La regla de oro: normaliza hasta 3FN/BCNF para escritura (OLTP); desnormaliza para lectura (OLAP/BI). En PostgreSQL, las vistas materializadas, indices funcionales y columnas generadas (<code>GENERATED ALWAYS AS</code>) permiten obtener lo mejor de ambos mundos sin sacrificar integridad.</p>
+        </section>
+
+        <nav class="nav">
+            <a href="index.html" class="nav__link">Volver al Indice</a>
+            <a href="semana_10.html" class="nav__link">Siguiente Semana</a>
+        </nav>
     </main>
 </div>
-
 </body>
 </html>

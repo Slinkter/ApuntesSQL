@@ -1,248 +1,335 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="stylesheet" href="master.css">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 04 - DML y Consultas Básicas</title>
-    
-    
+    <title>Semana 04 - Lenguaje de Definicion de Datos (DDL)</title>
+    <link rel="stylesheet" href="master.css">
 </head>
 <body>
+<header class="header">
+    <h1 class="header__title">Lenguaje de Definicion de Datos (DDL)</h1>
+    <p class="header__subtitle">Semana 04 | Ingenieria de Datos | ULima 2013-2</p>
+</header>
 
-<div class="header-box">
-    <h1>Lenguaje de Manipulación de Datos (DML)</h1>
-    <p>Semana 04 | Ingeniería de Datos | ULima 2013-2</p>
-</div>
-
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>PALABRAS CLAVE</h3>
-        <ul>
-            <li><strong>§ SELECT</strong><br>Consultar datos</li>
-            <li><strong>§ INSERT</strong><br>Insertar datos</li>
-            <li><strong>§ UPDATE</strong><br>Actualizar datos</li>
-            <li><strong>§ DELETE</strong><br>Eliminar datos</li>
-            <li><strong>§ WHERE</strong><br>Condiciones</li>
-            <li><strong>§ DISTINCT</strong><br>Valores únicos</li>
-            <li><strong>§ ORDER BY</strong><br>Ordenar resultados</li>
+<div class="cornell">
+    <aside class="sidebar">
+        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>Â§ DDL</strong>Data Definition Language: CREATE, ALTER, DROP</li>
+            <li class="sidebar__item"><strong>Â§ CREATE TABLE</strong>Crear tablas con columnas y restricciones</li>
+            <li class="sidebar__item"><strong>Â§ ALTER TABLE</strong>Modificar estructura de tablas existentes</li>
+            <li class="sidebar__item"><strong>Â§ DROP TABLE</strong>Eliminar tablas y sus datos</li>
+            <li class="sidebar__item"><strong>Â§ PRIMARY KEY</strong>Clave primaria: no nula, unica, indice automatico</li>
+            <li class="sidebar__item"><strong>Â§ FOREIGN KEY</strong>Clave foranea con REFERENCES y ON DELETE CASCADE</li>
+            <li class="sidebar__item"><strong>Â§ CASCADE CONSTRAINT</strong>Eliminar restricciones dependientes al dropear</li>
         </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">?? Índice del Curso</a></li>
-                <li><a href="semana_03.html">? Semana 03</a></li>
-                <li><a href="semana_05.html">? Semana 05</a></li>
+        <div class="box box--note" style="margin-top:1.5rem;padding:1rem;">
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio &mdash; Indice del Curso</a></li>
+                <li class="sidebar__item"><a href="semana_03.html" class="sidebar__link">Semana Anterior</a></li>
+                <li class="sidebar__item"><a href="semana_05.html" class="sidebar__link">Siguiente Semana</a></li>
             </ul>
         </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
-        <div class="box box-note">
-            <p><strong>?? Objetivos de Aprendizaje</strong></p>
-            <ul style="margin: 8px 0 0 20px;">
-                <li>Insertar datos en tablas</li>
-                <li>Actualizar datos existentes</li>
-                <li>Eliminar datos de tablas</li>
-                <li>Realizar consultas básicas con SELECT</li>
-                <li>Filtrar y ordenar resultados</li>
+    <main class="main">
+        <div class="box box--note">
+            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Crear tablas con tipos de datos apropiados y restricciones</li>
+                <li class="main__list-item">Definir PRIMARY KEY y FOREIGN KEY en la creacion de tablas</li>
+                <li class="main__list-item">Modificar tablas existentes con ALTER TABLE</li>
+                <li class="main__list-item">Eliminar tablas correctamente usando DROP TABLE</li>
+                <li class="main__list-item">Comprender el modelo de datos de la muebleria como caso de estudio</li>
             </ul>
         </div>
 
         <section class="architect-insight">
-            <h4>?? Insight del Arquitecto: DML en PostgreSQL</h4>
-            <p><strong>Diferencias con Oracle/SQL Server:</strong></p>
-            <ul>
-                <li><code>LIMIT</code> vs <code>TOP</code> (SQL Server) o <code>ROWNUM</code> (Oracle)</li>
-                <li><code>LIMIT 10 OFFSET 20</code> para paginación</li>
-                <li><code>RETURNING *</code> para obtener datos insertados</li>
-                <li><code>INSERT ... ON CONFLICT</code> (upsert)</li>
-                <li><code>TRUNCATE</code> vs DELETE (más rápido para vaciar tablas)</li>
-            </ul>
+            <h4 class="main__title--sub">Insight del Arquitecto: DDL Transaccional en PostgreSQL</h4>
+            <p class="main__text"><strong>Una diferencia crucial:</strong> En Oracle, los comandos DDL hacen COMMIT implicito. En PostgreSQL, los comandos DDL son transaccionales &mdash; puedes hacer ROLLBACK de un CREATE TABLE, ALTER TABLE o incluso DROP TABLE si esta dentro de una transaccion. Esto cambia dramaticamente la estrategia de migraciones.</p>
+            <p class="main__text"><strong>Consejo practico:</strong> Siempre envuelve cambios estructurales en transacciones explicitas (<code>BEGIN; ... COMMIT;</code>) y prueba con <code>ROLLBACK</code> en desarrollo antes de ejecutar en produccion.</p>
         </section>
 
-        <h2>1. Inserción de Datos (INSERT)</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Sintaxis básica:</strong></p>
-            <pre style="background: #2c3e50; color: #ecf0f1; padding: 10px; border-radius: 4px;">
-INSERT INTO tabla (columna1, columna2, ...)
-VALUES (valor1, valor2, ...);</pre>
+        <h2 class="main__title">1. Creacion de Tablas (CREATE TABLE)</h2>
+        <span class="tag">DDL basico</span>
+
+        <h3 class="main__title--sub">Sintaxis General</h3>
+
+        <pre>
+CREATE TABLE nombre_tabla
+    (columna1 tipo_dato [restriccion_columna],
+     columna2 tipo_dato [restriccion_columna],
+     ...
+     [restricciones_de_tabla]);</pre>
+
+        <h3 class="main__title--sub">Ejemplo 1: Restriccion a nivel de columna</h3>
+
+        <pre>
+CREATE TABLE orden_pedido
+    (numero_orden NUMBER(7) PRIMARY KEY,
+     fecha_colocacion DATE,
+     fecha_llenado DATE,
+     numero_embarques NUMBER(5),
+     id_cliente NUMBER(7) REFERENCES cliente );</pre>
+
+        <p class="main__text">En este ejemplo, <code>PRIMARY KEY</code> y <code>REFERENCES</code> se definen directamente sobre la columna. Es una sintaxis compacta pero menos flexible para claves compuestas.</p>
+
+        <h3 class="main__title--sub">Ejemplo 2: Restricciones a nivel de tabla</h3>
+
+        <pre>
+CREATE TABLE orden_pedido
+    (numero_orden NUMBER(7),
+     fecha_colocacion DATE,
+     fecha_llenado DATE,
+     numero_embarques NUMBER(5),
+     id_cliente NUMBER(7),
+     PRIMARY KEY (numero_orden),
+     FOREIGN KEY (id_cliente) REFERENCES cliente);</pre>
+
+        <div class="box box--concept">
+            <p class="main__text"><strong>Diferencia clave:</strong> La sintaxis a nivel de tabla permite definir claves compuestas (PK con multiples columnas) y nombrar las restricciones. Es la forma recomendada para esquemas complejos.</p>
         </div>
 
-        <h3>Ejemplos:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Insertar todos los campos (en orden)
-INSERT INTO cliente 
-VALUES (1, 'JUAN', 'PEREZ', '01-4414896');
+        <h2 class="main__title">2. Modelo de Datos de una Muebleria</h2>
+        <span class="tag">Caso de estudio</span>
 
--- Insertar campos específicos
-INSERT INTO cliente (nombre, apellido, email) 
-VALUES ('MARIA', 'GARCIA', 'maria@email.com');
+        <p class="main__text">El siguiente es el modelo relacional para un sistema de muebleria que usaremos como caso de estudio en DDL:</p>
 
--- Insertar múltiples filas
-INSERT INTO producto (nombre, precio) VALUES
-    ('Laptop', 1500.00),
-    ('Mouse', 25.50),
-    ('Teclado', 45.00);
+        <pre>
+-- Entidades principales del modelo
+cliente:      id_cliente, nombre, direccion, tipo, zip
+orden_pedido: numero_orden (PK), id_cliente (FK),
+              fecha_colocacion, fecha_llenado,
+              numero_embarques
+producto:     id_producto (PK), nombre_linea (FK),
+              meta_venta, stock, precio, costo
+linea_producto: nombre_linea (PK)
+producto_ordenado: numero_orden (FK), id_producto (FK),
+                   cantidad_ordenada</pre>
 
--- Insertar con RETURNING (PostgreSQL)
-INSERT INTO cliente (nombre, apellido) 
-VALUES ('PEDRO', 'LOPEZ')
-RETURNING id_cliente, nombre;</pre>
-
-        <div class="box box-concep">
-            <p><strong>Regla:</strong> Los campos con restricción NOT NULL deben ingresarse. Los demás pueden ser NULL o usar DEFAULT.</p>
+        <div class="box box--note">
+            <p class="main__text"><strong>Nota:</strong> Este modelo usa nomenclatura Oracle (NUMBER, DATE, VARCHAR2). En los ejemplos siguientes se presenta la sintaxis original del material academico y luego su equivalente en PostgreSQL.</p>
         </div>
 
-        <h2>2. Actualización de Datos (UPDATE)</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Sintaxis:</strong></p>
-            <pre style="background: #2c3e50; color: #ecf0f1; padding: 10px; border-radius: 4px;">
-UPDATE tabla
-SET columna1 = nuevo_valor, columna2 = nuevo_valor
-WHERE condición;</pre>
-        </div>
+        <h2 class="main__title">3. Creacion del Esquema Muebleria</h2>
 
-        <h3>Ejemplos:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Actualizar un campo específico
-UPDATE cliente
-SET telefono = '01-4367788'
-WHERE id_cliente = 1;
+        <h3 class="main__title--sub">Sintaxis Oracle (original del curso)</h3>
 
--- Actualizar múltiples campos
-UPDATE producto
-SET precio = precio * 1.10, stock = stock - 5
-WHERE id_producto = 10;
+        <pre>
+CREATE TABLE cliente (
+    id_cliente NUMBER(7) PRIMARY KEY,
+    nombre VARCHAR2(50) NOT NULL,
+    direccion VARCHAR2(100),
+    tipo CHAR(1) CHECK (tipo IN ('A','B','C')),
+    zip VARCHAR2(5)
+);
 
--- Actualizar con cálculo
-UPDATE orden_pedido
-SET numero_embarques = numero_embarques + 1
-WHERE estado = 'pendiente';</pre>
+CREATE TABLE linea_producto (
+    nombre_linea VARCHAR2(30) PRIMARY KEY
+);
 
-        <div class="box box-warning">
-            <p><strong>?? Peligro:</strong> Si omites el WHERE, se actualizan TODAS las filas. Siempre prueba con SELECT primero:</p>
-            <pre style="background: #f8f9fa; padding: 10px;">SELECT * FROM tabla WHERE condición;  -- verificar primero
-UPDATE tabla SET ... WHERE condición;  -- luego actualizar</pre>
-        </div>
+CREATE TABLE producto (
+    id_producto NUMBER(7) PRIMARY KEY,
+    nombre_linea VARCHAR2(30) REFERENCES linea_producto,
+    meta_venta NUMBER(10,2),
+    stock NUMBER(5) DEFAULT 0,
+    precio NUMBER(10,2) CHECK (precio > 0),
+    costo NUMBER(10,2)
+);
 
-        <h2>3. Eliminación de Datos (DELETE)</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Sintaxis:</strong></p>
-            <pre style="background: #2c3e50; color: #ecf0f1; padding: 10px; border-radius: 4px;">
-DELETE FROM tabla
-WHERE condición;</pre>
-        </div>
+CREATE TABLE orden_pedido (
+    numero_orden NUMBER(7) PRIMARY KEY,
+    fecha_colocacion DATE DEFAULT SYSDATE,
+    fecha_llenado DATE,
+    numero_embarques NUMBER(5),
+    id_cliente NUMBER(7) NOT NULL REFERENCES cliente
+);
 
-        <h3>Ejemplos:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Eliminar un registro específico
-DELETE FROM orden_pedido
-WHERE numero_orden = 555;
+CREATE TABLE producto_ordenado (
+    numero_orden NUMBER(7),
+    id_producto NUMBER(7),
+    cantidad_ordenada NUMBER(5) CHECK (cantidad_ordenada > 0),
+    PRIMARY KEY (numero_orden, id_producto),
+    FOREIGN KEY (numero_orden) REFERENCES orden_pedido
+        ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES producto
+);</pre>
 
--- Eliminar varios registros
-DELETE FROM cliente
-WHERE tipo = 'INACTIVO' AND fecha_registro < '2020-01-01';
+        <h3 class="main__title--sub">Equivalente en PostgreSQL</h3>
 
--- Eliminar todos los registros (¡cuidado!)
-DELETE FROM tabla_temp;  -- elimina todas las filas
+        <pre>
+CREATE TABLE cliente (
+    id_cliente SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    direccion VARCHAR(100),
+    tipo CHAR(1) CHECK (tipo IN ('A','B','C')),
+    zip VARCHAR(5)
+);
 
--- Usar TRUNCATE (más eficiente en PostgreSQL)
-TRUNCATE TABLE tabla_temp RESTART IDENTITY;</pre>
+CREATE TABLE linea_producto (
+    nombre_linea VARCHAR(30) PRIMARY KEY
+);
 
-        <h2>4. Consulta de Datos (SELECT)</h2>
-        
-        <h3>Formas básicas:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Seleccionar todas las columnas
-SELECT * FROM cliente;
+CREATE TABLE producto (
+    id_producto SERIAL PRIMARY KEY,
+    nombre_linea VARCHAR(30) REFERENCES linea_producto,
+    meta_venta NUMERIC(10,2),
+    stock INTEGER DEFAULT 0,
+    precio NUMERIC(10,2) CHECK (precio > 0),
+    costo NUMERIC(10,2)
+);
 
--- Seleccionar columnas específicas
-SELECT nombre, apellido, email FROM cliente;
+CREATE TABLE orden_pedido (
+    numero_orden SERIAL PRIMARY KEY,
+    fecha_colocacion DATE DEFAULT CURRENT_DATE,
+    fecha_llenado DATE,
+    numero_embarques INTEGER,
+    id_cliente INTEGER NOT NULL REFERENCES cliente
+);
 
--- Usar alias
-SELECT nombre AS "Nombre del Cliente", 
-       precio AS "Precio Unitario"
-FROM producto;
+CREATE TABLE producto_ordenado (
+    numero_orden INTEGER,
+    id_producto INTEGER,
+    cantidad_ordenada INTEGER CHECK (cantidad_ordenada > 0),
+    PRIMARY KEY (numero_orden, id_producto),
+    FOREIGN KEY (numero_orden) REFERENCES orden_pedido
+        ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES producto
+);</pre>
 
--- DISTINCT: valores únicos
-SELECT DISTINCT tipo FROM cliente;
+        <h2 class="main__title">4. Alteracion de Tablas (ALTER TABLE)</h2>
+        <span class="tag">Modificacion de estructura</span>
 
--- ORDER BY: ordenar resultados
-SELECT * FROM producto
-ORDER BY precio DESC;  -- DESC = descendente
+        <p class="main__text">ALTER TABLE permite modificar la estructura de una tabla existente sin perder los datos:</p>
 
-SELECT * FROM cliente
-ORDER BY apellido ASC, nombre ASC;  -- múltiples criterios</pre>
-
-        <h2>5. Filtrado con WHERE</h2>
-        
-        <table>
-            <tr><th>Operador</th><th>Descripción</th></tr>
-            <tr><td>=</td><td>Igual a</td></tr>
-            <tr><td><> o !=</td><td>Diferente de</td></tr>
-            <tr><td>> &lt;</td><td>Mayor/Menor que</td></tr>
-            <tr><td>>= &lt;=</td><td>Mayor/Menor o igual</td></tr>
-            <tr><td>BETWEEN</td><td>Entre rango (inclusive)</td></tr>
-            <tr><td>LIKE</td><td>Patrón de texto</td></tr>
-            <tr><td>IN</td><td>Está en lista</td></tr>
-            <tr><td>IS NULL / IS NOT NULL</td><td>Verificar nulos</td></tr>
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Operacion</th>
+                    <th class="table__th">Sintaxis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Agregar columna</strong></td>
+                    <td class="table__td"><code>ALTER TABLE tabla ADD (columna tipo [DEFAULT expr] [restriccion]);</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Modificar columna</strong></td>
+                    <td class="table__td"><code>ALTER TABLE tabla MODIFY (columna NUEVO_tipo [DEFAULT expr] [restriccion]);</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Eliminar columna</strong></td>
+                    <td class="table__td"><code>ALTER TABLE tabla DROP COLUMN columna;</code></td>
+                </tr>
+            </tbody>
         </table>
 
-        <h3>Ejemplos de WHERE:</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Filtrar por igualdad
-SELECT * FROM producto WHERE precio = 100;
+        <h3 class="main__title--sub">Ejemplos</h3>
 
--- Filtrar por rango
-SELECT * FROM producto 
-WHERE precio BETWEEN 50 AND 200;
+        <pre>
+-- Agregar una columna
+ALTER TABLE orden_pedido
+    ADD nombre_vendedor VARCHAR2(15);
 
--- Patrones con LIKE
-SELECT * FROM cliente 
-WHERE nombre LIKE 'J%';  -- comienza con J
+-- Modificar el tipo de dato de una columna existente
+ALTER TABLE orden_pedido
+    MODIFY numero_embarques NUMBER(6);
 
-SELECT * FROM producto 
-WHERE nombre LIKE '%lap%';  -- contiene "lap"
+-- Eliminar una columna
+ALTER TABLE orden_pedido
+    DROP COLUMN numero_embarques;</pre>
 
--- Lista con IN
-SELECT * FROM cliente 
-WHERE tipo IN ('PREMIUM', 'VIP');
-
--- Verificar nulos
-SELECT * FROM cliente 
-WHERE email IS NOT NULL;
-
--- Combinaciones AND/OR
-SELECT * FROM producto
-WHERE precio > 100 AND stock > 0;</pre>
-
-        <div class="box box-concep">
-            <p><strong>Operador LIKE:</strong> % = cualquier??, _ = un caracter. Ej: 'J__n' = nombres de 4 letras starting con J.</p>
+        <div class="box box--warning">
+            <p class="main__text"><strong>Advertencia:</strong> En Oracle, MODIFY puede fallar si la tabla tiene datos que no cumplen con el nuevo tipo. En PostgreSQL, ALTER COLUMN ... TYPE requiere una clausula USING para convertir datos existentes.</p>
         </div>
 
-        <hr>
+        <h2 class="main__title">5. Eliminacion de Tablas (DROP TABLE)</h2>
+        <span class="tag">Eliminacion de objetos</span>
 
-        <section class="laboratorio">
-            <h3>?? Laboratorio: DML Práctico</h3>
-            <p>Para la BD de tienda, ejecuta:</p>
-            <ol style="margin-left: 20px;">
-                <li>Inserta 3 clientes nuevos</li>
-                <li>Inserta 5 productos con precios diferentes</li>
-                <li>Actualiza el precio de un producto específico</li>
-                <li>Lista todos los productos que cuestan más de 50</li>
-                <li>Lista clientes ordenados por nombre</li>
-                <li>Elimina un cliente que no tenga pedidos</li>
+        <div class="box box--concept">
+            <p class="main__text"><strong>Sintaxis:</strong> <code>DROP TABLE tabla [CASCADE CONSTRAINT];</code></p>
+        </div>
+
+        <ul class="main__list">
+            <li class="main__list-item">Elimina la definicion de la tabla y todos sus datos.</li>
+            <li class="main__list-item">La opcion <code>CASCADE CONSTRAINT</code> elimina todas las restricciones de integridad referencial que dependen de la tabla (FK de otras tablas que la referencian).</li>
+            <li class="main__list-item">Si otras tablas tienen FK que referencian a esta tabla y no se usa CASCADE, el DROP fallara.</li>
+        </ul>
+
+        <h3 class="main__title--sub">Ejemplo</h3>
+
+        <pre>
+-- Eliminar la tabla (falla si hay dependencias)
+DROP TABLE orden_pedido;
+
+-- Eliminar la tabla con todas sus dependencias
+DROP TABLE orden_pedido CASCADE CONSTRAINTS;
+
+-- En PostgreSQL equivalente:
+DROP TABLE orden_pedido CASCADE;</pre>
+
+        <div class="box box--note">
+            <p class="main__text"><strong>Diferencia importante:</strong> En Oracle se usa <code>CASCADE CONSTRAINTS</code> (plural). En PostgreSQL es simplemente <code>CASCADE</code>. Ademas, PostgreSQL soporta <code>DROP TABLE IF EXISTS</code> para evitar errores si la tabla no existe.</p>
+        </div>
+
+        <h2 class="main__title">6. Resumen de DDL en PostgreSQL vs Oracle</h2>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Comando Oracle</th>
+                    <th class="table__th">Comando PostgreSQL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><code>VARCHAR2(n)</code></td>
+                    <td class="table__td"><code>VARCHAR(n)</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>NUMBER(7)</code></td>
+                    <td class="table__td"><code>INTEGER</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>NUMBER(10,2)</code></td>
+                    <td class="table__td"><code>NUMERIC(10,2)</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>SYSDATE</code></td>
+                    <td class="table__td"><code>CURRENT_DATE</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><code>DROP ... CASCADE CONSTRAINTS</code></td>
+                    <td class="table__td"><code>DROP ... CASCADE</code></td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">DDL hace COMMIT implicito</td>
+                    <td class="table__td">DDL es transaccional (ROLLBACK posible)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box--exercise">
+            <p class="main__text"><strong>Laboratorio: DDL en PostgreSQL</strong></p>
+            <p class="main__text">Crea el siguiente esquema para una tienda en linea directamente en PostgreSQL:</p>
+            <ol class="main__list">
+                <li class="main__list-item">Tabla <code>categoria</code>: id (SERIAL PK), nombre (VARCHAR(50) NOT NULL UNIQUE), descripcion (TEXT).</li>
+                <li class="main__list-item">Tabla <code>producto</code>: id (SERIAL PK), nombre (VARCHAR(100) NOT NULL), precio (NUMERIC(10,2) CHECK precio &gt; 0), stock (INTEGER DEFAULT 0), id_categoria (INTEGER FK REFERENCES categoria).</li>
+                <li class="main__list-item">Tabla <code>cliente</code>: id (SERIAL PK), nombre (VARCHAR(100) NOT NULL), email (VARCHAR(150) UNIQUE NOT NULL), fecha_registro (DATE DEFAULT CURRENT_DATE).</li>
+                <li class="main__list-item">Agrega una columna <code>telefono VARCHAR(20)</code> a la tabla cliente.</li>
+                <li class="main__list-item">Elimina la tabla producto si existiera y recreala con las restricciones actualizadas.</li>
             </ol>
-        </section>
+        </div>
 
-    </div>
+        <nav class="nav">
+            <a href="semana_03.html" class="nav__link">Semana Anterior</a>
+            <a href="index.html" class="nav__link">Volver al Indice</a>
+            <a href="semana_05.html" class="nav__link">Siguiente Semana</a>
+        </nav>
+    </main>
 </div>
-
 </body>
 </html>
-
-
-

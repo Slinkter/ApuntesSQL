@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semana 15 - Alta Disponibilidad (HA)</title>
+    <link rel="stylesheet" href="master.css">
+</head>
+<body>
+
+<header class="header">
+    <h1 class="header__title">Alta Disponibilidad en Bases de Datos</h1>
+    <p class="header__subtitle">Semana 15 | Tolerancia a Fallos y Continuidad del Negocio | ULima 2013-2</p>
+</header>
+
+<div class="cornell">
+    <aside class="sidebar">
+        <h3 class="sidebar__title">CONCEPTOS CLAVE</h3>
+        <ul class="sidebar__list">
+            <li class="sidebar__item"><strong>SLA</strong>Acuerdo de nivel de servicio</li>
+            <li class="sidebar__item"><strong>9s</strong>Metrica de disponibilidad</li>
+            <li class="sidebar__item"><strong>HOT Standby</strong>Copia transaccionalmente consistente</li>
+            <li class="sidebar__item"><strong>WARM Standby</strong>Copia sin confirmacion concurrente</li>
+            <li class="sidebar__item"><strong>COLD Standby</strong>Requiere restauracion manual</li>
+            <li class="sidebar__item"><strong>Failover Clustering</strong>Proteccion a nivel de instancia</li>
+            <li class="sidebar__item"><strong>Mirroring</strong>Base de datos reflejada</li>
+            <li class="sidebar__item"><strong>Log Shipping</strong>Trasvase de registro</li>
+            <li class="sidebar__item"><strong>RPO / RTO</strong>Recovery Point / Time Objective</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+            <h3 class="sidebar__title">RECURSOS</h3>
+            <ul class="sidebar__list">
+                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Indice del Curso</a></li>
+                <li class="sidebar__item"><a href="semana_14.html" class="sidebar__link">Semana 14</a></li>
+                <li class="sidebar__item"><a href="semana_16.html" class="sidebar__link">Semana 16 - Examen Final</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="box box--note">
+            <p><strong>Objetivos:</strong> Comprender los conceptos fundamentales de alta disponibilidad en bases de datos. Conocer las tecnologias de SQL Server para HA: Log Shipping, Database Mirroring, Failover Clustering y AlwaysOn. Entender los modos de espera HOT, WARM y COLD, y las metricas SLA, RPO y RTO.</p>
+        </div>
+
+        <section class="architect-insight">
+            <h4 class="main__title--sub">Insight del Arquitecto: HA no es solo tecnologia</h4>
+            <p class="main__text">La alta disponibilidad no es solo una decision tecnica -- es un compromiso de negocio. Cada "9" de disponibilidad cuesta exponencialmente mas. Pasar de 99.9% a 99.99% puede duplicar o triplicar el costo de infraestructura. La clave es alinear el SLA con el presupuesto y el impacto real del negocio. No todas las bases de datos necesitan 5 nueves.</p>
+        </section>
+
+        <h2 class="main__title">1. Conceptos Generales de HA</h2>
+        <span class="tag">Alta Disponibilidad</span>
+
+        <p class="main__text">La alta disponibilidad es una solucion para minimizar o mitigar el impacto de paradas de sistemas. Idealmente, un sistema de base de datos deberia estar disponible las 24 horas del dia, cada dia. Implica redundancia de algun tipo y tecnicas para incrementar la disponibilidad.</p>
+
+        <h3 class="main__title--sub">Acuerdos de Nivel de Servicio (SLA)</h3>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Numero de 9s</th>
+                    <th class="table__th">% Disponibilidad</th>
+                    <th class="table__th">Tiempo de parada anual</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">2</td>
+                    <td class="table__td">99%</td>
+                    <td class="table__td">3 dias y 15 horas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">3</td>
+                    <td class="table__td">99.9%</td>
+                    <td class="table__td">8 horas y 45 minutos</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">4</td>
+                    <td class="table__td">99.99%</td>
+                    <td class="table__td">52 minutos y 34 segundos</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">5</td>
+                    <td class="table__td">99.999%</td>
+                    <td class="table__td">5 minutos y 15 segundos</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 class="main__title--sub">Metricas Clave</h3>
+
+        <ul class="main__list">
+            <li class="main__list-item"><strong>RPO (Recovery Point Objective):</strong> Cantidad maxima de datos que se puede perder (medido en tiempo). Ej: RPO de 5 minutos = se pierden hasta 5 minutos de datos.</li>
+            <li class="main__list-item"><strong>RTO (Recovery Time Objective):</strong> Tiempo maximo para recuperar el servicio tras una falla. Ej: RTO de 1 hora = el sistema debe estar operativo en 1 hora.</li>
+        </ul>
+
+        <h2 class="main__title">2. Modos de Espera (Standby Modes)</h2>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Modo</th>
+                    <th class="table__th">Descripcion</th>
+                    <th class="table__th">Failover</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>HOT Standby</strong></td>
+                    <td class="table__td">El nodo secundario provee una copia transaccionalmente consistente de los datos del servidor primario. Deteccion automatica de errores y recuperacion.</td>
+                    <td class="table__td">Automatico</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>WARM Standby</strong></td>
+                    <td class="table__td">Se mantiene una copia de los datos en el secundario, pero los datos pueden o no ser confirmados concurrentemente. El error y recuperacion puede no ser automatico.</td>
+                    <td class="table__td">Manual</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>COLD Standby</strong></td>
+                    <td class="table__td">Servidor donde se pueden restaurar los datos. Se necesita OS apropiado, software y copia de seguridad. Puede llevar un tiempo considerable.</td>
+                    <td class="table__td">Manual (lento)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">3. Tecnologias de Alta Disponibilidad en SQL Server</h2>
+        <span class="tag">SQL Server 2012</span>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Caracteristica</th>
+                    <th class="table__th">Database Mirroring</th>
+                    <th class="table__th">Failover Clustering</th>
+                    <th class="table__th">AlwaysOn</th>
+                    <th class="table__th">Log Shipping</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td">Unidad de falla</td>
+                    <td class="table__td">Base de datos</td>
+                    <td class="table__td">Servidor</td>
+                    <td class="table__td">Grupo de Bases de Datos</td>
+                    <td class="table__td">Base de datos</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Failover automatico</td>
+                    <td class="table__td">Si (con testigo)</td>
+                    <td class="table__td">Si</td>
+                    <td class="table__td">Si</td>
+                    <td class="table__td">No</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Replicas de datos</td>
+                    <td class="table__td">1</td>
+                    <td class="table__td">0</td>
+                    <td class="table__td">4</td>
+                    <td class="table__td">Ilimitado</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Complejidad</td>
+                    <td class="table__td">Media</td>
+                    <td class="table__td">Media</td>
+                    <td class="table__td">Alta</td>
+                    <td class="table__td">Baja</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Lectura en replica</td>
+                    <td class="table__td">Solo con snapshot</td>
+                    <td class="table__td">N/A</td>
+                    <td class="table__td">Solo lectura</td>
+                    <td class="table__td">Solo lectura (entre restauraciones)</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Perdida de datos (RPO)</td>
+                    <td class="table__td">Cero (sync) / Segundos (async)</td>
+                    <td class="table__td">N/A</td>
+                    <td class="table__td">Cero (sync) / Segundos (async)</td>
+                    <td class="table__td">Minutos a Horas</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td">Tiempo recuperacion (RTO)</td>
+                    <td class="table__td">Segundos</td>
+                    <td class="table__td">Segundos a Minutos</td>
+                    <td class="table__td">Segundos (sync) / Minutos (async)</td>
+                    <td class="table__td">Horas a dias</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="main__title">4. Trasvase de Registro (Log Shipping)</h2>
+        <span class="tag">Warm Standby</span>
+
+        <p class="main__text">El Log Shipping es una tecnologia madura y estable que permite mantener una base de datos secundaria actualizada mediante la copia y restauracion periodica de los archivos de registro de transacciones de la base de datos primaria.</p>
+
+        <div class="box box--concept">
+            <p><strong>Funcionamiento:</strong></p>
+            <ol class="main__list">
+                <li class="main__list-item">En el servidor primario se realizan copias de seguridad del log de transacciones.</li>
+                <li class="main__list-item">Los archivos de backup se copian a una carpeta compartida accesible por el secundario.</li>
+                <li class="main__list-item">En el servidor secundario, los archivos se restauran (con NORECOVERY) para mantener la base sincronizada.</li>
+            </ol>
+        </div>
+
+        <div class="box box--example">
+            <p><strong>Fortalezas:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Maduro, estable y simple de configurar.</li>
+                <li class="main__list-item">No requiere hardware especial.</li>
+                <li class="main__list-item">Multiples copias de respaldo (ilimitadas).</li>
+                <li class="main__list-item">Las bases secundarias pueden consultarse (solo lectura) entre restauraciones.</li>
+                <li class="main__list-item">Alertas configuradas si el trasvase no se completa en un umbral de tiempo.</li>
+            </ul>
+            <p><strong>Debilidades:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item">Failover manual (el cliente debe redireccionarse manualmente).</li>
+                <li class="main__list-item">Configuracion por base de datos (no protege BD del sistema).</li>
+                <li class="main__list-item">Perdida de datos potencial (RPO de minutos a horas).</li>
+            </ul>
+        </div>
+
+        <pre>
+-- En el servidor primario: monitoreo
+EXEC sp_help_log_shipping_monitor_primary
+    'perdbprod01', 'adventureworks2012';
+EXEC sp_help_log_shipping_primary_database
+    'adventureworks2012';
+
+-- En el servidor secundario: monitoreo
+EXEC sp_help_log_shipping_monitor_secondary
+    'perdbprod01\SQLAD', 'adventureworks2012';
+EXEC sp_help_log_shipping_secondary_database
+    'adventureworks2012';
+
+-- Failover manual (en caso de falla del primario)
+RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;</pre>
+
+        <h2 class="main__title">5. Base de Datos Reflejada (Database Mirroring)</h2>
+        <span class="tag">Hot Standby</span>
+
+        <p class="main__text">El Database Mirroring es una solucion de software para incrementar la disponibilidad de la base de datos. Mantiene una copia actualizada (reflejo) en un servidor aparte para conmutacion en caso de falla del servidor principal.</p>
+
+        <div class="box box--concept">
+            <p><strong>Roles de los servidores:</strong></p>
+            <ul class="main__list">
+                <li class="main__list-item"><strong>Servidor Principal:</strong> Base de datos de produccion. Los usuarios y aplicaciones se conectan normalmente.</li>
+                <li class="main__list-item"><strong>Servidor Reflejo:</strong> Contiene la base de datos reflejo. Toma el control si el principal falla.</li>
+                <li class="main__list-item"><strong>Servidor Testigo (opcional):</strong> Monitorea ambos servidores y permite failover automatico.</li>
+            </ul>
+        </div>
+
+        <h3 class="main__title--sub">Modos de Operacion</h3>
+
+        <table class="table">
+            <thead>
+                <tr class="table__tr">
+                    <th class="table__th">Modo</th>
+                    <th class="table__th">Sincronizacion</th>
+                    <th class="table__th">Perdida de datos</th>
+                    <th class="table__th">Failover</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Alta Disponibilidad</strong></td>
+                    <td class="table__td">Sincronizado (con testigo)</td>
+                    <td class="table__td">Cero</td>
+                    <td class="table__td">Automatico</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Alta Proteccion</strong></td>
+                    <td class="table__td">Sincronizado (sin testigo)</td>
+                    <td class="table__td">Cero</td>
+                    <td class="table__td">Manual</td>
+                </tr>
+                <tr class="table__tr">
+                    <td class="table__td"><strong>Alto Rendimiento</strong></td>
+                    <td class="table__td">Asincrono</td>
+                    <td class="table__td">Posible (segundos)</td>
+                    <td class="table__td">Manual</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box--example">
+            <p><strong>Comandos de administracion:</strong></p>
+        </div>
+        <pre>
+-- Conmutacion manual (modo sincronizado)
+ALTER DATABASE AdventureWorks2012 SET PARTNER FAILOVER;
+
+-- Conmutacion en falla (modo sincronizado, sin testigo)
+ALTER DATABASE AdventureWorks2012 SET PARTNER OFF;
+RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;
+
+-- Forzar servicio con perdida de datos (modo asincrono)
+ALTER DATABASE AdventureWorks2012
+    SET PARTNER FORCE_SERVICE_ALLOW_DATA_LOSS;
+RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;
+
+-- Suspender sesion
+ALTER DATABASE AdventureWorks2012 SET PARTNER SUSPEND;
+
+-- Reanudar sesion
+ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;</pre>
+
+        <div class="box box--warning">
+            <p><strong>Nota importante:</strong> Database Mirroring fue descontinuado en versiones posteriores de SQL Server en favor de AlwaysOn Availability Groups. Sin embargo, su estudio es fundamental para entender la evolucion de las tecnologias HA.</p>
+        </div>
+
+        <h2 class="main__title">6. Failover Clustering</h2>
+        <span class="tag">Proteccion a nivel de instancia</span>
+
+        <p class="main__text">Failover Clustering protege contra fallos a nivel de servidor (instancia completa). Un cluster es un grupo de servidores independientes que trabajan juntos para aumentar la disponibilidad. Si un nodo falla, otro nodo asume automaticamente la carga de trabajo.</p>
+
+        <ul class="main__list">
+            <li class="main__list-item">Protege la instancia completa de SQL Server, no solo una base de datos.</li>
+            <li class="main__list-item">Requiere almacenamiento compartido (SAN).</li>
+            <li class="main__list-item">Failover automatico en segundos.</li>
+            <li class="main__list-item">No hay perdida de datos (disco compartido).</li>
+            <li class="main__list-item">Complejidad media de implementacion.</li>
+        </ul>
+
+        <h2 class="main__title">7. AlwaysOn Availability Groups</h2>
+        <span class="tag">SQL Server 2012+</span>
+
+        <p class="main__text">AlwaysOn es la evolucion de las tecnologias HA en SQL Server 2012. Combina lo mejor de Failover Clustering y Database Mirroring, permitiendo hasta 4 replicas secundarias con capacidad de lectura.</p>
+
+        <ul class="main__list">
+            <li class="main__list-item">Grupo de bases de datos como unidad de failover.</li>
+            <li class="main__list-item">Hasta 4 replicas secundarias (leibles).</li>
+            <li class="main__list-item">Soporta modos sincrono y asincrono.</li>
+            <li class="main__list-item">Failover automatico con hasta 2 replicas sincronas.</li>
+            <li class="main__list-item">Requiere Windows Server Failover Cluster (WSFC).</li>
+        </ul>
+
+        <h2 class="main__title">8. Interoperabilidad entre Tecnologias</h2>
+
+        <div class="box box--concept">
+            <p><strong>Log Shipping + Mirroring:</strong> La base de datos principal en una sesion de mirroring puede actuar tambien como base principal en una configuracion de log shipping. Las bases secundarias de log shipping deben residir en instancias distintas del servidor principal o reflejado.</p>
+            <p><strong>Log Shipping + Replicacion:</strong> Pueden usarse conjuntamente, pero la replicacion no continua tras un failover de log shipping. En replicacion transaccional, el comportamiento depende de la opcion <code>sync with backup</code>.</p>
+        </div>
+
+        <h2 class="main__title">9. Ejercicios Propuestos</h2>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 1:</strong> Una empresa requiere 99.99% de disponibilidad para su base de datos de ventas. Calcula el tiempo de parada maximo permitido por ano y recomienda una tecnologia HA adecuada.</p>
+        </div>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 2:</strong> Explica las diferencias fundamentales entre Database Mirroring y Log Shipping en terminos de RPO, RTO y modo de failover.</p>
+        </div>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 3:</strong> Disena una estrategia HA para una base de datos critica que requiere RPO cero y failover automatico. Que tecnologias combinarias y por que?</p>
+        </div>
+
+        <div class="box box--exercise">
+            <p><strong>Ejercicio 4:</strong> Investiga cual es la diferencia entre un cluster activo-pasivo y un cluster activo-activo. En que escenarios usarias cada uno?</p>
+        </div>
+
+        <nav class="nav">
+            <a href="semana_14.html" class="nav__link">Semana 14</a>
+            <a href="semana_16.html" class="nav__link">Semana 16 - Examen Final</a>
+        </nav>
+    </main>
+</div>
+
+</body>
+</html>
