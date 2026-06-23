@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 10 - JOINs y Subconsultas</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 <header class="header">
@@ -246,11 +247,40 @@ WHERE  id_cliente IN (
             <p class="main__text">En PostgreSQL, las subconsultas en <code>WHERE</code> se ejecutan una vez (subconsultas no correlacionadas) y se cachean. Para subconsultas correlacionadas, considera reescribirlas como JOINs con <code>LATERAL</code> o usar funciones ventana (<code>ROW_NUMBER()</code>) para mejor rendimiento en conjuntos grandes. Siempre verifica el plan con <code>EXPLAIN ANALYZE</code>.</p>
         </section>
 
+        <div class="canvas-container">
+            <canvas id="canvas_10" width="800" height="360"></canvas>
+            <div id="controls_10" class="canvas-controls"></div>
+        </div>
+
         <nav class="nav">
             <a href="index.html" class="nav__link">Volver al Indice</a>
             <a href="semana_11.html" class="nav__link">Siguiente Semana</a>
         </nav>
     </main>
 </div>
+<script>
+var joinType = 'inner';
+function draw10(ctx, W, H) {
+    CanvasUI.fillBg(ctx, W, H);
+    ctx.fillStyle = CanvasUI.COLORS.textMuted;
+    ctx.font = '13px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('JOIN: ' + joinType.toUpperCase() + ' — Selecciona el tipo con los botones', W / 2, 22);
+    CanvasUI.drawVenn(ctx, W, H, joinType);
+}
+document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { var c = CanvasUI.getContext('canvas_10'); if (c) draw10(c.ctx, c.W, c.H); }, 50); });
+CanvasUI.addControls('controls_10', {
+    play: function() { joinType = 'inner'; var c = CanvasUI.getContext('canvas_10'); if (c) draw10(c.ctx, c.W, c.H); },
+    step: function() { joinType = 'left'; var c = CanvasUI.getContext('canvas_10'); if (c) draw10(c.ctx, c.W, c.H); },
+    reset: function() { joinType = 'full'; var c = CanvasUI.getContext('canvas_10'); if (c) draw10(c.ctx, c.W, c.H); }
+});
+// Add labels: override button textContent
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        var btns = document.querySelectorAll('#controls_10 .btn-canvas');
+        if (btns.length >= 3) { btns[0].textContent = 'INNER JOIN'; btns[1].textContent = 'LEFT JOIN'; btns[2].textContent = 'FULL JOIN'; }
+    }, 100);
+});
+</script>
 </body>
 </html>

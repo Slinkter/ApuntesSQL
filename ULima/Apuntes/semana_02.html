@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 02 - Introduccion a las BD y su Ciclo de Vida</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 <header class="header">
@@ -332,6 +333,11 @@
             </ol>
         </div>
 
+        <div class="canvas-container">
+            <canvas id="canvas_02" width="800" height="360"></canvas>
+            <div id="controls_02" class="canvas-controls"></div>
+        </div>
+
         <nav class="nav">
             <a href="semana_01.html" class="nav__link">Semana Anterior</a>
             <a href="index.html" class="nav__link">Volver al Indice</a>
@@ -339,5 +345,45 @@
         </nav>
     </main>
 </div>
+<script>
+var step02 = 0;
+function draw02(ctx, W, H, frame) {
+    CanvasUI.fillBg(ctx, W, H);
+    step02 = Math.floor(frame / 80) % 4;
+    var layers = [
+        { label: 'Nivel Externo - Vistas de Usuario', y: 40 },
+        { label: 'Nivel Conceptual - Esquema Logico', y: 120 },
+        { label: 'Nivel Interno - Almacenamiento Fisico', y: 200 }
+    ];
+    ctx.fillStyle = CanvasUI.COLORS.textMuted;
+    ctx.font = '13px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Arquitectura de 3 Niveles (ANSI/SPARC)', W / 2, 20);
+    for (var i = 0; i < layers.length; i++) {
+        var active = i < step02;
+        CanvasUI.drawNode(ctx, W / 2 - 150, layers[i].y, 300, 55, layers[i].label, active ? CanvasUI.COLORS.accent : CanvasUI.COLORS.surface);
+        if (i < layers.length - 1) {
+            CanvasUI.drawArrow(ctx, W / 2, layers[i].y + 55, W / 2, layers[i + 1].y, active ? CanvasUI.COLORS.line : CanvasUI.COLORS.surface);
+        }
+    }
+    if (step02 >= 3) {
+        ctx.fillStyle = CanvasUI.COLORS.warn;
+        ctx.font = '12px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Independencia de Datos: cambios fisicos no afectan el nivel logico', W / 2, 280);
+    }
+}
+var anim02 = null;
+function start02() {
+    if (anim02) return;
+    anim02 = CanvasUI.startAnimation('canvas_02', draw02, 30);
+}
+CanvasUI.observeAndRun('canvas_02', start02);
+CanvasUI.addControls('controls_02', {
+    play: function() { if (!anim02) anim02 = CanvasUI.startAnimation('canvas_02', draw02, 30); },
+    pause: function() { if (anim02) { anim02.stop(); anim02 = null; } },
+    reset: function() { step02 = 0; if (anim02) { anim02.stop(); anim02 = null; } setTimeout(start02, 100); }
+});
+</script>
 </body>
 </html>

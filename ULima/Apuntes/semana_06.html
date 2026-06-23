@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 06 - Modelamiento de Datos (ERD)</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 
@@ -211,6 +212,10 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
             <p class="main__text">Identifique: entidades (fuertes y debiles), relaciones, cardinalidad (minima y maxima) y atributos clave.</p>
         </div>
 
+        <div class="canvas-container">
+            <canvas id="canvas_06" width="800" height="360"></canvas>
+            <div id="controls_06" class="canvas-controls"></div>
+        </div>
         <div class="nav">
             <a href="semana_05.html" class="nav__link">Semana 05</a>
             <a href="semana_07.html" class="nav__link">Semana 07</a>
@@ -218,5 +223,43 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
     </main>
 </div>
 
+<script>
+var erEntities = [
+    { label: 'Cliente', x: 80, y: 100, w: 120, h: 50 },
+    { label: 'Orden', x: 300, y: 100, w: 120, h: 50 },
+    { label: 'Producto', x: 190, y: 220, w: 120, h: 50 }
+];
+var erCard = 0;
+var cardLabels = ['1 : N', 'N : N', '1 : 1'];
+function draw06(ctx, W, H) {
+    CanvasUI.fillBg(ctx, W, H);
+    ctx.fillStyle = CanvasUI.COLORS.textMuted;
+    ctx.font = '13px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Diagrama Entidad-Relacion — Cardinalidad: ' + cardLabels[erCard], W / 2, 22);
+    for (var i = 0; i < erEntities.length; i++) {
+        var e = erEntities[i];
+        var color = i === 0 ? CanvasUI.COLORS.accent : (i === 1 ? CanvasUI.COLORS.line : CanvasUI.COLORS.warn);
+        CanvasUI.drawNode(ctx, e.x, e.y, e.w, e.h, e.label, color);
+    }
+    CanvasUI.drawArrow(ctx, 200, 125, 300, 125, CanvasUI.COLORS.line);
+    ctx.fillStyle = CanvasUI.COLORS.text;
+    ctx.font = 'bold 14px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(cardLabels[erCard], 250, 115);
+    CanvasUI.drawArrow(ctx, 250, 150, 250, 220, CanvasUI.COLORS.line);
+    ctx.fillStyle = CanvasUI.COLORS.textMuted;
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText('Un Cliente tiene N Ordenes', 250, 265);
+    ctx.fillText('Una Orden tiene N Productos', 250, 280);
+}
+document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { var c = CanvasUI.getContext('canvas_06'); if (c) draw06(c.ctx, c.W, c.H); }, 50); });
+CanvasUI.addControls('controls_06', {
+    step: function() { erCard = (erCard + 1) % 3; var c = CanvasUI.getContext('canvas_06'); if (c) draw06(c.ctx, c.W, c.H); },
+    reset: function() { erCard = 0; var c = CanvasUI.getContext('canvas_06'); if (c) draw06(c.ctx, c.W, c.H); }
+});
+</script>
 </body>
 </html>

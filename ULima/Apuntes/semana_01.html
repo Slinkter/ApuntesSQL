@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 01 - Fundamentos de Administracion de Informacion</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 <header class="header">
@@ -265,11 +266,35 @@
             </ol>
         </div>
 
+        <div class="canvas-container">
+            <canvas id="canvas_01" width="800" height="360"></canvas>
+            <div id="controls_01" class="canvas-controls"></div>
+        </div>
+
         <nav class="nav">
             <a href="index.html" class="nav__link">Volver al Indice</a>
             <a href="semana_02.html" class="nav__link">Siguiente Semana</a>
         </nav>
     </main>
 </div>
+<script>
+var step01 = 0;
+function draw01(ctx, W, H, frame) {
+    CanvasUI.fillBg(ctx, W, H);
+    step01 = Math.floor(frame / 60) % 5;
+    CanvasUI.drawPipeline(ctx, W, H, ['Dato', 'Info', 'Conocimiento', 'Decision'], step01);
+}
+var anim01 = null;
+function start01() {
+    if (anim01) return;
+    anim01 = CanvasUI.startAnimation('canvas_01', draw01, 30);
+}
+CanvasUI.observeAndRun('canvas_01', start01);
+CanvasUI.addControls('controls_01', {
+    play: function() { if (!anim01) anim01 = CanvasUI.startAnimation('canvas_01', draw01, 30); },
+    pause: function() { if (anim01) { anim01.stop(); anim01 = null; } },
+    reset: function() { step01 = 0; if (anim01) { anim01.stop(); anim01 = null; } CanvasUI.clear('canvas_01'); setTimeout(start01, 100); }
+});
+</script>
 </body>
 </html>

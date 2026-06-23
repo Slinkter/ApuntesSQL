@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 03 - Bases de Datos Relacionales (BDR)</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 <header class="header">
@@ -282,6 +283,11 @@
             </ol>
         </div>
 
+        <div class="canvas-container">
+            <canvas id="canvas_03" width="800" height="360"></canvas>
+            <div id="controls_03" class="canvas-controls"></div>
+        </div>
+
         <nav class="nav">
             <a href="semana_02.html" class="nav__link">Semana Anterior</a>
             <a href="index.html" class="nav__link">Volver al Indice</a>
@@ -289,5 +295,47 @@
         </nav>
     </main>
 </div>
+<script>
+var highlight03 = -1;
+function draw03(ctx, W, H) {
+    CanvasUI.fillBg(ctx, W, H);
+    ctx.fillStyle = CanvasUI.COLORS.textMuted;
+    ctx.font = '13px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Haz clic en una tabla para ver sus relaciones', W / 2, 22);
+    var tables = [
+        { cols: ['ID_Cliente', 'Nombre', 'Tipo'], rows: [['001', 'Juan', 'A'], ['007', 'Ana', 'B']], x: 30, y: 45 },
+        { cols: ['Nro_Orden', 'Fecha', 'ID_Cliente'], rows: [['1001', '01/03', '001'], ['1002', '05/03', '007']], x: 330, y: 45 },
+        { cols: ['ID_Producto', 'Nombre', 'Precio'], rows: [['P01', 'Laptop', '2500'], ['P02', 'Mouse', '50']], x: 170, y: 200 }
+    ];
+    for (var i = 0; i < tables.length; i++) {
+        var t = tables[i];
+        CanvasUI.drawTable(ctx, t.x, t.y, t.cols, t.rows, highlight03 === i ? 0 : undefined);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(['Clientes', 'Ordenes', 'Productos'][i], t.x + t.cols.length * 45, t.y - 8);
+    }
+    CanvasUI.drawArrow(ctx, 250, 90, 240, 130, '#3b82f6');
+    CanvasUI.drawArrow(ctx, 350, 90, 340, 195, '#3b82f6');
+}
+(function() {
+    var c = document.getElementById('canvas_03');
+    if (!c) return;
+    c.addEventListener('click', function(e) {
+        var rect = c.getBoundingClientRect();
+        var mx = e.clientX - rect.left;
+        highlight03 = (highlight03 + 1) % 4;
+        var ctx2 = c.getContext('2d');
+        c.width = c.width;
+        draw03(ctx2, c.width, c.height);
+    });
+    var ctx0 = c.getContext('2d');
+    draw03(ctx0, c.width, c.height);
+})();
+CanvasUI.addControls('controls_03', {
+    reset: function() { highlight03 = -1; var ctx = document.getElementById('canvas_03').getContext('2d'); document.getElementById('canvas_03').width = document.getElementById('canvas_03').width; draw03(ctx, document.getElementById('canvas_03').width, document.getElementById('canvas_03').height); }
+});
+</script>
 </body>
 </html>

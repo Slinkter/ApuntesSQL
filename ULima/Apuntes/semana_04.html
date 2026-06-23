@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 04 - Lenguaje de Definicion de Datos (DDL)</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 <header class="header">
@@ -324,6 +325,11 @@ DROP TABLE orden_pedido CASCADE;</pre>
             </ol>
         </div>
 
+        <div class="canvas-container">
+            <canvas id="canvas_04" width="800" height="360"></canvas>
+            <div id="controls_04" class="canvas-controls"></div>
+        </div>
+
         <nav class="nav">
             <a href="semana_03.html" class="nav__link">Semana Anterior</a>
             <a href="index.html" class="nav__link">Volver al Indice</a>
@@ -331,5 +337,24 @@ DROP TABLE orden_pedido CASCADE;</pre>
         </nav>
     </main>
 </div>
+<script>
+var step04 = 0;
+var tables04 = [
+    { title: 'Paso 1: CREATE TABLE con columnas', cols: ['Columna', 'Tipo', 'Constraint'], rows: [['id', 'INTEGER', 'PK'], ['nombre', 'VARCHAR(50)', 'NOT NULL'], ['email', 'VARCHAR(100)', 'UNIQUE']], highlight: undefined, extra: 'CREATE TABLE cliente ( id INTEGER PRIMARY KEY, nombre VARCHAR(50) NOT NULL, email VARCHAR(100) UNIQUE );' },
+    { title: 'Paso 2: Agregar FK', cols: ['Columna', 'Tipo', 'Constraint'], rows: [['id', 'INTEGER', 'PK'], ['nombre', 'VARCHAR(50)', 'NOT NULL'], ['cliente_id', 'INTEGER', 'FK -> Cliente']], highlight: 2, extra: 'FOREIGN KEY (cliente_id) REFERENCES cliente(id)' },
+    { title: 'Paso 3: ALTER TABLE', cols: ['Operacion', 'Sintaxis'], rows: [['ADD', 'ALTER TABLE t ADD col type'], ['MODIFY', 'ALTER TABLE t MODIFY col'], ['DROP', 'ALTER TABLE t DROP COLUMN col']], highlight: undefined, extra: 'ALTER TABLE permite evolucionar el esquema sin perder datos' }
+];
+function draw04(ctx, W, H) {
+    CanvasUI.drawTabAnimation(ctx, W, H, tables04, step04);
+}
+document.addEventListener('DOMContentLoaded', function() {
+    var ctx = CanvasUI.getContext('canvas_04');
+    if (ctx) CanvasUI.drawTabAnimation(ctx.ctx, ctx.W, ctx.H, tables04, 0);
+});
+CanvasUI.addControls('controls_04', {
+    step: function() { step04 = (step04 + 1) % tables04.length; var ctx = CanvasUI.getContext('canvas_04'); if (ctx) CanvasUI.drawTabAnimation(ctx.ctx, ctx.W, ctx.H, tables04, step04); },
+    reset: function() { step04 = 0; var ctx = CanvasUI.getContext('canvas_04'); if (ctx) CanvasUI.drawTabAnimation(ctx.ctx, ctx.W, ctx.H, tables04, 0); }
+});
+</script>
 </body>
 </html>

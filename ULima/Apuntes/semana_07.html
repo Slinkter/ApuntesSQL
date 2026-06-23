@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 07 - Normalizacion 1FN, 2FN, 3FN</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 
@@ -279,6 +280,10 @@ Linea_Factura (nro_factura, cod_articulo,
             </ol>
         </div>
 
+        <div class="canvas-container">
+            <canvas id="canvas_07" width="800" height="360"></canvas>
+            <div id="controls_07" class="canvas-controls"></div>
+        </div>
         <div class="nav">
             <a href="semana_06.html" class="nav__link">Semana 06</a>
             <a href="semana_08.html" class="nav__link">Semana 08: Examen Parcial</a>
@@ -286,5 +291,22 @@ Linea_Factura (nro_factura, cod_articulo,
     </main>
 </div>
 
+<script>
+var tables07 = [
+    { title: '0FN: Tabla Original (datos repetidos)', cols: ['Factura#', 'Cliente', 'Producto', 'Precio'], rows: [['F001','Juan','Laptop','2500'],['F001','Juan','Mouse','50'],['F002','Ana','Teclado','120'],['F002','Ana','Monitor','800']], highlight: undefined, extra: 'Redundancia: Juan y Ana aparecen repetidos' },
+    { title: '1FN: Valores atomicos (ya lo esta)', cols: ['Factura#', 'Cliente', 'Producto', 'Precio'], rows: [['F001','Juan','Laptop','2500'],['F001','Juan','Mouse','50'],['F002','Ana','Teclado','120'],['F002','Ana','Monitor','800']], highlight: undefined, extra: 'Cada celda tiene un solo valor. OK.' },
+    { title: '2FN: Separar dependencias parciales', cols: ['Factura#', 'Cliente'], rows: [['F001','Juan'],['F002','Ana']], highlight: undefined, extra: 'Tabla FACTURA: Cliente depende de Factura#' },
+    { title: '3FN: Separar dependencias transitivas', cols: ['Factura#'], rows: [['F001'],['F002']], highlight: undefined, extra: 'Tabla FACTURA final + tabla CLIENTE separada' }
+];
+var step07 = 0;
+function draw07(ctx, W, H) {
+    CanvasUI.drawTabAnimation(ctx, W, H, tables07, step07);
+}
+document.addEventListener('DOMContentLoaded', function() { var c = CanvasUI.getContext('canvas_07'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, tables07, 0); });
+CanvasUI.addControls('controls_07', {
+    step: function() { step07 = (step07 + 1) % tables07.length; var c = CanvasUI.getContext('canvas_07'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, tables07, step07); },
+    reset: function() { step07 = 0; var c = CanvasUI.getContext('canvas_07'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, tables07, 0); }
+});
+</script>
 </body>
 </html>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 12 - PL/SQL: Bloques, Variables y Cursores</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 <header class="header">
@@ -336,11 +337,58 @@ END;
             <p class="main__text">En PostgreSQL, PL/pgSQL ofrece el mismo paradigma con sintaxis ligeramente diferente: <code>DECLARE</code> usa <code>$function$</code> o <code>LANGUAGE plpgsql</code>, los cursores se declaran con <code>CURSOR FOR</code> y el FOR LOOP con <code>FOR registro IN consulta LOOP</code>. La principal ventaja sobre Oracle PL/SQL es que PostgreSQL permite <code>RETURN QUERY</code> para devolver conjuntos directamente desde funciones. Siempre prefiera operaciones basadas en conjuntos (SET-based) sobre cursores: un solo UPDATE con WHERE suele ser mas rapido que un cursor con 10,000 FETCHs.</p>
         </section>
 
+        <div class="canvas-container">
+            <canvas id="canvas_12" width="800" height="360"></canvas>
+            <div id="controls_12" class="canvas-controls"></div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="canvas_12" width="800" height="360"></canvas>
+            <div id="controls_12" class="canvas-controls"></div>
+        </div>
         <nav class="nav">
             <a href="index.html" class="nav__link">Volver al Indice</a>
             <a href="semana_13.html" class="nav__link">Siguiente Semana</a>
         </nav>
     </main>
 </div>
+<script>
+var step12 = 0;
+var plsqlSteps = [
+    { title: 'DECLARE — Variables y cursor', lines: ['DECLARE', '  CURSOR c_emp IS', '    SELECT nombre, salario', '    FROM empleado;', '  v_nom empleado.nombre%TYPE;', '  v_sal empleado.salario%TYPE;'], highlight: 0 },
+    { title: 'BEGIN — Abrir cursor y loop', lines: ['BEGIN', '  OPEN c_emp;', '  LOOP', '    FETCH c_emp INTO v_nom, v_sal;', '    EXIT WHEN c_emp%NOTFOUND;', '    -- procesar fila'], highlight: 2 },
+    { title: 'INSERT temporal y cierre', lines: ['    INSERT INTO temp', '      VALUES (v_nom, v_sal);', '  END LOOP;', '  CLOSE c_emp;', 'END;', '  '], highlight: 0 }
+];
+function draw12(ctx, W, H) {
+    CanvasUI.fillBg(ctx, W, H);
+    var s = plsqlSteps[step12];
+    ctx.fillStyle = CanvasUI.COLORS.textMuted;
+    ctx.font = '13px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('PL/SQL: ' + s.title, W / 2, 22);
+    var y = 50;
+    for (var i = 0; i < s.lines.length; i++) {
+        var isHL = i === s.highlight;
+        if (isHL) {
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+            ctx.fillRect(40, y - 3, W - 80, 22);
+        }
+        ctx.fillStyle = isHL ? CanvasUI.COLORS.highlight : CanvasUI.COLORS.text;
+        ctx.font = '13px JetBrains Mono, monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(s.lines[i], 50, y + 5);
+        y += 24;
+    }
+    ctx.fillStyle = CanvasUI.COLORS.textMuted;
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Paso ' + (step12 + 1) + ' de ' + plsqlSteps.length, W / 2, H - 15);
+}
+document.addEventListener('DOMContentLoaded', function() { var c = CanvasUI.getContext('canvas_12'); if (c) draw12(c.ctx, c.W, c.H); });
+CanvasUI.addControls('controls_12', {
+    step: function() { step12 = (step12 + 1) % plsqlSteps.length; var c = CanvasUI.getContext('canvas_12'); if (c) draw12(c.ctx, c.W, c.H); },
+    reset: function() { step12 = 0; var c = CanvasUI.getContext('canvas_12'); if (c) draw12(c.ctx, c.W, c.H); }
+});
+</script>
 </body>
 </html>

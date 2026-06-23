@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 09 - BCNF, 4FN, 5FN y Desnormalizacion</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 <header class="header">
@@ -373,11 +374,32 @@ Cliente (Cod, Nombre, Direccion, Ult.Nro_Factura)</code></pre>
             <p class="main__text">La regla de oro: normaliza hasta 3FN/BCNF para escritura (OLTP); desnormaliza para lectura (OLAP/BI). En PostgreSQL, las vistas materializadas, indices funcionales y columnas generadas (<code>GENERATED ALWAYS AS</code>) permiten obtener lo mejor de ambos mundos sin sacrificar integridad.</p>
         </section>
 
+        <div class="canvas-container">
+            <canvas id="canvas_09" width="800" height="360"></canvas>
+            <div id="controls_09" class="canvas-controls"></div>
+        </div>
         <nav class="nav">
             <a href="index.html" class="nav__link">Volver al Indice</a>
             <a href="semana_10.html" class="nav__link">Siguiente Semana</a>
         </nav>
     </main>
 </div>
+<script>
+var tables09 = [
+    { title: 'BCNF: Antes - Dependencia parcial oculta', cols: ['Codigo', 'Carrera', 'Asesor', 'Nota'], rows: [['2001','Sistemas','Lopez','16'],['2002','Contabilidad','Salas','15']], highlight: 0, extra: 'Asesor determina Carrera -> viola BCNF' },
+    { title: 'BCNF: Despues - Separado en 2 tablas', cols: ['Codigo', 'Asesor', 'Nota'], rows: [['2001','Lopez','16'],['2002','Salas','15']], highlight: undefined, extra: 'Tabla 1: Estudiante-Asesor' },
+    { title: '4FN: Dependencia Multivaluada', cols: ['Curso', 'Profesor', 'Texto'], rows: [['Admin','Garcia','Drucker'],['Admin','Garcia','Peters']], highlight: 1, extra: 'MVD: Curso ->> Profesor y Curso ->> Texto independientes' },
+    { title: 'Desnormalizacion: Unir por performance', cols: ['Factura#', 'Cliente', 'Total', 'Fecha'], rows: [['F001','Juan','2500','01/03'],['F002','Ana','920','05/03']], highlight: undefined, extra: 'Desnormalizado: evita JOIN en lecturas frecuentes' }
+];
+var step09 = 0;
+function draw09(ctx, W, H) {
+    CanvasUI.drawTabAnimation(ctx, W, H, tables09, step09);
+}
+document.addEventListener('DOMContentLoaded', function() { var c = CanvasUI.getContext('canvas_09'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, tables09, 0); });
+CanvasUI.addControls('controls_09', {
+    step: function() { step09 = (step09 + 1) % tables09.length; var c = CanvasUI.getContext('canvas_09'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, tables09, step09); },
+    reset: function() { step09 = 0; var c = CanvasUI.getContext('canvas_09'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, tables09, 0); }
+});
+</script>
 </body>
 </html>

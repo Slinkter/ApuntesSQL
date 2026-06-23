@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 15 - Alta Disponibilidad (HA)</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 
@@ -359,6 +360,10 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;</pre>
             <p><strong>Ejercicio 4:</strong> Investiga cual es la diferencia entre un cluster activo-pasivo y un cluster activo-activo. En que escenarios usarias cada uno?</p>
         </div>
 
+        <div class="canvas-container">
+            <canvas id="canvas_15" width="800" height="360"></canvas>
+            <div id="controls_15" class="canvas-controls"></div>
+        </div>
         <nav class="nav">
             <a href="semana_14.html" class="nav__link">Semana 14</a>
             <a href="semana_16.html" class="nav__link">Semana 16 - Examen Final</a>
@@ -366,5 +371,44 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;</pre>
     </main>
 </div>
 
+<script>
+var clusterState = { primary: 'up', standby: 'up' };
+var anim15 = null;
+var frame15 = 0;
+function draw15(ctx, W, H, frame) {
+    CanvasUI.drawCluster(ctx, W, H, clusterState);
+    ctx.fillStyle = CanvasUI.COLORS.textMuted;
+    ctx.font = '12px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Alta Disponibilidad — Simulacion de Failover', W / 2, 18);
+}
+function start15() {
+    if (anim15) return;
+    frame15 = 0;
+    anim15 = CanvasUI.startAnimation('canvas_15', draw15, 30);
+}
+CanvasUI.observeAndRun('canvas_15', start15);
+CanvasUI.addControls('controls_15', {
+    play: function() {
+        clusterState = { primary: 'down', standby: 'up' };
+        if (anim15) { anim15.stop(); anim15 = null; }
+        setTimeout(function() {
+            anim15 = CanvasUI.startAnimation('canvas_15', draw15, 30);
+        }, 100);
+    },
+    reset: function() {
+        clusterState = { primary: 'up', standby: 'up' };
+        if (anim15) { anim15.stop(); anim15 = null; }
+        setTimeout(start15, 100);
+    }
+});
+// Label buttons
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        var btns = document.querySelectorAll('#controls_15 .btn-canvas');
+        if (btns.length >= 2) { btns[0].textContent = 'Simular Falla'; btns[1].textContent = 'Restaurar'; }
+    }, 100);
+});
+</script>
 </body>
 </html>

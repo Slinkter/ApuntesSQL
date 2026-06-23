@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 13 - Procedimientos, Funciones, Triggers, Paquetes</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 
@@ -360,6 +361,15 @@ ORDER BY &nombre_columna;</pre>
             <p><strong>Ejercicio 4:</strong> Crea un paquete GESTION_EMPLEADOS que contenga un procedimiento para contratar y otro para despedir empleados.</p>
         </div>
 
+        <div class="canvas-container">
+            <canvas id="canvas_13" width="800" height="360"></canvas>
+            <div id="controls_13" class="canvas-controls"></div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="canvas_13" width="800" height="360"></canvas>
+            <div id="controls_13" class="canvas-controls"></div>
+        </div>
         <nav class="nav">
             <a href="semana_12.html" class="nav__link">Semana 12</a>
             <a href="semana_14.html" class="nav__link">Semana 14 - Data Warehouse</a>
@@ -367,5 +377,47 @@ ORDER BY &nombre_columna;</pre>
     </main>
 </div>
 
+<script>
+var step13 = 0;
+function draw13(ctx, W, H, frame) {
+    CanvasUI.fillBg(ctx, W, H);
+    step13 = Math.floor(frame / 90) % 5;
+    var events = [
+        { label: 'INSERT en empleados', y: 40, color: CanvasUI.COLORS.line },
+        { label: 'BEFORE INSERT TRIGGER', y: 100, color: CanvasUI.COLORS.warn },
+        { label: 'Validar :NEW.salario', y: 160, color: CanvasUI.COLORS.warn },
+        { label: 'Ejecutar INSERT', y: 220, color: CanvasUI.COLORS.accent },
+        { label: 'AFTER INSERT TRIGGER', y: 280, color: CanvasUI.COLORS.accent }
+    ];
+    ctx.fillStyle = CanvasUI.COLORS.textMuted;
+    ctx.font = '13px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Ciclo de vida de un Trigger en accion', W / 2, 18);
+    for (var i = 0; i < events.length; i++) {
+        var active = i <= step13;
+        CanvasUI.drawNode(ctx, W / 2 - 160, events[i].y, 320, 42, events[i].label, active ? events[i].color : CanvasUI.COLORS.surface);
+        if (i < events.length - 1) {
+            CanvasUI.drawArrow(ctx, W / 2, events[i].y + 42, W / 2, events[i + 1].y, active ? CanvasUI.COLORS.line : CanvasUI.COLORS.surface);
+        }
+    }
+    if (step13 >= 4) {
+        ctx.fillStyle = CanvasUI.COLORS.accent;
+        ctx.font = '12px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Trigger ejecutado correctamente. Datos insertados con validacion.', W / 2, 330);
+    }
+}
+var anim13 = null;
+function start13() {
+    if (anim13) return;
+    anim13 = CanvasUI.startAnimation('canvas_13', draw13, 30);
+}
+CanvasUI.observeAndRun('canvas_13', start13);
+CanvasUI.addControls('controls_13', {
+    play: function() { if (!anim13) anim13 = CanvasUI.startAnimation('canvas_13', draw13, 30); },
+    pause: function() { if (anim13) { anim13.stop(); anim13 = null; } },
+    reset: function() { step13 = 0; if (anim13) { anim13.stop(); anim13 = null; } setTimeout(start13, 100); }
+});
+</script>
 </body>
 </html>

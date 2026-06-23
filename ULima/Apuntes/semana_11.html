@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 11 - GROUP BY, HAVING y Funciones de Grupo</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 <header class="header">
@@ -220,11 +221,32 @@ HAVING COUNT(*) > (
             <p class="main__text">En PostgreSQL, GROUP BY tambien acepta numero de columna (<code>GROUP BY 1, 2</code>) y expresiones complejas (<code>GROUP BY DATE_TRUNC('month', fecha)</code>). Para analitica avanzada, combina GROUP BY con <code>FILTER (WHERE condicion)</code> para agregaciones condicionales sin subconsultas. Siempre revisa el plan de ejecucion: un <code>HashAggregate</code> eficiente es senal de que PostgreSQL esta optimizando bien tus grupos.</p>
         </section>
 
+        <div class="canvas-container">
+            <canvas id="canvas_11" width="800" height="360"></canvas>
+            <div id="controls_11" class="canvas-controls"></div>
+        </div>
+
         <nav class="nav">
             <a href="index.html" class="nav__link">Volver al Indice</a>
             <a href="semana_12.html" class="nav__link">Siguiente Semana</a>
         </nav>
     </main>
 </div>
+<script>
+var step11 = 0;
+var groupData = [
+    { title: 'Datos originales — Ventas por empleado', cols: ['Empleado', 'Region', 'Venta'], rows: [['Ana','Norte','100'],['Luis','Sur','150'],['Ana','Norte','200'],['Luis','Sur','50'],['Eva','Norte','300']], highlight: undefined, extra: '5 registros de ventas individuales' },
+    { title: 'GROUP BY Region — SUM(Venta)', cols: ['Region', 'Total Ventas'], rows: [['Norte','600'],['Sur','200']], highlight: undefined, extra: 'Los datos se agrupan por Region y se suman' },
+    { title: 'GROUP BY + HAVING > 250', cols: ['Region', 'Total Ventas'], rows: [['Norte','600']], highlight: 0, extra: 'HAVING filtra grupos: solo Region con ventas > 250' }
+];
+function draw11(ctx, W, H) {
+    CanvasUI.drawTabAnimation(ctx, W, H, groupData, step11);
+}
+document.addEventListener('DOMContentLoaded', function() { var c = CanvasUI.getContext('canvas_11'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, groupData, 0); });
+CanvasUI.addControls('controls_11', {
+    step: function() { step11 = (step11 + 1) % groupData.length; var c = CanvasUI.getContext('canvas_11'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, groupData, step11); },
+    reset: function() { step11 = 0; var c = CanvasUI.getContext('canvas_11'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, groupData, 0); }
+});
+</script>
 </body>
 </html>

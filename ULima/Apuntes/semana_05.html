@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 05 - DML y Consultas Simples</title>
     <link rel="stylesheet" href="master.css">
+    <script src="canvas-ui.js"></script>
 </head>
 <body>
 
@@ -195,6 +196,10 @@ WHERE codigo_cliente = 1;</pre>
             </ol>
         </div>
 
+        <div class="canvas-container">
+            <canvas id="canvas_05" width="800" height="360"></canvas>
+            <div id="controls_05" class="canvas-controls"></div>
+        </div>
         <div class="nav">
             <a href="semana_04.html" class="nav__link">Semana 04</a>
             <a href="semana_06.html" class="nav__link">Semana 06</a>
@@ -202,5 +207,44 @@ WHERE codigo_cliente = 1;</pre>
     </main>
 </div>
 
+<script>
+var dmlData = {
+    cols: ['ID', 'Nombre', 'Precio', 'Stock'],
+    rows: [['P01', 'Laptop', '2500', '10'], ['P02', 'Mouse', '50', '50'], ['P03', 'Teclado', '120', '30']]
+};
+var dmlHighlight = -1;
+var dmlMsg = '';
+function draw05(ctx, W, H) {
+    CanvasUI.fillBg(ctx, W, H);
+    ctx.fillStyle = CanvasUI.COLORS.textMuted;
+    ctx.font = '13px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Tabla: Productos — Ejecuta operaciones DML con los botones', W / 2, 22);
+    CanvasUI.drawTable(ctx, 20, 40, dmlData.cols, dmlData.rows, dmlHighlight);
+    if (dmlMsg) {
+        ctx.fillStyle = CanvasUI.COLORS.accent;
+        ctx.font = '12px JetBrains Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(dmlMsg, W / 2, H - 20);
+    }
+}
+function redraw05() {
+    var c = document.getElementById('canvas_05');
+    if (!c) return;
+    var ctx = c.getContext('2d');
+    c.width = c.width;
+    draw05(ctx, c.width, c.height);
+}
+document.addEventListener('DOMContentLoaded', function() { setTimeout(redraw05, 50); });
+CanvasUI.addControls('controls_05', {
+    play: function() { dmlMsg = 'INSERT INTO producto VALUES (\"P04\",\"Monitor\",800,15)'; dmlData.rows.push(['P04','Monitor','800','15']); dmlHighlight = dmlData.rows.length - 1; redraw05(); },
+    step: function() { dmlMsg = 'UPDATE producto SET stock = stock + 5'; for (var i = 0; i < dmlData.rows.length; i++) { dmlData.rows[i][3] = String(parseInt(dmlData.rows[i][3]) + 5); } dmlHighlight = -1; redraw05(); },
+    reset: function() { dmlData.rows = [['P01','Laptop','2500','10'],['P02','Mouse','50','50'],['P03','Teclado','120','30']]; dmlMsg = ''; dmlHighlight = -1; redraw05(); }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    var btns = document.querySelectorAll('#controls_05 .btn-canvas');
+    if (btns.length >= 3) { btns[2].textContent = 'Reset'; }
+});
+</script>
 </body>
 </html>
