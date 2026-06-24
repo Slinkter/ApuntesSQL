@@ -14,22 +14,39 @@ Transformar el conocimiento fragmentado en una base sólida de **Data Architectu
 ## 📂 Estructura del Proyecto
 ```bash
 .
-├── ULima/                   # Material académico y apuntes refactorizados
-│   ├── Apuntes/             # Material educativo central (HTML/Markdown)
-│   │   ├── 01_Fundamentos/  # Física del dato, Teoría Relacional, SDLC
-│   │   ├── 02_Postgres_Internals/ # Internals, Tipos tácticos, Normalización
-│   │   └── 03_Escalabilidad/ # Indexación, Query Planner, CDC, HTAP
-│   ├── Clases/              # PDFs y TXTs de sesiones originales
-│   └── otros/               # Documentación complementaria y ejercicios
-├── PostgresSQL/             # Recursos de laboratorio y dataset
-│   ├── 1.basico.md          # Guía práctica de SQL Básico
-│   ├── 2.intermedio.md      # SQL Intermedio y Agrupaciones
-│   ├── 3.avanzado.md        # Ventanas, CTEs, PL/pgSQL
-│   ├── db_northwind.sql     # Dataset oficial para ejercicios
-│   └── Youtube01/           # Recursos adicionales de video tutoriales
-├── Credenciales/            # Configuración y Guías de Despliegue
-│   └── Guia_Despliegue_Docker_AWS.md # Guía de infraestructura Cloud
-└── README.md                # Punto de entrada original
+├── SQL/
+│   ├── 1.basico.md            # PostgreSQL notes básico (refactorizado)
+│   ├── 2.intermedio.md        # PostgreSQL notes intermedio (refactorizado)
+│   ├── Youtube00/             # Tutorial series (básico → avanzado)
+│   │   ├── 1.basico.md
+│   │   ├── 2.intermedio.md
+│   │   ├── 3.avanzado.md
+│   │   ├── db_northwind.sql   # Dataset Northwind para PostgreSQL
+│   │   ├── prompt.md          # Persona ArquiDB — auditoría y calidad
+│   │   ├── plan.md            # Plan de aprendizaje 16 semanas
+│   │   └── README.md
+│   └── Youtube01/
+│       ├── Taller/            # Workshop: ejercicios + docker-compose
+│       │   ├── docker-compose/ # Postgres y MySQL listos para usar
+│       │   ├── Guia/          # Guías paso a paso con imágenes
+│       │   ├── Tipos-Join/    # Diagramas de JOIN
+│       │   └── *.md / *.sql   # Material del taller
+│       ├── sql/               # Scripts SQL sueltos
+│       ├── *.html             # Cheat sheets y guías de estudio
+│       └── README.md
+├── ULima/
+│   ├── Apuntes/               # HTML estático estilo Cornell (16 semanas)
+│   ├── Clases/                # PDFs + TXT de clases originales
+│   └── otros/                 # Documentación complementaria
+├── Credenciales/
+│   ├── Guia_Despliegue_Docker_AWS.md
+│   └── key_u_docker.pem
+├── AGENTS.md                  # Guía para el agente opencode
+├── GEMINI.md                  # Visión del proyecto y plan maestro
+├── README.md
+└── .github/
+    ├── copilot-instructions.md
+    └── workflows/
 ```
 
 ## 📖 Plan Maestro (16 Semanas)
@@ -40,11 +57,11 @@ Transformar el conocimiento fragmentado en una base sólida de **Data Architectu
 
 ## 🧪 Laboratorio: Northwind en PostgreSQL
 El proyecto utiliza una versión adaptada de la base de datos **Northwind** para PostgreSQL.
-- **Ubicación:** `PostgresSQL/db_northwind.sql`
-- **Modelado:** `PostgresSQL/1.basico.md` incluye el diagrama ER en formato Mermaid.
+- **Ubicación:** `SQL/Youtube00/db_northwind.sql`
+- **Modelado:** `SQL/Youtube00/1.basico.md` incluye el diagrama ER en formato Mermaid.
 
 ## ⚙️ Desarrollo y Auditoría
-- **Auditoría:** Se sigue el estándar definido en `prompt_auditoria.md` para garantizar calidad técnica (vía ArquiDB).
+- **Auditoría:** Se sigue el estándar definido en `prompt.md` para garantizar calidad técnica (vía ArquiDB).
 - **Convenciones:** 
     - Priorizar `JSONB` sobre `JSON`.
     - Usar `SERIAL`/`BIGSERIAL` para IDs secuenciales (o `UUID v7`).

@@ -128,9 +128,9 @@ CREATE TABLE employee_territories (
 CREATE TABLE order_details (
     order_id smallint NOT NULL,
     product_id smallint NOT NULL,
-    unit_price real NOT NULL,
+    unit_price numeric NOT NULL,
     quantity smallint NOT NULL,
-    discount real NOT NULL
+    discount numeric NOT NULL
 );
 
 
@@ -146,7 +146,7 @@ CREATE TABLE orders (
     required_date date,
     shipped_date date,
     ship_via smallint,
-    freight real,
+    freight numeric,
     ship_name character varying(40),
     ship_address character varying(60),
     ship_city character varying(15),
@@ -166,7 +166,7 @@ CREATE TABLE products (
     supplier_id smallint,
     category_id smallint,
     quantity_per_unit character varying(20),
-    unit_price real,
+    unit_price numeric,
     units_in_stock smallint,
     units_on_order smallint,
     reorder_level smallint,
@@ -3901,7 +3901,98 @@ ALTER TABLE ONLY customer_customer_demo
 ALTER TABLE ONLY employees
     ADD CONSTRAINT fk_employees_employees FOREIGN KEY (reports_to) REFERENCES employees;
 
-    
+
+--
+-- Name: idx_orders_customer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_orders_customer_id ON orders(customer_id);
+
+
+--
+-- Name: idx_orders_employee_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_orders_employee_id ON orders(employee_id);
+
+
+--
+-- Name: idx_orders_ship_via; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_orders_ship_via ON orders(ship_via);
+
+
+--
+-- Name: idx_order_details_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_order_details_product_id ON order_details(product_id);
+
+
+--
+-- Name: idx_order_details_order_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_order_details_order_id ON order_details(order_id);
+
+
+--
+-- Name: idx_products_supplier_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_products_supplier_id ON products(supplier_id);
+
+
+--
+-- Name: idx_products_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_products_category_id ON products(category_id);
+
+
+--
+-- Name: idx_territories_region_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_territories_region_id ON territories(region_id);
+
+
+--
+-- Name: idx_employee_territories_territory_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_employee_territories_territory_id ON employee_territories(territory_id);
+
+
+--
+-- Name: idx_employee_territories_employee_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_employee_territories_employee_id ON employee_territories(employee_id);
+
+
+--
+-- Name: idx_customer_customer_demo_customer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_customer_customer_demo_customer_id ON customer_customer_demo(customer_id);
+
+
+--
+-- Name: idx_customer_customer_demo_customer_type_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_customer_customer_demo_customer_type_id ON customer_customer_demo(customer_type_id);
+
+
+--
+-- Name: idx_employees_reports_to; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_employees_reports_to ON employees(reports_to);
+
+
 --
 -- PostgreSQL database dump complete
 --

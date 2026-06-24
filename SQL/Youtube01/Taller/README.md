@@ -34,10 +34,10 @@ https://youtu.be/Fca_kWJJXvo
 
 ## Cheatsheet Join:
 - [Tipos de Join](Tipos-Join/)
-  - [Join Diagram 1](Tipos-Join/01.jpg)
-  - [Join Diagram 2](Tipos-Join/02.jpg)
-  - [Join Diagram 3](Tipos-Join/03.jpg)
-  - [Join Diagram 4](Tipos-Join/04.jpg)
+  - [Join Diagram 1](Tipos-Join/01.png)
+  - [Join Diagram 2](Tipos-Join/02.png)
+  - [Join Diagram 3](Tipos-Join/03.png)
+  - [Join Diagram 4](Tipos-Join/04.png)
 
 ## Docker Compose ejemplos:
 - [MySQL sin variable de entorno](docker-compose/MySQL/docker-compose.yaml)
