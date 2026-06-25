@@ -1,92 +1,183 @@
 Ingeniería de Datos
 Modelo Relacional
 Nadia Rodríguez
-2013-1Agenda
-- Modelamiento Conceptual
-- Funciones del DBMS
-- Terminología de Base de Datos
+2013-1
+
+Agenda
+
+• Modelamiento Conceptual
+• Funciones del DBMS
+• Terminología de Base de Datos
 Relacional
-- Metodología de Diseño de Bases de
+• Metodología de Diseño de Bases de
 Datos
-- Implementación de Bases de DatosModelamiento ConceptualImplementación de Base de Datos Relacional
+• Implementación de Bases de Datos
+
+UNIVERSIDAD DE LIMA
+SCIENTIA ET PRAXIS
+Modelamiento Conceptual
+
+Implementación de Base de Datos Relacional
 y Sistemas de Información
-- System Development Life cycle - SDLC
-– Proceso de desarrollo detallado, bien
-planificado.
-– Consume tiempo, pero es comprensivo
-– Ciclo de desarrollo largo
-- Prototipo
-– Rapid application development (RAD)System Development Life cycle -
+
+• System Development Life cycle - SDLC
+ – Proceso de desarrollo detallado, bien
+   planificado.
+ – Consume tiempo, pero es comprensivo
+ – Ciclo de desarrollo largo
+• Prototipo
+ – Rapid application development (RAD)
+
+System Development Life cycle -
 SDLC
-Project Identification Comprender la situación de negocio que ha originado la necesidad de mejorar
-and Selection o crear un sistema de información.
-Project Initiation Plantear y planear cómo el sistema de información podria resolver
-la necesidad o problema que afronta el negocio.
+
+Project Identification
+and Selection
+Comprender la situación de negocio que ha originado la necesidad de mejorar
+o crear un sistema de información.
+
+Project Initiation
 and Planning
-Analizar la situación del negocio minuciosamente
+Plantear y planear cómo el sistema de información podria resolver
+la necesidad o problema que afronta el negocio.
+
 Analysis
+Analizar la situación del negocio minuciosamente
 para determinar y estructurar requerimientos.
-Obtener y estructurar todos los
+
 Logical Design
+Obtener y estructurar todos los
 requerimientos de información.
+
+Physical Design
 Desarrollar todas las
 especificaciones
-Physical Design
 tecnológicas y
 organizacionales.
-Desarrollar programas, probar, instalar el nuevo
+
 Implementation
+Desarrollar programas, probar, instalar el nuevo
 sistema, entrenar usuarios, y finalizar la documentación.
-Monitorear la operatividad y utilidad del sistema, repararlo y mejorarlo. MaintenanceArquitectura de la Base de Datos
+
+Monitorear la operatividad y utilidad del sistema, repararlo y mejorarlo.
+Maintenance
+
+Arquitectura de la Base de Datos
+
 Vistas de los diferentes
 usuarios sobre la Base de
 Datos (esquema externo)
+
+One organizational database description
+
+Program report definition
+User view 1
+(report)
+
+Program display definition
+User view 2
+(screen display)
+
+Program transaction definition
+User view n
+(transaction)
+
 Nivel Externo
+
+Conceptual
+schema
 Nivel Conceptual
-Nivel InternoArquitectura de una Base de Datos
-- Nivel interno tiene un esquema interno, que describe
+
+Physical
+schema
+Nivel Interno
+
+Arquitectura de una Base de Datos
+
+• Nivel interno tiene un esquema interno, que describe
 la estructura física de almacenamiento de la base de
 datos.
 – Estrategia de almacenamiento
 – Caminos de acceso
-- Nivel conceptual tiene un esquema conceptual, que
+
+• Nivel conceptual tiene un esquema conceptual, que
 describe la estructura de toda la base de datos para
 una comunidad de usuarios
 – La visión global de los datos, deberá incluirse la descripción de
 todos los datos e interrelaciones entre éstos, así como las
 restricciones de integridad y seguridad
-- Nivel externo o de vistas incluye varios esquemas
-externos o vistas de usuarioIndependencia de los Datos
+
+• Nivel externo o de vistas incluye varios esquemas
+externos o vistas de usuario
+
+Independencia de los Datos
+
 Capacidad para modificar el esquema en un nivel del
 sistema de base de datos sin tener que modificar el
 esquema del nivel inmediato superior
-Independencia de Datos
--
-Independencia Lógica
--
-Estructura lógica
--
-Añadir, borrar o cambiar campos, registros o relaciones
--
-Independencia Física
--
-Estructura física
--
-Características de campos, ubicación de registros en la DB,
--
-esquemas de encriptaciónEsquemas de la Base de Datos
-- Físico (Interno)
-– Estructuras físicas
-- Conceptual
-– Modelos de Datos
-- Externo
-– Vistas de usuarios
-– Listas de Esquemas conceptuales
-– Pueden estar determinados por la matrices
-Función/Entidad
-– DBA determina los esquemas para los diferentes
-usuariosArquitectura de Base de Datos
-de 3 capasSistema de Gestión de Base de Datos
+
+•Independencia de Datos
+ •Independencia Lógica
+  •Estructura lógica
+  •Añadir, borrar o cambiar campos, registros o relaciones
+ •Independencia Física
+  •Estructura física
+  •Características de campos, ubicación de registros en la DB,
+   esquemas de encriptación
+
+Esquemas de la Base de Datos
+
+• Físico (Interno)
+ – Estructuras físicas
+• Conceptual
+ – Modelos de Datos
+• Externo
+ – Vistas de usuarios
+ – Listas de Esquemas conceptuales
+ – Pueden estar determinados por la matrices
+   Función/Entidad
+ – DBA determina los esquemas para los diferentes
+   usuarios
+
+Arquitectura de Base de Datos
+de 3 capas
+
+Accounts payable processing
+Client
+tier
+Browser
+Database of vendors,
+purchase orders,
+vendor invoices
+
+Cash flow analyst
+Browser
+Database of
+customer receipts
+and our payments
+to vendors
+
+Customer service representative
+Browser
+No local
+database
+
+Application/Web
+tier
+Application/Web server
+A/P, A/R, order processing, inventory control,
+and so forth; access and connectivity to DBMS.
+Dynamic Web pages; management of session
+
+Enterprise
+tier
+Transaction databases containing all organizational
+data or summaries of data on department
+servers.
+Enterprise server
+with DBMS
+
+Sistema de Gestión de Base de Datos
 Usuarios/Programadores/DBA
 Sistema de
 Base de Datos
@@ -96,225 +187,319 @@ DBMS
 Sw para procesar consultas/programas
 Software para tener acceso a los
 datos almacenados
-Base de Datos
 Metadatos
-AlmacenadosSistema de Gestión de BD
+Base de Datos
+Almacenados
+
+Sistema de Gestión de BD
+
 Programador
-Usuario Programas de Usuario
+
 DBA
-Sofisticado Aplicación Ingenuo
-Enunciados Ordenes Consulta Precompilador
-en DDL Privilegiadas Interactiva
+
+Usuario
+Sofisticado
+
+Programas de
+Aplicación
+
+Usuario
+Ingenuo
+
+Enunciados
+en DDL
+
+Ordenes
+Privilegiadas
+
+Consulta
+Interactiva
+
+Precompilador
+
 Compilador del
 leng. anfitrión
-Compilador Instrucciones
-de Consultas del DML Transacciones
+
 Compilador
-Compiladas
 de DDL
+
+Compilador
+de Consultas
+
+Instrucciones
+del DML
+
+Transacciones
+Compiladas
+
 Catalogo
-del Sist./ Compilador
+del Sist./
 Diccionario
-de DML
 de Datos
+
+Compilador
+de DML
+
 Procesador de
 BD en t/ejecución
-Subsistema de Control de
+
 Gestor de
-Concurrencia/respaldo/Recuperación
 Datos
 (DMBS)
-Base de Datos AlmacenadaDBMS: Database Management
+
+Subsistema de Control de
+Concurrencia/respaldo/Recuperación
+
+Base de Datos Almacenada
+
+DBMS: Database Management
 System
--Producto de software a través del cual los
+
+Producto de software a través del cual los
 usuarios interactúan con la base de datos
+
 Planillas
-DBMS
 Facturación
+Usuarios online
+DBMS
 DATABASE
-Usuarios onlineFunciones del DBMSFunciones del DBMS
--Administración de Usuarios
--Permisos, privilegios, recursos
--Administración de Performance
--Throughput, instancia, almacenamiento, memoria,
-bloqueos, errores, etc.
--Administración de transacciones
--Almacenamiento, visualización y actualización de
-datos
--Control de concurrencia, gestión de bloqueos commit,
-rollback
--Encriptación de datosFunciones del DBMS
--Administración de Backup y Recovery
--Backup, restore y recovery
--Gestión de archivos Log
--Soporte y utilitarios
--Autorización de servicios
--Integración de datos: API, protocolos de comunicación
--Servicios integrados
--Migración y carga masiva de datos
--Replicación de datos, procesamiento en lote (batch) y
-en líneaFunciones...
+
+UNIVERSIDAD DE LIMA
+SCIENTIA ET PRAXIS
+Funciones del DBMS
+
+Funciones del DBMS
+
+•Administración de Usuarios
+ •Permisos, privilegios, recursos
+
+•Administración de Performance
+ •Throughput, instancia, almacenamiento, memoria,
+  bloqueos, errores, etc.
+
+•Administración de transacciones
+ •Almacenamiento, visualización y actualización de
+  datos
+ •Control de concurrencia, gestión de bloqueos commit,
+  rollback
+ •Encriptación de datos
+
+Funciones del DBMS
+
+•Administración de Backup y Recovery
+•Backup, restore y recovery
+•Gestión de archivos Log
+
+•Soporte y utilitarios
+•Autorización de servicios
+•Integración de datos: API, protocolos de comunicación
+•Servicios integrados
+•Migración y carga masiva de datos
+•Replicación de datos, procesamiento en lote (batch) y
+en línea
+
+Funciones...
+
 Soporte para comunicaciones de datos
--
 (Transaction Processing Monitor -TPM)
+
+TPM
+
 PGM1
-TPM DBMS DB
-PGM2Terminología Base Datos Relacional
+
+PGM2
+
+DBMS
+
+DB
+
+Terminología Base Datos Relacional
+
 Cada tabla tiene filas y columnas.
 Tabla PERSONA (Relación)
-ID NAME PHONE DEPT_ID
-Fila (Tupla)
+
+ID NAME PHONE DEPT ID
 201 Unisports 55-2066101 12
 202 Simms Atheletics 81-20101 14
 203 Delhi Sports 91-10351 14
 204 Womansport 1-206-104-0103 11
+
+Fila (Tupla)
 Primary Key
 Columna (Atributo)
 Foreign Key
+
 Los valores que pueden tener los atributos están sujetos a
-restricciones de integridad y dominioTerminología Base Datos Relacional
+restricciones de integridad y dominio
+
+Terminología Base Datos Relacional
 -Restricciones de Valores de Atributos-
-- El modelo de datos incluye varios tipos de
+
+• El modelo de datos incluye varios tipos de
 restricciones o reglas de negocio:
+
 – Restricciones de Dominio
-- Todos los valores de un atributo de una entidad
+• Todos los valores de un atributo de una entidad
 deben estar comprendidos en el mismo dominio.
 – Restricciones de Integridad
-- Cada entidad tiene una PK y los valores de una
+• Cada entidad tiene una PK y los valores de una
 PK tienen que ser válidos, especialmente NO
 NULOS.
-- Cada valor de una FK debe coincidir con el valor
-de la PK de otra entidad.Terminología Base Datos Relacional
+• Cada valor de una FK debe coincidir con el valor
+de la PK de otra entidad.
+
+Terminología Base Datos Relacional
 -Primary Key (PK)-
-- Es un atributo o una combinación de
+• Es un atributo o una combinación de
 atributos que identifica de manera
 única un registro en una relación
-- Características
+• Características
 – No cambian de valor
 – No deben ser nulas
 – Sustituye llaves compuestas muy largas
-por una declaración simpleTerminología Base Datos Relacional
+por una declaración simple
+
+Terminología Base Datos Relacional
 -Foreign Key (FK)-
-- Es un atributo en una entidad que es la
+
+• Es un atributo en una entidad que es la
 PK o forma parte de la PK de otra
 entidad.
-- Esta restricción implementará la
+
+• Esta restricción implementará la
 asociación entre tablas en las Bases
-de Datos RelacionalesRestricciones de Dominio
-- NULL
-- NOT NULL
-- CHECK
-- UNIQUE
-- DEFAULTTerminología Base Datos Relacional
+de Datos Relacionales
+
+Restricciones de Dominio
+
+• NULL
+• NOT NULL
+• CHECK
+• UNIQUE
+• DEFAULT
+
+Terminología Base Datos Relacional
 Objetos de la Base de Datos
-Objeto Descripción
-Tabla Unidad básica de almacenamiento;
-compuesta de filas y columnas
-Vista Representación lógica de los datos
-de una o más tablas
-Secuencia Genera valores de la clave PK
-Índice Mejora la performance de algunas
-consultas
-Sinónimo Asigna nombres alternativos a los
-objetosTerminología de Base de Datos
+
+| Objeto | Descripción |
+| :--- | :--- |
+| Tabla | Unidad básica de almacenamiento; compuesta de filas y columnas |
+| Vista | Representación lógica de los datos de una o más tablas |
+| Secuencia | Genera valores de la clave PK |
+| Índice | Mejora la performance de algunas consultas |
+| Sinónimo | Asigna nombres alternativos a los objetos |
+
+Terminología de Base de Datos
 Relacional
--Indices
--Key: Simple o Compuesto
--Unicos o no-unicos (unique or nonunique)
--Cluster
--Mecanismos más comunes
--Hash Access (RID)
--B+ Trees
--Optimizador
--Basado en reglas / Basado en Costo de Proceso
--API (Application Programming Interface)Terminología Base Datos Relacional
+
+Indices
+Key: Simple o Compuesto
+Unicos o no-unicos (unique or nonunique)
+Cluster
+Mecanismos más comunes
+Hash Access (RID)
+B+ Trees
+Optimizador
+Basado en reglas / Basado en Costo de Proceso
+API (Application Programming Interface)
+
+Terminología Base Datos Relacional
 Reglas de Nomenclatura de Nombres
-- Debe comenzar con una letra
-- Puede tener una longitud de 1 a 30
+• Debe comenzar con una letra
+• Puede tener una longitud de 1 a 30
 caracteres
-- Debe contener solamente los
+• Debe contener solamente los
 caracteres A–Z, a–z, 0–9, _, $, y #
-- No debe ser igual al nombre de otro
+• No debe ser igual al nombre de otro
 objeto dentro del mismo usuario del
 DBMS
-- No debe ser una palabra reservada del
-DBMSTerminología Base Datos Relacional
+• No debe ser una palabra reservada del
+DBMS
+
+Terminología Base Datos Relacional
 Tipo de datos
-Tipo de dato Descripción
-VARCHAR2(size) Longitud variable hasta 4000 caracteres
-CHAR(size) Caracteres de longitud fija
-NUMBER Numérico de punto flotante
-NUMBER(p,s) Numérico de punto fijo hasta 16 digitos
-DATE Fecha y tiempo HH:MM:SS
-Caracteres de longitud variable hasta de 2 GB
-LONG
-Datos en binario de longitud variable hasta de
-BLOB
-4 GBTransacción y Control de
-Concurrencia y RecuperaciónTransacción
-- Concepto
-– Cualquier operación de lectura o escritura realizada en la base de datos
-- Propiedades
-– A Atomicidad (Atomicity)
-– C Preservación de Consistencia (Consistency Preservation)
-– I Independencia/Aislamiento (Isolation/Independence)
-– D Durabilidad o Permanencia (Durability or Permanency)
-INICIO
-FIN
-TRANSACCION
-TRANSACCION
-parcialmente
-activo
-COMMIT
-comprometida
-comprometida
-ROLLBACK ROLLBACK
-READ, WRITE
-terminada
-falladaMetodología de
-Diseño de Base de DatosRequerimientos
--Funcionales
+
+Tipo de dato	Descripción
+VARCHAR2(size)	Longitud variable hasta 4000 caracteres
+CHAR(size)	Caracteres de longitud fija
+NUMBER	Numérico de punto flotante
+NUMBER(p,s)	Numérico de punto fijo hasta 16 digitos
+DATE	Fecha y tiempo HH:MM:SS
+LONG	Caracteres de longitud variable hasta de 2 GB
+BLOB	Datos en binario de longitud variable hasta de 4 GB
+
+UNIVERSIDAD DE LIMA
+Transacción y Control de
+Concurrencia y Recuperación
+
+Transacción
+
+• Concepto
+  - Cualquier operación de lectura o escritura realizada en la base de datos
+• Propiedades
+  - A      Atomicidad (Atomicity)
+  - C      Preservación de Consistencia (Consistency Preservation)
+  - I      Independencia/Aislamiento (Isolation/Independence)
+  - D      Durabilidad o Permanencia (Durability or Permanency)
+
+INICIO                               FIN
+TRANSACCION                          TRANSACCION
+             activo                               parcialmente
+                                                  comprometida
+                                                                    COMMIT
+                                                                               comprometida
+             READ, WRITE
+                                     ROLLBACK           ROLLBACK
+                                                                                               terminada
+                                                                fallada
+
+Metodología de
+Diseño de Base de Datos
+
+Requerimientos
+
+Funcionales
 Todos los reportes que deban ser producidos
--
 Todas las consultas
--
-Todas las salidas que deben ser enviadas a
--
-otros sistemas
+Todas las salidas que deben ser enviadas a otros sistemas
 Todas las transacciones de update
--
 Todos los cálculos
--
 Todos los sinónimos de atributos
--Generalidades
--Ambiente
--Usuario vs Requerimientos
--Diseñador de DB vs SoporteRequerimientos (cont.)
--Físicos
+
+Generalidades
+
+Ambiente
+
+Usuario vs Requerimientos
+
+Diseñador de DB vs Soporte
+
+Requerimientos (cont.)
+
+Físicos
 Número de ocurrencias de cada entidad
--
 Frecuencia de generación de reportes
--
 Número de líneas de c/reporte
--
 Tiempo de respuesta para c/consulta
--
 Tiempo de respuesta para c/update
--
 Condiciones especiales de seguridad
--Consideraciones
--Diseño Completo vs Todos los Requerimientos
--Diseño Físico vs DBMS Específico
--Eficiencia del Sistema
+
+Consideraciones
+
+Diseño Completo vs Todos los Requerimientos
+
+Diseño Físico vs DBMS Específico
+
+Eficiencia del Sistema
 Espacio
--
 Tiempo de Respuesta
--
 Tiempo de Proceso
--
--Redundancia vs Normalización
+
+Redundancia vs Normalización
 Documentar restricciones
--Metodología Pratt - Adamski
+
+Metodología Pratt - Adamski
+
 1. Representar las vistas de usuarios como
 un conjunto de relaciones
 2. Normalizar las relaciones
@@ -322,37 +507,196 @@ un conjunto de relaciones
 4. Determinar cualquier restricción especial
 5. Combinar el resultado de los pasos
 previos dentro del diseño
+
 Supuestos:
-- Los requerimientos son conocidos
-- Se documentará durante el proceso de diseñoFases del Diseño de Base de Datos
+■ Los requerimientos son conocidos
+■ Se documentará durante el proceso de diseño
+
+Fases del Diseño de Base de Datos
+
 Minimundo
+
 Recolección y Análisis
 de Requerimientos
-Requerimientos funcionales Requerimientos de la BD
-Análisis Funcional Diseño Conceptual
-Esquema Conceptual
+
+Requerimientos funcionales
+
+Requerimientos de la BD
+
+Análisis Funcional
+
+Diseño Conceptual
+
 Especificación de Transacciones de Alto Nivel
+
+Esquema Conceptual
 (modelo de datos a alto nivel)
+
 Independiente del DBMS
-Diseño Lógico
 Especifico para el DBMS
+
+Diseño Lógico
 (Transf. De Modelo de datos)
-Diseño de programas de aplicación Esquema (conceptual) lógico [DBMS]
+
+Diseño de programas de aplicación
+
+Esquema (conceptual) lógico [DBMS]
+
 Diseño
 Físico
+
 Implementación de Transacciones
+
 Esquema interno [DBMS]
-Programas de AplicaciónDespliegue de Bases de Datos
--Metodologia de Prototipo-Gestión de Proyectos
+
+Programas de Aplicación
+
+Despliegue de Bases de Datos
+-Metodologia de Prototipo-
+
+Conceptual data modeling
+• Analyze requirements
+• Develop preliminary
+data model
+
+Identify
+problem
+
+Initial
+requirements
+
+Develop
+initial
+prototype
+
+Logical database design
+• Analyze requirements in detail
+• Integrate database views into
+conceptual data model
+
+Database maintenance
+• Tune database for
+improved performance
+• Fix errors in database
+
+Convert to
+operational
+system
+
+Working
+prototype
+
+Physical database design
+and creation
+• Define new database
+contents to DBMS
+• Decide on physical organization
+for new data
+• Design database processing
+programs
+
+If prototype
+is inefficient
+
+Database implementation
+• Code database processing
+• Install new database
+contents, usually from
+existing data sources
+
+Implement and
+use prototype
+
+Problems
+
+Next version
+
+Revise and enhance
+prototype
+
+Database maintenance
+• Analyze database to ensure it
+meets application needs
+• Fix errors in database
+
+Gestión de Proyectos
 -Personal involucrado-
-- Analistas de Sistemas
-- Analistas de base de datos
-- Usuarios
-- Programadores
-- Administrador de Base de Datos
-- Administrador de redes, documentadores,
-testersGestión de Proyectos
+
+• Analistas de Sistemas
+• Analistas de base de datos
+• Usuarios
+• Programadores
+• Administrador de Base de Datos
+• Administrador de redes, documentadores,
+testers
+
+Gestión de Proyectos
 -Diagrama de Gantt-
-Muestra tiempos estimados de las tareasGestión de Proyectos
+
+Sales Promotion Tracking
+| | | April 1998 | May 1998 | June 1998 | July 1998 | August 1998 | September |
+|---|---|---|---|---|---|---|---|
+| ID | Name | | | | | | |
+| 1 | Requirements Collection | | | | | | |
+| 2 | Screen Design | | | | | | |
+| 3 | Report Design | | | | | | |
+| 4 | Database Design | | | | | | |
+| 5 | User Documentation | | | | | | |
+| 6 | Programming | | | | | | |
+| 7 | Testing | | | | | | |
+| 8 | Installation | | | | | | |
+
+Muestra tiempos estimados de las tareas
+
+Date: 4/1/98 8:00am | Critical | | Progress | | Summary | |
+| | Noncritical | | Milestone | | Rolled Up | |
+
+Gestión de Proyectos
 -Diagrama de Pert-
+
+Sales Promotion Tracking
+
+Requirements
+Collection
+1 5w
+4/16/01 5/18/01
+
+Screen Design
+2 6w
+5/21/01 6/29/01
+
+Report Design
+3 6w
+5/21/01 6/29/01
+
+Database Design
+4 2w
+7/2/01 7/13/01
+
+User
+Documentation
+5 5.5w
+7/16/01 8/22/01
+
+Programming
+6 5w
+7/16/01 8/17/01
+
+Installation
+8 5.5w
+9/10/01 9/14/01
+
+Testing
+7 3w
+8/20/01 9/7/01
+
 Muestra dependencias entre tareas
+
+Date: 4/9/01 8:00am
+
+Name
+ID Duration
+Scheduled Start Scheduled Finish
+
+Critical Milestone Subproject
+Noncritical Summary Marked
