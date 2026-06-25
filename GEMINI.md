@@ -62,10 +62,16 @@ El proyecto utiliza una versión adaptada de la base de datos **Northwind** para
 
 ## ⚙️ Desarrollo y Auditoría
 - **Auditoría:** Se sigue el estándar definido en `prompt.md` para garantizar calidad técnica (vía ArquiDB).
-- **Convenciones:** 
+- Convenciones: 
     - Priorizar `JSONB` sobre `JSON`.
     - Usar `SERIAL`/`BIGSERIAL` para IDs secuenciales (o `UUID v7`).
     - Explicar siempre el impacto en I/O de cada consulta (`EXPLAIN ANALYZE`).
+
+## 📝 Historial de Refactorizaciones y OCR (2026-06-25)
+- **Re-OCR y Transcripción:** Se aplicó Ollama + GLM-OCR a Clase_00 a Clase_06, logrando transcripciones de alta fidelidad.
+- **Limpieza de Encoding:** Todos los archivos TXT e HTML fueron normalizados a UTF-8 sin BOM.
+- **Correcciones de Diseño:** Se re-codificaron a UTF-8 los archivos complementarios `extra_*.html` resolviendo problemas de decodificación y eliminando caracteres huérfanos.
+- **Fixes de Formato:** Se repararon líneas pegadas detectadas en la auditoría final (`Clase_10.txt`, `Clase_11.txt`, `Script_Ejemplo_Warehouse.txt`).
 
 ---
 *Mantenido por el Senior Data Solutions Architect.*

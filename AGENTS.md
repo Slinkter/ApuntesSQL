@@ -47,3 +47,8 @@ psql -h localhost -U postgres -d northwind -c "SELECT ..."
 - Spanish, tutorial/mentor tone
 - Files are standalone Markdown with embedded SQL and Mermaid
 - No codegen, no build step, no formatter — just source files
+
+## OCR workflow (added 2026-06-25)
+
+Use Ollama + GLM-OCR for PDF→TXT transcription when needed. See `prompt.md` Fase 1b for the full workflow.
+

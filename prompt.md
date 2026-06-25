@@ -137,6 +137,17 @@ Mantener este prompt conciso. Al generar auditorías, priorizar claridad: una re
 - [x] Corregir `Taller_HA_MSSQL2012.txt` (texto stretch, viñetas (cid:1))
 - [x] Corregir `Practica_03_Sol.txt` (numeración de preguntas)
 
+### [x] Fase 1b: Re-OCR con Ollama + GLM-OCR (2026-06-25)
+
+- [x] Rasterización de 18 PDFs a PNG con `pdftoppm -r 200`
+- [x] OCR con GLM-OCR vía Ollama, prompt "extrae texto sin resumir"
+- [x] Comparación TXT actual vs GLM-OCR (umbral 95% para reemplazo)
+- [x] Reemplazos aplicados: `Clase_00.txt` a `Clase_06.txt`
+- [x] Mantenidos: `Clase_09`, `Clase_10`, `Clase_11`, `Clase_12`, `Clase_15`, `NormalizacioBD`, `Practica_03_Sol`, `Reglas de Negocio...`, `SolucionPractica`, `Taller_HA_MSSQL2012`
+- [x] Reparación de líneas pegadas (`Clase_10`, `Clase_11`, `Script_Ejemplo_Warehouse.txt`)
+- [x] Corrección U+FFFD en `Script_Ejemplo_Warehouse.txt` y conversión de `extra_*.html` a UTF-8
+- [x] HTMLs verificados: `semana_01.html` a `semana_08.html` (sin U+FFFD, sin BOM, sin marcadores PAGE)
+
 ### [x] Fase 2: Mapeo semanal según sílabo
 
 | Sem | Tema                                         | Fuente TXT                                                       | HTML                                                      |
