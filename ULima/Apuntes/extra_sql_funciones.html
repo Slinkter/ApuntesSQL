@@ -1,78 +1,69 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratorio - Funciones y Operadores Avanzados</title>
-    <link rel="stylesheet" href="master.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Laboratorio - Funciones y Operadores Avanzados</title>
+<link href="master.css" rel="stylesheet"/>
 </head>
 <body>
-
 <div class="header">
-    <h1 class="header__title">Laboratorio: Funciones y Operadores</h1>
-    <p class="header__subtitle">PostgreSQL Mastery | Manejo de Datos Avanzado</p>
+<h1 class="header__title">Laboratorio: Funciones y Operadores</h1>
+<p class="header__subtitle">PostgreSQL Mastery | Manejo de Datos Avanzado</p>
 </div>
-
 <div class="cornell">
-    <aside class="sidebar">
-        <h2 class="sidebar__title">Conceptos Clave</h2>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>COALESCE</strong> Manejo de valores nulos.</li>
-            <li class="sidebar__item"><strong>NULLIF</strong> Comparación y nulidad.</li>
-            <li class="sidebar__item"><strong>CAST</strong> Conversión de tipos.</li>
-            <li class="sidebar__item"><strong>Fecha/Hora</strong> Operaciones temporales.</li>
-        </ul>
-    </aside>
-
-    <main class="main">
-        <h2 class="main__title">1. Manejo de Nulos (COALESCE)</h2>
-        <p class="main__text">La función <code>COALESCE</code> retorna el primer valor no nulo de una lista.</p>
-        
-        <div class="box box--note">
-            <pre>-- Si el teléfono es NULL, muestra 'No disponible'
+<aside class="sidebar">
+<h2 class="sidebar__title">Conceptos Clave</h2>
+<ul class="sidebar__list">
+<li class="sidebar__item"><strong>COALESCE</strong> Manejo de valores nulos.</li>
+<li class="sidebar__item"><strong>NULLIF</strong> Comparación y nulidad.</li>
+<li class="sidebar__item"><strong>CAST</strong> Conversión de tipos.</li>
+<li class="sidebar__item"><strong>Fecha/Hora</strong> Operaciones temporales.</li>
+</ul>
+</aside>
+<main class="main">
+<h2 class="main__title">1. Manejo de Nulos (COALESCE)</h2>
+<p class="main__text">La función <code>COALESCE</code> retorna el primer valor no nulo de una lista.</p>
+<div class="box box--note">
+<pre>-- Si el teléfono es NULL, muestra 'No disponible'
 SELECT nombre, COALESCE(telefono, 'No disponible') AS contacto
 FROM clientes;</pre>
-        </div>
-
-        <h2 class="main__title--sub">2. Conversión de Datos (CAST)</h2>
-        <p class="main__text">En PostgreSQL, podemos usar el operador <code>::</code> o la función <code>CAST()</code>.</p>
-        
-        <div class="box box--example">
-            <pre>-- Convertir un texto a entero
+</div>
+<h2 class="main__title--sub">2. Conversión de Datos (CAST)</h2>
+<p class="main__text">En PostgreSQL, podemos usar el operador <code>::</code> o la función <code>CAST()</code>.</p>
+<div class="box box--example">
+<pre>-- Convertir un texto a entero
 SELECT '123'::INTEGER + 7;
 
 -- Usando sintaxis ANSI
 SELECT CAST('2023-05-13' AS DATE);</pre>
-        </div>
-
-        <h2 class="main__title--sub">3. Funciones de Fecha y Hora</h2>
-        <div class="table">
-            <div class="table__th">Función</div>
-            <div class="table__th">Descripción</div>
-            <div class="table__tr">
-                <div class="table__td"><code>NOW()</code></div>
-                <div class="table__td">Fecha y hora actual del servidor.</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td"><code>AGE(fecha)</code></div>
-                <div class="table__td">Calcula el intervalo transcurrido hasta hoy.</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td"><code>EXTRACT(part FROM fecha)</code></div>
-                <div class="table__td">Obtiene año, mes o día de una fecha.</div>
-            </div>
-        </div>
-
-        <h2 class="main__title--sub">4. Operadores de Comparación Avanzados</h2>
-        <pre>-- Operador IS DISTINCT FROM (maneja nulos como valores comparables)
-SELECT * FROM tabla WHERE col1 IS DISTINCT FROM col2;</pre>
-
-        <div class="nav">
-            <a href="extra_sql_consultas_basicas.html" class="nav__link">← Lab Anterior</a>
-            <a href="index.html" class="nav__link">Volver al Índice</a>
-        </div>
-    </main>
 </div>
-
+<h2 class="main__title--sub">3. Funciones de Fecha y Hora</h2>
+<div class="table-responsive"><div class="table">
+<div class="table__th">Función</div>
+<div class="table__th">Descripción</div>
+<div class="table__tr">
+<div class="table__td"><code>NOW()</code></div>
+<div class="table__td">Fecha y hora actual del servidor.</div>
+</div>
+<div class="table__tr">
+<div class="table__td"><code>AGE(fecha)</code></div>
+<div class="table__td">Calcula el intervalo transcurrido hasta hoy.</div>
+</div>
+<div class="table__tr">
+<div class="table__td"><code>EXTRACT(part FROM fecha)</code></div>
+<div class="table__td">Obtiene año, mes o día de una fecha.</div>
+</div>
+</div></div>
+<h2 class="main__title--sub">4. Operadores de Comparación Avanzados</h2>
+<pre>-- Operador IS DISTINCT FROM (maneja nulos como valores comparables)
+SELECT * FROM tabla WHERE col1 IS DISTINCT FROM col2;</pre>
+<div class="nav">
+<a class="nav__link" href="extra_sql_consultas_basicas.html">← Lab Anterior</a>
+<a class="nav__link" href="index.html">Volver al Índice</a>
+</div>
+</main>
+</div>
 </body>
 </html>

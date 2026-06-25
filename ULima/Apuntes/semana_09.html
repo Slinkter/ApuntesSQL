@@ -69,6 +69,7 @@
         </ul>
 
         <p class="main__text"><strong>Tabla inicial (no BCNF):</strong></p>
+        <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr class="table__tr">
@@ -111,6 +112,7 @@
                 </tr>
             </tbody>
         </table>
+        </div>
 
         <p class="main__text">Existe una <strong>segunda dependencia</strong>: Asesor &rarr; Carrera (cada asesor asesora una sola carrera). Por tanto, Asesor es un <strong>atributo determinante</strong> que deberia ser parte de la clave primaria. La tabla no esta en BCNF.</p>
 
@@ -155,6 +157,7 @@ Rojas    Contabilidad</code></pre>
 
         <h3 class="main__title--sub">Caso Practico: Curso - Profesor - Texto</h3>
         <p class="main__text">Un curso (A) tiene varios profesores (B) y varios textos (C). Profesor y Texto son independientes: cualquier profesor puede usar cualquier texto del curso.</p>
+        <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr class="table__tr">
@@ -206,6 +209,7 @@ Rojas    Contabilidad</code></pre>
                 </tr>
             </tbody>
         </table>
+        </div>
 
         <p class="main__text">Se genera una <strong>explosion combinatoria</strong> (producto cartesiano entre profesores y textos por cada curso). Para eliminar la MVD, separamos en dos tablas:</p>
 
@@ -241,6 +245,7 @@ Finanzas         Chang</code></pre>
         </div>
 
         <h3 class="main__title--sub">Caso Practico: Vendedor - Marca - Producto</h3>
+        <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr class="table__tr">
@@ -277,6 +282,7 @@ Finanzas         Chang</code></pre>
                 </tr>
             </tbody>
         </table>
+        </div>
 
         <p class="main__text">Si descomponemos en tres tablas binarias:</p>
         <pre><code>-- VENDEDOR-MARCA

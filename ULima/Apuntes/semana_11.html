@@ -53,6 +53,7 @@
         <h2 class="main__title">1. Funciones de Agrupamiento</h2>
         <p class="main__text">Las funciones de grupo (o funciones agregadas) permiten obtener resultados a partir del procesamiento de conjuntos de filas. Ignoran valores NULL (excepto <code>COUNT(*)</code>).</p>
 
+        <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr class="table__tr">
@@ -89,6 +90,7 @@
                 </tr>
             </tbody>
         </table>
+        </div>
 
         <div class="box box--example">
             <p class="main__text"><strong>Ejemplo completo:</strong> Estadisticas de ordenes de pedido del mes 07.</p>
@@ -162,6 +164,7 @@ FROM   orden_pedido
 GROUP BY id_cliente
 HAVING COUNT(*) > 5;</code></pre>
 
+        <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr class="table__tr">
@@ -183,6 +186,7 @@ HAVING COUNT(*) > 5;</code></pre>
                 </tr>
             </tbody>
         </table>
+        </div>
 
         <div class="box box--note">
             <p class="main__text"><strong>Regla practica:</strong> Usa <code>WHERE</code> para filtrar filas individuales (reduce el conjunto antes de agrupar, mejora rendimiento). Usa <code>HAVING</code> solo para condiciones sobre funciones de grupo (<code>COUNT(*) &gt; 5</code>, <code>AVG(salario) &gt; 5000</code>).</p>

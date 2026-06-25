@@ -1,229 +1,466 @@
-<!DOCTYPE html>
-<html lang="es">
-<head><link rel="stylesheet" href="master.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 14 - Data Warehouse y Business Intelligence</title>
-    
-    
-</head>
-<body>
-
-<div class="header-box">
-    <h1>Data Warehouse y Business Intelligence</h1>
-    <p>Semana 14 | Ingeniería de Datos | ULima 2013-2</p>
-</div>
-
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>PALABRAS CLAVE</h3>
-        <ul>
-            <li><strong>§ DW</strong><br>Data Warehouse</li>
-            <li><strong>§ Modelo Estrella</strong><br>Esquema en estrella</li>
-            <li><strong>§ Tabla de Hechos</strong><br>Fact Table</li>
-            <li><strong>§ Dimensión</strong><br>Tabla de dimensión</li>
-            <li><strong>§ ETL</strong><br>Extract, Transform, Load</li>
-            <li><strong>§ OLAP</strong><br>Procesamiento analítico</li>
-        </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">?? Índice del Curso</a></li>
-                <li><a href="semana_13.html">? Semana 13</a></li>
-                <li><a href="semana_15.html">? Semana 15</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="main-content">
-        <div class="box box-note">
-            <p><strong>?? Objetivos de Aprendizaje</strong></p>
-            <ul style="margin: 8px 0 0 20px;">
-                <li>Comprender qué es un Data Warehouse</li>
-                <li>Diferenciar entre sistemas OLTP y OLAP</li>
-                <li>Diseñar modelos de datos para DW (esquema estrella)</li>
-                <li>Entender el proceso ETL</li>
-                <li>Comprender conceptos de dimensiones y jerarquías</li>
-            </ul>
-        </div>
-
-        <section class="architect-insight">
-            <h4>?? Insight del Arquitecto: DW en 2026</h4>
-            <p><strong>El surgimiento del Data Lakehouse:</strong> En 2026, el enfoque tradicional de DW ha evolucionado. Plataformas como Snowflake, BigQuery yDatabricks combinan lo mejor de Data Warehouses y Data Lakes. Sin embargo, los conceptos fundamentales (hechos, dimensiones, ETL) siguen siendo relevantes.</p>
-        </section>
-
-        <h2>1. ¿Qué es un Data Warehouse?</h2>
-        
-        <div class="box box-concep">
-            <p><strong>Data Warehouse:</strong> Repositorio centralizado de datos históricos organizados para soportar decisiones de negocio.</p>
-        </div>
-
-        <ul>
-            <li><strong>Orientado a temas:</strong> Datos organizados por temas (ventas, clientes, productos)</li>
-            <li><strong>Integrado:</strong> Datos de múltiples fuentes unificados</li>
-            <li><strong>Variante en el tiempo:</strong> Mantiene historial de cambios</li>
-            <li><strong>No volátil:</strong> Los datos no se eliminan ni modifican</li>
-        </ul>
-
-        <h2>2. OLTP vs OLAP</h2>
-        
-        <table>
-            <tr><th>Característica</th><th>OLTP (Transaccional)</th><th>OLAP (Analítico)</th></tr>
-            <tr><td>Propósito</td><td>Operaciones del día a día</td><td>Análisis y decisiones</td></tr>
-            <tr><td>Usuarios</td><td>Operadores, cajeros</td><td>Gerentes, analistas</td></tr>
-            <tr><td>Tipo de acceso</td><td>Lectura/Escritura</td><td>Mayormente lectura</td></tr>
-            <tr><td>Tamaño de datos</td><td>GBs</td><td>TBs a PBs</td></tr>
-            <tr><td>Consultas</td><td>Simples, predefinidas</td><td>Complejas, ad-hoc</td></tr>
-            <tr><td>Rendimiento</td><td>Rápido (< 1 seg)</td><td>Segundos a minutos</td></tr>
-            <tr><td>Normalización</td><td>Alta (3FN)</td><td>Baja (desnormalizado)</td></tr>
-        </table>
-
-        <h2>3. Arquitectura de un DW</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
-                    +-------------+
-                    ¦   Fuentes   ¦
-                    ¦  (OLTP, DB) ¦
-                    +-------------+
-                           ¦
-                    +------?------+
-                    ¦     ETL     ¦
-                    ¦(Extracción, ¦
-                    ¦Transform.,  ¦
-                    ¦   Carga)    ¦
-                    +-------------+
-                           ¦
-                    +------?------+
-                    ¦ Data        ¦
-                    ¦ Warehouse    ¦
-                    +-------------+
-                           ¦
-              +------------+------------+
-              ¦            ¦            ¦
-        +-----?-----+ +----?----+ +----?-----+
-        ¦ Data Mart ¦ ¦  Data   ¦ ¦  OLAP    ¦
-        ¦  Ventas   ¦ ¦   Mart  ¦ ¦  Cubes   ¦
-        ¦           ¦ ¦  Marketing     ¦
-        +-----------+ +---------+ +----------+</pre>
-
-        <h2>4. Modelo Estrella (Star Schema)</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Componentes:</strong></p>
-        </div>
-
-        <ul>
-            <li><strong>Tabla de Hechos (Fact Table):</strong> Centro del modelo, contiene métricas/medidas</li>
-            <li><strong>Tablas de Dimensión:</strong> Rodean la tabla de hechos, contienen atributos descriptivos</li>
-        </ul>
-
-        <h3>Ejemplo: Esquema de Ventas</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
-                    +---------------------+
-                    ¦   dim_tiempo        ¦
-                    ¦ ------------------- ¦
-                    ¦ tiempo_id (PK)      ¦
-                    ¦ fecha               ¦
-                    ¦ año                 ¦
-                    ¦ mes                 ¦
-                    ¦ trimestre           ¦
-                    +---------------------+
-                               ¦
-        +-----------------------+-----------------------+
-        ¦                       ¦                       ¦
-+------?------+      +--------?--------+      +--------?--------+
-¦ dim_producto¦      ¦ fact_ventas     ¦      ¦  dim_cliente   ¦
-¦-------------¦      ¦----------------¦      ¦----------------¦
-¦producto_id  ¦?----?¦ tiempo_id (FK)  ¦?----?¦ cliente_id (PK)¦
-¦ (PK)        ¦      ¦ producto_id(FK)¦      ¦ nombre         ¦
-¦ nombre      ¦      ¦ cliente_id (FK)¦      ¦ segmento       ¦
-¦ categoría   ¦      ¦ cantidad       ¦      ¦ región         ¦
-¦ marca       ¦      ¦ precio_unitario¦      +----------------+
-¦ línea       ¦      ¦ importe_total  ¦
-+-------------+      ¦ tiempo_id (FK) ¦
-                     ¦ dim_geografía  ¦
-                     ¦ --------------¦
-                     ¦ geografía_id(PK)¦
-                     ¦ ciudad         ¦
-                     ¦ región         ¦
-                     ¦ país           ¦
-                     +----------------+</pre>
-
-        <h2>5. Tablas de Dimensión</h2>
-        
-        <table>
-            <tr><th>Tipo de Dimensión</th><th>Descripción</th></tr>
-            <tr><td><strong>Dimensión de Tiempo</strong></td><td>Siempre presente, fechas, períodos</td></tr>
-            <tr><td><strong>Dimensión de Producto</strong></td><td>Categorías, marcas, descripciones</td></tr>
-            <tr><td><strong>Dimensión de Cliente</strong></td><td>Demográficos, segmentación</td></tr>
-            <tr><td><strong>Dimensión Geográfica</strong></td><td>Ubicación, región, país</td></tr>
-            <tr><td><strong>Dimensión de Empleado</strong></td><td>Departamentos, cargos</td></tr>
-        </table>
-
-        <h3>Jerarquías en Dimensiones:</h3>
-        <ul>
-            <li>Producto ? Categoría ? Línea ? Marca</li>
-            <li>Geografía ? País ? Región ? Ciudad ? Tienda</li>
-            <li>Tiempo ? Año ? Trimestre ? Mes ? Día</li>
-        </ul>
-
-        <h2>6. Proceso ETL</h2>
-        
-        <div class="box box-concep">
-            <p><strong>ETL (Extract, Transform, Load):</strong> Proceso de extraer datos de fuentes, transformarlos y cargarlos al DW.</p>
-        </div>
-
-        <ul>
-            <li><strong>Extracción:</strong> Leer datos de sistemas fuente</li>
-            <li><strong>Transformación:</strong> Limpiar, convertir, agregar</li>
-            <li><strong>Carga:</strong> Insertar en el DW</li>
-        </ul>
-
-        <h2>7. Esquema Copo de Nieve (Snowflake)</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Diferencia con Estrella:
--- Las tablas de dimensión están normalizadas
-
-dim_producto --? dim_categoría (separada)
-     ¦
-     +--? dim_marca (separada)
-
--- Ventaja: Menos redundancia
--- Desventaja: Más JOINs, menor rendimiento</pre>
-
-        <table>
-            <tr><th>Esquema</th><th>Ventajas</th><th>Desventajas</th></tr>
-            <tr><td>Estrella</td><td>Simple, rápido, fácil de entender</td><td>Redundancia</td></tr>
-            <tr><td>Copo de Nieve</td><td>Menos redundancia, más flexibilidad</td><td>Más complejo, más JOINs</td></tr>
-        </table>
-
-        <h2>8. Tipos de Tablas de Hechos</h2>
-        
-        <table>
-            <tr><th>Tipo</th><th>Descripción</th></tr>
-            <tr><td><strong>Transaccional</strong></td><td>Una fila por transacción</td></tr>
-            <tr><td><strong>Periódica</strong></td><td>Resumen por período (diario, semanal)</td></tr>
-            <tr><td><strong>Acumulativa</strong></td><td>Todo el lifecycle de un proceso</td></tr>
-        </table>
-
-        <hr>
-
-        <section class="laboratorio">
-            <h3>?? Laboratorio: Diseña un DW</h3>
-            <ol style="margin-left: 20px;">
-                <li>Diseña el modelo estrella para un sistema de ventas de una tienda</li>
-                <li>Identifica las tablas de hechos y dimensiones</li>
-                <li>Define las jerarquías en cada dimensión</li>
-                <li>¿Qué consultas podría responder este DW?</li>
-            </ol>
-        </section>
-
-    </div>
-</div>
-
-</body>
-</html>
-
-
-
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head><link rel="stylesheet" href="master.css">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Semana 14 - Data Warehouse y Business Intelligence</title>
+
+    
+
+    
+
+</head>
+
+<body>
+
+
+
+<div class="header-box">
+
+    <h1>Data Warehouse y Business Intelligence</h1>
+
+    <p>Semana 14 | Ingeniería de Datos | ULima 2013-2</p>
+
+</div>
+
+
+
+<div class="cornell-container">
+
+    <div class="keywords-sidebar">
+
+        <h3>PALABRAS CLAVE</h3>
+
+        <ul>
+
+            <li><strong>§ DW</strong><br>Data Warehouse</li>
+
+            <li><strong>§ Modelo Estrella</strong><br>Esquema en estrella</li>
+
+            <li><strong>§ Tabla de Hechos</strong><br>Fact Table</li>
+
+            <li><strong>§ Dimensión</strong><br>Tabla de dimensión</li>
+
+            <li><strong>§ ETL</strong><br>Extract, Transform, Load</li>
+
+            <li><strong>§ OLAP</strong><br>Procesamiento analítico</li>
+
+        </ul>
+
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+
+            <h3>RECURSOS</h3>
+
+            <ul>
+
+                <li><a href="index.html">?? Índice del Curso</a></li>
+
+                <li><a href="semana_13.html">? Semana 13</a></li>
+
+                <li><a href="semana_15.html">? Semana 15</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="main-content">
+
+        <div class="box box-note">
+
+            <p><strong>?? Objetivos de Aprendizaje</strong></p>
+
+            <ul style="margin: 8px 0 0 20px;">
+
+                <li>Comprender qué es un Data Warehouse</li>
+
+                <li>Diferenciar entre sistemas OLTP y OLAP</li>
+
+                <li>Diseñar modelos de datos para DW (esquema estrella)</li>
+
+                <li>Entender el proceso ETL</li>
+
+                <li>Comprender conceptos de dimensiones y jerarquías</li>
+
+            </ul>
+
+        </div>
+
+
+
+        <section class="architect-insight">
+
+            <h4>?? Insight del Arquitecto: DW en 2026</h4>
+
+            <p><strong>El surgimiento del Data Lakehouse:</strong> En 2026, el enfoque tradicional de DW ha evolucionado. Plataformas como Snowflake, BigQuery yDatabricks combinan lo mejor de Data Warehouses y Data Lakes. Sin embargo, los conceptos fundamentales (hechos, dimensiones, ETL) siguen siendo relevantes.</p>
+
+        </section>
+
+
+
+        <h2>1. ¿Qué es un Data Warehouse?</h2>
+
+        
+
+        <div class="box box-concep">
+
+            <p><strong>Data Warehouse:</strong> Repositorio centralizado de datos históricos organizados para soportar decisiones de negocio.</p>
+
+        </div>
+
+
+
+        <ul>
+
+            <li><strong>Orientado a temas:</strong> Datos organizados por temas (ventas, clientes, productos)</li>
+
+            <li><strong>Integrado:</strong> Datos de múltiples fuentes unificados</li>
+
+            <li><strong>Variante en el tiempo:</strong> Mantiene historial de cambios</li>
+
+            <li><strong>No volátil:</strong> Los datos no se eliminan ni modifican</li>
+
+        </ul>
+
+
+
+        <h2>2. OLTP vs OLAP</h2>
+
+        
+
+        <div class="table-responsive">
+        <table>
+
+            <tr><th>Característica</th><th>OLTP (Transaccional)</th><th>OLAP (Analítico)</th></tr>
+
+            <tr><td>Propósito</td><td>Operaciones del día a día</td><td>Análisis y decisiones</td></tr>
+
+            <tr><td>Usuarios</td><td>Operadores, cajeros</td><td>Gerentes, analistas</td></tr>
+
+            <tr><td>Tipo de acceso</td><td>Lectura/Escritura</td><td>Mayormente lectura</td></tr>
+
+            <tr><td>Tamaño de datos</td><td>GBs</td><td>TBs a PBs</td></tr>
+
+            <tr><td>Consultas</td><td>Simples, predefinidas</td><td>Complejas, ad-hoc</td></tr>
+
+            <tr><td>Rendimiento</td><td>Rápido (< 1 seg)</td><td>Segundos a minutos</td></tr>
+
+            <tr><td>Normalización</td><td>Alta (3FN)</td><td>Baja (desnormalizado)</td></tr>
+
+        </table>
+        </div>
+
+
+
+        <h2>3. Arquitectura de un DW</h2>
+
+        
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+                    +-------------+
+
+                    ¦   Fuentes   ¦
+
+                    ¦  (OLTP, DB) ¦
+
+                    +-------------+
+
+                           ¦
+
+                    +------?------+
+
+                    ¦     ETL     ¦
+
+                    ¦(Extracción, ¦
+
+                    ¦Transform.,  ¦
+
+                    ¦   Carga)    ¦
+
+                    +-------------+
+
+                           ¦
+
+                    +------?------+
+
+                    ¦ Data        ¦
+
+                    ¦ Warehouse    ¦
+
+                    +-------------+
+
+                           ¦
+
+              +------------+------------+
+
+              ¦            ¦            ¦
+
+        +-----?-----+ +----?----+ +----?-----+
+
+        ¦ Data Mart ¦ ¦  Data   ¦ ¦  OLAP    ¦
+
+        ¦  Ventas   ¦ ¦   Mart  ¦ ¦  Cubes   ¦
+
+        ¦           ¦ ¦  Marketing     ¦
+
+        +-----------+ +---------+ +----------+</pre>
+
+
+
+        <h2>4. Modelo Estrella (Star Schema)</h2>
+
+        
+
+        <div class="box box-ejemplo">
+
+            <p><strong>Componentes:</strong></p>
+
+        </div>
+
+
+
+        <ul>
+
+            <li><strong>Tabla de Hechos (Fact Table):</strong> Centro del modelo, contiene métricas/medidas</li>
+
+            <li><strong>Tablas de Dimensión:</strong> Rodean la tabla de hechos, contienen atributos descriptivos</li>
+
+        </ul>
+
+
+
+        <h3>Ejemplo: Esquema de Ventas</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+                    +---------------------+
+
+                    ¦   dim_tiempo        ¦
+
+                    ¦ ------------------- ¦
+
+                    ¦ tiempo_id (PK)      ¦
+
+                    ¦ fecha               ¦
+
+                    ¦ año                 ¦
+
+                    ¦ mes                 ¦
+
+                    ¦ trimestre           ¦
+
+                    +---------------------+
+
+                               ¦
+
+        +-----------------------+-----------------------+
+
+        ¦                       ¦                       ¦
+
++------?------+      +--------?--------+      +--------?--------+
+
+¦ dim_producto¦      ¦ fact_ventas     ¦      ¦  dim_cliente   ¦
+
+¦-------------¦      ¦----------------¦      ¦----------------¦
+
+¦producto_id  ¦?----?¦ tiempo_id (FK)  ¦?----?¦ cliente_id (PK)¦
+
+¦ (PK)        ¦      ¦ producto_id(FK)¦      ¦ nombre         ¦
+
+¦ nombre      ¦      ¦ cliente_id (FK)¦      ¦ segmento       ¦
+
+¦ categoría   ¦      ¦ cantidad       ¦      ¦ región         ¦
+
+¦ marca       ¦      ¦ precio_unitario¦      +----------------+
+
+¦ línea       ¦      ¦ importe_total  ¦
+
++-------------+      ¦ tiempo_id (FK) ¦
+
+                     ¦ dim_geografía  ¦
+
+                     ¦ --------------¦
+
+                     ¦ geografía_id(PK)¦
+
+                     ¦ ciudad         ¦
+
+                     ¦ región         ¦
+
+                     ¦ país           ¦
+
+                     +----------------+</pre>
+
+
+
+        <h2>5. Tablas de Dimensión</h2>
+
+        
+
+        <div class="table-responsive">
+        <table>
+
+            <tr><th>Tipo de Dimensión</th><th>Descripción</th></tr>
+
+            <tr><td><strong>Dimensión de Tiempo</strong></td><td>Siempre presente, fechas, períodos</td></tr>
+
+            <tr><td><strong>Dimensión de Producto</strong></td><td>Categorías, marcas, descripciones</td></tr>
+
+            <tr><td><strong>Dimensión de Cliente</strong></td><td>Demográficos, segmentación</td></tr>
+
+            <tr><td><strong>Dimensión Geográfica</strong></td><td>Ubicación, región, país</td></tr>
+
+            <tr><td><strong>Dimensión de Empleado</strong></td><td>Departamentos, cargos</td></tr>
+
+        </table>
+        </div>
+
+
+
+        <h3>Jerarquías en Dimensiones:</h3>
+
+        <ul>
+
+            <li>Producto ? Categoría ? Línea ? Marca</li>
+
+            <li>Geografía ? País ? Región ? Ciudad ? Tienda</li>
+
+            <li>Tiempo ? Año ? Trimestre ? Mes ? Día</li>
+
+        </ul>
+
+
+
+        <h2>6. Proceso ETL</h2>
+
+        
+
+        <div class="box box-concep">
+
+            <p><strong>ETL (Extract, Transform, Load):</strong> Proceso de extraer datos de fuentes, transformarlos y cargarlos al DW.</p>
+
+        </div>
+
+
+
+        <ul>
+
+            <li><strong>Extracción:</strong> Leer datos de sistemas fuente</li>
+
+            <li><strong>Transformación:</strong> Limpiar, convertir, agregar</li>
+
+            <li><strong>Carga:</strong> Insertar en el DW</li>
+
+        </ul>
+
+
+
+        <h2>7. Esquema Copo de Nieve (Snowflake)</h2>
+
+        
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Diferencia con Estrella:
+
+-- Las tablas de dimensión están normalizadas
+
+
+
+dim_producto --? dim_categoría (separada)
+
+     ¦
+
+     +--? dim_marca (separada)
+
+
+
+-- Ventaja: Menos redundancia
+
+-- Desventaja: Más JOINs, menor rendimiento</pre>
+
+
+
+        <div class="table-responsive">
+        <table>
+
+            <tr><th>Esquema</th><th>Ventajas</th><th>Desventajas</th></tr>
+
+            <tr><td>Estrella</td><td>Simple, rápido, fácil de entender</td><td>Redundancia</td></tr>
+
+            <tr><td>Copo de Nieve</td><td>Menos redundancia, más flexibilidad</td><td>Más complejo, más JOINs</td></tr>
+
+        </table>
+        </div>
+
+
+
+        <h2>8. Tipos de Tablas de Hechos</h2>
+
+        
+
+        <div class="table-responsive">
+        <table>
+
+            <tr><th>Tipo</th><th>Descripción</th></tr>
+
+            <tr><td><strong>Transaccional</strong></td><td>Una fila por transacción</td></tr>
+
+            <tr><td><strong>Periódica</strong></td><td>Resumen por período (diario, semanal)</td></tr>
+
+            <tr><td><strong>Acumulativa</strong></td><td>Todo el lifecycle de un proceso</td></tr>
+
+        </table>
+        </div>
+
+
+
+        <hr>
+
+
+
+        <section class="laboratorio">
+
+            <h3>?? Laboratorio: Diseña un DW</h3>
+
+            <ol style="margin-left: 20px;">
+
+                <li>Diseña el modelo estrella para un sistema de ventas de una tienda</li>
+
+                <li>Identifica las tablas de hechos y dimensiones</li>
+
+                <li>Define las jerarquías en cada dimensión</li>
+
+                <li>¿Qué consultas podría responder este DW?</li>
+
+            </ol>
+
+        </section>
+
+
+
+    </div>
+
+</div>
+
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+

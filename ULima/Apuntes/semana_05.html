@@ -1,71 +1,65 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 05 - DML y Consultas Simples</title>
-    <link rel="stylesheet" href="master.css">
-    <script src="canvas-ui.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Semana 05 - DML y Consultas Simples</title>
+<link href="master.css" rel="stylesheet"/>
+<script src="canvas-ui.js"></script>
 </head>
 <body>
-
 <div class="header">
-    <h1 class="header__title">DML y Consultas Simples</h1>
-    <p class="header__subtitle">Semana 05 | Lenguaje de Manipulacion de Datos | Ingenieria de Datos</p>
+<h1 class="header__title">DML y Consultas Simples</h1>
+<p class="header__subtitle">Semana 05 | Lenguaje de Manipulacion de Datos | Ingenieria de Datos</p>
 </div>
-
 <div class="cornell">
-    <aside class="sidebar">
-        <h2 class="sidebar__title">Conceptos Clave</h2>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>INSERT</strong> Agregar filas a una tabla</li>
-            <li class="sidebar__item"><strong>UPDATE</strong> Modificar valores existentes</li>
-            <li class="sidebar__item"><strong>DELETE</strong> Eliminar filas de una tabla</li>
-            <li class="sidebar__item"><strong>SELECT</strong> Consultar datos almacenados</li>
-            <li class="sidebar__item"><strong>WHERE</strong> Clausula de filtrado condicional</li>
-            <li class="sidebar__item"><strong>DISTINCT</strong> Valores unicos sin duplicados</li>
-        </ul>
-        <h2 class="sidebar__title">Recursos</h2>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><a class="sidebar__link" href="index.html">Indice del Curso</a></li>
-            <li class="sidebar__item"><a class="sidebar__link" href="semana_04.html">Semana 04</a></li>
-            <li class="sidebar__item"><a class="sidebar__link" href="semana_06.html">Semana 06</a></li>
-        </ul>
-    </aside>
-
-    <main class="main">
-        <div class="box box--note">
-            <p><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Comprender los lenguajes de la Base de Datos Relacional (DDL, DML, DCL)</li>
-                <li class="main__list-item">Insertar nuevas filas con INSERT</li>
-                <li class="main__list-item">Modificar datos existentes con UPDATE</li>
-                <li class="main__list-item">Eliminar filas con DELETE</li>
-                <li class="main__list-item">Consultar datos con SELECT basico y filtrado WHERE</li>
-            </ul>
-        </div>
-
-        <div class="architect-insight">
-            <p><strong>Insight del Arquitecto:</strong> Las sentencias DML son las mas usadas en cualquier aplicacion. En PostgreSQL, recursos como <code>RETURNING</code> e <code>INSERT ... ON CONFLICT</code> (upsert) ahorran viajes de ida y vuelta al servidor. Siempre prefiera <code>TRUNCATE</code> sobre <code>DELETE</code> sin WHERE para vaciar tablas grandes.</p>
-        </div>
-
-        <h2 class="main__title">1. Lenguajes de la Base de Datos Relacional</h2>
-        <p class="main__text">Una base de datos relacional se maneja a traves de distintos sublenguajes SQL:</p>
-        <ul class="main__list">
-            <li class="main__list-item"><strong>DML</strong> (Data Manipulation Language) - INSERT, UPDATE, DELETE, SELECT</li>
-            <li class="main__list-item"><strong>DDL</strong> (Data Definition Language) - CREATE, ALTER, DROP, RENAME</li>
-            <li class="main__list-item"><strong>DCL</strong> (Data Control Language) - GRANT, REVOKE</li>
-            <li class="main__list-item"><strong>TCL</strong> (Transaction Control) - COMMIT, ROLLBACK, SAVEPOINT</li>
-        </ul>
-
-        <h2 class="main__title">2. INSERT - Insercion de Datos</h2>
-        <p class="main__text">Aniade una nueva fila a una tabla existente. Todos los campos con restriccion NOT NULL deben recibir un valor.</p>
-        <pre>INSERT INTO table [column, column...]
+<aside class="sidebar">
+<h2 class="sidebar__title">Conceptos Clave</h2>
+<ul class="sidebar__list">
+<li class="sidebar__item"><strong>INSERT</strong> Agregar filas a una tabla</li>
+<li class="sidebar__item"><strong>UPDATE</strong> Modificar valores existentes</li>
+<li class="sidebar__item"><strong>DELETE</strong> Eliminar filas de una tabla</li>
+<li class="sidebar__item"><strong>SELECT</strong> Consultar datos almacenados</li>
+<li class="sidebar__item"><strong>WHERE</strong> Clausula de filtrado condicional</li>
+<li class="sidebar__item"><strong>DISTINCT</strong> Valores unicos sin duplicados</li>
+</ul>
+<h2 class="sidebar__title">Recursos</h2>
+<ul class="sidebar__list">
+<li class="sidebar__item"><a class="sidebar__link" href="index.html">Indice del Curso</a></li>
+<li class="sidebar__item"><a class="sidebar__link" href="semana_04.html">Semana 04</a></li>
+<li class="sidebar__item"><a class="sidebar__link" href="semana_06.html">Semana 06</a></li>
+</ul>
+</aside>
+<main class="main">
+<div class="box box--note">
+<p><strong>Objetivos de Aprendizaje</strong></p>
+<ul class="main__list">
+<li class="main__list-item">Comprender los lenguajes de la Base de Datos Relacional (DDL, DML, DCL)</li>
+<li class="main__list-item">Insertar nuevas filas con INSERT</li>
+<li class="main__list-item">Modificar datos existentes con UPDATE</li>
+<li class="main__list-item">Eliminar filas con DELETE</li>
+<li class="main__list-item">Consultar datos con SELECT basico y filtrado WHERE</li>
+</ul>
+</div>
+<div class="architect-insight">
+<p><strong>Insight del Arquitecto:</strong> Las sentencias DML son las mas usadas en cualquier aplicacion. En PostgreSQL, recursos como <code>RETURNING</code> e <code>INSERT ... ON CONFLICT</code> (upsert) ahorran viajes de ida y vuelta al servidor. Siempre prefiera <code>TRUNCATE</code> sobre <code>DELETE</code> sin WHERE para vaciar tablas grandes.</p>
+</div>
+<h2 class="main__title">1. Lenguajes de la Base de Datos Relacional</h2>
+<p class="main__text">Una base de datos relacional se maneja a traves de distintos sublenguajes SQL:</p>
+<ul class="main__list">
+<li class="main__list-item"><strong>DML</strong> (Data Manipulation Language) - INSERT, UPDATE, DELETE, SELECT</li>
+<li class="main__list-item"><strong>DDL</strong> (Data Definition Language) - CREATE, ALTER, DROP, RENAME</li>
+<li class="main__list-item"><strong>DCL</strong> (Data Control Language) - GRANT, REVOKE</li>
+<li class="main__list-item"><strong>TCL</strong> (Transaction Control) - COMMIT, ROLLBACK, SAVEPOINT</li>
+</ul>
+<h2 class="main__title">2. INSERT - Insercion de Datos</h2>
+<p class="main__text">Aniade una nueva fila a una tabla existente. Todos los campos con restriccion NOT NULL deben recibir un valor.</p>
+<pre>INSERT INTO table [column, column...]
 VALUES (valor1, valor2, ...);</pre>
-
-        <div class="box box--example">
-            <p><strong>Ejemplo:</strong> Tabla <code>cliente</code> y <code>orden_pedido</code>.</p>
-            <pre>CREATE TABLE cliente (
+<div class="box box--example">
+<p><strong>Ejemplo:</strong> Tabla <code>cliente</code> y <code>orden_pedido</code>.</p>
+<pre>CREATE TABLE cliente (
     codigo_cliente NUMBER(5) PRIMARY KEY,
     nombre VARCHAR2(25) NOT NULL,
     apellido VARCHAR2(50) NOT NULL,
@@ -85,128 +79,114 @@ VALUES (1, 'JOSE', 'PARDO', '01-4414896');
 
 INSERT INTO orden_pedido
 VALUES (555, '25-OCT-07', '05-OCT-07', 5, 1);</pre>
-        </div>
-
-        <div class="box box--note">
-            <p><strong>Nota:</strong> Se puede especificar la lista de columnas. El valor NULL es valido para campos sin restriccion NOT NULL.</p>
-        </div>
-
-        <h2 class="main__title">3. UPDATE - Modificacion de Datos</h2>
-        <p class="main__text">Modifica el valor de uno o varios campos en filas existentes. Puede elegir las filas mediante la clausula WHERE.</p>
-        <pre>UPDATE table
+</div>
+<div class="box box--note">
+<p><strong>Nota:</strong> Se puede especificar la lista de columnas. El valor NULL es valido para campos sin restriccion NOT NULL.</p>
+</div>
+<h2 class="main__title">3. UPDATE - Modificacion de Datos</h2>
+<p class="main__text">Modifica el valor de uno o varios campos en filas existentes. Puede elegir las filas mediante la clausula WHERE.</p>
+<pre>UPDATE table
 SET column = nuevo_valor | expresion
 [WHERE condicion {AND|OR} condicion...];</pre>
-
-        <div class="box box--example">
-            <p><strong>Ejemplo:</strong> Cambiar numero de embarques de la orden 555 y telefono del cliente 1.</p>
-            <pre>UPDATE orden_pedido
+<div class="box box--example">
+<p><strong>Ejemplo:</strong> Cambiar numero de embarques de la orden 555 y telefono del cliente 1.</p>
+<pre>UPDATE orden_pedido
 SET numero_embarques = 3
 WHERE numero_orden = 555;
 
 UPDATE cliente
 SET telefono = '01-4367788'
 WHERE codigo_cliente = 1;</pre>
-        </div>
-
-        <div class="box box--warning">
-            <p><strong>Precaucion:</strong> Si omite la clausula WHERE, se actualizan TODAS las filas de la tabla. Siempre verifique primero con un SELECT.</p>
-        </div>
-
-        <h2 class="main__title">4. DELETE - Eliminacion de Datos</h2>
-        <p class="main__text">Elimina una o mas filas de una tabla. La clausula WHERE determina cuales filas se eliminan.</p>
-        <pre>DELETE FROM table
+</div>
+<div class="box box--warning">
+<p><strong>Precaucion:</strong> Si omite la clausula WHERE, se actualizan TODAS las filas de la tabla. Siempre verifique primero con un SELECT.</p>
+</div>
+<h2 class="main__title">4. DELETE - Eliminacion de Datos</h2>
+<p class="main__text">Elimina una o mas filas de una tabla. La clausula WHERE determina cuales filas se eliminan.</p>
+<pre>DELETE FROM table
 [WHERE condicion {AND|OR} condicion...];</pre>
-
-        <div class="box box--example">
-            <p><strong>Ejemplo:</strong> Eliminar la orden de pedido numero 555.</p>
-            <pre>DELETE FROM orden_pedido
+<div class="box box--example">
+<p><strong>Ejemplo:</strong> Eliminar la orden de pedido numero 555.</p>
+<pre>DELETE FROM orden_pedido
 WHERE numero_orden = 555;</pre>
-        </div>
-
-        <h2 class="main__title">5. SELECT - Consulta de Datos</h2>
-        <p class="main__text">Permite consultar la informacion contenida en una o varias tablas. Es la instruccion DML mas utilizada.</p>
-        <pre>SELECT ALL|*|DISTINCT|(column, column...)
+</div>
+<h2 class="main__title">5. SELECT - Consulta de Datos</h2>
+<p class="main__text">Permite consultar la informacion contenida en una o varias tablas. Es la instruccion DML mas utilizada.</p>
+<pre>SELECT ALL|*|DISTINCT|(column, column...)
 FROM table
 [WHERE condicion {AND|OR} condicion...];</pre>
-
-        <ul class="main__list">
-            <li class="main__list-item"><code>ALL</code> o <code>*</code> muestra todas las columnas y todas las filas</li>
-            <li class="main__list-item"><code>DISTINCT</code> elimina duplicados en los resultados</li>
-            <li class="main__list-item"><code>WHERE</code> filtra las filas segun una condicion logica</li>
-        </ul>
-
-        <div class="box box--example">
-            <p><strong>Ejemplos de SELECT:</strong></p>
-            <pre>SELECT ALL FROM orden_pedido;
+<ul class="main__list">
+<li class="main__list-item"><code>ALL</code> o <code>*</code> muestra todas las columnas y todas las filas</li>
+<li class="main__list-item"><code>DISTINCT</code> elimina duplicados en los resultados</li>
+<li class="main__list-item"><code>WHERE</code> filtra las filas segun una condicion logica</li>
+</ul>
+<div class="box box--example">
+<p><strong>Ejemplos de SELECT:</strong></p>
+<pre>SELECT ALL FROM orden_pedido;
 SELECT * FROM cliente;
 SELECT * FROM cliente WHERE codigo_cliente = 1;
 SELECT DISTINCT nombre FROM cliente;
 SELECT nombre, apellido FROM cliente
 WHERE codigo_cliente = 1;</pre>
-        </div>
-
-        <h2 class="main__title--sub">Operadores en la clausula WHERE</h2>
-        <div class="table">
-            <div class="table__tr">
-                <div class="table__th">Operador</div>
-                <div class="table__th">Descripcion</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">=</div>
-                <div class="table__td">Igual a</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">&lt;&gt; o !=</div>
-                <div class="table__td">Diferente de</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">&gt; &lt;</div>
-                <div class="table__td">Mayor / Menor que</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">BETWEEN</div>
-                <div class="table__td">Rango (inclusivo)</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">LIKE</div>
-                <div class="table__td">Coincidencia de patron</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">IN</div>
-                <div class="table__td">Pertenece a un conjunto</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">IS NULL</div>
-                <div class="table__td">Verificar valor nulo</div>
-            </div>
-        </div>
-
-        <div class="architect-insight">
-            <p><strong>Insight del Arquitecto:</strong> En PostgreSQL, la paginacion se logra con <code>LIMIT ... OFFSET ...</code> a diferencia de Oracle que usa <code>ROWNUM</code> o SQL Server con <code>TOP</code>. La clausula <code>RETURNING</code> es exclusiva de PostgreSQL y permite devolver los valores generados (como SERIAL) tras una insercion.</p>
-        </div>
-
-        <div class="box box--exercise">
-            <p><strong>Laboratorio:</strong> Dada la tabla <code>empleado (id, nombre, departamento, salario, fecha_ingreso)</code>, escriba:</p>
-            <ol class="main__list" style="list-style: decimal;">
-                <li class="main__list-item">Un INSERT para anadir 3 empleados</li>
-                <li class="main__list-item">Un UPDATE que aumente 10% el salario del departamento 'TI'</li>
-                <li class="main__list-item">Un DELETE del empleado con id = 5</li>
-                <li class="main__list-item">Un SELECT con todos los empleados ordenados por salario descendente</li>
-                <li class="main__list-item">Un SELECT con DISTINCT de los departamentos</li>
-            </ol>
-        </div>
-
-        <div class="canvas-container">
-            <canvas id="canvas_05" width="800" height="360"></canvas>
-            <div id="controls_05" class="canvas-controls"></div>
-        </div>
-        <div class="nav">
-            <a href="semana_04.html" class="nav__link">Semana 04</a>
-            <a href="semana_06.html" class="nav__link">Semana 06</a>
-        </div>
-    </main>
 </div>
-
+<h2 class="main__title--sub">Operadores en la clausula WHERE</h2>
+<div class="table-responsive"><div class="table">
+<div class="table__tr">
+<div class="table__th">Operador</div>
+<div class="table__th">Descripcion</div>
+</div>
+<div class="table__tr">
+<div class="table__td">=</div>
+<div class="table__td">Igual a</div>
+</div>
+<div class="table__tr">
+<div class="table__td"><> o !=</div>
+<div class="table__td">Diferente de</div>
+</div>
+<div class="table__tr">
+<div class="table__td">> <</div>
+<div class="table__td">Mayor / Menor que</div>
+</div>
+<div class="table__tr">
+<div class="table__td">BETWEEN</div>
+<div class="table__td">Rango (inclusivo)</div>
+</div>
+<div class="table__tr">
+<div class="table__td">LIKE</div>
+<div class="table__td">Coincidencia de patron</div>
+</div>
+<div class="table__tr">
+<div class="table__td">IN</div>
+<div class="table__td">Pertenece a un conjunto</div>
+</div>
+<div class="table__tr">
+<div class="table__td">IS NULL</div>
+<div class="table__td">Verificar valor nulo</div>
+</div>
+</div></div>
+<div class="architect-insight">
+<p><strong>Insight del Arquitecto:</strong> En PostgreSQL, la paginacion se logra con <code>LIMIT ... OFFSET ...</code> a diferencia de Oracle que usa <code>ROWNUM</code> o SQL Server con <code>TOP</code>. La clausula <code>RETURNING</code> es exclusiva de PostgreSQL y permite devolver los valores generados (como SERIAL) tras una insercion.</p>
+</div>
+<div class="box box--exercise">
+<p><strong>Laboratorio:</strong> Dada la tabla <code>empleado (id, nombre, departamento, salario, fecha_ingreso)</code>, escriba:</p>
+<ol class="main__list" style="list-style: decimal;">
+<li class="main__list-item">Un INSERT para anadir 3 empleados</li>
+<li class="main__list-item">Un UPDATE que aumente 10% el salario del departamento 'TI'</li>
+<li class="main__list-item">Un DELETE del empleado con id = 5</li>
+<li class="main__list-item">Un SELECT con todos los empleados ordenados por salario descendente</li>
+<li class="main__list-item">Un SELECT con DISTINCT de los departamentos</li>
+</ol>
+</div>
+<div class="canvas-container">
+<canvas height="360" id="canvas_05" width="800"></canvas>
+<div class="canvas-controls" id="controls_05"></div>
+</div>
+<div class="nav">
+<a class="nav__link" href="semana_04.html">Semana 04</a>
+<a class="nav__link" href="semana_06.html">Semana 06</a>
+</div>
+</main>
+</div>
 <script>
 var dmlData = {
     cols: ['ID', 'Nombre', 'Precio', 'Stock'],

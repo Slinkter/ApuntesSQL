@@ -1,271 +1,546 @@
-<!DOCTYPE html>
-<html lang="es">
-<head><link rel="stylesheet" href="master.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 12 - Triggers y Eventos</title>
-
-    
-</head>
-<body>
-
-<div class="header-box">
-    <h1>Triggers y Programación Avanzada</h1>
-    <p>Semana 12 | Ingeniería de Datos | ULima 2013-2</p>
-</div>
-
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>PALABRAS CLAVE</h3>
-        <ul>
-            <li><strong>§ Trigger</strong><br>Disparador automático</li>
-            <li><strong>§ NEW/OLD</strong><br>Nuevos/old valores de fila</li>
-            <li><strong>§ BEFORE/AFTER</strong><br>Cuando se ejecuta</li>
-            <li><strong>§ FOR EACH ROW</strong><br>Por cada fila</li>
-            <li><strong>§ WHEN</strong><br>Condición de disparo</li>
-            <li><strong>§ RAISE NOTICE</strong><br>Mensajes</li>
-        </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">?? Índice del Curso</a></li>
-                <li><a href="semana_11.html">? Semana 11</a></li>
-                <li><a href="semana_13.html">? Semana 13</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="main-content">
-        <div class="box box-note">
-            <p><strong>?? Objetivos de Aprendizaje</strong></p>
-            <ul style="margin: 8px 0 0 20px;">
-                <li>Comprender qué es un trigger y cuándo usarlo</li>
-                <li>Crear triggers en dos pasos (función + trigger)</li>
-                <li>Manejar las variables NEW y OLD</li>
-                <li>Implementar validaciones complejas</li>
-                <li>Crear logs de auditoría</li>
-            </ul>
-        </div>
-
-        <section class="architect-insight">
-            <h4>?? Insight del Arquitecto: Cuándo USAR Triggers</h4>
-            <p><strong>Triggers: úsalos con moderación:</strong> Los triggers son poderosos pero pueden ser difíciles de debuguear. El arquitecto Martin Kleppmann advierte que los triggers pueden crear efectos secundarios invisibiless. Úsalos para:</p>
-            <ul>
-                <li>Auditoría (logging de cambios)</li>
-                <li>Validaciones complejas que no puedes hacer con constraints</li>
-                <li>Mantener datos derivados (ej: timestamp de modificación)</li>
-                <li>Evita usarlos para lógica de negocio compleja (usa procedimientos)</li>
-            </ul>
-        </section>
-
-        <h2>1. ¿Qué es un Trigger?</h2>
-        
-        <div class="box box-concep">
-            <p><strong>Trigger:</strong> Procedimiento que se ejecuta automáticamente cuando ocurre un evento DML (INSERT, UPDATE, DELETE) en una tabla.</p>
-        </div>
-
-        <ul>
-            <li><strong>BEFORE:</strong> Se ejecuta antes de la operación</li>
-            <li><strong>AFTER:</strong> Se ejecuta después de la operación</li>
-            <li><strong>FOR EACH ROW:</strong> Se ejecuta por cada fila afectada</li>
-            <li><strong>FOR EACH STATEMENT:</strong> Se ejecuta una vez por operación</li>
-        </ul>
-
-        <h2>2. Estructura de un Trigger en PostgreSQL</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Dos pasos:</strong></p>
-            <ol>
-                <li>Crear la función trigger</li>
-                <li>Crear el trigger que llama a la función</li>
-            </ol>
-        </div>
-
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Paso 1: Crear la función trigger
-CREATE OR REPLACE FUNCTION nombre_funcion_trigger()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Lógica del trigger
-    -- NEW = nueva fila (para INSERT/UPDATE)
-    -- OLD = fila antigua (para UPDATE/DELETE)
-    RETURN NEW;  -- o RETURN OLD
-END;
-$$ LANGUAGE plpgsql;
-
--- Paso 2: Crear el trigger
-CREATE TRIGGER nombre_trigger
-    [BEFORE | AFTER] [INSERT | UPDATE | DELETE]
-    ON nombre_tabla
-    [FOR EACH ROW]
-    [WHEN (condición)]
-    EXECUTE FUNCTION nombre_funcion_trigger();</pre>
-
-        <h2>3. Variables NEW y OLD</h2>
-        
-        <table>
-            <tr><th>Evento</th><th>NEW</th><th>OLD</th></tr>
-            <tr><td>INSERT</td><td>Valores que se insertarán</td><td>NULL</td></tr>
-            <tr><td>UPDATE</td><td>Nuevos valores</td><td>Valores anteriores</td></tr>
-            <tr><td>DELETE</td><td>NULL</td><td>Valores que se eliminarán</td></tr>
-        </table>
-
-        <h3>Ejemplo: Actualizar fecha de modificación</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Función para actualizar timestamp
-CREATE OR REPLACE FUNCTION actualizar_fecha_mod()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.fecha_modificacion := CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger en tabla producto
-CREATE TRIGGER trigger_fecha_mod_producto
-    BEFORE UPDATE ON producto
-    FOR EACH ROW
-    EXECUTE FUNCTION actualizar_fecha_mod();</pre>
-
-        <h2>4. Validaciones con Triggers</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Evitar que el precio baje
-CREATE OR REPLACE FUNCTION validar_precio()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.precio < OLD.precio THEN
-        RAISE EXCEPTION 'No se puede reducir el precio de % a %', 
-            OLD.precio, NEW.precio;
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trigger_validar_precio
-    BEFORE UPDATE ON producto
-    FOR EACH ROW
-    EXECUTE FUNCTION validar_precio();
-
--- Validar que el stock no sea negativo
-CREATE OR REPLACE FUNCTION validar_stock()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.cantidad < 0 THEN
-        RAISE EXCEPTION 'La cantidad no puede ser negativa';
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;</pre>
-
-        <h2>5. Auditoría con Triggers</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Tabla de auditoría
-CREATE TABLE auditoria_cliente (
-    id SERIAL PRIMARY KEY,
-    usuario VARCHAR(100),
-    accion VARCHAR(10),
-    cliente_id INTEGER,
-    datos_anteriores TEXT,
-    datos_nuevos TEXT,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Función de auditoría
-CREATE OR REPLACE FUNCTION auditar_cliente()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF TG_OP = 'INSERT' THEN
-        INSERT INTO auditoria_cliente (usuario, accion, cliente_id, datos_nuevos)
-        VALUES (current_user, 'INSERT', NEW.id, row_to_json(NEW)::text);
-        RETURN NEW;
-    ELSIF TG_OP = 'UPDATE' THEN
-        INSERT INTO auditoria_cliente (usuario, accion, cliente_id, datos_anteriores, datos_nuevos)
-        VALUES (current_user, 'UPDATE', NEW.id, row_to_json(OLD)::text, row_to_json(NEW)::text);
-        RETURN NEW;
-    ELSIF TG_OP = 'DELETE' THEN
-        INSERT INTO auditoria_cliente (usuario, accion, cliente_id, datos_anteriores)
-        VALUES (current_user, 'DELETE', OLD.id, row_to_json(OLD)::text);
-        RETURN OLD;
-    END IF;
-    RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
-
--- Triggers de auditoría
-CREATE TRIGGER trigger_auditar_cliente_insert
-    AFTER INSERT ON cliente
-    FOR EACH ROW
-    EXECUTE FUNCTION auditar_cliente();
-
-CREATE TRIGGER trigger_auditar_cliente_update
-    AFTER UPDATE ON cliente
-    FOR EACH ROW
-    EXECUTE FUNCTION auditar_cliente();
-
-CREATE TRIGGER trigger_auditar_cliente_delete
-    AFTER DELETE ON cliente
-    FOR EACH ROW
-    EXECUTE FUNCTION auditar_cliente();</pre>
-
-        <h2>6. Triggers con Condición WHEN</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Solo dispara cuando se cumple la condición
-CREATE TRIGGER trigger_precio_alto
-    AFTER UPDATE ON producto
-    FOR EACH ROW
-    WHEN (NEW.precio > 1000)  -- solo si precio > 1000
-    EXECUTE FUNCTION notificar_precio_alto();
-
--- Función asociada
-CREATE OR REPLACE FUNCTION notificar_precio_alto()
-RETURNS TRIGGER AS $$
-BEGIN
-    RAISE NOTICE 'Producto % tiene nuevo precio alto: %', 
-        NEW.nombre, NEW.precio;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;</pre>
-
-        <h2>7. Eventos de Triggers</h2>
-        
-        <table>
-            <tr><th>Evento</th><th>Descripción</th></tr>
-            <tr><td>INSERT</td><td>Cuando se inserta una fila</td></tr>
-            <tr><td>UPDATE</td><td>Cuando se actualiza una fila</td></tr>
-            <tr><td>DELETE</td><td>Cuando se elimina una fila</td></tr>
-            <tr><td>TRUNCATE</td><td>Cuando se trunca la tabla</td></tr>
-        </table>
-
-        <div class="box box-warning">
-            <p><strong>?? Notas importantes:</strong></p>
-            <ul>
-                <li>En PostgreSQL, un trigger NO puede modificar otras tablas directamente (salvo que llame a funciones)</li>
-                <li>Usa RETURN NEW (o OLD para DELETE) al final de la función</li>
-                <li>TG_OP indica la operación que disparó el trigger</li>
-                <li>current_user indica el usuario que ejecutó la operación</li>
-            </ul>
-        </div>
-
-        <hr>
-
-        <section class="laboratorio">
-            <h3>?? Laboratorio: Triggers</h3>
-            <ol style="margin-left: 20px;">
-                <li>Crea un trigger que registre automáticamente la fecha de creación de un cliente</li>
-                <li>Crea un trigger que valide que el stock no exceda un máximo</li>
-                <li>Crea un sistema de auditoría para la tabla pedido</li>
-                <li>Crea un trigger que envíe notificación cuando un producto queda con stock = 0</li>
-            </ol>
-        </section>
-
-    </div>
-</div>
-
-</body>
-</html>
-
-
-
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head><link rel="stylesheet" href="master.css">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Semana 12 - Triggers y Eventos</title>
+
+
+
+    
+
+</head>
+
+<body>
+
+
+
+<div class="header-box">
+
+    <h1>Triggers y Programación Avanzada</h1>
+
+    <p>Semana 12 | Ingeniería de Datos | ULima 2013-2</p>
+
+</div>
+
+
+
+<div class="cornell-container">
+
+    <div class="keywords-sidebar">
+
+        <h3>PALABRAS CLAVE</h3>
+
+        <ul>
+
+            <li><strong>§ Trigger</strong><br>Disparador automático</li>
+
+            <li><strong>§ NEW/OLD</strong><br>Nuevos/old valores de fila</li>
+
+            <li><strong>§ BEFORE/AFTER</strong><br>Cuando se ejecuta</li>
+
+            <li><strong>§ FOR EACH ROW</strong><br>Por cada fila</li>
+
+            <li><strong>§ WHEN</strong><br>Condición de disparo</li>
+
+            <li><strong>§ RAISE NOTICE</strong><br>Mensajes</li>
+
+        </ul>
+
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+
+            <h3>RECURSOS</h3>
+
+            <ul>
+
+                <li><a href="index.html">?? Índice del Curso</a></li>
+
+                <li><a href="semana_11.html">? Semana 11</a></li>
+
+                <li><a href="semana_13.html">? Semana 13</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="main-content">
+
+        <div class="box box-note">
+
+            <p><strong>?? Objetivos de Aprendizaje</strong></p>
+
+            <ul style="margin: 8px 0 0 20px;">
+
+                <li>Comprender qué es un trigger y cuándo usarlo</li>
+
+                <li>Crear triggers en dos pasos (función + trigger)</li>
+
+                <li>Manejar las variables NEW y OLD</li>
+
+                <li>Implementar validaciones complejas</li>
+
+                <li>Crear logs de auditoría</li>
+
+            </ul>
+
+        </div>
+
+
+
+        <section class="architect-insight">
+
+            <h4>?? Insight del Arquitecto: Cuándo USAR Triggers</h4>
+
+            <p><strong>Triggers: úsalos con moderación:</strong> Los triggers son poderosos pero pueden ser difíciles de debuguear. El arquitecto Martin Kleppmann advierte que los triggers pueden crear efectos secundarios invisibiless. Úsalos para:</p>
+
+            <ul>
+
+                <li>Auditoría (logging de cambios)</li>
+
+                <li>Validaciones complejas que no puedes hacer con constraints</li>
+
+                <li>Mantener datos derivados (ej: timestamp de modificación)</li>
+
+                <li>Evita usarlos para lógica de negocio compleja (usa procedimientos)</li>
+
+            </ul>
+
+        </section>
+
+
+
+        <h2>1. ¿Qué es un Trigger?</h2>
+
+        
+
+        <div class="box box-concep">
+
+            <p><strong>Trigger:</strong> Procedimiento que se ejecuta automáticamente cuando ocurre un evento DML (INSERT, UPDATE, DELETE) en una tabla.</p>
+
+        </div>
+
+
+
+        <ul>
+
+            <li><strong>BEFORE:</strong> Se ejecuta antes de la operación</li>
+
+            <li><strong>AFTER:</strong> Se ejecuta después de la operación</li>
+
+            <li><strong>FOR EACH ROW:</strong> Se ejecuta por cada fila afectada</li>
+
+            <li><strong>FOR EACH STATEMENT:</strong> Se ejecuta una vez por operación</li>
+
+        </ul>
+
+
+
+        <h2>2. Estructura de un Trigger en PostgreSQL</h2>
+
+        
+
+        <div class="box box-ejemplo">
+
+            <p><strong>Dos pasos:</strong></p>
+
+            <ol>
+
+                <li>Crear la función trigger</li>
+
+                <li>Crear el trigger que llama a la función</li>
+
+            </ol>
+
+        </div>
+
+
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Paso 1: Crear la función trigger
+
+CREATE OR REPLACE FUNCTION nombre_funcion_trigger()
+
+RETURNS TRIGGER AS $$
+
+BEGIN
+
+    -- Lógica del trigger
+
+    -- NEW = nueva fila (para INSERT/UPDATE)
+
+    -- OLD = fila antigua (para UPDATE/DELETE)
+
+    RETURN NEW;  -- o RETURN OLD
+
+END;
+
+$$ LANGUAGE plpgsql;
+
+
+
+-- Paso 2: Crear el trigger
+
+CREATE TRIGGER nombre_trigger
+
+    [BEFORE | AFTER] [INSERT | UPDATE | DELETE]
+
+    ON nombre_tabla
+
+    [FOR EACH ROW]
+
+    [WHEN (condición)]
+
+    EXECUTE FUNCTION nombre_funcion_trigger();</pre>
+
+
+
+        <h2>3. Variables NEW y OLD</h2>
+
+        
+
+        <div class="table-responsive">
+        <table>
+
+            <tr><th>Evento</th><th>NEW</th><th>OLD</th></tr>
+
+            <tr><td>INSERT</td><td>Valores que se insertarán</td><td>NULL</td></tr>
+
+            <tr><td>UPDATE</td><td>Nuevos valores</td><td>Valores anteriores</td></tr>
+
+            <tr><td>DELETE</td><td>NULL</td><td>Valores que se eliminarán</td></tr>
+
+        </table>
+        </div>
+
+
+
+        <h3>Ejemplo: Actualizar fecha de modificación</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Función para actualizar timestamp
+
+CREATE OR REPLACE FUNCTION actualizar_fecha_mod()
+
+RETURNS TRIGGER AS $$
+
+BEGIN
+
+    NEW.fecha_modificacion := CURRENT_TIMESTAMP;
+
+    RETURN NEW;
+
+END;
+
+$$ LANGUAGE plpgsql;
+
+
+
+-- Trigger en tabla producto
+
+CREATE TRIGGER trigger_fecha_mod_producto
+
+    BEFORE UPDATE ON producto
+
+    FOR EACH ROW
+
+    EXECUTE FUNCTION actualizar_fecha_mod();</pre>
+
+
+
+        <h2>4. Validaciones con Triggers</h2>
+
+        
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Evitar que el precio baje
+
+CREATE OR REPLACE FUNCTION validar_precio()
+
+RETURNS TRIGGER AS $$
+
+BEGIN
+
+    IF NEW.precio < OLD.precio THEN
+
+        RAISE EXCEPTION 'No se puede reducir el precio de % a %', 
+
+            OLD.precio, NEW.precio;
+
+    END IF;
+
+    RETURN NEW;
+
+END;
+
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE TRIGGER trigger_validar_precio
+
+    BEFORE UPDATE ON producto
+
+    FOR EACH ROW
+
+    EXECUTE FUNCTION validar_precio();
+
+
+
+-- Validar que el stock no sea negativo
+
+CREATE OR REPLACE FUNCTION validar_stock()
+
+RETURNS TRIGGER AS $$
+
+BEGIN
+
+    IF NEW.cantidad < 0 THEN
+
+        RAISE EXCEPTION 'La cantidad no puede ser negativa';
+
+    END IF;
+
+    RETURN NEW;
+
+END;
+
+$$ LANGUAGE plpgsql;</pre>
+
+
+
+        <h2>5. Auditoría con Triggers</h2>
+
+        
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Tabla de auditoría
+
+CREATE TABLE auditoria_cliente (
+
+    id SERIAL PRIMARY KEY,
+
+    usuario VARCHAR(100),
+
+    accion VARCHAR(10),
+
+    cliente_id INTEGER,
+
+    datos_anteriores TEXT,
+
+    datos_nuevos TEXT,
+
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
+
+
+
+-- Función de auditoría
+
+CREATE OR REPLACE FUNCTION auditar_cliente()
+
+RETURNS TRIGGER AS $$
+
+BEGIN
+
+    IF TG_OP = 'INSERT' THEN
+
+        INSERT INTO auditoria_cliente (usuario, accion, cliente_id, datos_nuevos)
+
+        VALUES (current_user, 'INSERT', NEW.id, row_to_json(NEW)::text);
+
+        RETURN NEW;
+
+    ELSIF TG_OP = 'UPDATE' THEN
+
+        INSERT INTO auditoria_cliente (usuario, accion, cliente_id, datos_anteriores, datos_nuevos)
+
+        VALUES (current_user, 'UPDATE', NEW.id, row_to_json(OLD)::text, row_to_json(NEW)::text);
+
+        RETURN NEW;
+
+    ELSIF TG_OP = 'DELETE' THEN
+
+        INSERT INTO auditoria_cliente (usuario, accion, cliente_id, datos_anteriores)
+
+        VALUES (current_user, 'DELETE', OLD.id, row_to_json(OLD)::text);
+
+        RETURN OLD;
+
+    END IF;
+
+    RETURN NULL;
+
+END;
+
+$$ LANGUAGE plpgsql;
+
+
+
+-- Triggers de auditoría
+
+CREATE TRIGGER trigger_auditar_cliente_insert
+
+    AFTER INSERT ON cliente
+
+    FOR EACH ROW
+
+    EXECUTE FUNCTION auditar_cliente();
+
+
+
+CREATE TRIGGER trigger_auditar_cliente_update
+
+    AFTER UPDATE ON cliente
+
+    FOR EACH ROW
+
+    EXECUTE FUNCTION auditar_cliente();
+
+
+
+CREATE TRIGGER trigger_auditar_cliente_delete
+
+    AFTER DELETE ON cliente
+
+    FOR EACH ROW
+
+    EXECUTE FUNCTION auditar_cliente();</pre>
+
+
+
+        <h2>6. Triggers con Condición WHEN</h2>
+
+        
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Solo dispara cuando se cumple la condición
+
+CREATE TRIGGER trigger_precio_alto
+
+    AFTER UPDATE ON producto
+
+    FOR EACH ROW
+
+    WHEN (NEW.precio > 1000)  -- solo si precio > 1000
+
+    EXECUTE FUNCTION notificar_precio_alto();
+
+
+
+-- Función asociada
+
+CREATE OR REPLACE FUNCTION notificar_precio_alto()
+
+RETURNS TRIGGER AS $$
+
+BEGIN
+
+    RAISE NOTICE 'Producto % tiene nuevo precio alto: %', 
+
+        NEW.nombre, NEW.precio;
+
+    RETURN NEW;
+
+END;
+
+$$ LANGUAGE plpgsql;</pre>
+
+
+
+        <h2>7. Eventos de Triggers</h2>
+
+        
+
+        <div class="table-responsive">
+        <table>
+
+            <tr><th>Evento</th><th>Descripción</th></tr>
+
+            <tr><td>INSERT</td><td>Cuando se inserta una fila</td></tr>
+
+            <tr><td>UPDATE</td><td>Cuando se actualiza una fila</td></tr>
+
+            <tr><td>DELETE</td><td>Cuando se elimina una fila</td></tr>
+
+            <tr><td>TRUNCATE</td><td>Cuando se trunca la tabla</td></tr>
+
+        </table>
+        </div>
+
+
+
+        <div class="box box-warning">
+
+            <p><strong>?? Notas importantes:</strong></p>
+
+            <ul>
+
+                <li>En PostgreSQL, un trigger NO puede modificar otras tablas directamente (salvo que llame a funciones)</li>
+
+                <li>Usa RETURN NEW (o OLD para DELETE) al final de la función</li>
+
+                <li>TG_OP indica la operación que disparó el trigger</li>
+
+                <li>current_user indica el usuario que ejecutó la operación</li>
+
+            </ul>
+
+        </div>
+
+
+
+        <hr>
+
+
+
+        <section class="laboratorio">
+
+            <h3>?? Laboratorio: Triggers</h3>
+
+            <ol style="margin-left: 20px;">
+
+                <li>Crea un trigger que registre automáticamente la fecha de creación de un cliente</li>
+
+                <li>Crea un trigger que valide que el stock no exceda un máximo</li>
+
+                <li>Crea un sistema de auditoría para la tabla pedido</li>
+
+                <li>Crea un trigger que envíe notificación cuando un producto queda con stock = 0</li>
+
+            </ol>
+
+        </section>
+
+
+
+    </div>
+
+</div>
+
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+

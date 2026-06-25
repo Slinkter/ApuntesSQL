@@ -1,296 +1,276 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 07 - Normalizacion 1FN, 2FN, 3FN</title>
-    <link rel="stylesheet" href="master.css">
-    <script src="canvas-ui.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Semana 07 - Normalizacion 1FN, 2FN, 3FN</title>
+<link href="master.css" rel="stylesheet"/>
+<script src="canvas-ui.js"></script>
 </head>
 <body>
-
 <div class="header">
-    <h1 class="header__title">Normalizacion: Primera, Segunda y Tercera Forma Normal</h1>
-    <p class="header__subtitle">Semana 07 | Diseno Logico | Ingenieria de Datos</p>
+<h1 class="header__title">Normalizacion: Primera, Segunda y Tercera Forma Normal</h1>
+<p class="header__subtitle">Semana 07 | Diseno Logico | Ingenieria de Datos</p>
 </div>
-
 <div class="cornell">
-    <aside class="sidebar">
-        <h2 class="sidebar__title">Conceptos Clave</h2>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>Normalizacion</strong> Proceso de descomposicion para eliminar redundancia</li>
-            <li class="sidebar__item"><strong>1FN</strong> Valores atomicos, sin grupos repetitivos</li>
-            <li class="sidebar__item"><strong>2FN</strong> Dependencia funcional completa de la PK</li>
-            <li class="sidebar__item"><strong>3FN</strong> Sin dependencias transitivas entre atributos no clave</li>
-            <li class="sidebar__item"><strong>Anomalia</strong> Problemas de insercion, eliminacion, actualizacion</li>
-            <li class="sidebar__item"><strong>Dependencia Funcional</strong> A determina B: A rarr B</li>
-        </ul>
-        <h2 class="sidebar__title">Recursos</h2>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><a class="sidebar__link" href="index.html">Indice del Curso</a></li>
-            <li class="sidebar__item"><a class="sidebar__link" href="semana_06.html">Semana 06</a></li>
-            <li class="sidebar__item"><a class="sidebar__link" href="semana_08.html">Semana 08: Examen Parcial</a></li>
-        </ul>
-    </aside>
-
-    <main class="main">
-        <div class="box box--note">
-            <p><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Entender el proposito de la normalizacion</li>
-                <li class="main__list-item">Identificar anomalias de insercion, eliminacion y modificacion</li>
-                <li class="main__list-item">Aplicar la Primera Forma Normal (1FN)</li>
-                <li class="main__list-item">Aplicar la Segunda Forma Normal (2FN)</li>
-                <li class="main__list-item">Aplicar la Tercera Forma Normal (3FN)</li>
-            </ul>
-        </div>
-
-        <div class="architect-insight">
-            <p><strong>Insight del Arquitecto:</strong> La normalizacion evita la duplicacion innecesaria de datos y las inconsistencias. Sin embargo, en sistemas OLAP/Data Warehouse la desnormalizacion es comun para mejorar rendimiento de consultas. La clave: entender la teoria para saber cuando romper las reglas.</p>
-        </div>
-
-        <h2 class="main__title">1. Que es la Normalizacion?</h2>
-        <p class="main__text">Es el proceso de descomposicion de relaciones con anomalias para producir relaciones bien estructuradas y mas pequenas. Valida y mejora el diseno logico satisfaciendo restricciones que evitan la duplicacion innecesaria de datos.</p>
-
-        <div class="box box--concept">
-            <p><strong>Relacion bien estructurada:</strong> Contiene minima redundancia y permite anadir, eliminar y actualizar registros sin causar inconsistencias.</p>
-        </div>
-
-        <h2 class="main__title">2. El Problema: Anomalias</h2>
-        <p class="main__text">Considere la siguiente tabla NO normalizada de docentes y cursos:</p>
-
-        <div class="table">
-            <div class="table__tr">
-                <div class="table__th">cod_docente</div>
-                <div class="table__th">curso_capacitacion</div>
-                <div class="table__th">fecha_ingreso</div>
-                <div class="table__th">salario</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">42000</div>
-                <div class="table__td">Excel Avanzado</div>
-                <div class="table__td">20/11/2007</div>
-                <div class="table__td">1,500</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">42000</div>
-                <div class="table__td">PowerPoint Avanzado</div>
-                <div class="table__td">10/07/2007</div>
-                <div class="table__td">1,500</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">43000</div>
-                <div class="table__td">Metodologia Ensenanza</div>
-                <div class="table__td">30/01/2008</div>
-                <div class="table__td">3,200</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">44000</div>
-                <div class="table__td">SQL Basico</div>
-                <div class="table__td">31/03/2008</div>
-                <div class="table__td">1,800</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">44000</div>
-                <div class="table__td">DB2</div>
-                <div class="table__td">25/10/2007</div>
-                <div class="table__td">1,800</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">45000</div>
-                <div class="table__td">Excel Avanzado</div>
-                <div class="table__td">12/08/2007</div>
-                <div class="table__td">2,700</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">45000</div>
-                <div class="table__td">Java</div>
-                <div class="table__td">19/09/2007</div>
-                <div class="table__td">2,700</div>
-            </div>
-        </div>
-
-        <h2 class="main__title--sub">Tipos de Anomalias</h2>
-        <ul class="main__list">
-            <li class="main__list-item"><strong>Insercion:</strong> No se puede registrar un docente que aun no ha tomado ningun curso.</li>
-            <li class="main__list-item"><strong>Eliminacion:</strong> Si se elimina el registro del codigo 43000, se pierde toda la informacion del docente.</li>
-            <li class="main__list-item"><strong>Modificacion:</strong> Si el docente 42000 recibe un aumento, debe actualizarse en multiples filas.</li>
-        </ul>
-
-        <h2 class="main__title">3. Dependencia Funcional y Claves</h2>
-        <div class="box box--concept">
-            <p><strong>Dependencia Funcional:</strong> El valor de un atributo A (determinante) determina el valor de otro atributo B. Se denota A rarr B.</p>
-        </div>
-        <ul class="main__list">
-            <li class="main__list-item"><strong>Clave Candidata:</strong> Identificador unico. Una o varias claves que podrian convertirse en la clave primaria (ej. codigo de empleado y DNI).</li>
-            <li class="main__list-item">Cada campo no clave es funcionalmente dependiente de cada clave candidata.</li>
-        </ul>
-
-        <h2 class="main__title">4. Primera Forma Normal (1FN)</h2>
-        <p class="main__text">Elimina grupos repetitivos y garantiza que cada atributo tenga valores atomicos (no multivaluados).</p>
-
-        <div class="box box--example">
-            <p><strong>Ejemplo - Tabla factura antes de 1FN:</strong> La tabla original combinaba datos de factura y productos en una sola fila con grupos repetitivos.</p>
-            <div class="table">
-                <div class="table__tr">
-                    <div class="table__th">nro_factura</div>
-                    <div class="table__th">ruc_cliente</div>
-                    <div class="table__th">nombre_cliente</div>
-                    <div class="table__th">direccion</div>
-                    <div class="table__th">total</div>
-                    <div class="table__th">fecha</div>
-                    <div class="table__th">cod_articulo</div>
-                    <div class="table__th">desc_articulo</div>
-                    <div class="table__th">cant</div>
-                    <div class="table__th">prec_unitario</div>
-                    <div class="table__th">prec_total</div>
-                </div>
-                <div class="table__tr">
-                    <div class="table__td">1240001</div>
-                    <div class="table__td">0000125</div>
-                    <div class="table__td">JUAN PEREZ PAZ</div>
-                    <div class="table__td">Arica 325 Lince</div>
-                    <div class="table__td">2250</div>
-                    <div class="table__td">20/08/2007</div>
-                    <div class="table__td">010</div>
-                    <div class="table__td">Lapicero Azul</div>
-                    <div class="table__td">100</div>
-                    <div class="table__td">2.5</div>
-                    <div class="table__td">250</div>
-                </div>
-                <div class="table__tr">
-                    <div class="table__td">1240001</div>
-                    <div class="table__td">0000125</div>
-                    <div class="table__td">JUAN PEREZ PAZ</div>
-                    <div class="table__td">Arica 325 Lince</div>
-                    <div class="table__td">2250</div>
-                    <div class="table__td">20/08/2007</div>
-                    <div class="table__td">753</div>
-                    <div class="table__td">Cuaderno rayado A4</div>
-                    <div class="table__td">200</div>
-                    <div class="table__td">10</div>
-                    <div class="table__td">2000</div>
-                </div>
-            </div>
-            <p><strong>Resultado 1FN:</strong> Se separan en dos grupos: Grupo No Repetitivo (Factura) y Grupo Repetitivo (Linea Factura).</p>
-            <pre>-- Grupo No Repetitivo (1FN)
+<aside class="sidebar">
+<h2 class="sidebar__title">Conceptos Clave</h2>
+<ul class="sidebar__list">
+<li class="sidebar__item"><strong>Normalizacion</strong> Proceso de descomposicion para eliminar redundancia</li>
+<li class="sidebar__item"><strong>1FN</strong> Valores atomicos, sin grupos repetitivos</li>
+<li class="sidebar__item"><strong>2FN</strong> Dependencia funcional completa de la PK</li>
+<li class="sidebar__item"><strong>3FN</strong> Sin dependencias transitivas entre atributos no clave</li>
+<li class="sidebar__item"><strong>Anomalia</strong> Problemas de insercion, eliminacion, actualizacion</li>
+<li class="sidebar__item"><strong>Dependencia Funcional</strong> A determina B: A rarr B</li>
+</ul>
+<h2 class="sidebar__title">Recursos</h2>
+<ul class="sidebar__list">
+<li class="sidebar__item"><a class="sidebar__link" href="index.html">Indice del Curso</a></li>
+<li class="sidebar__item"><a class="sidebar__link" href="semana_06.html">Semana 06</a></li>
+<li class="sidebar__item"><a class="sidebar__link" href="semana_08.html">Semana 08: Examen Parcial</a></li>
+</ul>
+</aside>
+<main class="main">
+<div class="box box--note">
+<p><strong>Objetivos de Aprendizaje</strong></p>
+<ul class="main__list">
+<li class="main__list-item">Entender el proposito de la normalizacion</li>
+<li class="main__list-item">Identificar anomalias de insercion, eliminacion y modificacion</li>
+<li class="main__list-item">Aplicar la Primera Forma Normal (1FN)</li>
+<li class="main__list-item">Aplicar la Segunda Forma Normal (2FN)</li>
+<li class="main__list-item">Aplicar la Tercera Forma Normal (3FN)</li>
+</ul>
+</div>
+<div class="architect-insight">
+<p><strong>Insight del Arquitecto:</strong> La normalizacion evita la duplicacion innecesaria de datos y las inconsistencias. Sin embargo, en sistemas OLAP/Data Warehouse la desnormalizacion es comun para mejorar rendimiento de consultas. La clave: entender la teoria para saber cuando romper las reglas.</p>
+</div>
+<h2 class="main__title">1. Que es la Normalizacion?</h2>
+<p class="main__text">Es el proceso de descomposicion de relaciones con anomalias para producir relaciones bien estructuradas y mas pequenas. Valida y mejora el diseno logico satisfaciendo restricciones que evitan la duplicacion innecesaria de datos.</p>
+<div class="box box--concept">
+<p><strong>Relacion bien estructurada:</strong> Contiene minima redundancia y permite anadir, eliminar y actualizar registros sin causar inconsistencias.</p>
+</div>
+<h2 class="main__title">2. El Problema: Anomalias</h2>
+<p class="main__text">Considere la siguiente tabla NO normalizada de docentes y cursos:</p>
+<div class="table-responsive"><div class="table">
+<div class="table__tr">
+<div class="table__th">cod_docente</div>
+<div class="table__th">curso_capacitacion</div>
+<div class="table__th">fecha_ingreso</div>
+<div class="table__th">salario</div>
+</div>
+<div class="table__tr">
+<div class="table__td">42000</div>
+<div class="table__td">Excel Avanzado</div>
+<div class="table__td">20/11/2007</div>
+<div class="table__td">1,500</div>
+</div>
+<div class="table__tr">
+<div class="table__td">42000</div>
+<div class="table__td">PowerPoint Avanzado</div>
+<div class="table__td">10/07/2007</div>
+<div class="table__td">1,500</div>
+</div>
+<div class="table__tr">
+<div class="table__td">43000</div>
+<div class="table__td">Metodologia Ensenanza</div>
+<div class="table__td">30/01/2008</div>
+<div class="table__td">3,200</div>
+</div>
+<div class="table__tr">
+<div class="table__td">44000</div>
+<div class="table__td">SQL Basico</div>
+<div class="table__td">31/03/2008</div>
+<div class="table__td">1,800</div>
+</div>
+<div class="table__tr">
+<div class="table__td">44000</div>
+<div class="table__td">DB2</div>
+<div class="table__td">25/10/2007</div>
+<div class="table__td">1,800</div>
+</div>
+<div class="table__tr">
+<div class="table__td">45000</div>
+<div class="table__td">Excel Avanzado</div>
+<div class="table__td">12/08/2007</div>
+<div class="table__td">2,700</div>
+</div>
+<div class="table__tr">
+<div class="table__td">45000</div>
+<div class="table__td">Java</div>
+<div class="table__td">19/09/2007</div>
+<div class="table__td">2,700</div>
+</div>
+</div></div>
+<h2 class="main__title--sub">Tipos de Anomalias</h2>
+<ul class="main__list">
+<li class="main__list-item"><strong>Insercion:</strong> No se puede registrar un docente que aun no ha tomado ningun curso.</li>
+<li class="main__list-item"><strong>Eliminacion:</strong> Si se elimina el registro del codigo 43000, se pierde toda la informacion del docente.</li>
+<li class="main__list-item"><strong>Modificacion:</strong> Si el docente 42000 recibe un aumento, debe actualizarse en multiples filas.</li>
+</ul>
+<h2 class="main__title">3. Dependencia Funcional y Claves</h2>
+<div class="box box--concept">
+<p><strong>Dependencia Funcional:</strong> El valor de un atributo A (determinante) determina el valor de otro atributo B. Se denota A rarr B.</p>
+</div>
+<ul class="main__list">
+<li class="main__list-item"><strong>Clave Candidata:</strong> Identificador unico. Una o varias claves que podrian convertirse en la clave primaria (ej. codigo de empleado y DNI).</li>
+<li class="main__list-item">Cada campo no clave es funcionalmente dependiente de cada clave candidata.</li>
+</ul>
+<h2 class="main__title">4. Primera Forma Normal (1FN)</h2>
+<p class="main__text">Elimina grupos repetitivos y garantiza que cada atributo tenga valores atomicos (no multivaluados).</p>
+<div class="box box--example">
+<p><strong>Ejemplo - Tabla factura antes de 1FN:</strong> La tabla original combinaba datos de factura y productos en una sola fila con grupos repetitivos.</p>
+<div class="table-responsive"><div class="table">
+<div class="table__tr">
+<div class="table__th">nro_factura</div>
+<div class="table__th">ruc_cliente</div>
+<div class="table__th">nombre_cliente</div>
+<div class="table__th">direccion</div>
+<div class="table__th">total</div>
+<div class="table__th">fecha</div>
+<div class="table__th">cod_articulo</div>
+<div class="table__th">desc_articulo</div>
+<div class="table__th">cant</div>
+<div class="table__th">prec_unitario</div>
+<div class="table__th">prec_total</div>
+</div>
+<div class="table__tr">
+<div class="table__td">1240001</div>
+<div class="table__td">0000125</div>
+<div class="table__td">JUAN PEREZ PAZ</div>
+<div class="table__td">Arica 325 Lince</div>
+<div class="table__td">2250</div>
+<div class="table__td">20/08/2007</div>
+<div class="table__td">010</div>
+<div class="table__td">Lapicero Azul</div>
+<div class="table__td">100</div>
+<div class="table__td">2.5</div>
+<div class="table__td">250</div>
+</div>
+<div class="table__tr">
+<div class="table__td">1240001</div>
+<div class="table__td">0000125</div>
+<div class="table__td">JUAN PEREZ PAZ</div>
+<div class="table__td">Arica 325 Lince</div>
+<div class="table__td">2250</div>
+<div class="table__td">20/08/2007</div>
+<div class="table__td">753</div>
+<div class="table__td">Cuaderno rayado A4</div>
+<div class="table__td">200</div>
+<div class="table__td">10</div>
+<div class="table__td">2000</div>
+</div>
+</div></div>
+<p><strong>Resultado 1FN:</strong> Se separan en dos grupos: Grupo No Repetitivo (Factura) y Grupo Repetitivo (Linea Factura).</p>
+<pre>-- Grupo No Repetitivo (1FN)
 Factura (nro_factura, ruc_cliente, nombre_cliente,
          direccion, total, fecha)
 
 -- Grupo Repetitivo (1FN)
 Linea_Factura (nro_factura, cod_articulo,
                desc_articulo, cant, prec_unitario, prec_total)</pre>
-        </div>
-
-        <div class="architect-insight">
-            <p><strong>Insight del Arquitecto:</strong> En la vida real, la mayoria de tablas ya estan en 1FN porque los disenadores evitan grupos repetitivos. Sin embargo, los sistemas legacy (como archivos de mainframe) suelen violar 1FN con campos multivaluados separados por comas.</p>
-        </div>
-
-        <h2 class="main__title">5. Segunda Forma Normal (2FN)</h2>
-        <p class="main__text">Una tabla esta en 2FN si: (1) esta en 1FN y (2) cada atributo no clave depende funcionalmente de TODA la clave primaria (dependencia funcional total), no de parte de ella.</p>
-
-        <div class="box box--example">
-            <p><strong>Dependencias Parciales en Linea_Factura:</strong></p>
-            <p class="main__text">La clave primaria de Linea_Factura es compuesta: <code>(nro_factura, cod_articulo)</code>. Sin embargo:</p>
-            <ul class="main__list">
-                <li class="main__list-item"><code>desc_articulo</code> y <code>prec_unitario</code> dependen solo de <code>cod_articulo</code> (dependencia parcial)</li>
-                <li class="main__list-item"><code>cant</code> y <code>prec_total</code> dependen de la PK completa</li>
-            </ul>
-            <p><strong>Resultado 2FN:</strong> Separar las dependencias parciales.</p>
-            <pre>-- Factura (nro_factura, ruc_cliente, nombre_cliente,
+</div>
+<div class="architect-insight">
+<p><strong>Insight del Arquitecto:</strong> En la vida real, la mayoria de tablas ya estan en 1FN porque los disenadores evitan grupos repetitivos. Sin embargo, los sistemas legacy (como archivos de mainframe) suelen violar 1FN con campos multivaluados separados por comas.</p>
+</div>
+<h2 class="main__title">5. Segunda Forma Normal (2FN)</h2>
+<p class="main__text">Una tabla esta en 2FN si: (1) esta en 1FN y (2) cada atributo no clave depende funcionalmente de TODA la clave primaria (dependencia funcional total), no de parte de ella.</p>
+<div class="box box--example">
+<p><strong>Dependencias Parciales en Linea_Factura:</strong></p>
+<p class="main__text">La clave primaria de Linea_Factura es compuesta: <code>(nro_factura, cod_articulo)</code>. Sin embargo:</p>
+<ul class="main__list">
+<li class="main__list-item"><code>desc_articulo</code> y <code>prec_unitario</code> dependen solo de <code>cod_articulo</code> (dependencia parcial)</li>
+<li class="main__list-item"><code>cant</code> y <code>prec_total</code> dependen de la PK completa</li>
+</ul>
+<p><strong>Resultado 2FN:</strong> Separar las dependencias parciales.</p>
+<pre>-- Factura (nro_factura, ruc_cliente, nombre_cliente,
 --           direccion, total, fecha)
 
 -- Linea_Factura (nro_factura, cod_articulo, cant, prec_total)
 
 -- Articulo (cod_articulo, desc_articulo, prec_unitario)</pre>
-        </div>
-
-        <h2 class="main__title">6. Tercera Forma Normal (3FN)</h2>
-        <p class="main__text">Una tabla esta en 3FN si: (1) esta en 2FN y (2) no existen dependencias transitivas (un atributo no clave determina funcionalmente a otro u otros atributos no clave).</p>
-
-        <div class="box box--example">
-            <p><strong>Dependencia Transitiva en Factura:</strong></p>
-            <p class="main__text">La clave primaria es <code>nro_factura</code>. Sin embargo, <code>nombre_cliente</code> y <code>direccion</code> dependen de <code>ruc_cliente</code>, no directamente de <code>nro_factura</code>. Existe una dependencia transitiva: nro_factura rarr ruc_cliente rarr nombre_cliente.</p>
-            <p><strong>Resultado 3FN:</strong> Separar en cuatro tablas, cada una con su propia PK.</p>
-            <pre>-- Cliente (ruc_cliente, nombre_cliente, direccion)
+</div>
+<h2 class="main__title">6. Tercera Forma Normal (3FN)</h2>
+<p class="main__text">Una tabla esta en 3FN si: (1) esta en 2FN y (2) no existen dependencias transitivas (un atributo no clave determina funcionalmente a otro u otros atributos no clave).</p>
+<div class="box box--example">
+<p><strong>Dependencia Transitiva en Factura:</strong></p>
+<p class="main__text">La clave primaria es <code>nro_factura</code>. Sin embargo, <code>nombre_cliente</code> y <code>direccion</code> dependen de <code>ruc_cliente</code>, no directamente de <code>nro_factura</code>. Existe una dependencia transitiva: nro_factura rarr ruc_cliente rarr nombre_cliente.</p>
+<p><strong>Resultado 3FN:</strong> Separar en cuatro tablas, cada una con su propia PK.</p>
+<pre>-- Cliente (ruc_cliente, nombre_cliente, direccion)
 -- Factura (nro_factura, ruc_cliente, total, fecha)
 -- Linea_Factura (nro_factura, cod_articulo, cant, prec_total)
 -- Articulo (cod_articulo, desc_articulo, prec_unitario)</pre>
-        </div>
-
-        <div class="table">
-            <div class="table__tr">
-                <div class="table__th">Forma Normal</div>
-                <div class="table__th">Regla de Oro</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">1FN</div>
-                <div class="table__td">Atomicidad y PK definida. Sin grupos repetitivos.</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">2FN</div>
-                <div class="table__td">Dependencia funcional completa de TODA la PK.</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td">3FN</div>
-                <div class="table__td">Ninguna dependencia transitiva entre atributos no clave.</div>
-            </div>
-        </div>
-
-        <div class="box box--exercise">
-            <p><strong>Laboratorio:</strong> Dada la tabla <code>Empleados_Proyectos</code>:</p>
-            <div class="table">
-                <div class="table__tr">
-                    <div class="table__th">emp_id</div>
-                    <div class="table__th">nombre_emp</div>
-                    <div class="table__th">depto</div>
-                    <div class="table__th">jefe</div>
-                    <div class="table__th">proyecto</div>
-                    <div class="table__th">horas</div>
-                </div>
-                <div class="table__tr">
-                    <div class="table__td">1</div>
-                    <div class="table__td">Ana</div>
-                    <div class="table__td">TI</div>
-                    <div class="table__td">Carlos</div>
-                    <div class="table__td">Web</div>
-                    <div class="table__td">20</div>
-                </div>
-                <div class="table__tr">
-                    <div class="table__td">1</div>
-                    <div class="table__td">Ana</div>
-                    <div class="table__td">TI</div>
-                    <div class="table__td">Carlos</div>
-                    <div class="table__td">App</div>
-                    <div class="table__td">15</div>
-                </div>
-                <div class="table__tr">
-                    <div class="table__td">2</div>
-                    <div class="table__td">Luis</div>
-                    <div class="table__td">Ventas</div>
-                    <div class="table__td">Maria</div>
-                    <div class="table__td">Web</div>
-                    <div class="table__td">10</div>
-                </div>
-            </div>
-            <ol class="main__list" style="list-style: decimal;">
-                <li class="main__list-item">Identifique la clave primaria</li>
-                <li class="main__list-item">Identifique las anomalias actuales</li>
-                <li class="main__list-item">Normalice hasta 3FN (muestre las tablas resultantes)</li>
-            </ol>
-        </div>
-
-        <div class="canvas-container">
-            <canvas id="canvas_07" width="800" height="360"></canvas>
-            <div id="controls_07" class="canvas-controls"></div>
-        </div>
-        <div class="nav">
-            <a href="semana_06.html" class="nav__link">Semana 06</a>
-            <a href="semana_08.html" class="nav__link">Semana 08: Examen Parcial</a>
-        </div>
-    </main>
 </div>
-
+<div class="table-responsive"><div class="table">
+<div class="table__tr">
+<div class="table__th">Forma Normal</div>
+<div class="table__th">Regla de Oro</div>
+</div>
+<div class="table__tr">
+<div class="table__td">1FN</div>
+<div class="table__td">Atomicidad y PK definida. Sin grupos repetitivos.</div>
+</div>
+<div class="table__tr">
+<div class="table__td">2FN</div>
+<div class="table__td">Dependencia funcional completa de TODA la PK.</div>
+</div>
+<div class="table__tr">
+<div class="table__td">3FN</div>
+<div class="table__td">Ninguna dependencia transitiva entre atributos no clave.</div>
+</div>
+</div></div>
+<div class="box box--exercise">
+<p><strong>Laboratorio:</strong> Dada la tabla <code>Empleados_Proyectos</code>:</p>
+<div class="table-responsive"><div class="table">
+<div class="table__tr">
+<div class="table__th">emp_id</div>
+<div class="table__th">nombre_emp</div>
+<div class="table__th">depto</div>
+<div class="table__th">jefe</div>
+<div class="table__th">proyecto</div>
+<div class="table__th">horas</div>
+</div>
+<div class="table__tr">
+<div class="table__td">1</div>
+<div class="table__td">Ana</div>
+<div class="table__td">TI</div>
+<div class="table__td">Carlos</div>
+<div class="table__td">Web</div>
+<div class="table__td">20</div>
+</div>
+<div class="table__tr">
+<div class="table__td">1</div>
+<div class="table__td">Ana</div>
+<div class="table__td">TI</div>
+<div class="table__td">Carlos</div>
+<div class="table__td">App</div>
+<div class="table__td">15</div>
+</div>
+<div class="table__tr">
+<div class="table__td">2</div>
+<div class="table__td">Luis</div>
+<div class="table__td">Ventas</div>
+<div class="table__td">Maria</div>
+<div class="table__td">Web</div>
+<div class="table__td">10</div>
+</div>
+</div></div>
+<ol class="main__list" style="list-style: decimal;">
+<li class="main__list-item">Identifique la clave primaria</li>
+<li class="main__list-item">Identifique las anomalias actuales</li>
+<li class="main__list-item">Normalice hasta 3FN (muestre las tablas resultantes)</li>
+</ol>
+</div>
+<div class="canvas-container">
+<canvas height="360" id="canvas_07" width="800"></canvas>
+<div class="canvas-controls" id="controls_07"></div>
+</div>
+<div class="nav">
+<a class="nav__link" href="semana_06.html">Semana 06</a>
+<a class="nav__link" href="semana_08.html">Semana 08: Examen Parcial</a>
+</div>
+</main>
+</div>
 <script>
 var tables07 = [
     { title: '0FN: Tabla Original (datos repetidos)', cols: ['Factura#', 'Cliente', 'Producto', 'Precio'], rows: [['F001','Juan','Laptop','2500'],['F001','Juan','Mouse','50'],['F002','Ana','Teclado','120'],['F002','Ana','Monitor','800']], highlight: undefined, extra: 'Redundancia: Juan y Ana aparecen repetidos' },

@@ -1,81 +1,74 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratorio - Consultas Básicas y Filtros SQL</title>
-    <link rel="stylesheet" href="master.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Laboratorio - Consultas Básicas y Filtros SQL</title>
+<link href="master.css" rel="stylesheet"/>
 </head>
 <body>
-
 <div class="header">
-    <h1 class="header__title">Laboratorio: Consultas Básicas y Filtros</h1>
-    <p class="header__subtitle">PostgreSQL Mastery | Ejercicios Prácticos</p>
+<h1 class="header__title">Laboratorio: Consultas Básicas y Filtros</h1>
+<p class="header__subtitle">PostgreSQL Mastery | Ejercicios Prácticos</p>
 </div>
-
 <div class="cornell">
-    <aside class="sidebar">
-        <h2 class="sidebar__title">Palabras Clave</h2>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>Funciones</strong> Agregación, fecha, texto.</li>
-            <li class="sidebar__item"><strong>Agregación</strong> COUNT, SUM, AVG, MIN, MAX.</li>
-            <li class="sidebar__item"><strong>Filtros</strong> LIKE, IN, BETWEEN.</li>
-            <li class="sidebar__item"><strong>Condicionales</strong> CASE WHEN.</li>
-        </ul>
-    </aside>
-
-    <main class="main">
-        <h2 class="main__title">1. Estructura Básica de Selección</h2>
-        <p class="main__text">La sentencia <code>SELECT</code> es el eje fundamental para recuperar información de las tablas.</p>
-        
-        <div class="box box--example">
-            <pre>-- Seleccionar columnas específicas
+<aside class="sidebar">
+<h2 class="sidebar__title">Palabras Clave</h2>
+<ul class="sidebar__list">
+<li class="sidebar__item"><strong>Funciones</strong> Agregación, fecha, texto.</li>
+<li class="sidebar__item"><strong>Agregación</strong> COUNT, SUM, AVG, MIN, MAX.</li>
+<li class="sidebar__item"><strong>Filtros</strong> LIKE, IN, BETWEEN.</li>
+<li class="sidebar__item"><strong>Condicionales</strong> CASE WHEN.</li>
+</ul>
+</aside>
+<main class="main">
+<h2 class="main__title">1. Estructura Básica de Selección</h2>
+<p class="main__text">La sentencia <code>SELECT</code> es el eje fundamental para recuperar información de las tablas.</p>
+<div class="box box--example">
+<pre>-- Seleccionar columnas específicas
 SELECT nombre, apellido, salario 
 FROM empleados
 WHERE salario > 2000
 ORDER BY apellido ASC;</pre>
-        </div>
-
-        <h2 class="main__title--sub">2. Filtros Avanzados</h2>
-        <ul class="main__list">
-            <li class="main__list-item"><strong>LIKE:</strong> Búsqueda de patrones (<code>%</code> para varios caracteres, <code>_</code> para uno solo).</li>
-            <li class="main__list-item"><strong>IN:</strong> Compara un valor contra una lista de opciones.</li>
-            <li class="main__list-item"><strong>BETWEEN:</strong> Filtra valores dentro de un rango inclusivo.</li>
-        </ul>
-
-        <div class="box box--note">
-            <pre>-- Uso de LIKE
+</div>
+<h2 class="main__title--sub">2. Filtros Avanzados</h2>
+<ul class="main__list">
+<li class="main__list-item"><strong>LIKE:</strong> Búsqueda de patrones (<code>%</code> para varios caracteres, <code>_</code> para uno solo).</li>
+<li class="main__list-item"><strong>IN:</strong> Compara un valor contra una lista de opciones.</li>
+<li class="main__list-item"><strong>BETWEEN:</strong> Filtra valores dentro de un rango inclusivo.</li>
+</ul>
+<div class="box box--note">
+<pre>-- Uso de LIKE
 SELECT * FROM productos WHERE nombre LIKE 'Apple%';
 
 -- Uso de BETWEEN
 SELECT * FROM ventas WHERE fecha_pedido BETWEEN '2023-01-01' AND '2023-12-31';</pre>
-        </div>
-
-        <h2 class="main__title--sub">3. Funciones de Texto Comunes</h2>
-        <div class="table">
-            <div class="table__th">Función</div>
-            <div class="table__th">Descripción</div>
-            <div class="table__th">Ejemplo</div>
-            <div class="table__tr">
-                <div class="table__td"><code>UPPER() / LOWER()</code></div>
-                <div class="table__td">Cambio de mayúsculas/minúsculas.</div>
-                <div class="table__td"><code>UPPER('sql')</code> → 'SQL'</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td"><code>LENGTH()</code></div>
-                <div class="table__td">Retorna la longitud de la cadena.</div>
-                <div class="table__td"><code>LENGTH('Postgres')</code> → 8</div>
-            </div>
-            <div class="table__tr">
-                <div class="table__td"><code>TRIM()</code></div>
-                <div class="table__td">Elimina espacios en blanco.</div>
-                <div class="table__td"><code>TRIM('  data  ')</code> → 'data'</div>
-            </div>
-        </div>
-
-        <h2 class="main__title--sub">4. Lógica Condicional (CASE)</h2>
-        <p class="main__text">Permite implementar lógica de "if-else" directamente en la consulta SQL.</p>
-        <pre>SELECT nombre, 
+</div>
+<h2 class="main__title--sub">3. Funciones de Texto Comunes</h2>
+<div class="table-responsive"><div class="table">
+<div class="table__th">Función</div>
+<div class="table__th">Descripción</div>
+<div class="table__th">Ejemplo</div>
+<div class="table__tr">
+<div class="table__td"><code>UPPER() / LOWER()</code></div>
+<div class="table__td">Cambio de mayúsculas/minúsculas.</div>
+<div class="table__td"><code>UPPER('sql')</code> → 'SQL'</div>
+</div>
+<div class="table__tr">
+<div class="table__td"><code>LENGTH()</code></div>
+<div class="table__td">Retorna la longitud de la cadena.</div>
+<div class="table__td"><code>LENGTH('Postgres')</code> → 8</div>
+</div>
+<div class="table__tr">
+<div class="table__td"><code>TRIM()</code></div>
+<div class="table__td">Elimina espacios en blanco.</div>
+<div class="table__td"><code>TRIM('  data  ')</code> → 'data'</div>
+</div>
+</div></div>
+<h2 class="main__title--sub">4. Lógica Condicional (CASE)</h2>
+<p class="main__text">Permite implementar lógica de "if-else" directamente en la consulta SQL.</p>
+<pre>SELECT nombre, 
        salario,
        CASE 
            WHEN salario > 5000 THEN 'Alto'
@@ -83,13 +76,11 @@ SELECT * FROM ventas WHERE fecha_pedido BETWEEN '2023-01-01' AND '2023-12-31';</
            ELSE 'Bajo'
        END AS nivel_salarial
 FROM empleados;</pre>
-
-        <div class="nav">
-            <a href="index.html" class="nav__link">← Volver al Índice</a>
-            <a href="extra_sql_funciones.html" class="nav__link">Siguiente Lab →</a>
-        </div>
-    </main>
+<div class="nav">
+<a class="nav__link" href="index.html">← Volver al Índice</a>
+<a class="nav__link" href="extra_sql_funciones.html">Siguiente Lab →</a>
 </div>
-
+</main>
+</div>
 </body>
 </html>

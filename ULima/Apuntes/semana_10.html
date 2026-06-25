@@ -125,6 +125,7 @@ FROM   cliente LEFT OUTER JOIN orden_pedido
 FROM   orden_pedido RIGHT OUTER JOIN cliente
   ON   cliente.id_cliente = orden_pedido.id_cliente;</code></pre>
 
+        <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr class="table__tr">
@@ -156,6 +157,7 @@ FROM   orden_pedido RIGHT OUTER JOIN cliente
                 </tr>
             </tbody>
         </table>
+        </div>
 
         <h2 class="main__title">4. Subconsultas</h2>
         <p class="main__text">Una subconsulta es una consulta anidada dentro de otra consulta (principal o externa). Se ejecutan primero y su resultado es usado por la consulta principal a traves de las clausulas <code>WHERE</code> o <code>HAVING</code>.</p>
@@ -212,6 +214,7 @@ WHERE  numero_embarques = (
         <h3 class="main__title--sub">Subconsultas de Fila Multiple</h3>
         <p class="main__text">La subconsulta retorna varias filas de resultado. Se usan operadores de conjunto:</p>
 
+        <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr class="table__tr">
@@ -230,6 +233,7 @@ WHERE  numero_embarques = (
                 </tr>
             </tbody>
         </table>
+        </div>
 
         <pre><code>-- Clientes NACIONALES o INTERNACIONALES con ordenes de pedido
 SELECT numero_embarques
