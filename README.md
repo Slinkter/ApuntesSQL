@@ -2,6 +2,8 @@
 
 Este repositorio contiene notas de estudio de nivel profesional, laboratorios prácticos y recursos académicos estructurados para dominar **PostgreSQL** y la **Teoría Relacional de Bases de Datos**. El proyecto se divide en dos enfoques principales: una pista teórica/académica (método Cornell) y una pista práctica interactiva y basada en escenarios reales.
 
+> 📋 **Plan activo (2026-06-25)**: re-transcripción PDF→TXT con Ollama + GLM-OCR. Ver [`PLAN_OCR_ULima_2026-06-25.md`](./PLAN_OCR_ULima_2026-06-25.md) — Fases 0 y 1 completadas (entorno + rasterización), Fases 2-7 pendientes.
+
 ---
 
 ## 📂 Estructura de Contenidos
