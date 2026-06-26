@@ -139,6 +139,98 @@ def parse_mermaid_to_html(mermaid_content):
                 html.append(f'<div class="seq-note"><span class="seq-note-title">Nota:</span> {step["content"]}</div>')
         html.append('</div>')
         return '\n'.join(html)
+
+    # 3. ER DIAGRAMS
+    elif 'erdiagram' in diagram_type:
+        relationships = []
+        entities = {}
+        current_entity = None
+        
+        for line in lines[1:]:
+            line_str = line.strip()
+            if not line_str:
+                continue
+            
+            # Check if this is the start of an entity block
+            if '{' in line_str:
+                entity_name = line_str.split('{')[0].strip()
+                current_entity = entity_name
+                entities[current_entity] = []
+                continue
+            
+            # Check if this is the end of an entity block
+            if '}' in line_str:
+                current_entity = None
+                continue
+            
+            # If we are inside an entity block, parse attributes
+            if current_entity:
+                attr_parts = line_str.split()
+                if len(attr_parts) >= 2:
+                    attr_type = attr_parts[0]
+                    attr_name = attr_parts[1]
+                    attr_key = " ".join(attr_parts[2:]) if len(attr_parts) > 2 else ""
+                    entities[current_entity].append({
+                        'type': attr_type,
+                        'name': attr_name,
+                        'key': attr_key
+                    })
+                continue
+            
+            # Otherwise, check for relationship
+            if ':' in line_str:
+                parts = line_str.split(':')
+                rel_part = parts[0].strip()
+                label = parts[1].replace('"', '').strip()
+                
+                rel_match = re.match(r'([a-zA-Z0-9_-]+)\s+([|o{}~-]+)\s+([a-zA-Z0-9_-]+)', rel_part)
+                if rel_match:
+                    ent1, op, ent2 = rel_match.groups()
+                    relationships.append({
+                        'ent1': ent1,
+                        'op': op,
+                        'ent2': ent2,
+                        'label': label
+                    })
+        
+        # Build pure HTML/CSS ER diagram
+        html = ['<div class="pure-html-er-diagram">']
+        
+        # 1. Relationships list
+        if relationships:
+            html.append('<div class="er-relationships">')
+            html.append('<h4>Relaciones de la Base de Datos</h4>')
+            html.append('<ul class="er-relations-list">')
+            for rel in relationships:
+                op_desc = "Relación"
+                if "o{" in rel['op'] or "}o" in rel['op']:
+                    op_desc = "Uno a Varios (1:N)"
+                elif "||" in rel['op'] and "||" in rel['op']:
+                    op_desc = "Uno a Uno (1:1)"
+                
+                html.append(f'<li><span class="entity-badge">{rel["ent1"]}</span> ➔ <span class="relation-label">"{rel["label"]}" ({op_desc})</span> ➔ <span class="entity-badge">{rel["ent2"]}</span></li>')
+            html.append('</ul></div>')
+            
+        # 2. Entity details grid
+        if entities:
+            html.append('<div class="er-entities-grid">')
+            for ent_name, attrs in entities.items():
+                html.append(f'<div class="er-entity-card">')
+                html.append(f'<div class="er-entity-header">{ent_name}</div>')
+                html.append('<table class="er-entity-table">')
+                for attr in attrs:
+                    key_badge = ""
+                    if "PK" in attr['key']:
+                        key_badge = '<span class="key-badge pk">PK</span>'
+                    elif "FK" in attr['key']:
+                        key_badge = '<span class="key-badge fk">FK</span>'
+                    
+                    html.append(f'<tr><td class="attr-name">{attr["name"]} {key_badge}</td><td class="attr-type">{attr["type"]}</td></tr>')
+                html.append('</table></div>')
+            html.append('</div>')
+            
+        html.append('</div>')
+        return '\n'.join(html)
         
     return f'<pre class="raw-diagram"><code>{mermaid_content}</code></pre>'
 
@@ -643,6 +735,118 @@ def markdown_to_html(md_content, title):
             color: inherit !important;
             padding: 0 !important;
             font-size: inherit !important;
+        }}
+
+        /* Pure HTML ER Diagram styling */
+        .pure-html-er-diagram {{
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            background-color: var(--code-bg);
+        }}
+
+        .er-relationships {{
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }}
+
+        .er-relations-list {{
+            list-style-type: none !important;
+            padding-left: 0 !important;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }}
+
+        .er-relations-list li {{
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }}
+
+        .entity-badge {{
+            background-color: var(--primary);
+            color: var(--bg-main);
+            padding: 0.15rem 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            border: 1px solid var(--border);
+        }}
+
+        .relation-label {{
+            color: var(--text-muted);
+            font-weight: 600;
+        }}
+
+        .er-entities-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }}
+
+        .er-entity-card {{
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+        }}
+
+        .er-entity-header {{
+            background-color: var(--primary);
+            color: var(--bg-main);
+            padding: 0.4rem 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }}
+
+        .er-entity-table {{
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }}
+
+        .er-entity-table td {{
+            padding: 0.35rem 0.65rem;
+            border-bottom: 1px solid var(--border);
+        }}
+
+        .er-entity-table tr:last-child td {{
+            border-bottom: none;
+        }}
+
+        .attr-name {{
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.25rem;
+        }}
+
+        .attr-type {{
+            color: var(--text-muted);
+            text-align: right;
+        }}
+
+        .key-badge {{
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.05rem 0.25rem;
+            color: #ffffff;
+        }}
+
+        .key-badge.pk {{
+            background-color: var(--accent);
+        }}
+
+        .key-badge.fk {{
+            background-color: #666666;
         }}
 
         /* Pure HTML Flowchart styling (Replacing Mermaid) */

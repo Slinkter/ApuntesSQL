@@ -291,6 +291,118 @@
             font-size: inherit !important;
         }
 
+        /* Pure HTML ER Diagram styling */
+        .pure-html-er-diagram {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            background-color: var(--code-bg);
+        }
+
+        .er-relationships {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .er-relations-list {
+            list-style-type: none !important;
+            padding-left: 0 !important;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .er-relations-list li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .entity-badge {
+            background-color: var(--primary);
+            color: var(--bg-main);
+            padding: 0.15rem 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            border: 1px solid var(--border);
+        }
+
+        .relation-label {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .er-entities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .er-entity-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .er-entity-header {
+            background-color: var(--primary);
+            color: var(--bg-main);
+            padding: 0.4rem 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .er-entity-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }
+
+        .er-entity-table td {
+            padding: 0.35rem 0.65rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .er-entity-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .attr-name {
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.25rem;
+        }
+
+        .attr-type {
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .key-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.05rem 0.25rem;
+            color: #ffffff;
+        }
+
+        .key-badge.pk {
+            background-color: var(--accent);
+        }
+
+        .key-badge.fk {
+            background-color: #666666;
+        }
+
         /* Pure HTML Flowchart styling (Replacing Mermaid) */
         .pure-html-flowchart {
             display: flex;
@@ -709,124 +821,175 @@ northwind=# \di
 <li><strong>Us_states</strong> — lista de estados de EE.UU.</li>
 </ul>
 <h4>Diagrama ER</h4>
-<pre class="raw-diagram"><code>erDiagram
-    categories ||--o{ products : "pertenece a"
-    suppliers  ||--o{ products : "provee"
-    products   ||--o{ order_details : "se vende en"
-    orders     ||--o{ order_details : "contiene"
-    customers  ||--o{ orders : "hace"
-    employees  ||--o{ orders : "gestiona"
-    shippers   ||--o{ orders : "envía"
-    employees  ||--o{ employees : "reporta a"
-    employees  ||--o{ employee_territories : "cubre"
-    territories ||--o{ employee_territories : "asignado a"
-    region     ||--o{ territories : "pertenece a"
-
-    categories {
-        int category_id PK
-        varchar category_name
-        text description
-        bytea picture
-    }
-    customers {
-        char customer_id PK
-        varchar company_name
-        varchar contact_name
-        varchar contact_title
-        varchar address
-        varchar city
-        varchar region
-        varchar postal_code
-        varchar country
-        varchar phone
-        varchar fax
-    }
-    employees {
-        int employee_id PK
-        varchar last_name
-        varchar first_name
-        varchar title
-        date birth_date
-        date hire_date
-        varchar address
-        varchar city
-        varchar region
-        varchar postal_code
-        varchar country
-        varchar home_phone
-        int reports_to FK
-    }
-    products {
-        int product_id PK
-        varchar product_name
-        int supplier_id FK
-        int category_id FK
-        varchar quantity_per_unit
-        numeric unit_price
-        int units_in_stock
-        int units_on_order
-        int reorder_level
-        int discontinued
-    }
-    orders {
-        int order_id PK
-        char customer_id FK
-        int employee_id FK
-        date order_date
-        date required_date
-        date shipped_date
-        int ship_via FK
-        numeric freight
-        varchar ship_name
-        varchar ship_city
-        varchar ship_region
-        varchar ship_postal_code
-        varchar ship_country
-    }
-    order_details {
-        int order_id PK FK
-        int product_id PK FK
-        numeric unit_price
-        int quantity
-        numeric discount
-    }
-    shippers {
-        int shipper_id PK
-        varchar company_name
-        varchar phone
-    }
-    suppliers {
-        int supplier_id PK
-        varchar company_name
-        varchar contact_name
-        varchar contact_title
-        varchar address
-        varchar city
-        varchar region
-        varchar postal_code
-        varchar country
-        varchar phone
-        varchar fax
-        varchar homepage
-    }
-    territories {
-        varchar territory_id PK
-        varchar territory_description
-        int region_id FK
-    }
-    region {
-        int region_id PK
-        varchar region_description
-    }
-    employee_territories {
-        int employee_id PK FK
-        varchar territory_id PK FK
-    }
-    us_states {
-        int state_id PK
-        varchar state_code
-        varchar state_name
-    }</code></pre>
+<div class="pure-html-er-diagram">
+<div class="er-entities-grid">
+<div class="er-entity-card">
+<div class="er-entity-header">categories ||--o</div>
+<table class="er-entity-table">
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">suppliers  ||--o</div>
+<table class="er-entity-table">
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">products   ||--o</div>
+<table class="er-entity-table">
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">orders     ||--o</div>
+<table class="er-entity-table">
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">customers  ||--o</div>
+<table class="er-entity-table">
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">employees  ||--o</div>
+<table class="er-entity-table">
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">shippers   ||--o</div>
+<table class="er-entity-table">
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">territories ||--o</div>
+<table class="er-entity-table">
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">region     ||--o</div>
+<table class="er-entity-table">
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">categories</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">category_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">category_name </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">description </td><td class="attr-type">text</td></tr>
+<tr><td class="attr-name">picture </td><td class="attr-type">bytea</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">customers</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">customer_id <span class="key-badge pk">PK</span></td><td class="attr-type">char</td></tr>
+<tr><td class="attr-name">company_name </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">contact_name </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">contact_title </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">address </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">city </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">region </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">postal_code </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">country </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">phone </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">fax </td><td class="attr-type">varchar</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">employees</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">employee_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">last_name </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">first_name </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">title </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">birth_date </td><td class="attr-type">date</td></tr>
+<tr><td class="attr-name">hire_date </td><td class="attr-type">date</td></tr>
+<tr><td class="attr-name">address </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">city </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">region </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">postal_code </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">country </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">home_phone </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">reports_to <span class="key-badge fk">FK</span></td><td class="attr-type">int</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">products</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">product_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">product_name </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">supplier_id <span class="key-badge fk">FK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">category_id <span class="key-badge fk">FK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">quantity_per_unit </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">unit_price </td><td class="attr-type">numeric</td></tr>
+<tr><td class="attr-name">units_in_stock </td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">units_on_order </td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">reorder_level </td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">discontinued </td><td class="attr-type">int</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">orders</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">order_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">customer_id <span class="key-badge fk">FK</span></td><td class="attr-type">char</td></tr>
+<tr><td class="attr-name">employee_id <span class="key-badge fk">FK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">order_date </td><td class="attr-type">date</td></tr>
+<tr><td class="attr-name">required_date </td><td class="attr-type">date</td></tr>
+<tr><td class="attr-name">shipped_date </td><td class="attr-type">date</td></tr>
+<tr><td class="attr-name">ship_via <span class="key-badge fk">FK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">freight </td><td class="attr-type">numeric</td></tr>
+<tr><td class="attr-name">ship_name </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">ship_city </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">ship_region </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">ship_postal_code </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">ship_country </td><td class="attr-type">varchar</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">order_details</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">order_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">product_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">unit_price </td><td class="attr-type">numeric</td></tr>
+<tr><td class="attr-name">quantity </td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">discount </td><td class="attr-type">numeric</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">shippers</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">shipper_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">company_name </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">phone </td><td class="attr-type">varchar</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">suppliers</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">supplier_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">company_name </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">contact_name </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">contact_title </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">address </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">city </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">region </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">postal_code </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">country </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">phone </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">fax </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">homepage </td><td class="attr-type">varchar</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">territories</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">territory_id <span class="key-badge pk">PK</span></td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">territory_description </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">region_id <span class="key-badge fk">FK</span></td><td class="attr-type">int</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">region</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">region_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">region_description </td><td class="attr-type">varchar</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">employee_territories</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">employee_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">territory_id <span class="key-badge pk">PK</span></td><td class="attr-type">varchar</td></tr>
+</table></div>
+<div class="er-entity-card">
+<div class="er-entity-header">us_states</div>
+<table class="er-entity-table">
+<tr><td class="attr-name">state_id <span class="key-badge pk">PK</span></td><td class="attr-type">int</td></tr>
+<tr><td class="attr-name">state_code </td><td class="attr-type">varchar</td></tr>
+<tr><td class="attr-name">state_name </td><td class="attr-type">varchar</td></tr>
+</table></div>
+</div>
+</div>
 <h4>Convención de Columnas</h4>
 <div class="table-wrapper"><table>
 <thead><tr>

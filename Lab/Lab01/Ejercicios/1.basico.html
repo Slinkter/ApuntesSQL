@@ -291,6 +291,118 @@
             font-size: inherit !important;
         }
 
+        /* Pure HTML ER Diagram styling */
+        .pure-html-er-diagram {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            background-color: var(--code-bg);
+        }
+
+        .er-relationships {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .er-relations-list {
+            list-style-type: none !important;
+            padding-left: 0 !important;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .er-relations-list li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .entity-badge {
+            background-color: var(--primary);
+            color: var(--bg-main);
+            padding: 0.15rem 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            border: 1px solid var(--border);
+        }
+
+        .relation-label {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .er-entities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .er-entity-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .er-entity-header {
+            background-color: var(--primary);
+            color: var(--bg-main);
+            padding: 0.4rem 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .er-entity-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }
+
+        .er-entity-table td {
+            padding: 0.35rem 0.65rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .er-entity-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .attr-name {
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.25rem;
+        }
+
+        .attr-type {
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .key-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.05rem 0.25rem;
+            color: #ffffff;
+        }
+
+        .key-badge.pk {
+            background-color: var(--accent);
+        }
+
+        .key-badge.fk {
+            background-color: #666666;
+        }
+
         /* Pure HTML Flowchart styling (Replacing Mermaid) */
         .pure-html-flowchart {
             display: flex;
