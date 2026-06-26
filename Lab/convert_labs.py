@@ -136,7 +136,9 @@ def markdown_to_html(md_content, title):
         </header>
 
         <main class="bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800/80 rounded-3xl p-8 shadow-xl shadow-emerald-950/5">
-            {body_content}
+            <article class="prose dark:prose-invert max-w-none">
+                {body_content}
+            </article>
         </main>
 
         <footer class="mt-12 text-center text-xs text-stone-500 dark:text-stone-600">

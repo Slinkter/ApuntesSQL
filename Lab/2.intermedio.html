@@ -29,7 +29,8 @@
         </header>
 
         <main class="bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800/80 rounded-3xl p-8 shadow-xl shadow-emerald-950/5">
-            <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-100 mb-6">Fase 2: SQL Intermedio, Agrupaciones y Estrategias de Join</h2>
+            <article class="prose dark:prose-invert max-w-none">
+                <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-100 mb-6">Fase 2: SQL Intermedio, Agrupaciones y Estrategias de Join</h2>
 <p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Esta sección profundiza en las operaciones relacionales de proyección agrupada y combinación de conjuntos. El enfoque técnico recae sobre cómo el optimizador de PostgreSQL decide entre algoritmos de agregación y métodos de <em>Join</em> físicos según las estadísticas de cardinalidad.</p>
 <p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
 <h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 1: Agrupación Estricta y Filtrado Post-Agregación</h3>
@@ -132,6 +133,7 @@ WHERE
 <li>  <strong>LEFT JOIN + IS NULL vs NOT EXISTS:</strong> Ambas opciones son válidas en PostgreSQL y el optimizador suele transformarlas en el mismo plan físico (<em>Hash Anti Join</em>). Sin embargo, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT EXISTS</code> suele ser más legible para otros desarrolladores. Evita usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT IN</code> si hay columnas que pueden contener <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULL</code>, ya que podría devolver cero registros inesperadamente.</li>
 <li>  <strong>Filtro correcto:</strong> Siempre debes aplicar el filtro <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IS NULL</code> en una columna que sea obligatoria (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT NULL</code>) en la tabla de la derecha (como la llave primaria <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_id</code>). Si usas una columna opcional, podrías tener falsos positivos si esa columna era nula por otras razones.</li>
 </ul>
+            </article>
         </main>
 
         <footer class="mt-12 text-center text-xs text-stone-500 dark:text-stone-600">
