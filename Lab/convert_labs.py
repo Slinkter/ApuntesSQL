@@ -13,20 +13,18 @@ def markdown_to_html(md_content, title):
     quote_lines = []
 
     for line in lines:
-        # Code Blocks
+        # Code Blocks (keep their raw code lines, we will escape later)
         if line.strip().startswith('```'):
             if in_code_block:
-                # End of code block
                 in_code_block = False
                 code_content = '\n'.join(code_lines)
                 escaped_code = code_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                 if code_lang == 'mermaid':
-                    html_body.append(f'<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">{escaped_code}</div></div>')
+                    html_body.append(f'<div class="mermaid-container"><div class="mermaid">{escaped_code}</div></div>')
                 else:
-                    html_body.append(f'<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">{code_lang.upper()}</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>{escaped_code}</code></pre></div>')
+                    html_body.append(f'<div class="code-block-wrapper"><div class="code-lang-badge">{code_lang.upper()}</div><pre><code>{escaped_code}</code></pre></div>')
                 code_lines = []
             else:
-                # Start of code block
                 in_code_block = True
                 code_lang = line.strip()[3:].strip()
             continue
@@ -35,37 +33,38 @@ def markdown_to_html(md_content, title):
             code_lines.append(line)
             continue
 
+        # Escape raw text to prevent mathematical expressions like < or > from breaking HTML
+        escaped_line = line.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
         # Blockquotes (Explanations)
-        if line.strip().startswith('>'):
+        if escaped_line.strip().startswith('&gt;'):
             if not in_quote:
                 in_quote = True
-            quote_lines.append(line.strip()[1:].strip())
+            quote_lines.append(escaped_line.strip()[4:].strip())
             continue
         elif in_quote:
             in_quote = False
             quote_text = ' '.join(quote_lines)
-            # Parse bold/italic inside blockquote
+            # Restore formatting tags (bold, italic, code, links) after escaping
             quote_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', quote_text)
             quote_text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', quote_text)
-            quote_text = re.sub(r'`(.*?)`', r'<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\1</code>', quote_text)
-            # Check if it starts with "La analogía" or similar
-            if "analogía" in quote_text.lower():
-                html_body.append(f'<div class="my-6 p-5 bg-amber-500/10 border-l-4 border-amber-500 rounded-r-2xl"><div class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 mb-1">💡 Analogía Didáctica</div><p class="text-stone-700 dark:text-stone-300 italic text-sm leading-relaxed">{quote_text}</p></div>')
+            quote_text = re.sub(r'`(.*?)`', r'<code>\1</code>', quote_text)
+            if "analogía" in quote_text.lower() or "analoga" in quote_text.lower():
+                html_body.append(f'<div class="callout-box callout-analogy"><div class="callout-title">💡 Analogía Didáctica</div><p>{quote_text}</p></div>')
             else:
-                html_body.append(f'<div class="my-6 p-5 bg-stone-100 dark:bg-stone-900 border-l-4 border-stone-400 rounded-r-2xl"><p class="text-stone-700 dark:text-stone-300 italic text-sm leading-relaxed">{quote_text}</p></div>')
+                html_body.append(f'<div class="callout-box callout-note"><p>{quote_text}</p></div>')
             quote_lines = []
 
         # Lists
-        if line.strip().startswith('* ') or line.strip().startswith('- '):
+        if escaped_line.strip().startswith('* ') or escaped_line.strip().startswith('- '):
             if not in_list:
                 in_list = True
-                html_body.append('<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">')
-            list_content = line.strip()[2:]
-            # Format inline styles
+                html_body.append('<ul class="list-style-disc">')
+            list_content = escaped_line.strip()[2:]
             list_content = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', list_content)
             list_content = re.sub(r'\*(.*?)\*', r'<em>\1</em>', list_content)
-            list_content = re.sub(r'`(.*?)`', r'<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\1</code>', list_content)
-            list_content = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2" class="text-emerald-700 dark:text-emerald-400 hover:underline font-semibold">\1</a>', list_content)
+            list_content = re.sub(r'`(.*?)`', r'<code>\1</code>', list_content)
+            list_content = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', list_content)
             html_body.append(f'<li>{list_content}</li>')
             continue
         elif in_list:
@@ -73,75 +72,344 @@ def markdown_to_html(md_content, title):
             html_body.append('</ul>')
 
         # Headings
-        if line.strip().startswith('### '):
-            heading_text = line.strip()[4:]
-            html_body.append(f'<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">{heading_text}</h4>')
+        if escaped_line.strip().startswith('### '):
+            heading_text = escaped_line.strip()[4:]
+            html_body.append(f'<h4>{heading_text}</h4>')
             continue
-        elif line.strip().startswith('## '):
-            heading_text = line.strip()[3:]
-            html_body.append(f'<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">{heading_text}</h3>')
+        elif escaped_line.strip().startswith('## '):
+            heading_text = escaped_line.strip()[3:]
+            html_body.append(f'<h3>{heading_text}</h3>')
             continue
-        elif line.strip().startswith('# '):
-            heading_text = line.strip()[2:]
-            html_body.append(f'<h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-100 mb-6">{heading_text}</h2>')
-            continue
-
-        # Normal paragraphs or blank lines
-        if line.strip() == '':
+        elif escaped_line.strip().startswith('# '):
+            heading_text = escaped_line.strip()[2:]
+            html_body.append(f'<h2>{heading_text}</h2>')
             continue
 
-        # Inline formatting
-        p_text = line.strip()
+        if escaped_line.strip() == '':
+            continue
+
+        # Normal paragraphs formatting
+        p_text = escaped_line.strip()
         p_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', p_text)
         p_text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', p_text)
-        p_text = re.sub(r'`(.*?)`', r'<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\1</code>', p_text)
-        p_text = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2" class="text-emerald-700 dark:text-emerald-400 hover:underline font-semibold">\1</a>', p_text)
+        p_text = re.sub(r'`(.*?)`', r'<code>\1</code>', p_text)
+        p_text = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', p_text)
 
-        html_body.append(f'<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">{p_text}</p>')
+        html_body.append(f'<p>{p_text}</p>')
 
     if in_list:
         html_body.append('</ul>')
 
     body_content = '\n'.join(html_body)
 
-    # Full HTML layout with Organic Style & Tailwind v4
+    # Full HTML layout with native CSS variables for Light/Dark mode and perfect Mobile-First design
     template = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>{title}</title>
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({{ startOnLoad: true, theme: 'forest' }});
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        :root {{
+            --bg-main: #fbf9f4;       /* Organic Alabaster */
+            --bg-card: #ffffff;
+            --text-main: #2c3530;     /* Spruce Forest */
+            --text-muted: #5c6660;
+            --primary: #223c2b;       /* Dark Green */
+            --accent: #c06c54;        /* Terracotta */
+            --border: #e4e1d9;
+            --code-bg: #f4f3ee;
+            --code-text: #c05454;
+            --shadow: 0 10px 30px -10px rgba(34, 60, 43, 0.05);
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }}
+
+        @media (prefers-color-scheme: dark) {{
+            :root {{
+                --bg-main: #121815;   /* Moss Shadow */
+                --bg-card: #1a221e;
+                --text-main: #ebf2ee;
+                --text-muted: #9bb1a4;
+                --primary: #a3c4ae;
+                --accent: #e29784;    /* Warm Clay */
+                --border: #28332d;
+                --code-bg: #222c26;
+                --code-text: #f08c8c;
+                --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            }}
+        }}
+
+        /* Reset and Base Styles */
+        * {{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }}
+
         body {{
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #fbf9f4; /* Alabaster Cream */
-            color: #2c3530; /* Forest Slate */
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
         }}
-        pre, code {{
+
+        /* Mobile-First Layout container */
+        .wrapper {{
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem 0.5rem;
+        }}
+
+        @media (min-width: 640px) {{
+            .wrapper {{
+                padding: 2rem 1.5rem;
+            }}
+        }}
+
+        /* Header block */
+        header {{
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+        }}
+
+        header h1 {{
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1.25;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+        }}
+
+        @media (min-width: 640px) {{
+            header h1 {{
+                font-size: 2.25rem;
+            }}
+        }}
+
+        header p {{
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }}
+
+        /* Main card content */
+        main {{
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+        }}
+
+        @media (min-width: 640px) {{
+            main {{
+                padding: 2.5rem;
+            }}
+        }}
+
+        /* Typography spacing inside article */
+        article p {{
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }}
+
+        article h2 {{
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }}
+
+        article h3 {{
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 1.75rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid var(--accent);
+            padding-left: 0.75rem;
+        }}
+
+        article h4 {{
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }}
+
+        /* Inline formatting */
+        strong {{
+            font-weight: 700;
+            color: var(--primary);
+        }}
+
+        a {{
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }}
+
+        a:hover {{
+            color: var(--text-main);
+            text-decoration: underline;
+        }}
+
+        /* Inline code */
+        code {{
             font-family: 'JetBrains Mono', monospace;
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 0.15rem 0.35rem;
+            border-radius: 6px;
+            font-size: 0.85em;
+        }}
+
+        /* Lists */
+        .list-style-disc {{
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }}
+
+        .list-style-disc li {{
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }}
+
+        /* Code block layouts */
+        .code-block-wrapper {{
+            position: relative;
+            margin: 1.5rem 0;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }}
+
+        .code-lang-badge {{
+            position: absolute;
+            right: 1rem;
+            top: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #8c8c8c;
+            user-select: none;
+        }}
+
+        pre {{
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #0d120f; /* Dark background for code in both modes */
+            color: #e2e8f0;
+            padding: 1.25rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }}
+
+        pre code {{
+            background-color: transparent !important;
+            color: inherit !important;
+            padding: 0 !important;
+            font-size: inherit !important;
+        }}
+
+        /* Mermaid blocks responsive */
+        .mermaid-container {{
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background-color: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }}
+
+        .mermaid {{
+            display: flex;
+            justify-content: center;
+        }}
+
+        /* Callout Boxes */
+        .callout-box {{
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+            font-size: 0.9rem;
+        }}
+
+        .callout-box p {{
+            margin-bottom: 0;
+            font-size: inherit;
+        }}
+
+        .callout-note {{
+            background-color: var(--code-bg);
+            border-color: var(--text-muted);
+            color: var(--text-main);
+        }}
+
+        .callout-analogy {{
+            background-color: rgba(192, 108, 84, 0.08); /* Accent transparent */
+            border-color: var(--accent);
+            color: var(--text-main);
+        }}
+
+        .callout-title {{
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }}
+
+        /* Footer */
+        footer {{
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }}
     </style>
 </head>
-<body class="min-h-screen dark:bg-stone-950 dark:text-stone-100 transition-colors duration-300">
-    <div class="max-w-4xl mx-auto px-4 py-12">
-        <header class="mb-10 text-center">
-            <h1 class="text-3xl font-extrabold tracking-tight text-emerald-950 dark:text-emerald-300 mb-2">{title}</h1>
-            <p class="text-stone-600 dark:text-stone-400 text-sm">Libro de Trabajo de Ejercicios de Base de Datos Enriquecido</p>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>{title}</h1>
+            <p>Libro de Trabajo de Ejercicios de Base de Datos Enriquecido</p>
         </header>
 
-        <main class="bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800/80 rounded-3xl p-8 shadow-xl shadow-emerald-950/5">
-            <article class="prose dark:prose-invert max-w-none">
+        <main>
+            <article>
                 {body_content}
             </article>
         </main>
 
-        <footer class="mt-12 text-center text-xs text-stone-500 dark:text-stone-600">
+        <footer>
             <p>© 2026 PostgreSQL Academy | Academia de Arquitectura de Datos</p>
         </footer>
     </div>
