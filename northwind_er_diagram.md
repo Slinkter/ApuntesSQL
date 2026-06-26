@@ -122,6 +122,13 @@ erDiagram
         int region_id PK
         string region_description
     }
+
+    US_STATES {
+        int state_id PK
+        string state_name
+        string state_abbr
+        string state_region
+    }
 ```
 
 ---
@@ -154,6 +161,10 @@ Ocurre cuando una tabla tiene una relación consigo misma.
 *   **`EMPLOYEES` ➔ `EMPLOYEES` (1:N auto-referenciada):**
     - **Concepto:** Un empleado reporta a un supervisor o gerente (quien también es un empleado dentro de la misma tabla). Un gerente puede supervisar a muchos empleados (1:N).
     - **Clave Foránea:** `employees.reports_to` apunta a `employees.employee_id`. Si es `NULL`, indica que el empleado está en la cima de la jerarquía (por ejemplo, el Director General).
+
+### D. Tabla de Catálogo Independiente (Sin relaciones explícitas)
+*   **`US_STATES`:**
+    - **Concepto:** Almacena estados, abreviaturas y regiones de EE.UU. Se comporta como un catálogo de referencia. Aunque los campos de dirección de otras tablas (como `customers.region` o `suppliers.region`) pueden contener datos que correspondan a esta tabla, en el esquema estándar de Northwind no se define una clave foránea explícita (FK) para simplificar la compatibilidad con direcciones internacionales.
 
 ---
 
