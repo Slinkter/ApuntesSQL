@@ -43,13 +43,47 @@
     --text-inverse: #020617;
     --border: #334155;
     --border-focus: #60a5fa;
+    
+    /* Invert text colors for headings and emphasis */
+    --primary: #f8fafc;
+    --primary-light: #e2e8f0;
+    --secondary: #cbd5e1;
+    --accent: #60a5fa;
+    --accent-hover: #93c5fd;
+    --danger: #f87171;
+    --success: #34d399;
+    --warning: #fbbf24;
   }
+  
+  /* Fix hardcoded backgrounds in dark mode */
+  pre {
+    background: #000000 !important;
+    border: 1px solid var(--border);
+  }
+  code {
+    background: #1e293b !important;
+    color: #f87171 !important;
+  }
+  .table__th {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+  }
+  .table__tr:hover .table__td {
+    background-color: #1e293b !important;
+  }
+  
+  /* Fix callout boxes */
   .box--note, .box-note { background: #1e293b; border-color: #64748b; }
-  .box--concept, .box-concep, .box-concept { background: #064e3b; border-color: var(--success); }
-  .box--example, .box-ejemplo, .box-example { background: #1e3a8a; border-color: var(--accent); }
-  .box--exercise, .box-ejercicio, .box-exercise { background: #78350f; border-color: var(--warning); }
-  .box--warning, .box-warning { background: #7f1d1d; border-color: var(--danger); }
+  .box--concept, .box-concep, .box-concept { background: #022c22; border-color: var(--success); }
+  .box--example, .box-ejemplo, .box-example { background: #172554; border-color: var(--accent); }
+  .box--exercise, .box-ejercicio, .box-exercise { background: #451a03; border-color: var(--warning); }
+  .box--warning, .box-warning { background: #450a0a; border-color: var(--danger); }
   .architect-insight { background: #0f172a; border-left: 4px solid var(--accent); }
+  
+  /* Fix extra specific elements */
+  .week-num { background: var(--accent); color: #020617; }
+  .tag { background: #064e3b; border-color: #047857; color: #a7f3d0; }
+  .btn-cheat { color: #020617; }
 }
 
 /* Base Styles */

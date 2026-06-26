@@ -7,142 +7,143 @@
 <title>Semana 06 - Modelamiento de Datos (ERD)</title>
 <link href="master.css" rel="stylesheet"/>
 <script src="canvas-ui.js"></script>
+<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
-<div class="header">
-<h1 class="header__title">Modelamiento de Datos (Entidad-Relacion)</h1>
-<p class="header__subtitle">Semana 06 | DER | Ingenieria de Datos</p>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+<h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Modelamiento de Datos (Entidad-Relacion)</h1>
+<p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 06 | DER | Ingenieria de Datos</p>
 </div>
-<div class="cornell">
-<aside class="sidebar">
-<h2 class="sidebar__title">Conceptos Clave</h2>
-<ul class="sidebar__list">
-<li class="sidebar__item"><strong>Entidad</strong> Objeto del mundo real sobre el que se almacenan datos</li>
-<li class="sidebar__item"><strong>Relacion</strong> Asociacion entre dos o mas entidades</li>
-<li class="sidebar__item"><strong>Cardinalidad</strong> 1:1, 1:N, N:N</li>
-<li class="sidebar__item"><strong>PK</strong> Clave primaria, identifica de forma unica</li>
-<li class="sidebar__item"><strong>FK</strong> Clave foranea, vincula entidades</li>
-<li class="sidebar__item"><strong>Supertipo/Subtipo</strong> Jerarquia de herencia</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+<aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h2>
+<ul class="space-y-4">
+<li class="text-sm"><strong>Entidad</strong> Objeto del mundo real sobre el que se almacenan datos</li>
+<li class="text-sm"><strong>Relacion</strong> Asociacion entre dos o mas entidades</li>
+<li class="text-sm"><strong>Cardinalidad</strong> 1:1, 1:N, N:N</li>
+<li class="text-sm"><strong>PK</strong> Clave primaria, identifica de forma unica</li>
+<li class="text-sm"><strong>FK</strong> Clave foranea, vincula entidades</li>
+<li class="text-sm"><strong>Supertipo/Subtipo</strong> Jerarquia de herencia</li>
 </ul>
-<h2 class="sidebar__title">Recursos</h2>
-<ul class="sidebar__list">
-<li class="sidebar__item"><a class="sidebar__link" href="index.html">Indice del Curso</a></li>
-<li class="sidebar__item"><a class="sidebar__link" href="semana_05.html">Semana 05</a></li>
-<li class="sidebar__item"><a class="sidebar__link" href="semana_07.html">Semana 07</a></li>
+<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Recursos</h2>
+<ul class="space-y-4">
+<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="index.html">Indice del Curso</a></li>
+<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_05.html">Semana 05</a></li>
+<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_07.html">Semana 07</a></li>
 </ul>
 </aside>
-<main class="main">
-<div class="box box--note">
+<main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p><strong>Objetivos de Aprendizaje</strong></p>
-<ul class="main__list">
-<li class="main__list-item">Comprender el modelamiento de datos como fase critica del desarrollo</li>
-<li class="main__list-item">Identificar entidades, relaciones, atributos y cardinalidades</li>
-<li class="main__list-item">Distinguir entidades fuertes, debiles y asociativas</li>
-<li class="main__list-item">Construir un Diagrama Entidad-Relacion (DER)</li>
-<li class="main__list-item">Aplicar supertipos y subtipos en el modelo E-R extendido</li>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li >Comprender el modelamiento de datos como fase critica del desarrollo</li>
+<li >Identificar entidades, relaciones, atributos y cardinalidades</li>
+<li >Distinguir entidades fuertes, debiles y asociativas</li>
+<li >Construir un Diagrama Entidad-Relacion (DER)</li>
+<li >Aplicar supertipos y subtipos en el modelo E-R extendido</li>
 </ul>
 </div>
-<div class="architect-insight">
+<div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 <p><strong>Insight del Arquitecto:</strong> El modelamiento de datos es la parte mas importante del desarrollo de un sistema de informacion. Los datos tienden a ser mas estables que los procesos del negocio; un sistema orientado a datos tiene mayor vida util. Invertir tiempo en el DER reduce costos de mantenimiento futuro.</p>
 </div>
-<h2 class="main__title">1. Que es el Modelamiento de Datos?</h2>
-<p class="main__text">Es una abstraccion del mundo real que representa como organizamos la informacion y expresa las reglas de negocio de una organizacion.</p>
-<div class="box box--concept">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Que es el Modelamiento de Datos?</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Es una abstraccion del mundo real que representa como organizamos la informacion y expresa las reglas de negocio de una organizacion.</p>
+<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p><strong>Regla de Negocio:</strong> Enunciado que define o limita un aspecto del negocio. Debe ser declarativa (describe el QUE, no el COMO), precisa, atomica, consistente y expresada en lenguaje natural estructurado.</p>
 </div>
-<h2 class="main__title">2. Entidad</h2>
-<p class="main__text">Coleccion de objetos del mundo real (personas, lugares, eventos, conceptos) que se distinguen de otros.</p>
-<ul class="main__list">
-<li class="main__list-item"><strong>Tipo Entidad:</strong> La clase general (ej. Empleado, Automovil, Curso). Corresponde a una tabla.</li>
-<li class="main__list-item"><strong>Instancia:</strong> Un ejemplar concreto (ej. Pedro Picapiedra, Renault). Corresponde a una fila.</li>
-<li class="main__list-item">Se nombran con un sustantivo en singular: Cliente (no clientes).</li>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Entidad</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Coleccion de objetos del mundo real (personas, lugares, eventos, conceptos) que se distinguen de otros.</p>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li ><strong>Tipo Entidad:</strong> La clase general (ej. Empleado, Automovil, Curso). Corresponde a una tabla.</li>
+<li ><strong>Instancia:</strong> Un ejemplar concreto (ej. Pedro Picapiedra, Renault). Corresponde a una fila.</li>
+<li >Se nombran con un sustantivo en singular: Cliente (no clientes).</li>
 </ul>
-<h2 class="main__title--sub">Clasificacion de Entidades</h2>
-<div class="table-responsive"><div class="table">
-<div class="table__tr">
-<div class="table__th">Tipo</div>
-<div class="table__th">Descripcion</div>
-<div class="table__th">Ejemplo</div>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Clasificacion de Entidades</h2>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Ejemplo</div>
 </div>
-<div class="table__tr">
-<div class="table__td">Fuerte</div>
-<div class="table__td">Existe independientemente de otra entidad</div>
-<div class="table__td">Factura</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">Fuerte</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Existe independientemente de otra entidad</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Factura</div>
 </div>
-<div class="table__tr">
-<div class="table__td">Debil</div>
-<div class="table__td">Su existencia depende de otra entidad</div>
-<div class="table__td">Linea de Factura</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">Debil</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Su existencia depende de otra entidad</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Linea de Factura</div>
 </div>
-<div class="table__tr">
-<div class="table__td">Asociativa</div>
-<div class="table__td">Nace de la asociacion de dos entidades y contiene atributos propios</div>
-<div class="table__td">Asignacion (Empleado-Proyecto)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">Asociativa</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Nace de la asociacion de dos entidades y contiene atributos propios</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Asignacion (Empleado-Proyecto)</div>
 </div>
-<div class="table__tr">
-<div class="table__td">Recursiva</div>
-<div class="table__td">Tiene una relacion consigo misma</div>
-<div class="table__td">Empleado (jefe-subordinado)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">Recursiva</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Tiene una relacion consigo misma</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Empleado (jefe-subordinado)</div>
 </div>
 </div></div>
-<h2 class="main__title">3. Relacion</h2>
-<p class="main__text">Es una asociacion entre una o mas entidades que es de interes para la organizacion. Ejemplo: un alumno puede llevar uno o mas cursos (vinculo funcional) y un curso puede ser llevado por uno, ninguno o mas alumnos.</p>
-<h2 class="main__title--sub">Cardinalidad de Relaciones</h2>
-<div class="table-responsive"><div class="table">
-<div class="table__tr">
-<div class="table__th">Cardinalidad</div>
-<div class="table__th">Significado</div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Relacion</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Es una asociacion entre una o mas entidades que es de interes para la organizacion. Ejemplo: un alumno puede llevar uno o mas cursos (vinculo funcional) y un curso puede ser llevado por uno, ninguno o mas alumnos.</p>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Cardinalidad de Relaciones</h2>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Cardinalidad</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Significado</div>
 </div>
-<div class="table__tr">
-<div class="table__td">1:1</div>
-<div class="table__td">Cada entidad tiene exactamente una entidad relacionada</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">1:1</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Cada entidad tiene exactamente una entidad relacionada</div>
 </div>
-<div class="table__tr">
-<div class="table__td">1:N</div>
-<div class="table__td">Una entidad en un lado se asocia con muchas entidades en el otro</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">1:N</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Una entidad en un lado se asocia con muchas entidades en el otro</div>
 </div>
-<div class="table__tr">
-<div class="table__td">N:N</div>
-<div class="table__td">Muchas entidades en cada lado pueden estar asociadas</div>
-</div>
-</div></div>
-<h2 class="main__title--sub">Cardinalidad Minima y Maxima</h2>
-<ul class="main__list">
-<li class="main__list-item"><strong>Cardinalidad Minima:</strong> Si es 0, la relacion es opcional; si es 1 o mas, es mandatoria.</li>
-<li class="main__list-item"><strong>Cardinalidad Maxima:</strong> El numero maximo de instancias que pueden asociarse.</li>
-</ul>
-<h2 class="main__title--sub">Grados de Relacion</h2>
-<ul class="main__list">
-<li class="main__list-item"><strong>Unaria:</strong> Relacion sobre una misma entidad (ej. Empleado supervisa a Empleado). Cardinalidad 1:1 o 1:N.</li>
-<li class="main__list-item"><strong>Binaria:</strong> Relacion entre dos entidades. Es la mas comun. Puede ser 1:1, 1:N o N:N.</li>
-<li class="main__list-item"><strong>Ternaria:</strong> Relacion entre tres entidades (ej. Proveedor-Almacen-Articulo).</li>
-</ul>
-<h2 class="main__title">4. Claves y Restricciones de Integridad</h2>
-<p class="main__text">Las claves garantizan la identificacion unica y la integridad referencial entre entidades.</p>
-<div class="table-responsive"><div class="table">
-<div class="table__tr">
-<div class="table__th">Tipo de Clave</div>
-<div class="table__th">Descripcion</div>
-</div>
-<div class="table__tr">
-<div class="table__td">Primary Key (PK)</div>
-<div class="table__td">Atributo o combinacion de atributos que identifica de forma unica un registro. No cambia, no es nula, es unica.</div>
-</div>
-<div class="table__tr">
-<div class="table__td">PK Compuesta</div>
-<div class="table__td">Compuesta por mas de un atributo (ej. Nro Factura + Codigo Articulo)</div>
-</div>
-<div class="table__tr">
-<div class="table__td">Foreign Key (FK)</div>
-<div class="table__td">Atributo en una entidad que es PK de otra entidad. Implementa la asociacion entre tablas.</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">N:N</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Muchas entidades en cada lado pueden estar asociadas</div>
 </div>
 </div></div>
-<div class="box box--note">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Cardinalidad Minima y Maxima</h2>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li ><strong>Cardinalidad Minima:</strong> Si es 0, la relacion es opcional; si es 1 o mas, es mandatoria.</li>
+<li ><strong>Cardinalidad Maxima:</strong> El numero maximo de instancias que pueden asociarse.</li>
+</ul>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Grados de Relacion</h2>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li ><strong>Unaria:</strong> Relacion sobre una misma entidad (ej. Empleado supervisa a Empleado). Cardinalidad 1:1 o 1:N.</li>
+<li ><strong>Binaria:</strong> Relacion entre dos entidades. Es la mas comun. Puede ser 1:1, 1:N o N:N.</li>
+<li ><strong>Ternaria:</strong> Relacion entre tres entidades (ej. Proveedor-Almacen-Articulo).</li>
+</ul>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Claves y Restricciones de Integridad</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las claves garantizan la identificacion unica y la integridad referencial entre entidades.</p>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo de Clave</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</div>
+</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">Primary Key (PK)</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Atributo o combinacion de atributos que identifica de forma unica un registro. No cambia, no es nula, es unica.</div>
+</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">PK Compuesta</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Compuesta por mas de un atributo (ej. Nro Factura + Codigo Articulo)</div>
+</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">Foreign Key (FK)</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Atributo en una entidad que es PK de otra entidad. Implementa la asociacion entre tablas.</div>
+</div>
+</div></div>
+<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p><strong>Restricciones de Integridad:</strong> (1) Restricciones de dominio - todos los valores deben estar en el mismo dominio. (2) Restricciones de integridad - PK no nulas, FK debe coincidir con PK de otra entidad.</p>
 </div>
-<h2 class="main__title">5. Diagrama Entidad-Relacion (DER)</h2>
-<p class="main__text">El modelo entidad/relacion es el modelo conceptual mas utilizado para el diseno conceptual de bases de datos. Fue introducido por Peter Chen en 1976.</p>
-<h2 class="main__title--sub">Construccion del DER (Notacion Ingenieria de Informacion)</h2>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Diagrama Entidad-Relacion (DER)</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El modelo entidad/relacion es el modelo conceptual mas utilizado para el diseno conceptual de bases de datos. Fue introducido por Peter Chen en 1976.</p>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Construccion del DER (Notacion Ingenieria de Informacion)</h2>
 <div class="diagram-ascii">A --- asociada a Uno y Solo Un B --- A  +-------+  B
                                              |   1   |
                                              +-------+
@@ -153,20 +154,20 @@ A --- asociado a Un o Varios B      A  +----1-N---+  B
 A --- asociado a Cero o Varios B    A  +---0-N----+  B
 
 A --- asociado a Varios B           A  +----N-----+  B</div>
-<h2 class="main__title--sub">Pasos para construir el DER</h2>
-<ol class="main__list" style="list-style: decimal;">
-<li class="main__list-item">Graficar las entidades fuertes</li>
-<li class="main__list-item">Graficar las entidades debiles</li>
-<li class="main__list-item">Graficar las relaciones binarias</li>
-<li class="main__list-item">Graficar las entidades asociativas</li>
-<li class="main__list-item">Graficar las relaciones unarias (recursivas)</li>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Pasos para construir el DER</h2>
+<ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300" style="list-style: decimal;">
+<li >Graficar las entidades fuertes</li>
+<li >Graficar las entidades debiles</li>
+<li >Graficar las relaciones binarias</li>
+<li >Graficar las entidades asociativas</li>
+<li >Graficar las relaciones unarias (recursivas)</li>
 </ol>
-<h2 class="main__title">6. Supertipos y Subtipos (Modelo E-R Extendido)</h2>
-<p class="main__text">Mecanismo para representar jerarquias donde una entidad general se subdivide en subtipos especializados.</p>
-<ul class="main__list">
-<li class="main__list-item"><strong>Supertipo:</strong> Entidad que puede subdividirse en 2 o mas subtipos. Sus instancias pertenecen tanto al supertipo como al subtipo.</li>
-<li class="main__list-item"><strong>Subtipo:</strong> Guarda atributos diferenciadores pero hereda atributos comunes del supertipo.</li>
-<li class="main__list-item">Las categorias se diferencian a traves de atributos que difieren entre si.</li>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">6. Supertipos y Subtipos (Modelo E-R Extendido)</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Mecanismo para representar jerarquias donde una entidad general se subdivide en subtipos especializados.</p>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li ><strong>Supertipo:</strong> Entidad que puede subdividirse en 2 o mas subtipos. Sus instancias pertenecen tanto al supertipo como al subtipo.</li>
+<li ><strong>Subtipo:</strong> Guarda atributos diferenciadores pero hereda atributos comunes del supertipo.</li>
+<li >Las categorias se diferencian a traves de atributos que difieren entre si.</li>
 </ul>
 <div class="diagram-ascii">        +-------------------+
         |    EMPLEADO       |  (Supertipo)
@@ -186,16 +187,16 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
 | sueldo     |       | tarifa_h  |
 | bono       |       | max_horas |
 +------------+       +------------+</div>
-<div class="box box--exercise">
+<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
 <p><strong>Laboratorio:</strong> Dado el siguiente enunciado, construya el DER:</p>
 <p>"Una biblioteca tiene socios que pueden prestar libros. Cada prestamo registra la fecha de inicio y la fecha de devolucion. Un libro pertenece a una categoria. Un socio tiene un unico carnet."</p>
-<p class="main__text">Identifique: entidades (fuertes y debiles), relaciones, cardinalidad (minima y maxima) y atributos clave.</p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Identifique: entidades (fuertes y debiles), relaciones, cardinalidad (minima y maxima) y atributos clave.</p>
 </div>
 <div class="canvas-container">
 <canvas height="360" id="canvas_06" width="800"></canvas>
 <div class="canvas-controls" id="controls_06"></div>
 </div>
-<div class="nav">
+<div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
 <a class="nav__link" href="semana_05.html">Semana 05</a>
 <a class="nav__link" href="semana_07.html">Semana 07</a>
 </div>

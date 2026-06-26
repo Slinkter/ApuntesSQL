@@ -1,288 +1,577 @@
-<!DOCTYPE html>
-<html lang="es">
-<head><link rel="stylesheet" href="master.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 10 - Consultas Avanzadas: JOIN y Subconsultas</title>
-    
-    
-</head>
-<body>
-
-<div class="header-box">
-    <h1>Consultas Avanzadas: JOIN, Subconsultas y Agrupamiento</h1>
-    <p>Semana 10 | Ingeniería de Datos | ULima 2013-2</p>
-</div>
-
-<div class="cornell-container">
-    <div class="keywords-sidebar">
-        <h3>PALABRAS CLAVE</h3>
-        <ul>
-            <li><strong>§ JOIN</strong><br>Unir tablas</li>
-            <li><strong>§ INNER JOIN</strong><br>Solo coincidencias</li>
-            <li><strong>§ LEFT/RIGHT JOIN</strong><br>Todas las filas de un lado</li>
-            <li><strong>§ CROSS JOIN</strong><br>Producto cartesiano</li>
-            <li><strong>§ Self JOIN</strong><br>Join con la misma tabla</li>
-            <li><strong>§ Subconsulta</strong><br>Consulta dentro de consulta</li>
-        </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3>RECURSOS</h3>
-            <ul>
-                <li><a href="index.html">?? Índice del Curso</a></li>
-                <li><a href="semana_09.html">? Semana 09</a></li>
-                <li><a href="semana_11.html">? Semana 11</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="main-content">
-        <div class="box box-note">
-            <p><strong>?? Objetivos de Aprendizaje</strong></p>
-            <ul style="margin: 8px 0 0 20px;">
-                <li>Comprender los diferentes tipos de JOIN</li>
-                <li>Usar alias de tablas (aliases)</li>
-                <li>Crear subconsultas simples y correlacionadas</li>
-                <li>Aplicar funciones de grupo con GROUP BY</li>
-                <li>Utilizar HAVING para filtrar grupos</li>
-            </ul>
-        </div>
-
-        <section class="architect-insight">
-            <h4>?? Insight del Arquitecto: Optimización de JOINs</h4>
-            <p><strong>PostgreSQL y los JOINs:</strong> El optimizador de PostgreSQL es muy bueno eligiendo el método de JOIN (Nested Loop, Hash Join, Merge Join). El orden de las tablas en el FROM importa menos que las condiciones en el ON. Usa EXPLAIN ANALYZE para ver el plan de ejecución real.</p>
-            <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px;">
-EXPLAIN ANALYZE 
-SELECT * FROM cliente c 
-JOIN pedido p ON c.id = p.cliente_id 
-WHERE p.fecha > '2024-01-01';</pre>
-        </section>
-
-        <h2>1. Tipos de JOIN</h2>
-        
-        <div class="box box-concep">
-            <p><strong>JOIN:</strong> Combina filas de dos o más tablas basándose en una condición relacionada.</p>
-        </div>
-
-        <h3>INNER JOIN (Equijoin)</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Sintaxis estándar (preferida en PostgreSQL)
-SELECT c.nombre, p.numero_orden
-FROM cliente c
-INNER JOIN pedido p ON c.id = p.cliente_id;
-
--- Sintaxis antigua (Oracle, SQL Server legacy)
-SELECT c.nombre, p.numero_orden
-FROM cliente c, pedido p
-WHERE c.id = p.cliente_id;
-
--- Solo devuelve clientes que tienen pedidos</pre>
-
-        <h3>LEFT OUTER JOIN</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Devuelve TODOS los clientes, con sus pedidos (si existen)
-SELECT c.nombre, p.numero_orden
-FROM cliente c
-LEFT JOIN pedido p ON c.id = p.cliente_id;
-
--- Los clientes SIN pedidos mostrarán NULL en columnas de pedido</pre>
-
-        <h3>RIGHT OUTER JOIN</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Devuelve TODOS los pedidos, con su cliente (si existe)
-SELECT c.nombre, p.numero_orden
-FROM cliente c
-RIGHT JOIN pedido p ON c.id = p.cliente_id;</pre>
-
-        <h3>CROSS JOIN</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Producto cartesiano (todas las combinaciones)
--- Útil para generar datos de prueba
-SELECT c.nombre, p.nombre_producto
-FROM cliente c
-CROSS JOIN producto p;
-
--- Equivalente a (evitar en producción):
-SELECT c.nombre, p.nombre_producto
-FROM cliente c, producto p;</pre>
-
-        <h3>SELF JOIN</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Une una tabla consigo misma
--- Ej: Encontrar empleados que trabajan para el mismo jefe
-
-SELECT e1.nombre AS empleado, 
-       e2.nombre AS jefe
-FROM empleado e1
-JOIN empleado e2 ON e1.jefe_id = e2.id;
-
--- Ej: Todos los empleados del mismo departamento
-SELECT a.nombre, b.nombre
-FROM empleado a
-JOIN empleado b ON a.departamento_id = b.departamento_id
-WHERE a.id <> b.id;</pre>
-
-        <h2>2. Non-Equi JOIN</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- JOIN sin igualdad (usando rangos)
--- Ej: Categorizar productos por precio
-
-SELECT p.nombre, p.precio, c.categoria
-FROM producto p
-JOIN categoria_precio c 
-    ON p.precio BETWEEN c.precio_min AND c.precio_max;</pre>
-
-        <h2>3. Subconsultas</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Subconsulta:</strong> Consulta anidada dentro de otra consulta. Se ejecuta primero y su resultado se usa en la consulta principal.</p>
-        </div>
-
-        <h3>Subconsulta en WHERE</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Subconsulta de fila simple (=, <, >, etc.)
-SELECT * FROM pedido
-WHERE cliente_id = (
-    SELECT id FROM cliente 
-    WHERE nombre = 'JUAN'
-);
-
--- Subconsulta de múltiples filas (IN, ANY, ALL)
-SELECT * FROM producto
-WHERE id IN (
-    SELECT id_producto FROM detalle_pedido 
-    WHERE cantidad > 10
-);
-
--- Con función de agregación
-SELECT * FROM producto
-WHERE precio > (
-    SELECT AVG(precio) FROM producto
-);</pre>
-
-        <h3>Subconsulta Correlacionada</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- La subconsulta referencia la consulta principal
-SELECT p.nombre, p.precio
-FROM producto p
-WHERE p.precio > (
-    SELECT AVG(precio) 
-    FROM producto p2 
-    WHERE p2.categoria_id = p.categoria_id
-);</pre>
-
-        <h3>Subconsulta en FROM (Tabla derivada)</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
-SELECT sub.total_pedidos, sub.cliente_nombre
-FROM (
-    SELECT c.nombre AS cliente_name, 
-           COUNT(p.id) AS total_pedidos
-    FROM cliente c
-    LEFT JOIN pedido p ON c.id = p.cliente_id
-    GROUP BY c.nombre
-) AS sub
-WHERE sub.total_pedidos > 5;</pre>
-
-        <h3>Subconsulta con EXISTS</h3>
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Clientes que tienen al menos un pedido
-SELECT * FROM cliente c
-WHERE EXISTS (
-    SELECT 1 FROM pedido p 
-    WHERE p.cliente_id = c.id
-);
-
--- Clientes SIN pedidos (negación)
-SELECT * FROM cliente c
-WHERE NOT EXISTS (
-    SELECT 1 FROM pedido p 
-    WHERE p.cliente_id = c.id
-);</pre>
-
-        <h2>4. Funciones de Grupo con GROUP BY</h2>
-        
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Promedio por categoría
-SELECT categoria_id, 
-       AVG(precio) AS precio_promedio,
-       COUNT(*) AS productos,
-       SUM(stock) AS stock_total
-FROM producto
-GROUP BY categoria_id;
-
--- Con filtro de filas (WHERE) antes de agrupar
-SELECT categoria_id, AVG(precio) AS promedio
-FROM producto
-WHERE activo = true
-GROUP BY categoria_id;
-
--- Con filtro de grupos (HAVING) después de agrupar
-SELECT cliente_id, COUNT(*) AS num_pedidos
-FROM pedido
-GROUP BY cliente_id
-HAVING COUNT(*) > 3;</pre>
-
-        <h2>5. Ejercicios Completos</h2>
-        
-        <div class="box box-ejemplo">
-            <p><strong>Ejercicios:</strong></p>
-            <ol style="margin-left: 20px;">
-                <li>Lista clientes con sus pedidos (incluye clientes sin pedidos)</li>
-                <li>Encuentra el producto más vendido</li>
-                <li>Lista el total gastado por cada cliente</li>
-                <li>Muestra los productos que nunca se han vendido</li>
-                <li>Encuentra el segundo producto más caro</li>
-            </ol>
-        </div>
-
-        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
--- Soluciones:
-
--- 1. Clientes con pedidos (LEFT JOIN)
-SELECT c.nombre, COALESCE(COUNT(p.id), 0) AS pedidos
-FROM cliente c
-LEFT JOIN pedido p ON c.id = p.cliente_id
-GROUP BY c.nombre;
-
--- 2. Producto más vendido
-SELECT p.nombre, SUM(d.cantidad) AS total_vendido
-FROM producto p
-JOIN detalle_pedido d ON p.id = d.producto_id
-GROUP BY p.nombre
-ORDER BY total_vendido DESC
-LIMIT 1;
-
--- 4. Productos nunca vendidos
-SELECT p.nombre
-FROM producto p
-WHERE NOT EXISTS (
-    SELECT 1 FROM detalle_pedido d 
-    WHERE d.producto_id = p.id
-);
-
--- 5. Segundo producto más caro
-SELECT nombre, precio
-FROM producto
-ORDER BY precio DESC
-LIMIT 1 OFFSET 1;</pre>
-
-        <hr>
-
-        <section class="laboratorio">
-            <h3>?? Laboratorio: JOINs y Subconsultas</h3>
-            <ol style="margin-left: 20px;">
-                <li>Escribe una consulta que muestre el total de cada pedido con el nombre del cliente</li>
-                <li>Usa subconsulta para encontrar empleados que ganan más que el promedio</li>
-                <li>Crea una consulta correlacionada para encontrar productos con stock bajo el promedio de su categoría</li>
-                <li>Usa RIGHT JOIN para encontrar productos nunca pedidos</li>
-            </ol>
-        </section>
-
-    </div>
-</div>
-
-</body>
-</html>
-
-
-
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head><link rel="stylesheet" href="master.css">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Semana 10 - Consultas Avanzadas: JOIN y Subconsultas</title>
+
+    
+
+    
+
+<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+
+<body>
+
+
+
+<div class="header-box">
+
+    <h1>Consultas Avanzadas: JOIN, Subconsultas y Agrupamiento</h1>
+
+    <p>Semana 10 | Ingeniería de Datos | ULima 2013-2</p>
+
+</div>
+
+
+
+<div class="cornell-container">
+
+    <div class="keywords-sidebar">
+
+        <h3>PALABRAS CLAVE</h3>
+
+        <ul>
+
+            <li><strong>§ JOIN</strong><br>Unir tablas</li>
+
+            <li><strong>§ INNER JOIN</strong><br>Solo coincidencias</li>
+
+            <li><strong>§ LEFT/RIGHT JOIN</strong><br>Todas las filas de un lado</li>
+
+            <li><strong>§ CROSS JOIN</strong><br>Producto cartesiano</li>
+
+            <li><strong>§ Self JOIN</strong><br>Join con la misma tabla</li>
+
+            <li><strong>§ Subconsulta</strong><br>Consulta dentro de consulta</li>
+
+        </ul>
+
+        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
+
+            <h3>RECURSOS</h3>
+
+            <ul>
+
+                <li><a href="index.html">?? Índice del Curso</a></li>
+
+                <li><a href="semana_09.html">? Semana 09</a></li>
+
+                <li><a href="semana_11.html">? Semana 11</a></li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="main-content">
+
+        <div class="box box-note">
+
+            <p><strong>?? Objetivos de Aprendizaje</strong></p>
+
+            <ul style="margin: 8px 0 0 20px;">
+
+                <li>Comprender los diferentes tipos de JOIN</li>
+
+                <li>Usar alias de tablas (aliases)</li>
+
+                <li>Crear subconsultas simples y correlacionadas</li>
+
+                <li>Aplicar funciones de grupo con GROUP BY</li>
+
+                <li>Utilizar HAVING para filtrar grupos</li>
+
+            </ul>
+
+        </div>
+
+
+
+        <section class="architect-insight">
+
+            <h4>?? Insight del Arquitecto: Optimización de JOINs</h4>
+
+            <p><strong>PostgreSQL y los JOINs:</strong> El optimizador de PostgreSQL es muy bueno eligiendo el método de JOIN (Nested Loop, Hash Join, Merge Join). El orden de las tablas en el FROM importa menos que las condiciones en el ON. Usa EXPLAIN ANALYZE para ver el plan de ejecución real.</p>
+
+            <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px;">
+
+EXPLAIN ANALYZE 
+
+SELECT * FROM cliente c 
+
+JOIN pedido p ON c.id = p.cliente_id 
+
+WHERE p.fecha > '2024-01-01';</pre>
+
+        </section>
+
+
+
+        <h2>1. Tipos de JOIN</h2>
+
+        
+
+        <div class="box box-concep">
+
+            <p><strong>JOIN:</strong> Combina filas de dos o más tablas basándose en una condición relacionada.</p>
+
+        </div>
+
+
+
+        <h3>INNER JOIN (Equijoin)</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Sintaxis estándar (preferida en PostgreSQL)
+
+SELECT c.nombre, p.numero_orden
+
+FROM cliente c
+
+INNER JOIN pedido p ON c.id = p.cliente_id;
+
+
+
+-- Sintaxis antigua (Oracle, SQL Server legacy)
+
+SELECT c.nombre, p.numero_orden
+
+FROM cliente c, pedido p
+
+WHERE c.id = p.cliente_id;
+
+
+
+-- Solo devuelve clientes que tienen pedidos</pre>
+
+
+
+        <h3>LEFT OUTER JOIN</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Devuelve TODOS los clientes, con sus pedidos (si existen)
+
+SELECT c.nombre, p.numero_orden
+
+FROM cliente c
+
+LEFT JOIN pedido p ON c.id = p.cliente_id;
+
+
+
+-- Los clientes SIN pedidos mostrarán NULL en columnas de pedido</pre>
+
+
+
+        <h3>RIGHT OUTER JOIN</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Devuelve TODOS los pedidos, con su cliente (si existe)
+
+SELECT c.nombre, p.numero_orden
+
+FROM cliente c
+
+RIGHT JOIN pedido p ON c.id = p.cliente_id;</pre>
+
+
+
+        <h3>CROSS JOIN</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Producto cartesiano (todas las combinaciones)
+
+-- Útil para generar datos de prueba
+
+SELECT c.nombre, p.nombre_producto
+
+FROM cliente c
+
+CROSS JOIN producto p;
+
+
+
+-- Equivalente a (evitar en producción):
+
+SELECT c.nombre, p.nombre_producto
+
+FROM cliente c, producto p;</pre>
+
+
+
+        <h3>SELF JOIN</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Une una tabla consigo misma
+
+-- Ej: Encontrar empleados que trabajan para el mismo jefe
+
+
+
+SELECT e1.nombre AS empleado, 
+
+       e2.nombre AS jefe
+
+FROM empleado e1
+
+JOIN empleado e2 ON e1.jefe_id = e2.id;
+
+
+
+-- Ej: Todos los empleados del mismo departamento
+
+SELECT a.nombre, b.nombre
+
+FROM empleado a
+
+JOIN empleado b ON a.departamento_id = b.departamento_id
+
+WHERE a.id <> b.id;</pre>
+
+
+
+        <h2>2. Non-Equi JOIN</h2>
+
+        
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- JOIN sin igualdad (usando rangos)
+
+-- Ej: Categorizar productos por precio
+
+
+
+SELECT p.nombre, p.precio, c.categoria
+
+FROM producto p
+
+JOIN categoria_precio c 
+
+    ON p.precio BETWEEN c.precio_min AND c.precio_max;</pre>
+
+
+
+        <h2>3. Subconsultas</h2>
+
+        
+
+        <div class="box box-ejemplo">
+
+            <p><strong>Subconsulta:</strong> Consulta anidada dentro de otra consulta. Se ejecuta primero y su resultado se usa en la consulta principal.</p>
+
+        </div>
+
+
+
+        <h3>Subconsulta en WHERE</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Subconsulta de fila simple (=, <, >, etc.)
+
+SELECT * FROM pedido
+
+WHERE cliente_id = (
+
+    SELECT id FROM cliente 
+
+    WHERE nombre = 'JUAN'
+
+);
+
+
+
+-- Subconsulta de múltiples filas (IN, ANY, ALL)
+
+SELECT * FROM producto
+
+WHERE id IN (
+
+    SELECT id_producto FROM detalle_pedido 
+
+    WHERE cantidad > 10
+
+);
+
+
+
+-- Con función de agregación
+
+SELECT * FROM producto
+
+WHERE precio > (
+
+    SELECT AVG(precio) FROM producto
+
+);</pre>
+
+
+
+        <h3>Subconsulta Correlacionada</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- La subconsulta referencia la consulta principal
+
+SELECT p.nombre, p.precio
+
+FROM producto p
+
+WHERE p.precio > (
+
+    SELECT AVG(precio) 
+
+    FROM producto p2 
+
+    WHERE p2.categoria_id = p.categoria_id
+
+);</pre>
+
+
+
+        <h3>Subconsulta en FROM (Tabla derivada)</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+SELECT sub.total_pedidos, sub.cliente_nombre
+
+FROM (
+
+    SELECT c.nombre AS cliente_name, 
+
+           COUNT(p.id) AS total_pedidos
+
+    FROM cliente c
+
+    LEFT JOIN pedido p ON c.id = p.cliente_id
+
+    GROUP BY c.nombre
+
+) AS sub
+
+WHERE sub.total_pedidos > 5;</pre>
+
+
+
+        <h3>Subconsulta con EXISTS</h3>
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Clientes que tienen al menos un pedido
+
+SELECT * FROM cliente c
+
+WHERE EXISTS (
+
+    SELECT 1 FROM pedido p 
+
+    WHERE p.cliente_id = c.id
+
+);
+
+
+
+-- Clientes SIN pedidos (negación)
+
+SELECT * FROM cliente c
+
+WHERE NOT EXISTS (
+
+    SELECT 1 FROM pedido p 
+
+    WHERE p.cliente_id = c.id
+
+);</pre>
+
+
+
+        <h2>4. Funciones de Grupo con GROUP BY</h2>
+
+        
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Promedio por categoría
+
+SELECT categoria_id, 
+
+       AVG(precio) AS precio_promedio,
+
+       COUNT(*) AS productos,
+
+       SUM(stock) AS stock_total
+
+FROM producto
+
+GROUP BY categoria_id;
+
+
+
+-- Con filtro de filas (WHERE) antes de agrupar
+
+SELECT categoria_id, AVG(precio) AS promedio
+
+FROM producto
+
+WHERE activo = true
+
+GROUP BY categoria_id;
+
+
+
+-- Con filtro de grupos (HAVING) después de agrupar
+
+SELECT cliente_id, COUNT(*) AS num_pedidos
+
+FROM pedido
+
+GROUP BY cliente_id
+
+HAVING COUNT(*) > 3;</pre>
+
+
+
+        <h2>5. Ejercicios Completos</h2>
+
+        
+
+        <div class="box box-ejemplo">
+
+            <p><strong>Ejercicios:</strong></p>
+
+            <ol style="margin-left: 20px;">
+
+                <li>Lista clientes con sus pedidos (incluye clientes sin pedidos)</li>
+
+                <li>Encuentra el producto más vendido</li>
+
+                <li>Lista el total gastado por cada cliente</li>
+
+                <li>Muestra los productos que nunca se han vendido</li>
+
+                <li>Encuentra el segundo producto más caro</li>
+
+            </ol>
+
+        </div>
+
+
+
+        <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
+
+-- Soluciones:
+
+
+
+-- 1. Clientes con pedidos (LEFT JOIN)
+
+SELECT c.nombre, COALESCE(COUNT(p.id), 0) AS pedidos
+
+FROM cliente c
+
+LEFT JOIN pedido p ON c.id = p.cliente_id
+
+GROUP BY c.nombre;
+
+
+
+-- 2. Producto más vendido
+
+SELECT p.nombre, SUM(d.cantidad) AS total_vendido
+
+FROM producto p
+
+JOIN detalle_pedido d ON p.id = d.producto_id
+
+GROUP BY p.nombre
+
+ORDER BY total_vendido DESC
+
+LIMIT 1;
+
+
+
+-- 4. Productos nunca vendidos
+
+SELECT p.nombre
+
+FROM producto p
+
+WHERE NOT EXISTS (
+
+    SELECT 1 FROM detalle_pedido d 
+
+    WHERE d.producto_id = p.id
+
+);
+
+
+
+-- 5. Segundo producto más caro
+
+SELECT nombre, precio
+
+FROM producto
+
+ORDER BY precio DESC
+
+LIMIT 1 OFFSET 1;</pre>
+
+
+
+        <hr>
+
+
+
+        <section class="laboratorio">
+
+            <h3>?? Laboratorio: JOINs y Subconsultas</h3>
+
+            <ol style="margin-left: 20px;">
+
+                <li>Escribe una consulta que muestre el total de cada pedido con el nombre del cliente</li>
+
+                <li>Usa subconsulta para encontrar empleados que ganan más que el promedio</li>
+
+                <li>Crea una consulta correlacionada para encontrar productos con stock bajo el promedio de su categoría</li>
+
+                <li>Usa RIGHT JOIN para encontrar productos nunca pedidos</li>
+
+            </ol>
+
+        </section>
+
+
+
+    </div>
+
+</div>
+
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+

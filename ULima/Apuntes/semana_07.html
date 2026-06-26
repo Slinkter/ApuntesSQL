@@ -7,158 +7,159 @@
 <title>Semana 07 - Normalizacion 1FN, 2FN, 3FN</title>
 <link href="master.css" rel="stylesheet"/>
 <script src="canvas-ui.js"></script>
+<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
-<div class="header">
-<h1 class="header__title">Normalizacion: Primera, Segunda y Tercera Forma Normal</h1>
-<p class="header__subtitle">Semana 07 | Diseno Logico | Ingenieria de Datos</p>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+<h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Normalizacion: Primera, Segunda y Tercera Forma Normal</h1>
+<p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 07 | Diseno Logico | Ingenieria de Datos</p>
 </div>
-<div class="cornell">
-<aside class="sidebar">
-<h2 class="sidebar__title">Conceptos Clave</h2>
-<ul class="sidebar__list">
-<li class="sidebar__item"><strong>Normalizacion</strong> Proceso de descomposicion para eliminar redundancia</li>
-<li class="sidebar__item"><strong>1FN</strong> Valores atomicos, sin grupos repetitivos</li>
-<li class="sidebar__item"><strong>2FN</strong> Dependencia funcional completa de la PK</li>
-<li class="sidebar__item"><strong>3FN</strong> Sin dependencias transitivas entre atributos no clave</li>
-<li class="sidebar__item"><strong>Anomalia</strong> Problemas de insercion, eliminacion, actualizacion</li>
-<li class="sidebar__item"><strong>Dependencia Funcional</strong> A determina B: A rarr B</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+<aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h2>
+<ul class="space-y-4">
+<li class="text-sm"><strong>Normalizacion</strong> Proceso de descomposicion para eliminar redundancia</li>
+<li class="text-sm"><strong>1FN</strong> Valores atomicos, sin grupos repetitivos</li>
+<li class="text-sm"><strong>2FN</strong> Dependencia funcional completa de la PK</li>
+<li class="text-sm"><strong>3FN</strong> Sin dependencias transitivas entre atributos no clave</li>
+<li class="text-sm"><strong>Anomalia</strong> Problemas de insercion, eliminacion, actualizacion</li>
+<li class="text-sm"><strong>Dependencia Funcional</strong> A determina B: A rarr B</li>
 </ul>
-<h2 class="sidebar__title">Recursos</h2>
-<ul class="sidebar__list">
-<li class="sidebar__item"><a class="sidebar__link" href="index.html">Indice del Curso</a></li>
-<li class="sidebar__item"><a class="sidebar__link" href="semana_06.html">Semana 06</a></li>
-<li class="sidebar__item"><a class="sidebar__link" href="semana_08.html">Semana 08: Examen Parcial</a></li>
+<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Recursos</h2>
+<ul class="space-y-4">
+<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="index.html">Indice del Curso</a></li>
+<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_06.html">Semana 06</a></li>
+<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_08.html">Semana 08: Examen Parcial</a></li>
 </ul>
 </aside>
-<main class="main">
-<div class="box box--note">
+<main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p><strong>Objetivos de Aprendizaje</strong></p>
-<ul class="main__list">
-<li class="main__list-item">Entender el proposito de la normalizacion</li>
-<li class="main__list-item">Identificar anomalias de insercion, eliminacion y modificacion</li>
-<li class="main__list-item">Aplicar la Primera Forma Normal (1FN)</li>
-<li class="main__list-item">Aplicar la Segunda Forma Normal (2FN)</li>
-<li class="main__list-item">Aplicar la Tercera Forma Normal (3FN)</li>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li >Entender el proposito de la normalizacion</li>
+<li >Identificar anomalias de insercion, eliminacion y modificacion</li>
+<li >Aplicar la Primera Forma Normal (1FN)</li>
+<li >Aplicar la Segunda Forma Normal (2FN)</li>
+<li >Aplicar la Tercera Forma Normal (3FN)</li>
 </ul>
 </div>
-<div class="architect-insight">
+<div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 <p><strong>Insight del Arquitecto:</strong> La normalizacion evita la duplicacion innecesaria de datos y las inconsistencias. Sin embargo, en sistemas OLAP/Data Warehouse la desnormalizacion es comun para mejorar rendimiento de consultas. La clave: entender la teoria para saber cuando romper las reglas.</p>
 </div>
-<h2 class="main__title">1. Que es la Normalizacion?</h2>
-<p class="main__text">Es el proceso de descomposicion de relaciones con anomalias para producir relaciones bien estructuradas y mas pequenas. Valida y mejora el diseno logico satisfaciendo restricciones que evitan la duplicacion innecesaria de datos.</p>
-<div class="box box--concept">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Que es la Normalizacion?</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Es el proceso de descomposicion de relaciones con anomalias para producir relaciones bien estructuradas y mas pequenas. Valida y mejora el diseno logico satisfaciendo restricciones que evitan la duplicacion innecesaria de datos.</p>
+<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p><strong>Relacion bien estructurada:</strong> Contiene minima redundancia y permite anadir, eliminar y actualizar registros sin causar inconsistencias.</p>
 </div>
-<h2 class="main__title">2. El Problema: Anomalias</h2>
-<p class="main__text">Considere la siguiente tabla NO normalizada de docentes y cursos:</p>
-<div class="table-responsive"><div class="table">
-<div class="table__tr">
-<div class="table__th">cod_docente</div>
-<div class="table__th">curso_capacitacion</div>
-<div class="table__th">fecha_ingreso</div>
-<div class="table__th">salario</div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. El Problema: Anomalias</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Considere la siguiente tabla NO normalizada de docentes y cursos:</p>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">cod_docente</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">curso_capacitacion</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">fecha_ingreso</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">salario</div>
 </div>
-<div class="table__tr">
-<div class="table__td">42000</div>
-<div class="table__td">Excel Avanzado</div>
-<div class="table__td">20/11/2007</div>
-<div class="table__td">1,500</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">42000</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Excel Avanzado</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">20/11/2007</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">1,500</div>
 </div>
-<div class="table__tr">
-<div class="table__td">42000</div>
-<div class="table__td">PowerPoint Avanzado</div>
-<div class="table__td">10/07/2007</div>
-<div class="table__td">1,500</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">42000</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">PowerPoint Avanzado</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">10/07/2007</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">1,500</div>
 </div>
-<div class="table__tr">
-<div class="table__td">43000</div>
-<div class="table__td">Metodologia Ensenanza</div>
-<div class="table__td">30/01/2008</div>
-<div class="table__td">3,200</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">43000</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Metodologia Ensenanza</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">30/01/2008</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">3,200</div>
 </div>
-<div class="table__tr">
-<div class="table__td">44000</div>
-<div class="table__td">SQL Basico</div>
-<div class="table__td">31/03/2008</div>
-<div class="table__td">1,800</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">44000</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">SQL Basico</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">31/03/2008</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">1,800</div>
 </div>
-<div class="table__tr">
-<div class="table__td">44000</div>
-<div class="table__td">DB2</div>
-<div class="table__td">25/10/2007</div>
-<div class="table__td">1,800</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">44000</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">DB2</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">25/10/2007</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">1,800</div>
 </div>
-<div class="table__tr">
-<div class="table__td">45000</div>
-<div class="table__td">Excel Avanzado</div>
-<div class="table__td">12/08/2007</div>
-<div class="table__td">2,700</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">45000</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Excel Avanzado</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">12/08/2007</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">2,700</div>
 </div>
-<div class="table__tr">
-<div class="table__td">45000</div>
-<div class="table__td">Java</div>
-<div class="table__td">19/09/2007</div>
-<div class="table__td">2,700</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">45000</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Java</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">19/09/2007</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">2,700</div>
 </div>
 </div></div>
-<h2 class="main__title--sub">Tipos de Anomalias</h2>
-<ul class="main__list">
-<li class="main__list-item"><strong>Insercion:</strong> No se puede registrar un docente que aun no ha tomado ningun curso.</li>
-<li class="main__list-item"><strong>Eliminacion:</strong> Si se elimina el registro del codigo 43000, se pierde toda la informacion del docente.</li>
-<li class="main__list-item"><strong>Modificacion:</strong> Si el docente 42000 recibe un aumento, debe actualizarse en multiples filas.</li>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tipos de Anomalias</h2>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li ><strong>Insercion:</strong> No se puede registrar un docente que aun no ha tomado ningun curso.</li>
+<li ><strong>Eliminacion:</strong> Si se elimina el registro del codigo 43000, se pierde toda la informacion del docente.</li>
+<li ><strong>Modificacion:</strong> Si el docente 42000 recibe un aumento, debe actualizarse en multiples filas.</li>
 </ul>
-<h2 class="main__title">3. Dependencia Funcional y Claves</h2>
-<div class="box box--concept">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Dependencia Funcional y Claves</h2>
+<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p><strong>Dependencia Funcional:</strong> El valor de un atributo A (determinante) determina el valor de otro atributo B. Se denota A rarr B.</p>
 </div>
-<ul class="main__list">
-<li class="main__list-item"><strong>Clave Candidata:</strong> Identificador unico. Una o varias claves que podrian convertirse en la clave primaria (ej. codigo de empleado y DNI).</li>
-<li class="main__list-item">Cada campo no clave es funcionalmente dependiente de cada clave candidata.</li>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li ><strong>Clave Candidata:</strong> Identificador unico. Una o varias claves que podrian convertirse en la clave primaria (ej. codigo de empleado y DNI).</li>
+<li >Cada campo no clave es funcionalmente dependiente de cada clave candidata.</li>
 </ul>
-<h2 class="main__title">4. Primera Forma Normal (1FN)</h2>
-<p class="main__text">Elimina grupos repetitivos y garantiza que cada atributo tenga valores atomicos (no multivaluados).</p>
-<div class="box box--example">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Primera Forma Normal (1FN)</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Elimina grupos repetitivos y garantiza que cada atributo tenga valores atomicos (no multivaluados).</p>
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Ejemplo - Tabla factura antes de 1FN:</strong> La tabla original combinaba datos de factura y productos en una sola fila con grupos repetitivos.</p>
-<div class="table-responsive"><div class="table">
-<div class="table__tr">
-<div class="table__th">nro_factura</div>
-<div class="table__th">ruc_cliente</div>
-<div class="table__th">nombre_cliente</div>
-<div class="table__th">direccion</div>
-<div class="table__th">total</div>
-<div class="table__th">fecha</div>
-<div class="table__th">cod_articulo</div>
-<div class="table__th">desc_articulo</div>
-<div class="table__th">cant</div>
-<div class="table__th">prec_unitario</div>
-<div class="table__th">prec_total</div>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">nro_factura</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">ruc_cliente</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">nombre_cliente</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">direccion</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">total</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">fecha</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">cod_articulo</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">desc_articulo</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">cant</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">prec_unitario</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">prec_total</div>
 </div>
-<div class="table__tr">
-<div class="table__td">1240001</div>
-<div class="table__td">0000125</div>
-<div class="table__td">JUAN PEREZ PAZ</div>
-<div class="table__td">Arica 325 Lince</div>
-<div class="table__td">2250</div>
-<div class="table__td">20/08/2007</div>
-<div class="table__td">010</div>
-<div class="table__td">Lapicero Azul</div>
-<div class="table__td">100</div>
-<div class="table__td">2.5</div>
-<div class="table__td">250</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">1240001</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">0000125</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">JUAN PEREZ PAZ</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Arica 325 Lince</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">2250</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">20/08/2007</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">010</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Lapicero Azul</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">100</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">2.5</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">250</div>
 </div>
-<div class="table__tr">
-<div class="table__td">1240001</div>
-<div class="table__td">0000125</div>
-<div class="table__td">JUAN PEREZ PAZ</div>
-<div class="table__td">Arica 325 Lince</div>
-<div class="table__td">2250</div>
-<div class="table__td">20/08/2007</div>
-<div class="table__td">753</div>
-<div class="table__td">Cuaderno rayado A4</div>
-<div class="table__td">200</div>
-<div class="table__td">10</div>
-<div class="table__td">2000</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">1240001</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">0000125</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">JUAN PEREZ PAZ</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Arica 325 Lince</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">2250</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">20/08/2007</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">753</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Cuaderno rayado A4</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">200</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">10</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">2000</div>
 </div>
 </div></div>
 <p><strong>Resultado 1FN:</strong> Se separan en dos grupos: Grupo No Repetitivo (Factura) y Grupo Repetitivo (Linea Factura).</p>
@@ -170,17 +171,17 @@ Factura (nro_factura, ruc_cliente, nombre_cliente,
 Linea_Factura (nro_factura, cod_articulo,
                desc_articulo, cant, prec_unitario, prec_total)</pre>
 </div>
-<div class="architect-insight">
+<div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 <p><strong>Insight del Arquitecto:</strong> En la vida real, la mayoria de tablas ya estan en 1FN porque los disenadores evitan grupos repetitivos. Sin embargo, los sistemas legacy (como archivos de mainframe) suelen violar 1FN con campos multivaluados separados por comas.</p>
 </div>
-<h2 class="main__title">5. Segunda Forma Normal (2FN)</h2>
-<p class="main__text">Una tabla esta en 2FN si: (1) esta en 1FN y (2) cada atributo no clave depende funcionalmente de TODA la clave primaria (dependencia funcional total), no de parte de ella.</p>
-<div class="box box--example">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Segunda Forma Normal (2FN)</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una tabla esta en 2FN si: (1) esta en 1FN y (2) cada atributo no clave depende funcionalmente de TODA la clave primaria (dependencia funcional total), no de parte de ella.</p>
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Dependencias Parciales en Linea_Factura:</strong></p>
-<p class="main__text">La clave primaria de Linea_Factura es compuesta: <code>(nro_factura, cod_articulo)</code>. Sin embargo:</p>
-<ul class="main__list">
-<li class="main__list-item"><code>desc_articulo</code> y <code>prec_unitario</code> dependen solo de <code>cod_articulo</code> (dependencia parcial)</li>
-<li class="main__list-item"><code>cant</code> y <code>prec_total</code> dependen de la PK completa</li>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La clave primaria de Linea_Factura es compuesta: <code>(nro_factura, cod_articulo)</code>. Sin embargo:</p>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li ><code>desc_articulo</code> y <code>prec_unitario</code> dependen solo de <code>cod_articulo</code> (dependencia parcial)</li>
+<li ><code>cant</code> y <code>prec_total</code> dependen de la PK completa</li>
 </ul>
 <p><strong>Resultado 2FN:</strong> Separar las dependencias parciales.</p>
 <pre>-- Factura (nro_factura, ruc_cliente, nombre_cliente,
@@ -190,82 +191,82 @@ Linea_Factura (nro_factura, cod_articulo,
 
 -- Articulo (cod_articulo, desc_articulo, prec_unitario)</pre>
 </div>
-<h2 class="main__title">6. Tercera Forma Normal (3FN)</h2>
-<p class="main__text">Una tabla esta en 3FN si: (1) esta en 2FN y (2) no existen dependencias transitivas (un atributo no clave determina funcionalmente a otro u otros atributos no clave).</p>
-<div class="box box--example">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">6. Tercera Forma Normal (3FN)</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una tabla esta en 3FN si: (1) esta en 2FN y (2) no existen dependencias transitivas (un atributo no clave determina funcionalmente a otro u otros atributos no clave).</p>
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Dependencia Transitiva en Factura:</strong></p>
-<p class="main__text">La clave primaria es <code>nro_factura</code>. Sin embargo, <code>nombre_cliente</code> y <code>direccion</code> dependen de <code>ruc_cliente</code>, no directamente de <code>nro_factura</code>. Existe una dependencia transitiva: nro_factura rarr ruc_cliente rarr nombre_cliente.</p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La clave primaria es <code>nro_factura</code>. Sin embargo, <code>nombre_cliente</code> y <code>direccion</code> dependen de <code>ruc_cliente</code>, no directamente de <code>nro_factura</code>. Existe una dependencia transitiva: nro_factura rarr ruc_cliente rarr nombre_cliente.</p>
 <p><strong>Resultado 3FN:</strong> Separar en cuatro tablas, cada una con su propia PK.</p>
 <pre>-- Cliente (ruc_cliente, nombre_cliente, direccion)
 -- Factura (nro_factura, ruc_cliente, total, fecha)
 -- Linea_Factura (nro_factura, cod_articulo, cant, prec_total)
 -- Articulo (cod_articulo, desc_articulo, prec_unitario)</pre>
 </div>
-<div class="table-responsive"><div class="table">
-<div class="table__tr">
-<div class="table__th">Forma Normal</div>
-<div class="table__th">Regla de Oro</div>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Forma Normal</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Regla de Oro</div>
 </div>
-<div class="table__tr">
-<div class="table__td">1FN</div>
-<div class="table__td">Atomicidad y PK definida. Sin grupos repetitivos.</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">1FN</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Atomicidad y PK definida. Sin grupos repetitivos.</div>
 </div>
-<div class="table__tr">
-<div class="table__td">2FN</div>
-<div class="table__td">Dependencia funcional completa de TODA la PK.</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">2FN</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Dependencia funcional completa de TODA la PK.</div>
 </div>
-<div class="table__tr">
-<div class="table__td">3FN</div>
-<div class="table__td">Ninguna dependencia transitiva entre atributos no clave.</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">3FN</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Ninguna dependencia transitiva entre atributos no clave.</div>
 </div>
 </div></div>
-<div class="box box--exercise">
+<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
 <p><strong>Laboratorio:</strong> Dada la tabla <code>Empleados_Proyectos</code>:</p>
-<div class="table-responsive"><div class="table">
-<div class="table__tr">
-<div class="table__th">emp_id</div>
-<div class="table__th">nombre_emp</div>
-<div class="table__th">depto</div>
-<div class="table__th">jefe</div>
-<div class="table__th">proyecto</div>
-<div class="table__th">horas</div>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">emp_id</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">nombre_emp</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">depto</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">jefe</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">proyecto</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">horas</div>
 </div>
-<div class="table__tr">
-<div class="table__td">1</div>
-<div class="table__td">Ana</div>
-<div class="table__td">TI</div>
-<div class="table__td">Carlos</div>
-<div class="table__td">Web</div>
-<div class="table__td">20</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">1</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Ana</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">TI</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Carlos</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Web</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">20</div>
 </div>
-<div class="table__tr">
-<div class="table__td">1</div>
-<div class="table__td">Ana</div>
-<div class="table__td">TI</div>
-<div class="table__td">Carlos</div>
-<div class="table__td">App</div>
-<div class="table__td">15</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">1</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Ana</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">TI</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Carlos</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">App</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">15</div>
 </div>
-<div class="table__tr">
-<div class="table__td">2</div>
-<div class="table__td">Luis</div>
-<div class="table__td">Ventas</div>
-<div class="table__td">Maria</div>
-<div class="table__td">Web</div>
-<div class="table__td">10</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">2</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Luis</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Ventas</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Maria</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Web</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">10</div>
 </div>
 </div></div>
-<ol class="main__list" style="list-style: decimal;">
-<li class="main__list-item">Identifique la clave primaria</li>
-<li class="main__list-item">Identifique las anomalias actuales</li>
-<li class="main__list-item">Normalice hasta 3FN (muestre las tablas resultantes)</li>
+<ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300" style="list-style: decimal;">
+<li >Identifique la clave primaria</li>
+<li >Identifique las anomalias actuales</li>
+<li >Normalice hasta 3FN (muestre las tablas resultantes)</li>
 </ol>
 </div>
 <div class="canvas-container">
 <canvas height="360" id="canvas_07" width="800"></canvas>
 <div class="canvas-controls" id="controls_07"></div>
 </div>
-<div class="nav">
+<div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
 <a class="nav__link" href="semana_06.html">Semana 06</a>
 <a class="nav__link" href="semana_08.html">Semana 08: Examen Parcial</a>
 </div>

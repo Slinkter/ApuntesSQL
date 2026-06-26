@@ -6,344 +6,345 @@
     <title>Semana 02 - Introduccion a las BD y su Ciclo de Vida</title>
     <link rel="stylesheet" href="master.css">
     <script src="canvas-ui.js"></script>
+<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
-<header class="header">
-    <h1 class="header__title">Introduccion a las Bases de Datos y su Ciclo de Vida</h1>
-    <p class="header__subtitle">Semana 02 | Ingenieria de Datos | ULima 2013-2</p>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Introduccion a las Bases de Datos y su Ciclo de Vida</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 02 | Ingenieria de Datos | ULima 2013-2</p>
 </header>
 
-<div class="cornell">
-    <aside class="sidebar">
-        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>§ DBMS / SGDB</strong>Software que gestiona, define y manipula la BD</li>
-            <li class="sidebar__item"><strong>§ Arquitectura 3 niveles</strong>Interno, Conceptual, Externo (ANSI/SPARC)</li>
-            <li class="sidebar__item"><strong>§ Independencia de datos</strong>Logica y Fisica</li>
-            <li class="sidebar__item"><strong>§ PK / FK</strong>Primary Key, Foreign Key</li>
-            <li class="sidebar__item"><strong>§ ACID</strong>Atomicidad, Consistencia, Aislamiento, Durabilidad</li>
-            <li class="sidebar__item"><strong>§ Tipos de BD</strong>Jerarquicas, Red, Relacionales, Objetos, Documentos, Dimensionales</li>
-            <li class="sidebar__item"><strong>§ Metodologia Pratt-Adamski</strong>5 pasos para diseno relacional</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">PALABRAS CLAVE</h3>
+        <ul class="space-y-4">
+            <li class="text-sm"><strong>§ DBMS / SGDB</strong>Software que gestiona, define y manipula la BD</li>
+            <li class="text-sm"><strong>§ Arquitectura 3 niveles</strong>Interno, Conceptual, Externo (ANSI/SPARC)</li>
+            <li class="text-sm"><strong>§ Independencia de datos</strong>Logica y Fisica</li>
+            <li class="text-sm"><strong>§ PK / FK</strong>Primary Key, Foreign Key</li>
+            <li class="text-sm"><strong>§ ACID</strong>Atomicidad, Consistencia, Aislamiento, Durabilidad</li>
+            <li class="text-sm"><strong>§ Tipos de BD</strong>Jerarquicas, Red, Relacionales, Objetos, Documentos, Dimensionales</li>
+            <li class="text-sm"><strong>§ Metodologia Pratt-Adamski</strong>5 pasos para diseno relacional</li>
         </ul>
-        <div class="box box--note" style="margin-top:1.5rem;padding:1rem;">
-            <h3 class="sidebar__title">RECURSOS</h3>
-            <ul class="sidebar__list">
-                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio &mdash; Indice del Curso</a></li>
-                <li class="sidebar__item"><a href="semana_01.html" class="sidebar__link">Semana Anterior</a></li>
-                <li class="sidebar__item"><a href="semana_03.html" class="sidebar__link">Siguiente Semana</a></li>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6" style="margin-top:1.5rem;padding:1rem;">
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
+            <ul class="space-y-4">
+                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Inicio &mdash; Indice del Curso</a></li>
+                <li class="text-sm"><a href="semana_01.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana Anterior</a></li>
+                <li class="text-sm"><a href="semana_03.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Siguiente Semana</a></li>
             </ul>
         </div>
     </aside>
 
-    <main class="main">
-        <div class="box box--note">
-            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Comprender la arquitectura de tres niveles de una base de datos</li>
-                <li class="main__list-item">Identificar los diferentes tipos de bases de datos y sus usos</li>
-                <li class="main__list-item">Explicar las funciones del DBMS y sus componentes internos</li>
-                <li class="main__list-item">Entender las propiedades ACID de las transacciones</li>
-                <li class="main__list-item">Aplicar las fases de diseno de bases de datos</li>
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Objetivos de Aprendizaje</strong></p>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Comprender la arquitectura de tres niveles de una base de datos</li>
+                <li >Identificar los diferentes tipos de bases de datos y sus usos</li>
+                <li >Explicar las funciones del DBMS y sus componentes internos</li>
+                <li >Entender las propiedades ACID de las transacciones</li>
+                <li >Aplicar las fases de diseno de bases de datos</li>
             </ul>
         </div>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto: La Abstraccion en Tres Niveles</h4>
-            <p class="main__text"><strong>Arquitectura ANSI/SPARC:</strong> Propuesta en 1975, establece que un sistema de BD debe separar la vision del usuario (externo), la vision logica global (conceptual) y la realidad fisica (interno). Esta separacion es la base de la independencia de datos.</p>
-            <p class="main__text"><strong>Por que importa:</strong> Permite cambiar el almacenamiento fisico sin reescribir aplicaciones. En PostgreSQL, esto se traduce en la capacidad de agregar indices o cambiar tablespaces sin modificar una sola linea de codigo de aplicacion.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto: La Abstraccion en Tres Niveles</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Arquitectura ANSI/SPARC:</strong> Propuesta en 1975, establece que un sistema de BD debe separar la vision del usuario (externo), la vision logica global (conceptual) y la realidad fisica (interno). Esta separacion es la base de la independencia de datos.</p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Por que importa:</strong> Permite cambiar el almacenamiento fisico sin reescribir aplicaciones. En PostgreSQL, esto se traduce en la capacidad de agregar indices o cambiar tablespaces sin modificar una sola linea de codigo de aplicacion.</p>
         </section>
 
-        <h2 class="main__title">1. Datos, Informacion y Base de Datos</h2>
-        <span class="tag">Repaso conceptual</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Datos, Informacion y Base de Datos</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Repaso conceptual</span>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Dato vs Informacion:</strong> Los datos son las unidades basicas de la informacion no procesada, que por si solos no ofrecen significado. Requieren de un analisis de su contexto para interpretar su significado. La informacion es el resultado del procesamiento de los datos, que nos entrega un resultado significativo para tomar decisiones.</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Dato vs Informacion:</strong> Los datos son las unidades basicas de la informacion no procesada, que por si solos no ofrecen significado. Requieren de un analisis de su contexto para interpretar su significado. La informacion es el resultado del procesamiento de los datos, que nos entrega un resultado significativo para tomar decisiones.</p>
         </div>
 
-        <p class="main__text"><strong>Que es una Base de Datos?</strong></p>
-        <ul class="main__list">
-            <li class="main__list-item">Conjunto de datos persistentes utilizado por los sistemas de aplicaciones de una empresa.</li>
-            <li class="main__list-item">Coleccion de datos interrelacionados creados con un DBMS.</li>
-            <li class="main__list-item">Conjunto auto descriptivo de datos integrados.</li>
-            <li class="main__list-item">Sirve para almacenar datos que luego pueden ser recuperados al hacer una consulta y convertirse en informacion.</li>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Que es una Base de Datos?</strong></p>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li >Conjunto de datos persistentes utilizado por los sistemas de aplicaciones de una empresa.</li>
+            <li >Coleccion de datos interrelacionados creados con un DBMS.</li>
+            <li >Conjunto auto descriptivo de datos integrados.</li>
+            <li >Sirve para almacenar datos que luego pueden ser recuperados al hacer una consulta y convertirse en informacion.</li>
         </ul>
 
-        <h2 class="main__title">2. Caracteristicas de una Base de Datos</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Caracteristicas de una Base de Datos</h2>
 
-        <ul class="main__list">
-            <li class="main__list-item"><strong>CRUD:</strong> Create, Read, Update, Delete.</li>
-            <li class="main__list-item"><strong>Consistencia:</strong> Los datos deberian ser los mismos en el transcurso del tiempo si no ha tenido modificaciones.</li>
-            <li class="main__list-item"><strong>Validez:</strong> Datos validados.</li>
-            <li class="main__list-item"><strong>Correccion facil de errores.</strong></li>
-            <li class="main__list-item"><strong>Velocidad</strong> en las operaciones.</li>
-            <li class="main__list-item"><strong>ACID:</strong> Atomicidad, Consistencia, Aislamiento, Durabilidad.</li>
-            <li class="main__list-item"><strong>Persistencia y Copias de Seguridad.</strong></li>
-            <li class="main__list-item"><strong>Portabilidad:</strong> Descargar datos relevantes de forma sencilla.</li>
-            <li class="main__list-item"><strong>Seguridad.</strong></li>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li ><strong>CRUD:</strong> Create, Read, Update, Delete.</li>
+            <li ><strong>Consistencia:</strong> Los datos deberian ser los mismos en el transcurso del tiempo si no ha tenido modificaciones.</li>
+            <li ><strong>Validez:</strong> Datos validados.</li>
+            <li ><strong>Correccion facil de errores.</strong></li>
+            <li ><strong>Velocidad</strong> en las operaciones.</li>
+            <li ><strong>ACID:</strong> Atomicidad, Consistencia, Aislamiento, Durabilidad.</li>
+            <li ><strong>Persistencia y Copias de Seguridad.</strong></li>
+            <li ><strong>Portabilidad:</strong> Descargar datos relevantes de forma sencilla.</li>
+            <li ><strong>Seguridad.</strong></li>
         </ul>
 
-        <h2 class="main__title">3. Arquitectura de Tres Niveles</h2>
-        <span class="tag">ANSI/SPARC</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Arquitectura de Tres Niveles</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">ANSI/SPARC</span>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Nivel</th>
-                    <th class="table__th">Descripcion</th>
-                    <th class="table__th">Pregunta clave</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Nivel</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Pregunta clave</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Interno (Fisico)</strong></td>
-                    <td class="table__td">Describe la estructura fisica de almacenamiento: estrategia de almacenamiento, caminos de acceso, indices.</td>
-                    <td class="table__td">Como se guardan los datos en disco?</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Interno (Fisico)</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Describe la estructura fisica de almacenamiento: estrategia de almacenamiento, caminos de acceso, indices.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Como se guardan los datos en disco?</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Conceptual</strong></td>
-                    <td class="table__td">Describe la estructura de toda la base de datos para una comunidad de usuarios: vision global de los datos, interrelaciones, restricciones de integridad y seguridad.</td>
-                    <td class="table__td">Que datos existen y como se relacionan?</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Conceptual</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Describe la estructura de toda la base de datos para una comunidad de usuarios: vision global de los datos, interrelaciones, restricciones de integridad y seguridad.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Que datos existen y como se relacionan?</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Externo (Vistas)</strong></td>
-                    <td class="table__td">Incluye varios esquemas externos o vistas de usuario. Cada usuario ve solo los datos que necesita.</td>
-                    <td class="table__td">Que ve cada usuario?</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Externo (Vistas)</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Incluye varios esquemas externos o vistas de usuario. Cada usuario ve solo los datos que necesita.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Que ve cada usuario?</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">4. Independencia de Datos</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Independencia de Datos</h2>
 
-        <p class="main__text">Capacidad para modificar el esquema en un nivel del sistema de base de datos sin tener que modificar el esquema del nivel inmediato superior.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Capacidad para modificar el esquema en un nivel del sistema de base de datos sin tener que modificar el esquema del nivel inmediato superior.</p>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Tipo</th>
-                    <th class="table__th">Descripcion</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Independencia Logica</strong></td>
-                    <td class="table__td">Anadir, borrar o cambiar campos, registros o relaciones sin afectar aplicaciones existentes.</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Independencia Logica</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Anadir, borrar o cambiar campos, registros o relaciones sin afectar aplicaciones existentes.</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Independencia Fisica</strong></td>
-                    <td class="table__td">Cambiar caracteristicas fisicas, ubicacion de registros, esquemas de encriptacion sin afectar el nivel conceptual.</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Independencia Fisica</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Cambiar caracteristicas fisicas, ubicacion de registros, esquemas de encriptacion sin afectar el nivel conceptual.</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">5. Tipos de Bases de Datos</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Tipos de Bases de Datos</h2>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Tipo</th>
-                    <th class="table__th">Caracteristicas</th>
-                    <th class="table__th">Ejemplos</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Caracteristicas</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Ejemplos</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Archivos Planos</strong></td>
-                    <td class="table__td">Archivos de texto sin ayuda para busqueda ni calculos. Utiles para informacion sencilla que raramente cambia.</td>
-                    <td class="table__td">CSV, TXT</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Archivos Planos</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Archivos de texto sin ayuda para busqueda ni calculos. Utiles para informacion sencilla que raramente cambia.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">CSV, TXT</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Jerarquicas</strong></td>
-                    <td class="table__td">Estructura de arbol. Funcionan bien si los datos tienen naturaleza jerarquica.</td>
-                    <td class="table__td">IMS, XML, Registro de Windows</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Jerarquicas</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Estructura de arbol. Funcionan bien si los datos tienen naturaleza jerarquica.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">IMS, XML, Registro de Windows</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Relacionales</strong></td>
-                    <td class="table__td">Tablas con filas y columnas. Relaciones entre atributos comunes. Lenguaje SQL.</td>
-                    <td class="table__td">Oracle, MSSQL, DB2, MySQL, PostgreSQL</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Relacionales</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Tablas con filas y columnas. Relaciones entre atributos comunes. Lenguaje SQL.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Oracle, MSSQL, DB2, MySQL, PostgreSQL</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Redes</strong></td>
-                    <td class="table__td">Nodos conectados mediante enlaces. Utiles para rutas mas cortas y flujos de red.</td>
-                    <td class="table__td">Neo4J, CODASYL</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Redes</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Nodos conectados mediante enlaces. Utiles para rutas mas cortas y flujos de red.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Neo4J, CODASYL</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Objetos (OODBMS)</strong></td>
-                    <td class="table__td">Abstracciones llamadas objetos. Bueno si la arquitectura de programacion usa objetos.</td>
-                    <td class="table__td">O2, GemStone</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Objetos (OODBMS)</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Abstracciones llamadas objetos. Bueno si la arquitectura de programacion usa objetos.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">O2, GemStone</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Objeto-Relacional (ORDBMS)</strong></td>
-                    <td class="table__td">hibrido entre Relacional y Objetos.</td>
-                    <td class="table__td">PostgreSQL, Oracle</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Objeto-Relacional (ORDBMS)</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">hibrido entre Relacional y Objetos.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">PostgreSQL, Oracle</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Orientada a Documentos</strong></td>
-                    <td class="table__td">Documentos como registros no rigidos. Util para e-commerce.</td>
-                    <td class="table__td">MongoDB</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Orientada a Documentos</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Documentos como registros no rigidos. Util para e-commerce.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">MongoDB</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Dimensionales</strong></td>
-                    <td class="table__td"> dimensiones en lugar de tablas. Busqueda de patrones en datos.</td>
-                    <td class="table__td">Data Warehouses (OLAP)</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Dimensionales</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400"> dimensiones en lugar de tablas. Busqueda de patrones en datos.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Data Warehouses (OLAP)</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">6. Funciones del DBMS</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">6. Funciones del DBMS</h2>
 
-        <ul class="main__list">
-            <li class="main__list-item"><strong>Definicion de Datos (DDL):</strong> Crear, organizar y manipular la estructura de la base de datos.</li>
-            <li class="main__list-item"><strong>Manipulacion de Datos (DML):</strong> Consultas, inserciones, actualizaciones y eliminaciones.</li>
-            <li class="main__list-item"><strong>Administracion de Usuarios:</strong> Permisos, privilegios y recursos.</li>
-            <li class="main__list-item"><strong>Administracion de Performance:</strong> Throughput, instancia, almacenamiento, memoria, bloqueos.</li>
-            <li class="main__list-item"><strong>Control de Concurrencia:</strong> Gestion de bloqueos, commit y rollback.</li>
-            <li class="main__list-item"><strong>Encriptacion de datos.</strong></li>
-            <li class="main__list-item"><strong>Administracion de Backup y Recovery:</strong> Backup, restore, recovery, archivos Log.</li>
-            <li class="main__list-item"><strong>Optimizacion del desempeno.</strong></li>
-            <li class="main__list-item"><strong>Administrar el diccionario de datos.</strong></li>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li ><strong>Definicion de Datos (DDL):</strong> Crear, organizar y manipular la estructura de la base de datos.</li>
+            <li ><strong>Manipulacion de Datos (DML):</strong> Consultas, inserciones, actualizaciones y eliminaciones.</li>
+            <li ><strong>Administracion de Usuarios:</strong> Permisos, privilegios y recursos.</li>
+            <li ><strong>Administracion de Performance:</strong> Throughput, instancia, almacenamiento, memoria, bloqueos.</li>
+            <li ><strong>Control de Concurrencia:</strong> Gestion de bloqueos, commit y rollback.</li>
+            <li ><strong>Encriptacion de datos.</strong></li>
+            <li ><strong>Administracion de Backup y Recovery:</strong> Backup, restore, recovery, archivos Log.</li>
+            <li ><strong>Optimizacion del desempeno.</strong></li>
+            <li ><strong>Administrar el diccionario de datos.</strong></li>
         </ul>
 
-        <h2 class="main__title">7. Terminologia del Modelo Relacional</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">7. Terminologia del Modelo Relacional</h2>
 
-        <div class="box box--example">
-            <p class="main__text"><strong>Ejemplo de tabla PERSONA (Relacion):</strong></p>
-            <div class="table-responsive">
-            <table class="table">
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo de tabla PERSONA (Relacion):</strong></p>
+            <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="table__tr">
-                        <th class="table__th">ID (PK)</th>
-                        <th class="table__th">NAME</th>
-                        <th class="table__th">PHONE</th>
-                        <th class="table__th">DEPT_ID (FK)</th>
+                    <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">ID (PK)</th>
+                        <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">NAME</th>
+                        <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">PHONE</th>
+                        <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">DEPT_ID (FK)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="table__tr"><td class="table__td">201</td><td class="table__td">Unisports</td><td class="table__td">55-2066101</td><td class="table__td">12</td></tr>
-                    <tr class="table__tr"><td class="table__td">202</td><td class="table__td">Simms Athletics</td><td class="table__td">81-20101</td><td class="table__td">14</td></tr>
-                    <tr class="table__tr"><td class="table__td">203</td><td class="table__td">Delhi Sports</td><td class="table__td">91-10351</td><td class="table__td">14</td></tr>
-                    <tr class="table__tr"><td class="table__td">204</td><td class="table__td">Womansport</td><td class="table__td">1-206-104-0103</td><td class="table__td">11</td></tr>
+                    <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">201</td><td class="p-4 text-slate-600 dark:text-slate-400">Unisports</td><td class="p-4 text-slate-600 dark:text-slate-400">55-2066101</td><td class="p-4 text-slate-600 dark:text-slate-400">12</td></tr>
+                    <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">202</td><td class="p-4 text-slate-600 dark:text-slate-400">Simms Athletics</td><td class="p-4 text-slate-600 dark:text-slate-400">81-20101</td><td class="p-4 text-slate-600 dark:text-slate-400">14</td></tr>
+                    <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">203</td><td class="p-4 text-slate-600 dark:text-slate-400">Delhi Sports</td><td class="p-4 text-slate-600 dark:text-slate-400">91-10351</td><td class="p-4 text-slate-600 dark:text-slate-400">14</td></tr>
+                    <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">204</td><td class="p-4 text-slate-600 dark:text-slate-400">Womansport</td><td class="p-4 text-slate-600 dark:text-slate-400">1-206-104-0103</td><td class="p-4 text-slate-600 dark:text-slate-400">11</td></tr>
                 </tbody>
             </table>
             </div>
         </div>
 
-        <ul class="main__list">
-            <li class="main__list-item"><strong>Relacion (Tabla):</strong> Unidad basica de almacenamiento compuesta de filas y columnas.</li>
-            <li class="main__list-item"><strong>Tupla (Fila):</strong> Un registro especifico que representa una entidad.</li>
-            <li class="main__list-item"><strong>Atributo (Columna):</strong> Una propiedad de la entidad (nombre, telefono, etc.).</li>
-            <li class="main__list-item"><strong>Dominio:</strong> Conjunto de valores permitidos para un atributo.</li>
-            <li class="main__list-item"><strong>Primary Key (PK):</strong> Atributo o combinacion que identifica de manera unica un registro. No nula, inmutable, unica.</li>
-            <li class="main__list-item"><strong>Foreign Key (FK):</strong> Atributo que referencia la PK de otra entidad para implementar asociaciones entre tablas.</li>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li ><strong>Relacion (Tabla):</strong> Unidad basica de almacenamiento compuesta de filas y columnas.</li>
+            <li ><strong>Tupla (Fila):</strong> Un registro especifico que representa una entidad.</li>
+            <li ><strong>Atributo (Columna):</strong> Una propiedad de la entidad (nombre, telefono, etc.).</li>
+            <li ><strong>Dominio:</strong> Conjunto de valores permitidos para un atributo.</li>
+            <li ><strong>Primary Key (PK):</strong> Atributo o combinacion que identifica de manera unica un registro. No nula, inmutable, unica.</li>
+            <li ><strong>Foreign Key (FK):</strong> Atributo que referencia la PK de otra entidad para implementar asociaciones entre tablas.</li>
         </ul>
 
-        <h2 class="main__title">8. Restricciones de Dominio</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">8. Restricciones de Dominio</h2>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Restriccion</th>
-                    <th class="table__th">Descripcion</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Restriccion</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr"><td class="table__td"><strong>NULL</strong></td><td class="table__td">Permite valores nulos</td></tr>
-                <tr class="table__tr"><td class="table__td"><strong>NOT NULL</strong></td><td class="table__td">No permite valores nulos</td></tr>
-                <tr class="table__tr"><td class="table__td"><strong>CHECK</strong></td><td class="table__td">Condicion booleana personalizada</td></tr>
-                <tr class="table__tr"><td class="table__td"><strong>UNIQUE</strong></td><td class="table__td">Valores deben ser distintos entre si</td></tr>
-                <tr class="table__tr"><td class="table__td"><strong>DEFAULT</strong></td><td class="table__td">Valor por defecto si no se especifica</td></tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>NULL</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Permite valores nulos</td></tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>NOT NULL</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">No permite valores nulos</td></tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>CHECK</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Condicion booleana personalizada</td></tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>UNIQUE</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Valores deben ser distintos entre si</td></tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>DEFAULT</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Valor por defecto si no se especifica</td></tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">9. Transacciones y ACID</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">9. Transacciones y ACID</h2>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Transaccion:</strong> Cualquier operacion de lectura o escritura realizada en la base de datos. Pasa por estados: activa, parcialmente comprometida, fallida, terminada, comprometida (COMMIT) o deshecha (ROLLBACK).</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Transaccion:</strong> Cualquier operacion de lectura o escritura realizada en la base de datos. Pasa por estados: activa, parcialmente comprometida, fallida, terminada, comprometida (COMMIT) o deshecha (ROLLBACK).</p>
         </div>
 
-        <ul class="main__list">
-            <li class="main__list-item"><strong>A</strong>tomicidad: Todo o nada. Si una parte falla, toda la transaccion se deshace.</li>
-            <li class="main__list-item"><strong>C</strong>onsistencia: La BD pasa de un estado valido a otro estado valido.</li>
-            <li class="main__list-item"><strong>I</strong>ndependencia/Aislamiento: Las transacciones concurrentes no se afectan entre si.</li>
-            <li class="main__list-item"><strong>D</strong>urabilidad: Una vez committeada, los cambios persisten incluso si hay falla.</li>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li ><strong>A</strong>tomicidad: Todo o nada. Si una parte falla, toda la transaccion se deshace.</li>
+            <li ><strong>C</strong>onsistencia: La BD pasa de un estado valido a otro estado valido.</li>
+            <li ><strong>I</strong>ndependencia/Aislamiento: Las transacciones concurrentes no se afectan entre si.</li>
+            <li ><strong>D</strong>urabilidad: Una vez committeada, los cambios persisten incluso si hay falla.</li>
         </ul>
 
-        <h2 class="main__title">10. Fases del Diseno de Base de Datos</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">10. Fases del Diseno de Base de Datos</h2>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Fase</th>
-                    <th class="table__th">Actividades</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Fase</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Actividades</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Diseno Conceptual</strong></td>
-                    <td class="table__td">Recoleccion: identificacion de requerimientos, entidades y atributos. Refinamiento: cardinalidad, frecuencia de consultas, relaciones simples. Normalizacion.</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Diseno Conceptual</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Recoleccion: identificacion de requerimientos, entidades y atributos. Refinamiento: cardinalidad, frecuencia de consultas, relaciones simples. Normalizacion.</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Diseno Logico</strong></td>
-                    <td class="table__td">Determinar relaciones entre entidades. Asegurar que los requerimientos puedan ser soportados. Depende del tipo de DBMS.</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Diseno Logico</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Determinar relaciones entre entidades. Asegurar que los requerimientos puedan ser soportados. Depende del tipo de DBMS.</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Diseno Fisico</strong></td>
-                    <td class="table__td">Representacion fisica de entidades y atributos (tablas) a ser implementados en un DBMS especifico.</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Diseno Fisico</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Representacion fisica de entidades y atributos (tablas) a ser implementados en un DBMS especifico.</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">11. Metodologia Pratt-Adamski</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">11. Metodologia Pratt-Adamski</h2>
 
-        <ol class="main__list">
-            <li class="main__list-item">Representar las vistas de usuarios como un conjunto de relaciones.</li>
-            <li class="main__list-item">Normalizar las relaciones.</li>
-            <li class="main__list-item">Representar todas las claves (PK, FK).</li>
-            <li class="main__list-item">Determinar cualquier restriccion especial.</li>
-            <li class="main__list-item">Combinar el resultado de los pasos previos dentro del diseno final.</li>
+        <ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li >Representar las vistas de usuarios como un conjunto de relaciones.</li>
+            <li >Normalizar las relaciones.</li>
+            <li >Representar todas las claves (PK, FK).</li>
+            <li >Determinar cualquier restriccion especial.</li>
+            <li >Combinar el resultado de los pasos previos dentro del diseno final.</li>
         </ol>
 
-        <div class="box box--note">
-            <p class="main__text"><strong>Supuestos:</strong> Los requerimientos son conocidos y se documentara durante el proceso de diseno.</p>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Supuestos:</strong> Los requerimientos son conocidos y se documentara durante el proceso de diseno.</p>
         </div>
 
-        <h2 class="main__title">12. Objetos de la Base de Datos</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">12. Objetos de la Base de Datos</h2>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Objeto</th>
-                    <th class="table__th">Descripcion</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Objeto</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr"><td class="table__td"><strong>Tabla</strong></td><td class="table__td">Unidad basica de almacenamiento; compuesta de filas y columnas</td></tr>
-                <tr class="table__tr"><td class="table__td"><strong>Vista</strong></td><td class="table__td">Representacion logica de los datos de una o mas tablas</td></tr>
-                <tr class="table__tr"><td class="table__td"><strong>Secuencia</strong></td><td class="table__td">Genera valores de clave primaria secuenciales</td></tr>
-                <tr class="table__tr"><td class="table__td"><strong>Indice</strong></td><td class="table__td">Mejora la performance de consultas (B+Tree, Hash)</td></tr>
-                <tr class="table__tr"><td class="table__td"><strong>Sinonimo</strong></td><td class="table__td">Nombres alternativos para objetos</td></tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Tabla</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Unidad basica de almacenamiento; compuesta de filas y columnas</td></tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Vista</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Representacion logica de los datos de una o mas tablas</td></tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Secuencia</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Genera valores de clave primaria secuenciales</td></tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Indice</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Mejora la performance de consultas (B+Tree, Hash)</td></tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Sinonimo</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Nombres alternativos para objetos</td></tr>
             </tbody>
         </table>
         </div>
 
-        <div class="box box--exercise">
-            <p class="main__text"><strong>Laboratorio: Diseno Conceptual</strong></p>
-            <p class="main__text">Para un sistema de biblioteca:</p>
-            <ol class="main__list">
-                <li class="main__list-item">Identifica las entidades principales (Libro, Usuario, Prestamo).</li>
-                <li class="main__list-item">Define los atributos de cada entidad.</li>
-                <li class="main__list-item">Identifica las claves primarias.</li>
-                <li class="main__list-item">Identifica las relaciones entre entidades.</li>
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Laboratorio: Diseno Conceptual</strong></p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Para un sistema de biblioteca:</p>
+            <ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Identifica las entidades principales (Libro, Usuario, Prestamo).</li>
+                <li >Define los atributos de cada entidad.</li>
+                <li >Identifica las claves primarias.</li>
+                <li >Identifica las relaciones entre entidades.</li>
             </ol>
         </div>
 
@@ -352,7 +353,7 @@
             <div id="controls_02" class="canvas-controls"></div>
         </div>
 
-        <nav class="nav">
+        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
             <a href="semana_01.html" class="nav__link">Semana Anterior</a>
             <a href="index.html" class="nav__link">Volver al Indice</a>
             <a href="semana_03.html" class="nav__link">Siguiente Semana</a>

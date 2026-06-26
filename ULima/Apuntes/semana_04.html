@@ -6,57 +6,58 @@
     <title>Semana 04 - Lenguaje de Definicion de Datos (DDL)</title>
     <link rel="stylesheet" href="master.css">
     <script src="canvas-ui.js"></script>
+<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
-<header class="header">
-    <h1 class="header__title">Lenguaje de Definicion de Datos (DDL)</h1>
-    <p class="header__subtitle">Semana 04 | Ingenieria de Datos | ULima 2013-2</p>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Lenguaje de Definicion de Datos (DDL)</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 04 | Ingenieria de Datos | ULima 2013-2</p>
 </header>
 
-<div class="cornell">
-    <aside class="sidebar">
-        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>§ DDL</strong>Data Definition Language: CREATE, ALTER, DROP</li>
-            <li class="sidebar__item"><strong>§ CREATE TABLE</strong>Crear tablas con columnas y restricciones</li>
-            <li class="sidebar__item"><strong>§ ALTER TABLE</strong>Modificar estructura de tablas existentes</li>
-            <li class="sidebar__item"><strong>§ DROP TABLE</strong>Eliminar tablas y sus datos</li>
-            <li class="sidebar__item"><strong>§ PRIMARY KEY</strong>Clave primaria: no nula, unica, indice automatico</li>
-            <li class="sidebar__item"><strong>§ FOREIGN KEY</strong>Clave foranea con REFERENCES y ON DELETE CASCADE</li>
-            <li class="sidebar__item"><strong>§ CASCADE CONSTRAINT</strong>Eliminar restricciones dependientes al dropear</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">PALABRAS CLAVE</h3>
+        <ul class="space-y-4">
+            <li class="text-sm"><strong>§ DDL</strong>Data Definition Language: CREATE, ALTER, DROP</li>
+            <li class="text-sm"><strong>§ CREATE TABLE</strong>Crear tablas con columnas y restricciones</li>
+            <li class="text-sm"><strong>§ ALTER TABLE</strong>Modificar estructura de tablas existentes</li>
+            <li class="text-sm"><strong>§ DROP TABLE</strong>Eliminar tablas y sus datos</li>
+            <li class="text-sm"><strong>§ PRIMARY KEY</strong>Clave primaria: no nula, unica, indice automatico</li>
+            <li class="text-sm"><strong>§ FOREIGN KEY</strong>Clave foranea con REFERENCES y ON DELETE CASCADE</li>
+            <li class="text-sm"><strong>§ CASCADE CONSTRAINT</strong>Eliminar restricciones dependientes al dropear</li>
         </ul>
-        <div class="box box--note" style="margin-top:1.5rem;padding:1rem;">
-            <h3 class="sidebar__title">RECURSOS</h3>
-            <ul class="sidebar__list">
-                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio &mdash; Indice del Curso</a></li>
-                <li class="sidebar__item"><a href="semana_03.html" class="sidebar__link">Semana Anterior</a></li>
-                <li class="sidebar__item"><a href="semana_05.html" class="sidebar__link">Siguiente Semana</a></li>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6" style="margin-top:1.5rem;padding:1rem;">
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
+            <ul class="space-y-4">
+                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Inicio &mdash; Indice del Curso</a></li>
+                <li class="text-sm"><a href="semana_03.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana Anterior</a></li>
+                <li class="text-sm"><a href="semana_05.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Siguiente Semana</a></li>
             </ul>
         </div>
     </aside>
 
-    <main class="main">
-        <div class="box box--note">
-            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Crear tablas con tipos de datos apropiados y restricciones</li>
-                <li class="main__list-item">Definir PRIMARY KEY y FOREIGN KEY en la creacion de tablas</li>
-                <li class="main__list-item">Modificar tablas existentes con ALTER TABLE</li>
-                <li class="main__list-item">Eliminar tablas correctamente usando DROP TABLE</li>
-                <li class="main__list-item">Comprender el modelo de datos de la muebleria como caso de estudio</li>
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Objetivos de Aprendizaje</strong></p>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Crear tablas con tipos de datos apropiados y restricciones</li>
+                <li >Definir PRIMARY KEY y FOREIGN KEY en la creacion de tablas</li>
+                <li >Modificar tablas existentes con ALTER TABLE</li>
+                <li >Eliminar tablas correctamente usando DROP TABLE</li>
+                <li >Comprender el modelo de datos de la muebleria como caso de estudio</li>
             </ul>
         </div>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto: DDL Transaccional en PostgreSQL</h4>
-            <p class="main__text"><strong>Una diferencia crucial:</strong> En Oracle, los comandos DDL hacen COMMIT implicito. En PostgreSQL, los comandos DDL son transaccionales &mdash; puedes hacer ROLLBACK de un CREATE TABLE, ALTER TABLE o incluso DROP TABLE si esta dentro de una transaccion. Esto cambia dramaticamente la estrategia de migraciones.</p>
-            <p class="main__text"><strong>Consejo practico:</strong> Siempre envuelve cambios estructurales en transacciones explicitas (<code>BEGIN; ... COMMIT;</code>) y prueba con <code>ROLLBACK</code> en desarrollo antes de ejecutar en produccion.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto: DDL Transaccional en PostgreSQL</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Una diferencia crucial:</strong> En Oracle, los comandos DDL hacen COMMIT implicito. En PostgreSQL, los comandos DDL son transaccionales &mdash; puedes hacer ROLLBACK de un CREATE TABLE, ALTER TABLE o incluso DROP TABLE si esta dentro de una transaccion. Esto cambia dramaticamente la estrategia de migraciones.</p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Consejo practico:</strong> Siempre envuelve cambios estructurales en transacciones explicitas (<code>BEGIN; ... COMMIT;</code>) y prueba con <code>ROLLBACK</code> en desarrollo antes de ejecutar en produccion.</p>
         </section>
 
-        <h2 class="main__title">1. Creacion de Tablas (CREATE TABLE)</h2>
-        <span class="tag">DDL basico</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Creacion de Tablas (CREATE TABLE)</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">DDL basico</span>
 
-        <h3 class="main__title--sub">Sintaxis General</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Sintaxis General</h3>
 
         <pre>
 CREATE TABLE nombre_tabla
@@ -65,7 +66,7 @@ CREATE TABLE nombre_tabla
      ...
      [restricciones_de_tabla]);</pre>
 
-        <h3 class="main__title--sub">Ejemplo 1: Restriccion a nivel de columna</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo 1: Restriccion a nivel de columna</h3>
 
         <pre>
 CREATE TABLE orden_pedido
@@ -75,9 +76,9 @@ CREATE TABLE orden_pedido
      numero_embarques NUMBER(5),
      id_cliente NUMBER(7) REFERENCES cliente );</pre>
 
-        <p class="main__text">En este ejemplo, <code>PRIMARY KEY</code> y <code>REFERENCES</code> se definen directamente sobre la columna. Es una sintaxis compacta pero menos flexible para claves compuestas.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En este ejemplo, <code>PRIMARY KEY</code> y <code>REFERENCES</code> se definen directamente sobre la columna. Es una sintaxis compacta pero menos flexible para claves compuestas.</p>
 
-        <h3 class="main__title--sub">Ejemplo 2: Restricciones a nivel de tabla</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo 2: Restricciones a nivel de tabla</h3>
 
         <pre>
 CREATE TABLE orden_pedido
@@ -89,14 +90,14 @@ CREATE TABLE orden_pedido
      PRIMARY KEY (numero_orden),
      FOREIGN KEY (id_cliente) REFERENCES cliente);</pre>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Diferencia clave:</strong> La sintaxis a nivel de tabla permite definir claves compuestas (PK con multiples columnas) y nombrar las restricciones. Es la forma recomendada para esquemas complejos.</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Diferencia clave:</strong> La sintaxis a nivel de tabla permite definir claves compuestas (PK con multiples columnas) y nombrar las restricciones. Es la forma recomendada para esquemas complejos.</p>
         </div>
 
-        <h2 class="main__title">2. Modelo de Datos de una Muebleria</h2>
-        <span class="tag">Caso de estudio</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Modelo de Datos de una Muebleria</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Caso de estudio</span>
 
-        <p class="main__text">El siguiente es el modelo relacional para un sistema de muebleria que usaremos como caso de estudio en DDL:</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El siguiente es el modelo relacional para un sistema de muebleria que usaremos como caso de estudio en DDL:</p>
 
         <pre>
 -- Entidades principales del modelo
@@ -110,13 +111,13 @@ linea_producto: nombre_linea (PK)
 producto_ordenado: numero_orden (FK), id_producto (FK),
                    cantidad_ordenada</pre>
 
-        <div class="box box--note">
-            <p class="main__text"><strong>Nota:</strong> Este modelo usa nomenclatura Oracle (NUMBER, DATE, VARCHAR2). En los ejemplos siguientes se presenta la sintaxis original del material academico y luego su equivalente en PostgreSQL.</p>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Nota:</strong> Este modelo usa nomenclatura Oracle (NUMBER, DATE, VARCHAR2). En los ejemplos siguientes se presenta la sintaxis original del material academico y luego su equivalente en PostgreSQL.</p>
         </div>
 
-        <h2 class="main__title">3. Creacion del Esquema Muebleria</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Creacion del Esquema Muebleria</h2>
 
-        <h3 class="main__title--sub">Sintaxis Oracle (original del curso)</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Sintaxis Oracle (original del curso)</h3>
 
         <pre>
 CREATE TABLE cliente (
@@ -158,7 +159,7 @@ CREATE TABLE producto_ordenado (
     FOREIGN KEY (id_producto) REFERENCES producto
 );</pre>
 
-        <h3 class="main__title--sub">Equivalente en PostgreSQL</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Equivalente en PostgreSQL</h3>
 
         <pre>
 CREATE TABLE cliente (
@@ -200,37 +201,37 @@ CREATE TABLE producto_ordenado (
     FOREIGN KEY (id_producto) REFERENCES producto
 );</pre>
 
-        <h2 class="main__title">4. Alteracion de Tablas (ALTER TABLE)</h2>
-        <span class="tag">Modificacion de estructura</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Alteracion de Tablas (ALTER TABLE)</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Modificacion de estructura</span>
 
-        <p class="main__text">ALTER TABLE permite modificar la estructura de una tabla existente sin perder los datos:</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">ALTER TABLE permite modificar la estructura de una tabla existente sin perder los datos:</p>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Operacion</th>
-                    <th class="table__th">Sintaxis</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Operacion</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Sintaxis</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Agregar columna</strong></td>
-                    <td class="table__td"><code>ALTER TABLE tabla ADD (columna tipo [DEFAULT expr] [restriccion]);</code></td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Agregar columna</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ALTER TABLE tabla ADD (columna tipo [DEFAULT expr] [restriccion]);</code></td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Modificar columna</strong></td>
-                    <td class="table__td"><code>ALTER TABLE tabla MODIFY (columna NUEVO_tipo [DEFAULT expr] [restriccion]);</code></td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Modificar columna</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ALTER TABLE tabla MODIFY (columna NUEVO_tipo [DEFAULT expr] [restriccion]);</code></td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Eliminar columna</strong></td>
-                    <td class="table__td"><code>ALTER TABLE tabla DROP COLUMN columna;</code></td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Eliminar columna</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ALTER TABLE tabla DROP COLUMN columna;</code></td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h3 class="main__title--sub">Ejemplos</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplos</h3>
 
         <pre>
 -- Agregar una columna
@@ -245,24 +246,24 @@ ALTER TABLE orden_pedido
 ALTER TABLE orden_pedido
     DROP COLUMN numero_embarques;</pre>
 
-        <div class="box box--warning">
-            <p class="main__text"><strong>Advertencia:</strong> En Oracle, MODIFY puede fallar si la tabla tiene datos que no cumplen con el nuevo tipo. En PostgreSQL, ALTER COLUMN ... TYPE requiere una clausula USING para convertir datos existentes.</p>
+        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Advertencia:</strong> En Oracle, MODIFY puede fallar si la tabla tiene datos que no cumplen con el nuevo tipo. En PostgreSQL, ALTER COLUMN ... TYPE requiere una clausula USING para convertir datos existentes.</p>
         </div>
 
-        <h2 class="main__title">5. Eliminacion de Tablas (DROP TABLE)</h2>
-        <span class="tag">Eliminacion de objetos</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Eliminacion de Tablas (DROP TABLE)</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Eliminacion de objetos</span>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Sintaxis:</strong> <code>DROP TABLE tabla [CASCADE CONSTRAINT];</code></p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis:</strong> <code>DROP TABLE tabla [CASCADE CONSTRAINT];</code></p>
         </div>
 
-        <ul class="main__list">
-            <li class="main__list-item">Elimina la definicion de la tabla y todos sus datos.</li>
-            <li class="main__list-item">La opcion <code>CASCADE CONSTRAINT</code> elimina todas las restricciones de integridad referencial que dependen de la tabla (FK de otras tablas que la referencian).</li>
-            <li class="main__list-item">Si otras tablas tienen FK que referencian a esta tabla y no se usa CASCADE, el DROP fallara.</li>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li >Elimina la definicion de la tabla y todos sus datos.</li>
+            <li >La opcion <code>CASCADE CONSTRAINT</code> elimina todas las restricciones de integridad referencial que dependen de la tabla (FK de otras tablas que la referencian).</li>
+            <li >Si otras tablas tienen FK que referencian a esta tabla y no se usa CASCADE, el DROP fallara.</li>
         </ul>
 
-        <h3 class="main__title--sub">Ejemplo</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo</h3>
 
         <pre>
 -- Eliminar la tabla (falla si hay dependencias)
@@ -274,58 +275,58 @@ DROP TABLE orden_pedido CASCADE CONSTRAINTS;
 -- En PostgreSQL equivalente:
 DROP TABLE orden_pedido CASCADE;</pre>
 
-        <div class="box box--note">
-            <p class="main__text"><strong>Diferencia importante:</strong> En Oracle se usa <code>CASCADE CONSTRAINTS</code> (plural). En PostgreSQL es simplemente <code>CASCADE</code>. Ademas, PostgreSQL soporta <code>DROP TABLE IF EXISTS</code> para evitar errores si la tabla no existe.</p>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Diferencia importante:</strong> En Oracle se usa <code>CASCADE CONSTRAINTS</code> (plural). En PostgreSQL es simplemente <code>CASCADE</code>. Ademas, PostgreSQL soporta <code>DROP TABLE IF EXISTS</code> para evitar errores si la tabla no existe.</p>
         </div>
 
-        <h2 class="main__title">6. Resumen de DDL en PostgreSQL vs Oracle</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">6. Resumen de DDL en PostgreSQL vs Oracle</h2>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Comando Oracle</th>
-                    <th class="table__th">Comando PostgreSQL</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Comando Oracle</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Comando PostgreSQL</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><code>VARCHAR2(n)</code></td>
-                    <td class="table__td"><code>VARCHAR(n)</code></td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>VARCHAR2(n)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>VARCHAR(n)</code></td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><code>NUMBER(7)</code></td>
-                    <td class="table__td"><code>INTEGER</code></td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NUMBER(7)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>INTEGER</code></td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><code>NUMBER(10,2)</code></td>
-                    <td class="table__td"><code>NUMERIC(10,2)</code></td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NUMBER(10,2)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NUMERIC(10,2)</code></td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><code>SYSDATE</code></td>
-                    <td class="table__td"><code>CURRENT_DATE</code></td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>SYSDATE</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>CURRENT_DATE</code></td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><code>DROP ... CASCADE CONSTRAINTS</code></td>
-                    <td class="table__td"><code>DROP ... CASCADE</code></td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>DROP ... CASCADE CONSTRAINTS</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>DROP ... CASCADE</code></td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">DDL hace COMMIT implicito</td>
-                    <td class="table__td">DDL es transaccional (ROLLBACK posible)</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">DDL hace COMMIT implicito</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">DDL es transaccional (ROLLBACK posible)</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <div class="box box--exercise">
-            <p class="main__text"><strong>Laboratorio: DDL en PostgreSQL</strong></p>
-            <p class="main__text">Crea el siguiente esquema para una tienda en linea directamente en PostgreSQL:</p>
-            <ol class="main__list">
-                <li class="main__list-item">Tabla <code>categoria</code>: id (SERIAL PK), nombre (VARCHAR(50) NOT NULL UNIQUE), descripcion (TEXT).</li>
-                <li class="main__list-item">Tabla <code>producto</code>: id (SERIAL PK), nombre (VARCHAR(100) NOT NULL), precio (NUMERIC(10,2) CHECK precio &gt; 0), stock (INTEGER DEFAULT 0), id_categoria (INTEGER FK REFERENCES categoria).</li>
-                <li class="main__list-item">Tabla <code>cliente</code>: id (SERIAL PK), nombre (VARCHAR(100) NOT NULL), email (VARCHAR(150) UNIQUE NOT NULL), fecha_registro (DATE DEFAULT CURRENT_DATE).</li>
-                <li class="main__list-item">Agrega una columna <code>telefono VARCHAR(20)</code> a la tabla cliente.</li>
-                <li class="main__list-item">Elimina la tabla producto si existiera y recreala con las restricciones actualizadas.</li>
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Laboratorio: DDL en PostgreSQL</strong></p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Crea el siguiente esquema para una tienda en linea directamente en PostgreSQL:</p>
+            <ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Tabla <code>categoria</code>: id (SERIAL PK), nombre (VARCHAR(50) NOT NULL UNIQUE), descripcion (TEXT).</li>
+                <li >Tabla <code>producto</code>: id (SERIAL PK), nombre (VARCHAR(100) NOT NULL), precio (NUMERIC(10,2) CHECK precio &gt; 0), stock (INTEGER DEFAULT 0), id_categoria (INTEGER FK REFERENCES categoria).</li>
+                <li >Tabla <code>cliente</code>: id (SERIAL PK), nombre (VARCHAR(100) NOT NULL), email (VARCHAR(150) UNIQUE NOT NULL), fecha_registro (DATE DEFAULT CURRENT_DATE).</li>
+                <li >Agrega una columna <code>telefono VARCHAR(20)</code> a la tabla cliente.</li>
+                <li >Elimina la tabla producto si existiera y recreala con las restricciones actualizadas.</li>
             </ol>
         </div>
 
@@ -334,7 +335,7 @@ DROP TABLE orden_pedido CASCADE;</pre>
             <div id="controls_04" class="canvas-controls"></div>
         </div>
 
-        <nav class="nav">
+        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
             <a href="semana_03.html" class="nav__link">Semana Anterior</a>
             <a href="index.html" class="nav__link">Volver al Indice</a>
             <a href="semana_05.html" class="nav__link">Siguiente Semana</a>

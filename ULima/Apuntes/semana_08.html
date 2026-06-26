@@ -6,43 +6,44 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Semana 08 - Examen Parcial</title>
 <link href="master.css" rel="stylesheet"/>
+<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
-<div class="header">
-<h1 class="header__title">Examen Parcial</h1>
-<p class="header__subtitle">Semana 08 | Cobertura: Semanas 01-07 | Ingenieria de Datos</p>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+<h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Examen Parcial</h1>
+<p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 08 | Cobertura: Semanas 01-07 | Ingenieria de Datos</p>
 </div>
-<div class="cornell">
-<aside class="sidebar">
-<h2 class="sidebar__title">Temas Evaluados</h2>
-<ul class="sidebar__list">
-<li class="sidebar__item"><strong>Fundamentos BD</strong> Semana 01</li>
-<li class="sidebar__item"><strong>Modelo Relacional</strong> Semana 02</li>
-<li class="sidebar__item"><strong>DDL</strong> Semana 03</li>
-<li class="sidebar__item"><strong>DML</strong> Semana 04-05</li>
-<li class="sidebar__item"><strong>Modelamiento E-R</strong> Semana 06</li>
-<li class="sidebar__item"><strong>Normalizacion</strong> Semana 07</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+<aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Temas Evaluados</h2>
+<ul class="space-y-4">
+<li class="text-sm"><strong>Fundamentos BD</strong> Semana 01</li>
+<li class="text-sm"><strong>Modelo Relacional</strong> Semana 02</li>
+<li class="text-sm"><strong>DDL</strong> Semana 03</li>
+<li class="text-sm"><strong>DML</strong> Semana 04-05</li>
+<li class="text-sm"><strong>Modelamiento E-R</strong> Semana 06</li>
+<li class="text-sm"><strong>Normalizacion</strong> Semana 07</li>
 </ul>
-<h2 class="sidebar__title">Recursos</h2>
-<ul class="sidebar__list">
-<li class="sidebar__item"><a class="sidebar__link" href="index.html">Indice del Curso</a></li>
-<li class="sidebar__item"><a class="sidebar__link" href="semana_07.html">Semana 07</a></li>
-<li class="sidebar__item"><a class="sidebar__link" href="semana_09.html">Semana 09</a></li>
+<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Recursos</h2>
+<ul class="space-y-4">
+<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="index.html">Indice del Curso</a></li>
+<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_07.html">Semana 07</a></li>
+<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_09.html">Semana 09</a></li>
 </ul>
 </aside>
-<main class="main">
-<div class="box box--warning">
+<main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 <p><strong>Instrucciones:</strong> El examen parcial cubre las semanas 01-07. Consta de 4 secciones con un total de 100 puntos. Dispone de 90 minutos para completarlo. No se permite material de consulta. Escriba clara y legiblemente. Puntaje minimo aprobatorio: 60.</p>
 </div>
-<div class="architect-insight">
+<div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 <p><strong>Tips para el Examen:</strong> (1) Lea la pregunta completa antes de responder. (2) En modelamiento E-R, identifique primero las entidades y luego las relaciones. (3) En normalizacion, marque las dependencias funcionales paso a paso. (4) En SQL, escriba las consultas con indentacion clara.</p>
 </div>
 <!-- ============================================================= -->
 <!-- SECCION 1: TEORIA -->
 <!-- ============================================================= -->
-<span class="tag">EXAMEN</span>
-<h2 class="main__title">Seccion 1: Teoria (30 puntos)</h2>
-<p class="main__text">Instrucciones: Seleccione la respuesta correcta. Cada pregunta vale 3 puntos.</p>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 1: Teoria (30 puntos)</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Instrucciones: Seleccione la respuesta correcta. Cada pregunta vale 3 puntos.</p>
 <div class="q-level">Pregunta 1 - Fundamentos BD</div>
 <strong class="question">Cual es la principal diferencia entre dato e informacion?</strong>
 <div class="answer">
@@ -126,139 +127,139 @@
 <!-- ============================================================= -->
 <!-- SECCION 2: MODELAMIENTO E-R -->
 <!-- ============================================================= -->
-<span class="tag">EXAMEN</span>
-<h2 class="main__title">Seccion 2: Modelamiento E-R (25 puntos)</h2>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 2: Modelamiento E-R (25 puntos)</h2>
 <div class="q-level">Ejercicio 1 (12 puntos)</div>
 <strong class="question">Construya el Diagrama Entidad-Relacion (DER) basado en las siguientes reglas de negocio. Identifique entidades, relaciones, cardinalidad (minima y maxima) y atributos clave.</strong>
-<div class="box box--note">
+<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p><strong>Reglas de Negocio - Sistema de Pedidos:</strong></p>
-<ul class="main__list">
-<li class="main__list-item">Un cliente puede realizar uno o varios pedidos.</li>
-<li class="main__list-item">Cada pedido pertenece a un unico cliente y debe tener al menos un cliente asociado.</li>
-<li class="main__list-item">Un pedido contiene uno o varios productos y un producto puede aparecer en cero o varios pedidos.</li>
-<li class="main__list-item">Cada linea de pedido registra la cantidad y el precio unitario del producto en ese pedido.</li>
-<li class="main__list-item">Un producto pertenece a una categoria.</li>
-<li class="main__list-item">Cada categoria puede tener cero o muchos productos.</li>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li >Un cliente puede realizar uno o varios pedidos.</li>
+<li >Cada pedido pertenece a un unico cliente y debe tener al menos un cliente asociado.</li>
+<li >Un pedido contiene uno o varios productos y un producto puede aparecer en cero o varios pedidos.</li>
+<li >Cada linea de pedido registra la cantidad y el precio unitario del producto en ese pedido.</li>
+<li >Un producto pertenece a una categoria.</li>
+<li >Cada categoria puede tener cero o muchos productos.</li>
 </ul>
 </div>
 <div class="q-level">Ejercicio 2 (13 puntos)</div>
 <strong class="question">Dado el siguiente enunciado, disene el DER indicando claramente si existen supertipos/subtipos:</strong>
-<div class="box box--note">
+<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p><strong>Reglas de Negocio - Sistema de Recursos Humanos:</strong></p>
-<ul class="main__list">
-<li class="main__list-item">La empresa tiene empleados que pueden ser de tipo "Administrativo" o "Tecnico".</li>
-<li class="main__list-item">Todos los empleados tienen un codigo, nombre, direccion y fecha de ingreso.</li>
-<li class="main__list-item">Los empleados administrativos tienen un cargo y un sueldo fijo.</li>
-<li class="main__list-item">Los empleados tecnicos tienen una especialidad y una tarifa por hora.</li>
-<li class="main__list-item">Un empleado tecnico puede trabajar en uno o varios proyectos.</li>
-<li class="main__list-item">Cada proyecto tiene un codigo, nombre y fecha de inicio.</li>
-<li class="main__list-item">Un proyecto puede tener asignados varios tecnicos y debe tener al menos uno.</li>
-<li class="main__list-item">Se registra la cantidad de horas que cada tecnico trabaja en cada proyecto.</li>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li >La empresa tiene empleados que pueden ser de tipo "Administrativo" o "Tecnico".</li>
+<li >Todos los empleados tienen un codigo, nombre, direccion y fecha de ingreso.</li>
+<li >Los empleados administrativos tienen un cargo y un sueldo fijo.</li>
+<li >Los empleados tecnicos tienen una especialidad y una tarifa por hora.</li>
+<li >Un empleado tecnico puede trabajar en uno o varios proyectos.</li>
+<li >Cada proyecto tiene un codigo, nombre y fecha de inicio.</li>
+<li >Un proyecto puede tener asignados varios tecnicos y debe tener al menos uno.</li>
+<li >Se registra la cantidad de horas que cada tecnico trabaja en cada proyecto.</li>
 </ul>
 </div>
 <!-- ============================================================= -->
 <!-- SECCION 3: NORMALIZACION -->
 <!-- ============================================================= -->
-<span class="tag">EXAMEN</span>
-<h2 class="main__title">Seccion 3: Normalizacion (25 puntos)</h2>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 3: Normalizacion (25 puntos)</h2>
 <div class="q-level">Ejercicio 1 (12 puntos)</div>
 <strong class="question">Dada la siguiente tabla NO normalizada, identifique las dependencias funcionales y normalice hasta 3FN. Muestre todas las tablas resultantes con sus claves primarias y foraneas.</strong>
-<div class="table-responsive"><div class="table">
-<div class="table__tr">
-<div class="table__th">cod_matricula</div>
-<div class="table__th">cod_alumno</div>
-<div class="table__th">nom_alumno</div>
-<div class="table__th">cod_curso</div>
-<div class="table__th">nom_curso</div>
-<div class="table__th">creditos</div>
-<div class="table__th">ciclo</div>
-<div class="table__th">nota</div>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">cod_matricula</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">cod_alumno</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">nom_alumno</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">cod_curso</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">nom_curso</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">creditos</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">ciclo</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">nota</div>
 </div>
-<div class="table__tr">
-<div class="table__td">M001</div>
-<div class="table__td">A001</div>
-<div class="table__td">Maria Lopez</div>
-<div class="table__td">C101</div>
-<div class="table__td">BD Relacionales</div>
-<div class="table__td">4</div>
-<div class="table__td">2024-I</div>
-<div class="table__td">18</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">M001</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">A001</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Maria Lopez</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">C101</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">BD Relacionales</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">4</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">2024-I</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">18</div>
 </div>
-<div class="table__tr">
-<div class="table__td">M001</div>
-<div class="table__td">A001</div>
-<div class="table__td">Maria Lopez</div>
-<div class="table__td">C102</div>
-<div class="table__td">Analisis de Datos</div>
-<div class="table__td">3</div>
-<div class="table__td">2024-I</div>
-<div class="table__td">16</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">M001</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">A001</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Maria Lopez</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">C102</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Analisis de Datos</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">3</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">2024-I</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">16</div>
 </div>
-<div class="table__tr">
-<div class="table__td">M002</div>
-<div class="table__td">A002</div>
-<div class="table__td">Carlos Ruiz</div>
-<div class="table__td">C101</div>
-<div class="table__td">BD Relacionales</div>
-<div class="table__td">4</div>
-<div class="table__td">2024-I</div>
-<div class="table__td">15</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">M002</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">A002</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Carlos Ruiz</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">C101</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">BD Relacionales</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">4</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">2024-I</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">15</div>
 </div>
 </div></div>
-<p class="main__text">Sugerencia: Primero identifique la clave primaria, luego las dependencias parciales y transitivas.</p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Sugerencia: Primero identifique la clave primaria, luego las dependencias parciales y transitivas.</p>
 <div class="q-level">Ejercicio 2 (13 puntos)</div>
 <strong class="question">Analice la siguiente tabla "Libros_Prestamos" y normalice hasta 3FN:</strong>
-<div class="table-responsive"><div class="table">
-<div class="table__tr">
-<div class="table__th">prestamo_id</div>
-<div class="table__th">fecha_prestamo</div>
-<div class="table__th">socio_id</div>
-<div class="table__th">socio_nombre</div>
-<div class="table__th">socio_telefono</div>
-<div class="table__th">libro_id</div>
-<div class="table__th">libro_titulo</div>
-<div class="table__th">libro_autor</div>
-<div class="table__th">fecha_devolucion</div>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">prestamo_id</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">fecha_prestamo</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">socio_id</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">socio_nombre</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">socio_telefono</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">libro_id</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">libro_titulo</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">libro_autor</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">fecha_devolucion</div>
 </div>
-<div class="table__tr">
-<div class="table__td">P001</div>
-<div class="table__td">10/01/2025</div>
-<div class="table__td">S001</div>
-<div class="table__td">Ana Torres</div>
-<div class="table__td">999-8881</div>
-<div class="table__td">L101</div>
-<div class="table__td">Cien Anos de Soledad</div>
-<div class="table__td">G. Garcia Marquez</div>
-<div class="table__td">25/01/2025</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">P001</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">10/01/2025</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">S001</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Ana Torres</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">999-8881</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">L101</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Cien Anos de Soledad</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">G. Garcia Marquez</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">25/01/2025</div>
 </div>
-<div class="table__tr">
-<div class="table__td">P001</div>
-<div class="table__td">10/01/2025</div>
-<div class="table__td">S001</div>
-<div class="table__td">Ana Torres</div>
-<div class="table__td">999-8881</div>
-<div class="table__td">L102</div>
-<div class="table__td">Don Quijote</div>
-<div class="table__td">M. de Cervantes</div>
-<div class="table__td">25/01/2025</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">P001</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">10/01/2025</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">S001</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Ana Torres</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">999-8881</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">L102</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Don Quijote</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">M. de Cervantes</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">25/01/2025</div>
 </div>
-<div class="table__tr">
-<div class="table__td">P002</div>
-<div class="table__td">12/01/2025</div>
-<div class="table__td">S002</div>
-<div class="table__td">Luis Gomez</div>
-<div class="table__td">999-8882</div>
-<div class="table__td">L101</div>
-<div class="table__td">Cien Anos de Soledad</div>
-<div class="table__td">G. Garcia Marquez</div>
-<div class="table__td">30/01/2025</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">P002</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">12/01/2025</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">S002</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Luis Gomez</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">999-8882</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">L101</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Cien Anos de Soledad</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">G. Garcia Marquez</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">30/01/2025</div>
 </div>
 </div></div>
 <!-- ============================================================= -->
 <!-- SECCION 4: SQL -->
 <!-- ============================================================= -->
-<span class="tag">EXAMEN</span>
-<h2 class="main__title">Seccion 4: SQL (20 puntos)</h2>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 4: SQL (20 puntos)</h2>
 <div class="q-level">Ejercicio 1 - DDL (5 puntos)</div>
 <strong class="question">Escriba las sentencias CREATE TABLE para el siguiente esquema (incluyendo PK, FK, NOT NULL, CHECK):</strong>
 <div class="answer">
@@ -276,71 +277,71 @@
 <!-- ============================================================= -->
 <!-- SOLUCIONARIO -->
 <!-- ============================================================= -->
-<span class="tag">EXAMEN</span>
-<h2 class="main__title" style="color: var(--danger);">Solucionario</h2>
-<div class="box box--warning">
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4" style="color: var(--danger);">Solucionario</h2>
+<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 <p><strong>Importante:</strong> Este solucionario es para el docente. No distribuya a los estudiantes antes del examen.</p>
 </div>
-<h2 class="main__title--sub">Seccion 1: Teoria - Respuestas</h2>
-<div class="table-responsive"><div class="table">
-<div class="table__tr">
-<div class="table__th">Pregunta</div>
-<div class="table__th">Respuesta</div>
-<div class="table__th">Explicacion</div>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Seccion 1: Teoria - Respuestas</h2>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Pregunta</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Respuesta</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Explicacion</div>
 </div>
-<div class="table__tr">
-<div class="table__td">1</div>
-<div class="table__td">b</div>
-<div class="table__td">El dato es un hecho bruto; la informacion es dato procesado con contexto y significado. (Sem 01)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">1</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">b</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">El dato es un hecho bruto; la informacion es dato procesado con contexto y significado. (Sem 01)</div>
 </div>
-<div class="table__tr">
-<div class="table__td">2</div>
-<div class="table__td">c</div>
-<div class="table__td">En la fase de diseno logico se construye el modelo conceptual (DER) independiente del DBMS. (Sem 01)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">2</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">c</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">En la fase de diseno logico se construye el modelo conceptual (DER) independiente del DBMS. (Sem 01)</div>
 </div>
-<div class="table__tr">
-<div class="table__td">3</div>
-<div class="table__td">a</div>
-<div class="table__td">Atomicidad: la transaccion se ejecuta en su totalidad o se revierte completamente (todo o nada). (Sem 02)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">3</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">a</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Atomicidad: la transaccion se ejecuta en su totalidad o se revierte completamente (todo o nada). (Sem 02)</div>
 </div>
-<div class="table__tr">
-<div class="table__td">4</div>
-<div class="table__td">c</div>
-<div class="table__td">Nivel Interno: describe la estructura fisica de almacenamiento (archivos, indices, bloques). (Sem 02)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">4</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">c</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Nivel Interno: describe la estructura fisica de almacenamiento (archivos, indices, bloques). (Sem 02)</div>
 </div>
-<div class="table__tr">
-<div class="table__td">5</div>
-<div class="table__td">b</div>
-<div class="table__td">FK es un atributo que referencia la PK de otra tabla para establecer relaciones. (Sem 02)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">5</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">b</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">FK es un atributo que referencia la PK de otra tabla para establecer relaciones. (Sem 02)</div>
 </div>
-<div class="table__tr">
-<div class="table__td">6</div>
-<div class="table__td">c</div>
-<div class="table__td">"Archivos planos" no es un modelo de BD, es un enfoque tradicional de almacenamiento. Modelos: relacional, orientado a objetos, deductivo, etc. (Sem 01)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">6</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">c</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">"Archivos planos" no es un modelo de BD, es un enfoque tradicional de almacenamiento. Modelos: relacional, orientado a objetos, deductivo, etc. (Sem 01)</div>
 </div>
-<div class="table__tr">
-<div class="table__td">7</div>
-<div class="table__td">b</div>
-<div class="table__td">El DBMS gestiona almacenamiento, recuperacion, seguridad, concurrencia, etc. (Sem 01)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">7</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">b</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">El DBMS gestiona almacenamiento, recuperacion, seguridad, concurrencia, etc. (Sem 01)</div>
 </div>
-<div class="table__tr">
-<div class="table__td">8</div>
-<div class="table__td">b</div>
-<div class="table__td">Independencia logica: cambios en el esquema conceptual no afectan las vistas externas. (Sem 02)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">8</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">b</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Independencia logica: cambios en el esquema conceptual no afectan las vistas externas. (Sem 02)</div>
 </div>
-<div class="table__tr">
-<div class="table__td">9</div>
-<div class="table__td">b</div>
-<div class="table__td">Tupla = fila/registro en una tabla relacional. (Sem 02)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">9</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">b</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Tupla = fila/registro en una tabla relacional. (Sem 02)</div>
 </div>
-<div class="table__tr">
-<div class="table__td">10</div>
-<div class="table__td">c</div>
-<div class="table__td">ALTER pertenece a DDL (Data Definition Language). INSERT, UPDATE, SELECT son DML. (Sem 03)</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400">10</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">c</div>
+<div class="p-4 text-slate-600 dark:text-slate-400">ALTER pertenece a DDL (Data Definition Language). INSERT, UPDATE, SELECT son DML. (Sem 03)</div>
 </div>
 </div></div>
-<h2 class="main__title--sub">Seccion 2: Modelamiento E-R - Soluciones</h2>
-<p class="main__text"><strong>Ejercicio 1: Sistema de Pedidos</strong></p>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Seccion 2: Modelamiento E-R - Soluciones</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 1: Sistema de Pedidos</strong></p>
 <div class="diagram-ascii">Entidades: CLIENTE, PEDIDO, LINEA_PEDIDO, PRODUCTO, CATEGORIA
 
 Relaciones:
@@ -361,7 +362,7 @@ PEDIDO.cliente_id rarr CLIENTE.cliente_id
 LINEA_PEDIDO.pedido_id rarr PEDIDO.pedido_id
 LINEA_PEDIDO.producto_id rarr PRODUCTO.producto_id
 PRODUCTO.categoria_id rarr CATEGORIA.categoria_id</div>
-<p class="main__text"><strong>Ejercicio 2: Recursos Humanos con Supertipo/Subtipo</strong></p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 2: Recursos Humanos con Supertipo/Subtipo</strong></p>
 <div class="diagram-ascii">SUPERTIPO: EMPLEADO (cod_emp PK, nombre, direccion, fecha_ingreso)
   |--- ISA (discriminador: tipo)
   |--- SUBTIPO: ADMINISTRATIVO (cargo, sueldo_fijo)
@@ -373,37 +374,37 @@ TECNICO --- N:N --- PROYECTO
   ASIGNACION (cod_tecnico FK, cod_proy FK, horas)
 
 PROYECTO(cod_proy PK, nombre, fecha_inicio)</div>
-<h2 class="main__title--sub">Seccion 3: Normalizacion - Soluciones</h2>
-<p class="main__text"><strong>Ejercicio 1: Matriculas</strong></p>
-<p class="main__text">PK original: <code>(cod_matricula, cod_curso)</code> - cada fila representa un curso dentro de una matricula.</p>
-<p class="main__text"><strong>Dependencias funcionales:</strong></p>
-<ul class="main__list">
-<li class="main__list-item">cod_matricula rarr cod_alumno, nom_alumno, ciclo (dependencia parcial respecto a PK compuesta)</li>
-<li class="main__list-item">cod_alumno rarr nom_alumno (dependencia transitiva desde cod_matricula)</li>
-<li class="main__list-item">cod_curso rarr nom_curso, creditos (dependencia parcial respecto a PK compuesta)</li>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Seccion 3: Normalizacion - Soluciones</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 1: Matriculas</strong></p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PK original: <code>(cod_matricula, cod_curso)</code> - cada fila representa un curso dentro de una matricula.</p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Dependencias funcionales:</strong></p>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li >cod_matricula rarr cod_alumno, nom_alumno, ciclo (dependencia parcial respecto a PK compuesta)</li>
+<li >cod_alumno rarr nom_alumno (dependencia transitiva desde cod_matricula)</li>
+<li >cod_curso rarr nom_curso, creditos (dependencia parcial respecto a PK compuesta)</li>
 </ul>
-<p class="main__text"><strong>Despues de 2FN y 3FN:</strong></p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Despues de 2FN y 3FN:</strong></p>
 <pre>MATRICULA (cod_matricula PK, cod_alumno FK, ciclo)
 ALUMNO (cod_alumno PK, nom_alumno)
 CURSO (cod_curso PK, nom_curso, creditos)
 DETALLE_MATRICULA (cod_matricula FK, cod_curso FK, nota)
   -- PK compuesta: (cod_matricula, cod_curso)</pre>
-<p class="main__text"><strong>Ejercicio 2: Libros_Prestamos</strong></p>
-<p class="main__text">PK: <code>(prestamo_id, libro_id)</code></p>
-<p class="main__text"><strong>Dependencias identificadas:</strong></p>
-<ul class="main__list">
-<li class="main__list-item">prestamo_id rarr socio_id, socio_nombre, socio_telefono, fecha_prestamo (parcial)</li>
-<li class="main__list-item">socio_id rarr socio_nombre, socio_telefono (transitiva)</li>
-<li class="main__list-item">libro_id rarr libro_titulo, libro_autor (parcial)</li>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 2: Libros_Prestamos</strong></p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PK: <code>(prestamo_id, libro_id)</code></p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Dependencias identificadas:</strong></p>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li >prestamo_id rarr socio_id, socio_nombre, socio_telefono, fecha_prestamo (parcial)</li>
+<li >socio_id rarr socio_nombre, socio_telefono (transitiva)</li>
+<li >libro_id rarr libro_titulo, libro_autor (parcial)</li>
 </ul>
-<p class="main__text"><strong>Despues de 3FN (5 tablas):</strong></p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Despues de 3FN (5 tablas):</strong></p>
 <pre>PRESTAMO (prestamo_id PK, socio_id FK, fecha_prestamo, fecha_devolucion)
 SOCIO (socio_id PK, socio_nombre, socio_telefono)
 LIBRO (libro_id PK, libro_titulo, libro_autor)
 DETALLE_PRESTAMO (prestamo_id FK, libro_id FK) -- PK compuesta
 -- Nota: fecha_devolucion depende de prestamo_id, no del libro individual</pre>
-<h2 class="main__title--sub">Seccion 4: SQL - Soluciones</h2>
-<p class="main__text"><strong>Ejercicio 1 - DDL:</strong></p>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Seccion 4: SQL - Soluciones</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 1 - DDL:</strong></p>
 <pre>CREATE TABLE departamento (
     cod_depto CHAR(3) PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
@@ -418,7 +419,7 @@ CREATE TABLE empleado (
     FOREIGN KEY (cod_depto) REFERENCES departamento(cod_depto)
     ON DELETE CASCADE
 );</pre>
-<p class="main__text"><strong>Ejercicio 2 - INSERT:</strong></p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 2 - INSERT:</strong></p>
 <pre>BEGIN;
 
 INSERT INTO departamento VALUES
@@ -431,15 +432,15 @@ INSERT INTO empleado (cod_emp, nombre, salario, cod_depto) VALUES
     (3, 'Pedro Diaz', 1800.00, 'VEN');
 
 COMMIT;</pre>
-<p class="main__text"><strong>Ejercicio 3 - UPDATE:</strong></p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 3 - UPDATE:</strong></p>
 <pre>UPDATE empleado
 SET salario = salario * 1.15
 WHERE cod_depto = (SELECT cod_depto FROM departamento WHERE nombre = 'TI');</pre>
-<p class="main__text"><strong>Ejercicio 4 - DELETE:</strong></p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 4 - DELETE:</strong></p>
 <pre>DELETE FROM empleado
 WHERE salario < 1500
   AND cod_depto = (SELECT cod_depto FROM departamento WHERE nombre = 'VENTAS');</pre>
-<p class="main__text"><strong>Ejercicio 5 - SELECT con JOIN:</strong></p>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 5 - SELECT con JOIN:</strong></p>
 <pre>SELECT e.nombre AS empleado,
        d.nombre AS departamento,
        p.nombre AS proyecto
@@ -448,10 +449,10 @@ JOIN departamento d ON e.cod_depto = d.cod_depto
 LEFT JOIN proyecto p ON d.cod_depto = p.cod_depto
 WHERE e.salario > (SELECT AVG(salario) FROM empleado)
 ORDER BY e.salario DESC;</pre>
-<div class="box box--warning">
+<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 <p><strong>Fin del solucionario.</strong> Puntaje total: 100. Puntaje minimo aprobatorio: 60. Revise que cada respuesta este correctamente justificada.</p>
 </div>
-<div class="nav">
+<div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
 <a class="nav__link" href="semana_07.html">Semana 07</a>
 <a class="nav__link" href="semana_09.html">Semana 09</a>
 </div>
