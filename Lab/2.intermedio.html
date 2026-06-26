@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Intermedio, Agrupaciones y Joins</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'forest' });
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fbf9f4; /* Alabaster Cream */
+            color: #2c3530; /* Forest Slate */
+        }
+        pre, code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="min-h-screen dark:bg-stone-950 dark:text-stone-100 transition-colors duration-300">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl font-extrabold tracking-tight text-emerald-950 dark:text-emerald-300 mb-2">SQL Intermedio, Agrupaciones y Joins</h1>
+            <p class="text-stone-600 dark:text-stone-400 text-sm">Libro de Trabajo de Ejercicios de Base de Datos Enriquecido</p>
+        </header>
+
+        <main class="bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800/80 rounded-3xl p-8 shadow-xl shadow-emerald-950/5">
+            <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-100 mb-6">Fase 2: SQL Intermedio, Agrupaciones y Estrategias de Join</h2>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Esta sección profundiza en las operaciones relacionales de proyección agrupada y combinación de conjuntos. El enfoque técnico recae sobre cómo el optimizador de PostgreSQL decide entre algoritmos de agregación y métodos de <em>Join</em> físicos según las estadísticas de cardinalidad.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 1: Agrupación Estricta y Filtrado Post-Agregación</h3>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><strong>Enunciado de Negocio / Pregunta de Entrevista:</strong> Determine el monto total de ventas (sin descuento) por cada empleado, considerando únicamente a aquellos empleados cuyas ventas totales superen los $100,000. Ordene el resultado de mayor a menor.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">🏫 Explicación Sencilla (Nivel Secundaria)</h4>
+<div class="my-6 p-5 bg-amber-500/10 border-l-4 border-amber-500 rounded-r-2xl"><div class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 mb-1">💡 Analogía Didáctica</div><p class="text-stone-700 dark:text-stone-300 italic text-sm leading-relaxed"><strong>La analogía del festival de ventas del colegio:</strong> Imagina que varios alumnos vendieron rifas para el viaje de promoción. Cada vez que hacían una venta, se anotaba en una lista gigante (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FROM orders JOIN order_details</code>). Al final del día, el profesor quiere premiar solo a los alumnos que recaudaron más de $100,000 en total.  Para resolverlo: 1. Juntas todas las rifas vendidas y las apilas según el nombre del alumno que las vendió (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY employee_id</code>). 2. Sumas el dinero de cada pila para saber el total de cada alumno (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM(unit_price * quantity)</code>). 3. El profesor va fila por fila de alumnos: si la pila tiene $100,000 o menos, la descarta. Solo se queda con los que superaron la meta (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code>). 4. Finalmente, acomoda las pilas de los ganadores de mayor a menor recaudación (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY</code>).</p></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">🧠 1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Al utilizar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code>, PostgreSQL debe agrupar tuplas que comparten la misma clave de agrupación. El motor seleccionará entre un <em>HashAggregate</em> (construyendo una tabla hash en memoria si cabe en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">work_mem</code>) o un <em>GroupAggregate</em> (que requiere que los datos estén previamente ordenados). La cláusula <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> actúa como un filtro secundario aplicado <em>después</em> de la agregación, a diferencia de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code>, que filtra <em>antes</em>. Si el volumen de grupos es pequeño, el <em>HashAggregate</em> es típicamente el plan elegido por su menor costo de I/O.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">📊 2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    A[Seq Scan: orders &amp; order_details] --&gt; B(Hash Join)
+    B --&gt; C{work_mem: HashAggregate \n GROUP BY employee_id}
+    C --&gt; D[Calcular SUM: total_sales]
+    D --&gt; E{HAVING \n total_sales &gt; 100000}
+    E --&gt;|Falla| F[Descartar Grupo]
+    E --&gt;|Pasa| G[work_mem: Sort \n ORDER BY total_sales DESC]
+    G --&gt; H[Client: ResultSet]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>EXPLAIN (ANALYZE, BUFFERS)
+SELECT 
+    o.employee_id,
+    SUM(od.unit_price * od.quantity) AS total_sales
+FROM 
+    orders o
+JOIN 
+    order_details od ON o.order_id = od.order_id
+GROUP BY 
+    o.employee_id
+HAVING 
+    SUM(od.unit_price * od.quantity) &gt; 100000
+ORDER BY 
+    total_sales DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">💡 Tips del Profesor (Cloud & Data Architect)</h4>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li>  <strong>Diferencia Crítica (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code> vs <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code>):</strong> Recuerda que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code> filtra registros individuales antes de que se agrupen (ej. "solo ventas del año 1997"), mientras que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> filtra totales agrupados después de la suma. Intentar poner <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE SUM(...) > 100000</code> dará un error sintáctico inmediato.</li>
+<li>  <strong>Indices y Joins:</strong> Si la consulta corre lenta en producción, revisa que la tabla <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code> tenga un índice en la columna <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_id</code>. Al ser una llave primaria compuesta <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">(order_id, product_id)</code>, PostgreSQL crea el índice automáticamente, lo que optimiza el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">JOIN</code>.</li>
+</ul>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 2: Combinación de Conjuntos Multitabla (Joins)</h3>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><strong>Enunciado de Negocio / Pregunta de Entrevista:</strong> Genere un reporte que muestre el ID de la orden, el nombre del producto, el nombre de la categoría y la cantidad vendida. Se requiere cruzar información de tres tablas principales.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">🏫 Explicación Sencilla (Nivel Secundaria)</h4>
+<div class="my-6 p-5 bg-amber-500/10 border-l-4 border-amber-500 rounded-r-2xl"><div class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 mb-1">💡 Analogía Didáctica</div><p class="text-stone-700 dark:text-stone-300 italic text-sm leading-relaxed"><strong>La analogía de las piezas de rompecabezas:</strong> Tienes tres cajas con información incompleta: 1. La caja de "Boletas de compra" (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code>) que dice: "Se vendieron 5 unidades del producto #42 en la orden #10248". 2. La caja de "Catálogo de Productos" (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code>) que dice: "El producto #42 se llama 'Queso Cabrales' y pertenece a la categoría #4". 3. La caja de "Categorías" (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">categories</code>) que dice: "La categoría #4 se llama 'Lácteos'".  Para armar el reporte final, usas un pegamento llamado <strong><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">JOIN</code></strong> que une las piezas usando los códigos en común: - Pegas las boletas con los productos usando el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">product_id</code>. - Pegas ese resultado con las categorías usando el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">category_id</code>. Al final, tienes una sola gran tabla que dice: "Orden #10248 | Queso Cabrales | Lácteos | 5 unidades".</p></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">🧠 1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">La resolución de múltiples <em>JOINs</em> requiere que el motor determine el orden óptimo de combinación (Join Tree). Para unir <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code> y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">categories</code>, el planificador evaluará estadísticas. Generalmente, elegirá un <em>Hash Join</em> si las tablas internas caben en memoria, construyendo un <em>Hash Table</em> sobre la relación más pequeña (ej. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">categories</code> o <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code>) y escaneando la más grande (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code>) para encontrar coincidencias. Si existen índices efectivos y alta selectividad, podría optar por un <em>Nested Loop Join</em>.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">📊 2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    A[Seq Scan: categories] --&gt;|Build| B(Hash Table 1)
+    C[Seq Scan: products] --&gt;|Probe &amp; Build| D(Hash Table 2 + Hash Join)
+    B --&gt; D
+    E[Seq Scan: order_details] --&gt;|Probe| F(Hash Join Final)
+    D --&gt; F
+    F --&gt; G[Proyección: SELECT]
+    G --&gt; H[Client: ResultSet]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>EXPLAIN (ANALYZE, BUFFERS)
+SELECT 
+    od.order_id,
+    p.product_name,
+    c.category_name,
+    od.quantity
+FROM 
+    order_details od
+INNER JOIN 
+    products p ON od.product_id = p.product_id
+INNER JOIN 
+    categories c ON p.category_id = c.category_id;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">💡 Tips del Profesor (Cloud & Data Architect)</h4>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li>  <strong>Alias de Tablas:</strong> Usa alias cortos (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">od</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">p</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">c</code>) para hacer el código legible y evitar confusiones en bases de datos con cientos de tablas. Esto evita el error de ambigüedad si dos tablas tienen columnas con el mismo nombre.</li>
+<li>  <strong>Order of Joins:</strong> Aunque escribas el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FROM</code> en un orden, el motor de PostgreSQL (el Optimizador) decidirá en qué orden real unir las tablas según el peso de cada una. No te preocupes por el orden de los <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">INNER JOIN</code> en el código, el motor siempre buscará el más eficiente.</li>
+</ul>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 3: Anti-Joins y Detección de Ausencias</h3>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><strong>Enunciado de Negocio / Pregunta de Entrevista:</strong> Encuentre todos los productos que nunca han sido ordenados. Utilice una combinación externa.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">🏫 Explicación Sencilla (Nivel Secundaria)</h4>
+<div class="my-6 p-5 bg-amber-500/10 border-l-4 border-amber-500 rounded-r-2xl"><div class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 mb-1">💡 Analogía Didáctica</div><p class="text-stone-700 dark:text-stone-300 italic text-sm leading-relaxed"><strong>La analogía del inventario que junta polvo:</strong> Tienes una lista de todos los productos de tu tienda (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code>) y una caja llena de boletas de productos vendidos (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code>). Quieres saber cuáles de tus productos nunca se han vendido.  Lo que haces es poner la lista completa de productos sobre la mesa, y al costado colocas la boleta de venta si es que existe (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEFT JOIN products con order_details</code>). - Para los productos vendidos, verás el número de boleta al lado. - Para los productos que <strong>nunca se vendieron</strong>, el espacio de la boleta estará completamente vacío o en blanco (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IS NULL</code>). Al final, solo filtras tu lista para quedarte con los que tienen ese espacio vacío en la boleta.</p></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">🧠 1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Para resolver consultas de exclusión o "ausencia de", el patrón clásico es un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEFT JOIN</code> acoplado con una validación <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IS NULL</code> sobre la llave foránea del lado derecho. A nivel de ejecución lógica, el motor procesa un <em>Anti-Join</em>. Un <em>Hash Anti Join</em> o <em>Merge Anti Join</em> es altamente eficiente, ya que el motor puede detener la búsqueda para un producto tan pronto como encuentra la primera orden asociada, descartando la tupla inmediatamente y emitiendo solo aquellas que jamás encontraron coincidencia.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">📊 2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    A[Seq Scan: products] --&gt; B(LEFT JOIN)
+    C[Index/Seq Scan: order_details] --&gt; B
+    B --&gt; D{od.order_id IS NULL?}
+    D --&gt;|Falso: Tiene órdenes| E[Descartar]
+    D --&gt;|Verdadero: Anti-Join match| F[Proyectar Producto]
+    F --&gt; G[Client: ResultSet]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>EXPLAIN (ANALYZE, BUFFERS)
+SELECT 
+    p.product_id,
+    p.product_name
+FROM 
+    products p
+LEFT JOIN 
+    order_details od ON p.product_id = od.product_id
+WHERE 
+    od.order_id IS NULL;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">💡 Tips del Profesor (Cloud & Data Architect)</h4>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li>  <strong>LEFT JOIN + IS NULL vs NOT EXISTS:</strong> Ambas opciones son válidas en PostgreSQL y el optimizador suele transformarlas en el mismo plan físico (<em>Hash Anti Join</em>). Sin embargo, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT EXISTS</code> suele ser más legible para otros desarrolladores. Evita usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT IN</code> si hay columnas que pueden contener <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULL</code>, ya que podría devolver cero registros inesperadamente.</li>
+<li>  <strong>Filtro correcto:</strong> Siempre debes aplicar el filtro <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IS NULL</code> en una columna que sea obligatoria (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT NULL</code>) en la tabla de la derecha (como la llave primaria <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_id</code>). Si usas una columna opcional, podrías tener falsos positivos si esa columna era nula por otras razones.</li>
+</ul>
+        </main>
+
+        <footer class="mt-12 text-center text-xs text-stone-500 dark:text-stone-600">
+            <p>© 2026 PostgreSQL Academy | Academia de Arquitectura de Datos</p>
+        </footer>
+    </div>
+</body>
+</html>
