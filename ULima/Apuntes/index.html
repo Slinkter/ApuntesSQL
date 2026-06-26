@@ -1,13 +1,54 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ingenieria de Datos — Indice del Curso</title>
     <link rel="stylesheet" href="master.css">
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+<style>
+        @custom-variant dark (&:where(.dark, .dark *));
+        .theme-toggle-btn {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+            padding: 0.35rem 0.75rem;
+            border: 1px solid #111111;
+            background-color: #ffffff;
+            color: #111111;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        html.dark .theme-toggle-btn {
+            border-color: #333333;
+            background-color: #121212;
+            color: #f0f0f0;
+        }
+        .theme-toggle-btn:hover {
+            background-color: #111111;
+            color: #ffffff;
+        }
+        html.dark .theme-toggle-btn:hover {
+            background-color: #ffffff;
+            color: #111111;
+        }
+</style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300 p-6 md:p-12">
+    <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-12 shadow-xl text-center max-w-5xl mx-auto mb-12 relative overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-1.5 before:bg-gradient-to-r before:from-blue-600 before:to-emerald-500">
         <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3">Ingenieria de Datos</h1>
         <p class="text-base md:text-lg font-medium text-slate-500 dark:text-slate-400">Universidad de Lima | 16 Semanas | Silabo 2013-2</p>
@@ -119,5 +160,31 @@
             <li class="bg-white dark:bg-slate-850 p-5 rounded-2xl border border-slate-200 dark:border-slate-800/80 text-sm font-medium text-slate-700 dark:text-slate-300 shadow-sm hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all duration-300"><strong>Fase 3 (S14-S15):</strong> Data Warehouse y Alta Disponibilidad</li>
         </ul>
     </div>
+
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        
+        function updateToggleText() {
+            if (document.documentElement.classList.contains('dark')) {
+                themeToggleBtn.textContent = '[ MODO: CLARO ]';
+            } else {
+                themeToggleBtn.textContent = '[ MODO: OSCURO ]';
+            }
+        }
+        
+        updateToggleText();
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+            updateToggleText();
+        });
+    </script>
 </body>
+
 </html>
