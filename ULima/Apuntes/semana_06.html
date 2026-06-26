@@ -33,6 +33,35 @@
 </ul>
 </aside>
 <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        
+        <!-- Enfoque Arquitecto: Conceptos Avanzados de DER -->
+        <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Modelamiento Conceptual Relacional Puro</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                El diseño relacional formal se basa en modelar fielmente las reglas de negocio en el Diagrama Entidad-Relación (DER/ERD) antes de estructurar tablas físicas. Esto incluye conceptos como:
+            </p>
+            <ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li><strong>Estructuras de Herencia:</strong> Supertipos y subtipos (como una entidad <code>Empleado</code> especializada en <code>Contratado</code> y <code>Freelance</code>).</li>
+                <li><strong>Relaciones N-arias:</strong> Relaciones que vinculan a tres o más entidades de forma simultánea. Deben deconstruirse en tablas de intersección para su correcta implementación física.</li>
+                <li><strong>Cardinalidades Complejas:</strong> Definición estricta de límites mínimos y máximos de participación para evitar inconsistencias relacionales.</li>
+            </ul>
+        </section>
+        
+        
+        <!-- Enfoque Cloud: Herencia en Base de Datos Física -->
+        <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Estrategias de Herencia de Tablas en PostgreSQL</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+                Al mapear la herencia del DER al esquema físico en PostgreSQL, existen tres aproximaciones clásicas:
+            </p>
+            <ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li><strong>Tabla Única (Single Table Inheritance):</strong> Almacena todas las entidades en una sola tabla con una columna discriminadora y muchas columnas nulas. Búsqueda rápida, pero desperdicio de espacio.</li>
+                <li><strong>Tabla por Clase (Table per Class):</strong> Tablas separadas para cada subtipo. Evita nulos, pero requiere pesados <code>UNION</code> en consultas globales de supertipo.</li>
+                <li><strong>Herencia Nativa de PostgreSQL (INHERITS):</strong> Uso de la sentencia nativa <code>CREATE TABLE ... INHERITS</code>. El planificador resuelve automáticamente las consultas sobre el supertipo leyendo las tablas hijas de forma integrada.</li>
+            </ul>
+        </section>
+        
+
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p><strong>Objetivos de Aprendizaje</strong></p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
@@ -196,6 +225,84 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
 <canvas height="360" id="canvas_06" width="800"></canvas>
 <div class="canvas-controls" id="controls_06"></div>
 </div>
+
+        <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                </span>
+                💡 Tips del Profesor
+            </h2>
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Cuidado con la herencia nativa y las PKs:</strong> Las restricciones de clave primaria y unicidad en tablas padre de PostgreSQL NO se heredan ni se validan automáticamente a través de las tablas hijas. Planifique con cuidado.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Modelado para DW vs OLTP:</strong> En OLTP, priorice la normalización del DER para garantizar transacciones ultra rápidas sin anomalías. En Data Warehouses, prefiera esquemas desnormalizados (estrella/copo de nieve).</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Use diagramas ER vivos:</strong> Almacene la definición del DER en código de texto plano (como Mermaid.js) dentro de su repositorio Git para mantener la documentación sincronizada.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-10">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                </span>
+                ✍️ Autoevaluación y Ejercicios Prácticos
+            </h2>
+            <div class="space-y-4">
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
+                            ¿Qué es una relación débil en el Diagrama Entidad-Relación?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Es una entidad cuya existencia depende de otra entidad fuerte (padre). Su clave primaria está compuesta total o parcialmente por la clave primaria de la entidad fuerte.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
+                            ¿Qué limitación tiene la estrategia de Tabla Única al mapear herencia?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Provoca que la tabla contenga muchas columnas que aceptan valores nulos, violando el control estricto del dominio de datos y aumentando innecesariamente el ancho de fila en disco.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
+                            ¿Cómo resuelve PostgreSQL una consulta SELECT sobre una tabla padre con INHERITS?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">El motor realiza una consulta interna recorriendo la tabla padre y todas las tablas hijas asociadas, a menos que se especifique la cláusula <code>ONLY</code> (ej. <code>SELECT * FROM ONLY padre;</code>).</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
 <div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
 <a class="nav__link" href="semana_05.html">Semana 05</a>
 <a class="nav__link" href="semana_07.html">Semana 07</a>

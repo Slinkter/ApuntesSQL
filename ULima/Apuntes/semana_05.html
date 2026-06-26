@@ -33,6 +33,35 @@
 </ul>
 </aside>
 <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        
+        <!-- Enfoque Arquitecto: DML e Internals de MVCC -->
+        <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">PostgreSQL Internals: DML y MVCC</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                PostgreSQL implementa control de concurrencia mediante <strong>MVCC (Multi-Version Concurrency Control)</strong>. Cuando ejecuta un <code>UPDATE</code> o <code>DELETE</code>, el motor no sobrescribe ni borra físicamente la fila en el disco de inmediato:
+            </p>
+            <ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li><strong>DELETE:</strong> Marca la tupla existente como "muerta" (inactiva) al registrar el ID de transacción de eliminación.</li>
+                <li><strong>UPDATE:</strong> Funciona como un <code>DELETE</code> de la tupla antigua y un <code>INSERT</code> de la nueva tupla con los datos actualizados.</li>
+                <li><strong>Bloating:</strong> El espacio ocupado por tuplas muertas no se libera automáticamente al sistema operativo. Se requiere el proceso de <code>VACUUM</code> para limpiar estas tuplas y hacer reutilizable el espacio en las páginas de datos de 8KB.</li>
+            </ul>
+        </section>
+        
+        
+        <!-- Enfoque Cloud: EXPLAIN ANALYZE y Buffers -->
+        <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Lectura del Plan de Ejecución con EXPLAIN</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+                Para auditar el rendimiento de una consulta DML (como un <code>SELECT</code> de filtrado), ejecute <code>EXPLAIN (ANALYZE, BUFFERS)</code>. Esto forzará la ejecución de la consulta de forma segura y retornará métricas reales de:
+            </p>
+            <ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li><strong>Sec Scan (Sequential Scan):</strong> Lectura de todas las páginas de la tabla. Costoso para tablas grandes.</li>
+                <li><strong>Shared Read (I/O de disco):</strong> Páginas leídas directamente desde el sistema de almacenamiento cloud.</li>
+                <li><strong>Shared Hit (Buffer Cache):</strong> Páginas recuperadas instantáneamente desde la memoria RAM del servidor de BD.</li>
+            </ul>
+        </section>
+        
+
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p><strong>Objetivos de Aprendizaje</strong></p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
@@ -182,6 +211,84 @@ WHERE codigo_cliente = 1;</pre>
 <canvas height="360" id="canvas_05" width="800"></canvas>
 <div class="canvas-controls" id="controls_05"></div>
 </div>
+
+        <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                </span>
+                💡 Tips del Profesor
+            </h2>
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite SELECT * en producción:</strong> Recuperar columnas innecesarias incrementa el tráfico de red, sobrecarga la memoria RAM y bloquea la capacidad del planificador de usar Index-Only Scans.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Autovacuum Tuning:</strong> Asegúrese de configurar correctamente los parámetros de autovacuum en su instancia de RDS para evitar el temido 'Table Bloating' en tablas con alto volumen de modificaciones.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Cuidado con DELETE sin WHERE:</strong> Borrar millones de registros uno a uno genera millones de registros en el WAL (Write-Ahead Log) y genera millones de tuplas muertas. Si desea vaciar una tabla completa, prefiera <code>TRUNCATE TABLE</code>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-10">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                </span>
+                ✍️ Autoevaluación y Ejercicios Prácticos
+            </h2>
+            <div class="space-y-4">
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
+                            ¿Qué ocurre internamente en PostgreSQL cuando se ejecuta un UPDATE de una fila?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Se marca la tupla actual como inactiva (muerta) y se inserta una nueva tupla (versión física) en una página de la base de datos con los nuevos valores y el ID de transacción de inserción.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
+                            ¿Por qué es importante utilizar EXPLAIN (ANALYZE, BUFFERS) en lugar de un simple EXPLAIN?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Porque <code>EXPLAIN</code> solo calcula una estimación teórica del planificador, mientras que <code>ANALYZE</code> y <code>BUFFERS</code> ejecuta la consulta real mostrando tiempos exactos e impacto de I/O en caché y disco.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
+                            ¿Qué ventaja tiene TRUNCATE sobre un DELETE sin cláusula WHERE?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><code>TRUNCATE</code> es una instrucción DDL que libera instantáneamente el espacio en disco eliminando los archivos de datos subyacentes y requiere muy pocos recursos de WAL, a diferencia de <code>DELETE</code> que procesa fila por fila.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
 <div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
 <a class="nav__link" href="semana_04.html">Semana 04</a>
 <a class="nav__link" href="semana_06.html">Semana 06</a>

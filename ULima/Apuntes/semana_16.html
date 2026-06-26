@@ -37,6 +37,30 @@
     </aside>
 
     <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        
+        <!-- Enfoque Arquitecto: Consolidación del Curso -->
+        <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">La Evaluación Final: Maestría Relacional</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                El examen mock final abarca de manera integral la teoría relacional completa: desde el modelado conceptual puro, pasando por la optimización física de índices, y finalizando en la implementación robusta de lógica procedimental PL/pgSQL y resiliencia en la nube.
+            </p>
+        </section>
+        
+        
+        <!-- Enfoque Cloud: Checklist del Senior DBA -->
+        <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">La Perspectiva del DBA Cloud para el Examen Mock</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+                Para resolver con éxito los ejercicios de arquitectura y rendimiento del examen:
+            </p>
+            <ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li>Valide que los índices creados cubran las condiciones de búsqueda en las consultas clave.</li>
+                <li>Garantice que las transacciones complejas usen niveles de aislamiento adecuados (READ COMMITTED / SERIALIZABLE).</li>
+                <li>Diseñe sus funciones procedimentales limitando el consumo de recursos en memoria RAM.</li>
+            </ul>
+        </section>
+        
+
 
         <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Evaluacion Final: Arquitectura de Datos (Semanas 09-15)</h2>
@@ -439,7 +463,85 @@ CREATE TABLE FACT_VENTAS (
             <p><strong>Fin del examen.</strong> Revisa todas tus respuestas antes de entregar. Asegurate de que los bloques PL/SQL tengan la sintaxis correcta y que las consultas SQL se ejecuten sin errores sintacticos.</p>
         </div>
 
-        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+        
+        <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                </span>
+                💡 Tips del Profesor
+            </h2>
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Audite sus queries con EXPLAIN antes del despliegue:</strong> Un senior developer nunca asume que una consulta es rápida; la verifica con planes de ejecución reales.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Aplique seguridad por diseño:</strong> Configure permisos de acceso restringidos y use Row-Level Security (RLS) en sus tablas de producción.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Automatice backups de forma proactiva:</strong> Ninguna estrategia de alta disponibilidad reemplaza a una sólida y probada política de copias de seguridad en frío y Point-in-Time Recovery (PITR).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-10">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                </span>
+                ✍️ Autoevaluación y Ejercicios Prácticos
+            </h2>
+            <div class="space-y-4">
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
+                            Cómo se previene el problema del table bloating en PostgreSQL en producción?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Mediante el ajuste constante de los parámetros del Autovacuum para procesar tuplas muertas de forma concurrente sin degradar el rendimiento general, o mediante reconstrucciones periódicas con pg_repack.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
+                            Qué nivel de aislamiento de transacciones de SQL evita las lecturas no repetibles pero permite anomalías de serialización?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">El nivel de aislamiento es <code>REPEATABLE READ</code>. Evita lecturas sucias y no repetibles, pero requiere <code>SERIALIZABLE</code> para prevenir anomalías de escritura desordenada.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
+                            Cuál es el beneficio de separar el almacenamiento analítico (OLAP) del transaccional (OLTP)?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Evita que las pesadas y costosas consultas analíticas de reportes que escanean millones de registros afecten el rendimiento de las transacciones rápidas de escrituras de los usuarios activos de la aplicación.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+<nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
             <a href="semana_15.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 15 - HA</a>
             <a href="index.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Indice del Curso</a>
         </nav>

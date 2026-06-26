@@ -33,6 +33,33 @@
 </ul>
 </aside>
 <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        
+        <!-- Enfoque Arquitecto: Normalización y Armstrong -->
+        <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">La Teoría de Normalización de Codd</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                La normalización es el proceso formal de descomposición de relaciones para eliminar la redundancia y prevenir anomalías transaccionales. Se apoya en el estudio de las <strong>Dependencias Funcionales (DF)</strong> y se rige por reglas matemáticas como los Axiomas de Armstrong (Reflexividad, Aumento y Transitividad).
+            </p>
+            <ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li><strong>1FN:</strong> Valores atómicos en cada atributo. Sin grupos repetitivos.</li>
+                <li><strong>2FN:</strong> Cumple 1FN y todos los atributos no clave tienen dependencia funcional completa respecto a la Clave Primaria (no dependen de partes de una PK compuesta).</li>
+                <li><strong>3FN:</strong> Cumple 2FN y no existen dependencias transitivas (ningún atributo no clave depende de otro atributo no clave).</li>
+            </ul>
+        </section>
+        
+        
+        <!-- Enfoque Cloud: Normalización y Latencia I/O -->
+        <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Impacto de la Normalización en la Latencia Cloud</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+                Un diseño altamente normalizado (3FN o superior) ahorra espacio físico en disco y mantiene la consistencia relacional. Sin embargo, en bases de datos cloud, consultas complejas que requieren múltiples JOINs para reconstruir una entidad de negocio pueden degradar la latencia de respuesta debido al I/O de red necesario para combinar datos dispersos en disco.
+            </p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                <strong>Recomendación:</strong> Normalice siempre por diseño original. Si el rendimiento lo exige bajo perfiles reales de carga, aplique estrategias de desnormalización controlada acompañadas de vistas materializadas.
+            </p>
+        </section>
+        
+
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p><strong>Objetivos de Aprendizaje</strong></p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
@@ -266,6 +293,84 @@ Linea_Factura (nro_factura, cod_articulo,
 <canvas height="360" id="canvas_07" width="800"></canvas>
 <div class="canvas-controls" id="controls_07"></div>
 </div>
+
+        <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                </span>
+                💡 Tips del Profesor
+            </h2>
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Identifique anomalías a tiempo:</strong> Si al insertar un nuevo registro se ve obligado a inventar datos temporales para campos obligatorios, su diseño sufre anomalías de inserción y requiere normalización.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite dependencias transitivas:</strong> Si una columna C depende de B, y B depende de la clave primaria A, entonces C debe migrarse a una tabla independiente junto con B.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Guarde datos en su forma más atómica:</strong> No concatene nombres y apellidos en una sola columna; separarlos facilita el uso de índices b-tree para ordenamientos.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-10">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                </span>
+                ✍️ Autoevaluación y Ejercicios Prácticos
+            </h2>
+            <div class="space-y-4">
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
+                            ¿Qué es una anomalía de modificación en una tabla desnormalizada?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Es la inconsistencia que surge cuando un dato duplicado se actualiza en un registro pero no en los demás, dejando a la base de datos en un estado contradictorio.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
+                            ¿Cuándo se aplica la Segunda Forma Normal (2FN)?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Solo es relevante cuando la tabla posee una clave primaria compuesta. Exige que ningún atributo no clave dependa únicamente de una parte de esa clave primaria.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
+                            ¿Cuál es la regla de oro de la Tercera Forma Normal (3FN)?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Que los atributos no clave dependan directamente de la clave primaria, de toda la clave primaria y de nada más que de la clave primaria ('so help me Codd').</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
 <div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
 <a class="nav__link" href="semana_06.html">Semana 06</a>
 <a class="nav__link" href="semana_08.html">Semana 08: Examen Parcial</a>

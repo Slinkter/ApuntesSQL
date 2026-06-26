@@ -79,6 +79,34 @@
     <!-- MAIN CONTENT (Right Column) -->
     <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
         
+        <!-- Enfoque Arquitecto: Evolución e Historia Relacional -->
+        <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Evolución de los Modelos de Datos</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                Antes del modelo relacional propuesto por Edgar F. Codd en 1970 y defendido por C.J. Date, los sistemas de bases de datos se basaban en estructuras jerárquicas (como <strong>IMS</strong> de IBM) y de red (como <strong>CODASYL</strong>). Estos modelos acoplaban la lógica de la aplicación con la estructura física del almacenamiento, requiriendo que los desarrolladores conocieran los "punteros" físicos en el disco para navegar por los datos. El modelo relacional separó de forma definitiva la representación lógica de la física a través del álgebra relacional.
+            </p>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200">
+                CODASYL (Red):  [Registro Cliente] ---> (Puntero Físico) ---> [Registro Pedido]
+                Relacional:      SELECT * FROM Pedido WHERE ID_Cliente = 'C01'; -- Independencia de Ruta
+            </div>
+        </section>
+        
+        
+        <!-- Enfoque Cloud: Object Stores vs. Serverless DBs -->
+        <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Nube y Persistencia: Estructuras vs. Object Stores</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+                En arquitecturas cloud modernas, el almacenamiento se bifurca:
+            </p>
+            <ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li><strong>Bases de Datos Relacionales (RDS, Aurora):</strong> Datos altamente estructurados con soporte ACID estricto.</li>
+                <li><strong>Almacenamiento de Objetos (AWS S3, Google Cloud Storage):</strong> Escalabilidad infinita para datos no estructurados a bajo costo, pero sin consistencia transaccional inmediata en escrituras distribuidas.</li>
+                <li><strong>Bases de Datos Serverless (Aurora Serverless v2, DynamoDB):</strong> Escalado automático de capacidad en función de la demanda, reduciendo costos cuando no hay tráfico.</li>
+            </ul>
+        </section>
+        
+
+        
         <!-- Objective Box -->
         <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
             <h4 class="text-blue-800 dark:text-blue-300 font-bold mb-3 flex items-center gap-2">
@@ -312,7 +340,85 @@
         </div>
 
         <!-- Navigation Footer -->
-        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+        
+        <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                </span>
+                💡 Tips del Profesor
+            </h2>
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Dato != Información:</strong> En producción, almacenar datos sin contexto operativo o temporal limita el análisis de BI. Registre siempre timestamps y metadatos de auditoría.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Redundancia es Inconsistencia:</strong> En entornos distribuidos, la redundancia no controlada destruye la veracidad de la información y requiere complejas estrategias de reconciliación.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Diseño vs. Vistas:</strong> Diseñe el esquema relacional pensando en la pureza del modelo lógico, no en cómo se mostrará la interfaz de usuario.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-10">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                </span>
+                ✍️ Autoevaluación y Ejercicios Prácticos
+            </h2>
+            <div class="space-y-4">
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
+                            ¿Cuál es la principal diferencia entre dato e información?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">El dato es un hecho bruto, objetivo y sin procesar (ej. 3.50). La información es el dato procesado con un contexto y propósito que reduce la incertidumbre (ej. El precio de la manzana es 3.50).</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
+                            ¿Qué limitación tenían los sistemas de archivos tradicionales frente a un DBMS?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Tenían dependencia absoluta entre programas y datos, alta redundancia, inconsistencia por falta de sincronización y dificultad extrema para compartir datos de manera segura y concurrente.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
+                            ¿Qué significa que un DBMS proporcione independencia física de los datos?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Significa que la forma en que los datos se almacenan en el hardware (disco, orden de bytes, compresión) puede modificarse sin necesidad de alterar los programas de aplicación que consultan el esquema lógico.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+<nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
             <a href="index.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Volver al Índice</a>
             <a href="semana_02.html" class="px-5 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm">Siguiente Semana</a>
         </nav>

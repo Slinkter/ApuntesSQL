@@ -40,6 +40,35 @@
     </aside>
 
     <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        
+        <!-- Enfoque Arquitecto: Alta Disponibilidad Teórica -->
+        <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Fundamentos de Alta Disponibilidad (HA)</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                La resiliencia en bases de datos relacionales garantiza la continuidad del negocio ante fallos físicos de hardware. Los conceptos clave incluyen:
+            </p>
+            <ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li><strong>SLA (Service Level Agreement):</strong> El porcentaje de tiempo de actividad garantizado (ej. 99.99%).</li>
+                <li><strong>RPO (Recovery Point Objective):</strong> Cantidad de pérdida de datos aceptable medida en tiempo ante un desastre.</li>
+                <li><strong>RTO (Recovery Time Objective):</strong> Tiempo máximo tolerado para restaurar la base de datos después de una caída.</li>
+            </ul>
+        </section>
+        
+        
+        <!-- Enfoque Cloud: Log Shipping, RDS y Aurora -->
+        <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Replicación y Failover en la Nube</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+                Las estrategias de replicación en entornos cloud como AWS RDS e IBM Cloud se dividen en:
+            </p>
+            <ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li><strong>Log Shipping (Física/Síncrona):</strong> Envío de bloques del Write-Ahead Log (WAL) a servidores secundarios.</li>
+                <li><strong>AWS RDS Multi-AZ:</strong> Replicación síncrona a nivel de bloques de almacenamiento a una base secundaria pasiva en otra zona de disponibilidad. Proporciona failover automático transparente.</li>
+                <li><strong>Aurora Global Databases:</strong> Replicación física de latencia menor a un segundo orientada a múltiples regiones mundiales con el fin de resolver desastres globales.</li>
+            </ul>
+        </section>
+        
+
         <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
             <p><strong>Objetivos:</strong> Comprender los conceptos fundamentales de alta disponibilidad en bases de datos. Conocer las tecnologias de SQL Server para HA: Log Shipping, Database Mirroring, Failover Clustering y AlwaysOn. Entender los modos de espera HOT, WARM y COLD, y las metricas SLA, RPO y RTO.</p>
         </div>
@@ -397,7 +426,85 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;</pre>
             <canvas id="canvas_15" width="800" height="360"></canvas>
             <div id="controls_15" class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800"></div>
         </div>
-        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+        
+        <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                </span>
+                💡 Tips del Profesor
+            </h2>
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Use réplicas de lectura para desacoplar lecturas:</strong> Configure el pool de conexiones de su backend para dirigir consultas analíticas o SELECTs pesados hacia las réplicas de lectura, liberando de carga a la instancia principal transaccional.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Valide el comportamiento del Failover:</strong> Realice simulacros periódicos de caída del nodo principal para certificar que el software de aplicación reconecte automáticamente al nuevo nodo primario sin fallas catastróficas.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Diferencie Multi-AZ de Réplicas de Lectura:</strong> Multi-AZ se enfoca en alta disponibilidad y recuperación ante desastres (síncrono/pasivo), mientras que las réplicas de lectura se enfocan en escalabilidad de lectura (asíncrono/activo).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-10">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                </span>
+                ✍️ Autoevaluación y Ejercicios Prácticos
+            </h2>
+            <div class="space-y-4">
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
+                            Cuál es la diferencia fundamental entre replicación síncrona y asíncrona?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">La replicación síncrona exige que el nodo primario confirme la escritura local y la confirmación de la copia en el nodo secundario antes de responder un COMMIT exitoso al cliente (cero RPO pero mayor latencia). La asíncrona confirma de inmediato y envía la actualización al secundario después.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
+                            Qué función cumple el proceso de Failover en una arquitectura Multi-AZ?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Ante una falla de hardware en el nodo primario, el sistema automatizado del proveedor cloud redirige los registros DNS hacia la base de datos secundaria pasiva en otra zona física, promoviéndola a principal en minutos sin intervención manual.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
+                            Qué representa la métrica RPO en un plan de recuperación ante desastres?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Representa el Punto Objetivo de Recuperación, es decir, el volumen máximo de pérdida de datos aceptable medido en tiempo transcurrido (ej. perder como máximo 5 minutos de transacciones en caso de desastre).</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+<nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
             <a href="semana_14.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 14</a>
             <a href="semana_16.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 16 - Examen Final</a>
         </nav>

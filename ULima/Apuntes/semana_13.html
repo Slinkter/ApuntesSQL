@@ -37,6 +37,33 @@
     </aside>
 
     <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        
+        <!-- Enfoque Arquitecto: Procedimientos y Triggers -->
+        <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Arquitectura Avanzada: Procedimientos y Triggers</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                En PostgreSQL, la lógica del lado del servidor se clasifica en:
+            </p>
+            <ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li><strong>Funciones:</strong> Ejecutan cálculos lógicos y retornan valores. Pueden configurarse como <code>IMMUTABLE</code> (mismo output ante mismo input), <code>STABLE</code> o <code>VOLATILE</code>.</li>
+                <li><strong>Procedimientos Almacenados (STORED PROCEDURES):</strong> Soportados a partir de PostgreSQL 11, permiten iniciar y finalizar transacciones físicas (<code>COMMIT</code> y <code>ROLLBACK</code>) dentro del bloque de código.</li>
+                <li><strong>Triggers (Disparadores):</strong> Lógica automática asociada a eventos DML. Pueden configurarse a nivel de fila (<code>FOR EACH ROW</code>, usando las variables <code>NEW</code> y <code>OLD</code>) o de sentencia (<code>FOR EACH STATEMENT</code>).</li>
+            </ul>
+        </section>
+        
+        
+        <!-- Enfoque Cloud: Peligro de los Triggers y Bloqueos -->
+        <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Impacto en Latencia y Bloqueos de Fila (Locks)</h3>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+                Los triggers de tipo <code>AFTER ROW</code> ejecutan lógica adicional dentro de la misma transacción física que originó el evento DML. En sistemas de alto tráfico en la nube (OLTP), un trigger mal programado que realice consultas complejas incrementará dramáticamente el tiempo de vida de la transacción.
+            </p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed font-semibold">
+                Riesgo Crítico: Las filas implicadas se mantendrán bloqueadas (Exclusive Locks) por más tiempo del necesario, provocando el encolamiento de otras solicitudes, timeouts y eventuales caídas del servicio por Deadlocks.
+            </p>
+        </section>
+        
+
         <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
             <p><strong>Objetivos:</strong> Comprender y crear procedimientos almacenados, funciones, triggers y paquetes en PL/SQL. Dominar el uso de cursores, parametros y variables de sustitucion.</p>
         </div>
@@ -368,7 +395,85 @@ ORDER BY &nombre_columna;</pre>
             <canvas id="canvas_13" width="800" height="360"></canvas>
             <div id="controls_13" class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800"></div>
         </div>
-        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+        
+        <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                </span>
+                💡 Tips del Profesor
+            </h2>
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite Triggers para lógica de negocio pesada:</strong> Utilice triggers exclusivamente para tareas ligeras de auditoría e integridad. La lógica de negocio compleja debe residir en la capa de servicios de su backend.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Optimice la volatilidad de funciones:</strong> Declare sus funciones como <code>IMMUTABLE</code> si no consultan la base de datos y solo dependen de sus parámetros de entrada. Esto permite al planificador precalcular resultados (Function Inlining) acelerando consultas.</p>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-500 font-bold">&bull;</span>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Cuidado con los bucles infinitos en Triggers:</strong> Un trigger de tipo <code>UPDATE</code> que ejecute internamente un <code>UPDATE</code> sobre la misma tabla provocará recursión infinita a menos que valide adecuadamente la condición de parada.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-10">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                </span>
+                ✍️ Autoevaluación y Ejercicios Prácticos
+            </h2>
+            <div class="space-y-4">
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
+                            ¿Cuál es la diferencia fundamental entre una función (FUNCTION) y un procedimiento (PROCEDURE) en PostgreSQL?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">La diferencia principal es que un <code>PROCEDURE</code> permite controlar transacciones internamente (ejecutar <code>COMMIT</code> o <code>ROLLBACK</code>), mientras que una <code>FUNCTION</code> se ejecuta obligatoriamente dentro del contexto de una transacción activa existente.</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
+                            ¿Qué representan las variables especiales NEW y OLD dentro de un Trigger de fila?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><code>NEW</code> contiene la estructura y datos de la fila que está siendo insertada o actualizada (DML INSERT/UPDATE). <code>OLD</code> contiene la fila en su estado previo a la actualización o eliminación (UPDATE/DELETE).</p>
+                    </div>
+                </details>
+                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+                        <span class="flex items-center gap-3">
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
+                            ¿Qué significa que una función sea declarada como IMMUTABLE?
+                        </span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Significa que la función siempre retornará el mismo valor ante los mismos argumentos de entrada y no realiza consultas externas ni lecturas de tablas. Esto permite al optimizador de PostgreSQL cachear el resultado.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+<nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
             <a href="semana_12.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 12</a>
             <a href="semana_14.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 14 - Data Warehouse</a>
         </nav>
