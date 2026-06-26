@@ -458,33 +458,34 @@ def markdown_to_html(md_content, title):
         }}
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {{
-            --bg-main: #ffffff;       /* Pure Crisp White */
-            --bg-card: #ffffff;
-            --text-main: #111111;     /* High Contrast Black */
-            --text-muted: #666666;
-            --primary: #000000;
-            --accent: #ff3333;        /* Swiss Red */
-            --border: #111111;        /* Sharp 1px Borders */
-            --code-bg: #f5f5f5;
-            --code-text: #ff3333;
-            --shadow: none;
-            --radius-md: 0px;         /* Sharp Corners */
-            --radius-lg: 0px;
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {{
+            --color-bg-main: #ffffff;       /* Pure Crisp White */
+            --color-bg-card: #ffffff;
+            --color-text-main: #111111;     /* High Contrast Black */
+            --color-text-muted: #666666;
+            --color-primary: #000000;
+            --color-accent: #ff3333;        /* Swiss Red */
+            --color-border: #111111;        /* Sharp 1px Borders */
+            --color-code-bg: #f5f5f5;
+            --color-code-text: #ff3333;
+            
+            --font-sitka: 'Sitka Small', 'Sitka Text', 'Sitka Subheading', 'Lora', 'Georgia', serif;
         }}
 
-        :root.dark {{
-            --bg-main: #0a0a0a;   /* Deep Ashen Black */
-            --bg-card: #121212;
-            --text-main: #f0f0f0;
-            --text-muted: #888888;
-            --primary: #ffffff;
-            --accent: #ff5555;    /* Swiss Bright Red */
-            --border: #333333;
-            --code-bg: #181818;
-            --code-text: #ff5555;
-            --shadow: none;
+        @custom-variant dark (&:where(.dark, .dark *));
+
+        .dark {{
+            --color-bg-main: #0a0a0a;   /* Deep Ashen Black */
+            --color-bg-card: #121212;
+            --color-text-main: #f0f0f0;
+            --color-text-muted: #888888;
+            --color-primary: #ffffff;
+            --color-accent: #ff5555;    /* Swiss Bright Red */
+            --color-border: #333333;
+            --color-code-bg: #181818;
+            --color-code-text: #ff5555;
         }}
 
         /* Swiss Minimalist Theme Switcher Button */
@@ -494,9 +495,9 @@ def markdown_to_html(md_content, title):
             right: 1rem;
             z-index: 100;
             padding: 0.35rem 0.75rem;
-            border: 1px solid var(--border);
-            background-color: var(--bg-card);
-            color: var(--text-main);
+            border: 1px solid var(--color-border);
+            background-color: var(--color-bg-card);
+            color: var(--color-text-main);
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
             font-weight: 700;
@@ -504,8 +505,8 @@ def markdown_to_html(md_content, title):
             text-transform: uppercase;
         }}
         .theme-toggle-btn:hover {{
-            background-color: var(--primary);
-            color: var(--bg-main);
+            background-color: var(--color-primary);
+            color: var(--color-bg-main);
         }}
 
         /* Reset and Base Styles */
@@ -516,9 +517,9 @@ def markdown_to_html(md_content, title):
         }}
 
         body {{
-            font-family: 'Sitka Small', 'Sitka Text', 'Sitka Subheading', 'Lora', 'Georgia', 'Times New Roman', serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
+            font-family: var(--font-sitka);
+            background-color: var(--color-bg-main);
+            color: var(--color-text-main);
             line-height: 1.7;
             -webkit-font-smoothing: antialiased;
             padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
@@ -549,7 +550,7 @@ def markdown_to_html(md_content, title):
             font-family: 'Sitka Display', 'Sitka Subheading', 'Lora', 'Georgia', serif;
             font-size: 1.75rem;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--color-primary);
             line-height: 1.25;
             letter-spacing: -0.025em;
             margin-bottom: 0.5rem;
@@ -563,17 +564,17 @@ def markdown_to_html(md_content, title):
 
         header p {{
             font-size: 0.875rem;
-            color: var(--text-muted);
+            color: var(--color-text-muted);
             font-weight: 500;
         }}
 
         /* Main card content */
         main {{
-            background-color: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
+            background-color: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 0px;
             padding: 1.25rem;
-            box-shadow: var(--shadow);
+            box-shadow: none;
         }}
 
         @media (min-width: 640px) {{
@@ -586,17 +587,17 @@ def markdown_to_html(md_content, title):
         article p {{
             margin-bottom: 1.25rem;
             font-size: 0.95rem;
-            color: var(--text-main);
+            color: var(--color-text-main);
         }}
 
         article h2 {{
             font-family: 'Sitka Display', 'Sitka Subheading', 'Lora', 'Georgia', serif;
             font-size: 1.5rem;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--color-primary);
             margin-top: 2rem;
             margin-bottom: 1rem;
-            border-bottom: 2px solid var(--border);
+            border-bottom: 2px solid var(--color-border);
             padding-bottom: 0.5rem;
             letter-spacing: -0.02em;
         }}
@@ -605,10 +606,10 @@ def markdown_to_html(md_content, title):
             font-family: 'Sitka Subheading', 'Lora', 'Georgia', serif;
             font-size: 1.2rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--color-primary);
             margin-top: 1.75rem;
             margin-bottom: 0.75rem;
-            border-left: 4px solid var(--accent);
+            border-left: 4px solid var(--color-accent);
             padding-left: 0.75rem;
         }}
 
@@ -616,7 +617,7 @@ def markdown_to_html(md_content, title):
             font-family: 'Sitka Text', 'Lora', 'Georgia', serif;
             font-size: 1rem;
             font-weight: 700;
-            color: var(--text-main);
+            color: var(--color-text-main);
             margin-top: 1.5rem;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
@@ -627,26 +628,26 @@ def markdown_to_html(md_content, title):
         /* Inline formatting */
         strong {{
             font-weight: 700;
-            color: var(--primary);
+            color: var(--color-primary);
         }}
 
         a {{
-            color: var(--accent);
+            color: var(--color-accent);
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s ease;
         }}
 
         a:hover {{
-            color: var(--text-main);
+            color: var(--color-text-main);
             text-decoration: underline;
         }}
 
         /* Inline code */
         code {{
             font-family: 'JetBrains Mono', monospace;
-            background-color: var(--code-bg);
-            color: var(--code-text);
+            background-color: var(--color-code-bg);
+            color: var(--color-code-text);
             padding: 0.15rem 0.35rem;
             border-radius: 6px;
             font-size: 0.85em;
@@ -670,7 +671,7 @@ def markdown_to_html(md_content, title):
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             margin: 1.5rem 0;
-            border: 1px solid var(--border);
+            border: 1px solid var(--color-border);
         }}
 
         table {{
@@ -683,12 +684,12 @@ def markdown_to_html(md_content, title):
 
         th, td {{
             padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--color-border);
         }}
 
         th {{
-            background-color: var(--code-bg);
-            color: var(--primary);
+            background-color: var(--color-code-bg);
+            color: var(--color-primary);
             font-weight: 700;
             text-transform: uppercase;
             font-size: 0.75rem;
@@ -703,9 +704,9 @@ def markdown_to_html(md_content, title):
         .code-block-wrapper {{
             position: relative;
             margin: 1.5rem 0;
-            border-radius: var(--radius-md);
+            border-radius: 0px;
             overflow: hidden;
-            border: 1px solid var(--border);
+            border: 1px solid var(--color-border);
         }}
 
         .code-lang-badge {{
@@ -741,13 +742,13 @@ def markdown_to_html(md_content, title):
         .pure-html-er-diagram {{
             margin: 2rem 0;
             padding: 1.5rem;
-            border: 1px solid var(--border);
-            background-color: var(--code-bg);
+            border: 1px solid var(--color-border);
+            background-color: var(--color-code-bg);
         }}
 
         .er-relationships {{
             margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--color-border);
             padding-bottom: 1rem;
         }}
 
@@ -767,17 +768,17 @@ def markdown_to_html(md_content, title):
         }}
 
         .entity-badge {{
-            background-color: var(--primary);
-            color: var(--bg-main);
+            background-color: var(--color-primary);
+            color: var(--color-bg-main);
             padding: 0.15rem 0.5rem;
             font-weight: 700;
             text-transform: uppercase;
             font-size: 0.7rem;
-            border: 1px solid var(--border);
+            border: 1px solid var(--color-border);
         }}
 
         .relation-label {{
-            color: var(--text-muted);
+            color: var(--color-text-muted);
             font-weight: 600;
         }}
 
@@ -789,19 +790,19 @@ def markdown_to_html(md_content, title):
         }}
 
         .er-entity-card {{
-            background-color: var(--bg-card);
-            border: 1px solid var(--border);
+            background-color: var(--color-bg-card);
+            border: 1px solid var(--color-border);
         }}
 
         .er-entity-header {{
-            background-color: var(--primary);
-            color: var(--bg-main);
+            background-color: var(--color-primary);
+            color: var(--color-bg-main);
             padding: 0.4rem 0.75rem;
             font-family: 'JetBrains Mono', monospace;
             font-weight: 700;
             font-size: 0.85rem;
             text-transform: uppercase;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--color-border);
         }}
 
         .er-entity-table {{
@@ -813,7 +814,7 @@ def markdown_to_html(md_content, title):
 
         .er-entity-table td {{
             padding: 0.35rem 0.65rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--color-border);
         }}
 
         .er-entity-table tr:last-child td {{
@@ -822,7 +823,7 @@ def markdown_to_html(md_content, title):
 
         .attr-name {{
             font-weight: 600;
-            color: var(--text-main);
+            color: var(--color-text-main);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -830,7 +831,7 @@ def markdown_to_html(md_content, title):
         }}
 
         .attr-type {{
-            color: var(--text-muted);
+            color: var(--color-text-muted);
             text-align: right;
         }}
 
@@ -842,7 +843,7 @@ def markdown_to_html(md_content, title):
         }}
 
         .key-badge.pk {{
-            background-color: var(--accent);
+            background-color: var(--color-accent);
         }}
 
         .key-badge.fk {{
@@ -856,8 +857,8 @@ def markdown_to_html(md_content, title):
             align-items: center;
             margin: 2rem 0;
             padding: 1.5rem 1rem;
-            border: 1px solid var(--border);
-            background-color: var(--code-bg);
+            border: 1px solid var(--color-border);
+            background-color: var(--color-code-bg);
         }}
 
         .flow-node {{
@@ -865,26 +866,26 @@ def markdown_to_html(md_content, title):
             font-size: 0.875rem;
             font-weight: 700;
             text-align: center;
-            border: 1px solid var(--border);
-            background-color: var(--bg-card);
-            color: var(--text-main);
+            border: 1px solid var(--color-border);
+            background-color: var(--color-bg-card);
+            color: var(--color-text-main);
             min-width: 200px;
             max-width: 100%;
         }}
 
         .flow-node-step {{
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--color-primary);
         }}
 
         .flow-node-decision {{
-            border-left: 4px solid var(--accent);
+            border-left: 4px solid var(--color-accent);
             background-color: rgba(255, 51, 51, 0.04);
         }}
 
         .flow-arrow-vertical {{
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
-            color: var(--accent);
+            color: var(--color-accent);
             margin: 0.5rem 0;
             display: flex;
             flex-direction: column;
@@ -894,7 +895,7 @@ def markdown_to_html(md_content, title):
         
         .arrow-label {{
             font-size: 0.7rem;
-            color: var(--text-muted);
+            color: var(--color-text-muted);
             margin-top: 0.1rem;
         }}
 
@@ -917,8 +918,8 @@ def markdown_to_html(md_content, title):
 
         .branch-label {{
             font-size: 0.7rem;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border);
+            background-color: var(--color-bg-card);
+            border: 1px solid var(--color-border);
             padding: 0.1rem 0.4rem;
             margin-top: 0.1rem;
             font-weight: 700;
@@ -931,12 +932,12 @@ def markdown_to_html(md_content, title):
             gap: 1rem;
             margin: 2rem 0;
             padding: 1.5rem;
-            border: 1px solid var(--border);
-            background-color: var(--code-bg);
+            border: 1px solid var(--color-border);
+            background-color: var(--color-code-bg);
         }}
 
         .seq-step {{
-            border-left: 2px solid var(--accent);
+            border-left: 2px solid var(--color-accent);
             padding-left: 1rem;
         }}
 
@@ -944,7 +945,7 @@ def markdown_to_html(md_content, title):
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
             font-weight: 700;
-            color: var(--text-muted);
+            color: var(--color-text-muted);
             margin-bottom: 0.25rem;
         }}
 
@@ -956,23 +957,23 @@ def markdown_to_html(md_content, title):
         .seq-note {{
             font-size: 0.85rem;
             font-style: italic;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border);
+            background-color: var(--color-bg-card);
+            border: 1px solid var(--color-border);
             padding: 0.5rem 1rem;
-            color: var(--text-muted);
+            color: var(--color-text-muted);
         }}
         
         .seq-note-title {{
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
             font-weight: 700;
-            color: var(--accent);
+            color: var(--color-accent);
         }}
 
         /* Callout Boxes */
         .callout-box {{
             padding: 1.25rem;
-            border-radius: var(--radius-md);
+            border-radius: 0px;
             margin: 1.5rem 0;
             border-left: 4px solid;
             font-size: 0.9rem;
@@ -984,20 +985,20 @@ def markdown_to_html(md_content, title):
         }}
 
         .callout-note {{
-            background-color: var(--code-bg);
-            border-color: var(--text-muted);
-            color: var(--text-main);
+            background-color: var(--color-code-bg);
+            border-color: var(--color-text-muted);
+            color: var(--color-text-main);
         }}
 
         .callout-analogy {{
             background-color: rgba(255, 51, 51, 0.04);
-            border-color: var(--accent);
-            color: var(--text-main);
+            border-color: var(--color-accent);
+            color: var(--color-text-main);
         }}
 
         .callout-title {{
             font-weight: 700;
-            color: var(--accent);
+            color: var(--color-accent);
             margin-bottom: 0.25rem;
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -1010,7 +1011,7 @@ def markdown_to_html(md_content, title):
             margin-top: 3rem;
             padding: 1rem;
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: var(--color-text-muted);
         }}
     </style>
 </head>
