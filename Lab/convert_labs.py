@@ -116,7 +116,7 @@ def markdown_to_html(md_content, title):
             document.documentElement.classList.remove('dark');
         }}
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {{
             --bg-main: #ffffff;       /* Pure Crisp White */
@@ -175,7 +175,7 @@ def markdown_to_html(md_content, title):
         }}
 
         body {{
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Sitka Small', 'Sitka Text', 'Sitka Subheading', 'Lora', 'Georgia', 'Times New Roman', serif;
             background-color: var(--bg-main);
             color: var(--text-main);
             line-height: 1.7;
@@ -205,6 +205,7 @@ def markdown_to_html(md_content, title):
         }}
 
         header h1 {{
+            font-family: 'Sitka Display', 'Sitka Subheading', 'Lora', 'Georgia', serif;
             font-size: 1.75rem;
             font-weight: 800;
             color: var(--primary);
@@ -248,6 +249,7 @@ def markdown_to_html(md_content, title):
         }}
 
         article h2 {{
+            font-family: 'Sitka Display', 'Sitka Subheading', 'Lora', 'Georgia', serif;
             font-size: 1.5rem;
             font-weight: 800;
             color: var(--primary);
@@ -259,6 +261,7 @@ def markdown_to_html(md_content, title):
         }}
 
         article h3 {{
+            font-family: 'Sitka Subheading', 'Lora', 'Georgia', serif;
             font-size: 1.2rem;
             font-weight: 700;
             color: var(--primary);
@@ -269,6 +272,7 @@ def markdown_to_html(md_content, title):
         }}
 
         article h4 {{
+            font-family: 'Sitka Text', 'Lora', 'Georgia', serif;
             font-size: 1rem;
             font-weight: 700;
             color: var(--text-main);
