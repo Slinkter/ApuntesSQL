@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2. Ejercicios SQL Nivel Intermedio</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'forest' });
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fbf9f4; /* Alabaster Cream */
+            color: #2c3530; /* Forest Slate */
+        }
+        pre, code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="min-h-screen dark:bg-stone-950 dark:text-stone-100 transition-colors duration-300">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl font-extrabold tracking-tight text-emerald-950 dark:text-emerald-300 mb-2">2. Ejercicios SQL Nivel Intermedio</h1>
+            <p class="text-stone-600 dark:text-stone-400 text-sm">Libro de Trabajo de Ejercicios de Base de Datos Enriquecido</p>
+        </header>
+
+        <main class="bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800/80 rounded-3xl p-8 shadow-xl shadow-emerald-950/5">
+            <article class="prose dark:prose-invert max-w-none">
+                <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-100 mb-6">📚 Libro de Ejercicios SQL - Nivel 2: Intermedio</h2>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 1: Concentración de Clientes por País — Reporting Comercial</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">La cláusula <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY country</code> fuerza a PostgreSQL a elegir entre dos algoritmos físicos de agregación: <strong>HashAggregate</strong> (construye una tabla hash en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">work_mem</code> con clave <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">country</code>) o <strong>GroupAggregate</strong> (ordena primero por <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">country</code> y luego agrupa linealmente). Para una tabla de 91 filas con baja cardinalidad (≈21 países), HashAggregate es la estrategia óptima. El filtro posterior con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING COUNT(*) > 5</code> descarta grupos enteros en la fase de post-agregación, reduciendo el conjunto antes de la proyección final.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    C["customers (91 filas)"] --&gt;|Seq Scan / Lectura Heap| Agg["HashAggregate (work_mem)"]
+    Agg --&gt;|Clave: country, Acumulador: COUNT(*)| Groups["Grupos: 21 países"]
+    Groups --&gt;|HAVING COUNT(*) &gt; 5| Filtered["Países con &gt; 5 clientes"]
+    Filtered --&gt;|ORDER BY total DESC| Out["Reporte ordenado descendentemente"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    country,
+    COUNT(*) AS total_clientes
+FROM customers
+GROUP BY country
+HAVING COUNT(*) &gt; 5
+ORDER BY total_clientes DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">El entrevistador evalúa si el candidato diferencia el momento de ejecución de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code> (pre-agregación) vs <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> (post-agregación). Error grave: usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE COUNT(*) > 5</code>, que lanza <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ERROR: aggregate function calls cannot be used in WHERE</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 2: Densidad de Productos por Categoría — Gestión de Catálogo</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY category_id</code> sobre la tabla <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code> (77 filas, 8 categorías) fuerza una agregación por clave foránea. El optimizador lee secuencialmente la tabla, extrayendo <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">category_id</code> y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">product_id</code> (tupla de ancho mínimo), y aplica HashAggregate. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING COUNT(<em>) > 10</code> retiene solo categorías con alta densidad de SKUs. Si existe un índice en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products(category_id)</code>, PostgreSQL puede realizar un </em>Index-Only Scan* para leer solo la clave, evitando el Heap.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    P["products (Heap)"] --&gt;|Index-Only Scan en category_id + product_id| IO["Índice B-Tree"]
+    IO --&gt;|Conteo por clave| Agg["HashAggregate: COUNT(*)"]
+    Agg --&gt;|HAVING &gt; 10| Out["Categorías con más de 10 productos"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    category_id,
+    COUNT(*) AS total_productos
+FROM products
+GROUP BY category_id
+HAVING COUNT(*) &gt; 10
+ORDER BY total_productos DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato comprende que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code> sobre FK indexadas permite Index-Only Scan (sin tocar el Heap). Candidatos junior ignoran esta optimización de cobertura.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 3: Productividad de la Fuerza de Ventas — Empleados con Mayor Volumen</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">La consulta agrupa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> por <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employee_id</code> (830 filas, 9 empleados). El optimizador lee secuencialmente la tabla transaccional, proyecta solo <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employee_id</code> y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_id</code> (tupla angosta), y acumula el contador. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING COUNT(order_id) > 80</code> filtra los 3 empleados top. El planificador puede optar por GroupAggregate si <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> está físicamente ordenada por <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employee_id</code>.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders (Seq Scan)"] --&gt;|Proyecto employee_id, order_id| Agg["GroupAggregate / HashAggregate"]
+    Agg --&gt;|employee_id, COUNT(*)| Groups["9 grupos (uno por empleado)"]
+    Groups --&gt;|HAVING COUNT(*) &gt; 80| Top["Empleados con &gt; 80 pedidos"]
+    Top --&gt;|ORDER BY total DESC| Out["Ranking de productividad"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    employee_id,
+    COUNT(order_id) AS total_pedidos
+FROM orders
+GROUP BY employee_id
+HAVING COUNT(order_id) &gt; 80
+ORDER BY total_pedidos DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Verifica que el candidato entienda el orden de procesamiento: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code> colapsa filas, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> filtra grupos. Error: confundir <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code> por <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> para filtrar agregaciones.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 4: Cartera de Proveedores — Gestión de Abastecimiento</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Requiere un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">INNER JOIN</code> entre <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">suppliers</code> y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code> antes de agrupar. PostgreSQL aplica Predicate Pushdown: primero une ambas tablas (Hash Join: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">suppliers</code> es la tabla pequeña de 29 filas, se construye hash en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">supplier_id</code>), luego agrupa por <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">supplier_id, company_name</code> y cuenta productos. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING COUNT(p.product_id) > 3</code> retorna proveedores con cartera sustancial.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    S["suppliers (29 filas)"] --&gt;|Hash Build| HT["Hash Table (supplier_id)"]
+    P["products (77 filas)"] --&gt;|Hash Probe| HT
+    HT --&gt;|INNER JOIN| J["Conjunto: supplier_id, company_name, product_id"]
+    J --&gt;|GROUP BY supplier_id| Agg["COUNT(product_id)"]
+    Agg --&gt;|HAVING &gt; 3| Out["Proveedores con &gt; 3 productos"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    s.supplier_id,
+    s.company_name,
+    COUNT(p.product_id) AS total_productos
+FROM suppliers s
+INNER JOIN products p ON s.supplier_id = p.supplier_id
+GROUP BY s.supplier_id, s.company_name
+HAVING COUNT(p.product_id) &gt; 3
+ORDER BY total_productos DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato sabe agrupar por columnas de la tabla padre después de un JOIN. Error común: olvidar incluir <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">s.company_name</code> en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code> cuando está en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 5: Clientes Premium por Facturación — Segmentación Comercial</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Consulta que une <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code> (830 × 2155 filas) para calcular facturación por cliente. El optimizador ejecuta un Hash Join entre ambas tablas (tabla intermedia aproximada de 2155 filas), agrupa por <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">customer_id</code> y suma <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">(quantity <em> unit_price </em> (1 - discount))</code>. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING SUM(...) > 5000</code> filtra solo los clientes de alto valor. La expresión aritmética se evalúa en la CPU por cada tupla antes de la agregación.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders"] --&gt;|Hash Join| OD["order_details"]
+    OD --&gt;|product_id, quantity, unit_price, discount| Calc["Cálculo: quantity * unit_price * (1 - discount)"]
+    Calc --&gt;|GROUP BY customer_id| Agg["SUM(facturacion)"]
+    Agg --&gt;|HAVING SUM &gt; 5000| Out["Clientes premium"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    o.customer_id,
+    ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS facturacion_total
+FROM orders o
+INNER JOIN order_details od ON o.order_id = od.order_id
+GROUP BY o.customer_id
+HAVING SUM(od.quantity * od.unit_price * (1 - od.discount)) &gt; 5000
+ORDER BY facturacion_total DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa capacidad de expresión aritmética dentro de funciones agregadas. Error: duplicar la expresión en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT</code> y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> sin considerar el impacto de reevaluación. PostgreSQL no cachea automáticamente la expresión entre cláusulas.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 6: Rotación de Inventario — Productos Más Vendidos por Cantidad</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Agrupa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code> por <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">product_id</code>, sumando <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">quantity</code>. Con 2155 filas, el HashAggregate es eficiente. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING SUM(quantity) > 200</code> descarta productos de baja rotación. El planificador proyecta solo <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">product_id</code> y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">quantity</code> desde el Heap, minimizando el ancho de tupla en memoria.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    OD["order_details (Seq Scan)"] --&gt;|Proyecto: product_id, quantity| Agg["HashAggregate (work_mem)"]
+    Agg --&gt;|SUM(quantity) GROUP BY product_id| Groups["77 grupos"]
+    Groups --&gt;|HAVING SUM &gt; 200| Filtered["Productos alta rotación"]
+    Filtered --&gt;|ORDER BY total DESC| Out["Top ventas por cantidad"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    product_id,
+    SUM(quantity) AS unidades_vendidas
+FROM order_details
+GROUP BY product_id
+HAVING SUM(quantity) &gt; 200
+ORDER BY unidades_vendidas DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide comprensión de agregación pura sobre tabla transaccional sin JOINs. Error: proyectar columnas como <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">product_name</code> sin incluir en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 7: Estacionalidad de Ventas — Pedidos por Año</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY EXTRACT(YEAR FROM order_date)</code> fuerza la evaluación de la función <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">EXTRACT</code> sobre cada tupla de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> (830 filas). PostgreSQL convierte la fecha a un entero de año y agrupa sobre ese valor derivado. El optimizador no puede usar un índice B-Tree en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_date</code> para Index-Only Scan porque la expresión no es idéntica a la columna subyacente (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_date</code> vs <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">EXTRACT</code>). <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING COUNT(*) > 100</code> retiene años con alta actividad.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders (Heap)"] --&gt;|Seq Scan| Extract["EXTRACT(YEAR FROM order_date)"]
+    Extract --&gt;|Año como entero| Agg["HashAggregate: GROUP BY año"]
+    Agg --&gt;|HAVING COUNT &gt; 100| Out["Años con &gt; 100 pedidos"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    EXTRACT(YEAR FROM order_date)::int AS anio,
+    COUNT(*) AS total_pedidos
+FROM orders
+GROUP BY EXTRACT(YEAR FROM order_date)
+HAVING COUNT(*) &gt; 100
+ORDER BY anio;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato sabe agrupar por expresiones derivadas. PostgreSQL 15+ permite alias de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY anio</code>) siempre que no haya ambigüedad. Error: usar alias de SELECT en GROUP BY sin conocer la precedencia lógica.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 8: Logística Internacional — Países con Flete Promedio Elevado</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY ship_country</code> sobre 830 pedidos. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AVG(freight)</code> calcula la media aritmética manteniendo dos variables de estado transitorias (suma acumulada y contador). <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING AVG(freight) > 50</code> filtra países con costo logístico alto. El planificador puede usar un índice en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ship_country</code> si existe para reducir el Heap Scan, aunque la tabla es pequeña.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    O["orders"] --&gt;|Seq Scan| Agg["HashAggregate: AVG(freight)"]
+    Agg --&gt;|ship_country, avg_freight| Groups["21 países destino"]
+    Groups --&gt;|HAVING AVG &gt; 50| Filtered["Países con flete costoso"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    ship_country,
+    ROUND(AVG(freight)::numeric, 2) AS flete_promedio,
+    COUNT(*) AS total_pedidos
+FROM orders
+GROUP BY ship_country
+HAVING AVG(freight) &gt; 50
+ORDER BY flete_promedio DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato maneja múltiples agregaciones y redondeo. Error: asumir que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> puede referenciar alias de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT</code> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">flete_promedio</code>) — en SQL estándar, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> se evalúa antes que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT</code>, por lo que debe repetir la expresión.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 9: Distribución Geográfica del Equipo — Ciudades con Múltiples Empleados</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY city</code> sobre <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employees</code> (9 filas). El Optimizador ejecuta un Seq Scan trivial y HashAggregate en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">work_mem</code>. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING COUNT(*) > 1</code> filtra ciudades con más de un empleado. La cardinalidad es tan baja que el plan es prácticamente instantáneo, pero el ejercicio refuerza el concepto de agrupamiento con filtro.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    E["employees (9 filas)"] --&gt;|Seq Scan| Agg["HashAggregate"]
+    Agg --&gt;|GROUP BY city| Groups["Ciudades agrupadas"]
+    Groups --&gt;|HAVING COUNT(*) &gt; 1| Out["Ciudades con 2+ empleados"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    city,
+    COUNT(*) AS total_empleados
+FROM employees
+GROUP BY city
+HAVING COUNT(*) &gt; 1
+ORDER BY total_empleados DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Ejercicio conceptual. El entrevistador busca confirmar que el candidato no usa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code> para filtrar agregaciones. Error: escribir <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE COUNT(*) > 1</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 10: Estrategia de Precios — Categorías con Precio Promedio Superior</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY category_id</code> sobre <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code>, calculando <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AVG(unit_price)</code>. PostgreSQL debe leer la columna <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">unit_price</code> (numeric) y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">category_id</code> (int). <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING AVG(unit_price) > 25</code> retiene categorías cuyo precio promedio excede 25. Si existe un índice compuesto en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">(category_id, unit_price)</code>, el optimizador puede ejecutar un <em>Index-Only Scan</em> evitando la lectura del Heap.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    P["products (Heap)"] --&gt;|Index-Only Scan| Idx["Índice (category_id, unit_price)"]
+    Idx --&gt;|GROUP BY category_id| Agg["AVG(unit_price)"]
+    Agg --&gt;|HAVING AVG &gt; 25| Out["Categorías premium"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    category_id,
+    ROUND(AVG(unit_price)::numeric, 2) AS precio_promedio,
+    COUNT(*) AS total_productos
+FROM products
+GROUP BY category_id
+HAVING AVG(unit_price) &gt; 25
+ORDER BY precio_promedio DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato piensa en estrategias de indexación (índice de cobertura). Error: proyectar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">category_name</code> sin incluirlo en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code> ni usar JOIN.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 11: Subconsulta Escalar — Producto Más Caro del Catálogo</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">La subconsulta escalar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">(SELECT MAX(unit_price) FROM products)</code> se ejecuta una sola vez en la fase de iniciación de la consulta externa. PostgreSQL la trata como una constante paramétrica (el planificador la materializa como un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Result</code> node). El valor resultante se une implícitamente a cada fila de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code> sin costo adicional de E/S. La tabla se escanea dos veces: una para la subconsulta (Seq Scan con agregación) y otra para la externa.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    subgraph Subconsulta
+        P1["products (Seq Scan)"] --&gt;|MAX(unit_price)| MaxVal["Constante: 263.50"]
+    end
+    subgraph Consulta externa
+        P2["products (Seq Scan 2)"] --&gt;|Filtro: unit_price = MAX| Filter["unit_price = 263.50"]
+        Filter --&gt; Out["Producto más caro"]
+    end
+    MaxVal --&gt; Filter</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    product_id,
+    product_name,
+    unit_price
+FROM products
+WHERE unit_price = (
+    SELECT MAX(unit_price)
+    FROM products
+);</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato distingue subconsultas escalares (retornan 1 fila × 1 columna) de subconsultas de conjunto. Error: usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">=</code> con subconsulta que puede retornar múltiples filas (lanzaría error).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 12: Subconsulta con IN — Productos de Proveedores Japoneses</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">La subconsulta <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT supplier_id FROM suppliers WHERE country = 'Japan'</code> se ejecuta primero (materializada como tabla hash o resultado literal) y luego la externa usa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IN</code> para sondear. PostgreSQL transforma internamente <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IN (subquery)</code> en un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Semi Join</code> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Hash Semi Join</code>) si la subconsulta no es correlacionada, evitando duplicados. La tabla <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">suppliers</code> tiene 29 filas; el Hash Semi Join es óptimo.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    S["suppliers (29 filas)"] --&gt;|Filtro: country = 'Japan'| SubQ["Hash Set: supplier_ids"]
+    P["products (77 filas)"] --&gt;|Sondeo en Hash Set| Semi["Hash Semi Join"]
+    Semi --&gt;|Coincidencia| Out["Productos de proveedores japoneses"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    product_id,
+    product_name,
+    unit_price
+FROM products
+WHERE supplier_id IN (
+    SELECT supplier_id
+    FROM suppliers
+    WHERE country = 'Japan'
+)
+ORDER BY product_name;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa comprensión de Semi Join. Error: usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT IN (subquery)</code> con columnas anulables — si la subconsulta contiene <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULL</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT IN</code> retorna 0 filas. Preferir <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT EXISTS</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 13: Subconsulta Correlacionada — Productos sobre el Promedio de su Categoría</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">La subconsulta <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT AVG(p2.unit_price) FROM products p2 WHERE p2.category_id = p1.category_id</code> está correlacionada: hace referencia a <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">p1.category_id</code> de la consulta externa. PostgreSQL la ejecuta una vez <strong>por cada fila</strong> de la tabla externa (77 filas), resultando en un plan con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">InitPlan</code> o <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SubPlan</code>. Esto puede forzar un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Nested Loop</code> implícito con costo $O(N \times M)$. La subconsulta calcula <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AVG</code> sobre el subconjunto de productos de la misma categoría.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    P1["products p1 (77 filas)"] --&gt;|Para cada fila| Loop["SubPlan (correlacionado)"]
+    Loop --&gt;|Filtra p2.category_id = p1.category_id| P2["products p2 (Subconjunto por categoría)"]
+    P2 --&gt;|AVG(unit_price)| Avg["Promedio de la categoría"]
+    Avg --&gt;|¿p1.unit_price &gt; AVG?| Check{"unit_price &gt; promedio"}
+    Check --&gt;|Sí| Out["Producto sobre el promedio"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    product_name,
+    unit_price,
+    category_id
+FROM products p1
+WHERE unit_price &gt; (
+    SELECT AVG(unit_price)
+    FROM products p2
+    WHERE p2.category_id = p1.category_id
+)
+ORDER BY category_id, unit_price DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">¡Pregunta clásica de FAANG! Evalúa si el candidato comprende el costo cuadrático de las subconsultas correlacionadas vs alternativas (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LATERAL JOIN</code>, ventanas). Error: no entender que la subconsulta se ejecuta 77 veces.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 14: Derived Table — Promedio de Ítems por Pedido</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">La subconsulta en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FROM</code> (derived table) calcula <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">COUNT(product_id)</code> por <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_id</code> (2155 filas agrupadas en ≈830 grupos). PostgreSQL materializa este resultado como una tabla temporal en memoria. Luego la consulta externa calcula <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AVG(total_productos)</code> sobre esa tabla virtual. El optimizador no puede propagar condiciones de filtro hacia la derived table porque no hay cláusula <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code> externa.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    OD["order_details (2155 filas)"] --&gt;|GROUP BY order_id| Agg["COUNT(product_id) por pedido"]
+    Agg --&gt;|Materializar| DT["Derived Table (830 filas)"]
+    DT --&gt;|AVG(total_productos)| Out["Promedio de ítems por pedido"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    ROUND(AVG(total_productos)::numeric, 2) AS promedio_items_por_pedido
+FROM (
+    SELECT 
+        order_id,
+        COUNT(product_id) AS total_productos
+    FROM order_details
+    GROUP BY order_id
+) AS pedido_counts;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato domina las derived tables (subconsultas en FROM). Error: omitir el alias obligatorio (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AS pedido_counts</code>) — PostgreSQL lanzará <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ERROR: subquery in FROM must have an alias</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 15: EXISTS — Clientes con Actividad Comercial (Semi Join)</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">EXISTS</code> ejecuta un <strong>Semi Join</strong> lógico. PostgreSQL evaluará <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.customer_id)</code> y detendrá el escaneo interno en cuanto encuentre <strong>la primera</strong> coincidencia para cada cliente (short-circuit evaluation). Esto es radicalmente más eficiente que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IN</code> cuando la subconsulta puede retornar muchas filas. El <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT 1</code> es una convención: PostgreSQL ignora el contenido del SELECT dentro de EXISTS.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    C["customers (91 filas)"] --&gt;|Para cada cliente| Loop["Semi Join Search"]
+    Loop --&gt;|¿Existe orden para este customer_id?| O["orders (Index Scan en customer_id)"]
+    O --&gt;|Primera coincidencia encontrada| Stop["STOP (Short-circuit)"]
+    Stop --&gt;|Sí| Out["Cliente con actividad"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    customer_id,
+    company_name,
+    country
+FROM customers c
+WHERE EXISTS (
+    SELECT 1
+    FROM orders o
+    WHERE o.customer_id = c.customer_id
+)
+ORDER BY company_name;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato prefiere <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">EXISTS</code> sobre <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IN</code> para consultas correlacionadas con posibles nulos. Error: escribir <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT *</code> dentro de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">EXISTS</code> (ineficiente, aunque PostgreSQL lo ignore).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 16: NOT EXISTS — Productos Inactivos (Nunca Vendidos)</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT EXISTS</code> implementa un <strong>Anti Join</strong> lógico: retorna todas las filas de la tabla izquierda que <strong>no</strong> tienen correspondencia en la derecha. PostgreSQL ejecuta un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Hash Anti Join</code>: construye un conjunto hash con los <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">product_id</code> de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code> (2155 filas) y luego escanea <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code> (77 filas) verificando ausencia en el hash. Es inmune al problema de NULL que afecta a <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT IN</code>.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    OD["order_details"] --&gt;|Build: Hash Set de product_id| HT["Hash Set (2155 claves)"]
+    P["products (77 filas)"] --&gt;|Probe: ¿product_id no existe?| Anti["Hash Anti Join"]
+    Anti --&gt;|No encontrado| Out["Productos sin ventas"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    product_id,
+    product_name,
+    unit_price
+FROM products p
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM order_details od
+    WHERE od.product_id = p.product_id
+);</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">¡Pregunta de seguridad! El entrevistador busca que el candidato evite <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT IN (SELECT product_id FROM order_details)</code> porque <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">product_id</code> en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code> es parte de PK compuesta y no tiene NULLs (podría funcionar), pero la mejor práctica es usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NOT EXISTS</code> siempre. Demostrar esta conciencia es señal de seniority.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 17: ANY — Productos Más Caros que Cualquier Producto de Categoría 1</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">> ANY (subquery)</code> retorna <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">TRUE</code> si el valor de la izquierda es mayor que <strong>al menos un</strong> valor de la subconsulta. PostgreSQL ejecuta la subconsulta interna primero (productos de categoría 1), materializa los precios, y para cada producto externo evalúa la comparación. Internamente puede reescribirse como <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">unit_price > (SELECT MIN(unit_price) FROM products WHERE category_id = 1)</code> si el optimizador detecta la equivalencia semántica.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    SubQ["Subconsulta: precios categoría 1"] --&gt;|Materializar lista| Set["Set de precios"]
+    P["products (todas categorías)"] --&gt;|Por cada producto: unit_price &gt; ANY(set)| Eval["Evaluar &gt; ANY"]
+    Eval --&gt;|TRUE| Out["Productos más caros que alguno de categoría 1"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    product_id,
+    product_name,
+    unit_price,
+    category_id
+FROM products
+WHERE unit_price &gt; ANY (
+    SELECT unit_price
+    FROM products
+    WHERE category_id = 1
+)
+ORDER BY unit_price;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide comprensión de los cuantificadores lógicos. Error: confundir <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ANY</code> con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ALL</code>. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">> ANY</code> equivale a "mayor que el mínimo del conjunto".</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 18: ALL — Productos Más Caros que Todos los de Categoría 1</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">> ALL (subquery)</code> retorna <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">TRUE</code> solo si el valor supera <strong>todos</strong> los valores de la subconsulta. PostgreSQL reescribe internamente como <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">unit_price > (SELECT MAX(unit_price) FROM products WHERE category_id = 1)</code>. La subconsulta se ejecuta una vez como <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">InitPlan</code>, produciendo una constante.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    SubQ["Subconsulta: MAX(price) categoría 1"] --&gt;|Constante| MaxVal["263.50"]
+    P["products"] --&gt;|Filtro: unit_price &gt; 263.50| Filter["unit_price &gt; MAX"]
+    Filter --&gt; Out["Productos más caros que toda categoría 1"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    product_id,
+    product_name,
+    unit_price,
+    category_id
+FROM products
+WHERE unit_price &gt; ALL (
+    SELECT unit_price
+    FROM products
+    WHERE category_id = 1
+)
+ORDER BY unit_price;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato distingue <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ANY</code> vs <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ALL</code>. Error común: pensar que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">> ALL</code> requiere que la subconsulta retorne una sola fila.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 19: Subconsulta Correlacionada en SELECT — Última Compra por Cliente</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">La subconsulta escalar en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT</code> calcula <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">MAX(order_date)</code> para cada cliente. Por cada fila de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">customers</code> (91 filas), PostgreSQL ejecuta la subconsulta correlacionada sobre <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> (830 filas) usando un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Index Scan</code> en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders(customer_id)</code> para localizar la fecha máxima. Si no existe índice, el plan sería un Seq Scan de orders por cada cliente (91 × 830 = 75,530 operaciones de E/S).</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    C["customers (91 filas)"] --&gt;|Por cada fila| Init["SubPlan"]
+    Init --&gt;|Index Scan: customer_id = c.customer_id| O["orders (Index Scan)"]
+    O --&gt;|MAX(order_date)| MaxDate["Última fecha de compra"]
+    MaxDate --&gt;|Proyectar como columna| Out["customer_id, company_name, ultima_compra"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    customer_id,
+    company_name,
+    (
+        SELECT MAX(order_date)
+        FROM orders o
+        WHERE o.customer_id = c.customer_id
+    ) AS ultima_compra
+FROM customers c
+ORDER BY ultima_compra DESC NULLS LAST;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato conoce el patrón de subconsulta escalar en SELECT para enriquecer reportes. Error: no manejar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULLS LAST</code> para clientes sin pedidos.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 20: Subconsulta Anidada — Top 5 Productos por Ingresos</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Consulta de tres niveles de anidación: la subconsulta más interna calcula ingresos por producto desde <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code>; la intermedia ordena y limita a 5; la externa agrega el nombre del producto con un JOIN adicional. PostgreSQL ejecuta las subconsultas de adentro hacia afuera. La derived table <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">product_revenue</code> se materializa en memoria (77 filas, tabla pequeña).</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    OD["order_details"] --&gt;|SUM(quantity * unit_price * (1 - discount)) GROUP BY product_id| Rev["Ingresos por producto"]
+    Rev --&gt;|ORDER BY DESC LIMIT 5| Top5["Top 5 product_id"]
+    Top5 --&gt;|INNER JOIN products| P["products"]
+    P --&gt; Out["product_id, product_name, ingresos"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    p.product_id,
+    p.product_name,
+    r.ingresos_totales
+FROM (
+    SELECT 
+        product_id,
+        ROUND(SUM(quantity * unit_price * (1 - discount))::numeric, 2) AS ingresos_totales
+    FROM order_details
+    GROUP BY product_id
+    ORDER BY ingresos_totales DESC
+    LIMIT 5
+) r
+INNER JOIN products p ON r.product_id = p.product_id
+ORDER BY r.ingresos_totales DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato estructura consultas anidadas de forma legible. Error: perder la cardinalidad al hacer JOIN después de LIMIT (funciona aquí porque LIMIT se aplica antes del JOIN). En PostgreSQL 15+, las derived tables con LIMIT se evalúan completamente antes del JOIN externo.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 21: CASE Simple — Segmentación de Precios (Económico / Intermedio / Premium)</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">La expresión <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> se evalúa en la fase de proyección de tuplas (después de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code>, antes de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY</code>). PostgreSQL implementa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> como una serie de comparaciones booleanas en CPU: la primera condición verdadera cortocircuita la evaluación. No hay impacto en el plan de acceso a disco; es puramente computacional en la capa de proyección.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    P["products (Seq Scan)"] --&gt;|unit_price| Case{"CASE WHEN unit_price &lt; 20 THEN 'Económico'\nWHEN unit_price &lt;= 50 THEN 'Intermedio'\nELSE 'Premium'"}
+    Case --&gt;|Categoría calculada| Out["product_name, unit_price, categoria_costo"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    product_name,
+    unit_price,
+    CASE 
+        WHEN unit_price &lt; 20 THEN 'Económico'
+        WHEN unit_price &lt;= 50 THEN 'Intermedio'
+        ELSE 'Premium'
+    END AS categoria_costo
+FROM products
+ORDER BY unit_price;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato conoce la sintaxis <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> searched (sin expresión después de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code>). Error: olvidar que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> retorna la primera coincidencia y el orden de las cláusulas <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHEN</code> importa.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 22: CASE Searched — Zona Logística de Clientes</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> searched evalúa condiciones booleanas arbitrarias. Similar al ejercicio anterior, la evaluación es puramente computacional en la capa de proyección. La función se aplica a cada una de las 91 filas de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">customers</code>, con cortocircuito en la primera coincidencia. Las condiciones con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IN</code> son evaluadas como comparación de conjunto (el motor expande <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IN</code> a una serie de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">OR</code>).</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    C["customers (91 filas)"] --&gt;|country| Case{"CASE WHEN country IN ('USA','Canada','Mexico') THEN 'Norteamérica'\nWHEN country IN ('UK','Germany','France','Spain','Italy') THEN 'Europa'\nELSE 'Resto del Mundo'"}
+    Case --&gt;|zona_logistica| Out["company_name, country, zona_logistica"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    company_name,
+    country,
+    CASE
+        WHEN country IN ('USA', 'Canada', 'Mexico') THEN 'Norteamérica'
+        WHEN country IN ('UK', 'Germany', 'France', 'Spain', 'Italy') THEN 'Europa'
+        ELSE 'Resto del Mundo'
+    END AS zona_logistica
+FROM customers
+ORDER BY country;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato usa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> searched sin expresión después de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code>. Error: escribir <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE country WHEN IN (...)</code> (sintaxis inválida). <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> simple no acepta <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IN</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 23: CASE + FILTER — Conteo Condicional por Zona Geográfica</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">COUNT(*) FILTER (WHERE ...)</code> es una extensión PostgreSQL que implementa agregación condicional sin subconsultas. Internamente, la función de ventana/agregación mantiene un contador que solo se incrementa cuando el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FILTER</code> es <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">TRUE</code>. El <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FILTER</code> se evalúa tupla por tupla durante el escaneo, y la agregación acumula en una sola pasada sobre los datos. Esto evita escanear la tabla múltiples veces o usar costosos <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> dentro de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">COUNT</code>.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    C["customers (Seq Scan)"] --&gt;|Filtros condicionales| Filters["FILTER: country IN ('USA','Canada','Mexico')\nFILTER: country IN ('UK','Germany','France','Spain','Italy')\nFILTER: ELSE"]
+    Filters --&gt;|Tres contadores| Agg["COUNT(*) FILTER 1 | COUNT(*) FILTER 2 | COUNT(*) FILTER 3"]
+    Agg --&gt; Out["Norteamérica: 16 | Europa: 45 | Resto: 30"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT
+    COUNT(*) FILTER (
+        WHERE country IN ('USA', 'Canada', 'Mexico')
+    ) AS norteamerica,
+    COUNT(*) FILTER (
+        WHERE country IN ('UK', 'Germany', 'France', 'Spain', 'Italy')
+    ) AS europa,
+    COUNT(*) FILTER (
+        WHERE country NOT IN ('USA', 'Canada', 'Mexico', 'UK', 'Germany', 'France', 'Spain', 'Italy')
+    ) AS resto_del_mundo
+FROM customers;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato conoce <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FILTER (WHERE ...)</code> como alternativa superior a <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE WHEN ... THEN 1 END</code>. En PostgreSQL 15+, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FILTER</code> es más legible y tiene el mismo plan de ejecución optimizado. Error: usar múltiples subconsultas <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT (SELECT COUNT(*) FROM ... WHERE ...)</code> para cada categoría.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 24: CASE + SUM — Pivote de Ventas por Año en Columnas</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM(CASE WHEN ... THEN value ELSE 0 END)</code> implementa un pivote manual (filas a columnas). PostgreSQL evalúa el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> para cada tupla de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code> JOIN <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> (2155 filas), y la función <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM</code> acumula selectivamente. El optimizador no puede indexar sobre la expresión condicional, por lo que el plan es un Hash Join seguido de HashAggregate con múltiples acumuladores.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders"] --&gt;|INNER JOIN| OD["order_details"]
+    OD --&gt;|Cálculo por fila| Case{"CASE WHEN EXTRACT(YEAR FROM order_date) = 1996 THEN importe ELSE 0\nCASE WHEN EXTRACT(YEAR FROM order_date) = 1997 THEN importe ELSE 0\nCASE WHEN EXTRACT(YEAR FROM order_date) = 1998 THEN importe ELSE 0"}
+    Case --&gt;|GROUP BY customer_id| Agg["SUM(1996), SUM(1997), SUM(1998)"]
+    Agg --&gt; Out["customer_id, ventas_1996, ventas_1997, ventas_1998"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    o.customer_id,
+    ROUND(SUM(CASE WHEN EXTRACT(YEAR FROM o.order_date) = 1996 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS ventas_1996,
+    ROUND(SUM(CASE WHEN EXTRACT(YEAR FROM o.order_date) = 1997 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS ventas_1997,
+    ROUND(SUM(CASE WHEN EXTRACT(YEAR FROM o.order_date) = 1998 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS ventas_1998
+FROM orders o
+INNER JOIN order_details od ON o.order_id = od.order_id
+GROUP BY o.customer_id
+ORDER BY o.customer_id;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa técnica de pivoteo sin <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">crosstab()</code>. Error: no usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ELSE 0</code> — si no hay ventas en un año, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM(CASE ... END)</code> retorna <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULL</code> en lugar de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">0</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 25: CASE para Antigüedad Laboral — Clasificación de Empleados</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> con funciones de fecha (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AGE</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">EXTRACT</code>). <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AGE(hire_date)</code> retorna un intervalo; <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">EXTRACT(YEAR FROM AGE(...))</code> extrae los años. La evaluación se realiza en la proyección sobre 9 filas. PostgreSQL optimiza la función <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AGE</code> como immutable para el mismo valor de entrada, permitiendo cacheo de resultados.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    E["employees (Seq Scan)"] --&gt;|hire_date| Age["EXTRACT(YEAR FROM AGE(hire_date))"]
+    Age --&gt;|Años de antigüedad| Case{"CASE WHEN &gt;= 30 THEN 'Veterano'\nWHEN &gt;= 20 THEN 'Senior'\nWHEN &gt;= 10 THEN 'Experimentado'\nELSE 'Nuevo'"}
+    Case --&gt; Out["employee_id, nombre, antigüedad, categoria"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    employee_id,
+    first_name || ' ' || last_name AS nombre_completo,
+    EXTRACT(YEAR FROM AGE(hire_date))::int AS anios_antiguedad,
+    CASE
+        WHEN EXTRACT(YEAR FROM AGE(hire_date)) &gt;= 30 THEN 'Veterano'
+        WHEN EXTRACT(YEAR FROM AGE(hire_date)) &gt;= 20 THEN 'Senior'
+        WHEN EXTRACT(YEAR FROM AGE(hire_date)) &gt;= 10 THEN 'Experimentado'
+        ELSE 'Nuevo'
+    END AS categoria_antiguedad
+FROM employees
+ORDER BY anios_antiguedad DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato usa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AGE()</code> correctamente. Error: calcular antigüedad como <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">2024 - EXTRACT(YEAR FROM hire_date)</code> — frágil y no usa funciones nativas de PostgreSQL.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 26: CASE en ORDER BY — Priorización Personalizada de Países</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> dentro de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY</code> permite ordenamiento customizado. El motor evalúa el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> para cada fila durante la fase de ordenamiento (después de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT</code>). Si el conjunto es grande, la expresión se evalúa antes del sort y se almacena como clave de ordenamiento en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">work_mem</code>. No hay impacto en el plan de acceso, pero la expresión puede aumentar la memoria requerida para el sort.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    C["customers (Seq Scan)"] --&gt;|country| Case{"CASE WHEN country = 'USA' THEN 1\nWHEN country = 'Germany' THEN 2\nWHEN country = 'UK' THEN 3\nELSE 4"}
+    Case --&gt;|Clave de orden personalizada| Sort["ORDER BY CASE priority, country"]
+    Sort --&gt; Out["Clientes USA primero, luego Germany, luego UK, luego resto"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    customer_id,
+    company_name,
+    country
+FROM customers
+ORDER BY
+    CASE
+        WHEN country = 'USA' THEN 1
+        WHEN country = 'Germany' THEN 2
+        WHEN country = 'UK' THEN 3
+        ELSE 4
+    END,
+    country;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa creatividad en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY</code>. Útil para reportes donde ciertos mercados tienen prioridad visual. Error: no entender que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY</code> puede referenciar columnas no incluidas en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 27: CASE + FILTER Combinados — Reporte de Desempeño por Trimestre</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Combinación de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FILTER</code> (para agregación condicional nativa) y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> (para lógica compleja). PostgreSQL evalúa ambos en la misma pasada de agregación. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FILTER</code> es puramente una condición booleana que el acumulador verifica; <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> es una expresión evaluada antes de pasar el valor al acumulador.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders"] --&gt;|INNER JOIN| OD["order_details"]
+    OD --&gt;|Para cada fila| Case{"CASE WHEN EXTRACT(QUARTER FROM order_date) = 1 THEN importe ELSE 0\n... para 4 trimestres"}
+    Case --&gt;|COUNT(*) FILTER (WHERE discount &gt; 0)| Agg["SUM por trimestre, COUNT con descuento"]
+    Agg --&gt;|GROUP BY employee_id| Out["employee_id, Q1, Q2, Q3, Q4, pedidos_con_descuento"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    o.employee_id,
+    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 1 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q1,
+    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 2 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q2,
+    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 3 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q3,
+    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 4 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q4,
+    COUNT(*) FILTER (WHERE od.discount &gt; 0) AS pedidos_con_descuento
+FROM orders o
+INNER JOIN order_details od ON o.order_id = od.order_id
+GROUP BY o.employee_id
+ORDER BY o.employee_id;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Ejercicio integrador de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> + <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FILTER</code>. El entrevistador busca que el candidato distinga cuándo usar uno u otro: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FILTER</code> para agregación condicional nativa, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> dentro de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM</code> para valores condicionales.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 28: CASE en HAVING — Categorías con Alto Ratio de Productos Caros</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> dentro de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> permite filtrar grupos basados en agregaciones condicionales. El motor agrupa primero, calcula las agregaciones condicionales para cada grupo, y luego aplica <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code>. En este caso, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END)</code> cuenta productos caros por categoría, y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> retiene categorías con al menos 3 productos caros.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    P["products (Seq Scan)"] --&gt;|GROUP BY category_id| Agg["SUM(CASE WHEN unit_price &gt; 30 THEN 1 ELSE 0 END) AS productos_caros\nCOUNT(*) AS total"]
+    Agg --&gt;|HAVING productos_caros &gt;= 3| Filtered["Categorías con &gt;=3 productos &gt; 30"]
+    Filtered --&gt;|Cociente: productos_caros / total| Out["category_id, ratio"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    category_id,
+    COUNT(*) AS total_productos,
+    SUM(CASE WHEN unit_price &gt; 30 THEN 1 ELSE 0 END) AS productos_caros,
+    ROUND(
+        SUM(CASE WHEN unit_price &gt; 30 THEN 1 ELSE 0 END)::numeric 
+        / COUNT(*)::numeric * 100, 2
+    ) AS porcentaje_caros
+FROM products
+GROUP BY category_id
+HAVING SUM(CASE WHEN unit_price &gt; 30 THEN 1 ELSE 0 END) &gt;= 3
+ORDER BY porcentaje_caros DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato usa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> dentro de funciones agregadas en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code>. Error: olvidar que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code> se evalúa antes que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT</code> (no puede referenciar alias <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">productos_caros</code> en PostgreSQL, aunque en algunos dialectos sí).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 29: CASE Anidado — Categorización Compleja de Descuentos</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> anidados se evalúan de adentro hacia afuera. Cada nivel de anidamiento agrega comparaciones booleanas adicionales. PostgreSQL evalúa el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> más interno primero, y su resultado alimenta el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> externo. No hay penalización significativa de rendimiento para anidamientos poco profundos (2-3 niveles) sobre conjuntos pequeños como 2155 filas.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    OD["order_details"] --&gt;|discount| Inner{"CASE interno: \nWHEN discount = 0 THEN 'Sin descuento'\nWHEN discount &lt;= 0.05 THEN 'Descuento bajo'\nWHEN discount &lt;= 0.15 THEN 'Descuento medio'\nELSE 'Descuento alto'"}
+    Inner --&gt;|categoria_1| Outer{"CASE externo:\nWHEN 'Sin descuento' THEN 'Precio completo'\nWHEN 'Descuento bajo' THEN 'Mínima promoción'\nELSE 'En promoción'"}
+    Outer --&gt; Out["order_id, product_id, discount, clasificacion"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    order_id,
+    product_id,
+    discount,
+    CASE
+        WHEN discount = 0 THEN 'Precio completo'
+        ELSE 
+            CASE
+                WHEN discount &lt;= 0.05 THEN 'Mínima promoción'
+                WHEN discount &lt;= 0.15 THEN 'Promoción media'
+                ELSE 'Alta promoción'
+            END
+    END AS tipo_descuento
+FROM order_details
+ORDER BY discount DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato puede estructurar lógica condicional compleja. Alternativa recomendada: usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CASE</code> searched plano en lugar de anidado para legibilidad. Error: olvidar el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">END</code> del CASE interno.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 30: CASE con Agregación Múltiple — Reporte de Ventas por Región (Pivote)</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Este es un pivote manual completo: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM(CASE WHEN country IN (...) THEN importe END)</code> para cada región. La tabla <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> se une con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code> (2155 filas), se agrupa por <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employee_id</code>, y se calculan 4 acumuladores simultáneos en una sola pasada. El optimizador no puede usar índices en las expresiones CASE.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders"] --&gt;|JOIN ship_country| OD["order_details"]
+    OD --&gt;|importe| Cases["4 acumuladores CASE"]
+    Cases --&gt;|GROUP BY employee_id| Agg["SUM(USA), SUM(Europa), SUM(Latam), SUM(Resto)"]
+    Agg --&gt;|ORDER BY employee_id| Out["employee_id, usa, europa, latam, resto"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    o.employee_id,
+    ROUND(SUM(CASE WHEN o.ship_country IN ('USA', 'Canada', 'Mexico') 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS norteamerica,
+    ROUND(SUM(CASE WHEN o.ship_country IN ('UK', 'Germany', 'France', 'Spain', 'Italy') 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS europa,
+    ROUND(SUM(CASE WHEN o.ship_country IN ('Argentina', 'Brazil', 'Venezuela') 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS latam,
+    ROUND(SUM(CASE WHEN o.ship_country NOT IN ('USA', 'Canada', 'Mexico', 'UK', 'Germany', 'France', 'Spain', 'Italy', 'Argentina', 'Brazil', 'Venezuela') 
+              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS resto_mundo
+FROM orders o
+INNER JOIN order_details od ON o.order_id = od.order_id
+GROUP BY o.employee_id
+ORDER BY o.employee_id;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa habilidad de pivoteo manual. El entrevistador busca que el candidato reconozca cuándo esto es adecuado vs cuándo usar la extensión <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">tablefunc</code> con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">crosstab()</code>. Error: no manejar clientes sin ventas en una región (resultado NULL vs 0).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 31: SELF JOIN — Organigrama Jerárquico de Empleados</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">El <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELF JOIN</code> crea dos instancias lógicas de la misma tabla física <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employees</code> en el plan de ejecución. El optimizador asigna alias <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">e</code> (empleado) y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">m</code> (manager) a dos instancias separadas en memoria. La condición <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">e.reports_to = m.employee_id</code> se resuelve mediante un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Hash Join</code> si no hay índice, o un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Nested Loop</code> con Index Scan si existe un índice en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">reports_to</code>. Como la tabla tiene solo 9 filas, el plan es trivial.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    E["employees e (Subordinados)"] --&gt;|e.reports_to = m.employee_id| Join["INNER JOIN (SELF)"]
+    M["employees m (Managers)"] --&gt; Join
+    Join --&gt;|Coincidencia| Out["empleado | cargo_empleado | manager | cargo_manager"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    e.employee_id,
+    e.first_name || ' ' || e.last_name AS empleado,
+    e.title AS cargo_empleado,
+    m.first_name || ' ' || m.last_name AS manager,
+    m.title AS cargo_manager
+FROM employees e
+INNER JOIN employees m ON e.reports_to = m.employee_id
+ORDER BY e.employee_id;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato comprende la auto-referenciación relacional. Error: usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEFT JOIN</code> aquí excluiría al Presidente (Andrew Fuller, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">reports_to IS NULL</code>). Si se desea incluirlo, debe ser <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEFT JOIN</code>. La elección depende del requerimiento.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 32: SELF JOIN — Empleados que Comparten el Mismo Manager</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">SELF JOIN no-equitativo: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">e1.reports_to = e2.reports_to AND e1.employee_id <> e2.employee_id</code>. El optimizador cruza la tabla consigo misma encontrando pares de empleados que reportan al mismo jefe. El plan es un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Nested Loop</code> sobre las 9 filas con filtro adicional de desigualdad. La tabla es tan pequeña que el plan es instantáneo.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    E1["employees e1"] --&gt;|e1.reports_to = e2.reports_to| Cross["Cruce cruzado"]
+    E2["employees e2"] --&gt; Cross
+    Cross --&gt;|Filtro: e1.employee_id &lt;&gt; e2.employee_id| Filter["Excluir mismo empleado"]
+    Filter --&gt;|e1.employee_id &lt; e2.employee_id| Dedup["Eliminar pares duplicados"]
+    Dedup --&gt; Out["e1 (colega) | e2 (colega) | manager_id"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    e1.employee_id AS empleado1_id,
+    e1.first_name || ' ' || e1.last_name AS empleado1,
+    e2.employee_id AS empleado2_id,
+    e2.first_name || ' ' || e2.last_name AS empleado2,
+    e1.reports_to AS manager_id
+FROM employees e1
+INNER JOIN employees e2 ON e1.reports_to = e2.reports_to
+    AND e1.employee_id &lt; e2.employee_id
+ORDER BY e1.reports_to, e1.employee_id;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato conoce el patrón de "pares únicos" usando <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs"><</code> en lugar de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs"><></code> para evitar duplicados simétricos. Error: usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs"><></code> que genera pares (A,B) y (B,A) duplicados.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 33: FULL OUTER JOIN — Empleados vs Territorios (Todos de Ambos Lados)</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FULL OUTER JOIN</code> preserva filas de ambas tablas. PostgreSQL implementa el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FULL OUTER JOIN</code> como la combinación de un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEFT JOIN</code> y un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RIGHT JOIN</code> con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">UNION</code>, o más eficientemente como un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Hash Join</code> con marcadores de presencia. Las filas sin correspondencia se rellenan con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULL</code>. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employee_territories</code> es la tabla puente; al hacer FULL JOIN directo entre <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employees</code> y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employee_territories</code>, se preservan empleados sin territorio y territorios sin empleado.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    E["employees"] --&gt;|FULL OUTER JOIN| ET["employee_territories"]
+    ET --&gt;|Coincidencia| Match["filas emparejadas"]
+    E --&gt;|Sin coincidencia| LeftNull["Empleados sin territorio (NULLs a la derecha)"]
+    ET --&gt;|Sin coincidencia| RightNull["Territorios sin empleado (NULLs a la izquierda)"]
+    Match &amp; LeftNull &amp; RightNull --&gt; Out["Resultado FULL OUTER"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    e.employee_id,
+    e.first_name || ' ' || e.last_name AS empleado,
+    et.territory_id
+FROM employees e
+FULL OUTER JOIN employee_territories et ON e.employee_id = et.employee_id
+ORDER BY e.employee_id NULLS LAST, et.territory_id NULLS LAST;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato entiende la diferencia entre FULL y LEFT/RIGHT JOIN. Error: asumir que FULL JOIN siempre produce filas con NULLs en ambos lados (ambas tablas pueden tener todas las filas emparejadas).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 34: FULL OUTER JOIN — Clientes y Pedidos (Análisis Completo)</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">FULL OUTER JOIN entre <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">customers</code> (91 filas) y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> (830 filas). PostgreSQL construye un Hash Join con marcadores de presencia. Clientes sin pedidos aparecen con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULL</code> en columnas de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code>; pedidos huérfanos (sin cliente válido) aparecen con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULL</code> en columnas de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">customers</code>. Esto permite detectar inconsistencias de integridad referencial.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    C["customers"] --&gt;|FULL JOIN| O["orders"]
+    O --&gt;|customer_id| Join["Hash Full Join"]
+    Join --&gt; Out["Todos los clientes (con/sin pedidos) + Pedidos huérfanos (si existen)"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    c.customer_id AS id_cliente,
+    c.company_name,
+    o.order_id,
+    o.order_date
+FROM customers c
+FULL OUTER JOIN orders o ON c.customer_id = o.customer_id
+ORDER BY c.customer_id NULLS LAST, o.order_id NULLS LAST;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato usa FULL JOIN para auditoría de integridad referencial. Error: no usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULLS LAST</code> en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY</code> — por defecto PostgreSQL ordena NULLs primero (dependiendo de la configuración).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 35: JOIN de 5 Tablas — Trazabilidad Completa de un Producto en un Pedido</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Consulta que une 5 tablas: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code> → <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code> → <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">categories</code> → <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">suppliers</code> → <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code>. El optimizador usa algoritmos genéticos (GEQO) para determinar el orden óptimo de joins. Con 5 tablas pequeñas, el plan típico comienza JOINeando <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code> con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code> (índice en PK), luego <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">categories</code> (índice en PK), luego <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">suppliers</code> (índice en PK), y finalmente <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code>. Cada JOIN reduce la cardinalidad del conjunto intermedio.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    OD["order_details"] --&gt;|product_id| P["products"]
+    P --&gt;|category_id| C["categories"]
+    P --&gt;|supplier_id| S["suppliers"]
+    OD --&gt;|order_id| O["orders"]
+    C &amp; S &amp; O --&gt; Out["order_id | product_name | category_name | supplier_name | order_date"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    od.order_id,
+    p.product_name,
+    c.category_name,
+    s.company_name AS proveedor,
+    o.order_date,
+    od.quantity,
+    od.unit_price
+FROM order_details od
+INNER JOIN products p ON od.product_id = p.product_id
+INNER JOIN categories c ON p.category_id = c.category_id
+INNER JOIN suppliers s ON p.supplier_id = s.supplier_id
+INNER JOIN orders o ON od.order_id = o.order_id
+ORDER BY od.order_id, p.product_name;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato mantiene legibilidad en JOINS múltiples. Error: perder filas por usar INNER JOIN cuando un LEFT JOIN sería necesario (p. ej., si un producto no tiene categoría).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 36: JOIN de 4 Tablas — Reporte Logístico Completo</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">4 tablas: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> → <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">customers</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> → <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employees</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> → <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">shippers</code>. El optimizador usa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code> como tabla central (tabla de hechos en esquema estrella). Como <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">customers</code> (91), <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employees</code> (9), y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">shippers</code> (3) son tablas pequeñas, el optimizador construye Hash Joins secuenciales, agregando cada tabla dimensión al conjunto intermedio. El plan es un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Nested Loop</code> con índices.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders (Tabla de hechos)"] --&gt;|customer_id| C["customers"]
+    O --&gt;|employee_id| E["employees"]
+    O --&gt;|ship_via| S["shippers"]
+    C &amp; E &amp; S --&gt;|Hash Joins secuenciales| Out["Reporte consolidado de operaciones"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    o.order_id,
+    o.order_date,
+    c.company_name AS cliente,
+    e.first_name || ' ' || e.last_name AS empleado,
+    s.company_name AS transportista,
+    o.freight
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.customer_id
+INNER JOIN employees e ON o.employee_id = e.employee_id
+INNER JOIN shippers s ON o.ship_via = s.shipper_id
+ORDER BY o.order_date DESC
+LIMIT 20;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa capacidad de construir reportes multi-tabla. Error: no usar alias descriptivos, haciendo el SQL críptico.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 37: RIGHT JOIN — Empleados y sus Pedidos (Preservando Empleados)</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RIGHT JOIN</code> es la imagen espejo de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEFT JOIN</code>. El parser de PostgreSQL reescribe internamente <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RIGHT JOIN</code> como <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEFT JOIN</code> invirtiendo el orden de las tablas en el árbol sintáctico. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders RIGHT JOIN employees</code> es equivalente a <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employees LEFT JOIN orders</code>. Es una transformación puramente sintáctica: el optimizador genera el mismo plan físico independientemente.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders (izquierda en código)"] --&gt;|RIGHT JOIN| E["employees (derecha — preservada)"]
+    E --&gt;|Parser reescribe como LEFT JOIN| Rewrite["employees LEFT JOIN orders"]
+    Rewrite --&gt; Out["Todos los empleados con/sin pedidos"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    e.employee_id,
+    e.first_name || ' ' || e.last_name AS empleado,
+    o.order_id,
+    o.order_date
+FROM orders o
+RIGHT JOIN employees e ON o.employee_id = e.employee_id
+ORDER BY e.employee_id;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">El entrevistador busca que el candidato explique que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RIGHT JOIN</code> es sintácticamente redundante y que prefiere <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEFT JOIN</code> para legibilidad. Error: sugerir que RIGHT JOIN tiene mejor rendimiento que LEFT JOIN (falso, el plan es idéntico tras la reescritura).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 38: CROSS JOIN + Filtro — Combinaciones de Productos y Categorías</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CROSS JOIN</code> genera el producto cartesiano de dos tablas (77 × 8 = 616 filas). El optimizador implementa el CROSS JOIN como un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Nested Loop</code> sin condición de join. El filtro <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE p.category_id = c.category_id</code> transforma el CROSS JOIN en un INNER JOIN lógico. En PostgreSQL, escribir <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FROM products p, categories c WHERE p.category_id = c.category_id</code> es equivalente a <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CROSS JOIN</code> + <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code>. El optimizador trata ambas formulaciones de forma idéntica.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    P["products (77 filas)"] --&gt;|CROSS JOIN| Cart["Producto Cartesiano (77 × 8 = 616 filas)"]
+    C["categories (8 filas)"] --&gt; Cart
+    Cart --&gt;|Filtro: p.category_id = c.category_id| Filter["Filtrar a 77 filas"]
+    Filter --&gt; Out["product_name, category_name"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    p.product_name,
+    c.category_name,
+    p.unit_price
+FROM products p
+CROSS JOIN categories c
+WHERE p.category_id = c.category_id
+ORDER BY c.category_name, p.product_name;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato entiende que CROSS JOIN + WHERE es equivalente a INNER JOIN. Error: olvidar el filtro y generar un producto cartesiano masivo no intencional.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 39: JOIN con Condición Compuesta — Pedidos y Detalles con Filtro en ON</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">La condición de JOIN puede incluir múltiples predicados más allá de la FK. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">INNER JOIN order_details od ON o.order_id = od.order_id AND od.discount > 0</code> filtra los detalles con descuento <strong>durante</strong> la operación de JOIN, no después. El optimizador puede usar un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Hash Join</code> donde la tabla hash solo contiene filas con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">discount > 0</code>, reduciendo el tamaño de la estructura hash en memoria.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders"] --&gt;|Hash Join| HT["Hash Table (order_details con discount &gt; 0)"]
+    OD["order_details"] --&gt;|Filtro: discount &gt; 0 (durante build)| HT
+    HT --&gt;|Sondeo por order_id| Out["Pedidos con al menos un detalle con descuento"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    o.order_id,
+    o.order_date,
+    od.product_id,
+    od.discount
+FROM orders o
+INNER JOIN order_details od ON o.order_id = od.order_id
+    AND od.discount &gt; 0
+ORDER BY od.discount DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato distingue filtrar en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ON</code> vs <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code> para JOINs. En <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">INNER JOIN</code> no hay diferencia lógica (ambos producen mismo resultado), pero en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">OUTER JOIN</code> la ubicación del filtro cambia el resultado. Error: pensar que siempre es lo mismo sin considerar el tipo de JOIN.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 40: JOIN con LATERAL — Subconsulta por Fila para el Último Pedido de Cada Cliente</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LATERAL</code> permite que la subconsulta en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FROM</code> referencie columnas de tablas precedentes en el mismo <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FROM</code>. Es una alternativa a subconsultas correlacionadas. Para cada fila de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">customers</code> (91 filas), PostgreSQL ejecuta la subconsulta lateral que obtiene el último pedido usando <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY order_date DESC LIMIT 1</code>. El plan es un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Nested Loop</code> con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Limit</code> — para cada cliente, un Index Scan en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders(customer_id, order_date)</code> encuentra la última fecha instantáneamente.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    C["customers (91 filas)"] --&gt;|Para cada fila| Loop["Nested Loop"]
+    Loop --&gt;|Index Scan: customer_id, ORDER BY order_date DESC LIMIT 1| O["orders (Index Scan)"]
+    O --&gt;|Último pedido| Out["customer_id, company_name, order_id, order_date"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    c.customer_id,
+    c.company_name,
+    ultimo_pedido.order_id,
+    ultimo_pedido.order_date
+FROM customers c
+CROSS JOIN LATERAL (
+    SELECT o.order_id, o.order_date
+    FROM orders o
+    WHERE o.customer_id = c.customer_id
+    ORDER BY o.order_date DESC
+    LIMIT 1
+) ultimo_pedido
+ORDER BY ultimo_pedido.order_date DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">¡Técnica avanzada! El entrevistador busca si el candidato conoce <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LATERAL</code> como optimización sobre subconsultas correlacionadas. Nota: este JOIN excluye clientes sin pedidos (usa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">INNER JOIN</code>). Para incluirlos, usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEFT JOIN LATERAL ... ON TRUE</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 41: ROW_NUMBER — Ranking Secuencial de Productos por Precio</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ROW_NUMBER() OVER (ORDER BY unit_price DESC)</code> asigna números secuenciales únicos (1, 2, 3, ...) basados en el orden descendente de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">unit_price</code>. La función de ventana opera <strong>después</strong> de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code> y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">HAVING</code>, pero <strong>antes</strong> de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY</code> final y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LIMIT</code>. PostgreSQL evalúa la ventana en una fase separada del plan de ejecución (WindowAgg node), que ordena las filas en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">work_mem</code> y aplica la numeración.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    P["products (Seq Scan)"] --&gt;|Ordenar por unit_price DESC| Sort["Sort Node (work_mem)"]
+    Sort --&gt;|WindowAgg| Win["ROW_NUMBER() OVER (ORDER BY unit_price DESC)"]
+    Win --&gt;|Numeración secuencial| Out["product_name, unit_price, ranking_secuencial"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    product_name,
+    unit_price,
+    ROW_NUMBER() OVER (ORDER BY unit_price DESC) AS ranking_secuencial
+FROM products
+ORDER BY ranking_secuencial;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide comprensión básica de window functions. Error: creer que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ROW_NUMBER</code> garantiza un orden específico sin <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY</code> en la ventana. Error: confundir <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ROW_NUMBER</code> con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RANK</code>.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 42: RANK y DENSE_RANK — Ranking con Empates por Categoría</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RANK() OVER (PARTITION BY category_id ORDER BY unit_price DESC)</code> y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">DENSE_RANK()</code> difieren en el tratamiento de empates. <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RANK</code> genera saltos después de un empate (1, 1, 3, ...), <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">DENSE_RANK</code> no (1, 1, 2, ...). El WindowAgg particiona las filas por <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">category_id</code>, ordena por precio dentro de cada partición, y asigna rangos. Las particiones se procesan secuencialmente en memoria; si hay muchas particiones, PostgreSQL puede derramar a disco.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    P["products"] --&gt;|PARTITION BY category_id| Partition["Particiones por categoría"]
+    Partition --&gt;|ORDER BY unit_price DESC| Sort["Ordenar dentro de cada partición"]
+    Sort --&gt;|RANK() vs DENSE_RANK()| Win["WindowAgg"]
+    Win --&gt;|Con empates| Out["category_id, product_name, unit_price, rank, dense_rank"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    category_id,
+    product_name,
+    unit_price,
+    RANK() OVER (PARTITION BY category_id ORDER BY unit_price DESC) AS rango_con_saltos,
+    DENSE_RANK() OVER (PARTITION BY category_id ORDER BY unit_price DESC) AS rango_sin_saltos
+FROM products
+ORDER BY category_id, rango_con_saltos;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Pregunta clásica de entrevista técnica. El entrevistador busca que el candidato explique las diferencias entre <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ROW_NUMBER</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RANK</code> y <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">DENSE_RANK</code> con ejemplos concretos. Error: no entender que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RANK</code> salta números tras empates.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 43: Top-N por Grupo — Los 3 Productos Más Caros de Cada Categoría</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Para obtener el top-N por grupo, se usa una subconsulta con ventana que asigna <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ROW_NUMBER()</code> por partición, y luego la externa filtra <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WHERE rn <= 3</code>. PostgreSQL ejecuta primero el WindowAgg internamente (ordena por categoría y precio), numera las filas, y luego la consulta externa aplica el filtro. No hay un operador específico "Top-N por grupo" en el optimizador; se implementa como WindowAgg + Filter.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    P["products"] --&gt;|PARTITION BY category_id ORDER BY unit_price DESC| Win["WindowAgg: ROW_NUMBER()"]
+    Win --&gt;|WHERE rn &lt;= 3| Filter["Filtro externo"]
+    Filter --&gt;|Solo 3 por categoría| Out["Top 3 productos más caros por categoría"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>WITH ranked_products AS (
+    SELECT 
+        category_id,
+        product_id,
+        product_name,
+        unit_price,
+        ROW_NUMBER() OVER (
+            PARTITION BY category_id 
+            ORDER BY unit_price DESC
+        ) AS rn
+    FROM products
+)
+SELECT 
+    rp.category_id,
+    c.category_name,
+    rp.product_name,
+    rp.unit_price,
+    rp.rn
+FROM ranked_products rp
+INNER JOIN categories c ON rp.category_id = c.category_id
+WHERE rp.rn &lt;= 3
+ORDER BY rp.category_id, rp.rn;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">¡Pregunta clásica de top-N por grupo! El entrevistador evalúa si el candidato usa CTE con window function para resolver el patrón. Error: intentar usar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code> + <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LIMIT</code> (no funciona para top-N por grupo).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 44: LAG — Diferencia entre Pedido Actual y Anterior del Mismo Cliente</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LAG(order_date, 1) OVER (PARTITION BY customer_id ORDER BY order_date)</code> accede a la fila anterior dentro de la misma partición de cliente. El WindowAgg mantiene un buffer de una fila por partición para proporcionar el valor <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LAG</code>. Si no hay fila anterior, retorna <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULL</code>. La diferencia de fechas se calcula con el operador de resta de PostgreSQL, que retorna un <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">interval</code>.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders"] --&gt;|PARTITION BY customer_id ORDER BY order_date| Win["WindowAgg: LAG(order_date)"]
+    Win --&gt;|order_date - LAG = dias_entre_pedidos| Calc["Diferencia de fechas (interval)"]
+    Calc --&gt; Out["customer_id, order_id, order_date, order_date_anterior, dias_diferencia"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    customer_id,
+    order_id,
+    order_date,
+    LAG(order_date, 1) OVER (
+        PARTITION BY customer_id 
+        ORDER BY order_date
+    ) AS fecha_pedido_anterior,
+    order_date - LAG(order_date, 1) OVER (
+        PARTITION BY customer_id 
+        ORDER BY order_date
+    ) AS dias_entre_pedidos
+FROM orders
+ORDER BY customer_id, order_date;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato conoce <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LAG</code> para análisis temporal. Error: no considerar el <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULL</code> en el primer pedido de cada cliente (no hay fila anterior). El entrevistador valora si el candidato menciona que el resultado incluye NULLs para la primera fila.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 45: LEAD — Detección de Próximo Pedido por Cliente</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEAD(order_date, 1) OVER (PARTITION BY customer_id ORDER BY order_date)</code> proporciona la siguiente fecha de pedido para cada fila. Similar a <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LAG</code>, pero mirando hacia adelante. El WindowAgg procesa las filas en orden y almacena en un buffer la fila siguiente. Si es la última fila de la partición, retorna <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NULL</code>.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    O["orders"] --&gt;|PARTITION BY customer_id ORDER BY order_date| Win["WindowAgg: LEAD(order_date)"]
+    Win --&gt;|order_date_actual | LEAD | lead_date| Out["customer_id, order_id, order_date, proximo_pedido"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    customer_id,
+    order_id,
+    order_date,
+    LEAD(order_date, 1) OVER (
+        PARTITION BY customer_id 
+        ORDER BY order_date
+    ) AS fecha_proximo_pedido
+FROM orders
+ORDER BY customer_id, order_date;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato comprende <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEAD</code> vs <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LAG</code>. Error: confundir la dirección — <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LAG</code> mira atrás, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LEAD</code> mira adelante. Útil para calcular período entre compras consecutivas.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 46: SUM OVER — Acumulado de Ingresos Mes a Mes</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM(ingresos_mes) OVER (ORDER BY periodo_mes ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)</code> calcula un acumulado histórico. El CTE <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">monthly_revenue</code> primero computa los ingresos mensuales (GROUP BY), luego la ventana suma acumulativamente. La cláusula <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> define el frame desde el inicio hasta la fila actual. Si se omite, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM OVER</code> por defecto usa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code>.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    O["orders"] --&gt;|JOIN + GROUP BY mes| MR["CTE: monthly_revenue (ingresos por mes)"]
+    MR --&gt;|SUM OVER (ORDER BY mes)| Win["WindowAgg: SUM(frame: unbounded preceding → current row)"]
+    Win --&gt;|Acumulado| Out["periodo_mes, ingresos_mes, ingresos_acumulados"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>WITH monthly_revenue AS (
+    SELECT 
+        TO_CHAR(o.order_date, 'YYYY-MM') AS periodo_mes,
+        ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS ingresos_mes
+    FROM orders o
+    INNER JOIN order_details od ON o.order_id = od.order_id
+    GROUP BY TO_CHAR(o.order_date, 'YYYY-MM')
+)
+SELECT 
+    periodo_mes,
+    ingresos_mes,
+    ROUND(SUM(ingresos_mes) OVER (
+        ORDER BY periodo_mes
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    )::numeric, 2) AS ingresos_acumulados
+FROM monthly_revenue
+ORDER BY periodo_mes;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato domina window frames. Error: no especificar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ROWS BETWEEN</code> y asumir el frame por defecto. En <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM OVER</code> con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY</code>, el frame default es <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code>, que puede dar resultados inesperados con empates en la columna de ordenamiento.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 47: AVG OVER — Precio del Producto vs Promedio de su Categoría</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AVG(unit_price) OVER (PARTITION BY category_id)</code> calcula el precio promedio de la categoría <strong>sin colapsar filas</strong>. A diferencia de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code>, la ventana preserva cada producto individual. El WindowAgg calcula el promedio por partición y replica el mismo valor en todas las filas de esa partición. La diferencia <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">unit_price - AVG(...)</code> muestra la desviación de cada producto respecto al promedio de su categoría.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart LR
+    P["products"] --&gt;|PARTITION BY category_id| Win["WindowAgg: AVG(unit_price)"]
+    Win --&gt;|unit_price - avg_categoria| Calc["Desviación del promedio"]
+    Calc --&gt; Out["product_name, category_id, unit_price, promedio_categoria, desviacion"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    product_name,
+    category_id,
+    unit_price,
+    ROUND(AVG(unit_price) OVER (PARTITION BY category_id)::numeric, 2) AS promedio_categoria,
+    ROUND((unit_price - AVG(unit_price) OVER (PARTITION BY category_id))::numeric, 2) AS desviacion_promedio
+FROM products
+ORDER BY category_id, unit_price;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Evalúa si el candidato comprende que las window functions preservan el número de filas, a diferencia de <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code>. Error: creer que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">AVG OVER</code> es lo mismo que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GROUP BY</code> (producen el mismo valor pero diferente cardinalidad).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 48: FIRST_VALUE / LAST_VALUE — Producto Más Caro y Más Barato por Categoría</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FIRST_VALUE(unit_price) OVER (PARTITION BY category_id ORDER BY unit_price DESC)</code> retorna el precio del primer producto en el frame (el más caro). <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LAST_VALUE(unit_price) OVER (PARTITION BY category_id ORDER BY unit_price DESC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)</code> retorna el último (el más barato). Sin el frame <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">UNBOUNDED FOLLOWING</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LAST_VALUE</code> solo vería hasta la fila actual.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    P["products"] --&gt;|PARTITION BY category_id ORDER BY unit_price DESC| Win["WindowAgg: FIRST_VALUE + LAST_VALUE"]
+    Win --&gt;|Frame: UNBOUNDED PRECEDING TO UNBOUNDED FOLLOWING| Frame["Frame completo por partición"]
+    Frame --&gt; Out["category_id, product_name, unit_price, mas_caro, mas_barato"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    category_id,
+    product_name,
+    unit_price,
+    FIRST_VALUE(product_name) OVER (
+        PARTITION BY category_id 
+        ORDER BY unit_price DESC
+    ) AS producto_mas_caro,
+    LAST_VALUE(unit_price) OVER (
+        PARTITION BY category_id 
+        ORDER BY unit_price DESC
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+    ) AS precio_mas_barato
+FROM products
+ORDER BY category_id, unit_price DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">¡Trampa clásica! Si el candidato usa <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LAST_VALUE</code> sin especificar <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code>, el frame por defecto termina en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CURRENT ROW</code>, haciendo que <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">LAST_VALUE</code> sea igual a <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">unit_price</code> actual. El entrevistador busca que el candidato conozca el comportamiento del frame.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 49: NTILE — Clasificación de Clientes en Cuartiles por Nivel de Pedidos</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NTILE(4) OVER (ORDER BY total_pedidos DESC)</code> divide el conjunto ordenado en 4 grupos (cuartiles) lo más equitativamente posible. Si hay 91 clientes, NTILE asigna 23 filas a algunos cuartiles y 22 a otros. El WindowAgg necesita conocer el número total de filas para determinar el tamaño de cada bucket, por lo que puede requerir dos pasadas sobre los datos.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    C["customers"] --&gt;|LEFT JOIN| O["orders"]
+    O --&gt;|GROUP BY customer_id| Agg["COUNT(order_id) por cliente"]
+    Agg --&gt;|NTILE(4) OVER (ORDER BY pedidos DESC)| Win["WindowAgg: NTILE"]
+    Win --&gt;|Cuartil 1 (top 25%)| Q1["Clientes Premium"]
+    Win --&gt;|Cuartil 2| Q2["Clientes Regulares"]
+    Win --&gt;|Cuartil 3| Q3["Clientes Ocasionales"]
+    Win --&gt;|Cuartil 4| Q4["Clientes Inactivos"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>WITH customer_orders AS (
+    SELECT 
+        c.customer_id,
+        c.company_name,
+        COUNT(o.order_id) AS total_pedidos
+    FROM customers c
+    LEFT JOIN orders o ON c.customer_id = o.customer_id
+    GROUP BY c.customer_id, c.company_name
+)
+SELECT 
+    customer_id,
+    company_name,
+    total_pedidos,
+    NTILE(4) OVER (ORDER BY total_pedidos DESC) AS cuartil
+FROM customer_orders
+ORDER BY cuartil, total_pedidos DESC;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Mide si el candidato conoce <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">NTILE</code> para segmentación de clientes (RFM). Error: asumir que NTILE divide exactamente (el número de filas puede no ser divisible exactamente por N).</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Ejercicio 50: Window con FILTER — Suma Acumulada con Filtro Condicional</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1. Marco Conceptual del Optimizador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM(quantity) FILTER (WHERE discount > 0) OVER (PARTITION BY product_id ORDER BY order_id)</code> combina dos conceptos avanzados: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FILTER</code> dentro de una window function. PostgreSQL aplica primero el filtro a cada fila dentro de la ventana; las filas que no cumplen la condición se excluyen del acumulador. El WindowAgg mantiene un acumulador que solo se actualiza cuando <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">discount > 0</code>. Esto permite calcular, por ejemplo, la suma acumulada de unidades vendidas <strong>con descuento</strong> para cada producto.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2. Diagrama de Flujo de Datos</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">flowchart TD
+    OD["order_details"] --&gt;|PARTITION BY product_id ORDER BY order_id| Win["WindowAgg"]
+    Win --&gt;|FILTER (WHERE discount &gt; 0)| Filtered["Solo filas con descuento"]
+    Filtered --&gt;|SUM(quantity) ventana| Sum["Acumulado condicional"]
+    Sum --&gt; Out["order_id, product_id, quantity, discount, unidades_con_descuento_acum"]</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">3. Código de Solución</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT 
+    order_id,
+    product_id,
+    quantity,
+    discount,
+    SUM(quantity) FILTER (WHERE discount &gt; 0) OVER (
+        PARTITION BY product_id 
+        ORDER BY order_id
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS unidades_con_descuento_acumuladas
+FROM order_details
+ORDER BY product_id, order_id;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">4. Criterio de Evaluación del Entrevistador</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Ejercicio cumbre del nivel intermedio. Evalúa dominio combinado de window functions + FILTER + frames. El entrevistador busca que el candidato demuestre que puede construir análisis condicionales avanzados sin subconsultas. Error: olvidar el frame <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ROWS BETWEEN</code>, que en PostgreSQL es el valor por defecto para <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SUM OVER</code> con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ORDER BY</code>, pero explicitarlo muestra mejor práctica.</p>
+            </article>
+        </main>
+
+        <footer class="mt-12 text-center text-xs text-stone-500 dark:text-stone-600">
+            <p>© 2026 PostgreSQL Academy | Academia de Arquitectura de Datos</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -152,9 +152,12 @@ def markdown_to_html(md_content, title):
 
 # Convert the files
 files_to_convert = [
+    ("C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/Lab01/Ejercicios/0.prerrequisitos.md", "C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/Lab01/Ejercicios/0.prerrequisitos.html", "0. Prerrequisitos y Configuración de AWS EC2"),
+    ("C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/Lab01/Ejercicios/1.basico.md", "C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/Lab01/Ejercicios/1.basico.html", "1. Ejercicios SQL Nivel Básico"),
+    ("C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/Lab01/Ejercicios/2.intermedio.md", "C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/Lab01/Ejercicios/2.intermedio.html", "2. Ejercicios SQL Nivel Intermedio"),
+    ("C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/Lab01/Ejercicios/3.avanzado.md", "C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/Lab01/Ejercicios/3.avanzado.html", "3. Ejercicios SQL Nivel Avanzado"),
     ("C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/1.basico.md", "C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/1.basico.html", "SQL Básico y Mecánica de Motor"),
-    ("C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/2.intermedio.md", "C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/2.intermedio.html", "SQL Intermedio, Agrupaciones y Joins"),
-    ("C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/Lab01/Ejercicios/3.avanzado.md", "C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/Lab01/Ejercicios/3.avanzado.html", "SQL Avanzado, CTEs y Ventanas")
+    ("C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/2.intermedio.md", "C:/Users/LJCR/Documents/GitHub/ApuntesSQL/Lab/2.intermedio.html", "SQL Intermedio, Agrupaciones y Joins")
 ]
 
 for src, dest, title in files_to_convert:

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0. Prerrequisitos y Configuración de AWS EC2</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'forest' });
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fbf9f4; /* Alabaster Cream */
+            color: #2c3530; /* Forest Slate */
+        }
+        pre, code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="min-h-screen dark:bg-stone-950 dark:text-stone-100 transition-colors duration-300">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl font-extrabold tracking-tight text-emerald-950 dark:text-emerald-300 mb-2">0. Prerrequisitos y Configuración de AWS EC2</h1>
+            <p class="text-stone-600 dark:text-stone-400 text-sm">Libro de Trabajo de Ejercicios de Base de Datos Enriquecido</p>
+        </header>
+
+        <main class="bg-white dark:bg-stone-900 border border-stone-200/80 dark:border-stone-800/80 rounded-3xl p-8 shadow-xl shadow-emerald-950/5">
+            <article class="prose dark:prose-invert max-w-none">
+                <h2 class="text-2xl font-black tracking-tight text-stone-900 dark:text-stone-100 mb-6">Prerrequisitos: Conceptos, Setup y Fundamento para los Ejercicios</h2>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">Contenido</h3>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">1. <a href="#1-conceptos-base" class="text-emerald-700 dark:text-emerald-400 hover:underline font-semibold">Conceptos Base</a></p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">2. <a href="#2-setup-del-laboratorio-docker" class="text-emerald-700 dark:text-emerald-400 hover:underline font-semibold">Setup del Laboratorio (Docker)</a></p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">3. <a href="#3-comandos-esenciales-de-psql" class="text-emerald-700 dark:text-emerald-400 hover:underline font-semibold">Comandos Esenciales de psql</a></p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">4. <a href="#4-esquema-northwind" class="text-emerald-700 dark:text-emerald-400 hover:underline font-semibold">Esquema Northwind</a></p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">5. <a href="#5-cómo-leer-explain-analyze-buffers" class="text-emerald-700 dark:text-emerald-400 hover:underline font-semibold">Cómo Leer EXPLAIN (ANALYZE, BUFFERS)</a></p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">6. <a href="#6-transacciones-begin--commit--rollback" class="text-emerald-700 dark:text-emerald-400 hover:underline font-semibold">Transacciones: BEGIN / COMMIT / ROLLBACK</a></p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">7. <a href="#7-convenciones-postgresql-que-usaremos" class="text-emerald-700 dark:text-emerald-400 hover:underline font-semibold">Convenciones PostgreSQL que Usaremos</a></p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">8. <a href="#8-glosario-rápido" class="text-emerald-700 dark:text-emerald-400 hover:underline font-semibold">Glosario Rápido</a></p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">1. Conceptos Base</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1.1 ¿Qué es SQL?</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">SQL (Structured Query Language) es el lenguaje estándar para comunicarse con bases de datos relacionales. Con SQL puedes:</p>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li><strong>Consultar datos</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">SELECT</code>)</li>
+<li><strong>Crear y modificar estructuras</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">CREATE TABLE</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ALTER TABLE</code>)</li>
+<li><strong>Insertar, actualizar y eliminar datos</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">INSERT</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">UPDATE</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">DELETE</code>)</li>
+<li><strong>Controlar acceso</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">GRANT</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">REVOKE</code>)</li>
+</ul>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1.2 ¿Qué es PostgreSQL?</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">PostgreSQL es un sistema de gestión de bases de datos relacional (RDBMS) de código abierto, conocido por:</p>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li><strong>Cumplimiento ACID</strong> (Atomicidad, Consistencia, Aislamiento, Durabilidad)</li>
+<li><strong>Soporte de estándares SQL</strong> avanzados (ventanas, CTEs recursivas, JSONB)</li>
+<li><strong>MVCC</strong> (Control de Concurrencia Multiversión) — las lecturas nunca bloquean escrituras</li>
+<li><strong>Extensibilidad</strong> — puedes crear tipos de datos, operadores, funciones e índices personalizados</li>
+</ul>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1.3 Modelo Relacional</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Los datos se organizan en <strong>tablas</strong> (relaciones). Cada tabla tiene:</p>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li><strong>Filas</strong> (tuplas o registros) — cada fila representa una entidad</li>
+<li><strong>Columnas</strong> (atributos) — cada columna representa una propiedad</li>
+<li><strong>Clave Primaria (PK)</strong> — columna o combinación que identifica <strong>de forma única</strong> cada fila</li>
+<li><strong>Clave Foránea (FK)</strong> — columna que referencia la PK de otra tabla, creando una relación</li>
+</ul>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none"></div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>Ejemplo: orders (pedidos) → customer_id → customers (clientes)
+  orders.customer_id = customers.customer_id
+  ┌─────────────────┐         ┌──────────────────┐
+  │    orders       │         │   customers       │
+  ├─────────────────┤         ├──────────────────┤
+  │ order_id (PK)   │         │ customer_id (PK) │
+  │ customer_id (FK)│────────→│ company_name     │
+  │ order_date      │         │ country          │
+  │ ...             │         │ ...              │
+  └─────────────────┘         └──────────────────┘</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1.4 Índices</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Un índice es una estructura auxiliar que acelera la búsqueda de filas. Es como el índice alfabético de un libro:</p>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li>Sin índice: PostgreSQL lee toda la tabla secuencialmente (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Seq Scan</code>)</li>
+<li>Con índice: salta directamente a las filas relevantes (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Index Scan</code>)</li>
+<li>PostgreSQL soporta: B-tree (default), Hash, GiST, GIN, BRIN</li>
+</ul>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">1.5 SET search_path</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SET search_path TO public;</code></pre></div>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Por defecto, PostgreSQL busca tablas en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">public</code>. Siempre estamos en <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">public</code> en este laboratorio.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">2. Setup del Laboratorio (Docker)</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2.1 Requisitos de Software</h4>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li><strong>Docker Desktop</strong> (Windows/Mac) o <strong>Docker Engine</strong> (Linux) — v24+</li>
+<li>Al menos <strong>4 GB de RAM libre</strong> para el contenedor</li>
+<li>Opcional: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">psql</code> cliente instalado localmente</li>
+</ul>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2.2 Método Rápido: Docker Standalone</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">POWERSHELL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code># PowerShell (Windows)
+docker run --name pg_northwind_lab ^
+  -e POSTGRES_USER=postgres ^
+  -e POSTGRES_PASSWORD=postgres ^
+  -e POSTGRES_DB=northwind ^
+  -v "${PWD}/db_northwind.sql:/docker-entrypoint-initdb.d/db_northwind.sql" ^
+  -p 5432:5432 ^
+  -d postgres:16-alpine</code></pre></div>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">BASH</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code># Bash (Linux/Mac)
+docker run --name pg_northwind_lab \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=northwind \
+  -v "$(pwd)/../db_northwind.sql:/docker-entrypoint-initdb.d/db_northwind.sql" \
+  -p 5432:5432 \
+  -d postgres:16-alpine</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2.3 ¿Qué hace `docker-entrypoint-initdb.d/`?</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Es una carpeta especial dentro de la imagen oficial de PostgreSQL. Cuando el contenedor arranca <strong>por primera vez</strong> y la base de datos no existe, PostgreSQL ejecuta automáticamente todos los archivos <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">.sql</code> o <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">.sh</code> que encuentre ahí, en orden alfabético.</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Esto significa que <strong>no necesitas ejecutar nada manualmente</strong> — el script <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">db_northwind.sql</code> se ejecuta solo.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2.4 Verificar que la Base Está Lista</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">BASH</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code># Ver logs
+docker logs pg_northwind_lab
+
+# Buscar la línea de éxito
+docker logs pg_northwind_lab 2&gt;&amp;1 | grep "ready for start up"</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2.5 Docker Compose (Alternativa)</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">YAML</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code># docker-compose.yml
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: pg_northwind_lab
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: northwind
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db_northwind.sql:/docker-entrypoint-initdb.d/db_northwind.sql
+
+volumes:
+  pg_data:</code></pre></div>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">BASH</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>docker compose up -d</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2.6 Conexión desde VSCode</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">1. Instalar extensión <strong>PostgreSQL</strong> de Microsoft</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">2. Agregar conexión:</p>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li>Server: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">localhost</code></li>
+<li>User: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">postgres</code></li>
+<li>Password: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">postgres</code></li>
+<li>Database: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">northwind</code></li>
+</ul>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">3. Advanced → SSL mode → <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">disable</code></p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">2.7 Troubleshooting Rápido</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| Problema | Solución |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">|----------|----------|</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| Puerto 5432 ocupado | Cambia <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">-p 5432:5432</code> a <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">-p 5433:5432</code> |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| Contenedor existe | <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">docker rm pg_northwind_lab</code> y reintenta |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| Error de auth | Verifica <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">POSTGRES_PASSWORD</code> |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| SSL required | <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">sslmode=disable</code> en connection string |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">3. Comandos Esenciales de psql</h3>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">psql</code> es el cliente interactivo de PostgreSQL.</p>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">BASH</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code># Conectar
+docker exec -it pg_northwind_lab psql -U postgres -d northwind
+
+# O desde local
+psql -h localhost -U postgres -d northwind</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Meta-comandos (empiezan con `\`)</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| Comando | Qué hace |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">|---------|----------|</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\l</code> | Lista bases de datos |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\dt</code> | Lista tablas de la base actual |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\dt public.*</code> | Lista tablas del schema public |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\d customers</code> | Describe la tabla (columnas, tipos, constraints) |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\di</code> | Lista índices |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\dv</code> | Lista vistas |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\df</code> | Lista funciones |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\x</code> | Modo expandido (columnas como filas) |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\timing</code> | Muestra tiempo de ejecución |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\i archivo.sql</code> | Ejecuta un archivo .sql |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\o archivo.txt</code> | Redirige output a archivo |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\e</code> | Abre editor externo para escribir queries |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\q</code> | Salir de psql |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\?</code> | Ayuda de meta-comandos |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\h SELECT</code> | Ayuda sobre sintaxis de SELECT |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">\conninfo</code> | Información de la conexión actual |</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Ejemplo de sesión</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>northwind=# \dt
+             List of relations
+ Schema |      Name      | Type  |  Owner
+--------+----------------+-------+---------
+ public | categories     | table | postgres
+ public | customers      | table | postgres
+ ...
+
+northwind=# \d customers
+                       Table "public.customers"
+    Column    |         Type          | Collation | Nullable | Default
+--------------+-----------------------+-----------+----------+---------
+ customer_id  | character(5)          |           | not null |
+ company_name | character varying(40) |           | not null |
+ contact_name | character varying(30) |           |          |
+ ...
+
+northwind=# \di
+                    List of relations
+ Schema |        Name         | Type  |  Owner
+--------+---------------------+-------+---------
+ public | idx_orders_customer  | index | postgres
+ public | idx_order_details_product | index | postgres
+ ...</code></pre></div>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">4. Esquema Northwind</h3>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Northwind es una base de datos clásica de una empresa de distribución de alimentos. Contiene <strong>14 tablas</strong> que modelan:</p>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li><strong>Clientes</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">customers</code>) — empresas que compran productos</li>
+<li><strong>Productos</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">products</code>) — catálogo de alimentos</li>
+<li><strong>Categorías</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">categories</code>) — clasificación de productos</li>
+<li><strong>Proveedores</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">suppliers</code>) — quién fabrica los productos</li>
+<li><strong>Pedidos</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">orders</code>) — transacciones de compra</li>
+<li><strong>Detalles de pedido</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_details</code>) — ítems individuales de cada pedido</li>
+<li><strong>Empleados</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">employees</code>) — fuerza de ventas</li>
+<li><strong>Territorios</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">territories</code>, <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">region</code>) — zona geográfica de empleados</li>
+<li><strong>Transportistas</strong> (<code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">shippers</code>) — empresas de envío</li>
+<li><strong>Us_states</strong> — lista de estados de EE.UU.</li>
+</ul>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Diagrama ER</h4>
+<div class="my-6 p-4 bg-emerald-950/20 border border-emerald-900/30 rounded-2xl overflow-hidden"><div class="mermaid text-center">erDiagram
+    categories ||--o{ products : "pertenece a"
+    suppliers  ||--o{ products : "provee"
+    products   ||--o{ order_details : "se vende en"
+    orders     ||--o{ order_details : "contiene"
+    customers  ||--o{ orders : "hace"
+    employees  ||--o{ orders : "gestiona"
+    shippers   ||--o{ orders : "envía"
+    employees  ||--o{ employees : "reporta a"
+    employees  ||--o{ employee_territories : "cubre"
+    territories ||--o{ employee_territories : "asignado a"
+    region     ||--o{ territories : "pertenece a"
+
+    categories {
+        int category_id PK
+        varchar category_name
+        text description
+        bytea picture
+    }
+    customers {
+        char customer_id PK
+        varchar company_name
+        varchar contact_name
+        varchar contact_title
+        varchar address
+        varchar city
+        varchar region
+        varchar postal_code
+        varchar country
+        varchar phone
+        varchar fax
+    }
+    employees {
+        int employee_id PK
+        varchar last_name
+        varchar first_name
+        varchar title
+        date birth_date
+        date hire_date
+        varchar address
+        varchar city
+        varchar region
+        varchar postal_code
+        varchar country
+        varchar home_phone
+        int reports_to FK
+    }
+    products {
+        int product_id PK
+        varchar product_name
+        int supplier_id FK
+        int category_id FK
+        varchar quantity_per_unit
+        numeric unit_price
+        int units_in_stock
+        int units_on_order
+        int reorder_level
+        int discontinued
+    }
+    orders {
+        int order_id PK
+        char customer_id FK
+        int employee_id FK
+        date order_date
+        date required_date
+        date shipped_date
+        int ship_via FK
+        numeric freight
+        varchar ship_name
+        varchar ship_city
+        varchar ship_region
+        varchar ship_postal_code
+        varchar ship_country
+    }
+    order_details {
+        int order_id PK FK
+        int product_id PK FK
+        numeric unit_price
+        int quantity
+        numeric discount
+    }
+    shippers {
+        int shipper_id PK
+        varchar company_name
+        varchar phone
+    }
+    suppliers {
+        int supplier_id PK
+        varchar company_name
+        varchar contact_name
+        varchar contact_title
+        varchar address
+        varchar city
+        varchar region
+        varchar postal_code
+        varchar country
+        varchar phone
+        varchar fax
+        varchar homepage
+    }
+    territories {
+        varchar territory_id PK
+        varchar territory_description
+        int region_id FK
+    }
+    region {
+        int region_id PK
+        varchar region_description
+    }
+    employee_territories {
+        int employee_id PK FK
+        varchar territory_id PK FK
+    }
+    us_states {
+        int state_id PK
+        varchar state_code
+        varchar state_name
+    }</div></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Convención de Columnas</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| Columna | Tipo | Descripción |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">|---------|------|-------------|</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">unit_price</code> | <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">numeric</code> | Precio sin pérdida de precisión |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">quantity</code> | <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">integer</code> | Cantidad de ítems |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">discount</code> | <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">numeric</code> | Descuento en porcentaje (0.00 a 0.25) |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">customer_id</code> | <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">character(5)</code> | Siempre 5 caracteres, PK de customers |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">order_date</code> | <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">date</code> | Fecha del pedido (sin hora) |</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Carga de Datos (resumen)</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| Tabla | Filas |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">|-------|-------|</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| categories | 8 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| customers | 91 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| employees | 9 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| products | 77 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| orders | 830 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| order_details | 2155 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| suppliers | 29 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| shippers | 3 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| region | 4 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| territories | 53 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| us_states | 54 |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">5. Cómo Leer EXPLAIN (ANALYZE, BUFFERS)</h3>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3"><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">EXPLAIN</code> muestra el plan de ejecución que PostgreSQL usará para resolver una consulta. Con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ANALYZE</code> lo ejecuta y muestra tiempos reales. Con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">BUFFERS</code> muestra E/S.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Sintaxis</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>EXPLAIN (ANALYZE, BUFFERS) SELECT ... ;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Ejemplo</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>EXPLAIN (ANALYZE, BUFFERS)
+SELECT c.company_name, COUNT(o.order_id) AS pedidos
+FROM customers c
+LEFT JOIN orders o ON c.customer_id = o.customer_id
+WHERE c.country = 'Mexico'
+GROUP BY c.company_name;</code></pre></div>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Output:</p>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none"></div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code> HashAggregate  (cost=... rows=5 width=...) (actual time=0.45..0.47 rows=5 loops=1)
+   Group Key: c.company_name
+   Buffers: shared hit=16
+   -&gt;  Hash Right Join  (cost=... rows=... width=...)
+         Hash Cond: (o.customer_id = c.customer_id)
+         Buffers: shared hit=16
+         -&gt;  Seq Scan on orders o  (cost=... rows=... width=...) (actual time=0.01..0.18 rows=48 loops=1)
+               Buffers: shared hit=10
+         -&gt;  Hash  (cost=... rows=... width=...)
+               -&gt;  Seq Scan on customers c  (cost=... rows=... width=...)
+                     Filter: (country = 'Mexico'::text)
+                     Buffers: shared hit=6
+ Planning Time: 0.15 ms
+ Execution Time: 0.55 ms</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Interpretación</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| Elemento | Significa |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">|----------|-----------|</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Seq Scan</code> | Escaneo secuencial (lee toda la tabla) — lento en tablas grandes |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Index Scan</code> | Escaneo por índice (salta a filas específicas) — rápido |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Hash Join</code> | Construye hash de una tabla y escanea la otra — óptimo para JOINs sin índice |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Nested Loop</code> | Para cada fila de A, busca en B — óptimo para conjuntos pequeños |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Merge Join</code> | Ordena ambas y las fusiona — óptimo para datos preordenados |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">cost=...</code> | Costo estimado (unidad arbitraria, comparativo) |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">actual time=0.45..0.47</code> | Tiempo real en ms (inicio..fin) |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">rows=5</code> | Filas reales producidas |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">loops=1</code> | Veces que se ejecutó este nodo |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Buffers: shared hit=16</code> | 16 bloques leídos desde caché (rápido) |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Buffers: shared read=10</code> | 10 bloques leídos desde disco (lento) |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Planning Time</code> | Tiempo que el optimizador planificó |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Execution Time</code> | Tiempo total de ejecución |</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Regla de Oro</h4>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li><strong><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Seq Scan</code> en tabla pequeña (< 1000 filas)</strong> → normal</li>
+<li><strong><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Seq Scan</code> en tabla grande (> 10000 filas)</strong> → probablemente falta un índice</li>
+<li><strong><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">Buffers: shared read</code></strong> → lecturas de disco, posible bottleneck</li>
+<li><strong>Diferencia entre <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">rows</code> estimado y filas reales</strong> → estadísticas desactualizadas (correr <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ANALYZE</code>)</li>
+</ul>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">6. Transacciones: BEGIN / COMMIT / ROLLBACK</h3>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Una transacción agrupa operaciones en una sola unidad atómica: <strong>o se ejecutan todas, o no se ejecuta ninguna</strong>.</p>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Flujo Básico</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>-- Iniciar transacción
+BEGIN;
+
+INSERT INTO orders (order_id, customer_id, employee_id, order_date)
+VALUES (99999, 'ALFKI', 1, CURRENT_DATE);
+
+UPDATE customers
+SET contact_name = 'Nuevo Contacto'
+WHERE customer_id = 'ALFKI';
+
+-- Confirmar cambios
+COMMIT;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Rollback (deshacer)</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>BEGIN;
+DELETE FROM orders WHERE order_id = 99999;
+-- Ups, no quería borrar
+ROLLBACK;  -- todo vuelve al estado anterior</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Transacciones Anidadas con SAVEPOINT</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>BEGIN;
+  INSERT INTO customers ...;
+  SAVEPOINT sp1;
+  INSERT INTO orders ...;     -- esto falla
+  ROLLBACK TO SAVEPOINT sp1;  -- deshace solo el INSERT orders
+  -- customers insertado se conserva
+COMMIT;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">Buenas Prácticas</h4>
+<ul class="list-disc pl-6 my-4 space-y-2 text-stone-600 dark:text-stone-300 leading-relaxed text-sm">
+<li><strong>Transacciones cortas</strong> — mantener el menor tiempo posible para reducir contención</li>
+<li>Siempre hacer <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">COMMIT</code> o <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ROLLBACK</code> explícito (no confiar en el cierre de conexión)</li>
+<li>Para pruebas de DML destructivo: <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">BEGIN; EXPLAIN ANALYZE <DML>; ROLLBACK;</code></li>
+</ul>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">7. Convenciones PostgreSQL que Usaremos</h3>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">7.1 RETURNING</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Devuelve valores de la fila afectada, evitando un SELECT posterior:</p>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>INSERT INTO customers (customer_id, company_name, city, country)
+VALUES ('NEWCO', 'Nueva Corp', 'Lima', 'Peru')
+RETURNING customer_id, company_name, city;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">7.2 ON CONFLICT (UPSERT)</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Inserta o actualiza si existe conflicto:</p>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>INSERT INTO products (product_id, product_name, unit_price)
+VALUES (100, 'Producto Nuevo', 15.50)
+ON CONFLICT (product_id)
+DO UPDATE SET 
+  product_name = EXCLUDED.product_name,
+  unit_price = EXCLUDED.unit_price;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">7.3 ILIKE (case-insensitive LIKE)</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT * FROM customers WHERE company_name ILIKE '%food%';
+-- Encuentra "Food", "FOOD", "food", etc.</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">7.4 FILTER (agregación condicional)</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT
+  COUNT(*) AS total_pedidos,
+  COUNT(*) FILTER (WHERE ship_country = 'USA') AS usa,
+  COUNT(*) FILTER (WHERE ship_country = 'Germany') AS germany
+FROM orders;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">7.5 SERIAL / BIGSERIAL</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Auto-incrementales (equivalentes a <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">IDENTITY</code> en SQL estándar):</p>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>CREATE TABLE mi_tabla (
+  id SERIAL PRIMARY KEY,  -- equivalente a INTEGER GENERATED BY DEFAULT AS IDENTITY
+  nombre TEXT
+);</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">7.6 Orden de Ejecución Lógica de SQL</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Este orden conceptual (no físico) determina qué alias están disponibles dónde:</p>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none"></div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>FROM       → JOIN      → WHERE     → GROUP BY  → HAVING    → 
+WINDOW     → SELECT    → DISTINCT  → UNION     → ORDER BY  → LIMIT/OFFSET</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">7.7 DML Destructivo con EXPLAIN</h4>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>BEGIN;
+EXPLAIN (ANALYZE, BUFFERS)
+DELETE FROM orders WHERE order_date &lt; '1990-01-01';
+ROLLBACK;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">7.8 CTEs con MATERIALIZED Hint</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Desde PostgreSQL 12, puedes controlar si una CTE se materializa o se inlining:</p>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>WITH cte AS MATERIALIZED (
+  SELECT ...  -- se ejecuta una vez, se almacena en memoria
+)
+SELECT * FROM cte;
+
+WITH cte AS NOT MATERIALIZED (
+  SELECT ...  -- se inlined como subquery, puede ser más rápido
+)
+SELECT * FROM cte;</code></pre></div>
+<h4 class="text-md font-bold text-stone-800 dark:text-stone-200 mt-6 mb-3 flex items-center gap-2 border-b border-stone-200/60 dark:border-stone-800/60 pb-1">7.9 generate_series</h4>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">Función de PostgreSQL para generar secuencias (útil para pruebas):</p>
+<div class="my-6 relative"><div class="absolute right-4 top-3 text-xs text-stone-400 font-mono select-none">SQL</div><pre class="bg-stone-900 text-stone-100 p-5 rounded-2xl overflow-x-auto border border-stone-800 font-mono text-sm leading-relaxed"><code>SELECT generate_series(1, 10);
+
+SELECT generate_series('2024-01-01'::date, '2024-01-10'::date, '1 day'::interval);</code></pre></div>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">---</p>
+<h3 class="text-lg font-bold text-emerald-900 dark:text-emerald-300 mt-8 mb-4 border-l-4 border-emerald-600 pl-3">8. Glosario Rápido</h3>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| Término | Definición |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">|---------|------------|</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>ACID</strong> | Atomicidad, Consistencia, Aislamiento, Durabilidad — garantías de transacción |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>CTE</strong> | Common Table Expression — consulta nombrada con <code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">WITH</code> |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>DDL</strong> | Data Definition Language — CREATE, ALTER, DROP |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>DML</strong> | Data Manipulation Language — INSERT, UPDATE, DELETE |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>FK</strong> | Foreign Key — columna que referencia otra tabla |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>Index Scan</strong> | Búsqueda por índice (rápida) |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>MVCC</strong> | Multi-Version Concurrency Control — lecturas sin bloqueo |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>Nested Loop</strong> | Algoritmo de JOIN: por cada fila A, buscar en B |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>Hash Join</strong> | Algoritmo de JOIN: construir hash de una tabla, escanear otra |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>PK</strong> | Primary Key — identificador único de fila |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>Seq Scan</strong> | Sequential Scan — lectura completa de tabla |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>Window Function</strong> | Función que opera sobre un grupo de filas relacionadas |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>work_mem</strong> | Memoria para operaciones de sorting/hashing (por operación, no global) |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong>shared_buffers</strong> | Memoria compartida para cache de datos en PostgreSQL |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">RETURNING</code></strong> | Devuelve datos de la fila afectada por DML |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ON CONFLICT</code></strong> | UPSERT: inserta o actualiza según conflicto |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">ILIKE</code></strong> | LIKE case-insensitive |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">FILTER (WHERE ...)</code></strong> | Agregación condicional sin subquery |</p>
+<p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed my-3">| <strong><code class="px-1.5 py-0.5 bg-stone-200/60 dark:bg-stone-800/60 rounded text-rose-600 dark:text-rose-400 font-mono text-xs">generate_series</code></strong> | Generador de filas secuenciales |</p>
+            </article>
+        </main>
+
+        <footer class="mt-12 text-center text-xs text-stone-500 dark:text-stone-600">
+            <p>© 2026 PostgreSQL Academy | Academia de Arquitectura de Datos</p>
+        </footer>
+    </div>
+</body>
+</html>
