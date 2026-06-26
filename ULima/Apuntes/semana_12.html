@@ -106,13 +106,16 @@
         </section>
         
 
-        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li >Comprender la estructura de un bloque PL/SQL: DECLARE, BEGIN, EXCEPTION, END.</li>
-                <li >Declarar variables usando tipado directo, %TYPE y %ROWTYPE.</li>
-                <li >Usar estructuras de control: IF, LOOP, WHILE, FOR.</li>
-                <li >Implementar cursores implicitos y explicitos para procesamiento fila a fila.</li>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
+            <h4 class="text-blue-800 dark:text-blue-300 font-bold mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Objetivos de Aprendizaje
+            </h4>
+            <ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
+                <li>Comprender la estructura de un bloque PL/SQL: DECLARE, BEGIN, EXCEPTION, END.</li>
+                <li>Declarar variables usando tipado directo, %TYPE y %ROWTYPE.</li>
+                <li>Usar estructuras de control: IF, LOOP, WHILE, FOR.</li>
+                <li>Implementar cursores implicitos y explicitos para procesamiento fila a fila.</li>
             </ul>
         </div>
 
@@ -127,7 +130,7 @@
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Seccion</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Obligatorio</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
@@ -135,24 +138,24 @@
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>DECLARE</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Opcional</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Variables, restricciones, cursores y excepciones definidas por el usuario</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>DECLARE</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Opcional</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Variables, restricciones, cursores y excepciones definidas por el usuario</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>BEGIN</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Obligatorio</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Sentencias SQL y sentencias de control PL/SQL</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>BEGIN</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Obligatorio</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Sentencias SQL y sentencias de control PL/SQL</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>EXCEPTION</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Opcional</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Acciones a ejecutar cuando ocurren errores</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>EXCEPTION</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Opcional</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Acciones a ejecutar cuando ocurren errores</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>END;</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Obligatorio</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Cierra el bloque</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>END;</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Obligatorio</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Cierra el bloque</td>
                 </tr>
             </tbody>
         </table>
@@ -223,7 +226,7 @@ END;
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción / Ejemplo</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Resultado</th>
@@ -231,39 +234,39 @@ END;
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>CONCAT(str1, str2)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Concatena dos cadenas: <code>CONCAT('Hola', 'Mundo')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">"HolaMundo"</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>CONCAT(str1, str2)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Concatena dos cadenas: <code>CONCAT('Hola', 'Mundo')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">"HolaMundo"</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>SUBSTR(str, pos, len)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Extrae parte de una cadena: <code>SUBSTR('HolaMundo', 1, 5)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">"HolaM"</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>SUBSTR(str, pos, len)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Extrae parte de una cadena: <code>SUBSTR('HolaMundo', 1, 5)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">"HolaM"</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>LENGTH(str)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Retorna la longitud de la cadena: <code>LENGTH('HolaMundo')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">9</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>LENGTH(str)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Retorna la longitud de la cadena: <code>LENGTH('HolaMundo')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">9</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>INSTR(str, char)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Encuentra la posición de un carácter: <code>INSTR('HolaMundo', 'M')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">5</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>INSTR(str, char)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Encuentra la posición de un carácter: <code>INSTR('HolaMundo', 'M')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">5</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>LPAD(col, len, pad)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Rellena a la izquierda: <code>LPAD(salario, 10, '*')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">"*****24000"</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>LPAD(col, len, pad)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Rellena a la izquierda: <code>LPAD(salario, 10, '*')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">"*****24000"</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>RPAD(col, len, pad)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Rellena a la derecha: <code>RPAD(salario, 10, '*')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">"24000*****"</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>RPAD(col, len, pad)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Rellena a la derecha: <code>RPAD(salario, 10, '*')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">"24000*****"</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>TRIM(char FROM str)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Remueve caracteres extremos: <code>TRIM('H' FROM 'HolaMundo')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">"olaMundo"</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>TRIM(char FROM str)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Remueve caracteres extremos: <code>TRIM('H' FROM 'HolaMundo')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">"olaMundo"</td>
                 </tr>
             </tbody>
         </table>
@@ -273,7 +276,7 @@ END;
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción / Ejemplo</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Resultado</th>
@@ -281,19 +284,19 @@ END;
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ROUND(n, d)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Redondea a d decimales: <code>ROUND(45.926, 2)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">45.93</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ROUND(n, d)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Redondea a d decimales: <code>ROUND(45.926, 2)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">45.93</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>TRUNC(n, d)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Trunca a d decimales: <code>TRUNC(45.926, 2)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">45.92</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>TRUNC(n, d)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Trunca a d decimales: <code>TRUNC(45.926, 2)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">45.92</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>MOD(m, n)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Retorna el residuo de la división: <code>MOD(1600, 300)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">100</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>MOD(m, n)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Retorna el residuo de la división: <code>MOD(1600, 300)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">100</td>
                 </tr>
             </tbody>
         </table>
@@ -303,7 +306,7 @@ END;
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción / Ejemplo</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Resultado</th>
@@ -311,34 +314,34 @@ END;
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>MONTHS_BETWEEN(d1, d2)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Meses entre d1 y d2: <code>MONTHS_BETWEEN('01-SEP-95', '11-JAN-94')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">19.6774194</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>MONTHS_BETWEEN(d1, d2)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Meses entre d1 y d2: <code>MONTHS_BETWEEN('01-SEP-95', '11-JAN-94')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">19.6774194</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ADD_MONTHS(d, n)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Suma n meses a una fecha: <code>ADD_MONTHS('11-JAN-94', 6)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">11-JUL-94</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ADD_MONTHS(d, n)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Suma n meses a una fecha: <code>ADD_MONTHS('11-JAN-94', 6)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">11-JUL-94</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NEXT_DAY(d, day)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Próximo día especificado: <code>NEXT_DAY('10-JUN-08', 'TUESDAY')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">17-JUN-08</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>NEXT_DAY(d, day)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Próximo día especificado: <code>NEXT_DAY('10-JUN-08', 'TUESDAY')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">17-JUN-08</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>LAST_DAY(d)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Último día del mes: <code>LAST_DAY('01-FEB-08')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">29-FEB-08</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>LAST_DAY(d)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Último día del mes: <code>LAST_DAY('01-FEB-08')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">29-FEB-08</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ROUND(d, 'YEAR'|'MONTH')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Redondea la fecha al año o mes más cercano</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Fecha redondeada</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ROUND(d, 'YEAR'|'MONTH')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Redondea la fecha al año o mes más cercano</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Fecha redondeada</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>TRUNC(d, 'YEAR'|'MONTH')</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Trunca la fecha al inicio de año o mes</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Fecha truncada</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>TRUNC(d, 'YEAR'|'MONTH')</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Trunca la fecha al inicio de año o mes</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Fecha truncada</td>
                 </tr>
             </tbody>
         </table>
@@ -414,7 +417,7 @@ END LOOP;</code></pre>
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Atributo</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
@@ -422,24 +425,24 @@ END LOOP;</code></pre>
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>%ISOPEN</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Booleano</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">TRUE si el cursor esta abierto</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>%ISOPEN</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Booleano</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">TRUE si el cursor esta abierto</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>%NOTFOUND</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Booleano</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">TRUE si el ultimo FETCH no trajo filas</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>%NOTFOUND</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Booleano</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">TRUE si el ultimo FETCH no trajo filas</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>%FOUND</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Booleano</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">TRUE mientras el ultimo FETCH trae una fila</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>%FOUND</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Booleano</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">TRUE mientras el ultimo FETCH trae una fila</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>%ROWCOUNT</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Numerico</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Total de filas retornadas hasta el momento</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>%ROWCOUNT</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Numerico</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Total de filas retornadas hasta el momento</td>
                 </tr>
             </tbody>
         </table>
@@ -451,7 +454,7 @@ END LOOP;</code></pre>
             <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                         <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Paso</th>
                         <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Comando</th>
                         <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
@@ -459,24 +462,24 @@ END LOOP;</code></pre>
                 </thead>
                 <tbody>
                     <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="p-4 text-slate-600 dark:text-slate-400">1</td>
-                        <td class="p-4 text-slate-600 dark:text-slate-400"><code>DECLARE CURSOR</code></td>
-                        <td class="p-4 text-slate-600 dark:text-slate-400">Crear el cursor con la sentencia SELECT</td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">1</td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>DECLARE CURSOR</code></td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Crear el cursor con la sentencia SELECT</td>
                     </tr>
                     <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="p-4 text-slate-600 dark:text-slate-400">2</td>
-                        <td class="p-4 text-slate-600 dark:text-slate-400"><code>OPEN</code></td>
-                        <td class="p-4 text-slate-600 dark:text-slate-400">Abrir el cursor (ejecuta el SELECT)</td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">2</td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>OPEN</code></td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Abrir el cursor (ejecuta el SELECT)</td>
                     </tr>
                     <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="p-4 text-slate-600 dark:text-slate-400">3</td>
-                        <td class="p-4 text-slate-600 dark:text-slate-400"><code>FETCH</code></td>
-                        <td class="p-4 text-slate-600 dark:text-slate-400">Cargar la fila actual en variables</td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">3</td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>FETCH</code></td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Cargar la fila actual en variables</td>
                     </tr>
                     <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="p-4 text-slate-600 dark:text-slate-400">4</td>
-                        <td class="p-4 text-slate-600 dark:text-slate-400"><code>CLOSE</code></td>
-                        <td class="p-4 text-slate-600 dark:text-slate-400">Cerrar el cursor</td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">4</td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>CLOSE</code></td>
+                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Cerrar el cursor</td>
                     </tr>
                 </tbody>
             </table>
@@ -523,39 +526,39 @@ END;
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Excepcion</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Causa</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NO_DATA_FOUND</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">SELECT INTO no retorna filas</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>NO_DATA_FOUND</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">SELECT INTO no retorna filas</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>TOO_MANY_ROWS</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">SELECT INTO retorna mas de una fila</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>TOO_MANY_ROWS</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">SELECT INTO retorna mas de una fila</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>DUP_VAL_ON_INDEX</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Insercion de valor duplicado en columna unica</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>DUP_VAL_ON_INDEX</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Insercion de valor duplicado en columna unica</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ZERO_DIVIDE</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Division entre cero</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ZERO_DIVIDE</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Division entre cero</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>INVALID_CURSOR</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Operacion ilegal sobre un cursor</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>INVALID_CURSOR</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Operacion ilegal sobre un cursor</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>CURSOR_ALREADY_OPEN</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Intento de abrir un cursor ya abierto</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>CURSOR_ALREADY_OPEN</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Intento de abrir un cursor ya abierto</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>VALUE_ERROR</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Error de conversion o truncamiento</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>VALUE_ERROR</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Error de conversion o truncamiento</td>
                 </tr>
             </tbody>
         </table>
@@ -651,8 +654,8 @@ END;
         </section>
 
 <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
-            <a href="index.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Volver al Indice</a>
-            <a href="semana_13.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Siguiente Semana</a>
+            <a href="index.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Volver al Índice</a>
+            <a href="semana_13.html" class="px-5 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm">Siguiente Semana</a>
         </nav>
     </main>
 </div>

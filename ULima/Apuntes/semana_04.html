@@ -130,14 +130,17 @@
         </section>
         
 
-        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li >Crear tablas con tipos de datos apropiados y restricciones</li>
-                <li >Definir PRIMARY KEY y FOREIGN KEY en la creacion de tablas</li>
-                <li >Modificar tablas existentes con ALTER TABLE</li>
-                <li >Eliminar tablas correctamente usando DROP TABLE</li>
-                <li >Comprender el modelo de datos de la muebleria como caso de estudio</li>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
+            <h4 class="text-blue-800 dark:text-blue-300 font-bold mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Objetivos de Aprendizaje
+            </h4>
+            <ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
+                <li>Crear tablas con tipos de datos apropiados y restricciones</li>
+                <li>Definir PRIMARY KEY y FOREIGN KEY en la creacion de tablas</li>
+                <li>Modificar tablas existentes con ALTER TABLE</li>
+                <li>Eliminar tablas correctamente usando DROP TABLE</li>
+                <li>Comprender el modelo de datos de la muebleria como caso de estudio</li>
             </ul>
         </div>
 
@@ -302,23 +305,23 @@ CREATE TABLE producto_ordenado (
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Operacion</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Sintaxis</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Agregar columna</strong></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ALTER TABLE tabla ADD (columna tipo [DEFAULT expr] [restriccion]);</code></td>
+                    <td class="p-4 text-slate-900 dark:text-slate-200 font-medium whitespace-nowrap"><strong>Agregar columna</strong></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ALTER TABLE tabla ADD (columna tipo [DEFAULT expr] [restriccion]);</code></td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Modificar columna</strong></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ALTER TABLE tabla MODIFY (columna NUEVO_tipo [DEFAULT expr] [restriccion]);</code></td>
+                    <td class="p-4 text-slate-900 dark:text-slate-200 font-medium whitespace-nowrap"><strong>Modificar columna</strong></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ALTER TABLE tabla MODIFY (columna NUEVO_tipo [DEFAULT expr] [restriccion]);</code></td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Eliminar columna</strong></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ALTER TABLE tabla DROP COLUMN columna;</code></td>
+                    <td class="p-4 text-slate-900 dark:text-slate-200 font-medium whitespace-nowrap"><strong>Eliminar columna</strong></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ALTER TABLE tabla DROP COLUMN columna;</code></td>
                 </tr>
             </tbody>
         </table>
@@ -377,35 +380,35 @@ DROP TABLE orden_pedido CASCADE;</pre>
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Comando Oracle</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Comando PostgreSQL</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>VARCHAR2(n)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>VARCHAR(n)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>VARCHAR2(n)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>VARCHAR(n)</code></td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NUMBER(7)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>INTEGER</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>NUMBER(7)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>INTEGER</code></td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NUMBER(10,2)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NUMERIC(10,2)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>NUMBER(10,2)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>NUMERIC(10,2)</code></td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>SYSDATE</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>CURRENT_DATE</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>SYSDATE</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>CURRENT_DATE</code></td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>DROP ... CASCADE CONSTRAINTS</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>DROP ... CASCADE</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>DROP ... CASCADE CONSTRAINTS</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>DROP ... CASCADE</code></td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400">DDL hace COMMIT implicito</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">DDL es transaccional (ROLLBACK posible)</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">DDL hace COMMIT implicito</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">DDL es transaccional (ROLLBACK posible)</td>
                 </tr>
             </tbody>
         </table>
@@ -507,9 +510,9 @@ DROP TABLE orden_pedido CASCADE;</pre>
         </section>
 
 <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
-            <a href="semana_03.html" class="nav__link">Semana Anterior</a>
-            <a href="index.html" class="nav__link">Volver al Indice</a>
-            <a href="semana_05.html" class="nav__link">Siguiente Semana</a>
+            <a href="semana_03.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Semana Anterior</a>
+            <a href="index.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Volver al Índice</a>
+            <a href="semana_05.html" class="px-5 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm">Siguiente Semana</a>
         </nav>
     </main>
 </div>

@@ -108,13 +108,16 @@
         </section>
         
 
-        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li >Comprender el concepto de JOIN y el producto cartesiano.</li>
-                <li >Dominar los 4 tipos de JOIN: equijoin, non-equijoin, self join y outer join.</li>
-                <li >Distinguir entre subconsultas de fila simple y fila multiple.</li>
-                <li >Aplicar subconsultas con funciones de grupo.</li>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
+            <h4 class="text-blue-800 dark:text-blue-300 font-bold mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Objetivos de Aprendizaje
+            </h4>
+            <ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
+                <li>Comprender el concepto de JOIN y el producto cartesiano.</li>
+                <li>Dominar los 4 tipos de JOIN: equijoin, non-equijoin, self join y outer join.</li>
+                <li>Distinguir entre subconsultas de fila simple y fila multiple.</li>
+                <li>Aplicar subconsultas con funciones de grupo.</li>
             </ul>
         </div>
 
@@ -241,7 +244,7 @@ FROM   orden_pedido RIGHT OUTER JOIN cliente
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo de JOIN</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Filas sin match</th>
@@ -249,24 +252,24 @@ FROM   orden_pedido RIGHT OUTER JOIN cliente
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400">INNER JOIN</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Solo filas que coinciden en ambas tablas</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Excluidas</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">INNER JOIN</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Solo filas que coinciden en ambas tablas</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Excluidas</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400">LEFT OUTER JOIN</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Todas las filas de la tabla izquierda</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Tabla derecha = NULL</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">LEFT OUTER JOIN</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Todas las filas de la tabla izquierda</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Tabla derecha = NULL</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400">RIGHT OUTER JOIN</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Todas las filas de la tabla derecha</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Tabla izquierda = NULL</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">RIGHT OUTER JOIN</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Todas las filas de la tabla derecha</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Tabla izquierda = NULL</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400">FULL OUTER JOIN</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Todas las filas de ambas tablas</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Lado sin match = NULL</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">FULL OUTER JOIN</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Todas las filas de ambas tablas</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Lado sin match = NULL</td>
                 </tr>
             </tbody>
         </table>
@@ -330,19 +333,19 @@ WHERE  numero_embarques = (
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Operador</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Significado</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>IN</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Igual a cualquier miembro de la lista</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>IN</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Igual a cualquier miembro de la lista</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NOT IN</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">No igual a ningun miembro de la lista</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>NOT IN</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">No igual a ningun miembro de la lista</td>
                 </tr>
             </tbody>
         </table>
@@ -448,8 +451,8 @@ WHERE  id_cliente IN (
         </section>
 
 <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
-            <a href="index.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Volver al Indice</a>
-            <a href="semana_11.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Siguiente Semana</a>
+            <a href="index.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Volver al Índice</a>
+            <a href="semana_11.html" class="px-5 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm">Siguiente Semana</a>
         </nav>
     </main>
 </div>

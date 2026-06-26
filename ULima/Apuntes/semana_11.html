@@ -105,13 +105,16 @@
         </section>
         
 
-        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li >Conocer y aplicar las 5 funciones de grupo: MIN, MAX, AVG, SUM, COUNT.</li>
-                <li >Usar GROUP BY para dividir datos en subconjuntos logicos.</li>
-                <li >Filtrar grupos con HAVING (vs filtrar filas con WHERE).</li>
-                <li >Combinar HAVING con subconsultas para analitica avanzada.</li>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
+            <h4 class="text-blue-800 dark:text-blue-300 font-bold mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Objetivos de Aprendizaje
+            </h4>
+            <ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
+                <li>Conocer y aplicar las 5 funciones de grupo: MIN, MAX, AVG, SUM, COUNT.</li>
+                <li>Usar GROUP BY para dividir datos en subconjuntos logicos.</li>
+                <li>Filtrar grupos con HAVING (vs filtrar filas con WHERE).</li>
+                <li>Combinar HAVING con subconsultas para analitica avanzada.</li>
             </ul>
         </div>
 
@@ -126,7 +129,7 @@
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Funcion</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo de dato</th>
@@ -134,29 +137,29 @@
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>MIN(n)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Valor minimo</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Numerico, fecha, caracter</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>MIN(n)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Valor minimo</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Numerico, fecha, caracter</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>MAX(n)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Valor maximo</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Numerico, fecha, caracter</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>MAX(n)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Valor maximo</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Numerico, fecha, caracter</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>AVG(n)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Promedio (media aritmetica)</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Numerico</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>AVG(n)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Promedio (media aritmetica)</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Numerico</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>SUM(n)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Suma total</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Numerico</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>SUM(n)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Suma total</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Numerico</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>COUNT(x)</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Numero de filas (con <code>*</code>) o valores no nulos</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Cualquiera</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>COUNT(x)</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Numero de filas (con <code>*</code>) o valores no nulos</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Cualquiera</td>
                 </tr>
             </tbody>
         </table>
@@ -237,7 +240,7 @@ HAVING COUNT(*) > 5;</code></pre>
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr class="bg-slate-50 dark:bg-slate-800/50">
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Clausula</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Filtra</th>
                     <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Momento de ejecucion</th>
@@ -245,14 +248,14 @@ HAVING COUNT(*) > 5;</code></pre>
             </thead>
             <tbody>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>WHERE</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Filas individuales</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Antes de GROUP BY</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>WHERE</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Filas individuales</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Antes de GROUP BY</td>
                 </tr>
                 <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>HAVING</code></td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Grupos completos</td>
-                    <td class="p-4 text-slate-600 dark:text-slate-400">Despues de GROUP BY</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>HAVING</code></td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Grupos completos</td>
+                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Despues de GROUP BY</td>
                 </tr>
             </tbody>
         </table>
@@ -379,8 +382,8 @@ HAVING COUNT(*) > (
         </section>
 
 <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
-            <a href="index.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Volver al Indice</a>
-            <a href="semana_12.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Siguiente Semana</a>
+            <a href="index.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Volver al Índice</a>
+            <a href="semana_12.html" class="px-5 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm">Siguiente Semana</a>
         </nav>
     </main>
 </div>
