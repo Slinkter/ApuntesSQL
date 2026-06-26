@@ -218,6 +218,41 @@
             font-size: 0.95rem;
         }
 
+        /* Tables styling */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--code-bg);
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
         /* Code block layouts */
         .code-block-wrapper {
             position: relative;
@@ -552,12 +587,24 @@ volumes:
 </ul>
 <p>3. Advanced → SSL mode → <code>disable</code></p>
 <h4>2.7 Troubleshooting Rápido</h4>
-<p>| Problema | Solución |</p>
-<p>|----------|----------|</p>
-<p>| Puerto 5432 ocupado | Cambia <code>-p 5432:5432</code> a <code>-p 5433:5432</code> |</p>
-<p>| Contenedor existe | <code>docker rm pg_northwind_lab</code> y reintenta |</p>
-<p>| Error de auth | Verifica <code>POSTGRES_PASSWORD</code> |</p>
-<p>| SSL required | <code>sslmode=disable</code> en connection string |</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Problema</th><th>Solución</th>
+</tr></thead><tbody>
+<tr>
+<td>Puerto 5432 ocupado</td><td>Cambia <code>-p 5432:5432</code> a <code>-p 5433:5432</code></td>
+</tr>
+<tr>
+<td>Contenedor existe</td><td><code>docker rm pg_northwind_lab</code> y reintenta</td>
+</tr>
+<tr>
+<td>Error de auth</td><td>Verifica <code>POSTGRES_PASSWORD</code></td>
+</tr>
+<tr>
+<td>SSL required</td><td><code>sslmode=disable</code> en connection string</td>
+</tr>
+</tbody>
+</table></div>
 <p>---</p>
 <h3>3. Comandos Esenciales de psql</h3>
 <p><code>psql</code> es el cliente interactivo de PostgreSQL.</p>
@@ -567,24 +614,60 @@ docker exec -it pg_northwind_lab psql -U postgres -d northwind
 # O desde local
 psql -h localhost -U postgres -d northwind</code></pre></div>
 <h4>Meta-comandos (empiezan con `\`)</h4>
-<p>| Comando | Qué hace |</p>
-<p>|---------|----------|</p>
-<p>| <code>\l</code> | Lista bases de datos |</p>
-<p>| <code>\dt</code> | Lista tablas de la base actual |</p>
-<p>| <code>\dt public.*</code> | Lista tablas del schema public |</p>
-<p>| <code>\d customers</code> | Describe la tabla (columnas, tipos, constraints) |</p>
-<p>| <code>\di</code> | Lista índices |</p>
-<p>| <code>\dv</code> | Lista vistas |</p>
-<p>| <code>\df</code> | Lista funciones |</p>
-<p>| <code>\x</code> | Modo expandido (columnas como filas) |</p>
-<p>| <code>\timing</code> | Muestra tiempo de ejecución |</p>
-<p>| <code>\i archivo.sql</code> | Ejecuta un archivo .sql |</p>
-<p>| <code>\o archivo.txt</code> | Redirige output a archivo |</p>
-<p>| <code>\e</code> | Abre editor externo para escribir queries |</p>
-<p>| <code>\q</code> | Salir de psql |</p>
-<p>| <code>\?</code> | Ayuda de meta-comandos |</p>
-<p>| <code>\h SELECT</code> | Ayuda sobre sintaxis de SELECT |</p>
-<p>| <code>\conninfo</code> | Información de la conexión actual |</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Comando</th><th>Qué hace</th>
+</tr></thead><tbody>
+<tr>
+<td><code>\l</code></td><td>Lista bases de datos</td>
+</tr>
+<tr>
+<td><code>\dt</code></td><td>Lista tablas de la base actual</td>
+</tr>
+<tr>
+<td><code>\dt public.*</code></td><td>Lista tablas del schema public</td>
+</tr>
+<tr>
+<td><code>\d customers</code></td><td>Describe la tabla (columnas, tipos, constraints)</td>
+</tr>
+<tr>
+<td><code>\di</code></td><td>Lista índices</td>
+</tr>
+<tr>
+<td><code>\dv</code></td><td>Lista vistas</td>
+</tr>
+<tr>
+<td><code>\df</code></td><td>Lista funciones</td>
+</tr>
+<tr>
+<td><code>\x</code></td><td>Modo expandido (columnas como filas)</td>
+</tr>
+<tr>
+<td><code>\timing</code></td><td>Muestra tiempo de ejecución</td>
+</tr>
+<tr>
+<td><code>\i archivo.sql</code></td><td>Ejecuta un archivo .sql</td>
+</tr>
+<tr>
+<td><code>\o archivo.txt</code></td><td>Redirige output a archivo</td>
+</tr>
+<tr>
+<td><code>\e</code></td><td>Abre editor externo para escribir queries</td>
+</tr>
+<tr>
+<td><code>\q</code></td><td>Salir de psql</td>
+</tr>
+<tr>
+<td><code>\?</code></td><td>Ayuda de meta-comandos</td>
+</tr>
+<tr>
+<td><code>\h SELECT</code></td><td>Ayuda sobre sintaxis de SELECT</td>
+</tr>
+<tr>
+<td><code>\conninfo</code></td><td>Información de la conexión actual</td>
+</tr>
+</tbody>
+</table></div>
 <h4>Ejemplo de sesión</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>northwind=# \dt
              List of relations
@@ -745,27 +828,67 @@ northwind=# \di
         varchar state_name
     }</code></pre>
 <h4>Convención de Columnas</h4>
-<p>| Columna | Tipo | Descripción |</p>
-<p>|---------|------|-------------|</p>
-<p>| <code>unit_price</code> | <code>numeric</code> | Precio sin pérdida de precisión |</p>
-<p>| <code>quantity</code> | <code>integer</code> | Cantidad de ítems |</p>
-<p>| <code>discount</code> | <code>numeric</code> | Descuento en porcentaje (0.00 a 0.25) |</p>
-<p>| <code>customer_id</code> | <code>character(5)</code> | Siempre 5 caracteres, PK de customers |</p>
-<p>| <code>order_date</code> | <code>date</code> | Fecha del pedido (sin hora) |</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Columna</th><th>Tipo</th><th>Descripción</th>
+</tr></thead><tbody>
+<tr>
+<td><code>unit_price</code></td><td><code>numeric</code></td><td>Precio sin pérdida de precisión</td>
+</tr>
+<tr>
+<td><code>quantity</code></td><td><code>integer</code></td><td>Cantidad de ítems</td>
+</tr>
+<tr>
+<td><code>discount</code></td><td><code>numeric</code></td><td>Descuento en porcentaje (0.00 a 0.25)</td>
+</tr>
+<tr>
+<td><code>customer_id</code></td><td><code>character(5)</code></td><td>Siempre 5 caracteres, PK de customers</td>
+</tr>
+<tr>
+<td><code>order_date</code></td><td><code>date</code></td><td>Fecha del pedido (sin hora)</td>
+</tr>
+</tbody>
+</table></div>
 <h4>Carga de Datos (resumen)</h4>
-<p>| Tabla | Filas |</p>
-<p>|-------|-------|</p>
-<p>| categories | 8 |</p>
-<p>| customers | 91 |</p>
-<p>| employees | 9 |</p>
-<p>| products | 77 |</p>
-<p>| orders | 830 |</p>
-<p>| order_details | 2155 |</p>
-<p>| suppliers | 29 |</p>
-<p>| shippers | 3 |</p>
-<p>| region | 4 |</p>
-<p>| territories | 53 |</p>
-<p>| us_states | 54 |</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Tabla</th><th>Filas</th>
+</tr></thead><tbody>
+<tr>
+<td>categories</td><td>8</td>
+</tr>
+<tr>
+<td>customers</td><td>91</td>
+</tr>
+<tr>
+<td>employees</td><td>9</td>
+</tr>
+<tr>
+<td>products</td><td>77</td>
+</tr>
+<tr>
+<td>orders</td><td>830</td>
+</tr>
+<tr>
+<td>order_details</td><td>2155</td>
+</tr>
+<tr>
+<td>suppliers</td><td>29</td>
+</tr>
+<tr>
+<td>shippers</td><td>3</td>
+</tr>
+<tr>
+<td>region</td><td>4</td>
+</tr>
+<tr>
+<td>territories</td><td>53</td>
+</tr>
+<tr>
+<td>us_states</td><td>54</td>
+</tr>
+</tbody>
+</table></div>
 <p>---</p>
 <h3>5. Cómo Leer EXPLAIN (ANALYZE, BUFFERS)</h3>
 <p><code>EXPLAIN</code> muestra el plan de ejecución que PostgreSQL usará para resolver una consulta. Con <code>ANALYZE</code> lo ejecuta y muestra tiempos reales. Con <code>BUFFERS</code> muestra E/S.</p>
@@ -794,21 +917,51 @@ GROUP BY c.company_name;</code></pre></div>
  Planning Time: 0.15 ms
  Execution Time: 0.55 ms</code></pre></div>
 <h4>Interpretación</h4>
-<p>| Elemento | Significa |</p>
-<p>|----------|-----------|</p>
-<p>| <code>Seq Scan</code> | Escaneo secuencial (lee toda la tabla) — lento en tablas grandes |</p>
-<p>| <code>Index Scan</code> | Escaneo por índice (salta a filas específicas) — rápido |</p>
-<p>| <code>Hash Join</code> | Construye hash de una tabla y escanea la otra — óptimo para JOINs sin índice |</p>
-<p>| <code>Nested Loop</code> | Para cada fila de A, busca en B — óptimo para conjuntos pequeños |</p>
-<p>| <code>Merge Join</code> | Ordena ambas y las fusiona — óptimo para datos preordenados |</p>
-<p>| <code>cost=...</code> | Costo estimado (unidad arbitraria, comparativo) |</p>
-<p>| <code>actual time=0.45..0.47</code> | Tiempo real en ms (inicio..fin) |</p>
-<p>| <code>rows=5</code> | Filas reales producidas |</p>
-<p>| <code>loops=1</code> | Veces que se ejecutó este nodo |</p>
-<p>| <code>Buffers: shared hit=16</code> | 16 bloques leídos desde caché (rápido) |</p>
-<p>| <code>Buffers: shared read=10</code> | 10 bloques leídos desde disco (lento) |</p>
-<p>| <code>Planning Time</code> | Tiempo que el optimizador planificó |</p>
-<p>| <code>Execution Time</code> | Tiempo total de ejecución |</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Elemento</th><th>Significa</th>
+</tr></thead><tbody>
+<tr>
+<td><code>Seq Scan</code></td><td>Escaneo secuencial (lee toda la tabla) — lento en tablas grandes</td>
+</tr>
+<tr>
+<td><code>Index Scan</code></td><td>Escaneo por índice (salta a filas específicas) — rápido</td>
+</tr>
+<tr>
+<td><code>Hash Join</code></td><td>Construye hash de una tabla y escanea la otra — óptimo para JOINs sin índice</td>
+</tr>
+<tr>
+<td><code>Nested Loop</code></td><td>Para cada fila de A, busca en B — óptimo para conjuntos pequeños</td>
+</tr>
+<tr>
+<td><code>Merge Join</code></td><td>Ordena ambas y las fusiona — óptimo para datos preordenados</td>
+</tr>
+<tr>
+<td><code>cost=...</code></td><td>Costo estimado (unidad arbitraria, comparativo)</td>
+</tr>
+<tr>
+<td><code>actual time=0.45..0.47</code></td><td>Tiempo real en ms (inicio..fin)</td>
+</tr>
+<tr>
+<td><code>rows=5</code></td><td>Filas reales producidas</td>
+</tr>
+<tr>
+<td><code>loops=1</code></td><td>Veces que se ejecutó este nodo</td>
+</tr>
+<tr>
+<td><code>Buffers: shared hit=16</code></td><td>16 bloques leídos desde caché (rápido)</td>
+</tr>
+<tr>
+<td><code>Buffers: shared read=10</code></td><td>10 bloques leídos desde disco (lento)</td>
+</tr>
+<tr>
+<td><code>Planning Time</code></td><td>Tiempo que el optimizador planificó</td>
+</tr>
+<tr>
+<td><code>Execution Time</code></td><td>Tiempo total de ejecución</td>
+</tr>
+</tbody>
+</table></div>
 <h4>Regla de Oro</h4>
 <ul class="list-style-disc">
 <li><strong><code>Seq Scan</code> en tabla pequeña (&lt; 1000 filas)</strong> → normal</li>
@@ -908,27 +1061,69 @@ SELECT * FROM cte;</code></pre></div>
 SELECT generate_series('2024-01-01'::date, '2024-01-10'::date, '1 day'::interval);</code></pre></div>
 <p>---</p>
 <h3>8. Glosario Rápido</h3>
-<p>| Término | Definición |</p>
-<p>|---------|------------|</p>
-<p>| <strong>ACID</strong> | Atomicidad, Consistencia, Aislamiento, Durabilidad — garantías de transacción |</p>
-<p>| <strong>CTE</strong> | Common Table Expression — consulta nombrada con <code>WITH</code> |</p>
-<p>| <strong>DDL</strong> | Data Definition Language — CREATE, ALTER, DROP |</p>
-<p>| <strong>DML</strong> | Data Manipulation Language — INSERT, UPDATE, DELETE |</p>
-<p>| <strong>FK</strong> | Foreign Key — columna que referencia otra tabla |</p>
-<p>| <strong>Index Scan</strong> | Búsqueda por índice (rápida) |</p>
-<p>| <strong>MVCC</strong> | Multi-Version Concurrency Control — lecturas sin bloqueo |</p>
-<p>| <strong>Nested Loop</strong> | Algoritmo de JOIN: por cada fila A, buscar en B |</p>
-<p>| <strong>Hash Join</strong> | Algoritmo de JOIN: construir hash de una tabla, escanear otra |</p>
-<p>| <strong>PK</strong> | Primary Key — identificador único de fila |</p>
-<p>| <strong>Seq Scan</strong> | Sequential Scan — lectura completa de tabla |</p>
-<p>| <strong>Window Function</strong> | Función que opera sobre un grupo de filas relacionadas |</p>
-<p>| <strong>work_mem</strong> | Memoria para operaciones de sorting/hashing (por operación, no global) |</p>
-<p>| <strong>shared_buffers</strong> | Memoria compartida para cache de datos en PostgreSQL |</p>
-<p>| <strong><code>RETURNING</code></strong> | Devuelve datos de la fila afectada por DML |</p>
-<p>| <strong><code>ON CONFLICT</code></strong> | UPSERT: inserta o actualiza según conflicto |</p>
-<p>| <strong><code>ILIKE</code></strong> | LIKE case-insensitive |</p>
-<p>| <strong><code>FILTER (WHERE ...)</code></strong> | Agregación condicional sin subquery |</p>
-<p>| <strong><code>generate_series</code></strong> | Generador de filas secuenciales |</p>
+<div class="table-wrapper"><table>
+<thead><tr>
+<th>Término</th><th>Definición</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>ACID</strong></td><td>Atomicidad, Consistencia, Aislamiento, Durabilidad — garantías de transacción</td>
+</tr>
+<tr>
+<td><strong>CTE</strong></td><td>Common Table Expression — consulta nombrada con <code>WITH</code></td>
+</tr>
+<tr>
+<td><strong>DDL</strong></td><td>Data Definition Language — CREATE, ALTER, DROP</td>
+</tr>
+<tr>
+<td><strong>DML</strong></td><td>Data Manipulation Language — INSERT, UPDATE, DELETE</td>
+</tr>
+<tr>
+<td><strong>FK</strong></td><td>Foreign Key — columna que referencia otra tabla</td>
+</tr>
+<tr>
+<td><strong>Index Scan</strong></td><td>Búsqueda por índice (rápida)</td>
+</tr>
+<tr>
+<td><strong>MVCC</strong></td><td>Multi-Version Concurrency Control — lecturas sin bloqueo</td>
+</tr>
+<tr>
+<td><strong>Nested Loop</strong></td><td>Algoritmo de JOIN: por cada fila A, buscar en B</td>
+</tr>
+<tr>
+<td><strong>Hash Join</strong></td><td>Algoritmo de JOIN: construir hash de una tabla, escanear otra</td>
+</tr>
+<tr>
+<td><strong>PK</strong></td><td>Primary Key — identificador único de fila</td>
+</tr>
+<tr>
+<td><strong>Seq Scan</strong></td><td>Sequential Scan — lectura completa de tabla</td>
+</tr>
+<tr>
+<td><strong>Window Function</strong></td><td>Función que opera sobre un grupo de filas relacionadas</td>
+</tr>
+<tr>
+<td><strong>work_mem</strong></td><td>Memoria para operaciones de sorting/hashing (por operación, no global)</td>
+</tr>
+<tr>
+<td><strong>shared_buffers</strong></td><td>Memoria compartida para cache de datos en PostgreSQL</td>
+</tr>
+<tr>
+<td><strong><code>RETURNING</code></strong></td><td>Devuelve datos de la fila afectada por DML</td>
+</tr>
+<tr>
+<td><strong><code>ON CONFLICT</code></strong></td><td>UPSERT: inserta o actualiza según conflicto</td>
+</tr>
+<tr>
+<td><strong><code>ILIKE</code></strong></td><td>LIKE case-insensitive</td>
+</tr>
+<tr>
+<td><strong><code>FILTER (WHERE ...)</code></strong></td><td>Agregación condicional sin subquery</td>
+</tr>
+<tr>
+<td><strong><code>generate_series</code></strong></td><td>Generador de filas secuenciales</td>
+</tr>
+</tbody>
+</table></div>
             </article>
         </main>
 

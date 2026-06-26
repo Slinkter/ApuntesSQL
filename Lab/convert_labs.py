@@ -143,6 +143,37 @@ def parse_mermaid_to_html(mermaid_content):
     return f'<pre class="raw-diagram"><code>{mermaid_content}</code></pre>'
 
 
+def render_table_to_html(table_rows):
+    html_table = ['<div class="table-wrapper"><table>']
+    has_thead = False
+    for row in table_rows:
+        row_html = []
+        if row['is_header']:
+            html_table.append('<thead><tr>')
+            for cell in row['cells']:
+                formatted_cell = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', cell)
+                formatted_cell = re.sub(r'\*(.*?)\*', r'<em>\1</em>', formatted_cell)
+                formatted_cell = re.sub(r'`(.*?)`', r'<code>\1</code>', formatted_cell)
+                formatted_cell = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', formatted_cell)
+                row_html.append(f'<th>{formatted_cell}</th>')
+            html_table.append(''.join(row_html))
+            html_table.append('</tr></thead><tbody>')
+            has_thead = True
+        else:
+            html_table.append('<tr>')
+            for cell in row['cells']:
+                formatted_cell = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', cell)
+                formatted_cell = re.sub(r'\*(.*?)\*', r'<em>\1</em>', formatted_cell)
+                formatted_cell = re.sub(r'`(.*?)`', r'<code>\1</code>', formatted_cell)
+                formatted_cell = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', formatted_cell)
+                row_html.append(f'<td>{formatted_cell}</td>')
+            html_table.append(''.join(row_html))
+            html_table.append('</tr>')
+    if has_thead:
+        html_table.append('</tbody>')
+    html_table.append('</table></div>')
+    return '\n'.join(html_table)
+
 def markdown_to_html(md_content, title):
     # Split into lines
     lines = md_content.split('\n')
@@ -153,6 +184,31 @@ def markdown_to_html(md_content, title):
     in_list = False
     in_quote = False
     quote_lines = []
+    in_table = False
+    table_rows = []
+
+    def close_open_structures():
+        nonlocal in_list, in_quote, in_table, table_rows, quote_lines
+        res = []
+        if in_table:
+            in_table = False
+            res.append(render_table_to_html(table_rows))
+            table_rows = []
+        if in_list:
+            in_list = False
+            res.append('</ul>')
+        if in_quote:
+            in_quote = False
+            quote_text = ' '.join(quote_lines)
+            quote_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', quote_text)
+            quote_text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', quote_text)
+            quote_text = re.sub(r'`(.*?)`', r'<code>\1</code>', quote_text)
+            if "analogía" in quote_text.lower() or "analoga" in quote_text.lower():
+                res.append(f'<div class="callout-box callout-analogy"><div class="callout-title">💡 Analogía Didáctica</div><p>{quote_text}</p></div>')
+            else:
+                res.append(f'<div class="callout-box callout-note"><p>{quote_text}</p></div>')
+            quote_lines = []
+        return res
 
     for line in lines:
         # Code Blocks
@@ -168,6 +224,7 @@ def markdown_to_html(md_content, title):
                     html_body.append(f'<div class="code-block-wrapper"><div class="code-lang-badge">{code_lang.upper()}</div><pre><code>{escaped_code}</code></pre></div>')
                 code_lines = []
             else:
+                html_body.extend(close_open_structures())
                 in_code_block = True
                 code_lang = line.strip()[3:].strip()
             continue
@@ -179,26 +236,74 @@ def markdown_to_html(md_content, title):
         # Escape raw text to prevent mathematical expressions like < or > from breaking HTML
         escaped_line = line.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
+        # Table rows check
+        is_table_row = escaped_line.strip().startswith('|') and escaped_line.strip().endswith('|')
+        if is_table_row:
+            if in_list or in_quote:
+                if in_list:
+                    in_list = False
+                    html_body.append('</ul>')
+                if in_quote:
+                    in_quote = False
+                    quote_text = ' '.join(quote_lines)
+                    quote_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', quote_text)
+                    quote_text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', quote_text)
+                    quote_text = re.sub(r'`(.*?)`', r'<code>\1</code>', quote_text)
+                    if "analogía" in quote_text.lower() or "analoga" in quote_text.lower():
+                        html_body.append(f'<div class="callout-box callout-analogy"><div class="callout-title">💡 Analogía Didáctica</div><p>{quote_text}</p></div>')
+                    else:
+                        html_body.append(f'<div class="callout-box callout-note"><p>{quote_text}</p></div>')
+                    quote_lines = []
+
+            if not in_table:
+                in_table = True
+                table_rows = []
+
+            raw_cells = [cell.strip() for cell in escaped_line.strip().split('|')[1:-1]]
+            is_separator = all(re.match(r'^:?-+:?$', cell) for cell in raw_cells) and len(raw_cells) > 0
+            if is_separator:
+                if table_rows:
+                    table_rows[-1]['is_header'] = True
+            else:
+                table_rows.append({
+                    'is_header': False,
+                    'cells': raw_cells
+                })
+            continue
+
         # Blockquotes (Explanations)
         if escaped_line.strip().startswith('&gt;'):
+            if in_list or in_table:
+                if in_list:
+                    in_list = False
+                    html_body.append('</ul>')
+                if in_table:
+                    in_table = False
+                    html_body.append(render_table_to_html(table_rows))
+                    table_rows = []
             if not in_quote:
                 in_quote = True
             quote_lines.append(escaped_line.strip()[4:].strip())
             continue
-        elif in_quote:
-            in_quote = False
-            quote_text = ' '.join(quote_lines)
-            quote_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', quote_text)
-            quote_text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', quote_text)
-            quote_text = re.sub(r'`(.*?)`', r'<code>\1</code>', quote_text)
-            if "analogía" in quote_text.lower() or "analoga" in quote_text.lower():
-                html_body.append(f'<div class="callout-box callout-analogy"><div class="callout-title">💡 Analogía Didáctica</div><p>{quote_text}</p></div>')
-            else:
-                html_body.append(f'<div class="callout-box callout-note"><p>{quote_text}</p></div>')
-            quote_lines = []
 
         # Lists
         if escaped_line.strip().startswith('* ') or escaped_line.strip().startswith('- '):
+            if in_quote or in_table:
+                if in_quote:
+                    in_quote = False
+                    quote_text = ' '.join(quote_lines)
+                    quote_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', quote_text)
+                    quote_text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', quote_text)
+                    quote_text = re.sub(r'`(.*?)`', r'<code>\1</code>', quote_text)
+                    if "analogía" in quote_text.lower() or "analoga" in quote_text.lower():
+                        html_body.append(f'<div class="callout-box callout-analogy"><div class="callout-title">💡 Analogía Didáctica</div><p>{quote_text}</p></div>')
+                    else:
+                        html_body.append(f'<div class="callout-box callout-note"><p>{quote_text}</p></div>')
+                    quote_lines = []
+                if in_table:
+                    in_table = False
+                    html_body.append(render_table_to_html(table_rows))
+                    table_rows = []
             if not in_list:
                 in_list = True
                 html_body.append('<ul class="list-style-disc">')
@@ -209,9 +314,11 @@ def markdown_to_html(md_content, title):
             list_content = re.sub(r'\[(.*?)\]\((.*?)\)', r'<a href="\2">\1</a>', list_content)
             html_body.append(f'<li>{list_content}</li>')
             continue
-        elif in_list:
-            in_list = False
-            html_body.append('</ul>')
+
+        # For any other line, close list, table, or quote if they were active
+        closed_tags = close_open_structures()
+        if closed_tags:
+            html_body.extend(closed_tags)
 
         # Headings
         if escaped_line.strip().startswith('### '):
@@ -239,8 +346,8 @@ def markdown_to_html(md_content, title):
 
         html_body.append(f'<p>{p_text}</p>')
 
-    if in_list:
-        html_body.append('</ul>')
+    # End of loop, close anything left open
+    html_body.extend(close_open_structures())
 
     body_content = '\n'.join(html_body)
 
@@ -463,6 +570,41 @@ def markdown_to_html(md_content, title):
         .list-style-disc li {{
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
+        }}
+
+        /* Tables styling */
+        .table-wrapper {{
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+        }}
+
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            text-align: left;
+        }}
+
+        th, td {{
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }}
+
+        th {{
+            background-color: var(--code-bg);
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }}
+
+        tr:last-child td {{
+            border-bottom: none;
         }}
 
         /* Code block layouts */
