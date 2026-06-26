@@ -52,14 +52,54 @@
         </section>
 
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Concepto de JOIN</h2>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un JOIN se emplea para consultar datos que se encuentran en mas de una tabla. Las filas se enlazan empleando valores comunes, tipicamente entre la clave primaria (PK) y la clave foranea (FK). Sin una condicion de JOIN, se genera un <strong>producto cartesiano</strong> (todas las combinaciones posibles).</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un JOIN se emplea para consultar datos que se encuentran en más de una tabla. Las filas son enlazadas empleando valores comunes, típicamente entre la clave primaria (PK) y la clave foránea (FK). Sin una condición de JOIN válida, se genera un <strong>producto cartesiano</strong> (todas las combinaciones posibles).</p>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tablas de Referencia (Ejemplo)</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Para ilustrar las uniones, utilizaremos las siguientes tablas basadas en la estructura del negocio:</p>
+<pre><code>-- Tabla: EMP (Empleados)
+EMPNO ENAME          DEPTNO
+----- -------------- ------
+    1 Smith              50
+    2 Award              40
+    3 Jones              NULL
+   11 Susan              30
+   12 Gregory            30
+   13 Bill               30
+   16 Robert             40
+
+-- Tabla: S_DEPT (Departamentos)
+ID  NAME               LOC_ID
+--- ------------------ ------
+10  Finance                 1
+20  Sales                   1
+30  Marketing               2
+40  Operation              NULL
+50  Administr              NULL
+
+-- Tabla: S_LOC (Ubicaciones)
+ID NAME
+-- ------------------------------
+ 1 North America
+ 2 South America
+ 3 Africa / Middle East
+ 4 Asia
+ 5 Europe</code></pre>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Cross Join (Producto Cartesiano):</strong></p>
-            <pre><code>SELECT *
-FROM   tabla1 CROSS JOIN tabla2;
--- Equivale a: SELECT * FROM tabla1, tabla2;</code></pre>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Si tabla1 tiene M filas y tabla2 tiene N filas, el resultado tiene M &times; N filas. Raramente util por si solo; es la base sobre la que se aplica la condicion de JOIN.</p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Se genera cuando la condición de JOIN se omite o es inválida. Todas las filas de la primera tabla se juntan con todas las de la segunda tabla.</p>
+<pre><code>-- Consulta de Producto Cartesiano
+SELECT EMP.empno, EMP.ename, DEPT.deptno, DEPT.dname
+FROM   emp CROSS JOIN dept;
+-- O equivalentemente: SELECT * FROM emp, dept;</code></pre>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Si <code>EMP</code> tiene 14 filas y <code>DEPT</code> tiene 4 filas, el resultado tendrá 56 filas (14 &times; 4):</p>
+<pre><code>-- Detalle del Producto Cartesiano (EMP X DEPT)
+7369 SMITH CLERK 7902 17-DEC-80 800 20 10 ACCOUNTING NEW YORK
+7369 SMITH CLERK 7902 17-DEC-80 800 20 20 RESEARCH DALLAS
+7369 SMITH CLERK 7902 17-DEC-80 800 20 30 SALES CHICAGO
+7369 SMITH CLERK 7902 17-DEC-80 800 20 40 OPERATIONS BOSTON
+7499 ALLEN SALESMAN 7698 20-Feb-81 1600 300 30 10 ACCOUNTING NEW YORK
+... (etcétera)</code></pre>
         </div>
 
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Variables Tupla (Alias)</h2>

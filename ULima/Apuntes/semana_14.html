@@ -27,6 +27,8 @@
             <li class="text-sm"><strong>ROLAP / MOLAP / HOLAP</strong>Implementaciones de cubos</li>
             <li class="text-sm"><strong>Star Schema</strong>Modelo estrella</li>
             <li class="text-sm"><strong>Snowflake</strong>Modelo copo de nieve</li>
+            <li class="text-sm"><strong>Calidad</strong>Metodología de Nivel 0 a Nivel 4</li>
+            <li class="text-sm"><strong>Data Mining</strong>Explotación automática de patrones</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
             <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
@@ -133,70 +135,164 @@
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Modelo Estrella (Star Schema)</h2>
         <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Fact Table + Dimension Tables</span>
 
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El modelo estrella es el esquema mas utilizado en Data Warehousing. Consta de una tabla central de hechos (fact table) rodeada de tablas de dimension (dimension tables).</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El modelo estrella es el esquema más utilizado en Data Warehousing. Consta de una tabla central de hechos (fact table) rodeada de tablas de dimensión (dimension tables) relacionadas en relaciones 1:N directas (tipo estrella).</p>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-            <p><strong>Componentes:</strong></p>
-            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li ><strong>Tabla de Hechos (Fact Table):</strong> Almacena eventos de negocio (ventas, transacciones). Contiene medidas numericas (cantidad, monto) y foreign keys a las dimensiones.</li>
-                <li ><strong>Tablas de Dimension:</strong> Entidades de negocio (clientes, productos, tiempo, geografia). Contienen atributos descriptivos.</li>
-                <li ><strong>Medidas (Measures):</strong> Valores cuantitativos que miden la efectividad del negocio.</li>
+            <p class="text-slate-800 dark:text-slate-200 font-bold mb-2">Conceptos Clave de Diseño:</p>
+            <ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li><strong>Tabla de Hechos (Fact Table):</strong> Almacena eventos de negocio (ventas, transacciones). Contiene las métricas operativas y las claves foráneas (FK) a las dimensiones.</li>
+                <li><strong>Hecho (Fact):</strong> Cada fila de la tabla de hechos, que representa un evento específico.</li>
+                <li><strong>Medidas (Measures):</strong> Valores cuantitativos (numéricos) acumulables que miden el negocio (ej: ventas total, cantidad vendida).</li>
+                <li><strong>Tablas de Dimensión:</strong> Entidades que describen el contexto del negocio (tiempo, clientes, productos, ubicación).</li>
             </ul>
         </div>
 
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Jerarquías, Niveles y Miembros (Members)</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una dimensión contiene una o más jerarquías compuestas por niveles ordenados de agregación. Por ejemplo, en la dimensión <strong>Ubigeo</strong>:</p>
+        <ul class="space-y-2 pl-5 list-decimal text-slate-700 dark:text-slate-300 mb-4">
+            <li><strong>Niveles de Agregación:</strong> <code>País &rarr; Departamento &rarr; Provincia &rarr; Distrito</code>.</li>
+            <li><strong>Miembros (Members):</strong> Las ocurrencias reales de cada nivel. Por ejemplo, <code>"Lima"</code> es un miembro del nivel Departamento.</li>
+        </ul>
+
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-            <p><strong>Ejemplo: Esquema Estrella de Ventas</strong></p>
-            <pre>
--- Tabla de Dimension: Producto
-CREATE TABLE DIM_PRODUCTO (
-    producto_key INTEGER PRIMARY KEY,
-    id_producto INTEGER,
-    nombre VARCHAR(100),
-    categoria VARCHAR(50),
-    subcategoria VARCHAR(50),
-    marca VARCHAR(50),
-    precio_actual NUMERIC(10,2)
+            <p class="text-slate-800 dark:text-slate-200 font-bold mb-2">Ejemplo: Estructura del Star Schema clásico (FoodMart)</p>
+            <p class="text-slate-700 dark:text-slate-300 mb-4">El esquema de FoodMart representa la estructura real de ventas de una cadena minorista en 1997:</p>
+            <pre><code>-- Dimensión: store
+CREATE TABLE store (
+    store_id INTEGER PRIMARY KEY,
+    store_type VARCHAR(30),
+    region_id INTEGER,
+    store_name VARCHAR(40),
+    store_number INTEGER,
+    store_street_address VARCHAR(50),
+    store_city VARCHAR(30),
+    store_state VARCHAR(30),
+    store_postal_code VARCHAR(15),
+    store_country VARCHAR(30),
+    store_manager VARCHAR(40),
+    store_phone VARCHAR(20),
+    store_fax VARCHAR(20),
+    first_opened_date DATE,
+    last_remodel_date DATE,
+    store_sqft INTEGER,
+    grocery_sqft INTEGER,
+    frozen_sqft INTEGER
 );
 
--- Tabla de Dimension: Tiempo
-CREATE TABLE DIM_TIEMPO (
-    tiempo_key INTEGER PRIMARY KEY,
-    fecha DATE,
-    dia_semana VARCHAR(20),
-    mes INTEGER,
-    nombre_mes VARCHAR(20),
-    trimestre INTEGER,
-    anio INTEGER
+-- Dimensión: promotion
+CREATE TABLE promotion (
+    promotion_id INTEGER PRIMARY KEY,
+    promotion_district_id INTEGER,
+    promotion_name VARCHAR(50),
+    media_type VARCHAR(30),
+    cost NUMERIC(10,2),
+    start_date DATE
 );
 
--- Tabla de Dimension: Cliente
-CREATE TABLE DIM_CLIENTE (
-    cliente_key INTEGER PRIMARY KEY,
-    id_cliente INTEGER,
-    nombre VARCHAR(100),
-    ciudad VARCHAR(50),
-    region VARCHAR(50),
-    pais VARCHAR(50),
-    segmento VARCHAR(30)
+-- Dimensión: time_by_day
+CREATE TABLE time_by_day (
+    time_id INTEGER PRIMARY KEY,
+    the_date DATE,
+    the_day VARCHAR(15),
+    the_month VARCHAR(15),
+    the_year INTEGER,
+    day_of_month INTEGER,
+    week_of_year INTEGER,
+    month_of_year INTEGER,
+    quarter VARCHAR(10),
+    fiscal_period VARCHAR(10)
 );
 
--- Tabla de Hechos: Ventas
-CREATE TABLE FACT_VENTAS (
-    producto_key INTEGER REFERENCES DIM_PRODUCTO,
-    cliente_key INTEGER REFERENCES DIM_CLIENTE,
-    tiempo_key INTEGER REFERENCES DIM_TIEMPO,
-    vendedor_key INTEGER REFERENCES DIM_VENDEDOR,
-    cantidad_vendida INTEGER,
-    monto_total NUMERIC(12,2),
-    costo_total NUMERIC(12,2),
-    ganancia NUMERIC(12,2)
-);</pre>
+-- Dimensión: product
+CREATE TABLE product (
+    product_id INTEGER PRIMARY KEY,
+    product_class_id INTEGER,
+    brand_name VARCHAR(50),
+    product_name VARCHAR(100),
+    SKU VARCHAR(20),
+    SRP NUMERIC(10,2),
+    gross_weight NUMERIC(10,2),
+    net_weight NUMERIC(10,2),
+    recyclable_package BOOLEAN,
+    low_fat BOOLEAN,
+    units_per_case INTEGER,
+    cases_per_pallet INTEGER,
+    shelf_width NUMERIC(5,2),
+    shelf_height NUMERIC(5,2),
+    shelf_depth NUMERIC(5,2)
+);
+
+-- Dimensión: customer
+CREATE TABLE customer (
+    customer_id INTEGER PRIMARY KEY,
+    account_num VARCHAR(30),
+    lname VARCHAR(50),
+    fname VARCHAR(50),
+    mi CHAR(1),
+    address1 VARCHAR(100),
+    address2 VARCHAR(100),
+    address3 VARCHAR(100),
+    address4 VARCHAR(100),
+    city VARCHAR(30),
+    state_province VARCHAR(30),
+    postal_code VARCHAR(15),
+    country VARCHAR(30),
+    customer_region_id INTEGER,
+    phone1 VARCHAR(20)
+);
+
+-- Tabla de Hechos: sales_fact_1997
+CREATE TABLE sales_fact_1997 (
+    product_id INTEGER REFERENCES product(product_id),
+    time_id INTEGER REFERENCES time_by_day(time_id),
+    customer_id INTEGER REFERENCES customer(customer_id),
+    promotion_id INTEGER REFERENCES promotion(promotion_id),
+    store_id INTEGER REFERENCES store(store_id),
+    store_sales NUMERIC(10,2),
+    store_cost NUMERIC(10,2),
+    unit_sales INTEGER
+);</code></pre>
         </div>
 
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Modelo Copo de Nieve (Snowflake Schema)</h2>
 
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En el modelo Snowflake, las dimensiones se normalizan en multiples tablas, una por cada nivel jerarquico. Esto reduce redundancia pero aumenta la complejidad de las consultas.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En el modelo Snowflake, las dimensiones se normalizan en múltiples tablas, una por cada nivel jerárquico. Esto reduce la redundancia al mínimo pero aumenta significativamente la complejidad de las consultas (más JOINs) y ralentiza el procesamiento.</p>
 
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <p class="text-slate-800 dark:text-slate-200 font-bold mb-2">Ejemplo: Estructura Normalizada de Dimensión Producto (Copo de Nieve)</p>
+            <pre><code>-- Tabla: FAMILIA_DIM
+CREATE TABLE FAMILIA_DIM (
+    Familia_Key INTEGER PRIMARY KEY,
+    IdFamilia INTEGER,
+    Familia VARCHAR(50)
+);
+
+-- Tabla: SUBFAMILIA_DIM
+CREATE TABLE SUBFAMILIA_DIM (
+    SubFamilia_Key INTEGER PRIMARY KEY,
+    Familia_Key INTEGER REFERENCES FAMILIA_DIM(Familia_Key),
+    IdSubFamilia INTEGER,
+    SubFamilia VARCHAR(50)
+);
+
+-- Tabla: MARCA_DIM
+CREATE TABLE MARCA_DIM (
+    Marca_Key INTEGER PRIMARY KEY,
+    SubFamilia_Key INTEGER REFERENCES SUBFAMILIA_DIM(SubFamilia_Key),
+    IdMarca INTEGER,
+    Marca VARCHAR(50)
+);
+
+-- Tabla: PRESENTACION_DIM (Esta es la tabla que se relaciona con la Fact Table)
+CREATE TABLE PRESENTACION_DIM (
+    Presentacion_Key INTEGER PRIMARY KEY,
+    Marca_Key INTEGER REFERENCES MARCA_DIM(Marca_Key),
+    IdPresentacion INTEGER,
+    Presentacion VARCHAR(50)
+);</code></pre>
+        </div>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Comparación: STAR vs SNOWFLAKE</h3>
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
             <thead>
@@ -384,36 +480,120 @@ CREATE TABLE FACT_RRHH (
     TotalEmpleado NUMBER
 );</pre>
 
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">10. Indices en Data Warehouse</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">10. Índices en Data Warehouse</h2>
 
         <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-            <li ><strong>Indices Bitmap:</strong> Ideales para columnas con baja cardinalidad (genero, estado, categoria). Muy eficientes en consultas ad-hoc sobre grandes volumenes. Reducen uso de espacio comparado con B-tree.</li>
-            <li ><strong>Indices B-tree:</strong> Arbol invertido, optimo para busquedas de alta selectividad. Utilizado para acceso a consultas tipicas con alta cardinalidad.</li>
+            <li><strong>Índices Bitmap:</strong> Ideales para columnas con baja cardinalidad (ej. género, estado, región). Reducen sustancialmente el uso de espacio y su mantenimiento es sumamente eficiente en consultas y cargas DML paralelas.</li>
+            <li><strong>Índices B-tree:</strong> Ordenan los datos como un árbol inverso, ideales para accesos a consultas típicas de alta cardinalidad.</li>
         </ul>
 
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">11. Beneficios del Data Warehouse</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">11. Metodología de Calidad de Datos</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Antes de cargar los datos en el Data Warehouse, es vital asegurar su calidad y consistencia mediante una metodología por niveles:</p>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Nivel</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo de Análisis</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Nivel 0</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Análisis de valores de dominio</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Verificar que los valores de los datos estén en los rangos esperados.</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Nivel 1</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Integridad &amp; Análisis de validez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Comprobar datos faltantes, valores nulos y formatos de datos inválidos.</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Nivel 2</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Análisis de integridad estructural</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Garantizar que las relaciones de clave primaria/clave foránea e integridad referencial sean correctas.</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Nivel 3</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Análisis de reglas de negocios</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Verificar el cumplimiento de restricciones complejas basadas en lógica de negocio empresarial.</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Nivel 4</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Reglas de conversión de datos</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Comprobar y unificar codificaciones heterogéneas (ej. unificar <code>género: F/M</code>, <code>1/0</code>, <code>femenino/masculino</code> en una sola norma).</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">12. Explotación de Datos y Minería de Datos (Data Mining)</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una vez estructurado el Data Warehouse, existen tres formas principales para explotar y analizar la información:</p>
+        <ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300 mb-6">
+            <li><strong>Consultas Ad-hoc (Query Ad-hoc):</strong> Proceso iterativo de preguntas y respuestas formuladas manualmente por expertos para encontrar información valiosa.</li>
+            <li><strong>OLAP (Análisis Multidimensional):</strong> Preguntas y respuestas multidimensionales complejas para asistir a los tomadores de decisiones.</li>
+            <li><strong>Data Mining (Minería de Datos):</strong> Proceso automático que busca tendencias y patrones en el contenido de la información, permitiendo al usuario descubrir la esencia y relaciones entre sus datos.</li>
+        </ul>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tipos de Minería de Datos</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50">
+                <h4 class="font-bold text-slate-900 dark:text-white mb-2">Minería de Descubrimiento</h4>
+                <p class="text-sm text-slate-700 dark:text-slate-300">Encuentra patrones en los datos sin una dirección preconcebida. Analiza todo el almacén de datos para descubrir relaciones valiosas de forma simple.</p>
+            </div>
+            <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50">
+                <h4 class="font-bold text-slate-900 dark:text-white mb-2">Minería Predictiva</h4>
+                <p class="text-sm text-slate-700 dark:text-slate-300">Usa resultados históricos conocidos para construir modelos que permitan predecir comportamientos o valores futuros (requiere control exhaustivo del analista).</p>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Técnicas de Data Mining</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las herramientas modernas aplican diversas técnicas estadísticas y de inteligencia artificial:</p>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Enfoque Analítico</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Técnicas Algorítmicas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Detección de Patrones y Agrupación</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Análisis de la Cesta de la Compra (Market Basket Analysis), Segmentación de Clientes, Análisis de Enlaces (Link Analysis), Agrupamiento (Clustering), Clasificación y Predicción.</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Modelos de IA y Modelado Numérico</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Árboles de Decisión (Decision Trees), Redes Neuronales (Neural Networks), Funciones de Base Radial (Radial Basis), Modelado de Ingresos, Series Temporales (Time Series) y Optimización de Búsqueda.</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">13. Beneficios del Data Warehouse</h2>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Desde la perspectiva de TI:</strong></p>
             <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li >Arquitectura flexible que permite cambios.</li>
-                <li >Actualizacion automatica de datos.</li>
-                <li >Reduccion de carga sobre sistemas operacionales.</li>
+                <li>Arquitectura flexible de data warehousing que permite cambiar ante nuevas necesidades.</li>
+                <li>Procesos automáticos que actualizan y limpian la data.</li>
+                <li>Menor desgaste del área de IT ante requerimientos ad-hoc de los usuarios.</li>
             </ul>
-            <p><strong>Desde la perspectiva de usuarios de negocio:</strong></p>
+            <p><strong>Desde la perspectiva de usuarios finales:</strong></p>
             <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li >Vista global de los datos de la organizacion.</li>
-                <li >Herramientas faciles de usar.</li>
-                <li >Capacidad de generar reportes independientemente.</li>
-                <li >Acceso via intranet/internet.</li>
+                <li>Tener una vista global de los datos de la organización, independientemente de la fuente.</li>
+                <li>Contar con herramientas intuitivas y fáciles de usar.</li>
+                <li>Capacidad de generar reportes analíticos de manera independiente (Self-service BI).</li>
+                <li>Acceso flexible vía intranet o internet.</li>
             </ul>
         </div>
 
         <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-            <p><strong>Importante:</strong> Segun estudios de IDC, las organizaciones que implementan soluciones analiticas logran un ROI promedio de 112%, con periodos de recuperacion de menos de un ano en el 49% de los casos. El costo de generacion de reportes se reduce aproximadamente en un 60%.</p>
+            <p><strong>Importante (Estudio de IDC):</strong> Las organizaciones que implementan soluciones analíticas logran retornos de inversión (ROI) que van del 17% al 2000%, con una media de <strong>112% (139% en el área financiera)</strong>. El 49% logra recuperar el costo en menos de un año, el costo de reportes se reduce un 60% y el tiempo total de generación baja de 10 a 1.</p>
         </div>
 
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">12. Ejercicios Propuestos</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">14. Ejercicios Propuestos</h2>
 
         <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 1:</strong> Disena un esquema estrella para un sistema de pedidos en linea. Identifica las tablas de hechos y dimensiones necesarias.</p>

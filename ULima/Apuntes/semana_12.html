@@ -146,7 +146,159 @@ END;
   INDEX BY BINARY_INTEGER;</code></pre>
         </div>
 
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Estructuras de Control</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Funciones Built-in (Manipulación y Conversión)</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PL/SQL incluye funciones integradas para la manipulación de caracteres, cálculos numéricos, operaciones de fecha y conversiones de tipo.</p>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Funciones de Manipulación de Caracteres</h3>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción / Ejemplo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Resultado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>CONCAT(str1, str2)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Concatena dos cadenas: <code>CONCAT('Hola', 'Mundo')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">"HolaMundo"</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>SUBSTR(str, pos, len)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Extrae parte de una cadena: <code>SUBSTR('HolaMundo', 1, 5)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">"HolaM"</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>LENGTH(str)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Retorna la longitud de la cadena: <code>LENGTH('HolaMundo')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">9</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>INSTR(str, char)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Encuentra la posición de un carácter: <code>INSTR('HolaMundo', 'M')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">5</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>LPAD(col, len, pad)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Rellena a la izquierda: <code>LPAD(salario, 10, '*')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">"*****24000"</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>RPAD(col, len, pad)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Rellena a la derecha: <code>RPAD(salario, 10, '*')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">"24000*****"</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>TRIM(char FROM str)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Remueve caracteres extremos: <code>TRIM('H' FROM 'HolaMundo')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">"olaMundo"</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Funciones Numéricas</h3>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción / Ejemplo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Resultado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ROUND(n, d)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Redondea a d decimales: <code>ROUND(45.926, 2)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">45.93</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>TRUNC(n, d)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Trunca a d decimales: <code>TRUNC(45.926, 2)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">45.92</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>MOD(m, n)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Retorna el residuo de la división: <code>MOD(1600, 300)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">100</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Funciones de Fecha</h3>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción / Ejemplo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Resultado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>MONTHS_BETWEEN(d1, d2)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Meses entre d1 y d2: <code>MONTHS_BETWEEN('01-SEP-95', '11-JAN-94')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">19.6774194</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ADD_MONTHS(d, n)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Suma n meses a una fecha: <code>ADD_MONTHS('11-JAN-94', 6)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">11-JUL-94</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NEXT_DAY(d, day)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Próximo día especificado: <code>NEXT_DAY('10-JUN-08', 'TUESDAY')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">17-JUN-08</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>LAST_DAY(d)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Último día del mes: <code>LAST_DAY('01-FEB-08')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">29-FEB-08</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>ROUND(d, 'YEAR'|'MONTH')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Redondea la fecha al año o mes más cercano</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Fecha redondeada</td>
+                </tr>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>TRUNC(d, 'YEAR'|'MONTH')</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Trunca la fecha al inicio de año o mes</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Fecha truncada</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Funciones de Conversión de Datos</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Permiten convertir tipos de datos de forma explícita:</p>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li><strong><code>TO_CHAR(n|d, format)</code>:</strong> Convierte número o fecha a cadena de caracteres. Ejemplos:
+                <pre><code>TO_CHAR(55000, '$99,999.00') -- Retorna "$55,000.00"
+TO_CHAR(TRUNC(SYSDATE), 'DD MONTH YYYY') -- Retorna p.ej. "26 JUNIO 2026"</code></pre>
+            </li>
+            <li><strong><code>TO_DATE(str, format)</code>:</strong> Convierte cadena a tipo DATE. Ejemplos:
+                <pre><code>TO_DATE('25/12/2007', 'DD/MM/YYYY')
+TO_DATE('01-Jan-90', 'DD-Mon-RR')</code></pre>
+            </li>
+            <li><strong><code>TO_NUMBER(str)</code>:</strong> Convierte cadena a tipo numérico. Ejemplos:
+                <pre><code>TO_NUMBER('0100') -- Retorna 100
+TO_NUMBER('1000.10') -- Retorna 1000.10</code></pre>
+            </li>
+        </ul>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Otras Funciones del Sistema</h3>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li><strong><code>NVL(expr1, expr2)</code>:</strong> Sustituye valores nulos. Retorna <code>expr2</code> si <code>expr1</code> es NULL.</li>
+            <li><strong><code>NVL2(expr1, expr2, expr3)</code>:</strong> Si <code>expr1</code> no es NULL retorna <code>expr2</code>, de lo contrario retorna <code>expr3</code>.</li>
+            <li><strong><code>DECODE(col|expr, busqueda1, res1, busqueda2, res2, ..., default)</code>:</strong> Estructura condicional inline (similar a un IF-THEN-ELSE o CASE en SQL).</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Estructuras de Control</h2>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Condicional: IF</h3>
         <pre><code>IF condicion1 THEN
@@ -184,7 +336,7 @@ FOR contador IN REVERSE 10..1 LOOP
   secuencia_de_instrucciones;
 END LOOP;</code></pre>
 
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Cursores</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Cursores</h2>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un cursor es un puntero a un conjunto de resultados. Permite procesar fila por fila cuando se necesita logica procedural que no puede expresarse en SQL puro.</p>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Cursores Implicitos</h3>

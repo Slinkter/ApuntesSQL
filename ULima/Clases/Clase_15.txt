@@ -1,504 +1,979 @@
+UNIVERSIDAD DE LIMA
+SCIENTIA ET PRAXIS
+
 Ingeniería de Datos
+
 Data Warehouse
+
 Rosario Guzmán, Milo Flores
 Fernando Arimana, Pedro Wong
-Junio 2006Agenda
-- Introducción
-- Concepto de Data Warehouse, Data Mart
-- Arquitectura
-- Tipos de implementación
-- Extracción, transformación y carga de datos - ETL
-- Metadatos
-- Cubos de datos
-- Explotación de datos
-- BeneficiosInfraestructura e-Business
+
+Junio 2006
+
+Agenda
+
+• Introducción
+• Concepto de Data Warehouse, Data Mart
+• Arquitectura
+• Tipos de implementación
+• Extracción, transformación y carga de datos - ETL
+• Metadatos
+• Cubos de datos
+• Explotación de datos
+• Beneficios
+
+Infraestructura e-Business
+
 Banca
-. . . .
-y Seguros Ventas Gobierno Telecom
-P Finanzas
+y
+Finanzas
+
+Seguros
+
+Ventas
+
+Gobierno
+
+Telecom
+
+....
+
+P
+R
+O
+V
+E
+E
+D
+O
+R
+E
+S
+
+E
+-
+C
+O
+M
+M
+E
 R
 C
-S
-O
-U L
-E E
-V
-P - -
-Planeamiento I
-C C
-PE O Manejo Recursos Manejo O
 E
-L M Cadena de Empresa Relaciones M
+
+Manejo
+Cadena
+proveedores
+
+Planeamiento
+Recursos
+de Empresa
+Back Office
+
+Manejo
+Relaciones
+Cliente
+
 E
-M proveedores Cliente M N
-I E Back Office E
-D
-R R
+-
+C
+M
+M
+E
+R
+C
+E
+
+C
+L
+I
+E
+N
 T
 E
-C C
-O
-R E E E
-SR
 S
-E
-S
-Fuentes de DatosDiversidad de Fuentes de DatosProductividad de los Usuarios de Negocios
-Source: Gartner GroupProductividad de los Usuarios de Negocios
-Source: Gartner GroupBrecha del Conocimiento Creciente
+
+Fuentes de Datos
+
+Diversidad de Fuentes de Datos
+
+Productividad de los Usuarios de Negocios
+
+Obtener Datos
+Analizar Datos
+Determinar Decision
+Planear Scenario
+Actuar Plan
+
+0 10 20 30 40
+Porcentaje de Tiempo por Actividad
+Sin Aplicaciones Estrategicas
+
+Source: Gartner Group
+
+Productividad de los Usuarios de Negocios
+
+Obtener Datos
+Analizar Datos
+Determinar Decision
+Planear Escenarios
+Actuar Plan
+
+0 10 20 30 40
+Porcentaje de Tiempo por Actividad
+
+Sin Aplicaciones Estrategicas Con Aplicaciones Estrategicas
+
+Source: Gartner Group
+
+Brecha del Conocimiento Creciente
+
 Disponibilidad de
 Información
+
 Brecha del
 Conocimiento
+
 Datos
+
 Potencial de
 Análisis
+
 1960 1970 1980 1990 2000
-Source: Gartner GroupData WarehousingDecision Support
-On-Line
+
+Source: Gartner Group
+
+Data Warehousing
+
+Transformación, Filtrado, Limpieza
+
+Data Warehouse
+
+Gestión de Información
+Decision Support
 Data
+Mart
+Business Intelligence
+On-Line
 Analytical
-Mart Processing
+Processing
 (OLAP)
+Data Warehouse
 RDBMS
 Análisis Multi-
-Star Schema
 Dimensional
+Star Schema
+Data Mining
 Operational Data Store (ODS)
 Executive Information System (EIS)
 Metadatos
-Sistemas de Información Gerencia (SIG)Data WarehousingData Warehouse
+Sistemas de Información Gerencia (SIG)
+
+Data Warehousing
+
+Sistemas
+Operacionales
+Finanzas
+Procesa-
+miento de
+órdenes
+Inventario
+Metadata
+Extraer
+Transformar
+Cargar
+Data
+Externa
+Acceso a
+usuarios
+finales
+Data
+Warehouse
+(Plataforma)
+Figura N° 8
+
+Data Warehouse
+
 data warehouse n. Area de almacenamiento para
 Información como Soporte para Toma de Decisiones.
 Almacena Data recolectada de Sistemas Operacionales
 Diversos y Externos, Integra la Data en un Modelo de
 Negocios, Permite el Análisis de la Data y Entrega
 Información a las personas de Toma de Decisiones a lo
-largo de la Organización.Data Mart
+largo de la Organización.
+
+Data Mart
+
 data mart n. Areas de Almacenamientos de Grupos de Trabajo o
 Departamentales que son Pequeños en tamaño y Especializados en
 Funciones. El Data Mart contiene Data Informacional que es ajustada a las
--Click here to type bulleted text
 Necesidades de Departamentos de Trabajo Específicos. También ofrece
 Mejoras de Performance.
+
 En otras palabras .....
 Presenta una vista de Unidad de Negocio de la Información
 Usualmente Creada para Mejorar Performance de Acceso/Análisis
+
 Según una definición formal de Bill Inmon:
 Organizada por Temas: Información del mismo evento o tema relacionada.
 Variante en el Tiempo: Lo cambios en la data son auditables,
 No Volatil: Información permanente,
-Integrada: Amplia y ConsistenteDiferencias entre Sistemas Operacionales y
+Integrada: Amplia y Consistente
+
+Diferencias entre Sistemas Operacionales y
 Sistemas Analíticos
+
 Sistemas Operacionales
--Ejecuta el negocio
--Empleado por
-í
-–Oficinistas/administradores Sistemas Anal ticos
--Data Actualizada al segundo
--Altos Volúmenes de Transacciones
--Administra el negocio
-simples
--Empleado por
--Rápido tiempo de respuesta
-–Decision makers
-–Empleados con experiencia
--Detallado y sumarizado
--Integrado
--HistóricoArquitecturaArquitectura Referencial
-MMeettaa DDaattaa MMaannaaggeemmeenntt
-OOppeerraattiioonnaall
-SSoouurrccee DDaattaa EExxttrraacctt TTrraannssffoorrmm DDaattaa WWaarreehhoouussee AApppplliiccaattiioonnss
-DDaattaa SSttoorree
-FFuunnccttiioonnaall
-AArreeaa
-SSoouurrccee
-SSyysstteemmss PPuurrcchhaassiinngg TTrraannssllaattee Brand
-Performance
-TTrraannssaaccttiioonn DDaattaa AAttttrriibbuuttee
-AApppplliiccaattiioonnss MMaarrkkeettiinngg
-EExxttrraaccttiioonn
-aanndd SSaalleess
-IInntteeggrraattiioonn CCaallccuullaattee
-GGeenneerraall aanndd SSeeggmmeenntteedd Financial
-LLeeddggeerr CCoorrppoorraattee DDaattaa
-CClleeaannssiinngg
-DDeerriivvee
-PPrroocceesssseess IInnffoorrmmaattiioonn SSuubbsseettss EIS
-OOtthheerr IInntteerrnnaall .
-SSyysstteemmss SSuummmmaattiioonn SSuummmmaarriizzee C.osts
-.
-.
-EExxtteerrnnaall DDaattaa PPrroodduucctt LLiinnee SSyynncchhrroonniizzee SSuummmmaarriizzeedd Supply
-SSoouurrcceess
-DDaattaa Chain
-LLooccaattiioonn
-CCoonnttiinnuuoouuss IImmpprroovveemmeenntt PPrroocceessss,, GGrroouuppwwaarree,, IInntteerrnneett
-DDaattaa RReessoouurrccee MMaannaaggeemmeenntt aanndd QQuuaalliittyy AAssssuurraanncceeAmbiente de Trabajo MS
+
+•Ejecuta el negocio
+•Empleado por
+ –Oficinistas/administradores
+•Data Actualizada al segundo
+•Altos Volúmenes de Transacciones
+ simples
+•Rápido tiempo de respuesta
+
+Sistemas Analíticos
+
+•Administra el negocio
+•Empleado por
+ –Decision makers
+ –Empleados con experiencia
+•Detallado y sumarizado
+•Integrado
+•Histórico
+
+UNIVERSIDAD DE LIMA
+SCIENTIA ET PRAXIS
+Arquitectura
+
+Arquitectura Referencial
+
+Meta Data Management
+
+Source Data
+Extract
+Operational Data Store
+Transform
+Data Warehouse
+Applications
+
+Source Systems
+Transaction Applications
+General Ledger
+Other Internal Systems
+External Data Sources
+
+Data Extraction Integration and Cleansing Processes
+
+Functional Area
+Purchasing
+Marketing and Sales
+Corporate Information
+Summation
+Product Lin
+Location
+
+Translate
+Attribute
+Calculate
+Derive
+Summarize
+Synchroniz
+
+Segmented Data Subsets
+Summarized Data
+
+Brand Performance
+Financial
+Costs
+Supply Chain
+EIS
+
+Continuous Improvement Process, Groupware, Internet
+Data Resource Management and Quality Assurance
+
+Ambiente de Trabajo MS
+
 DTS SQL Server 7.0 DTS or OLAP OLE DB for
--Automated Admin Replication Services OLAP
+- Automated Admin Replication Services OLAP
 - Index Tuning wizard
 Source OLTP - Visual Diagrams Data Marts
 Systems
-Cube
-Client
-Data
+
+Data Cube Client
 Warehouse
+
 ADO
 ADO MD
 PivotTable Service
-OLE DB
-Microsoft English Query
-Repository ODBC Third Party Tools
-MetadataTipos de ImplementaciónImplementación:
+English Query
+Third Party Tools
+
+Microsoft OLE DB
+Repository ODBC
+
+Metadata
+
+Tipos de Implementación
+
+Implementación:
 Data Warehouse -> Data Mart
 Source 1
-Data
 Source 2
-Warehouse
 Source 3
-Customer Service
-Sales Mart Financial Mart
-MartImplementación:
-Data Mart -> Data Warehouse
-Sales Mart
-Source 1
 Data
-Source 2 Financial Mart
 Warehouse
-Source 3 Customer Service
-MartIntegrando Data Marts
-Source 1 Source 2 Source 3
-Product Sales Customer
-Location Time
+Sales Mart
+Financial Mart
+Customer Service
+Mart
+
+Implementación:
+Data Mart -> Data Warehouse
+
+Source 1
+Source 2
+Source 3
+
+Sales Mart
+Financial Mart
+Customer Service Mart
+
+Data
+Warehouse
+
+UNIVERSIDAD DE LIMA
+
+Integrando Data Marts
+
+Source 1
+
+Source 2
+
+Source 3
+
+Product
+
+Sales
+
+Customer
+
+Location
+
 Financial
-GL OrganizationExtracción, Transformación y
+
+Time
+
+GL
+
+Organization
+
+Extracción, Transformación y
 Carga de datos (ETL)
+
 “80% del tiempo y recursos necesarios para crear y mantener un
 Data Warehouse son necesarios en la Extracción, Limpieza y
 Carga de la Data”.
-Source: Bill ImmonExtracción, Transformación y
-Carga de datosHerramienta ETL - Warehouse Manager
-Transformación
+
+Source: Bill Immon
+
+Extracción, Transformación y
 Carga de datos
+
+B.D. A
+género= F, M
+B.D. B
+género= 1, 0
+B.D. C
+género= masculino, femenino
+Transformación
+Data Warehouse
+género= F, M
+Figura N° 9
+
+Herramienta ETL - Warehouse Manager
+
+Transformación
+
 Extraccion de
-datosWarehouse Manager
+datos
+
+Carga de datos
+
+Warehouse Manager
+
 Registra y accede a las fuentes de datos
 DB2, Oracle, Microsoft, Sybase,
 Informix, archivos planos y otros
 Define extracciones y transformaciones
 Mas de 100 transformaciones
 incorporadas
+
 Define carga y actualización del warehouse
 Full refresh, histórico, y movimento de datos
 Modela, automatiza, y monitorea procesos
 Programa, triggers, dependencias, reintentos y
 notificaciones
 Maneja e intercambia metadatos
-Basados en estandars OMG CWMIMetadatosMetadatos - Diversidad de ComponentesMetadatos - ArquitecturaMetadatos - De dónde vienen los Datos?Calidad de DatosCalidad de Datos - MetodologíaCalidad de Datos - Metodología
-Monitorear el nivel
-de calidad de datos
-del data warehouse
+Basados en estandars OMG CWMI
+
+Data Warehouse Center
+Warehouse Selected Edit View Tools Help
+Warehouse
+Subject Areas
+TBC Sample
+Processes
+Sample Fact Table
+Sample Product
+Sample Scenario
+Sample Time
+Warehouse Sources
+Warehouse Targets
+Warehouse Schemas
+Administration
+TBC Sample - Sample Fact Table
+Name Type Subtype Modified Mode
+Fact Table Join SQL SQL March 24, 200... Product
+Select Time SQL SQL March 24, 200... Product
+PRODUCTION COSTS February 22 Develno
+Process Model - Sample Fact Table
+Process Selected Edit View Help
+PRODUCTION_COSTS INVENTORY SALES
+Select Time Fact Table Join
+TARGET FACT TABLE
+
+Metadatos
+
+UNIVERSIDAD DE LIMA
+SCIENTIA ET PRAXIS
+
+Metadatos - Diversidad de Componentes
+
+Database
+Catalogs
+
+Worksheet
+
+Copybooks
+
+Personal Databases
+
+Program Libraries
+
+Word Docs
+
+Data Dictionaries
+
+Program Logic
+
+Notebooks
+
+Metadatos - Arquitectura
+
+Directorio
+
+Metadatos - De dónde vienen los Datos?
+
+Calidad de Datos
+
+Calidad de Datos - Metodología
+
+Nivel 0    Analisis del valores de dominio
+Nivel 1    Integridad & Analisis de validez
+Nivel 2    Analisis de integridad estructural
+Nivel 3    Analisis de reglas de negocios
+Nivel 4    Reglas de conversión de datos
+
+Calidad de Datos - Metodología
+
 Mejorar el proceso
 de transformación
 para limpieza de
 datos
+
+Monitorear el nivel
+de calidad de datos
+del data warehouse
+
 Evaluar fuentes
 antes del proceso
-de transformacionCubos de Datos13
-1 9 9 7 , 1 9 9 8 ,
-C a n a d a , C a n a d a ,
-ye llo w
-b lu e 1 9 9 7 , 1 9 9 7 ,
-D i m e n s i o n C a n a d a , C a n a d a ,
-ye llo w ye llo w
-P a í s
-1 9 9 7 , 1998,
-M e x ic o , M exico ,
-yello w
-b lu e
-1 9 9 7 ,
-1 9 9 7 , M e x ic o ,
-M e x ic o , ye llo w
-y e llo w
-D i m e n s i o n
-D i m e n s i o n
-C o l o r
-A ñ oCubos de Datos
-- Los metadatos en data warehouse se representan a
-través de “cubo de datos” multidimensionales.
-- Componentes:
-– Dimensiones
-- Ej: parte p, proveedor s, cliente c
-– Hechos o Fact (Medidas de interés)
-- Ej: ventas totales
-– Cubo de Datos 3-D
-- Ej: para cada celda (p,s,c),ventas totales de p que fueron
-compradas a s y fueron vendidas a cDefiniciones
-- Tablas Fact
+de transformacion
+
+Cubos de Datos
+
+13
+
+Dimension
+País
+
+1997,
+Canada,
+blue
+
+1997,
+Canada,
+yellow
+
+1997,
+Canada,
+yellow
+
+1998,
+Canada,
+yellow
+
+1997,
+Mexico,
+blue
+
+1997,
+Mexico,
+yellow
+
+1997,
+Mexico,
+yellow
+
+1998,
+Mexico,
+yellow
+
+Dimension
+Color
+
+Dimension
+Año
+
+Cubos de Datos
+
+• Los metadatos en data warehouse se representan a
+  través de “cubo de datos” multidimensionales.
+• Componentes:
+  – Dimensiones
+    • Ej: parte p, proveedor s, cliente c
+  – Hechos o Fact (Medidas de interés)
+    • Ej: ventas totales
+  – Cubo de Datos 3-D
+    • Ej: para cada celda (p,s,c),ventas totales de p que fueron
+      compradas a s y fueron vendidas a c
+
+Definiciones
+
+• Tablas Fact
 – Tambien conocidas como Tablas de Hecho, estas son las tablas
 centrales en un esquema estrella de un modelo DW. Los tablas
 fact representan el conocimiento del negocio y sus datos
 generalmente son numéricos y/o añadidos para ser analizados.
-- Tablas Dimensión
+• Tablas Dimensión
 – También conocidas como Tablas de la Referencia, contienen
 los datos relativamente estáticos en el DW. Una dimensión es
 una estructura, integrada a menudo por unas o más jerarquías,
 que categoriza datos.
 – Jerarquías
-- Las jerarquías son las estructuras lógicas que utilizan niveles pedidos
-como los medios de ordenamiento de datos.Índices
-- Índices Bitmap
-– Ideales para búsquedas en gran cantidad datos y consultas ad hoc,
-reduce substancialmente del uso del espacio comparado con a
-otras técnicas de la indexación y su mantenimiento es muy
-eficiente durante consultas DML en paralelo y cargas de datos.
-- Índices del B-tree
-– Un índice del b-tree ordena los datos como un árbol inverso. El
-nivel mas bajo del índice mantiene los valores reales de los datos y
-los punteros a las filas correspondientes. Este es utilizado
-mayormente para acceso de consultas típicas.Esquema Básico
-GBL_DIM_CANAL GBL_DIM_PROD
-TDPROD_ID
-TDCAN_ID CLASE_ID
-CANAL_ID GBL_VENTA_BASE FAMILIA_ID
-ITEM_ID
+• Las jerarquías son las estructuras lógicas que utilizan niveles pedidos
+como los medios de ordenamiento de datos.
+
+Índices
+
+Índices Bitmap
+- Ideales para búsquedas en gran cantidad datos y consultas ad hoc,
+  reduce substancialmente del uso del espacio comparado con a
+  otras técnicas de la indexación y su mantenimiento es muy
+  eficiente durante consultas DML en paralelo y cargas de datos.
+
+Índices del B-tree
+- Un índice del b-tree ordena los datos como un árbol inverso. El
+  nivel mas bajo del índice mantiene los valores reales de los datos y
+  los punteros a las filas correspondientes. Este es utilizado
+  mayormente para acceso de consultas típicas.
+
+Esquema Básico
+
+GBL_DIM_CANAL
+TDCAN_ID
 CANAL_ID
-PAQUETE_ID
+
+GBL_DIM_GEO
+TDGEO_ID
+REGION_ID
+PROVINCIA_ID
+TIENDA_ID
+
+GBL_VENTA_BASE
+CANAL_ID
 TIENDA_ID
 ITEM_ID
 MES_ID
-GBL_DIM_GEO GBL_DIM_TIEMPO
 UNIDADES
-TDGEO_ID VENTAS
+VENTAS
+
+GBL_DIM_PROD
+TDPROD_ID
+CLASE_ID
+FAMILIA_ID
+ITEM_ID
+PAQUETE_ID
+
+GBL_DIM_TIEMPO
 AÑO_ID
-REGION_ID
 SEMESTRE_ID
-PROVINCIA_ID
 MES_ID
-TIENDA_ID¿Qué es una Dimensión?
-- Una dimensión describe
+
+¿Qué es una Dimensión?
+
 ALL
+Year
+Quarter
+Month
+Nombre del mes
+Week
+Season
+Time Key
+
+• Una dimensión describe
 las relaciones entre
 datos.
-Year
-- Definido por la
+• Definido por la
 referenciación de tablas
 en la Base de Datos.
-Season Week Quarter - Puede ser usada en una
+• Puede ser usada en una
 BD normalizada o
 desnormalizada.
-Month Nombre del mes
-Time Key
-38Cubo de Datos
+
+38
+
+Cubo de Datos
+
 roll-up a region
-Dimensiones:
 Tacna
-Ica Tiempo, Producto, Geografía
-roll-up a clase
-Lima Atributos:
-Jugos 10 Productos (upc, precio, …)
-o
-t
-c Leche 34 Geografia …
-u
-d
-o Cafe 56 Jerarquias:
-r
-P Helado 32 Producto → Clase → …
-Sopas 12 Dia → Semana → Semestre
-Pan 56 roll-up a sem anal Ciudad→ Region → Pais
+Ica
+Lima
+Jugos 10
+Leche 34
+Cafe 56
+Helado 32
+Sopas 12
+Pan 56
 L M M J V S D
 Tiempo
-56 unidades de la venta de pan en Lima el LunesEjemplo de Dimensión
-CREATE DIMENSION time_dim nombre
-LEVEL time_key IS time.time_key
-LEVEL month IS time.month
-Define el
-LEVEL quarter IS time.quarter
-nombre de cada
-LEVEL year IS time.year
-nivel en la
-LEVEL week IS time.week
-dimension y la
-LEVEL fiscal_qtr IS time.fiscal_qtr
-columnas de la
-HIERARCHY calendar_rollup ( tabla
+roll-up a clase
+roll-up a semanal
+
+Dimensiones:
+Tiempo, Producto, Geografía
+Atributos:
+Productos (upc, precio, ...)
+Geografia ...
+Jerarquias:
+Producto -> Clase -> ...
+Dia -> Semana -> Semestre
+Ciudad-> Region -> Pais
+
+56 unidades de la venta de pan en Lima el Lunes
+
+Ejemplo de Dimensión
+
+CREATE DIMENSION time_dim                                     nombre
+LEVEL time_key              IS time.time_key
+LEVEL month                 IS time.month                     Define el
+LEVEL quarter               IS time.quarter                   nombre de cada
+LEVEL year                  IS time.year                      nivel en la
+LEVEL week                  IS time.week                      dimension y la
+LEVEL fiscal_qtr            IS time.fiscal_qtr                columnas de la
+                                                              tabla
+HIERARCHY calendar_rollup   (
+time_key CHILD OF                                             Describe la
+month    CHILD OF                                             jerarquia usando
+quarter  CHILD OF year )                                      niveles de
+HIERARCHY fiscal_rollup     (                                 nombres
 time_key CHILD OF
-Describe la
-month CHILD OF
-jerarquia usando
-quarter CHILD OF year )
-niveles de
-HIERARCHY fiscal_rollup (
-time_key CHILD OF nombres
-week )
-atributos que
-ATTRIBUTE time_key DETERMINES son unicos
-(day_number_in_month, day_number_in_year) por nivel
-ATTRIBUTE week DETERMINES week_number_of_year
-ATTRIBUTE month DETERMINES full_month_name;
-40Desnormalización vs Normalización
-vsEsquema Estrella
-Store Dimension
+week     )
+                                                              atributos que
+ATTRIBUTE time_key DETERMINES                                 son unicos
+(day_number_in_month, day_number_in_year)                     por nivel
+ATTRIBUTE week              DETERMINES week_number_of_year
+ATTRIBUTE month             DETERMINES full_month_name;
+                                                              40
+
+Desnormalización vs Normalización
+
+VS
+
+Esquema Estrella
 Product Dimension
-store key
 product key
-store name
 product name
-store address
 product size
-Sales Fact
-store manager
 product form
-product key floor plan type
 product package
-organization key
-store size
 product dept
-store key ...
 product cat
-time key
 product subcat
-units sold qty
 ...
+
+Organization
+Dimension
+organization key
+division name
+area name
+region name
+market name
+...
+
+Sales Fact
+product key
+organization key
+store key
+time key
+units sold qty
 lcl currency sale amt
 US$ sale amount
 US$ cost amount
-Organization
-Dimension product gross margin
-Time Dimension
+product gross margin
 intercompany profit
-organization key time key
 royalty amount
-division name time date
 ...
-area name week
-region name month
-market name quarter
-... year
-...Aplicación de un Modelo de Datos
+
+Store Dimension
+store key
+store name
+store address
+store manager
+floor plan type
+store size
+...
+
+Time Dimension
+time key
+time date
+week
+month
+quarter
+year
+...
+
+Aplicación de un Modelo de Datos
 Dimensiones, Niveles, Jerarquías y Atributos
-Producto Tiempo Geografia Canal
-Segmento
-Patron Patron Ventas Patron
-Mercado
-Todos productos Año Todos zona geog. Todos canales
-Todos segmentos
-Clases Semestre Regiones Canal
-Segmentos
-Familias Mes Provicias
-Cuentas
-Item Día Tiendas
-Tiendas
+Producto	Tiempo	Geografia	Canal
+Patron	Patron	Segmento Mercado	Ventas	Patron
+Todos productos	Año	Todos segmentos	Todos zona geog.	Todos canales
+Clases	Semestre	Segmentos	Regiones	Canal
+Familias	Mes	Cuentas	Provicias
+Item	Día	Tiendas	Tiendas
 Variables
 Dimensiones (producto, tiempo,geografía, canal)
-Unidades (patron{todos, algunos, uno}, segmentos{mercado, zonas} )Tipos de CubosROLAP
-OLTP Data Warehouse
-Sources
+Unidades (patron{todos, algunos, uno}, segmentos{mercado, zonas} )
+
+Tipos de Cubos
+
 ROLAP
-SQL Relationship
-Database
-Relationship
-Database
-Relational OLAP Services
-Database and
-Oracle
-Client Applications
-ROLAP Data
-Other
-ROLAP AggregationsMOLAP
-OLTP Data Warehouse
+
+OLTP
 Sources
-MOLAP
+
+Data Warehouse
+
+ROLAP
+
 SQL
-MOLAP
-OLAP Services
-Data
-and
+
 Oracle
+
+Other
+
+Relational
+Database
+
+ROLAP Data
+
+ROLAP Aggregations
+
+OLAP Services
+and
 Client Applications
+
+OLTP
+Sources
+SQL
+Oracle
+Other
+Data Warehouse
+MOLAP
+MOLAP
+Data
 MOLAP Data
-Other
-MOLAP AggregationsHOLAP
-OLTP Data Warehouse
-Sources
-HOLAP
-ROLAP
+MOLAP Aggregations
 MOLAP
-SQL
-Data
-MOLAP
-Data
 OLAP Services
-ROLAP Data
 and
-Oracle
 Client Applications
-MOLAP
+
+HOLAP
+
+OLTP
+Sources
+
+Data Warehouse
+
+HOLAP
+
+ROLAP
+
+SQL
+
+Oracle
+
 Other
-AggregationsExplotación de DatosExplotación de Datos
+
+MOLAP
+
+ROLAP Data
+
+Aggregations
+
+OLAP Services
+and
+Client Applications
+
+UNIVERSIDAD DE LIMA
+SCIENTIA ET PRAXIS
+
+UNIVERSIDAD DE LIMA
+Explotación de Datos
+ENTIA ET PRAXIS
+
+Explotación de Datos
+
 ✓Query Ad hoc – Consultas Ad hoc
-- Proceso Iterativo de Preguntas y Respuestas
-- Herramienta que asiste a experto a encontrar información valiosa
+• Proceso Iterativo de Preguntas y Respuestas
+• Herramienta que asiste a experto a encontrar información valiosa
+
 ✓OLAP - Análisis Multidimensional
-- Preguntas Multidimensionales/Respuestas Multidimensionales
-- Consultas Complejas - Herramienta que ayuda al usuario experto
+• Preguntas Multidimensionales/Respuestas Multidimensionales
+• Consultas Complejas - Herramienta que ayuda al usuario experto
+
 ✓Data Mining - Minería de Datos
-- Herramienta que automáticamente busca tendencias y patrones
-- Herramienta que aprende y desarrolla experiencia
-- Puede ser la base para análisis detalladoData Mining
-- Es el proceso que permite al usuario conocer la
+• Herramienta que automáticamente busca tendencias y patrones
+• Herramienta que aprende y desarrolla experiencia
+• Puede ser la base para análisis detallado
+
+Data Mining
+
+• Es el proceso que permite al usuario conocer la
 escencia y las relaciones entre sus datos.
-- Data mining descubre patrones y tendencias en el
+
+• Data mining descubre patrones y tendencias en el
 contenido de la información almacenada en el
 warehouse a través de las diferentes técnicas que
-utiliza.Proceso de Data MiningTipos de Minería
+utiliza.
+
+Proceso de Data Mining
+
+Identificar
+oportunidad
+de negocio
+
+Seleccionar Transformar Minar Asimilar
+
+Data
+Warehouse
+
+Selected
+Data
+
+Visualización
+
+Tipos de Minería
+
 ✓ Minería de Descubrimiento - Encontrar patrones en Datos que
 pueden ser usados para guiar decisiones.
-- Minimiza dirección de la minería
-- Analiza todo el almacén de datos
-- Mineria de "fácil". Algunas veces la más valiosa.
+• Minimiza dirección de la minería
+• Analiza todo el almacén de datos
+• Mineria de "fácil". Algunas veces la más valiosa.
+
 ✓ Minería Predictiva - Usar resultados conocidos para crear
 modelos que puedan predecir valores futuros.
-- Extensiva dirección del minador
-- Aprende del muestras para aplicar la populación
-- Minería "Dura". Un experto usuario es requerido.Técnicas Data Mining
-Response
+• Extensiva dirección del minador
+• Aprende del muestras para aplicar la población
+• Minería "Dura". Un experto usuario es requerido.
+
+Técnicas Data Mining
+
 Fraud
-Delinquency
 Market Basket
-Revenue Modeling
 Analysis
+
+Response
+Delinquency
+Revenue Modeling
+
 Risk Analysis
 Client Retention
-Customer Segmentation Credit Approval
-Prediction
-Classification
+Credit Approval
+
+Customer Segmentation
+
 Link Analysis
+
 Clustering
-Similarity Optimization/ Time Radial Basis Neural Decision
-Measures Search Series Functions Networks TreesBeneficiosROI y Beneficios de la Solución
+
+Prediction
+
+Classification
+
+Similarity
+Measures
+
+Optimization/
+Search
+
+Time
+Series
+
+Radial Basis
+Functions
+
+Neural
+Networks
+
+Decision
+Trees
+
+Beneficios
+UNIVERSIDAD DE LIMA
+SCIENTIA ET PRAXIS
+
+ROI y Beneficios de la Solución
+
 ✓Las organizaciones que han implementado y utilizado aplicaciones
 analíticas han logrado retornos en un rango desde 17% a 2000% con
 una media de ROI de 112%.
+
 ✓Cerca de la mitad (49%) de estos han tenido un periodo de
 recuperación de menos de un año.
+
 ✓Los resultados en el área financiera utilizando sistemas analíticos
 tienen una media de ROI de 139%.
+
 ✓El costo de generación de reportes se reduciría en aprox. 60%.
+
 ✓El tiempo total de generación de reportes se reduce de 10 a 1
-Source: IDCBeneficios
+Source: IDC
+
+Beneficios
+
 ✓ Desde perspectiva IT
-- Arquitectura flexible de data warehousing que me permita cambiar
+• Arquitectura flexible de data warehousing que me permita cambiar
 cuando lo necesite
-- Presupuestos limitados
-- Procesos que automáticamente actualicen los datos del data
+• Presupuestos limitados
+• Procesos que automáticamente actualicen los datos del data
 warehousing
-- Desgaste del area de IT por requerimientos de usuarios
+• Desgaste del area de IT por requerimientos de usuarios
+
 ✓ Desde perpectiva de usuarios finales
-- Tener una vista global de los datos de la organización, no
+• Tener una vista global de los datos de la organización, no
 importando de donde provenga la información
-- Tener una herramienta fácil de usar
-- Tener la capacidad de generar reportes de manera independiente
-- Acceso desde internet o intranet
+• Tener una herramienta fácil de usar
+• Tener la capacidad de generar reportes de manera independiente
+• Acceso desde internet o intranet

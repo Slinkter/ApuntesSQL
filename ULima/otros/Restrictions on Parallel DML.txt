@@ -1,2 +1,56 @@
-NOTA: Este archivo estaba vacío. El contenido original proviene del PDF "Restrictions on Parallel DML.pdf". 
-Pendiente de transcripción desde la fuente original.
+9/11/13 Document Display
+Restrictions on Parallel DML (Doc ID 201978.1)
+Modified: Sep 21, 2012 Type: BULLETIN Status: PUBLISHED Priority: 3
+***Checked for relevance on 21-SEP-2012***
+
+Restrictions on Parallel DML
+
+The following are the restrictions for parallel DML in 9i Release 1. It has changed for 9i Release 2. Please look into the
+Data Warehousing Guide Chapter Parallel Execution for the latest information.
+
+• Update and delete operations are not parallelized on nonpartitioned tables.
+• For parallel update operations, global unique indexes are not supported. All other indexes are fully maintained
+by parallel operations.
+• A transaction can contain multiple parallel DML statements that modify different tables, but after a parallel DML
+statement modifies a table, no subsequent serial or parallel statement (DML or query) can access the same
+table again in that transaction.
+o This restriction also exists after a serial direct-path INSERT statement: no subsequent SQL statement
+(DML or query) can access the modified table during that transaction.
+o Queries that access the same table are allowed before a parallel DML or direct-path INSERT statement,
+but not after.
+o Any serial or parallel statements attempting to access a table that has already been modified by a
+parallel UPDATE, DELETE, or MERGE, or a direct-path INSERT during the same transaction are rejected
+with an error message.
+• This restriction also exists after a serial direct-load INSERT statement: no subsequent SQL statement (DML or
+query) can access the modified table
+• Queries that access the same table are allowed before a parallel DML or direct-load INSERT statement, but not
+after.
+• INSERT during the same transaction are rejected with an error message.
+• If initialization parameter ROW_LOCKING = INTENT, then inserts, updates, and deletes are not parallelized
+(regardless of the serializable mode).
+• Triggers are not supported for parallel DML operations.
+• Replication functionality is not supported for parallel DML.
+• Parallel DML cannot occur in the presence of certain constraints: self-referential integrity, delete cascade, and
+deferred integrity. In addition, for direct-path INSERT, there is no support for any referential integrity.
+• INSERT there is no support for any referential integrity.
+• Parallel DML cannot occur on tables with object columns or LOB columns, or on index-organized tables.
+• A transaction involved in a parallel DML operation cannot be or become a distributed transaction.
+• Clustered tables are not supported.>
+
+Violations will cause the statement to execute serially without warnings or error messages (except for the restriction
+on statements accessing the same table in a transaction, which can cause error messages). For example, an update
+will be serialized if it requires global unique index maintenance.
+
+Integrity Restrictions:
+
+| DML Statement | Issued on Parent | Issued on Child | Self-Referential |
+| :--- | :--- | :--- | :--- |
+| INSERT | (Not applicable) | Not parallelized | Not parallelized |
+| UPDATE No Action | Supported | Supported | Not parallelized |
+| DELETE No Action | Supported | Supported | Not parallelized |
+
+https://support.oracle.com/epmos/faces/ui/km/SearchDocDisplay.jspx?_adf.ctrl-state=1a69t01511_86 1/2
+
+9/11/13 Document Display
+DELETE Cascade Not parallelized (Not applicable) Not parallelized
+https://support.oracle.com/epmos/faces/ui/km/SearchDocDisplay.jsp?_adf.ctrl-state=1a69t01511_86 2/2

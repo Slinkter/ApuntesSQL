@@ -1,90 +1,323 @@
 Conceptos
-- Business Intelligence: Conjunto de
+
+Business Intelligence: Conjunto de
 productos y servicios que permiten a los
 usuarios finales accesar y analizar de
 manera rápida y sencilla, la información para
 la toma de decisiones de negocio a nivel
 operativo, táctico y estratégico.
-- Data warehouse: Repositorio centralizado
+Data warehouse: Repositorio centralizado
 de datos.
-- Cubos: Estructura de almacenamiento de
+Cubos: Estructura de almacenamiento de
 datos que facilita la realización de consultas
-grandes en tiempos óptimos.CubosConceptos de diseño
-- Fact table (tabla de hechos): Almacena eventos
+grandes en tiempos óptimos.
+
+Cubos
+
+Información de negocios
+
+Ubicación
+Lima
+Cuzco
+Tacna
+
+Productos
+Uvas
+Fresas
+Sandias
+Manzanas
+Peras
+
+Ventas
+
+T1 T2 T3 T4
+Periodos
+
+Conceptos de diseño
+
+Fact table (tabla de hechos): Almacena eventos
 (por ejemplo, las ventas). Contiene las métricas que
 miden la efectividad de las operaciones del negocio.
-- Fact (hecho): Es una fila de la fact table. Representa
+Fact (hecho): Es una fila de la fact table. Representa
 un evento específico.
-- Measures (medidas): Valores cuantitativos que
+Measures (medidas): Valores cuantitativos que
 almacenan las métricas del negocio. Están
 representados por columnas numéricas en la fact
 table.
-- Dimensión: Es una entidad de negocios respecto de
+Dimensión: Es una entidad de negocios respecto de
 la cual se deben calcular las métricas. Ejemplos:
 clientes, productos, tiempo.
-- Dimension Table (tabla de dimensión): Tablas que
-almacenan las dimensiones.Dimensiones
-- Es un criterio utilizado para cruzar la
+Dimension Table (tabla de dimensión): Tablas que
+almacenan las dimensiones.
+
+store *
+store_type
+region_id
+store_name
+store_number
+store_street_addre
+store_city
+store_state
+store_postal_code
+store_country
+store_manager
+store_phone
+store_fax
+first_opened_date
+last_remodel_date
+store_sqft
+grocery_sqft
+frozen_sqft
+
+promotion *
+promotion_id
+promotion_district_id
+promotion_name
+media_type
+cost
+start_date
+
+time_by_day *
+time_id
+the_date
+the_day
+the_month
+the_year
+day_of_month
+week_of_year
+month_of_year
+quarter
+fiscal_period
+
+sales_fact_1997 *
+product_id
+time_id
+customer_id
+promotion_id
+store_id
+store_sales
+store_cost
+unit_sales
+
+product *
+product_class_id
+product_id
+brand_name
+product_name
+SKU
+SRP
+gross_weight
+net_weight
+recyclable_package
+low_fat
+units_per_case
+cases_per_pallet
+shelf_width
+shelf_height
+shelf_depth
+
+customer *
+customer_id
+account_num
+lname
+fname
+mi
+address1
+address2
+address3
+address4
+city
+state_province
+postal_code
+country
+customer_region_id
+phone1
+
+Dimensiones
+
+■ Es un criterio utilizado para cruzar la
 información.
-- La medida “Ventas”, por sí sola, carece de
+■ La medida “Ventas”, por sí sola, carece de
 sentido. ¿Quiero ver las ventas por producto?
 ¿por tiempo? ¿por distribuidor?
-- Cada uno de estos criterios produce una
-dimensión.Dimensiones y niveles
-- Una dimensión tiene múltiples niveles de agrupación. Por
+■ Cada uno de estos criterios produce una
+dimensión.
+
+Dimensiones y niveles
+
+Una dimensión tiene múltiples niveles de agrupación. Por
 ejemplo, la dimensión “Ubigeo” debe poder disgregarse en
 países, departamentos, provincia, distrito.
-- Cada uno de estos niveles de agregación define un nivel.
-- En el ejemplo antes mencionado, los niveles de la dimensión
+Cada uno de estos niveles de agregación define un nivel.
+En el ejemplo antes mencionado, los niveles de la dimensión
 “Ubigeo” son:
 . País
 .. Departamento
-…Provincia
-….Distrito
-- Cada nivel tiene ocurrencias. Por ejemplo, “Lima” es una
+...Provincia
+....Distrito
+Cada nivel tiene ocurrencias. Por ejemplo, “Lima” es una
 ocurrencia del nivel Departamento. A estas ocurrencias se les
-llama miembros (members).Tablas de dimensión
-- Las dimensiones se
+llama miembros (members).
+
+Tablas de dimensión
+
+Las dimensiones se
 almacenan en tablas.
-PRODUCTO_DIM
-- Generalmente, cada nivel
-representa una columna en Producto_Key
+Generalmente, cada nivel
+representa una columna en
 la tabla de dimensión.
-IDProducto
-- Una tabla de dimensión
-posee una columna clave, Familia
+Una tabla de dimensión
+posee una columna clave,
 comúnmente auto-generada.
-Subfamilia
 Por ejemplo, una clave
-Identity de SQL Server. Marca
-- Además, una tabla de
-Presentación
+Identity de SQL Server.
+Además, una tabla de
 dimensión contiene
 columnas que almacenan
 los IDs de cada registro en
-sus sistemas de origen.Relación entre tabla de hechos y tablas
+sus sistemas de origen.
+
+PRODUCTO_DIM
+Producto_Key
+IDProducto
+Familia
+Subfamilia
+Marca
+Presentación
+
+Relación entre tabla de hechos y tablas
 de dimensión
-- La tabla de
+
+La tabla de
 hechos tiene
 relaciones
 de foreign
 key con
 cada una de
 las tablas de
-dimensiónEl modelo estrella (STAR)El modelo copo de nieve
+dimensión
+
+Dimensiones
+Ubicacion
+Producto
+Tiempo
+
+Dimension
+Fact Table
+Medidas
+Ubicacion Producto Tiempo Unid $
+Facts
+
+El modelo estrella (STAR)
+
+Employee
+EmployeeKey
+EmployeeID
+.
+.
+
+Time
+TimeKey
+TheDate
+.
+.
+
+Sales_Fact
+TimeKey
+EmployeeKey
+ProductKey
+CustomerKey
+ShipperKey
+RequiredDate
+.
+.
+
+Product
+ProductKey
+ProductID
+.
+.
+
+Llaves dimensionales
+
+Llave múltiple
+
+Medidas
+
+Shipper
+ShipperKey
+ShipperID
+.
+.
+
+Customer
+CustomerKey
+CustomerID
+.
+.
+
+El modelo copo de nieve
 (SNOWFLAKE)
-- En el modelo STAR, cada nivel corresponde
+
+■ En el modelo STAR, cada nivel corresponde
 con una columna adicional en una sola tabla
 de dimensión.
-- En el modelo SNOWFLAKE, cada nivel
+■ En el modelo SNOWFLAKE, cada nivel
 corresponde con una nueva tabla de
-dimensión.Apariencia del modelo SNOWFLAKEModelo STAR vs SNOWFLAKE
-STAR SNOWFLAKE
-Entendimiento del Sencillo Mayor dificultad
-modelo
-Número de tablas Menor Mayor
-Complejidad de la Baja Alta
-consulta
-Performance del Rápida Lenta
-procesamiento del
-cuboModelo STAR vs SNOWFLAKE
+dimensión.
+
+Apariencia del modelo SNOWFLAKE
+
+FAMILIA_DIM
+Familia_Key
+IdFamilia
+Familia
+
+SUBFAMILIA_DIM
+SubFamilia_Key
+Familia_Key
+IdSubFamilia
+SubFamilia
+
+MARCA_DIM
+Marca_Key
+SubFamilia_Key
+IdMarca
+Marca
+
+PRESENTACION_DIM
+Presentacion_Key
+Marca_Key
+IdPresentacion
+Presentacion
+
+Modelo STAR vs SNOWFLAKE
+
+| | STAR | SNOWFLAKE |
+| :--- | :--- | :--- |
+| Entendimiento del modelo | Sencillo | Mayor dificultad |
+| Número de tablas | Menor | Mayor |
+| Complejidad de la consulta | Baja | Alta |
+| Performance del procesamiento del cubo | Rápida | Lenta |
+
+Modelo STAR vs SNOWFLAKE
+
+MODELO STAR
+Ubicación del almacen
+Continente | País | Region | Ciudad | Almacen
+--- | --- | --- | --- | ---
+| | | | |
+
+MODELO SNOWFLAKE
+Almacen
+Continente
+Continente
+País
+País
+Region
+Region
+Ciudad
+Ciudad
+Almacen
+Almacen
+01

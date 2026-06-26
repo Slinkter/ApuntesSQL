@@ -332,49 +332,71 @@ Rojas      Auto</code></pre>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>a) Grabar Valores Derivados</strong></p>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Almacenar calculos (totales, promedios, conteos) directamente en la tabla maestra para evitar recalcular cada vez. Ejemplo: <code>Total_Factura</code> en lugar de calcular <code>SUM(Precio * Cantidad)</code> en cada consulta.</p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Almacenar cálculos (totales, promedios, conteos) directamente en la tabla maestra para evitar recalcular en cada consulta.</p>
+<pre><code>-- Modelo Normalizado (Normalized Schema)
+CUSTOMER (CUSTOMER_ID, LNAME, FNAME, ADDRESS, PHONE)
+ORDER (ORDER_ID, CUSTOMER_ID, ORDER_STATUS, PRICE, ORDER_DATE)
+
+-- Modelo Desnormalizado (Denormalized Schema)
+CUSTOMER (CUSTOMER_ID, LNAME, FNAME, ADDRESS, PHONE, SUM_PRICE)
+ORDER (ORDER_ID, CUSTOMER_ID, ORDER_STATUS, PRICE, ORDER_DATE)</code></pre>
         </div>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>b) Uniendo Entidades</strong></p>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Fusionar tablas relacionadas en una sola. En lugar de <code>Factura</code> + <code>Linea_Factura</code>, crear una tabla desnormalizada que contenga tanto los datos de la factura como los items repetidos por fila.</p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Fusionar tablas relacionadas en una sola para evitar JOINs costosos.</p>
 <pre><code>-- Modelo Normalizado
-Factura (Nro, Fecha, Cod_Cliente)
-Linea_Factura (Nro_Factura, Nro_Item, Cod_Articulo, Cantidad, Precio)
+Factura (Nro Factura, Fecha, Cod Cliente, Total Factura)
+Línea Factura (Nro Factura, Nro Item, Cod Articulo, Cantidad, Precio Unitario)
 
 -- Modelo Desnormalizado
-Factura_Unica (Nro, Fecha, Cod_Cliente, Cod_Articulo, Cantidad, Precio, Total_Factura)</code></pre>
+Factura (Nro Factura, Fecha, Cod Cliente, Cod Articulo, Cantidad, Precio Unitario)</code></pre>
         </div>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>c) Valores Fijos (Hard Code)</strong></p>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Incorporar valores fijos directamente en la tabla en lugar de normalizar en tablas parametricas. Ejemplo: guardar <code>Sexo (M/F)</code> como columna directa en <code>Estudiante</code> en vez de tener una tabla <code>Sexo</code> separada.</p>
-<pre><code>-- Normalizado: Estudiante (Cod, Fecha_Nac, Nombre, Cod_Sexo) + Sexo (Cod, Descripcion)
--- Desnormalizado: Estudiante (Cod, Fecha_Nac, Nombre, Sexo)</code></pre>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Incorporar valores paramétricos directamente en la tabla principal en lugar de normalizar en tablas maestras auxiliares.</p>
+<pre><code>-- Modelo Normalizado
+Estudiante (Cod Estudiante, Fecha Nacimiento, Nombre, Cod Sexo)
+Sexo (Cod Sexo, Descripción)
+
+-- Modelo Desnormalizado
+Estudiante (Cod Estudiante, Fecha Nacimiento, Nombre, Sexo (M/F))</code></pre>
         </div>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>d) Manteniendo Detalle en el Maestro</strong></p>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Convertir filas de detalle en columnas del maestro. Ejemplo: Presupuesto con 12 columnas (Importe_Ene ... Importe_Dic) en vez de 12 filas en una tabla Presupuesto_Mes.</p>
-<pre><code>-- Normalizado: Presupuesto_Mes (Cod_Presupuesto, Tipo, Descripcion, Mes, Importe)
--- Desnormalizado: Presupuesto (Cod, Tipo, Descripcion, Ene, Feb, Mar, ..., Dic)</code></pre>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Convertir filas del detalle repetitivas en columnas dentro de la tabla maestra cuando la cardinalidad es fija.</p>
+<pre><code>-- Modelo Normalizado
+Presupuesto (Cod Presupuesto, Tipo Presupuesto, Descripción, Ingreso/Egreso)
+Presupuesto-Mes (Cod Presupuesto, Mes, Importe)
+
+-- Modelo Desnormalizado
+Presupuesto (Cod Presupuesto, Tipo Presupuesto, Descripción, Ingreso/Egreso, Importe-Ene, Importe-Feb, Importe-Mar, ..., Importe-Dic)</code></pre>
         </div>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>e) Repitiendo Atributo del Detalle en el Maestro (y viceversa)</strong></p>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Copiar un atributo del detalle en el maestro para evitar JOINs. Ejemplo: <code>Ult.Nro_Factura</code> en la tabla <code>Cliente</code> para conocer rapidamente la ultima factura sin consultar la tabla detalle.</p>
-<pre><code>-- Maestro con atributo de detalle
-Cliente (Cod, Nombre, Direccion, Ult.Nro_Factura)</code></pre>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Duplicar un valor del detalle en el maestro para evitar resolver búsquedas agregadas frecuentes.</p>
+<pre><code>-- Modelo Normalizado / Intermedio
+Cliente (Cod Cliente, Nombre, Direccion, Ult.Nro Factura)
+Factura (Nro Factura, Fecha, Cod Cliente)
+Línea Factura (Nro Factura, Nro Item, Fecha, Cod Articulo, Cantidad, Precio Unitario)</code></pre>
         </div>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>f) Llaves de Circuito Corto</strong></p>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Incluir la clave del abuelo en la tabla del nieto para evitar recorrer la jerarquia completa de JOINs. Ejemplo: incluir <code>Cod_Cliente</code> directamente en <code>Linea_Factura</code> en vez de navegar <code>Linea &rarr; Factura &rarr; Cliente</code>.</p>
-<pre><code>-- Normal: Linea (Nro_Factura, Item) → Factura (Nro, Cod_Cliente) → Cliente
--- Corto:  Linea (Nro_Factura, Item, Cod_Cliente)</code></pre>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Incluir la clave primaria del "abuelo" directamente en la tabla "nieta" para saltear JOINs intermediarios en la jerarquía.</p>
+<pre><code>-- Modelo Normalizado
+Cliente (Cod Cliente, Nombre, Direccion, Ult.Nro Factura)
+Factura (Nro Factura, Fecha, Cod Cliente)
+Línea Factura (Nro Factura, Nro Item, Cod Articulo, Cantidad, Precio Unitario)
+
+-- Modelo Desnormalizado (Circuito Corto)
+Línea Factura (Nro Factura, Nro Item, Cod Articulo, Cantidad, Precio Unitario, Cod Cliente)</code></pre>
         </div>
 
-        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Desnormalizacion</span>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Desnormalización</span>
 
         <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
             <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto</h4>

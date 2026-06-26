@@ -217,16 +217,28 @@
                 <li >No requiere hardware especial.</li>
                 <li >Multiples copias de respaldo (ilimitadas).</li>
                 <li >Las bases secundarias pueden consultarse (solo lectura) entre restauraciones.</li>
-                <li >Alertas configuradas si el trasvase no se completa en un umbral de tiempo.</li>
+                <li >Alertas configuradas si el trasvase no se completa en un umbral de tiempo (ej. LSAlert).</li>
             </ul>
             <p><strong>Debilidades:</strong></p>
             <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li >Failover manual (el cliente debe redireccionarse manualmente).</li>
-                <li >Configuracion por base de datos (no protege BD del sistema).</li>
+                <li >Fallo (failover) de cliente manual.</li>
+                <li >Configuracion por base de datos (no protege bases de datos del sistema).</li>
                 <li >Perdida de datos potencial (RPO de minutos a horas).</li>
             </ul>
         </div>
 
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Pasos de Configuración de Trasvase de Registro</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La implementación del Trasvase de Registro consta de seis pasos esenciales realizados a través de SSMS o scripts:</p>
+        <ol class="space-y-4 pl-5 list-decimal text-slate-700 dark:text-slate-300 mb-6">
+            <li><strong>Habilitar Trasvase:</strong> Habilitar la base de datos principal en las propiedades del servidor primario (modo de recuperación completo/FULL).</li>
+            <li><strong>Configurar Copia de Seguridad (LSBackup):</strong> Indicar la carpeta local para los backups y una ruta de red compartida para que el secundario acceda. Conceder permisos de lectura/escritura a la cuenta del servicio SQL Server y del Agente. Definir la frecuencia (por defecto cada 15 minutos).</li>
+            <li><strong>Agregar Instancia Secundaria:</strong> Conectarse a la instancia que alojará la base de datos secundaria.</li>
+            <li><strong>Inicializar Base de Datos Secundaria:</strong> Generar un backup completo del principal y restaurarlo en el secundario (dejar la base en estado de restauración).</li>
+            <li><strong>Configurar Copia de Archivos (LSCopy):</strong> Definir la carpeta local en el servidor secundario donde se descargarán los archivos del log y configurar la retención (ej. 72 horas).</li>
+            <li><strong>Configurar Restauración (LSRestore):</strong> Establecer si la base se mantiene en modo sin recuperación (NORECOVERY) o en modo de espera (STANDBY / Read-Only, permitiendo desconectar usuarios durante la restauración).</li>
+        </ol>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Monitoreo y Conmutación por Código T-SQL</h3>
         <pre>
 -- En el servidor primario: monitoreo
 EXEC sp_help_log_shipping_monitor_primary
@@ -240,7 +252,7 @@ EXEC sp_help_log_shipping_monitor_secondary
 EXEC sp_help_log_shipping_secondary_database
     'adventureworks2012';
 
--- Failover manual (en caso de falla del primario)
+-- Conmutación (Failover) manual (en caso de falla del primario)
 RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;</pre>
 
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Base de Datos Reflejada (Database Mirroring)</h2>
@@ -292,8 +304,20 @@ RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;</pre>
         </table>
         </div>
 
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Pasos de Configuración de Reflejo de Base de Datos</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La configuración de una sesión de creación de reflejo (mirroring) requiere un orden estricto:</p>
+        <ol class="space-y-4 pl-5 list-decimal text-slate-700 dark:text-slate-300 mb-6">
+            <li><strong>Sincronizar la Base de Datos:</strong> Configurar la base de datos principal en modo de recuperación completo (FULL). Realizar un backup completo y de registro de transacciones, y restaurarlos en el servidor reflejo utilizando la opción <code>WITH NORECOVERY</code> (dejar la base en estado de restauración).</li>
+            <li><strong>Propiedades de Reflejo:</strong> En SSMS, ir a las propiedades de la base de datos principal y seleccionar la pestaña "Mirroring" (Creación de reflejo) y pulsar en "Configurar seguridad...".</li>
+            <li><strong>Definir Servidor Testigo (Witness):</strong> Indicar si la sesión incluirá una instancia testigo (necesaria para conmutación por error automática en modo síncrono).</li>
+            <li><strong>Configurar Puertos y Extremos (Endpoints):</strong> Definir el puerto de escucha y el nombre del extremo en cada servidor. Por defecto se usa el puerto <code>5022</code> para el Principal, <code>5023</code> para el Reflejado, y <code>5024</code> para el Testigo (extremos de tipo TCP, habilitar en Firewall).</li>
+            <li><strong>Definir Cuentas de Servicio:</strong> Asignar las cuentas de dominio bajo las cuales corren las instancias. Esto configurará automáticamente los permisos <code>GRANT CONNECT ON ENDPOINT</code> correspondientes.</li>
+            <li><strong>Establecer el Modo de Funcionamiento:</strong> Elegir entre Alto Rendimiento (asíncrono), Seguridad Alta sin conmutación automática (síncrono sin testigo), o Seguridad Alta con conmutación automática (síncrono con testigo).</li>
+            <li><strong>Iniciar la Sesión:</strong> Pulsar "Iniciar creación de reflejo" para activar la sincronización.</li>
+        </ol>
+
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-            <p><strong>Comandos de administracion:</strong></p>
+            <p><strong>Comandos de administración (T-SQL):</strong></p>
         </div>
         <pre>
 -- Conmutacion manual (modo sincronizado)
