@@ -17,25 +17,22 @@
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
 
-<body>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
 
 
 
-<div class="header-box">
-
-    <h1>Formas Normales Avanzadas y Desnormalización</h1>
-
-    <p>Semana 09 | Ingeniería de Datos | ULima 2013-2</p>
-
-</div>
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Formas Normales Avanzadas y Desnormalización</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 09 | Ingeniería de Datos | ULima 2013-2</p>
+</header>
 
 
 
-<div class="cornell-container">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
 
-    <div class="keywords-sidebar">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
 
-        <h3>PALABRAS CLAVE</h3>
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">PALABRAS CLAVE</h3>
 
         <ul>
 
@@ -55,7 +52,7 @@
 
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
 
-            <h3>RECURSOS</h3>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
 
             <ul>
 
@@ -68,14 +65,11 @@
             </ul>
 
         </div>
+    </aside>
 
-    </div>
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
 
-
-
-    <div class="main-content">
-
-        <div class="box box-note">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 
             <p><strong>?? Objetivos de Aprendizaje</strong></p>
 
@@ -97,7 +91,7 @@
 
 
 
-        <section class="architect-insight">
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 
             <h4>?? Insight del Arquitecto: Más Allá de 3FN</h4>
 
@@ -107,11 +101,11 @@
 
 
 
-        <h2>1. Forma Normal Boyce-Codd (BCNF)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Forma Normal Boyce-Codd (BCNF)</h2>
 
         
 
-        <div class="box box-concep">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 
             <p><strong>Definición:</strong> Una relación está en BCNF si todo determinante es una clave candidata.</p>
 
@@ -119,7 +113,7 @@
 
 
 
-        <h3>Ejemplo: Estudiantes y Carreras</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo: Estudiantes y Carreras</h3>
 
         <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
 
@@ -161,9 +155,9 @@ Tabla2: Asesor(carrera, asesor)</pre>
 
 
 
-        <h3>Caso donde BCNF ? 3FN:</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Caso donde BCNF ? 3FN:</h3>
 
-        <ul>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 
             <li>Cuando hay múltiples claves candidatas</li>
 
@@ -173,11 +167,11 @@ Tabla2: Asesor(carrera, asesor)</pre>
 
 
 
-        <h2>2. Cuarta Forma Normal (4FN)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Cuarta Forma Normal (4FN)</h2>
 
         
 
-        <div class="box box-concep">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 
             <p><strong>Definición:</strong> Una relación está en 4FN si está en BCNF y no contiene dependencias multivaluadas.</p>
 
@@ -185,13 +179,13 @@ Tabla2: Asesor(carrera, asesor)</pre>
 
 
 
-        <h3>Dependencia Multivaluada:</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Dependencia Multivaluada:</h3>
 
         <p>Existe cuando para cada valor de A, hay un conjunto de valores de B Y un conjunto de valores de C, pero B y C son independientes entre sí.</p>
 
 
 
-        <h3>Ejemplo: Cursos, Profesores, Textos</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo: Cursos, Profesores, Textos</h3>
 
         <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
 
@@ -237,11 +231,11 @@ Curso_Texto(curso, texto)</pre>
 
 
 
-        <h2>3. Quinta Forma Normal (5FN)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Quinta Forma Normal (5FN)</h2>
 
         
 
-        <div class="box box-concep">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 
             <p><strong>Definición:</strong> Una relación está en 5FN si está en 4FN y no contiene dependencias de group/join (también llamadas dependencias de proyección-union).</p>
 
@@ -249,13 +243,13 @@ Curso_Texto(curso, texto)</pre>
 
 
 
-        <h3>Dependencia de Join:</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Dependencia de Join:</h3>
 
         <p>Una tabla puede ser reconstruida unionizando tres o más tablas más pequeñas.</p>
 
 
 
-        <h3>Ejemplo: Vendedor-Marca-Producto</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo: Vendedor-Marca-Producto</h3>
 
         <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
 
@@ -295,33 +289,33 @@ Vendedor_Producto(vendedor, producto)</pre>
 
 
 
-        <h2>4. Resumen de Formas Normales</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Resumen de Formas Normales</h2>
 
         
 
-        <div class="table-responsive">
-        <table>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
 
-            <tr><th>F.N.</th><th>Problema que resuelve</th><th>Condición</th></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">F.N.</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Problema que resuelve</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Condición</th></tr>
 
-            <tr><td>1FN</td><td>Grupos repetitivos</td><td>Valores atómicos</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">1FN</td><td class="p-4 text-slate-600 dark:text-slate-400">Grupos repetitivos</td><td class="p-4 text-slate-600 dark:text-slate-400">Valores atómicos</td></tr>
 
-            <tr><td>2FN</td><td>Dependencias parciales</td><td>En 1FN + sin dep. parciales</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">2FN</td><td class="p-4 text-slate-600 dark:text-slate-400">Dependencias parciales</td><td class="p-4 text-slate-600 dark:text-slate-400">En 1FN + sin dep. parciales</td></tr>
 
-            <tr><td>3FN</td><td>Dependencias transitivas</td><td>En 2FN + sin dep. transitivas</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">3FN</td><td class="p-4 text-slate-600 dark:text-slate-400">Dependencias transitivas</td><td class="p-4 text-slate-600 dark:text-slate-400">En 2FN + sin dep. transitivas</td></tr>
 
-            <tr><td>BCNF</td><td>Determinantes no clave</td><td>En 3FN + todo determinante es clave</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">BCNF</td><td class="p-4 text-slate-600 dark:text-slate-400">Determinantes no clave</td><td class="p-4 text-slate-600 dark:text-slate-400">En 3FN + todo determinante es clave</td></tr>
 
-            <tr><td>4FN</td><td>Dependencias multivaluadas</td><td>En BCNF + sin dep. multivaluadas</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">4FN</td><td class="p-4 text-slate-600 dark:text-slate-400">Dependencias multivaluadas</td><td class="p-4 text-slate-600 dark:text-slate-400">En BCNF + sin dep. multivaluadas</td></tr>
 
-            <tr><td>5FN</td><td>Dependencias de join</td><td>En 4FN + sin dep. de join</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">5FN</td><td class="p-4 text-slate-600 dark:text-slate-400">Dependencias de join</td><td class="p-4 text-slate-600 dark:text-slate-400">En 4FN + sin dep. de join</td></tr>
 
         </table>
         </div>
 
 
 
-        <h2>5. Desnormalización</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Desnormalización</h2>
 
         
 
@@ -333,9 +327,9 @@ Vendedor_Producto(vendedor, producto)</pre>
 
 
 
-        <h3>Cuándo Desnormalizar:</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Cuándo Desnormalizar:</h3>
 
-        <ul>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 
             <li>Sistemas OLAP (Data Warehouse)</li>
 
@@ -349,29 +343,29 @@ Vendedor_Producto(vendedor, producto)</pre>
 
 
 
-        <h3>Técnicas de Desnormalización:</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Técnicas de Desnormalización:</h3>
 
-        <div class="table-responsive">
-        <table>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
 
-            <tr><th>Técnica</th><th>Descripción</th></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Técnica</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción</th></tr>
 
-            <tr><td>Valores Derivados</td><td>Guardar cálculos (total, subtotal)</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Valores Derivados</td><td class="p-4 text-slate-600 dark:text-slate-400">Guardar cálculos (total, subtotal)</td></tr>
 
-            <tr><td>Unir Entidades</td><td>Combinar tablas relacionadas</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Unir Entidades</td><td class="p-4 text-slate-600 dark:text-slate-400">Combinar tablas relacionadas</td></tr>
 
-            <tr><td>Valores Fijos</td><td>Hard code de catálogos pequeños</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Valores Fijos</td><td class="p-4 text-slate-600 dark:text-slate-400">Hard code de catálogos pequeños</td></tr>
 
-            <tr><td>Repetir Atributos</td><td>Copiar datos de detalle a maestro</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Repetir Atributos</td><td class="p-4 text-slate-600 dark:text-slate-400">Copiar datos de detalle a maestro</td></tr>
 
-            <tr><td>Llaves de Corto Circuito</td><td>Agregar FK directa para evitar JOIN</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Llaves de Corto Circuito</td><td class="p-4 text-slate-600 dark:text-slate-400">Agregar FK directa para evitar JOIN</td></tr>
 
         </table>
         </div>
 
 
 
-        <h3>Ejemplo de Desnormalización:</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo de Desnormalización:</h3>
 
         <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
 
@@ -399,7 +393,7 @@ Factura(id, id_cliente, fecha, total, nombre_cliente)
 
 
 
-        <div class="box box-warning">
+        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 
             <p><strong>?? Trade-off:</strong> Desnormalización mejora lectura pero complica escritura. Usa solo cuando el beneficio de rendimiento supera el costo de mantener consistencia.</p>
 
@@ -413,7 +407,7 @@ Factura(id, id_cliente, fecha, total, nombre_cliente)
 
         <section class="laboratorio">
 
-            <h3>?? Laboratorio: Formas Normales Superiores</h3>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">?? Laboratorio: Formas Normales Superiores</h3>
 
             <ol style="margin-left: 20px;">
 
@@ -429,11 +423,8 @@ Factura(id, id_cliente, fecha, total, nombre_cliente)
 
 
 
-    </div>
-
+    </main>
 </div>
-
-
 
 </body>
 

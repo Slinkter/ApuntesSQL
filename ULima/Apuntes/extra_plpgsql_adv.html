@@ -17,25 +17,22 @@
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
 
-<body>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
 
 
 
-<div class="header-box">
-
-    <h1>Triggers y Programación Avanzada</h1>
-
-    <p>Semana 12 | Ingeniería de Datos | ULima 2013-2</p>
-
-</div>
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Triggers y Programación Avanzada</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 12 | Ingeniería de Datos | ULima 2013-2</p>
+</header>
 
 
 
-<div class="cornell-container">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
 
-    <div class="keywords-sidebar">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
 
-        <h3>PALABRAS CLAVE</h3>
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">PALABRAS CLAVE</h3>
 
         <ul>
 
@@ -55,7 +52,7 @@
 
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
 
-            <h3>RECURSOS</h3>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
 
             <ul>
 
@@ -68,14 +65,11 @@
             </ul>
 
         </div>
+    </aside>
 
-    </div>
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
 
-
-
-    <div class="main-content">
-
-        <div class="box box-note">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 
             <p><strong>?? Objetivos de Aprendizaje</strong></p>
 
@@ -97,13 +91,13 @@
 
 
 
-        <section class="architect-insight">
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 
             <h4>?? Insight del Arquitecto: Cuándo USAR Triggers</h4>
 
             <p><strong>Triggers: úsalos con moderación:</strong> Los triggers son poderosos pero pueden ser difíciles de debuguear. El arquitecto Martin Kleppmann advierte que los triggers pueden crear efectos secundarios invisibiless. Úsalos para:</p>
 
-            <ul>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 
                 <li>Auditoría (logging de cambios)</li>
 
@@ -119,11 +113,11 @@
 
 
 
-        <h2>1. ¿Qué es un Trigger?</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. ¿Qué es un Trigger?</h2>
 
         
 
-        <div class="box box-concep">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 
             <p><strong>Trigger:</strong> Procedimiento que se ejecuta automáticamente cuando ocurre un evento DML (INSERT, UPDATE, DELETE) en una tabla.</p>
 
@@ -131,7 +125,7 @@
 
 
 
-        <ul>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 
             <li><strong>BEFORE:</strong> Se ejecuta antes de la operación</li>
 
@@ -145,7 +139,7 @@
 
 
 
-        <h2>2. Estructura de un Trigger en PostgreSQL</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Estructura de un Trigger en PostgreSQL</h2>
 
         
 
@@ -153,7 +147,7 @@
 
             <p><strong>Dos pasos:</strong></p>
 
-            <ol>
+            <ol class="main__list list-decimal">
 
                 <li>Crear la función trigger</li>
 
@@ -205,27 +199,27 @@ CREATE TRIGGER nombre_trigger
 
 
 
-        <h2>3. Variables NEW y OLD</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Variables NEW y OLD</h2>
 
         
 
-        <div class="table-responsive">
-        <table>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
 
-            <tr><th>Evento</th><th>NEW</th><th>OLD</th></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Evento</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">NEW</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">OLD</th></tr>
 
-            <tr><td>INSERT</td><td>Valores que se insertarán</td><td>NULL</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">INSERT</td><td class="p-4 text-slate-600 dark:text-slate-400">Valores que se insertarán</td><td class="p-4 text-slate-600 dark:text-slate-400">NULL</td></tr>
 
-            <tr><td>UPDATE</td><td>Nuevos valores</td><td>Valores anteriores</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">UPDATE</td><td class="p-4 text-slate-600 dark:text-slate-400">Nuevos valores</td><td class="p-4 text-slate-600 dark:text-slate-400">Valores anteriores</td></tr>
 
-            <tr><td>DELETE</td><td>NULL</td><td>Valores que se eliminarán</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">DELETE</td><td class="p-4 text-slate-600 dark:text-slate-400">NULL</td><td class="p-4 text-slate-600 dark:text-slate-400">Valores que se eliminarán</td></tr>
 
         </table>
         </div>
 
 
 
-        <h3>Ejemplo: Actualizar fecha de modificación</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo: Actualizar fecha de modificación</h3>
 
         <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
 
@@ -259,7 +253,7 @@ CREATE TRIGGER trigger_fecha_mod_producto
 
 
 
-        <h2>4. Validaciones con Triggers</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Validaciones con Triggers</h2>
 
         
 
@@ -321,7 +315,7 @@ $$ LANGUAGE plpgsql;</pre>
 
 
 
-        <h2>5. Auditoría con Triggers</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Auditoría con Triggers</h2>
 
         
 
@@ -423,7 +417,7 @@ CREATE TRIGGER trigger_auditar_cliente_delete
 
 
 
-        <h2>6. Triggers con Condición WHEN</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">6. Triggers con Condición WHEN</h2>
 
         
 
@@ -463,33 +457,33 @@ $$ LANGUAGE plpgsql;</pre>
 
 
 
-        <h2>7. Eventos de Triggers</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">7. Eventos de Triggers</h2>
 
         
 
-        <div class="table-responsive">
-        <table>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
 
-            <tr><th>Evento</th><th>Descripción</th></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Evento</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción</th></tr>
 
-            <tr><td>INSERT</td><td>Cuando se inserta una fila</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">INSERT</td><td class="p-4 text-slate-600 dark:text-slate-400">Cuando se inserta una fila</td></tr>
 
-            <tr><td>UPDATE</td><td>Cuando se actualiza una fila</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">UPDATE</td><td class="p-4 text-slate-600 dark:text-slate-400">Cuando se actualiza una fila</td></tr>
 
-            <tr><td>DELETE</td><td>Cuando se elimina una fila</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">DELETE</td><td class="p-4 text-slate-600 dark:text-slate-400">Cuando se elimina una fila</td></tr>
 
-            <tr><td>TRUNCATE</td><td>Cuando se trunca la tabla</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">TRUNCATE</td><td class="p-4 text-slate-600 dark:text-slate-400">Cuando se trunca la tabla</td></tr>
 
         </table>
         </div>
 
 
 
-        <div class="box box-warning">
+        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 
             <p><strong>?? Notas importantes:</strong></p>
 
-            <ul>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 
                 <li>En PostgreSQL, un trigger NO puede modificar otras tablas directamente (salvo que llame a funciones)</li>
 
@@ -511,7 +505,7 @@ $$ LANGUAGE plpgsql;</pre>
 
         <section class="laboratorio">
 
-            <h3>?? Laboratorio: Triggers</h3>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">?? Laboratorio: Triggers</h3>
 
             <ol style="margin-left: 20px;">
 
@@ -529,11 +523,8 @@ $$ LANGUAGE plpgsql;</pre>
 
 
 
-    </div>
-
+    </main>
 </div>
-
-
 
 </body>
 

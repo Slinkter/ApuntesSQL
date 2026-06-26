@@ -8,70 +8,70 @@
     <script src="canvas-ui.js"></script>
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
-<header class="header">
-    <h1 class="header__title">JOINs y Subconsultas</h1>
-    <p class="header__subtitle">Semana 10 | Ingenieria de Datos | ULima 2013-2</p>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">JOINs y Subconsultas</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 10 | Ingenieria de Datos | ULima 2013-2</p>
 </header>
 
-<div class="cornell">
-    <aside class="sidebar">
-        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>&sect; JOIN</strong>Union de dos o mas tablas mediante valores relacionados.</li>
-            <li class="sidebar__item"><strong>&sect; Equijoin</strong>JOIN con operador de igualdad (=).</li>
-            <li class="sidebar__item"><strong>&sect; Non-Equijoin</strong>JOIN con operador de rango (BETWEEN, &gt;, &lt;).</li>
-            <li class="sidebar__item"><strong>&sect; Self Join</strong>JOIN de una tabla consigo misma (relacion recursiva).</li>
-            <li class="sidebar__item"><strong>&sect; Outer Join</strong>Incluye filas sin correspondencia (LEFT / RIGHT).</li>
-            <li class="sidebar__item"><strong>&sect; Subconsulta</strong>Consulta anidada dentro de otra consulta.</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">PALABRAS CLAVE</h3>
+        <ul class="space-y-4">
+            <li class="text-sm"><strong>&sect; JOIN</strong>Union de dos o mas tablas mediante valores relacionados.</li>
+            <li class="text-sm"><strong>&sect; Equijoin</strong>JOIN con operador de igualdad (=).</li>
+            <li class="text-sm"><strong>&sect; Non-Equijoin</strong>JOIN con operador de rango (BETWEEN, &gt;, &lt;).</li>
+            <li class="text-sm"><strong>&sect; Self Join</strong>JOIN de una tabla consigo misma (relacion recursiva).</li>
+            <li class="text-sm"><strong>&sect; Outer Join</strong>Incluye filas sin correspondencia (LEFT / RIGHT).</li>
+            <li class="text-sm"><strong>&sect; Subconsulta</strong>Consulta anidada dentro de otra consulta.</li>
         </ul>
         <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-sidebar);border-radius:var(--radius-md);">
-            <h3 class="sidebar__title">RECURSOS</h3>
-            <ul class="sidebar__list">
-                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio</a></li>
-                <li class="sidebar__item"><a href="semana_09.html" class="sidebar__link">Semana 09</a></li>
-                <li class="sidebar__item"><a href="semana_11.html" class="sidebar__link">Siguiente</a></li>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
+            <ul class="space-y-4">
+                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Inicio</a></li>
+                <li class="text-sm"><a href="semana_09.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 09</a></li>
+                <li class="text-sm"><a href="semana_11.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Siguiente</a></li>
             </ul>
         </div>
     </aside>
 
-    <main class="main">
-        <div class="box box--note">
-            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Comprender el concepto de JOIN y el producto cartesiano.</li>
-                <li class="main__list-item">Dominar los 4 tipos de JOIN: equijoin, non-equijoin, self join y outer join.</li>
-                <li class="main__list-item">Distinguir entre subconsultas de fila simple y fila multiple.</li>
-                <li class="main__list-item">Aplicar subconsultas con funciones de grupo.</li>
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Objetivos de Aprendizaje</strong></p>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Comprender el concepto de JOIN y el producto cartesiano.</li>
+                <li >Dominar los 4 tipos de JOIN: equijoin, non-equijoin, self join y outer join.</li>
+                <li >Distinguir entre subconsultas de fila simple y fila multiple.</li>
+                <li >Aplicar subconsultas con funciones de grupo.</li>
             </ul>
         </div>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto</h4>
-            <p class="main__text">Los JOINs son el corazon del modelo relacional. Conocer cuando usar cada tipo (y como el optimizador los ejecuta) marca la diferencia entre consultas que responden en milisegundos y las que colapsan el servidor. Las subconsultas son elegantes pero no siempre eficientes; en PostgreSQL moderno, muchas subconsultas pueden reescribirse como JOINs o con <code>LATERAL</code> para mejor rendimiento.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Los JOINs son el corazon del modelo relacional. Conocer cuando usar cada tipo (y como el optimizador los ejecuta) marca la diferencia entre consultas que responden en milisegundos y las que colapsan el servidor. Las subconsultas son elegantes pero no siempre eficientes; en PostgreSQL moderno, muchas subconsultas pueden reescribirse como JOINs o con <code>LATERAL</code> para mejor rendimiento.</p>
         </section>
 
-        <h2 class="main__title">1. Concepto de JOIN</h2>
-        <p class="main__text">Un JOIN se emplea para consultar datos que se encuentran en mas de una tabla. Las filas se enlazan empleando valores comunes, tipicamente entre la clave primaria (PK) y la clave foranea (FK). Sin una condicion de JOIN, se genera un <strong>producto cartesiano</strong> (todas las combinaciones posibles).</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Concepto de JOIN</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un JOIN se emplea para consultar datos que se encuentran en mas de una tabla. Las filas se enlazan empleando valores comunes, tipicamente entre la clave primaria (PK) y la clave foranea (FK). Sin una condicion de JOIN, se genera un <strong>producto cartesiano</strong> (todas las combinaciones posibles).</p>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Cross Join (Producto Cartesiano):</strong></p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Cross Join (Producto Cartesiano):</strong></p>
             <pre><code>SELECT *
 FROM   tabla1 CROSS JOIN tabla2;
 -- Equivale a: SELECT * FROM tabla1, tabla2;</code></pre>
-            <p class="main__text">Si tabla1 tiene M filas y tabla2 tiene N filas, el resultado tiene M &times; N filas. Raramente util por si solo; es la base sobre la que se aplica la condicion de JOIN.</p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Si tabla1 tiene M filas y tabla2 tiene N filas, el resultado tiene M &times; N filas. Raramente util por si solo; es la base sobre la que se aplica la condicion de JOIN.</p>
         </div>
 
-        <h2 class="main__title">2. Variables Tupla (Alias)</h2>
-        <p class="main__text">Simplifican las consultas mediante alias en los nombres de tablas. Son obligatorias cuando hay nombres de columna identicos entre tablas.</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Variables Tupla (Alias)</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Simplifican las consultas mediante alias en los nombres de tablas. Son obligatorias cuando hay nombres de columna identicos entre tablas.</p>
         <pre><code>SELECT C.nombre, OP.numero_orden, OP.numero_embarques
 FROM   orden_pedido OP JOIN cliente C
   ON   OP.id_cliente = C.id_cliente;</code></pre>
 
-        <h2 class="main__title">3. Tipos de JOIN</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Tipos de JOIN</h2>
 
-        <h3 class="main__title--sub">Equijoin</h3>
-        <p class="main__text">Resulta cuando el valor de una columna corresponde explicitamente al valor de alguna columna de otra tabla, usando el operador <code>=</code>.</p>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Equijoin</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Resulta cuando el valor de una columna corresponde explicitamente al valor de alguna columna de otra tabla, usando el operador <code>=</code>.</p>
         <pre><code>SELECT table1.column, table2.column
 FROM   table1 JOIN table2
   ON   table1.column1 = table2.column2;
@@ -81,19 +81,19 @@ SELECT C.nombre, OP.numero_orden, OP.numero_embarques
 FROM   orden_pedido OP JOIN cliente C
   ON   OP.id_cliente = C.id_cliente;</code></pre>
 
-        <div class="box box--example">
-            <p class="main__text">Cada nombre de columna debe ser precedido por el nombre de la tabla (o su alias). Si las columnas tienen el mismo nombre en ambas tablas, el alias es obligatorio.</p>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Cada nombre de columna debe ser precedido por el nombre de la tabla (o su alias). Si las columnas tienen el mismo nombre en ambas tablas, el alias es obligatorio.</p>
         </div>
 
-        <h3 class="main__title--sub">Non-Equijoin</h3>
-        <p class="main__text">Resulta cuando la condicion de JOIN utiliza un operador diferente a la igualdad: <code>BETWEEN</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&lt;&gt;</code>.</p>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Non-Equijoin</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Resulta cuando la condicion de JOIN utiliza un operador diferente a la igualdad: <code>BETWEEN</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&lt;&gt;</code>.</p>
         <pre><code>SELECT L.nombre_linea
 FROM   producto P JOIN linea_producto L
   ON   P.precio BETWEEN L.meta_venta_min AND L.meta_venta_max
   AND  P.idprod = L.idprod;</code></pre>
 
-        <h3 class="main__title--sub">Self Join</h3>
-        <p class="main__text">Utilizado para unir filas de una misma tabla con relacion recursiva. Se simulan dos tablas en el FROM creando 2 alias diferentes para la misma tabla.</p>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Self Join</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Utilizado para unir filas de una misma tabla con relacion recursiva. Se simulan dos tablas en el FROM creando 2 alias diferentes para la misma tabla.</p>
         <pre><code>SELECT E.nombre || 'trabaja para ' || J.nombre
 FROM   empleado E JOIN empleado J
   ON   E.cod_jefe = J.cod_emp;
@@ -101,70 +101,70 @@ FROM   empleado E JOIN empleado J
 -- Explicacion: E es el empleado, J es su jefe.
 -- E.cod_jefe = J.cod_emp relaciona cada empleado con su jefe.</code></pre>
 
-        <div class="box box--warning">
-            <p class="main__text"><strong>Precaucion:</strong> En Self Join siempre use alias obligatorios. Sin alias, el SQL no puede distinguir entre las dos instancias de la misma tabla.</p>
+        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Precaucion:</strong> En Self Join siempre use alias obligatorios. Sin alias, el SQL no puede distinguir entre las dos instancias de la misma tabla.</p>
         </div>
 
-        <h3 class="main__title--sub">Outer Join</h3>
-        <p class="main__text">Se utiliza para ver filas que normalmente no se presentan mediante una condicion INNER JOIN. El operador puede ser <code>LEFT</code> o <code>RIGHT</code>, segun el lado del JOIN que no tenga un valor coincidente.</p>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Outer Join</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Se utiliza para ver filas que normalmente no se presentan mediante una condicion INNER JOIN. El operador puede ser <code>LEFT</code> o <code>RIGHT</code>, segun el lado del JOIN que no tenga un valor coincidente.</p>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Sintaxis basica</strong></p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis basica</strong></p>
         </div>
         <pre><code>SELECT table1.column, table2.column
 FROM   table1 LEFT OUTER JOIN table2
   ON   table1.column1 = table2.column2;
 -- Incluye todas las filas de table1, aunque no tengan correspondencia en table2</code></pre>
 
-        <p class="main__text"><strong>Ejemplo LEFT JOIN:</strong> Todos los clientes, incluso aquellos sin ordenes de pedido.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo LEFT JOIN:</strong> Todos los clientes, incluso aquellos sin ordenes de pedido.</p>
         <pre><code>SELECT nombre, numero_orden, numero_embarques
 FROM   cliente LEFT OUTER JOIN orden_pedido
   ON   cliente.id_cliente = orden_pedido.id_cliente;</code></pre>
 
-        <p class="main__text"><strong>Ejemplo RIGHT JOIN:</strong> Equivalente al anterior, intercambiando el orden de las tablas.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo RIGHT JOIN:</strong> Equivalente al anterior, intercambiando el orden de las tablas.</p>
         <pre><code>SELECT nombre, numero_orden, numero_embarques
 FROM   orden_pedido RIGHT OUTER JOIN cliente
   ON   cliente.id_cliente = orden_pedido.id_cliente;</code></pre>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Tipo de JOIN</th>
-                    <th class="table__th">Descripcion</th>
-                    <th class="table__th">Filas sin match</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo de JOIN</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Filas sin match</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td">INNER JOIN</td>
-                    <td class="table__td">Solo filas que coinciden en ambas tablas</td>
-                    <td class="table__td">Excluidas</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">INNER JOIN</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Solo filas que coinciden en ambas tablas</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Excluidas</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">LEFT OUTER JOIN</td>
-                    <td class="table__td">Todas las filas de la tabla izquierda</td>
-                    <td class="table__td">Tabla derecha = NULL</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">LEFT OUTER JOIN</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Todas las filas de la tabla izquierda</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Tabla derecha = NULL</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">RIGHT OUTER JOIN</td>
-                    <td class="table__td">Todas las filas de la tabla derecha</td>
-                    <td class="table__td">Tabla izquierda = NULL</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">RIGHT OUTER JOIN</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Todas las filas de la tabla derecha</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Tabla izquierda = NULL</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">FULL OUTER JOIN</td>
-                    <td class="table__td">Todas las filas de ambas tablas</td>
-                    <td class="table__td">Lado sin match = NULL</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">FULL OUTER JOIN</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Todas las filas de ambas tablas</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Lado sin match = NULL</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">4. Subconsultas</h2>
-        <p class="main__text">Una subconsulta es una consulta anidada dentro de otra consulta (principal o externa). Se ejecutan primero y su resultado es usado por la consulta principal a traves de las clausulas <code>WHERE</code> o <code>HAVING</code>.</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Subconsultas</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una subconsulta es una consulta anidada dentro de otra consulta (principal o externa). Se ejecutan primero y su resultado es usado por la consulta principal a traves de las clausulas <code>WHERE</code> o <code>HAVING</code>.</p>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Sintaxis general</strong></p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis general</strong></p>
         </div>
         <pre><code>SELECT select_list
 FROM   table
@@ -173,18 +173,18 @@ WHERE  expr operator (
   FROM   table
 );</code></pre>
 
-        <h3 class="main__title--sub">Reglas para Subconsultas</h3>
-        <ul class="main__list">
-            <li class="main__list-item">Se usan cuando una consulta esta basada en valores desconocidos.</li>
-            <li class="main__list-item">Deben estar encerradas entre parentesis <code>()</code>.</li>
-            <li class="main__list-item">Dos clases de operadores: de fila simple (<code>= &gt; &gt;= &lt; &lt;= &lt;&gt;</code>) y de fila multiple (<code>IN, NOT IN</code>).</li>
-            <li class="main__list-item">El operador debe aparecer al lado izquierdo de la subconsulta.</li>
-            <li class="main__list-item">No pueden contener una clausula <code>ORDER BY</code> (a menos que usen <code>OFFSET/FETCH</code> en versiones modernas).</li>
-            <li class="main__list-item">Las subconsultas son procesadas primero; luego la consulta principal usa el resultado.</li>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Reglas para Subconsultas</h3>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li >Se usan cuando una consulta esta basada en valores desconocidos.</li>
+            <li >Deben estar encerradas entre parentesis <code>()</code>.</li>
+            <li >Dos clases de operadores: de fila simple (<code>= &gt; &gt;= &lt; &lt;= &lt;&gt;</code>) y de fila multiple (<code>IN, NOT IN</code>).</li>
+            <li >El operador debe aparecer al lado izquierdo de la subconsulta.</li>
+            <li >No pueden contener una clausula <code>ORDER BY</code> (a menos que usen <code>OFFSET/FETCH</code> en versiones modernas).</li>
+            <li >Las subconsultas son procesadas primero; luego la consulta principal usa el resultado.</li>
         </ul>
 
-        <h3 class="main__title--sub">Procesamiento de Subconsultas Anidadas</h3>
-        <p class="main__text">Ejemplo paso a paso:</p>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Procesamiento de Subconsultas Anidadas</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Ejemplo paso a paso:</p>
         <pre><code>SELECT numero_embarques
 FROM   orden_pedido
 WHERE  id_cliente = (
@@ -198,8 +198,8 @@ WHERE  id_cliente = (
 -- 2. El resultado (990) se pasa a la consulta principal:
 --    SELECT numero_embarques FROM orden_pedido WHERE id_cliente = 990</code></pre>
 
-        <h3 class="main__title--sub">Subconsultas de Fila Simple</h3>
-        <p class="main__text">La subconsulta retorna una sola fila. Solo usa operadores de fila simple: <code>= &gt; &gt;= &lt; &lt;= &lt;&gt;</code>.</p>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Subconsultas de Fila Simple</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La subconsulta retorna una sola fila. Solo usa operadores de fila simple: <code>= &gt; &gt;= &lt; &lt;= &lt;&gt;</code>.</p>
         <pre><code>-- Cliente que ha generado el maximo numero de embarques
 SELECT id_cliente
 FROM   orden_pedido
@@ -208,29 +208,29 @@ WHERE  numero_embarques = (
   FROM   orden_pedido
 );</code></pre>
 
-        <div class="box box--example">
-            <p class="main__text">Si la subconsulta retorna mas de una fila y se usa un operador de fila simple, el motor lanza un error: <code>ORA-01427: single-row subquery returns more than one row</code>. En PostgreSQL: <code>ERROR: more than one row returned by a subquery used as an expression</code>.</p>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Si la subconsulta retorna mas de una fila y se usa un operador de fila simple, el motor lanza un error: <code>ORA-01427: single-row subquery returns more than one row</code>. En PostgreSQL: <code>ERROR: more than one row returned by a subquery used as an expression</code>.</p>
         </div>
 
-        <h3 class="main__title--sub">Subconsultas de Fila Multiple</h3>
-        <p class="main__text">La subconsulta retorna varias filas de resultado. Se usan operadores de conjunto:</p>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Subconsultas de Fila Multiple</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La subconsulta retorna varias filas de resultado. Se usan operadores de conjunto:</p>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Operador</th>
-                    <th class="table__th">Significado</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Operador</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Significado</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><code>IN</code></td>
-                    <td class="table__td">Igual a cualquier miembro de la lista</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>IN</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Igual a cualquier miembro de la lista</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><code>NOT IN</code></td>
-                    <td class="table__td">No igual a ningun miembro de la lista</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>NOT IN</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">No igual a ningun miembro de la lista</td>
                 </tr>
             </tbody>
         </table>
@@ -245,21 +245,21 @@ WHERE  id_cliente IN (
   WHERE  tipo = 'NAC' OR tipo = 'INT'
 );</code></pre>
 
-        <span class="tag">Subconsultas</span>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Subconsultas</span>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto</h4>
-            <p class="main__text">En PostgreSQL, las subconsultas en <code>WHERE</code> se ejecutan una vez (subconsultas no correlacionadas) y se cachean. Para subconsultas correlacionadas, considera reescribirlas como JOINs con <code>LATERAL</code> o usar funciones ventana (<code>ROW_NUMBER()</code>) para mejor rendimiento en conjuntos grandes. Siempre verifica el plan con <code>EXPLAIN ANALYZE</code>.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En PostgreSQL, las subconsultas en <code>WHERE</code> se ejecutan una vez (subconsultas no correlacionadas) y se cachean. Para subconsultas correlacionadas, considera reescribirlas como JOINs con <code>LATERAL</code> o usar funciones ventana (<code>ROW_NUMBER()</code>) para mejor rendimiento en conjuntos grandes. Siempre verifica el plan con <code>EXPLAIN ANALYZE</code>.</p>
         </section>
 
-        <div class="canvas-container">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
             <canvas id="canvas_10" width="800" height="360"></canvas>
-            <div id="controls_10" class="canvas-controls"></div>
+            <div id="controls_10" class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800"></div>
         </div>
 
-        <nav class="nav">
-            <a href="index.html" class="nav__link">Volver al Indice</a>
-            <a href="semana_11.html" class="nav__link">Siguiente Semana</a>
+        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+            <a href="index.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Volver al Indice</a>
+            <a href="semana_11.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Siguiente Semana</a>
         </nav>
     </main>
 </div>

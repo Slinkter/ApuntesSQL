@@ -8,50 +8,50 @@
     <script src="canvas-ui.js"></script>
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
 
-<header class="header">
-    <h1 class="header__title">Procedimientos, Funciones, Triggers y Paquetes</h1>
-    <p class="header__subtitle">Semana 13 | Programacion PL/SQL Avanzada | ULima 2013-2</p>
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Procedimientos, Funciones, Triggers y Paquetes</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 13 | Programacion PL/SQL Avanzada | ULima 2013-2</p>
 </header>
 
-<div class="cornell">
-    <aside class="sidebar">
-        <h3 class="sidebar__title">TEMAS CLAVE</h3>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>Procedimientos</strong>Bloques con IN/OUT/IN OUT</li>
-            <li class="sidebar__item"><strong>Funciones</strong>Retornan un valor</li>
-            <li class="sidebar__item"><strong>Triggers</strong>:NEW / :OLD y eventos DML</li>
-            <li class="sidebar__item"><strong>Paquetes</strong>Agrupacion logica de subprogramas</li>
-            <li class="sidebar__item"><strong>Cursores</strong>FETCH, FOR LOOP, atributos</li>
-            <li class="sidebar__item"><strong>Variables</strong>Sustitucion con & y &&</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">TEMAS CLAVE</h3>
+        <ul class="space-y-4">
+            <li class="text-sm"><strong>Procedimientos</strong>Bloques con IN/OUT/IN OUT</li>
+            <li class="text-sm"><strong>Funciones</strong>Retornan un valor</li>
+            <li class="text-sm"><strong>Triggers</strong>:NEW / :OLD y eventos DML</li>
+            <li class="text-sm"><strong>Paquetes</strong>Agrupacion logica de subprogramas</li>
+            <li class="text-sm"><strong>Cursores</strong>FETCH, FOR LOOP, atributos</li>
+            <li class="text-sm"><strong>Variables</strong>Sustitucion con & y &&</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3 class="sidebar__title">RECURSOS</h3>
-            <ul class="sidebar__list">
-                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Indice del Curso</a></li>
-                <li class="sidebar__item"><a href="semana_12.html" class="sidebar__link">Semana 12</a></li>
-                <li class="sidebar__item"><a href="semana_14.html" class="sidebar__link">Semana 14</a></li>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
+            <ul class="space-y-4">
+                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Indice del Curso</a></li>
+                <li class="text-sm"><a href="semana_12.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 12</a></li>
+                <li class="text-sm"><a href="semana_14.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 14</a></li>
             </ul>
         </div>
     </aside>
 
-    <main class="main">
-        <div class="box box--note">
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
             <p><strong>Objetivos:</strong> Comprender y crear procedimientos almacenados, funciones, triggers y paquetes en PL/SQL. Dominar el uso de cursores, parametros y variables de sustitucion.</p>
         </div>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto: PL/SQL como Herramienta de Poder</h4>
-            <p class="main__text">Los subprogramas almacenados (procedimientos, funciones, paquetes) son el corazon de la logica de negocio en la base de datos. Mientras que el SQL puro es declarativo, PL/SQL permite programacion imperativa: condiciones, loops, manejo de excepciones. Un buen arquitecto sabe cuando usar cada uno. Los triggers, por otro lado, deben usarse con cuidado -- un trigger mal disenado puede destruir el rendimiento de una base de datos completa.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto: PL/SQL como Herramienta de Poder</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Los subprogramas almacenados (procedimientos, funciones, paquetes) son el corazon de la logica de negocio en la base de datos. Mientras que el SQL puro es declarativo, PL/SQL permite programacion imperativa: condiciones, loops, manejo de excepciones. Un buen arquitecto sabe cuando usar cada uno. Los triggers, por otro lado, deben usarse con cuidado -- un trigger mal disenado puede destruir el rendimiento de una base de datos completa.</p>
         </section>
 
-        <h2 class="main__title">1. Cursores en PL/SQL</h2>
-        <span class="tag">Recorrido de filas</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Cursores en PL/SQL</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Recorrido de filas</span>
 
-        <p class="main__text">Un cursor permite recuperar filas de una consulta SELECT una por una y procesarlas individualmente.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un cursor permite recuperar filas de una consulta SELECT una por una y procesarlas individualmente.</p>
 
-        <h3 class="main__title--sub">Cursor Manual con FETCH</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Cursor Manual con FETCH</h3>
         <pre>
 DECLARE
     CURSOR ejecursor IS
@@ -69,7 +69,7 @@ BEGIN
     CLOSE ejecursor;
 END;</pre>
 
-        <h3 class="main__title--sub">Cursor con FOR LOOP (Automatico)</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Cursor con FOR LOOP (Automatico)</h3>
         <pre>
 DECLARE
     CURSOR ejecursor IS
@@ -82,47 +82,47 @@ BEGIN
     END LOOP;
 END;</pre>
 
-        <h3 class="main__title--sub">Atributos del Cursor</h3>
-        <div class="table-responsive">
-        <table class="table">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Atributos del Cursor</h3>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Atributo</th>
-                    <th class="table__th">Tipo</th>
-                    <th class="table__th">Descripcion</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Atributo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td">%ISOPEN</td>
-                    <td class="table__td">Booleano</td>
-                    <td class="table__td">TRUE si el cursor esta abierto</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">%ISOPEN</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Booleano</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">TRUE si el cursor esta abierto</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">%FOUND</td>
-                    <td class="table__td">Booleano</td>
-                    <td class="table__td">TRUE mientras el ultimo FETCH trae una fila</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">%FOUND</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Booleano</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">TRUE mientras el ultimo FETCH trae una fila</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">%NOTFOUND</td>
-                    <td class="table__td">Booleano</td>
-                    <td class="table__td">TRUE cuando el ultimo FETCH no trae filas</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">%NOTFOUND</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Booleano</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">TRUE cuando el ultimo FETCH no trae filas</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">%ROWCOUNT</td>
-                    <td class="table__td">Numerico</td>
-                    <td class="table__td">Total de filas recuperadas hasta el momento</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">%ROWCOUNT</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Numerico</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Total de filas recuperadas hasta el momento</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">2. Procedimientos Almacenados</h2>
-        <span class="tag">CREATE OR REPLACE PROCEDURE</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Procedimientos Almacenados</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">CREATE OR REPLACE PROCEDURE</span>
 
-        <p class="main__text">Un procedimiento ejecuta una accion. Puede tener parametros de entrada (IN), salida (OUT) o ambos (IN OUT).</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un procedimiento ejecuta una accion. Puede tener parametros de entrada (IN), salida (OUT) o ambos (IN OUT).</p>
 
-        <div class="box box--concept">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Sintaxis general:</strong></p>
             <pre>
 CREATE OR REPLACE PROCEDURE &lt;nombre&gt;
@@ -135,8 +135,8 @@ BEGIN
 END;</pre>
         </div>
 
-        <h3 class="main__title--sub">Ejemplo 1: Actualizar Salario</h3>
-        <div class="box box--example">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo 1: Actualizar Salario</h3>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>Procedimiento con parametro IN:</strong> Actualiza el salario de un empleado por su ID.</p>
         </div>
         <pre>
@@ -154,8 +154,8 @@ END cambio_salario;
 -- Ejecucion:
 EXECUTE cambio_salario(7839, 12000);</pre>
 
-        <h3 class="main__title--sub">Ejemplo 2: Con Manejo de Excepciones</h3>
-        <div class="box box--example">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo 2: Con Manejo de Excepciones</h3>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>Procedimiento con validacion:</strong> Incrementa el salario si existe, lanza excepcion si es nulo.</p>
         </div>
         <pre>
@@ -186,12 +186,12 @@ EXCEPTION
         VALUES (v_id_emp, 'Salario es nulo');
 END actualiza_salario;</pre>
 
-        <h2 class="main__title">3. Funciones</h2>
-        <span class="tag">RETURN valor</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Funciones</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">RETURN valor</span>
 
-        <p class="main__text">Una funcion es similar a un procedimiento, pero obligatoriamente retorna un valor al entorno llamante mediante la clausula RETURN.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una funcion es similar a un procedimiento, pero obligatoriamente retorna un valor al entorno llamante mediante la clausula RETURN.</p>
 
-        <div class="box box--concept">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Sintaxis general:</strong></p>
             <pre>
 CREATE OR REPLACE FUNCTION &lt;nombre&gt;
@@ -206,7 +206,7 @@ BEGIN
 END;</pre>
         </div>
 
-        <h3 class="main__title--sub">Ejemplo 1: Calculo de Impuesto</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo 1: Calculo de Impuesto</h3>
         <pre>
 CREATE OR REPLACE FUNCTION impuesto
     (v_valor IN NUMBER)
@@ -221,7 +221,7 @@ SELECT salary, impuesto(salary) AS IMPUESTO
 FROM employees
 WHERE employee_id = 100;</pre>
 
-        <h3 class="main__title--sub">Ejemplo 2: Validacion de Salario</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo 2: Validacion de Salario</h3>
         <pre>
 CREATE OR REPLACE FUNCTION salario_ok
     (v_salario NUMBER, v_jobid NUMBER)
@@ -242,12 +242,12 @@ BEGIN
     END IF;
 END salario_ok;</pre>
 
-        <h2 class="main__title">4. Triggers (Disparadores)</h2>
-        <span class="tag">BEFORE / AFTER · FOR EACH ROW</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Triggers (Disparadores)</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">BEFORE / AFTER · FOR EACH ROW</span>
 
-        <p class="main__text">Un trigger es un bloque PL/SQL que se ejecuta automaticamente cuando ocurre un evento DML (INSERT, UPDATE, DELETE) sobre una tabla.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un trigger es un bloque PL/SQL que se ejecuta automaticamente cuando ocurre un evento DML (INSERT, UPDATE, DELETE) sobre una tabla.</p>
 
-        <div class="box box--concept">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Sintaxis general:</strong></p>
             <pre>
 CREATE OR REPLACE TRIGGER &lt;nombre&gt;
@@ -263,8 +263,8 @@ BEGIN
 END;</pre>
         </div>
 
-        <h3 class="main__title--sub">Ejemplo: Validacion de Rango Salarial</h3>
-        <div class="box box--example">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo: Validacion de Rango Salarial</h3>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>Trigger BEFORE:</strong> Verifica que el salario nuevo este dentro del rango del cargo y que el incremento no exceda el 10%.</p>
         </div>
         <pre>
@@ -290,12 +290,12 @@ BEGIN
     END IF;
 END chequea_salario;</pre>
 
-        <h2 class="main__title">5. Paquetes (Packages)</h2>
-        <span class="tag">Agrupacion de subprogramas</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Paquetes (Packages)</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Agrupacion de subprogramas</span>
 
-        <p class="main__text">Un paquete agrupa logicamente procedimientos y funciones relacionados. Tiene dos partes: la especificacion (interfaz publica) y el cuerpo (implementacion).</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un paquete agrupa logicamente procedimientos y funciones relacionados. Tiene dos partes: la especificacion (interfaz publica) y el cuerpo (implementacion).</p>
 
-        <div class="box box--concept">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Estructura:</strong></p>
         </div>
         <pre>
@@ -325,12 +325,12 @@ CREATE PACKAGE BODY emp_acciones AS
     END despide_empleado;
 END emp_acciones;</pre>
 
-        <h2 class="main__title">6. Variables de Sustitucion</h2>
-        <span class="tag">& y && en SQL*Plus</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">6. Variables de Sustitucion</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">& y && en SQL*Plus</span>
 
-        <p class="main__text">SQL*Plus permite usar variables de sustitucion para ingresar valores en tiempo de ejecucion.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">SQL*Plus permite usar variables de sustitucion para ingresar valores en tiempo de ejecucion.</p>
 
-        <div class="box box--example">
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>& (un solo uso):</strong> Pide el valor cada vez que aparece.</p>
         </div>
         <pre>
@@ -338,7 +338,7 @@ SELECT nombre
 FROM empleado
 WHERE cod_empleado = &cod_empleado;</pre>
 
-        <div class="box box--example">
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>&& (reutilizable):</strong> Pide el valor solo la primera vez y lo reutiliza.</p>
         </div>
         <pre>
@@ -346,31 +346,31 @@ SELECT nombre, &&nombre_columna
 FROM empleado
 ORDER BY &nombre_columna;</pre>
 
-        <h2 class="main__title">7. Ejercicios de Repaso</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">7. Ejercicios de Repaso</h2>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 1:</strong> Crea una funcion que reciba un codigo de empleado y retorne su nombre completo concatenado.</p>
         </div>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 2:</strong> Crea un procedimiento que transfiera un empleado de un departamento a otro, registrando el cambio en una tabla de auditoria.</p>
         </div>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 3:</strong> Crea un trigger AFTER UPDATE que registre en una tabla de log los cambios de salario con el valor anterior y nuevo.</p>
         </div>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 4:</strong> Crea un paquete GESTION_EMPLEADOS que contenga un procedimiento para contratar y otro para despedir empleados.</p>
         </div>
 
-        <div class="canvas-container">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
             <canvas id="canvas_13" width="800" height="360"></canvas>
-            <div id="controls_13" class="canvas-controls"></div>
+            <div id="controls_13" class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800"></div>
         </div>
-        <nav class="nav">
-            <a href="semana_12.html" class="nav__link">Semana 12</a>
-            <a href="semana_14.html" class="nav__link">Semana 14 - Data Warehouse</a>
+        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+            <a href="semana_12.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 12</a>
+            <a href="semana_14.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 14 - Data Warehouse</a>
         </nav>
     </main>
 </div>

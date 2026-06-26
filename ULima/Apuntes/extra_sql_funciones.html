@@ -8,61 +8,61 @@
 <link href="master.css" rel="stylesheet"/>
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
-<div class="header">
-<h1 class="header__title">Laboratorio: Funciones y Operadores</h1>
-<p class="header__subtitle">PostgreSQL Mastery | Manejo de Datos Avanzado</p>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+<h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Laboratorio: Funciones y Operadores</h1>
+<p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">PostgreSQL Mastery | Manejo de Datos Avanzado</p>
 </div>
-<div class="cornell">
-<aside class="sidebar">
-<h2 class="sidebar__title">Conceptos Clave</h2>
-<ul class="sidebar__list">
-<li class="sidebar__item"><strong>COALESCE</strong> Manejo de valores nulos.</li>
-<li class="sidebar__item"><strong>NULLIF</strong> Comparación y nulidad.</li>
-<li class="sidebar__item"><strong>CAST</strong> Conversión de tipos.</li>
-<li class="sidebar__item"><strong>Fecha/Hora</strong> Operaciones temporales.</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+<aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h2>
+<ul class="space-y-4">
+<li class="text-sm"><strong>COALESCE</strong> Manejo de valores nulos.</li>
+<li class="text-sm"><strong>NULLIF</strong> Comparación y nulidad.</li>
+<li class="text-sm"><strong>CAST</strong> Conversión de tipos.</li>
+<li class="text-sm"><strong>Fecha/Hora</strong> Operaciones temporales.</li>
 </ul>
 </aside>
-<main class="main">
-<h2 class="main__title">1. Manejo de Nulos (COALESCE)</h2>
-<p class="main__text">La función <code>COALESCE</code> retorna el primer valor no nulo de una lista.</p>
-<div class="box box--note">
+<main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Manejo de Nulos (COALESCE)</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La función <code>COALESCE</code> retorna el primer valor no nulo de una lista.</p>
+<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <pre>-- Si el teléfono es NULL, muestra 'No disponible'
 SELECT nombre, COALESCE(telefono, 'No disponible') AS contacto
 FROM clientes;</pre>
 </div>
-<h2 class="main__title--sub">2. Conversión de Datos (CAST)</h2>
-<p class="main__text">En PostgreSQL, podemos usar el operador <code>::</code> o la función <code>CAST()</code>.</p>
-<div class="box box--example">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">2. Conversión de Datos (CAST)</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En PostgreSQL, podemos usar el operador <code>::</code> o la función <code>CAST()</code>.</p>
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <pre>-- Convertir un texto a entero
 SELECT '123'::INTEGER + 7;
 
 -- Usando sintaxis ANSI
 SELECT CAST('2023-05-13' AS DATE);</pre>
 </div>
-<h2 class="main__title--sub">3. Funciones de Fecha y Hora</h2>
-<div class="table-responsive"><div class="table">
-<div class="table__th">Función</div>
-<div class="table__th">Descripción</div>
-<div class="table__tr">
-<div class="table__td"><code>NOW()</code></div>
-<div class="table__td">Fecha y hora actual del servidor.</div>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">3. Funciones de Fecha y Hora</h2>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400"><code>NOW()</code></div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Fecha y hora actual del servidor.</div>
 </div>
-<div class="table__tr">
-<div class="table__td"><code>AGE(fecha)</code></div>
-<div class="table__td">Calcula el intervalo transcurrido hasta hoy.</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400"><code>AGE(fecha)</code></div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Calcula el intervalo transcurrido hasta hoy.</div>
 </div>
-<div class="table__tr">
-<div class="table__td"><code>EXTRACT(part FROM fecha)</code></div>
-<div class="table__td">Obtiene año, mes o día de una fecha.</div>
+<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="p-4 text-slate-600 dark:text-slate-400"><code>EXTRACT(part FROM fecha)</code></div>
+<div class="p-4 text-slate-600 dark:text-slate-400">Obtiene año, mes o día de una fecha.</div>
 </div>
 </div></div>
-<h2 class="main__title--sub">4. Operadores de Comparación Avanzados</h2>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">4. Operadores de Comparación Avanzados</h2>
 <pre>-- Operador IS DISTINCT FROM (maneja nulos como valores comparables)
 SELECT * FROM tabla WHERE col1 IS DISTINCT FROM col2;</pre>
-<div class="nav">
-<a class="nav__link" href="extra_sql_consultas_basicas.html">← Lab Anterior</a>
-<a class="nav__link" href="index.html">Volver al Índice</a>
+<div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+<a class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow" href="extra_sql_consultas_basicas.html">← Lab Anterior</a>
+<a class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow" href="index.html">Volver al Índice</a>
 </div>
 </main>
 </div>

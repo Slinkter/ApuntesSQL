@@ -8,143 +8,143 @@
     <script src="canvas-ui.js"></script>
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
 
-<header class="header">
-    <h1 class="header__title">Data Warehouse y Business Intelligence</h1>
-    <p class="header__subtitle">Semana 14 | Arquitectura de Datos | ULima 2013-2</p>
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Data Warehouse y Business Intelligence</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 14 | Arquitectura de Datos | ULima 2013-2</p>
 </header>
 
-<div class="cornell">
-    <aside class="sidebar">
-        <h3 class="sidebar__title">CONCEPTOS CLAVE</h3>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>BI</strong>Business Intelligence</li>
-            <li class="sidebar__item"><strong>DW</strong>Data Warehouse</li>
-            <li class="sidebar__item"><strong>Data Mart</strong>Subconjunto departamental</li>
-            <li class="sidebar__item"><strong>ETL</strong>Extraccion, Transformacion, Carga</li>
-            <li class="sidebar__item"><strong>OLAP</strong>Analisis multidimensional</li>
-            <li class="sidebar__item"><strong>ROLAP / MOLAP / HOLAP</strong>Implementaciones de cubos</li>
-            <li class="sidebar__item"><strong>Star Schema</strong>Modelo estrella</li>
-            <li class="sidebar__item"><strong>Snowflake</strong>Modelo copo de nieve</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">CONCEPTOS CLAVE</h3>
+        <ul class="space-y-4">
+            <li class="text-sm"><strong>BI</strong>Business Intelligence</li>
+            <li class="text-sm"><strong>DW</strong>Data Warehouse</li>
+            <li class="text-sm"><strong>Data Mart</strong>Subconjunto departamental</li>
+            <li class="text-sm"><strong>ETL</strong>Extraccion, Transformacion, Carga</li>
+            <li class="text-sm"><strong>OLAP</strong>Analisis multidimensional</li>
+            <li class="text-sm"><strong>ROLAP / MOLAP / HOLAP</strong>Implementaciones de cubos</li>
+            <li class="text-sm"><strong>Star Schema</strong>Modelo estrella</li>
+            <li class="text-sm"><strong>Snowflake</strong>Modelo copo de nieve</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3 class="sidebar__title">RECURSOS</h3>
-            <ul class="sidebar__list">
-                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Indice del Curso</a></li>
-                <li class="sidebar__item"><a href="semana_13.html" class="sidebar__link">Semana 13</a></li>
-                <li class="sidebar__item"><a href="semana_15.html" class="sidebar__link">Semana 15</a></li>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
+            <ul class="space-y-4">
+                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Indice del Curso</a></li>
+                <li class="text-sm"><a href="semana_13.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 13</a></li>
+                <li class="text-sm"><a href="semana_15.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 15</a></li>
             </ul>
         </div>
     </aside>
 
-    <main class="main">
-        <div class="box box--note">
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
             <p><strong>Objetivos:</strong> Comprender los fundamentos de Data Warehousing y Business Intelligence. Diferenciar sistemas OLTP de OLAP. Disenar esquemas estrella y copo de nieve. Conocer el proceso ETL y los tipos de implementacion de cubos OLAP.</p>
         </div>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto: El DW como Centro de Decisiones</h4>
-            <p class="main__text">Bill Inmon, padre del Data Warehousing, define el Data Warehouse como "una coleccion de datos orientada a temas, integrada, no volatil y variante en el tiempo, disenada para soportar la toma de decisiones". A diferencia de una base de datos operacional (OLTP) que optimiza transacciones, el DW optimiza consultas analiticas. El 80% del esfuerzo en un proyecto DW esta en el proceso ETL, no en el modelado.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto: El DW como Centro de Decisiones</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Bill Inmon, padre del Data Warehousing, define el Data Warehouse como "una coleccion de datos orientada a temas, integrada, no volatil y variante en el tiempo, disenada para soportar la toma de decisiones". A diferencia de una base de datos operacional (OLTP) que optimiza transacciones, el DW optimiza consultas analiticas. El 80% del esfuerzo en un proyecto DW esta en el proceso ETL, no en el modelado.</p>
         </section>
 
-        <h2 class="main__title">1. Business Intelligence (BI)</h2>
-        <span class="tag">Inteligencia de Negocios</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Business Intelligence (BI)</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Inteligencia de Negocios</span>
 
-        <p class="main__text">Conjunto de productos y servicios que permiten a los usuarios finales acceder y analizar de manera rapida y sencilla la informacion para la toma de decisiones de negocio a nivel operativo, tactico y estrategico.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Conjunto de productos y servicios que permiten a los usuarios finales acceder y analizar de manera rapida y sencilla la informacion para la toma de decisiones de negocio a nivel operativo, tactico y estrategico.</p>
 
-        <div class="box box--concept">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Componentes clave del BI:</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item"><strong>Data Warehouse:</strong> Repositorio centralizado de datos.</li>
-                <li class="main__list-item"><strong>Data Mart:</strong> Subconjunto departamental (ventas, finanzas, RRHH).</li>
-                <li class="main__list-item"><strong>Cubos OLAP:</strong> Estructura multidimensional para consultas rapidas.</li>
-                <li class="main__list-item"><strong>ETL:</strong> Proceso de extraccion, transformacion y carga.</li>
-                <li class="main__list-item"><strong>Metadatos:</strong> Datos sobre los datos del warehouse.</li>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li ><strong>Data Warehouse:</strong> Repositorio centralizado de datos.</li>
+                <li ><strong>Data Mart:</strong> Subconjunto departamental (ventas, finanzas, RRHH).</li>
+                <li ><strong>Cubos OLAP:</strong> Estructura multidimensional para consultas rapidas.</li>
+                <li ><strong>ETL:</strong> Proceso de extraccion, transformacion y carga.</li>
+                <li ><strong>Metadatos:</strong> Datos sobre los datos del warehouse.</li>
             </ul>
         </div>
 
-        <h2 class="main__title">2. Sistemas OLTP vs OLAP</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Sistemas OLTP vs OLAP</h2>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Caracteristica</th>
-                    <th class="table__th">Sistemas Operacionales (OLTP)</th>
-                    <th class="table__th">Sistemas Analiticos (OLAP)</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Caracteristica</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Sistemas Operacionales (OLTP)</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Sistemas Analiticos (OLAP)</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td">Proposito</td>
-                    <td class="table__td">Ejecutar el negocio</td>
-                    <td class="table__td">Administrar el negocio</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Proposito</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Ejecutar el negocio</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Administrar el negocio</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Usuarios</td>
-                    <td class="table__td">Oficinistas, administrativos</td>
-                    <td class="table__td">Decision makers, analistas</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Usuarios</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Oficinistas, administrativos</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Decision makers, analistas</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Actualizacion</td>
-                    <td class="table__td">Al segundo</td>
-                    <td class="table__td">Periodica (diaria, semanal)</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Actualizacion</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Al segundo</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Periodica (diaria, semanal)</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Volumen</td>
-                    <td class="table__td">Altos volumenes de transacciones simples</td>
-                    <td class="table__td">Consultas complejas sobre grandes volumenes</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Volumen</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Altos volumenes de transacciones simples</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Consultas complejas sobre grandes volumenes</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Datos</td>
-                    <td class="table__td">Detallados, actuales</td>
-                    <td class="table__td">Detallados, sumarizados e historicos</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Datos</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Detallados, actuales</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Detallados, sumarizados e historicos</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Integracion</td>
-                    <td class="table__td">Por aplicacion</td>
-                    <td class="table__td">Integrado y consistente</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Integracion</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Por aplicacion</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Integrado y consistente</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">3. Arquitectura del Data Warehouse</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Arquitectura del Data Warehouse</h2>
 
-        <p class="main__text">La arquitectura de referencia incluye las siguientes capas:</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La arquitectura de referencia incluye las siguientes capas:</p>
 
-        <ul class="main__list">
-            <li class="main__list-item"><strong>Fuentes de datos:</strong> Sistemas operacionales (ERP, CRM), archivos planos, fuentes externas.</li>
-            <li class="main__list-item"><strong>Extraccion e Integracion:</strong> Proceso ETL: extraer, limpiar, transformar, integrar.</li>
-            <li class="main__list-item"><strong>Almacenamiento:</strong> Data Warehouse corporativo + Data Marts departamentales.</li>
-            <li class="main__list-item"><strong>Aplicaciones:</strong> OLAP, reporting, Data Mining, EIS.</li>
-            <li class="main__list-item"><strong>Metadatos:</strong> Repositorio central de definiciones y linaje de datos.</li>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li ><strong>Fuentes de datos:</strong> Sistemas operacionales (ERP, CRM), archivos planos, fuentes externas.</li>
+            <li ><strong>Extraccion e Integracion:</strong> Proceso ETL: extraer, limpiar, transformar, integrar.</li>
+            <li ><strong>Almacenamiento:</strong> Data Warehouse corporativo + Data Marts departamentales.</li>
+            <li ><strong>Aplicaciones:</strong> OLAP, reporting, Data Mining, EIS.</li>
+            <li ><strong>Metadatos:</strong> Repositorio central de definiciones y linaje de datos.</li>
         </ul>
 
-        <div class="box box--note">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
             <p><strong>Nota:</strong> Existen dos enfoques de implementacion:</p>
-            <ul class="main__list">
-                <li class="main__list-item"><strong>Top-Down (Inmon):</strong> Primero el DW corporativo, luego los Data Marts.</li>
-                <li class="main__list-item"><strong>Bottom-Up (Kimball):</strong> Primero los Data Marts, luego se integran en el DW.</li>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li ><strong>Top-Down (Inmon):</strong> Primero el DW corporativo, luego los Data Marts.</li>
+                <li ><strong>Bottom-Up (Kimball):</strong> Primero los Data Marts, luego se integran en el DW.</li>
             </ul>
         </div>
 
-        <h2 class="main__title">4. Modelo Estrella (Star Schema)</h2>
-        <span class="tag">Fact Table + Dimension Tables</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Modelo Estrella (Star Schema)</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Fact Table + Dimension Tables</span>
 
-        <p class="main__text">El modelo estrella es el esquema mas utilizado en Data Warehousing. Consta de una tabla central de hechos (fact table) rodeada de tablas de dimension (dimension tables).</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El modelo estrella es el esquema mas utilizado en Data Warehousing. Consta de una tabla central de hechos (fact table) rodeada de tablas de dimension (dimension tables).</p>
 
-        <div class="box box--concept">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Componentes:</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item"><strong>Tabla de Hechos (Fact Table):</strong> Almacena eventos de negocio (ventas, transacciones). Contiene medidas numericas (cantidad, monto) y foreign keys a las dimensiones.</li>
-                <li class="main__list-item"><strong>Tablas de Dimension:</strong> Entidades de negocio (clientes, productos, tiempo, geografia). Contienen atributos descriptivos.</li>
-                <li class="main__list-item"><strong>Medidas (Measures):</strong> Valores cuantitativos que miden la efectividad del negocio.</li>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li ><strong>Tabla de Hechos (Fact Table):</strong> Almacena eventos de negocio (ventas, transacciones). Contiene medidas numericas (cantidad, monto) y foreign keys a las dimensiones.</li>
+                <li ><strong>Tablas de Dimension:</strong> Entidades de negocio (clientes, productos, tiempo, geografia). Contienen atributos descriptivos.</li>
+                <li ><strong>Medidas (Measures):</strong> Valores cuantitativos que miden la efectividad del negocio.</li>
             </ul>
         </div>
 
-        <div class="box box--example">
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>Ejemplo: Esquema Estrella de Ventas</strong></p>
             <pre>
 -- Tabla de Dimension: Producto
@@ -193,113 +193,113 @@ CREATE TABLE FACT_VENTAS (
 );</pre>
         </div>
 
-        <h2 class="main__title">5. Modelo Copo de Nieve (Snowflake Schema)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Modelo Copo de Nieve (Snowflake Schema)</h2>
 
-        <p class="main__text">En el modelo Snowflake, las dimensiones se normalizan en multiples tablas, una por cada nivel jerarquico. Esto reduce redundancia pero aumenta la complejidad de las consultas.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En el modelo Snowflake, las dimensiones se normalizan en multiples tablas, una por cada nivel jerarquico. Esto reduce redundancia pero aumenta la complejidad de las consultas.</p>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Caracteristica</th>
-                    <th class="table__th">STAR (Estrella)</th>
-                    <th class="table__th">SNOWFLAKE (Copo de Nieve)</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Caracteristica</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">STAR (Estrella)</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">SNOWFLAKE (Copo de Nieve)</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td">Entendimiento del modelo</td>
-                    <td class="table__td">Sencillo</td>
-                    <td class="table__td">Mayor dificultad</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Entendimiento del modelo</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Sencillo</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Mayor dificultad</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Numero de tablas</td>
-                    <td class="table__td">Menor</td>
-                    <td class="table__td">Mayor</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Numero de tablas</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Menor</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Mayor</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Complejidad de consulta</td>
-                    <td class="table__td">Baja</td>
-                    <td class="table__td">Alta</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Complejidad de consulta</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Baja</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Alta</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Rendimiento</td>
-                    <td class="table__td">Rapida</td>
-                    <td class="table__td">Lenta</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Rendimiento</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Rapida</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Lenta</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Redundancia</td>
-                    <td class="table__td">Alta (desnormalizado)</td>
-                    <td class="table__td">Baja (normalizado)</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Redundancia</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Alta (desnormalizado)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Baja (normalizado)</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Espacio de almacenamiento</td>
-                    <td class="table__td">Mayor</td>
-                    <td class="table__td">Menor</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Espacio de almacenamiento</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Mayor</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Menor</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">6. Proceso ETL</h2>
-        <span class="tag">Extraccion, Transformacion, Carga</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">6. Proceso ETL</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Extraccion, Transformacion, Carga</span>
 
-        <p class="main__text">El proceso ETL consume aproximadamente el 80% del tiempo y recursos en un proyecto Data Warehouse (segun Bill Inmon).</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El proceso ETL consume aproximadamente el 80% del tiempo y recursos en un proyecto Data Warehouse (segun Bill Inmon).</p>
 
-        <h3 class="main__title--sub">Fases del ETL</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Fases del ETL</h3>
 
-        <ol class="main__list">
-            <li class="main__list-item"><strong>Extraccion:</strong> Obtener datos de fuentes heterogeneas (Bases de datos, archivos planos, sistemas legacy, fuentes externas).</li>
-            <li class="main__list-item"><strong>Transformacion:</strong> Limpiar, filtrar, validar, calcular, agregar, convertir tipos, aplicar reglas de negocio.</li>
-            <li class="main__list-item"><strong>Carga:</strong> Insertar los datos transformados en el Data Warehouse (full refresh, carga incremental, historico).</li>
+        <ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li ><strong>Extraccion:</strong> Obtener datos de fuentes heterogeneas (Bases de datos, archivos planos, sistemas legacy, fuentes externas).</li>
+            <li ><strong>Transformacion:</strong> Limpiar, filtrar, validar, calcular, agregar, convertir tipos, aplicar reglas de negocio.</li>
+            <li ><strong>Carga:</strong> Insertar los datos transformados en el Data Warehouse (full refresh, carga incremental, historico).</li>
         </ol>
 
-        <div class="box box--example">
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>Herramientas ETL comunes:</strong> Warehouse Manager, SQL Server Integration Services (SSIS), Oracle Warehouse Builder, Pentaho, Talend, Informatica.</p>
         </div>
 
-        <h2 class="main__title">7. Tipos de Cubos OLAP</h2>
-        <span class="tag">ROLAP vs MOLAP vs HOLAP</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">7. Tipos de Cubos OLAP</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">ROLAP vs MOLAP vs HOLAP</span>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Tipo</th>
-                    <th class="table__th">Descripcion</th>
-                    <th class="table__th">Ventajas</th>
-                    <th class="table__th">Desventajas</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Ventajas</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Desventajas</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>ROLAP</strong></td>
-                    <td class="table__td">Almacena datos en tablas relacionales. Las agregaciones se calculan sobre la marcha.</td>
-                    <td class="table__td">Escalable, datos en tiempo real, usa SQL estandar.</td>
-                    <td class="table__td">Rendimiento mas lento en consultas complejas.</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>ROLAP</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Almacena datos en tablas relacionales. Las agregaciones se calculan sobre la marcha.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Escalable, datos en tiempo real, usa SQL estandar.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Rendimiento mas lento en consultas complejas.</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>MOLAP</strong></td>
-                    <td class="table__td">Almacena datos en una estructura multidimensional propietaria (cubo precalculado).</td>
-                    <td class="table__td">Rendimiento excelente, consultas rapidas, indices optimizados.</td>
-                    <td class="table__td">Menos escalable, datos no en tiempo real, espacio adicional.</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>MOLAP</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Almacena datos en una estructura multidimensional propietaria (cubo precalculado).</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Rendimiento excelente, consultas rapidas, indices optimizados.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Menos escalable, datos no en tiempo real, espacio adicional.</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>HOLAP</strong></td>
-                    <td class="table__td">Combina ROLAP y MOLAP: datos detallados en BD relacional, agregaciones en cubo.</td>
-                    <td class="table__td">Balance entre rendimiento y escalabilidad.</td>
-                    <td class="table__td">Mayor complejidad de administracion.</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>HOLAP</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Combina ROLAP y MOLAP: datos detallados en BD relacional, agregaciones en cubo.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Balance entre rendimiento y escalabilidad.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Mayor complejidad de administracion.</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">8. Creacion de Dimensiones en Oracle</h2>
-        <span class="tag">CREATE DIMENSION</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">8. Creacion de Dimensiones en Oracle</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">CREATE DIMENSION</span>
 
-        <p class="main__text">Oracle permite definir dimensiones y jerarquias directamente en el diccionario de datos.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Oracle permite definir dimensiones y jerarquias directamente en el diccionario de datos.</p>
 
-        <div class="box box--example">
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>Ejemplo: Dimension Tiempo con Jerarquias</strong></p>
         </div>
         <pre>
@@ -326,7 +326,7 @@ CREATE DIMENSION time_dim
     ATTRIBUTE week DETERMINES week_number_of_year
     ATTRIBUTE month DETERMINES full_month_name;</pre>
 
-        <div class="box box--example">
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>Ejemplo: Dimension Empleado (desde script de ejemplo)</strong></p>
         </div>
         <pre>
@@ -343,9 +343,9 @@ CREATE DIMENSION DIM_EMP
     ATTRIBUTE job DETERMINES
         (DIM_EMPLEADO.job_title);</pre>
 
-        <h2 class="main__title">9. Fact Table: Ejemplo RRHH</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">9. Fact Table: Ejemplo RRHH</h2>
 
-        <div class="box box--example">
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>Creacion de tablas dimension y hecho para un Data Warehouse de RRHH</strong></p>
         </div>
         <pre>
@@ -384,60 +384,60 @@ CREATE TABLE FACT_RRHH (
     TotalEmpleado NUMBER
 );</pre>
 
-        <h2 class="main__title">10. Indices en Data Warehouse</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">10. Indices en Data Warehouse</h2>
 
-        <ul class="main__list">
-            <li class="main__list-item"><strong>Indices Bitmap:</strong> Ideales para columnas con baja cardinalidad (genero, estado, categoria). Muy eficientes en consultas ad-hoc sobre grandes volumenes. Reducen uso de espacio comparado con B-tree.</li>
-            <li class="main__list-item"><strong>Indices B-tree:</strong> Arbol invertido, optimo para busquedas de alta selectividad. Utilizado para acceso a consultas tipicas con alta cardinalidad.</li>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li ><strong>Indices Bitmap:</strong> Ideales para columnas con baja cardinalidad (genero, estado, categoria). Muy eficientes en consultas ad-hoc sobre grandes volumenes. Reducen uso de espacio comparado con B-tree.</li>
+            <li ><strong>Indices B-tree:</strong> Arbol invertido, optimo para busquedas de alta selectividad. Utilizado para acceso a consultas tipicas con alta cardinalidad.</li>
         </ul>
 
-        <h2 class="main__title">11. Beneficios del Data Warehouse</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">11. Beneficios del Data Warehouse</h2>
 
-        <div class="box box--concept">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Desde la perspectiva de TI:</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Arquitectura flexible que permite cambios.</li>
-                <li class="main__list-item">Actualizacion automatica de datos.</li>
-                <li class="main__list-item">Reduccion de carga sobre sistemas operacionales.</li>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Arquitectura flexible que permite cambios.</li>
+                <li >Actualizacion automatica de datos.</li>
+                <li >Reduccion de carga sobre sistemas operacionales.</li>
             </ul>
             <p><strong>Desde la perspectiva de usuarios de negocio:</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Vista global de los datos de la organizacion.</li>
-                <li class="main__list-item">Herramientas faciles de usar.</li>
-                <li class="main__list-item">Capacidad de generar reportes independientemente.</li>
-                <li class="main__list-item">Acceso via intranet/internet.</li>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Vista global de los datos de la organizacion.</li>
+                <li >Herramientas faciles de usar.</li>
+                <li >Capacidad de generar reportes independientemente.</li>
+                <li >Acceso via intranet/internet.</li>
             </ul>
         </div>
 
-        <div class="box box--warning">
+        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
             <p><strong>Importante:</strong> Segun estudios de IDC, las organizaciones que implementan soluciones analiticas logran un ROI promedio de 112%, con periodos de recuperacion de menos de un ano en el 49% de los casos. El costo de generacion de reportes se reduce aproximadamente en un 60%.</p>
         </div>
 
-        <h2 class="main__title">12. Ejercicios Propuestos</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">12. Ejercicios Propuestos</h2>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 1:</strong> Disena un esquema estrella para un sistema de pedidos en linea. Identifica las tablas de hechos y dimensiones necesarias.</p>
         </div>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 2:</strong> Explica las diferencias entre los enfoques Top-Down (Inmon) y Bottom-Up (Kimball) para la implementacion de un Data Warehouse.</p>
         </div>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 3:</strong> Dado el siguiente requerimiento: "Analizar ventas por producto, por region y por mes", disena las tablas DIM y FACT correspondientes.</p>
         </div>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 4:</strong> Investiga y explica cual es la diferencia entre un Data Warehouse y un Data Lake. Menciona casos de uso para cada uno.</p>
         </div>
 
-        <div class="canvas-container">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
             <canvas id="canvas_14" width="800" height="360"></canvas>
-            <div id="controls_14" class="canvas-controls"></div>
+            <div id="controls_14" class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800"></div>
         </div>
-        <nav class="nav">
-            <a href="semana_13.html" class="nav__link">Semana 13</a>
-            <a href="semana_15.html" class="nav__link">Semana 15 - Alta Disponibilidad</a>
+        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+            <a href="semana_13.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 13</a>
+            <a href="semana_15.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 15 - Alta Disponibilidad</a>
         </nav>
     </main>
 </div>

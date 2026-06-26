@@ -7,56 +7,56 @@
     <link rel="stylesheet" href="master.css">
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
 
-<header class="header">
-    <h1 class="header__title">Examen Final: Arquitectura de Datos</h1>
-    <p class="header__subtitle">Semana 16 | Evaluacion Integral (Semanas 09-15) | ULima 2013-2</p>
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Examen Final: Arquitectura de Datos</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 16 | Evaluacion Integral (Semanas 09-15) | ULima 2013-2</p>
 </header>
 
-<div class="cornell">
-    <aside class="sidebar">
-        <h3 class="sidebar__title">ESTRUCTURA DEL EXAMEN</h3>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>Teoria Avanzada</strong>10 preguntas (normalizacion, OLAP, HA)</li>
-            <li class="sidebar__item"><strong>PL/SQL</strong>3 ejercicios: procedimiento, funcion, trigger</li>
-            <li class="sidebar__item"><strong>Consultas</strong>5 ejercicios de SQL complejo</li>
-            <li class="sidebar__item"><strong>Data Warehouse</strong>2 ejercicios de diseno Star Schema</li>
-            <li class="sidebar__item"><strong>Solucionario</strong>Clave de respuestas al final</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">ESTRUCTURA DEL EXAMEN</h3>
+        <ul class="space-y-4">
+            <li class="text-sm"><strong>Teoria Avanzada</strong>10 preguntas (normalizacion, OLAP, HA)</li>
+            <li class="text-sm"><strong>PL/SQL</strong>3 ejercicios: procedimiento, funcion, trigger</li>
+            <li class="text-sm"><strong>Consultas</strong>5 ejercicios de SQL complejo</li>
+            <li class="text-sm"><strong>Data Warehouse</strong>2 ejercicios de diseno Star Schema</li>
+            <li class="text-sm"><strong>Solucionario</strong>Clave de respuestas al final</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3 class="sidebar__title">RECURSOS</h3>
-            <ul class="sidebar__list">
-                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Indice del Curso</a></li>
-                <li class="sidebar__item"><a href="semana_15.html" class="sidebar__link">Semana 15</a></li>
-                <li class="sidebar__item"><a href="semana_09.html" class="sidebar__link">Semana 09 - 4FN, 5FN</a></li>
-                <li class="sidebar__item"><a href="semana_13.html" class="sidebar__link">Semana 13 - PL/SQL</a></li>
-                <li class="sidebar__item"><a href="semana_14.html" class="sidebar__link">Semana 14 - DW</a></li>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
+            <ul class="space-y-4">
+                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Indice del Curso</a></li>
+                <li class="text-sm"><a href="semana_15.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 15</a></li>
+                <li class="text-sm"><a href="semana_09.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 09 - 4FN, 5FN</a></li>
+                <li class="text-sm"><a href="semana_13.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 13 - PL/SQL</a></li>
+                <li class="text-sm"><a href="semana_14.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 14 - DW</a></li>
             </ul>
         </div>
     </aside>
 
-    <main class="main">
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
 
-        <span class="tag">EXAMEN</span>
-        <h2 class="main__title">Evaluacion Final: Arquitectura de Datos (Semanas 09-15)</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Evaluacion Final: Arquitectura de Datos (Semanas 09-15)</h2>
 
-        <div class="box box--warning">
+        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
             <p><strong>Instrucciones:</strong> Resuelve las cuatro secciones. El tiempo estimado es de 120 minutos. Puntaje total: 100 puntos. Teoria: 40 pts (4 c/u). PL/SQL: 20 pts. Consultas: 25 pts (5 c/u). Data Warehouse: 15 pts.</p>
         </div>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Consejos del Arquitecto</h4>
-            <ul class="main__list">
-                <li class="main__list-item">Lee todas las preguntas antes de empezar.</li>
-                <li class="main__list-item">En PL/SQL, verifica la sintaxis: cada bloque necesita BEGIN...END.</li>
-                <li class="main__list-item">En consultas, piensa en el orden de ejecucion: FROM > WHERE > GROUP BY > HAVING > SELECT > ORDER BY.</li>
-                <li class="main__list-item">En DW, identifica primero las medidas (numericas) y luego las dimensiones.</li>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Consejos del Arquitecto</h4>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Lee todas las preguntas antes de empezar.</li>
+                <li >En PL/SQL, verifica la sintaxis: cada bloque necesita BEGIN...END.</li>
+                <li >En consultas, piensa en el orden de ejecucion: FROM > WHERE > GROUP BY > HAVING > SELECT > ORDER BY.</li>
+                <li >En DW, identifica primero las medidas (numericas) y luego las dimensiones.</li>
             </ul>
         </section>
 
         <!-- ==================== SECCION 1: TEORIA ==================== -->
-        <h2 class="main__title">Seccion 1: Teoria Avanzada (40 puntos)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 1: Teoria Avanzada (40 puntos)</h2>
 
         <div class="q-level">NIVEL BASICO (1-4)</div>
 
@@ -95,9 +95,9 @@
         <div class="answer"><em>Responde aqui:</em></div>
 
         <!-- ==================== SECCION 2: PL/SQL ==================== -->
-        <h2 class="main__title">Seccion 2: PL/SQL (20 puntos)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 2: PL/SQL (20 puntos)</h2>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 1: Procedimiento con IN/OUT (7 pts)</strong></p>
             <p>Escribe un procedimiento almacenado llamado <code>obtener_estadisticas_empleado</code> que reciba como parametro IN el ID de un departamento y retorne (OUT) el numero total de empleados, el salario promedio y el salario maximo de ese departamento.</p>
         </div>
@@ -112,7 +112,7 @@
 
 </pre>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 2: Funcion con retorno (7 pts)</strong></p>
             <p>Crea una funcion llamada <code>categoria_cliente</code> que reciba el ID de un cliente y retorne un VARCHAR con su categoria basada en el total de compras: 'VIP' si > 10000, 'Regular' si entre 1000 y 10000, 'Basico' si menor a 1000.</p>
         </div>
@@ -127,7 +127,7 @@
 
 </pre>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 3: Trigger con :NEW / :OLD (6 pts)</strong></p>
             <p>Crea un trigger <code>trg_auditar_precio</code> que se dispare BEFORE UPDATE del precio en la tabla <code>producto</code>. Debe verificar que el nuevo precio no sea mas del 50% superior al anterior. Si lo es, debe lanzar un error con <code>raise_application_error</code>.</p>
         </div>
@@ -143,9 +143,9 @@
 </pre>
 
         <!-- ==================== SECCION 3: CONSULTAS ==================== -->
-        <h2 class="main__title">Seccion 3: Consultas Complejas (25 puntos)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 3: Consultas Complejas (25 puntos)</h2>
 
-        <p class="main__text">Usa el siguiente esquema:</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Usa el siguiente esquema:</p>
         <pre>
 cliente(id, nombre, email, ciudad, fecha_registro, activo)
 producto(id, nombre, categoria, precio, stock)
@@ -168,9 +168,9 @@ detalle_pedido(id, pedido_id, producto_id, cantidad, precio_unitario)</pre>
         <div class="answer"><em>Escribe aqui:</em></div>
 
         <!-- ==================== SECCION 4: DATA WAREHOUSE ==================== -->
-        <h2 class="main__title">Seccion 4: Data Warehouse (15 puntos)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 4: Data Warehouse (15 puntos)</h2>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 1: Diseno de Star Schema (8 pts)</strong></p>
             <p>Una cadena de tiendas necesita analizar sus ventas. Requiere reportes por tienda, por producto, por fecha y por vendedor. Las metricas a analizar son: cantidad de unidades vendidas, monto total de venta, descuento aplicado y ganancia neta. Disena el esquema estrella identificando tablas de hechos y tablas de dimension, con sus columnas principales.</p>
         </div>
@@ -192,14 +192,14 @@ detalle_pedido(id, pedido_id, producto_id, cantidad, precio_unitario)</pre>
 
 </pre>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 2: Identificacion de componentes (7 pts)</strong></p>
             <p>Identifica en el esquema del ejercicio anterior:</p>
-            <ul class="main__list">
-                <li class="main__list-item">Cuales son las medidas (facts / measures)?</li>
-                <li class="main__list-item">Cuales son las dimensiones?</li>
-                <li class="main__list-item">Que granularidad tiene la tabla de hechos?</li>
-                <li class="main__list-item">Cuales serian las claves primarias de cada dimension?</li>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Cuales son las medidas (facts / measures)?</li>
+                <li >Cuales son las dimensiones?</li>
+                <li >Que granularidad tiene la tabla de hechos?</li>
+                <li >Cuales serian las claves primarias de cada dimension?</li>
             </ul>
         </div>
 
@@ -216,9 +216,9 @@ detalle_pedido(id, pedido_id, producto_id, cantidad, precio_unitario)</pre>
         <hr>
 
         <!-- ==================== SOLUCIONARIO ==================== -->
-        <div class="box box--warning">
-            <h3 class="main__title--sub">Solucionario Completo</h3>
-            <span class="tag">Clave de respuestas</span>
+        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Solucionario Completo</h3>
+            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Clave de respuestas</span>
 
             <p><strong>Seccion 1: Teoria Avanzada</strong></p>
 
@@ -427,21 +427,21 @@ CREATE TABLE FACT_VENTAS (
 );</pre>
 
             <p><strong>Ejercicio 2 - Identificacion:</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item"><strong>Medidas (Facts):</strong> unidades_vendidas, monto_total, descuento, ganancia_neta.</li>
-                <li class="main__list-item"><strong>Dimensiones:</strong> Tienda, Producto, Tiempo, Vendedor.</li>
-                <li class="main__list-item"><strong>Granularidad:</strong> Una fila por cada venta individual (transaccion).</li>
-                <li class="main__list-item"><strong>Claves primarias:</strong> tienda_key (DIM_TIENDA), producto_key (DIM_PRODUCTO), tiempo_key (DIM_TIEMPO), vendedor_key (DIM_VENDEDOR).</li>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li ><strong>Medidas (Facts):</strong> unidades_vendidas, monto_total, descuento, ganancia_neta.</li>
+                <li ><strong>Dimensiones:</strong> Tienda, Producto, Tiempo, Vendedor.</li>
+                <li ><strong>Granularidad:</strong> Una fila por cada venta individual (transaccion).</li>
+                <li ><strong>Claves primarias:</strong> tienda_key (DIM_TIENDA), producto_key (DIM_PRODUCTO), tiempo_key (DIM_TIEMPO), vendedor_key (DIM_VENDEDOR).</li>
             </ul>
         </div>
 
-        <div class="box box--note">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
             <p><strong>Fin del examen.</strong> Revisa todas tus respuestas antes de entregar. Asegurate de que los bloques PL/SQL tengan la sintaxis correcta y que las consultas SQL se ejecuten sin errores sintacticos.</p>
         </div>
 
-        <nav class="nav">
-            <a href="semana_15.html" class="nav__link">Semana 15 - HA</a>
-            <a href="index.html" class="nav__link">Indice del Curso</a>
+        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+            <a href="semana_15.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 15 - HA</a>
+            <a href="index.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Indice del Curso</a>
         </nav>
     </main>
 </div>

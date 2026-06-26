@@ -8,222 +8,222 @@
     <script src="canvas-ui.js"></script>
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
 
-<header class="header">
-    <h1 class="header__title">Alta Disponibilidad en Bases de Datos</h1>
-    <p class="header__subtitle">Semana 15 | Tolerancia a Fallos y Continuidad del Negocio | ULima 2013-2</p>
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Alta Disponibilidad en Bases de Datos</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 15 | Tolerancia a Fallos y Continuidad del Negocio | ULima 2013-2</p>
 </header>
 
-<div class="cornell">
-    <aside class="sidebar">
-        <h3 class="sidebar__title">CONCEPTOS CLAVE</h3>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>SLA</strong>Acuerdo de nivel de servicio</li>
-            <li class="sidebar__item"><strong>9s</strong>Metrica de disponibilidad</li>
-            <li class="sidebar__item"><strong>HOT Standby</strong>Copia transaccionalmente consistente</li>
-            <li class="sidebar__item"><strong>WARM Standby</strong>Copia sin confirmacion concurrente</li>
-            <li class="sidebar__item"><strong>COLD Standby</strong>Requiere restauracion manual</li>
-            <li class="sidebar__item"><strong>Failover Clustering</strong>Proteccion a nivel de instancia</li>
-            <li class="sidebar__item"><strong>Mirroring</strong>Base de datos reflejada</li>
-            <li class="sidebar__item"><strong>Log Shipping</strong>Trasvase de registro</li>
-            <li class="sidebar__item"><strong>RPO / RTO</strong>Recovery Point / Time Objective</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">CONCEPTOS CLAVE</h3>
+        <ul class="space-y-4">
+            <li class="text-sm"><strong>SLA</strong>Acuerdo de nivel de servicio</li>
+            <li class="text-sm"><strong>9s</strong>Metrica de disponibilidad</li>
+            <li class="text-sm"><strong>HOT Standby</strong>Copia transaccionalmente consistente</li>
+            <li class="text-sm"><strong>WARM Standby</strong>Copia sin confirmacion concurrente</li>
+            <li class="text-sm"><strong>COLD Standby</strong>Requiere restauracion manual</li>
+            <li class="text-sm"><strong>Failover Clustering</strong>Proteccion a nivel de instancia</li>
+            <li class="text-sm"><strong>Mirroring</strong>Base de datos reflejada</li>
+            <li class="text-sm"><strong>Log Shipping</strong>Trasvase de registro</li>
+            <li class="text-sm"><strong>RPO / RTO</strong>Recovery Point / Time Objective</li>
         </ul>
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3 class="sidebar__title">RECURSOS</h3>
-            <ul class="sidebar__list">
-                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Indice del Curso</a></li>
-                <li class="sidebar__item"><a href="semana_14.html" class="sidebar__link">Semana 14</a></li>
-                <li class="sidebar__item"><a href="semana_16.html" class="sidebar__link">Semana 16 - Examen Final</a></li>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
+            <ul class="space-y-4">
+                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Indice del Curso</a></li>
+                <li class="text-sm"><a href="semana_14.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 14</a></li>
+                <li class="text-sm"><a href="semana_16.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 16 - Examen Final</a></li>
             </ul>
         </div>
     </aside>
 
-    <main class="main">
-        <div class="box box--note">
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
             <p><strong>Objetivos:</strong> Comprender los conceptos fundamentales de alta disponibilidad en bases de datos. Conocer las tecnologias de SQL Server para HA: Log Shipping, Database Mirroring, Failover Clustering y AlwaysOn. Entender los modos de espera HOT, WARM y COLD, y las metricas SLA, RPO y RTO.</p>
         </div>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto: HA no es solo tecnologia</h4>
-            <p class="main__text">La alta disponibilidad no es solo una decision tecnica -- es un compromiso de negocio. Cada "9" de disponibilidad cuesta exponencialmente mas. Pasar de 99.9% a 99.99% puede duplicar o triplicar el costo de infraestructura. La clave es alinear el SLA con el presupuesto y el impacto real del negocio. No todas las bases de datos necesitan 5 nueves.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto: HA no es solo tecnologia</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La alta disponibilidad no es solo una decision tecnica -- es un compromiso de negocio. Cada "9" de disponibilidad cuesta exponencialmente mas. Pasar de 99.9% a 99.99% puede duplicar o triplicar el costo de infraestructura. La clave es alinear el SLA con el presupuesto y el impacto real del negocio. No todas las bases de datos necesitan 5 nueves.</p>
         </section>
 
-        <h2 class="main__title">1. Conceptos Generales de HA</h2>
-        <span class="tag">Alta Disponibilidad</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Conceptos Generales de HA</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Alta Disponibilidad</span>
 
-        <p class="main__text">La alta disponibilidad es una solucion para minimizar o mitigar el impacto de paradas de sistemas. Idealmente, un sistema de base de datos deberia estar disponible las 24 horas del dia, cada dia. Implica redundancia de algun tipo y tecnicas para incrementar la disponibilidad.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La alta disponibilidad es una solucion para minimizar o mitigar el impacto de paradas de sistemas. Idealmente, un sistema de base de datos deberia estar disponible las 24 horas del dia, cada dia. Implica redundancia de algun tipo y tecnicas para incrementar la disponibilidad.</p>
 
-        <h3 class="main__title--sub">Acuerdos de Nivel de Servicio (SLA)</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Acuerdos de Nivel de Servicio (SLA)</h3>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Numero de 9s</th>
-                    <th class="table__th">% Disponibilidad</th>
-                    <th class="table__th">Tiempo de parada anual</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Numero de 9s</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">% Disponibilidad</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tiempo de parada anual</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td">2</td>
-                    <td class="table__td">99%</td>
-                    <td class="table__td">3 dias y 15 horas</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">2</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">99%</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">3 dias y 15 horas</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">3</td>
-                    <td class="table__td">99.9%</td>
-                    <td class="table__td">8 horas y 45 minutos</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">3</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">99.9%</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">8 horas y 45 minutos</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">4</td>
-                    <td class="table__td">99.99%</td>
-                    <td class="table__td">52 minutos y 34 segundos</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">4</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">99.99%</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">52 minutos y 34 segundos</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">5</td>
-                    <td class="table__td">99.999%</td>
-                    <td class="table__td">5 minutos y 15 segundos</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">5</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">99.999%</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">5 minutos y 15 segundos</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h3 class="main__title--sub">Metricas Clave</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Metricas Clave</h3>
 
-        <ul class="main__list">
-            <li class="main__list-item"><strong>RPO (Recovery Point Objective):</strong> Cantidad maxima de datos que se puede perder (medido en tiempo). Ej: RPO de 5 minutos = se pierden hasta 5 minutos de datos.</li>
-            <li class="main__list-item"><strong>RTO (Recovery Time Objective):</strong> Tiempo maximo para recuperar el servicio tras una falla. Ej: RTO de 1 hora = el sistema debe estar operativo en 1 hora.</li>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li ><strong>RPO (Recovery Point Objective):</strong> Cantidad maxima de datos que se puede perder (medido en tiempo). Ej: RPO de 5 minutos = se pierden hasta 5 minutos de datos.</li>
+            <li ><strong>RTO (Recovery Time Objective):</strong> Tiempo maximo para recuperar el servicio tras una falla. Ej: RTO de 1 hora = el sistema debe estar operativo en 1 hora.</li>
         </ul>
 
-        <h2 class="main__title">2. Modos de Espera (Standby Modes)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Modos de Espera (Standby Modes)</h2>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Modo</th>
-                    <th class="table__th">Descripcion</th>
-                    <th class="table__th">Failover</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Modo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Failover</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>HOT Standby</strong></td>
-                    <td class="table__td">El nodo secundario provee una copia transaccionalmente consistente de los datos del servidor primario. Deteccion automatica de errores y recuperacion.</td>
-                    <td class="table__td">Automatico</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>HOT Standby</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">El nodo secundario provee una copia transaccionalmente consistente de los datos del servidor primario. Deteccion automatica de errores y recuperacion.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Automatico</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>WARM Standby</strong></td>
-                    <td class="table__td">Se mantiene una copia de los datos en el secundario, pero los datos pueden o no ser confirmados concurrentemente. El error y recuperacion puede no ser automatico.</td>
-                    <td class="table__td">Manual</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>WARM Standby</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Se mantiene una copia de los datos en el secundario, pero los datos pueden o no ser confirmados concurrentemente. El error y recuperacion puede no ser automatico.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Manual</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>COLD Standby</strong></td>
-                    <td class="table__td">Servidor donde se pueden restaurar los datos. Se necesita OS apropiado, software y copia de seguridad. Puede llevar un tiempo considerable.</td>
-                    <td class="table__td">Manual (lento)</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>COLD Standby</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Servidor donde se pueden restaurar los datos. Se necesita OS apropiado, software y copia de seguridad. Puede llevar un tiempo considerable.</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Manual (lento)</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">3. Tecnologias de Alta Disponibilidad en SQL Server</h2>
-        <span class="tag">SQL Server 2012</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Tecnologias de Alta Disponibilidad en SQL Server</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">SQL Server 2012</span>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Caracteristica</th>
-                    <th class="table__th">Database Mirroring</th>
-                    <th class="table__th">Failover Clustering</th>
-                    <th class="table__th">AlwaysOn</th>
-                    <th class="table__th">Log Shipping</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Caracteristica</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Database Mirroring</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Failover Clustering</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">AlwaysOn</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Log Shipping</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td">Unidad de falla</td>
-                    <td class="table__td">Base de datos</td>
-                    <td class="table__td">Servidor</td>
-                    <td class="table__td">Grupo de Bases de Datos</td>
-                    <td class="table__td">Base de datos</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Unidad de falla</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Base de datos</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Servidor</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Grupo de Bases de Datos</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Base de datos</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Failover automatico</td>
-                    <td class="table__td">Si (con testigo)</td>
-                    <td class="table__td">Si</td>
-                    <td class="table__td">Si</td>
-                    <td class="table__td">No</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Failover automatico</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Si (con testigo)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Si</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Si</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">No</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Replicas de datos</td>
-                    <td class="table__td">1</td>
-                    <td class="table__td">0</td>
-                    <td class="table__td">4</td>
-                    <td class="table__td">Ilimitado</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Replicas de datos</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">1</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">0</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">4</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Ilimitado</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Complejidad</td>
-                    <td class="table__td">Media</td>
-                    <td class="table__td">Media</td>
-                    <td class="table__td">Alta</td>
-                    <td class="table__td">Baja</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Complejidad</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Media</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Media</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Alta</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Baja</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Lectura en replica</td>
-                    <td class="table__td">Solo con snapshot</td>
-                    <td class="table__td">N/A</td>
-                    <td class="table__td">Solo lectura</td>
-                    <td class="table__td">Solo lectura (entre restauraciones)</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Lectura en replica</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Solo con snapshot</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">N/A</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Solo lectura</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Solo lectura (entre restauraciones)</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Perdida de datos (RPO)</td>
-                    <td class="table__td">Cero (sync) / Segundos (async)</td>
-                    <td class="table__td">N/A</td>
-                    <td class="table__td">Cero (sync) / Segundos (async)</td>
-                    <td class="table__td">Minutos a Horas</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Perdida de datos (RPO)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Cero (sync) / Segundos (async)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">N/A</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Cero (sync) / Segundos (async)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Minutos a Horas</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Tiempo recuperacion (RTO)</td>
-                    <td class="table__td">Segundos</td>
-                    <td class="table__td">Segundos a Minutos</td>
-                    <td class="table__td">Segundos (sync) / Minutos (async)</td>
-                    <td class="table__td">Horas a dias</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Tiempo recuperacion (RTO)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Segundos</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Segundos a Minutos</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Segundos (sync) / Minutos (async)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Horas a dias</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <h2 class="main__title">4. Trasvase de Registro (Log Shipping)</h2>
-        <span class="tag">Warm Standby</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Trasvase de Registro (Log Shipping)</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Warm Standby</span>
 
-        <p class="main__text">El Log Shipping es una tecnologia madura y estable que permite mantener una base de datos secundaria actualizada mediante la copia y restauracion periodica de los archivos de registro de transacciones de la base de datos primaria.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El Log Shipping es una tecnologia madura y estable que permite mantener una base de datos secundaria actualizada mediante la copia y restauracion periodica de los archivos de registro de transacciones de la base de datos primaria.</p>
 
-        <div class="box box--concept">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Funcionamiento:</strong></p>
-            <ol class="main__list">
-                <li class="main__list-item">En el servidor primario se realizan copias de seguridad del log de transacciones.</li>
-                <li class="main__list-item">Los archivos de backup se copian a una carpeta compartida accesible por el secundario.</li>
-                <li class="main__list-item">En el servidor secundario, los archivos se restauran (con NORECOVERY) para mantener la base sincronizada.</li>
+            <ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >En el servidor primario se realizan copias de seguridad del log de transacciones.</li>
+                <li >Los archivos de backup se copian a una carpeta compartida accesible por el secundario.</li>
+                <li >En el servidor secundario, los archivos se restauran (con NORECOVERY) para mantener la base sincronizada.</li>
             </ol>
         </div>
 
-        <div class="box box--example">
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>Fortalezas:</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Maduro, estable y simple de configurar.</li>
-                <li class="main__list-item">No requiere hardware especial.</li>
-                <li class="main__list-item">Multiples copias de respaldo (ilimitadas).</li>
-                <li class="main__list-item">Las bases secundarias pueden consultarse (solo lectura) entre restauraciones.</li>
-                <li class="main__list-item">Alertas configuradas si el trasvase no se completa en un umbral de tiempo.</li>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Maduro, estable y simple de configurar.</li>
+                <li >No requiere hardware especial.</li>
+                <li >Multiples copias de respaldo (ilimitadas).</li>
+                <li >Las bases secundarias pueden consultarse (solo lectura) entre restauraciones.</li>
+                <li >Alertas configuradas si el trasvase no se completa en un umbral de tiempo.</li>
             </ul>
             <p><strong>Debilidades:</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Failover manual (el cliente debe redireccionarse manualmente).</li>
-                <li class="main__list-item">Configuracion por base de datos (no protege BD del sistema).</li>
-                <li class="main__list-item">Perdida de datos potencial (RPO de minutos a horas).</li>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Failover manual (el cliente debe redireccionarse manualmente).</li>
+                <li >Configuracion por base de datos (no protege BD del sistema).</li>
+                <li >Perdida de datos potencial (RPO de minutos a horas).</li>
             </ul>
         </div>
 
@@ -243,56 +243,56 @@ EXEC sp_help_log_shipping_secondary_database
 -- Failover manual (en caso de falla del primario)
 RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;</pre>
 
-        <h2 class="main__title">5. Base de Datos Reflejada (Database Mirroring)</h2>
-        <span class="tag">Hot Standby</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Base de Datos Reflejada (Database Mirroring)</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Hot Standby</span>
 
-        <p class="main__text">El Database Mirroring es una solucion de software para incrementar la disponibilidad de la base de datos. Mantiene una copia actualizada (reflejo) en un servidor aparte para conmutacion en caso de falla del servidor principal.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El Database Mirroring es una solucion de software para incrementar la disponibilidad de la base de datos. Mantiene una copia actualizada (reflejo) en un servidor aparte para conmutacion en caso de falla del servidor principal.</p>
 
-        <div class="box box--concept">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Roles de los servidores:</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item"><strong>Servidor Principal:</strong> Base de datos de produccion. Los usuarios y aplicaciones se conectan normalmente.</li>
-                <li class="main__list-item"><strong>Servidor Reflejo:</strong> Contiene la base de datos reflejo. Toma el control si el principal falla.</li>
-                <li class="main__list-item"><strong>Servidor Testigo (opcional):</strong> Monitorea ambos servidores y permite failover automatico.</li>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li ><strong>Servidor Principal:</strong> Base de datos de produccion. Los usuarios y aplicaciones se conectan normalmente.</li>
+                <li ><strong>Servidor Reflejo:</strong> Contiene la base de datos reflejo. Toma el control si el principal falla.</li>
+                <li ><strong>Servidor Testigo (opcional):</strong> Monitorea ambos servidores y permite failover automatico.</li>
             </ul>
         </div>
 
-        <h3 class="main__title--sub">Modos de Operacion</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Modos de Operacion</h3>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Modo</th>
-                    <th class="table__th">Sincronizacion</th>
-                    <th class="table__th">Perdida de datos</th>
-                    <th class="table__th">Failover</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Modo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Sincronizacion</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Perdida de datos</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Failover</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Alta Disponibilidad</strong></td>
-                    <td class="table__td">Sincronizado (con testigo)</td>
-                    <td class="table__td">Cero</td>
-                    <td class="table__td">Automatico</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Alta Disponibilidad</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Sincronizado (con testigo)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Cero</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Automatico</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Alta Proteccion</strong></td>
-                    <td class="table__td">Sincronizado (sin testigo)</td>
-                    <td class="table__td">Cero</td>
-                    <td class="table__td">Manual</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Alta Proteccion</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Sincronizado (sin testigo)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Cero</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Manual</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><strong>Alto Rendimiento</strong></td>
-                    <td class="table__td">Asincrono</td>
-                    <td class="table__td">Posible (segundos)</td>
-                    <td class="table__td">Manual</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><strong>Alto Rendimiento</strong></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Asincrono</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Posible (segundos)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Manual</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <div class="box box--example">
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p><strong>Comandos de administracion:</strong></p>
         </div>
         <pre>
@@ -314,68 +314,68 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER SUSPEND;
 -- Reanudar sesion
 ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;</pre>
 
-        <div class="box box--warning">
+        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
             <p><strong>Nota importante:</strong> Database Mirroring fue descontinuado en versiones posteriores de SQL Server en favor de AlwaysOn Availability Groups. Sin embargo, su estudio es fundamental para entender la evolucion de las tecnologias HA.</p>
         </div>
 
-        <h2 class="main__title">6. Failover Clustering</h2>
-        <span class="tag">Proteccion a nivel de instancia</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">6. Failover Clustering</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Proteccion a nivel de instancia</span>
 
-        <p class="main__text">Failover Clustering protege contra fallos a nivel de servidor (instancia completa). Un cluster es un grupo de servidores independientes que trabajan juntos para aumentar la disponibilidad. Si un nodo falla, otro nodo asume automaticamente la carga de trabajo.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Failover Clustering protege contra fallos a nivel de servidor (instancia completa). Un cluster es un grupo de servidores independientes que trabajan juntos para aumentar la disponibilidad. Si un nodo falla, otro nodo asume automaticamente la carga de trabajo.</p>
 
-        <ul class="main__list">
-            <li class="main__list-item">Protege la instancia completa de SQL Server, no solo una base de datos.</li>
-            <li class="main__list-item">Requiere almacenamiento compartido (SAN).</li>
-            <li class="main__list-item">Failover automatico en segundos.</li>
-            <li class="main__list-item">No hay perdida de datos (disco compartido).</li>
-            <li class="main__list-item">Complejidad media de implementacion.</li>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li >Protege la instancia completa de SQL Server, no solo una base de datos.</li>
+            <li >Requiere almacenamiento compartido (SAN).</li>
+            <li >Failover automatico en segundos.</li>
+            <li >No hay perdida de datos (disco compartido).</li>
+            <li >Complejidad media de implementacion.</li>
         </ul>
 
-        <h2 class="main__title">7. AlwaysOn Availability Groups</h2>
-        <span class="tag">SQL Server 2012+</span>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">7. AlwaysOn Availability Groups</h2>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">SQL Server 2012+</span>
 
-        <p class="main__text">AlwaysOn es la evolucion de las tecnologias HA en SQL Server 2012. Combina lo mejor de Failover Clustering y Database Mirroring, permitiendo hasta 4 replicas secundarias con capacidad de lectura.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">AlwaysOn es la evolucion de las tecnologias HA en SQL Server 2012. Combina lo mejor de Failover Clustering y Database Mirroring, permitiendo hasta 4 replicas secundarias con capacidad de lectura.</p>
 
-        <ul class="main__list">
-            <li class="main__list-item">Grupo de bases de datos como unidad de failover.</li>
-            <li class="main__list-item">Hasta 4 replicas secundarias (leibles).</li>
-            <li class="main__list-item">Soporta modos sincrono y asincrono.</li>
-            <li class="main__list-item">Failover automatico con hasta 2 replicas sincronas.</li>
-            <li class="main__list-item">Requiere Windows Server Failover Cluster (WSFC).</li>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li >Grupo de bases de datos como unidad de failover.</li>
+            <li >Hasta 4 replicas secundarias (leibles).</li>
+            <li >Soporta modos sincrono y asincrono.</li>
+            <li >Failover automatico con hasta 2 replicas sincronas.</li>
+            <li >Requiere Windows Server Failover Cluster (WSFC).</li>
         </ul>
 
-        <h2 class="main__title">8. Interoperabilidad entre Tecnologias</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">8. Interoperabilidad entre Tecnologias</h2>
 
-        <div class="box box--concept">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p><strong>Log Shipping + Mirroring:</strong> La base de datos principal en una sesion de mirroring puede actuar tambien como base principal en una configuracion de log shipping. Las bases secundarias de log shipping deben residir en instancias distintas del servidor principal o reflejado.</p>
             <p><strong>Log Shipping + Replicacion:</strong> Pueden usarse conjuntamente, pero la replicacion no continua tras un failover de log shipping. En replicacion transaccional, el comportamiento depende de la opcion <code>sync with backup</code>.</p>
         </div>
 
-        <h2 class="main__title">9. Ejercicios Propuestos</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">9. Ejercicios Propuestos</h2>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 1:</strong> Una empresa requiere 99.99% de disponibilidad para su base de datos de ventas. Calcula el tiempo de parada maximo permitido por ano y recomienda una tecnologia HA adecuada.</p>
         </div>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 2:</strong> Explica las diferencias fundamentales entre Database Mirroring y Log Shipping en terminos de RPO, RTO y modo de failover.</p>
         </div>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 3:</strong> Disena una estrategia HA para una base de datos critica que requiere RPO cero y failover automatico. Que tecnologias combinarias y por que?</p>
         </div>
 
-        <div class="box box--exercise">
+        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
             <p><strong>Ejercicio 4:</strong> Investiga cual es la diferencia entre un cluster activo-pasivo y un cluster activo-activo. En que escenarios usarias cada uno?</p>
         </div>
 
-        <div class="canvas-container">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
             <canvas id="canvas_15" width="800" height="360"></canvas>
-            <div id="controls_15" class="canvas-controls"></div>
+            <div id="controls_15" class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800"></div>
         </div>
-        <nav class="nav">
-            <a href="semana_14.html" class="nav__link">Semana 14</a>
-            <a href="semana_16.html" class="nav__link">Semana 16 - Examen Final</a>
+        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+            <a href="semana_14.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 14</a>
+            <a href="semana_16.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Semana 16 - Examen Final</a>
         </nav>
     </main>
 </div>

@@ -17,25 +17,22 @@
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
 
-<body>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
 
 
 
-<div class="header-box">
-
-    <h1>Data Warehouse y Business Intelligence</h1>
-
-    <p>Semana 14 | Ingeniería de Datos | ULima 2013-2</p>
-
-</div>
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Data Warehouse y Business Intelligence</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 14 | Ingeniería de Datos | ULima 2013-2</p>
+</header>
 
 
 
-<div class="cornell-container">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
 
-    <div class="keywords-sidebar">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
 
-        <h3>PALABRAS CLAVE</h3>
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">PALABRAS CLAVE</h3>
 
         <ul>
 
@@ -55,7 +52,7 @@
 
         <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
 
-            <h3>RECURSOS</h3>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
 
             <ul>
 
@@ -68,14 +65,11 @@
             </ul>
 
         </div>
+    </aside>
 
-    </div>
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
 
-
-
-    <div class="main-content">
-
-        <div class="box box-note">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 
             <p><strong>?? Objetivos de Aprendizaje</strong></p>
 
@@ -97,7 +91,7 @@
 
 
 
-        <section class="architect-insight">
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 
             <h4>?? Insight del Arquitecto: DW en 2026</h4>
 
@@ -107,11 +101,11 @@
 
 
 
-        <h2>1. ¿Qué es un Data Warehouse?</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. ¿Qué es un Data Warehouse?</h2>
 
         
 
-        <div class="box box-concep">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 
             <p><strong>Data Warehouse:</strong> Repositorio centralizado de datos históricos organizados para soportar decisiones de negocio.</p>
 
@@ -119,7 +113,7 @@
 
 
 
-        <ul>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 
             <li><strong>Orientado a temas:</strong> Datos organizados por temas (ventas, clientes, productos)</li>
 
@@ -133,35 +127,35 @@
 
 
 
-        <h2>2. OLTP vs OLAP</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. OLTP vs OLAP</h2>
 
         
 
-        <div class="table-responsive">
-        <table>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
 
-            <tr><th>Característica</th><th>OLTP (Transaccional)</th><th>OLAP (Analítico)</th></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Característica</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">OLTP (Transaccional)</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">OLAP (Analítico)</th></tr>
 
-            <tr><td>Propósito</td><td>Operaciones del día a día</td><td>Análisis y decisiones</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Propósito</td><td class="p-4 text-slate-600 dark:text-slate-400">Operaciones del día a día</td><td class="p-4 text-slate-600 dark:text-slate-400">Análisis y decisiones</td></tr>
 
-            <tr><td>Usuarios</td><td>Operadores, cajeros</td><td>Gerentes, analistas</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Usuarios</td><td class="p-4 text-slate-600 dark:text-slate-400">Operadores, cajeros</td><td class="p-4 text-slate-600 dark:text-slate-400">Gerentes, analistas</td></tr>
 
-            <tr><td>Tipo de acceso</td><td>Lectura/Escritura</td><td>Mayormente lectura</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Tipo de acceso</td><td class="p-4 text-slate-600 dark:text-slate-400">Lectura/Escritura</td><td class="p-4 text-slate-600 dark:text-slate-400">Mayormente lectura</td></tr>
 
-            <tr><td>Tamaño de datos</td><td>GBs</td><td>TBs a PBs</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Tamaño de datos</td><td class="p-4 text-slate-600 dark:text-slate-400">GBs</td><td class="p-4 text-slate-600 dark:text-slate-400">TBs a PBs</td></tr>
 
-            <tr><td>Consultas</td><td>Simples, predefinidas</td><td>Complejas, ad-hoc</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Consultas</td><td class="p-4 text-slate-600 dark:text-slate-400">Simples, predefinidas</td><td class="p-4 text-slate-600 dark:text-slate-400">Complejas, ad-hoc</td></tr>
 
-            <tr><td>Rendimiento</td><td>Rápido (< 1 seg)</td><td>Segundos a minutos</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Rendimiento</td><td class="p-4 text-slate-600 dark:text-slate-400">Rápido (< 1 seg)</td><td class="p-4 text-slate-600 dark:text-slate-400">Segundos a minutos</td></tr>
 
-            <tr><td>Normalización</td><td>Alta (3FN)</td><td>Baja (desnormalizado)</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Normalización</td><td class="p-4 text-slate-600 dark:text-slate-400">Alta (3FN)</td><td class="p-4 text-slate-600 dark:text-slate-400">Baja (desnormalizado)</td></tr>
 
         </table>
         </div>
 
 
 
-        <h2>3. Arquitectura de un DW</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Arquitectura de un DW</h2>
 
         
 
@@ -217,7 +211,7 @@
 
 
 
-        <h2>4. Modelo Estrella (Star Schema)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Modelo Estrella (Star Schema)</h2>
 
         
 
@@ -229,7 +223,7 @@
 
 
 
-        <ul>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 
             <li><strong>Tabla de Hechos (Fact Table):</strong> Centro del modelo, contiene métricas/medidas</li>
 
@@ -239,7 +233,7 @@
 
 
 
-        <h3>Ejemplo: Esquema de Ventas</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplo: Esquema de Ventas</h3>
 
         <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;">
 
@@ -303,33 +297,33 @@
 
 
 
-        <h2>5. Tablas de Dimensión</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Tablas de Dimensión</h2>
 
         
 
-        <div class="table-responsive">
-        <table>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
 
-            <tr><th>Tipo de Dimensión</th><th>Descripción</th></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo de Dimensión</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción</th></tr>
 
-            <tr><td><strong>Dimensión de Tiempo</strong></td><td>Siempre presente, fechas, períodos</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Dimensión de Tiempo</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Siempre presente, fechas, períodos</td></tr>
 
-            <tr><td><strong>Dimensión de Producto</strong></td><td>Categorías, marcas, descripciones</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Dimensión de Producto</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Categorías, marcas, descripciones</td></tr>
 
-            <tr><td><strong>Dimensión de Cliente</strong></td><td>Demográficos, segmentación</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Dimensión de Cliente</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Demográficos, segmentación</td></tr>
 
-            <tr><td><strong>Dimensión Geográfica</strong></td><td>Ubicación, región, país</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Dimensión Geográfica</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Ubicación, región, país</td></tr>
 
-            <tr><td><strong>Dimensión de Empleado</strong></td><td>Departamentos, cargos</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Dimensión de Empleado</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Departamentos, cargos</td></tr>
 
         </table>
         </div>
 
 
 
-        <h3>Jerarquías en Dimensiones:</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Jerarquías en Dimensiones:</h3>
 
-        <ul>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 
             <li>Producto ? Categoría ? Línea ? Marca</li>
 
@@ -341,11 +335,11 @@
 
 
 
-        <h2>6. Proceso ETL</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">6. Proceso ETL</h2>
 
         
 
-        <div class="box box-concep">
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 
             <p><strong>ETL (Extract, Transform, Load):</strong> Proceso de extraer datos de fuentes, transformarlos y cargarlos al DW.</p>
 
@@ -353,7 +347,7 @@
 
 
 
-        <ul>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 
             <li><strong>Extracción:</strong> Leer datos de sistemas fuente</li>
 
@@ -365,7 +359,7 @@
 
 
 
-        <h2>7. Esquema Copo de Nieve (Snowflake)</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">7. Esquema Copo de Nieve (Snowflake)</h2>
 
         
 
@@ -391,34 +385,34 @@ dim_producto --? dim_categoría (separada)
 
 
 
-        <div class="table-responsive">
-        <table>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
 
-            <tr><th>Esquema</th><th>Ventajas</th><th>Desventajas</th></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Esquema</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Ventajas</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Desventajas</th></tr>
 
-            <tr><td>Estrella</td><td>Simple, rápido, fácil de entender</td><td>Redundancia</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Estrella</td><td class="p-4 text-slate-600 dark:text-slate-400">Simple, rápido, fácil de entender</td><td class="p-4 text-slate-600 dark:text-slate-400">Redundancia</td></tr>
 
-            <tr><td>Copo de Nieve</td><td>Menos redundancia, más flexibilidad</td><td>Más complejo, más JOINs</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400">Copo de Nieve</td><td class="p-4 text-slate-600 dark:text-slate-400">Menos redundancia, más flexibilidad</td><td class="p-4 text-slate-600 dark:text-slate-400">Más complejo, más JOINs</td></tr>
 
         </table>
         </div>
 
 
 
-        <h2>8. Tipos de Tablas de Hechos</h2>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">8. Tipos de Tablas de Hechos</h2>
 
         
 
-        <div class="table-responsive">
-        <table>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
 
-            <tr><th>Tipo</th><th>Descripción</th></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo</th><th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción</th></tr>
 
-            <tr><td><strong>Transaccional</strong></td><td>Una fila por transacción</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Transaccional</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Una fila por transacción</td></tr>
 
-            <tr><td><strong>Periódica</strong></td><td>Resumen por período (diario, semanal)</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Periódica</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Resumen por período (diario, semanal)</td></tr>
 
-            <tr><td><strong>Acumulativa</strong></td><td>Todo el lifecycle de un proceso</td></tr>
+            <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"><td class="p-4 text-slate-600 dark:text-slate-400"><strong>Acumulativa</strong></td><td class="p-4 text-slate-600 dark:text-slate-400">Todo el lifecycle de un proceso</td></tr>
 
         </table>
         </div>
@@ -431,7 +425,7 @@ dim_producto --? dim_categoría (separada)
 
         <section class="laboratorio">
 
-            <h3>?? Laboratorio: Diseña un DW</h3>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">?? Laboratorio: Diseña un DW</h3>
 
             <ol style="margin-left: 20px;">
 
@@ -449,11 +443,8 @@ dim_producto --? dim_categoría (separada)
 
 
 
-    </div>
-
+    </main>
 </div>
-
-
 
 </body>
 

@@ -8,117 +8,117 @@
     <script src="canvas-ui.js"></script>
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
-<header class="header">
-    <h1 class="header__title">Formas Normales Superiores y Desnormalizacion</h1>
-    <p class="header__subtitle">Semana 09 | Ingenieria de Datos | ULima 2013-2</p>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Formas Normales Superiores y Desnormalizacion</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 09 | Ingenieria de Datos | ULima 2013-2</p>
 </header>
 
-<div class="cornell">
-    <aside class="sidebar">
-        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>&sect; BCNF</strong>Forma Normal Boyce-Codd: todo determinante debe ser clave candidata.</li>
-            <li class="sidebar__item"><strong>&sect; MVD</strong>Dependencia Multivaluada: relacion 1:N independiente entre atributos.</li>
-            <li class="sidebar__item"><strong>&sect; 4FN</strong>Elimina dependencias multivaluadas separando tablas.</li>
-            <li class="sidebar__item"><strong>&sect; 5FN</strong>Elimina dependencias de join (join dependencies).</li>
-            <li class="sidebar__item"><strong>&sect; Desnormalizacion</strong>Proceso contrario: crear redundancia controlada por rendimiento.</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">PALABRAS CLAVE</h3>
+        <ul class="space-y-4">
+            <li class="text-sm"><strong>&sect; BCNF</strong>Forma Normal Boyce-Codd: todo determinante debe ser clave candidata.</li>
+            <li class="text-sm"><strong>&sect; MVD</strong>Dependencia Multivaluada: relacion 1:N independiente entre atributos.</li>
+            <li class="text-sm"><strong>&sect; 4FN</strong>Elimina dependencias multivaluadas separando tablas.</li>
+            <li class="text-sm"><strong>&sect; 5FN</strong>Elimina dependencias de join (join dependencies).</li>
+            <li class="text-sm"><strong>&sect; Desnormalizacion</strong>Proceso contrario: crear redundancia controlada por rendimiento.</li>
         </ul>
         <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-sidebar);border-radius:var(--radius-md);">
-            <h3 class="sidebar__title">RECURSOS</h3>
-            <ul class="sidebar__list">
-                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio</a></li>
-                <li class="sidebar__item"><a href="semana_08.html" class="sidebar__link">Semana 08</a></li>
-                <li class="sidebar__item"><a href="semana_10.html" class="sidebar__link">Siguiente</a></li>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
+            <ul class="space-y-4">
+                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Inicio</a></li>
+                <li class="text-sm"><a href="semana_08.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 08</a></li>
+                <li class="text-sm"><a href="semana_10.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Siguiente</a></li>
             </ul>
         </div>
     </aside>
 
-    <main class="main">
-        <div class="box box--note">
-            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Comprender la Forma Normal Boyce-Codd y su diferencia con 3FN.</li>
-                <li class="main__list-item">Identificar dependencias multivaluadas y aplicar 4FN.</li>
-                <li class="main__list-item">Conocer la 5FN como forma normal proyectiva-join.</li>
-                <li class="main__list-item">Aplicar tecnicas de desnormalizacion estrategica en escenarios OLAP.</li>
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Objetivos de Aprendizaje</strong></p>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Comprender la Forma Normal Boyce-Codd y su diferencia con 3FN.</li>
+                <li >Identificar dependencias multivaluadas y aplicar 4FN.</li>
+                <li >Conocer la 5FN como forma normal proyectiva-join.</li>
+                <li >Aplicar tecnicas de desnormalizacion estrategica en escenarios OLAP.</li>
             </ul>
         </div>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto</h4>
-            <p class="main__text">En la practica, BCNF es el objetivo minimo para bases de datos operacionales (OLTP). La 4FN aparece cuando modelamos entidades con atributos multivaluados independientes (como telefonos y direcciones). La 5FN suele ser innecesaria, pero la usamos al disenar almacenes de datos con esquemas de estrella. La desnormalizacion, bien aplicada, convierte un modelo teorico en uno performante.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En la practica, BCNF es el objetivo minimo para bases de datos operacionales (OLTP). La 4FN aparece cuando modelamos entidades con atributos multivaluados independientes (como telefonos y direcciones). La 5FN suele ser innecesaria, pero la usamos al disenar almacenes de datos con esquemas de estrella. La desnormalizacion, bien aplicada, convierte un modelo teorico en uno performante.</p>
         </section>
 
-        <h2 class="main__title">1. Forma Normal Boyce-Codd (BCNF)</h2>
-        <p class="main__text">Una relacion esta en BCNF si y solo si <strong>cada atributo determinante es una clave candidata</strong>. BCNF es una version mas estricta de 3FN: elimina las dependencias funcionales donde un atributo no-clave determina a otro atributo no-clave, incluso si no hay transitividad.</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Forma Normal Boyce-Codd (BCNF)</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una relacion esta en BCNF si y solo si <strong>cada atributo determinante es una clave candidata</strong>. BCNF es una version mas estricta de 3FN: elimina las dependencias funcionales donde un atributo no-clave determina a otro atributo no-clave, incluso si no hay transitividad.</p>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Recordatorio:</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item"><strong>Dependencia Funcional:</strong> A &rarr; B significa que el valor de A determina el valor de B.</li>
-                <li class="main__list-item"><strong>Clave Candidata:</strong> Identificador unico; una o mas columnas que podrian ser la clave primaria.</li>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Recordatorio:</strong></p>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li ><strong>Dependencia Funcional:</strong> A &rarr; B significa que el valor de A determina el valor de B.</li>
+                <li ><strong>Clave Candidata:</strong> Identificador unico; una o mas columnas que podrian ser la clave primaria.</li>
             </ul>
         </div>
 
-        <h3 class="main__title--sub">Caso Practico: Estudiante - Carrera - Asesor</h3>
-        <p class="main__text">Supuesto del negocio:</p>
-        <ul class="main__list">
-            <li class="main__list-item">Un estudiante puede tener mas de una carrera.</li>
-            <li class="main__list-item">Para cada carrera, un estudiante tiene un solo asesor y una nota promedio.</li>
-            <li class="main__list-item">Un asesor solo puede asesorar una carrera.</li>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Caso Practico: Estudiante - Carrera - Asesor</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Supuesto del negocio:</p>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li >Un estudiante puede tener mas de una carrera.</li>
+            <li >Para cada carrera, un estudiante tiene un solo asesor y una nota promedio.</li>
+            <li >Un asesor solo puede asesorar una carrera.</li>
         </ul>
 
-        <p class="main__text"><strong>Tabla inicial (no BCNF):</strong></p>
-        <div class="table-responsive">
-        <table class="table">
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Tabla inicial (no BCNF):</strong></p>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Codigo</th>
-                    <th class="table__th">Carrera</th>
-                    <th class="table__th">Asesor</th>
-                    <th class="table__th">Nota Promedio</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Codigo</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Carrera</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Asesor</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Nota Promedio</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td">20041236</td>
-                    <td class="table__td">Sistemas</td>
-                    <td class="table__td">Lopez</td>
-                    <td class="table__td">16</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">20041236</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Sistemas</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Lopez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">16</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">20041236</td>
-                    <td class="table__td">Contabilidad</td>
-                    <td class="table__td">Salas</td>
-                    <td class="table__td">16</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">20041236</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Contabilidad</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Salas</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">16</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">20052133</td>
-                    <td class="table__td">Psicologia</td>
-                    <td class="table__td">Perez</td>
-                    <td class="table__td">13</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">20052133</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Psicologia</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Perez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">13</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">20051782</td>
-                    <td class="table__td">Contabilidad</td>
-                    <td class="table__td">Rojas</td>
-                    <td class="table__td">12</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">20051782</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Contabilidad</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Rojas</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">12</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">20062023</td>
-                    <td class="table__td">Sistemas</td>
-                    <td class="table__td">Lopez</td>
-                    <td class="table__td">15</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">20062023</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Sistemas</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Lopez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">15</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <p class="main__text">Existe una <strong>segunda dependencia</strong>: Asesor &rarr; Carrera (cada asesor asesora una sola carrera). Por tanto, Asesor es un <strong>atributo determinante</strong> que deberia ser parte de la clave primaria. La tabla no esta en BCNF.</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Existe una <strong>segunda dependencia</strong>: Asesor &rarr; Carrera (cada asesor asesora una sola carrera). Por tanto, Asesor es un <strong>atributo determinante</strong> que deberia ser parte de la clave primaria. La tabla no esta en BCNF.</p>
 
-        <h3 class="main__title--sub">Solucion BCNF (2 pasos)</h3>
-        <p class="main__text"><strong>Paso 1:</strong> Intercambiar Carrera por Asesor, generando una dependencia parcial.</p>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Solucion BCNF (2 pasos)</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Paso 1:</strong> Intercambiar Carrera por Asesor, generando una dependencia parcial.</p>
         <pre><code>Codigo   Asesor   Carrera   Nota_Promedio
 -------- -------- --------- --------------
 20041236 Lopez   Sistemas  16
@@ -127,7 +127,7 @@
 20051782 Rojas   Contab.   12
 20062023 Lopez   Sistemas  15</code></pre>
 
-        <p class="main__text"><strong>Paso 2:</strong> Aplicar 2FN para eliminar la dependencia parcial:</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Paso 2:</strong> Aplicar 2FN para eliminar la dependencia parcial:</p>
         <pre><code>-- Tabla: ESTUDIANTE_ASESOR
 CODIGO   ASESOR   NOTA_PROMEDIO
 -------  -------- -------------
@@ -145,77 +145,77 @@ Salas    Contabilidad
 Perez    Psicologia
 Rojas    Contabilidad</code></pre>
 
-        <div class="box box--note">
-            <p class="main__text"><strong>Conclusion BCNF:</strong> La clave primaria compuesta (Codigo, Carrera) tenia un determinante no clave (Asesor &rarr; Carrera). Al separar en dos tablas, cada determinante es clave candidata en su propia tabla.</p>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Conclusion BCNF:</strong> La clave primaria compuesta (Codigo, Carrera) tenia un determinante no clave (Asesor &rarr; Carrera). Al separar en dos tablas, cada determinante es clave candidata en su propia tabla.</p>
         </div>
 
-        <h2 class="main__title">2. Cuarta Forma Normal (4FN)</h2>
-        <p class="main__text">Una relacion esta en 4FN si esta en BCNF y <strong>no contiene dependencias multivaluadas (MVD)</strong>. Una MVD ocurre cuando hay al menos 3 atributos A, B, C tales que: por cada valor de A hay un conjunto de valores B y un conjunto de valores C, pero B es independiente de C y viceversa.</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Cuarta Forma Normal (4FN)</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una relacion esta en 4FN si esta en BCNF y <strong>no contiene dependencias multivaluadas (MVD)</strong>. Una MVD ocurre cuando hay al menos 3 atributos A, B, C tales que: por cada valor de A hay un conjunto de valores B y un conjunto de valores C, pero B es independiente de C y viceversa.</p>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Notacion MVD:</strong> A &rarr;&rarr; B | A &rarr;&rarr; C (A determina multivalentemente a B y C, independientes entre si)</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Notacion MVD:</strong> A &rarr;&rarr; B | A &rarr;&rarr; C (A determina multivalentemente a B y C, independientes entre si)</p>
         </div>
 
-        <h3 class="main__title--sub">Caso Practico: Curso - Profesor - Texto</h3>
-        <p class="main__text">Un curso (A) tiene varios profesores (B) y varios textos (C). Profesor y Texto son independientes: cualquier profesor puede usar cualquier texto del curso.</p>
-        <div class="table-responsive">
-        <table class="table">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Caso Practico: Curso - Profesor - Texto</h3>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un curso (A) tiene varios profesores (B) y varios textos (C). Profesor y Texto son independientes: cualquier profesor puede usar cualquier texto del curso.</p>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Curso (A)</th>
-                    <th class="table__th">Profesor (B)</th>
-                    <th class="table__th">Texto (C)</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Curso (A)</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Profesor (B)</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Texto (C)</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td">Administracion</td>
-                    <td class="table__td">Garcia</td>
-                    <td class="table__td">Drucker</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Administracion</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Garcia</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Drucker</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Administracion</td>
-                    <td class="table__td">Garcia</td>
-                    <td class="table__td">Peters</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Administracion</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Garcia</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Peters</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Administracion</td>
-                    <td class="table__td">Arce</td>
-                    <td class="table__td">Drucker</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Administracion</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Arce</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Drucker</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Administracion</td>
-                    <td class="table__td">Arce</td>
-                    <td class="table__td">Peters</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Administracion</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Arce</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Peters</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Administracion</td>
-                    <td class="table__td">Perez</td>
-                    <td class="table__td">Drucker</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Administracion</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Perez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Drucker</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Administracion</td>
-                    <td class="table__td">Perez</td>
-                    <td class="table__td">Peters</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Administracion</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Perez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Peters</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Finanzas</td>
-                    <td class="table__td">Mendez</td>
-                    <td class="table__td">Jones</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Finanzas</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Mendez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Jones</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Finanzas</td>
-                    <td class="table__td">Mendez</td>
-                    <td class="table__td">Chang</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Finanzas</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Mendez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Chang</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <p class="main__text">Se genera una <strong>explosion combinatoria</strong> (producto cartesiano entre profesores y textos por cada curso). Para eliminar la MVD, separamos en dos tablas:</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Se genera una <strong>explosion combinatoria</strong> (producto cartesiano entre profesores y textos por cada curso). Para eliminar la MVD, separamos en dos tablas:</p>
 
-        <div class="box box--example">
-            <p class="main__text"><strong>Solucion 4FN:</strong></p>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Solucion 4FN:</strong></p>
         </div>
 
         <pre><code>-- Tabla: CURSO_PROFESOR
@@ -234,58 +234,58 @@ Administracion   Peters
 Finanzas         Jones
 Finanzas         Chang</code></pre>
 
-        <div class="box box--note">
-            <p class="main__text"><strong>Conclusion 4FN:</strong> Al separar los atributos independientes (Profesor y Texto) en tablas distintas, eliminamos la redundancia combinatoria. La 4FN es especialmente util al modelar relaciones N:N con atributos independientes.</p>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Conclusion 4FN:</strong> Al separar los atributos independientes (Profesor y Texto) en tablas distintas, eliminamos la redundancia combinatoria. La 4FN es especialmente util al modelar relaciones N:N con atributos independientes.</p>
         </div>
 
-        <h2 class="main__title">3. Quinta Forma Normal (5FN)</h2>
-        <p class="main__text">Una relacion esta en 5FN (tambien llamada <strong>Project-Join Normal Form</strong> o PJ/NF) cuando no puede ser descompuesta en tablas mas pequenas sin perder informacion al reconstruirla mediante JOINs. Elimina <strong>dependencias de join</strong> (join dependencies).</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Quinta Forma Normal (5FN)</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una relacion esta en 5FN (tambien llamada <strong>Project-Join Normal Form</strong> o PJ/NF) cuando no puede ser descompuesta en tablas mas pequenas sin perder informacion al reconstruirla mediante JOINs. Elimina <strong>dependencias de join</strong> (join dependencies).</p>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Join Dependency:</strong> Ocurre cuando una tabla es igual a la reunion (JOIN) de varias de sus proyecciones. Si al hacer JOIN de las proyecciones se pierden o generan filas espurias, hay una dependencia de join que 5FN debe resolver.</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Join Dependency:</strong> Ocurre cuando una tabla es igual a la reunion (JOIN) de varias de sus proyecciones. Si al hacer JOIN de las proyecciones se pierden o generan filas espurias, hay una dependencia de join que 5FN debe resolver.</p>
         </div>
 
-        <h3 class="main__title--sub">Caso Practico: Vendedor - Marca - Producto</h3>
-        <div class="table-responsive">
-        <table class="table">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Caso Practico: Vendedor - Marca - Producto</h3>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">VENDEDOR</th>
-                    <th class="table__th">MARCA</th>
-                    <th class="table__th">PRODUCTO</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">VENDEDOR</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">MARCA</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">PRODUCTO</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td">Perez</td>
-                    <td class="table__td">Toyota</td>
-                    <td class="table__td">Auto</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Perez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Toyota</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Auto</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Perez</td>
-                    <td class="table__td">Toyota</td>
-                    <td class="table__td">Camioneta</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Perez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Toyota</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Camioneta</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Perez</td>
-                    <td class="table__td">Nissan</td>
-                    <td class="table__td">Auto</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Perez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Nissan</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Auto</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Perez</td>
-                    <td class="table__td">Nissan</td>
-                    <td class="table__td">Camioneta</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Perez</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Nissan</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Camioneta</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td">Rojas</td>
-                    <td class="table__td">Toyota</td>
-                    <td class="table__td">Auto</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Rojas</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Toyota</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Auto</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <p class="main__text">Si descomponemos en tres tablas binarias:</p>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Si descomponemos en tres tablas binarias:</p>
         <pre><code>-- VENDEDOR-MARCA
 VENDEDOR   MARCA
 -------    ------
@@ -308,36 +308,36 @@ Perez      Auto
 Perez      Camioneta
 Rojas      Auto</code></pre>
 
-        <div class="box box--example">
-            <p class="main__text">Al hacer JOIN de las tres proyecciones, se reconstruye exactamente la tabla original sin filas espurias. La tabla original esta en 5FN porque la descomposicion es <strong>sin perdida</strong> y cada proyeccion captura una restriccion del negocio.</p>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Al hacer JOIN de las tres proyecciones, se reconstruye exactamente la tabla original sin filas espurias. La tabla original esta en 5FN porque la descomposicion es <strong>sin perdida</strong> y cada proyeccion captura una restriccion del negocio.</p>
         </div>
 
-        <span class="tag">5FN / PJNF</span>
-        <p class="main__text">En la practica, la 5FN es raramente necesaria. Se utiliza en sistemas con restricciones join complejas, tipicamente en modelado dimensional de alta precision (Data Vault 2.0, Anchor Modeling).</p>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">5FN / PJNF</span>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En la practica, la 5FN es raramente necesaria. Se utiliza en sistemas con restricciones join complejas, tipicamente en modelado dimensional de alta precision (Data Vault 2.0, Anchor Modeling).</p>
 
-        <h2 class="main__title">4. Desnormalizacion Estrategica</h2>
-        <p class="main__text">La desnormalizacion es el <strong>proceso contrario a la normalizacion</strong>: crear redundancia controlada en un modelo normalizado para mejorar los tiempos de respuesta en el sistema de base de datos. Se aplica principalmente en entornos OLAP, Data Warehousing y sistemas de alta concurrencia de lectura.</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Desnormalizacion Estrategica</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La desnormalizacion es el <strong>proceso contrario a la normalizacion</strong>: crear redundancia controlada en un modelo normalizado para mejorar los tiempos de respuesta en el sistema de base de datos. Se aplica principalmente en entornos OLAP, Data Warehousing y sistemas de alta concurrencia de lectura.</p>
 
-        <div class="box box--warning">
-            <p class="main__text"><strong>Desventajas de la Desnormalizacion</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Agrega redundancia de datos.</li>
-                <li class="main__list-item">Reduce la integridad referencial.</li>
-                <li class="main__list-item">Hace menos flexible el modelo.</li>
-                <li class="main__list-item">Requiere compensar con logica de programacion (triggers, reglas de negocio).</li>
+        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Desventajas de la Desnormalizacion</strong></p>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Agrega redundancia de datos.</li>
+                <li >Reduce la integridad referencial.</li>
+                <li >Hace menos flexible el modelo.</li>
+                <li >Requiere compensar con logica de programacion (triggers, reglas de negocio).</li>
             </ul>
         </div>
 
-        <h3 class="main__title--sub">Tecnicas de Desnormalizacion</h3>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tecnicas de Desnormalizacion</h3>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>a) Grabar Valores Derivados</strong></p>
-            <p class="main__text">Almacenar calculos (totales, promedios, conteos) directamente en la tabla maestra para evitar recalcular cada vez. Ejemplo: <code>Total_Factura</code> en lugar de calcular <code>SUM(Precio * Cantidad)</code> en cada consulta.</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>a) Grabar Valores Derivados</strong></p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Almacenar calculos (totales, promedios, conteos) directamente en la tabla maestra para evitar recalcular cada vez. Ejemplo: <code>Total_Factura</code> en lugar de calcular <code>SUM(Precio * Cantidad)</code> en cada consulta.</p>
         </div>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>b) Uniendo Entidades</strong></p>
-            <p class="main__text">Fusionar tablas relacionadas en una sola. En lugar de <code>Factura</code> + <code>Linea_Factura</code>, crear una tabla desnormalizada que contenga tanto los datos de la factura como los items repetidos por fila.</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>b) Uniendo Entidades</strong></p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Fusionar tablas relacionadas en una sola. En lugar de <code>Factura</code> + <code>Linea_Factura</code>, crear una tabla desnormalizada que contenga tanto los datos de la factura como los items repetidos por fila.</p>
 <pre><code>-- Modelo Normalizado
 Factura (Nro, Fecha, Cod_Cliente)
 Linea_Factura (Nro_Factura, Nro_Item, Cod_Articulo, Cantidad, Precio)
@@ -346,48 +346,48 @@ Linea_Factura (Nro_Factura, Nro_Item, Cod_Articulo, Cantidad, Precio)
 Factura_Unica (Nro, Fecha, Cod_Cliente, Cod_Articulo, Cantidad, Precio, Total_Factura)</code></pre>
         </div>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>c) Valores Fijos (Hard Code)</strong></p>
-            <p class="main__text">Incorporar valores fijos directamente en la tabla en lugar de normalizar en tablas parametricas. Ejemplo: guardar <code>Sexo (M/F)</code> como columna directa en <code>Estudiante</code> en vez de tener una tabla <code>Sexo</code> separada.</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>c) Valores Fijos (Hard Code)</strong></p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Incorporar valores fijos directamente en la tabla en lugar de normalizar en tablas parametricas. Ejemplo: guardar <code>Sexo (M/F)</code> como columna directa en <code>Estudiante</code> en vez de tener una tabla <code>Sexo</code> separada.</p>
 <pre><code>-- Normalizado: Estudiante (Cod, Fecha_Nac, Nombre, Cod_Sexo) + Sexo (Cod, Descripcion)
 -- Desnormalizado: Estudiante (Cod, Fecha_Nac, Nombre, Sexo)</code></pre>
         </div>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>d) Manteniendo Detalle en el Maestro</strong></p>
-            <p class="main__text">Convertir filas de detalle en columnas del maestro. Ejemplo: Presupuesto con 12 columnas (Importe_Ene ... Importe_Dic) en vez de 12 filas en una tabla Presupuesto_Mes.</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>d) Manteniendo Detalle en el Maestro</strong></p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Convertir filas de detalle en columnas del maestro. Ejemplo: Presupuesto con 12 columnas (Importe_Ene ... Importe_Dic) en vez de 12 filas en una tabla Presupuesto_Mes.</p>
 <pre><code>-- Normalizado: Presupuesto_Mes (Cod_Presupuesto, Tipo, Descripcion, Mes, Importe)
 -- Desnormalizado: Presupuesto (Cod, Tipo, Descripcion, Ene, Feb, Mar, ..., Dic)</code></pre>
         </div>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>e) Repitiendo Atributo del Detalle en el Maestro (y viceversa)</strong></p>
-            <p class="main__text">Copiar un atributo del detalle en el maestro para evitar JOINs. Ejemplo: <code>Ult.Nro_Factura</code> en la tabla <code>Cliente</code> para conocer rapidamente la ultima factura sin consultar la tabla detalle.</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>e) Repitiendo Atributo del Detalle en el Maestro (y viceversa)</strong></p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Copiar un atributo del detalle en el maestro para evitar JOINs. Ejemplo: <code>Ult.Nro_Factura</code> en la tabla <code>Cliente</code> para conocer rapidamente la ultima factura sin consultar la tabla detalle.</p>
 <pre><code>-- Maestro con atributo de detalle
 Cliente (Cod, Nombre, Direccion, Ult.Nro_Factura)</code></pre>
         </div>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>f) Llaves de Circuito Corto</strong></p>
-            <p class="main__text">Incluir la clave del abuelo en la tabla del nieto para evitar recorrer la jerarquia completa de JOINs. Ejemplo: incluir <code>Cod_Cliente</code> directamente en <code>Linea_Factura</code> en vez de navegar <code>Linea &rarr; Factura &rarr; Cliente</code>.</p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>f) Llaves de Circuito Corto</strong></p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Incluir la clave del abuelo en la tabla del nieto para evitar recorrer la jerarquia completa de JOINs. Ejemplo: incluir <code>Cod_Cliente</code> directamente en <code>Linea_Factura</code> en vez de navegar <code>Linea &rarr; Factura &rarr; Cliente</code>.</p>
 <pre><code>-- Normal: Linea (Nro_Factura, Item) → Factura (Nro, Cod_Cliente) → Cliente
 -- Corto:  Linea (Nro_Factura, Item, Cod_Cliente)</code></pre>
         </div>
 
-        <span class="tag">Desnormalizacion</span>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Desnormalizacion</span>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto</h4>
-            <p class="main__text">La regla de oro: normaliza hasta 3FN/BCNF para escritura (OLTP); desnormaliza para lectura (OLAP/BI). En PostgreSQL, las vistas materializadas, indices funcionales y columnas generadas (<code>GENERATED ALWAYS AS</code>) permiten obtener lo mejor de ambos mundos sin sacrificar integridad.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La regla de oro: normaliza hasta 3FN/BCNF para escritura (OLTP); desnormaliza para lectura (OLAP/BI). En PostgreSQL, las vistas materializadas, indices funcionales y columnas generadas (<code>GENERATED ALWAYS AS</code>) permiten obtener lo mejor de ambos mundos sin sacrificar integridad.</p>
         </section>
 
-        <div class="canvas-container">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
             <canvas id="canvas_09" width="800" height="360"></canvas>
-            <div id="controls_09" class="canvas-controls"></div>
+            <div id="controls_09" class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800"></div>
         </div>
-        <nav class="nav">
-            <a href="index.html" class="nav__link">Volver al Indice</a>
-            <a href="semana_10.html" class="nav__link">Siguiente Semana</a>
+        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+            <a href="index.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Volver al Indice</a>
+            <a href="semana_10.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Siguiente Semana</a>
         </nav>
     </main>
 </div>

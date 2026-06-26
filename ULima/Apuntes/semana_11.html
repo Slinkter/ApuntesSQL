@@ -8,93 +8,93 @@
     <script src="canvas-ui.js"></script>
 <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
-<header class="header">
-    <h1 class="header__title">Funciones de Grupo y Agrupamiento</h1>
-    <p class="header__subtitle">Semana 11 | Ingenieria de Datos | ULima 2013-2</p>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Funciones de Grupo y Agrupamiento</h1>
+    <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 11 | Ingenieria de Datos | ULima 2013-2</p>
 </header>
 
-<div class="cornell">
-    <aside class="sidebar">
-        <h3 class="sidebar__title">PALABRAS CLAVE</h3>
-        <ul class="sidebar__list">
-            <li class="sidebar__item"><strong>&sect; Funcion de Grupo</strong>Opera sobre un conjunto de filas para producir un unico resultado.</li>
-            <li class="sidebar__item"><strong>&sect; MIN / MAX</strong>Valor minimo y maximo de un conjunto.</li>
-            <li class="sidebar__item"><strong>&sect; AVG / SUM</strong>Promedio y suma de valores numericos.</li>
-            <li class="sidebar__item"><strong>&sect; COUNT</strong>Cantidad de filas o valores no nulos.</li>
-            <li class="sidebar__item"><strong>&sect; GROUP BY</strong>Divide filas en subconjuntos para aplicar funciones de grupo.</li>
-            <li class="sidebar__item"><strong>&sect; HAVING</strong>Filtra grupos despues de la agregacion (como WHERE pero para grupos).</li>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
+        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">PALABRAS CLAVE</h3>
+        <ul class="space-y-4">
+            <li class="text-sm"><strong>&sect; Funcion de Grupo</strong>Opera sobre un conjunto de filas para producir un unico resultado.</li>
+            <li class="text-sm"><strong>&sect; MIN / MAX</strong>Valor minimo y maximo de un conjunto.</li>
+            <li class="text-sm"><strong>&sect; AVG / SUM</strong>Promedio y suma de valores numericos.</li>
+            <li class="text-sm"><strong>&sect; COUNT</strong>Cantidad de filas o valores no nulos.</li>
+            <li class="text-sm"><strong>&sect; GROUP BY</strong>Divide filas en subconjuntos para aplicar funciones de grupo.</li>
+            <li class="text-sm"><strong>&sect; HAVING</strong>Filtra grupos despues de la agregacion (como WHERE pero para grupos).</li>
         </ul>
         <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-sidebar);border-radius:var(--radius-md);">
-            <h3 class="sidebar__title">RECURSOS</h3>
-            <ul class="sidebar__list">
-                <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio</a></li>
-                <li class="sidebar__item"><a href="semana_10.html" class="sidebar__link">Semana 10</a></li>
-                <li class="sidebar__item"><a href="semana_12.html" class="sidebar__link">Siguiente</a></li>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
+            <ul class="space-y-4">
+                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Inicio</a></li>
+                <li class="text-sm"><a href="semana_10.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 10</a></li>
+                <li class="text-sm"><a href="semana_12.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Siguiente</a></li>
             </ul>
         </div>
     </aside>
 
-    <main class="main">
-        <div class="box box--note">
-            <p class="main__text"><strong>Objetivos de Aprendizaje</strong></p>
-            <ul class="main__list">
-                <li class="main__list-item">Conocer y aplicar las 5 funciones de grupo: MIN, MAX, AVG, SUM, COUNT.</li>
-                <li class="main__list-item">Usar GROUP BY para dividir datos en subconjuntos logicos.</li>
-                <li class="main__list-item">Filtrar grupos con HAVING (vs filtrar filas con WHERE).</li>
-                <li class="main__list-item">Combinar HAVING con subconsultas para analitica avanzada.</li>
+    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Objetivos de Aprendizaje</strong></p>
+            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+                <li >Conocer y aplicar las 5 funciones de grupo: MIN, MAX, AVG, SUM, COUNT.</li>
+                <li >Usar GROUP BY para dividir datos en subconjuntos logicos.</li>
+                <li >Filtrar grupos con HAVING (vs filtrar filas con WHERE).</li>
+                <li >Combinar HAVING con subconsultas para analitica avanzada.</li>
             </ul>
         </div>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto</h4>
-            <p class="main__text">Las funciones de grupo son la base de la inteligencia de negocios en SQL. En PostgreSQL, combinadas con <code>GROUPING SETS</code>, <code>ROLLUP</code> y <code>CUBE</code>, permiten generar cubos OLAP directamente desde el motor. Domina esto y podras reemplazar hojas de calculo enteras con una sola consulta.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las funciones de grupo son la base de la inteligencia de negocios en SQL. En PostgreSQL, combinadas con <code>GROUPING SETS</code>, <code>ROLLUP</code> y <code>CUBE</code>, permiten generar cubos OLAP directamente desde el motor. Domina esto y podras reemplazar hojas de calculo enteras con una sola consulta.</p>
         </section>
 
-        <h2 class="main__title">1. Funciones de Agrupamiento</h2>
-        <p class="main__text">Las funciones de grupo (o funciones agregadas) permiten obtener resultados a partir del procesamiento de conjuntos de filas. Ignoran valores NULL (excepto <code>COUNT(*)</code>).</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Funciones de Agrupamiento</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las funciones de grupo (o funciones agregadas) permiten obtener resultados a partir del procesamiento de conjuntos de filas. Ignoran valores NULL (excepto <code>COUNT(*)</code>).</p>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Funcion</th>
-                    <th class="table__th">Descripcion</th>
-                    <th class="table__th">Tipo de dato</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Funcion</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo de dato</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><code>MIN(n)</code></td>
-                    <td class="table__td">Valor minimo</td>
-                    <td class="table__td">Numerico, fecha, caracter</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>MIN(n)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Valor minimo</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Numerico, fecha, caracter</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><code>MAX(n)</code></td>
-                    <td class="table__td">Valor maximo</td>
-                    <td class="table__td">Numerico, fecha, caracter</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>MAX(n)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Valor maximo</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Numerico, fecha, caracter</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><code>AVG(n)</code></td>
-                    <td class="table__td">Promedio (media aritmetica)</td>
-                    <td class="table__td">Numerico</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>AVG(n)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Promedio (media aritmetica)</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Numerico</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><code>SUM(n)</code></td>
-                    <td class="table__td">Suma total</td>
-                    <td class="table__td">Numerico</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>SUM(n)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Suma total</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Numerico</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><code>COUNT(x)</code></td>
-                    <td class="table__td">Numero de filas (con <code>*</code>) o valores no nulos</td>
-                    <td class="table__td">Cualquiera</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>COUNT(x)</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Numero de filas (con <code>*</code>) o valores no nulos</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Cualquiera</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <div class="box box--example">
-            <p class="main__text"><strong>Ejemplo completo:</strong> Estadisticas de ordenes de pedido del mes 07.</p>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo completo:</strong> Estadisticas de ordenes de pedido del mes 07.</p>
         </div>
         <pre><code>SELECT MIN(numero_embarques) AS minimo,
        MAX(numero_embarques) AS maximo,
@@ -107,15 +107,15 @@ WHERE  fecha_llenado LIKE '%07';
 SELECT COUNT(*) AS total_clientes
 FROM   cliente;</code></pre>
 
-        <div class="box box--note">
-            <p class="main__text"><strong>Comportamiento con NULL:</strong> <code>AVG</code>, <code>SUM</code>, <code>MIN</code>, <code>MAX</code> ignoran NULL. <code>COUNT(*)</code> cuenta todas las filas; <code>COUNT(columna)</code> solo cuenta los valores no nulos.</p>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Comportamiento con NULL:</strong> <code>AVG</code>, <code>SUM</code>, <code>MIN</code>, <code>MAX</code> ignoran NULL. <code>COUNT(*)</code> cuenta todas las filas; <code>COUNT(columna)</code> solo cuenta los valores no nulos.</p>
         </div>
 
-        <h2 class="main__title">2. La Clausula GROUP BY</h2>
-        <p class="main__text">Divide las filas en subconjuntos, aplicando las funciones de grupo a cada subconjunto de forma independiente. Toda columna en el SELECT que no sea funcion de grupo debe aparecer en el GROUP BY.</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. La Clausula GROUP BY</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Divide las filas en subconjuntos, aplicando las funciones de grupo a cada subconjunto de forma independiente. Toda columna en el SELECT que no sea funcion de grupo debe aparecer en el GROUP BY.</p>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Sintaxis general</strong></p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis general</strong></p>
         </div>
         <pre><code>SELECT columna, grupo_funcion
 FROM   tabla
@@ -123,8 +123,8 @@ FROM   tabla
 [GROUP BY expresion]
 [ORDER BY columna];</code></pre>
 
-        <div class="box box--example">
-            <p class="main__text"><strong>Ejemplo:</strong> Contar clientes por tipo, solo aquellos cuyo apellido comienza con 'A', ordenados descendentemente.</p>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo:</strong> Contar clientes por tipo, solo aquellos cuyo apellido comienza con 'A', ordenados descendentemente.</p>
         </div>
         <pre><code>SELECT tipo, COUNT(*) AS cantidad
 FROM   cliente
@@ -132,23 +132,23 @@ WHERE  apellido LIKE 'A%'
 GROUP BY tipo
 ORDER BY tipo DESC;</code></pre>
 
-        <p class="main__text">Este query:</p>
-        <ul class="main__list">
-            <li class="main__list-item">Filtra clientes con apellido que empieza con 'A' (<code>WHERE</code>).</li>
-            <li class="main__list-item">Agrupa por <code>tipo</code> de cliente.</li>
-            <li class="main__list-item">Cuenta cuantos hay en cada grupo.</li>
-            <li class="main__list-item">Ordena de Z a A por tipo.</li>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Este query:</p>
+        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li >Filtra clientes con apellido que empieza con 'A' (<code>WHERE</code>).</li>
+            <li >Agrupa por <code>tipo</code> de cliente.</li>
+            <li >Cuenta cuantos hay en cada grupo.</li>
+            <li >Ordena de Z a A por tipo.</li>
         </ul>
 
-        <div class="box box--warning">
-            <p class="main__text"><strong>Error comun:</strong> Incluir una columna en SELECT que no esta en GROUP BY ni es funcion de grupo. PostgreSQL exige que <strong>toda columna no agregada en SELECT</strong> aparezca en GROUP BY (a menos que sea funcionalmente dependiente de la clave de agrupacion, caso que PostgreSQL maneja desde v9.1+).</p>
+        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Error comun:</strong> Incluir una columna en SELECT que no esta en GROUP BY ni es funcion de grupo. PostgreSQL exige que <strong>toda columna no agregada en SELECT</strong> aparezca en GROUP BY (a menos que sea funcionalmente dependiente de la clave de agrupacion, caso que PostgreSQL maneja desde v9.1+).</p>
         </div>
 
-        <h2 class="main__title">3. La Clausula HAVING</h2>
-        <p class="main__text">HAVING permite especificar que grupos seran mostrados en el resultado, funcionando como un <code>WHERE</code> pero para grupos. Se aplica <strong>despues</strong> de la agregacion, a diferencia de WHERE que filtra filas <strong>antes</strong> de agrupar.</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. La Clausula HAVING</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">HAVING permite especificar que grupos seran mostrados en el resultado, funcionando como un <code>WHERE</code> pero para grupos. Se aplica <strong>despues</strong> de la agregacion, a diferencia de WHERE que filtra filas <strong>antes</strong> de agrupar.</p>
 
-        <div class="box box--concept">
-            <p class="main__text"><strong>Sintaxis general</strong></p>
+        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis general</strong></p>
         </div>
         <pre><code>SELECT columna, grupo_funcion
 FROM   tabla
@@ -157,47 +157,47 @@ FROM   tabla
 [HAVING condicion_grupo]
 [ORDER BY columna];</code></pre>
 
-        <div class="box box--example">
-            <p class="main__text"><strong>Ejemplo:</strong> Clientes que han generado mas de 5 ordenes de pedido.</p>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo:</strong> Clientes que han generado mas de 5 ordenes de pedido.</p>
         </div>
         <pre><code>SELECT id_cliente, COUNT(*) AS total_ordenes
 FROM   orden_pedido
 GROUP BY id_cliente
 HAVING COUNT(*) > 5;</code></pre>
 
-        <div class="table-responsive">
-        <table class="table">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="table__tr">
-                    <th class="table__th">Clausula</th>
-                    <th class="table__th">Filtra</th>
-                    <th class="table__th">Momento de ejecucion</th>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Clausula</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Filtra</th>
+                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Momento de ejecucion</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="table__tr">
-                    <td class="table__td"><code>WHERE</code></td>
-                    <td class="table__td">Filas individuales</td>
-                    <td class="table__td">Antes de GROUP BY</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>WHERE</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Filas individuales</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Antes de GROUP BY</td>
                 </tr>
-                <tr class="table__tr">
-                    <td class="table__td"><code>HAVING</code></td>
-                    <td class="table__td">Grupos completos</td>
-                    <td class="table__td">Despues de GROUP BY</td>
+                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-4 text-slate-600 dark:text-slate-400"><code>HAVING</code></td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Grupos completos</td>
+                    <td class="p-4 text-slate-600 dark:text-slate-400">Despues de GROUP BY</td>
                 </tr>
             </tbody>
         </table>
         </div>
 
-        <div class="box box--note">
-            <p class="main__text"><strong>Regla practica:</strong> Usa <code>WHERE</code> para filtrar filas individuales (reduce el conjunto antes de agrupar, mejora rendimiento). Usa <code>HAVING</code> solo para condiciones sobre funciones de grupo (<code>COUNT(*) &gt; 5</code>, <code>AVG(salario) &gt; 5000</code>).</p>
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Regla practica:</strong> Usa <code>WHERE</code> para filtrar filas individuales (reduce el conjunto antes de agrupar, mejora rendimiento). Usa <code>HAVING</code> solo para condiciones sobre funciones de grupo (<code>COUNT(*) &gt; 5</code>, <code>AVG(salario) &gt; 5000</code>).</p>
         </div>
 
-        <h2 class="main__title">4. HAVING con Subconsultas</h2>
-        <p class="main__text">Se pueden usar subconsultas dentro de la clausula HAVING para condiciones de grupo mas sofisticadas.</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. HAVING con Subconsultas</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Se pueden usar subconsultas dentro de la clausula HAVING para condiciones de grupo mas sofisticadas.</p>
 
-        <div class="box box--example">
-            <p class="main__text"><strong>Ejemplo:</strong> Clientes cuyo numero de ordenes supera el promedio de ordenes de todos los clientes.</p>
+        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo:</strong> Clientes cuyo numero de ordenes supera el promedio de ordenes de todos los clientes.</p>
         </div>
         <pre><code>SELECT id_cliente, COUNT(*) AS total_ordenes
 FROM   orden_pedido
@@ -211,29 +211,29 @@ HAVING COUNT(*) > (
 -- La subconsulta calcula el promedio de ordenes por cliente
 -- Luego HAVING filtra solo los que estan por encima de ese promedio</code></pre>
 
-        <p class="main__text">Orden de ejecucion completo:</p>
-        <ol class="main__list">
-            <li class="main__list-item">Se ejecuta la subconsulta interna (<code>SELECT AVG(COUNT(*)) ...</code>).</li>
-            <li class="main__list-item">La consulta principal agrupa por <code>id_cliente</code>.</li>
-            <li class="main__list-item">Se aplica HAVING comparando cada grupo con el valor de la subconsulta.</li>
-            <li class="main__list-item">Se retornan solo los grupos que cumplen la condicion.</li>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Orden de ejecucion completo:</p>
+        <ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+            <li >Se ejecuta la subconsulta interna (<code>SELECT AVG(COUNT(*)) ...</code>).</li>
+            <li >La consulta principal agrupa por <code>id_cliente</code>.</li>
+            <li >Se aplica HAVING comparando cada grupo con el valor de la subconsulta.</li>
+            <li >Se retornan solo los grupos que cumplen la condicion.</li>
         </ol>
 
-        <span class="tag">Agregaciones</span>
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Agregaciones</span>
 
-        <section class="architect-insight">
-            <h4 class="main__title--sub">Insight del Arquitecto</h4>
-            <p class="main__text">En PostgreSQL, GROUP BY tambien acepta numero de columna (<code>GROUP BY 1, 2</code>) y expresiones complejas (<code>GROUP BY DATE_TRUNC('month', fecha)</code>). Para analitica avanzada, combina GROUP BY con <code>FILTER (WHERE condicion)</code> para agregaciones condicionales sin subconsultas. Siempre revisa el plan de ejecucion: un <code>HashAggregate</code> eficiente es senal de que PostgreSQL esta optimizando bien tus grupos.</p>
+        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto</h4>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En PostgreSQL, GROUP BY tambien acepta numero de columna (<code>GROUP BY 1, 2</code>) y expresiones complejas (<code>GROUP BY DATE_TRUNC('month', fecha)</code>). Para analitica avanzada, combina GROUP BY con <code>FILTER (WHERE condicion)</code> para agregaciones condicionales sin subconsultas. Siempre revisa el plan de ejecucion: un <code>HashAggregate</code> eficiente es senal de que PostgreSQL esta optimizando bien tus grupos.</p>
         </section>
 
-        <div class="canvas-container">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
             <canvas id="canvas_11" width="800" height="360"></canvas>
-            <div id="controls_11" class="canvas-controls"></div>
+            <div id="controls_11" class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800"></div>
         </div>
 
-        <nav class="nav">
-            <a href="index.html" class="nav__link">Volver al Indice</a>
-            <a href="semana_12.html" class="nav__link">Siguiente Semana</a>
+        <nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+            <a href="index.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Volver al Indice</a>
+            <a href="semana_12.html" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow">Siguiente Semana</a>
         </nav>
     </main>
 </div>
