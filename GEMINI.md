@@ -72,6 +72,7 @@ El proyecto utiliza una versión adaptada de la base de datos **Northwind** para
 - **Limpieza de Encoding:** Todos los archivos TXT e HTML fueron normalizados a UTF-8 sin BOM.
 - **Correcciones de Diseño:** Se re-codificaron a UTF-8 los archivos complementarios `extra_*.html` resolviendo problemas de decodificación y eliminando caracteres huérfanos.
 - **Fixes de Formato:** Se repararon líneas pegadas detectadas en la auditoría final (`Clase_10.txt`, `Clase_11.txt`, `Script_Ejemplo_Warehouse.txt`).
+- **OCR y Sincronización Completa (2026-06-26):** Se completó la transcripción con Gemini Flash Lite para los archivos restantes (`Clase_09`, `Clase_10`, `Clase_11`, `Clase_12`, `Clase_15`) y se sincronizó todo su contenido de manera responsiva en los archivos HTML correspondientes (Semanas 09-15), manteniendo el diseño estético de Tailwind CSS y el formato de apuntes Cornell.
 
 ---
 *Mantenido por el Senior Data Solutions Architect.*
