@@ -52,3 +52,11 @@ psql -h localhost -U postgres -d northwind -c "SELECT ..."
 
 Use Ollama + GLM-OCR for PDF→TXT transcription when needed. See `prompt.md` Fase 1b for the full workflow.
 
+## Academia & Profesor Personas (added 2026-06-26)
+
+For auditing, expanding, and optimizing the HTML notes content, follow the multi-role personas framework defined in [EQUIPO_DOCENTES.md](file:///C:/Users/LJCR/Documents/GitHub/ApuntesSQL/EQUIPO_DOCENTES.md). These include:
+- **Data Architect Persona:** Enriches database theory, checks books (Date, Silberschatz, etc.), adds diagrams.
+- **Cloud Database Engineer Persona:** Adds cloud-native context (AWS, RDS, Docker), performance observation (EXPLAIN ANALYZE), compatibility.
+- **Web Designer Persona:** Enhances styling with Tailwind CSS v4, dark mode colors, responsive layout, animations, cards.
+- **Formato de Cierre:** Ensures each week ends with "Tips del Profesor" and "Autoevaluación y Ejercicios" (with collapsible answers).
+
