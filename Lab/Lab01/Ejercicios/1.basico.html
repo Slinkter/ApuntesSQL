@@ -256,20 +256,124 @@
             font-size: inherit !important;
         }
 
-        /* Mermaid blocks responsive */
-        .mermaid-container {
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background-color: var(--code-bg);
+        /* Pure HTML Flowchart styling (Replacing Mermaid) */
+        .pure-html-flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1.5rem 1rem;
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            background-color: var(--code-bg);
         }
 
-        .mermaid {
+        .flow-node {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-align: center;
+            border: 1px solid var(--border);
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            min-width: 200px;
+            max-width: 100%;
+        }
+
+        .flow-node-step {
+            border-left: 4px solid var(--primary);
+        }
+
+        .flow-node-decision {
+            border-left: 4px solid var(--accent);
+            background-color: rgba(255, 51, 51, 0.04);
+        }
+
+        .flow-arrow-vertical {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin: 0.5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: 700;
+        }
+        
+        .arrow-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }
+
+        .flow-branches-wrapper {
             display: flex;
             justify-content: center;
+            gap: 1.5rem;
+            width: 100%;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .flow-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .branch-label {
+            font-size: 0.7rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.1rem 0.4rem;
+            margin-top: 0.1rem;
+            font-weight: 700;
+        }
+
+        /* Pure HTML Sequence Diagram styling */
+        .pure-html-sequence {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            background-color: var(--code-bg);
+        }
+
+        .seq-step {
+            border-left: 2px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seq-actors {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .seq-message {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .seq-note {
+            font-size: 0.85rem;
+            font-style: italic;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            color: var(--text-muted);
+        }
+        
+        .seq-note-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
         }
 
         /* Callout Boxes */
@@ -293,7 +397,7 @@
         }
 
         .callout-analogy {
-            background-color: rgba(192, 108, 84, 0.08); /* Accent transparent */
+            background-color: rgba(255, 51, 51, 0.04);
             border-color: var(--accent);
             color: var(--text-main);
         }
@@ -333,9 +437,10 @@
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El motor de PostgreSQL ejecuta la cláusula <code>FROM</code> para localizar la tabla <code>employees</code> en el catálogo y mapear sus páginas físicas (bloques de 8 KB) en el heap. La proyección <code>SELECT</code> con columnas específicas reduce el ancho de la tupla (<code>tuple width</code>) en los buffers de <code>shared_buffers</code>. Al evitar <code>SELECT <em></code>, se minimiza la transferencia de datos desde disco a memoria y se habilita la posibilidad de un </em>Index-Only Scan* si existiera un índice de cobertura.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    Disk["Disco (Páginas 8 KB Heap)"] -->|Seq Scan| SB["shared_buffers (RAM)"]
-    SB -->|Proyección selectiva| Output["employee_id | last_name | first_name | title"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">Disco (Páginas 8 KB Heap)</div>
+<div class="flow-node flow-node-step">shared_buffers (RAM)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Proyección selectiva</span></div><div class="flow-node flow-node-step">employee_id | last_name | first_name | title</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     employee_id,
@@ -350,10 +455,13 @@ FROM employees;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El predicado <code>WHERE unit_price &gt; 30</code> filtra las tuplas después de la fase <code>FROM</code>. PostgreSQL evalúa este filtro en la CPU durante un <em>Sequential Scan</em> o, si existe un índice B-Tree en <code>unit_price</code>, mediante un <em>Index Range Scan</em>. El optimizador utiliza las estadísticas de la columna (<code>n_distinct</code>, <code>most_common_vals</code>) para estimar la selectividad del predicado y elegir el plan más barato.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    P["products (Heap)"] -->|Seq Scan| Filter{"unit_price > 30"}
-    Filter -->|TRUE| Project["Proyectar: product_name | unit_price"]
-    Filter -->|FALSE| Drop["Descartar tupla"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products (Heap)</div>
+<div class="flow-node flow-node-step">unit_price > 30</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">TRUE</span></div><div class="flow-node flow-node-step">Proyectar: product_name | unit_price</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">FALSE</span></div><div class="flow-node flow-node-step">Descartar tupla</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     product_name,
@@ -367,12 +475,13 @@ WHERE unit_price &gt; 30;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>ORDER BY order_date DESC</code> fuerza a PostgreSQL a ordenar el conjunto resultante después de la proyección. Si no existe un índice B-Tree en <code>order_date</code>, el motor asigna memoria en <code>work_mem</code> para realizar un <em>QuickSort</em> en memoria. Si el volumen de datos excede <code>work_mem</code>, el motor deriva el ordenamiento a disco usando <em>External Merge Sort</em>, degradando el rendimiento.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O["orders"] -->|Filtro + Proyección| Sort["work_mem: QuickSort"]
-    Sort -->|¿Cabe en work_mem?| Mem["Ordenamiento en RAM"]
-    Sort -->|¿Excede work_mem?| Disk["External Merge Sort en disco temporal"]
-    Mem --> Output["Resultado ordenado DESC"]
-    Disk --> Output</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">work_mem: QuickSort</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">¿Cabe en work_mem?</span></div><div class="flow-node flow-node-step">Ordenamiento en RAM</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado ordenado DESC</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">¿Excede work_mem?</span></div><div class="flow-node flow-node-step">External Merge Sort en disco temporal</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado ordenado DESC</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     order_id,
@@ -387,9 +496,10 @@ ORDER BY order_date DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La directiva <code>NULLS LAST</code> instruye a PostgreSQL a posicionar los valores nulos al final del conjunto ordenado, independientemente de la dirección <code>ASC</code> o <code>DESC</code>. Por defecto, PostgreSQL trata los nulos como valores más grandes (<code>NULLS LAST</code> en <code>ASC</code>, <code>NULLS FIRST</code> en <code>DESC</code>). Especificarlo explícitamente evita ambigüedades en reportes financieros.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    Raw["orders (freight)"] -->|ORDER BY freight DESC NULLS LAST| Sort["Ordenar: nulos al final"]
-    Sort --> Out["freight ordenado | sin contaminación de NULL"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders (freight)</div>
+<div class="flow-node flow-node-step">Ordenar: nulos al final</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">freight ordenado | sin contaminación de NULL</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     order_id,
@@ -404,9 +514,10 @@ ORDER BY freight DESC NULLS LAST;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LIMIT 5</code> combinado con <code>ORDER BY</code> activa el optimizador <em>Top-N Heap Sort</em> en PostgreSQL. En lugar de ordenar el conjunto completo, el motor mantiene una estructura de montículo (heap) de tamaño 5 en <code>work_mem</code>, insertando cada tupla y descartando la de menor prioridad. Esto reduce drásticamente el uso de memoria y evita el ordenamiento completo.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    P["products"] -->|Scan secuencial| TopN["Top-N Heap (tamaño 5 en work_mem)"]
-    TopN -->|Retener solo 5 más caros| Out["5 productos con mayor unit_price"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">Top-N Heap (tamaño 5 en work_mem)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Retener solo 5 más caros</span></div><div class="flow-node flow-node-step">5 productos con mayor unit_price</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     product_name,
@@ -421,10 +532,10 @@ LIMIT 5;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LIMIT 10 OFFSET 20</code> fuerza al motor a generar y descartar internamente las primeras 20 tuplas ordenadas. El optimizador de PostgreSQL aplica <em>Top-N</em> solo si no hay <code>OFFSET</code>. Con <code>OFFSET</code>, el motor debe contar y saltar físicamente las filas antes de devolver las siguientes, lo que es ineficiente para valores altos de <code>OFFSET</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    Orders["orders ORDER BY order_date"] -->|Saltar primeras 20| Offset["OFFSET 20"]
-    Offset -->|Extraer siguientes 10| Limit["LIMIT 10"]
-    Limit --> Out["Página 3 de pedidos (10 registros)"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders ORDER BY order_date</div>
+<div class="flow-node flow-node-step">OFFSET 20</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Extraer siguientes 10</span></div><div class="flow-node flow-node-step">LIMIT 10</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Página 3 de pedidos (10 registros)</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     order_id,
@@ -440,10 +551,10 @@ LIMIT 10 OFFSET 20;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La expresión <code>country IN ('Germany', 'UK', 'USA')</code> es reescrita internamente por el optimizador como <code>country = 'Germany' OR country = 'UK' OR country = 'USA'</code>. PostgreSQL evalúa la lista de constantes y, si existe un índice B-Tree en <code>country</code>, realiza múltiples <em>Index Scans</em> (Bitmap Index Scan) combinando los mapas de bits mediante OR.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    C["customers"] -->|Índice en country?| Index["Bitmap Index Scan"]
-    Index -->|Combinar mapas de bits| Bitmap["Bitmap OR (Germany | UK | USA)"]
-    Bitmap -->|Tuplas correspondientes| Out["Clientes de los 3 países"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">Bitmap Index Scan</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Combinar mapas de bits</span></div><div class="flow-node flow-node-step">Bitmap OR (Germany | UK | USA)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Tuplas correspondientes</span></div><div class="flow-node flow-node-step">Clientes de los 3 países</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     customer_id,
@@ -459,10 +570,10 @@ ORDER BY country, company_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>BETWEEN 15 AND 75</code> es reescrito como <code>unit_price &gt;= 15 AND unit_price &lt;= 75</code>. Con un índice B-Tree en <code>unit_price</code>, PostgreSQL ejecuta un <em>Index Range Scan</em>, localizando la primera hoja del índice con valor 15 y recorriendo las hojas enlazadas hasta alcanzar el valor 75. La complejidad es logarítmica en la búsqueda inicial y lineal en el recorrido.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    BTree["B-Tree (unit_price)"] -->|Buscar 15| Start["Nodo hoja: 15"]
-    Start -->|Recorrer hojas enlazadas| Range["→ 20 → 35 → 50 → 75"]
-    Range -->|Fetch de tuplas| Out["productos con precio entre 15 y 75"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">B-Tree (unit_price)</div>
+<div class="flow-node flow-node-step">Nodo hoja: 15</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Recorrer hojas enlazadas</span></div><div class="flow-node flow-node-step">→ 20 → 35 → 50 → 75</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Fetch de tuplas</span></div><div class="flow-node flow-node-step">productos con precio entre 15 y 75</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     product_id,
@@ -478,10 +589,13 @@ ORDER BY unit_price;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La comparación <code>order_date &lt; '1997-01-01'</code> es un filtro de rango sobre una columna de tipo <code>date</code>. PostgreSQL almacena las fechas como enteros de 4 bytes (días desde la época 2000-01-01). La comparación se realiza a nivel de CPU como una operación entera. Si existe un índice B-Tree en <code>order_date</code>, el optimizador lo utiliza para un <em>Index Range Scan</em>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O["orders"] -->|Seq Scan o Index Scan| Filter{"order_date < '1997-01-01'"}
-    Filter -->|TRUE| Project["order_id | customer_id | order_date"]
-    Filter -->|FALSE| Skip["Omitir"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">order_date < '1997-01-01'</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">TRUE</span></div><div class="flow-node flow-node-step">order_id | customer_id | order_date</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">FALSE</span></div><div class="flow-node flow-node-step">Omitir</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     order_id,
@@ -497,10 +611,10 @@ ORDER BY order_date;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La combinación <code>WHERE hire_date &gt;= '1993-01-01' ORDER BY hire_date ASC LIMIT 10</code> ejecuta un <em>Top-N Heap Sort</em> filtrado. El optimizador aplica primero el predicado de fecha, reduciendo el conjunto a ordenar, y luego mantiene solo las 10 fechas más tempranas. La presencia de un índice en <code>hire_date</code> permite un <em>Index Scan</em> directo sin necesidad de ordenamiento posterior.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    E["employees"] -->|Filtro: hire_date >= 1993| Filtered["Empleados desde 1993"]
-    Filtered -->|ORDER BY + Top 10| TopN["Top-N Heap (10)"]
-    TopN --> Out["10 empleados más recientes"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees</div>
+<div class="flow-node flow-node-step">Empleados desde 1993</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">ORDER BY + Top 10</span></div><div class="flow-node flow-node-step">Top-N Heap (10)</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">10 empleados más recientes</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     employee_id,
@@ -518,10 +632,13 @@ LIMIT 10;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El operador <code>LIKE '%Sales%'</code> contiene un comodín inicial, lo que impide el uso de un índice B-Tree estándar. PostgreSQL fuerza un <em>Sequential Scan</em> sobre toda la tabla <code>customers</code>, evaluando el patrón en cada tupla mediante una expresión regular simplificada. Para optimizar esta búsqueda, sería necesario un índice GIN con el módulo <code>pg_trgm</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    C["customers"] -->|Seq Scan forzado| Filter["contact_title LIKE '%Sales%'"]
-    Filter -->|Coincide| Accept["Proyectar: company_name | contact_name"]
-    Filter -->|No coincide| Reject["Descartar"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">contact_title LIKE '%Sales%'</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Coincide</span></div><div class="flow-node flow-node-step">Proyectar: company_name | contact_name</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No coincide</span></div><div class="flow-node flow-node-step">Descartar</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     company_name,
@@ -537,10 +654,10 @@ ORDER BY company_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El patrón <code>LIKE 'C%'</code> tiene un comodín solo al final, lo que permite a PostgreSQL utilizar un <em>Index Range Scan</em> sobre un índice B-Tree en <code>product_name</code>. El motor busca en el índice el primer valor mayor o igual a <code>'C'</code> y menor que <code>'D'</code>, recorriendo las hojas del índice y accediendo al heap solo para las tuplas que cumplen.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    BTree["B-Tree (product_name)"] -->|Range: C ≤ x < D| RangeScan["Index Range Scan"]
-    RangeScan -->|Fetch por TID| Heap["Páginas del Heap"]
-    Heap --> Out["Productos que inician con C"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">B-Tree (product_name)</div>
+<div class="flow-node flow-node-step">Index Range Scan</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Fetch por TID</span></div><div class="flow-node flow-node-step">Páginas del Heap</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Productos que inician con C</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     product_id,
@@ -556,10 +673,13 @@ ORDER BY product_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>ILIKE '%manager%'</code> realiza una búsqueda case-insensitive. PostgreSQL implementa <code>ILIKE</code> como una llamada a la función <code>lower()</code> sobre ambos operandos antes de la comparación. Al igual que <code>LIKE</code> con comodín inicial, fuerza un <em>Sequential Scan</em>. La función <code>lower(product_name)</code> impide el uso de índices B-Tree a menos que exista un índice funcional <code>CREATE INDEX ON employees(LOWER(title))</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    E["employees"] -->|Seq Scan obligatorio| Lower["Aplicar LOWER(title) y LOWER('manager')"]
-    Lower -->|ILIKE match| Accept["Proyectar: nombre | title"]
-    Lower -->|No match| Reject["Descartar"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees</div>
+<div class="flow-node flow-node-step">Aplicar LOWER(title) y LOWER('manager')</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">ILIKE match</span></div><div class="flow-node flow-node-step">Proyectar: nombre | title</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No match</span></div><div class="flow-node flow-node-step">Descartar</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     employee_id,
@@ -574,10 +694,13 @@ WHERE title ILIKE '%manager%';</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>region IS NULL</code> evalúa el <em>null bitmap</em> de cada tupla en la cabecera del registro físico. PostgreSQL no necesita leer el valor completo de la columna; consulta directamente el mapa de bits de nulos en el encabezado de la tupla (HeapTupleHeaderData). Esto hace que la evaluación sea extremadamente rápida, independientemente del tamaño de la columna.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    Tuple["Tupla en shared_buffers"] -->|Leer Null Bitmap| Bitmap{"Bit de región activo?"}
-    Bitmap -->|Sí (es NULL)| Accept["Incluir en resultados"]
-    Bitmap -->|No (tiene valor)| Reject["Descartar"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">Tupla en shared_buffers</div>
+<div class="flow-node flow-node-decision">Bit de región activo?</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Sí (es NULL)</span></div><div class="flow-node flow-node-step">Incluir en resultados</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No (tiene valor)</span></div><div class="flow-node flow-node-step">Descartar</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     customer_id,
@@ -593,10 +716,13 @@ WHERE region IS NULL;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>units_in_stock IS NOT NULL</code> filtra las tuplas donde la columna tiene un valor definido. Internamente, PostgreSQL verifica el <em>null bitmap</em> para confirmar que la columna tiene un valor almacenado. A diferencia de otros operadores, <code>IS NOT NULL</code> no puede utilizar un índice B-Tree de forma tradicional (aunque un índice parcial <code>WHERE units_in_stock IS NOT NULL</code> sí sería útil).</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    P["products"] -->|Seq Scan| Check{"units_in_stock IS NOT NULL"}
-    Check -->|TRUE| Out["product_name | units_in_stock"]
-    Check -->|FALSE| Skip["Omitir"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">units_in_stock IS NOT NULL</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">TRUE</span></div><div class="flow-node flow-node-step">product_name | units_in_stock</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">FALSE</span></div><div class="flow-node flow-node-step">Omitir</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     product_name,
@@ -611,10 +737,13 @@ ORDER BY units_in_stock DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La condición <code>country = 'USA' OR country = 'Canada'</code> es evaluada por PostgreSQL usando cortocircuito lógico: si la primera condición es TRUE, la segunda no se evalúa. El optimizador puede convertir esta disyunción en un <em>BitmapOr</em> si existen índices, combinando los mapas de bits de ambos valores.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    C["customers"] -->|Escanear| OR{"country = 'USA' OR country = 'Canada'"}
-    OR -->|TRUE| Accept["Proyectar: customer_id | company_name"]
-    OR -->|FALSE| Reject["Descartar"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">country = 'USA' OR country = 'Canada'</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">TRUE</span></div><div class="flow-node flow-node-step">Proyectar: customer_id | company_name</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">FALSE</span></div><div class="flow-node flow-node-step">Descartar</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     customer_id,
@@ -632,10 +761,13 @@ ORDER BY country, company_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>NOT discontinued = 1</code> o <code>discontinued &lt;&gt; 1</code> evalua la negación lógica. PostgreSQL aplica el filtro invirtiendo el predicado. Si <code>discontinued</code> tiene un índice B-Tree, el motor puede usar un <em>Bitmap Index Scan</em> excluyendo el valor <code>1</code>. Sin embargo, la negación suele ser menos selectiva que la afirmación equivalente.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    P["products"] -->|Filtro| Not{"discontinued <> 1"}
-    Not -->|TRUE (activo)| Accept["product_id | product_name"]
-    Not -->|FALSE (descontinuado)| Reject["Descartar"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">discontinued <> 1</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">TRUE (activo)</span></div><div class="flow-node flow-node-step">product_id | product_name</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">FALSE (descontinuado)</span></div><div class="flow-node flow-node-step">Descartar</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     product_id,
@@ -652,12 +784,16 @@ ORDER BY product_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La combinación de predicados con <code>AND</code> (<code>unit_price &gt; 20 AND units_in_stock &gt; 50</code>) permite a PostgreSQL usar un <em>Index Scan</em> compuesto si existe un índice multicolumna en <code>(unit_price, units_in_stock)</code>. El motor evalúa primero el predicado más selectivo, minimizando el número de tuplas a verificar para el segundo predicado.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    P["products"] -->|Filtro AND| Price{"unit_price > 20"}
-    Price -->|TRUE| Stock{"units_in_stock > 50"}
-    Stock -->|TRUE| Accept["product_name | precio | stock"]
-    Stock -->|FALSE| Reject
-    Price -->|FALSE| Reject</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">unit_price > 20</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">TRUE</span></div><div class="flow-node flow-node-step">units_in_stock > 50</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">TRUE</span></div><div class="flow-node flow-node-step">product_name | precio | stock</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">FALSE</span></div><div class="flow-node flow-node-step">Reject</div></div>
+</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">FALSE</span></div><div class="flow-node flow-node-step">Reject</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     product_name,
@@ -674,10 +810,13 @@ ORDER BY unit_price DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>shipped_date &gt; required_date</code> combina la verificación de no nulo implícito (una fecha debe existir para ser comparada) con una comparación de rangos. PostgreSQL aplica un filtro de desigualdad sobre dos columnas de la misma tupla, evaluando tupla por tupla en la CPU. Si existen índices separados en ambas columnas, el optimizador podría usar un <em>Bitmap Scan</em> combinado.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O["orders"] -->|Seq Scan| Compare{"shipped_date > required_date"}
-    Compare -->|TRUE (retraso)| Accept["order_id | retraso en días"]
-    Compare -->|FALSE (a tiempo)| Reject["Descartar"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">shipped_date > required_date</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">TRUE (retraso)</span></div><div class="flow-node flow-node-step">order_id | retraso en días</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">FALSE (a tiempo)</span></div><div class="flow-node flow-node-step">Descartar</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     order_id,
@@ -694,12 +833,16 @@ ORDER BY shipped_date;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La combinación de <code>AND</code> y <code>NOT</code> se evalúa en orden ascendente de dificultad. PostgreSQL primero aplica el filtro de fecha (rangos indexables) y luego aplica la negación geográfica. Si existe un índice compuesto en <code>(hire_date, country)</code>, el motor lo utiliza para un <em>Index Scan</em> de rango con filtro adicional.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    E["employees"] -->|Filtro fecha| Hire{"hire_date BETWEEN 1990 AND 1999"}
-    Hire -->|TRUE| Country{"country <> 'USA'"}
-    Country -->|TRUE| Accept["employee_id | nombre | país"]
-    Country -->|FALSE| Reject
-    Hire -->|FALSE| Reject</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees</div>
+<div class="flow-node flow-node-step">hire_date BETWEEN 1990 AND 1999</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">TRUE</span></div><div class="flow-node flow-node-step">country <> 'USA'</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">TRUE</span></div><div class="flow-node flow-node-step">employee_id | nombre | país</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">FALSE</span></div><div class="flow-node flow-node-step">Reject</div></div>
+</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">FALSE</span></div><div class="flow-node flow-node-step">Reject</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     employee_id,
@@ -718,9 +861,10 @@ ORDER BY hire_date;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>DISTINCT country</code> elimina duplicados del conjunto de resultados. PostgreSQL implementa <code>DISTINCT</code> mediante <em>HashAggregate</em> (construye una tabla hash en <code>work_mem</code> con los valores únicos) o <em>Unique</em> (requiere que los datos estén preordenados). Para baja cardinalidad como <code>country</code>, <em>HashAggregate</em> es óptimo ya que la tabla hash cabe completamente en <code>work_mem</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    C["customers (country)"] -->|Escanear todas las tuplas| Hash["HashAggregate en work_mem"]
-    Hash -->|Clave única por país| Out["Lista de países sin repetición"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers (country)</div>
+<div class="flow-node flow-node-step">HashAggregate en work_mem</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Clave única por país</span></div><div class="flow-node flow-node-step">Lista de países sin repetición</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT DISTINCT
     country
@@ -733,9 +877,10 @@ ORDER BY country;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>GROUP BY country</code> con <code>COUNT(<em>)</code> ejecuta una agregación. PostgreSQL selecciona entre </em>HashAggregate<em> (cada grupo se inserta en una tabla hash) y </em>GroupAggregate<em> (ordena primero y agrupa secuencialmente). Si <code>work_mem</code> es suficiente para la tabla hash, </em>HashAggregate* es O(n). En caso contrario, se fuerza un ordenamiento en disco.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    C["customers"] -->|Escanear| HashAgg["HashAggregate (country → COUNT)"]
-    HashAgg -->|Emitir grupos| Out["país | total_clientes"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">HashAggregate (country → COUNT)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Emitir grupos</span></div><div class="flow-node flow-node-step">país | total_clientes</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     country,
@@ -750,10 +895,10 @@ ORDER BY total_clientes DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>SUM(unit_price <em> units_in_stock)</code> evalúa una expresión aritmética en cada tupla y acumula el resultado. PostgreSQL ejecuta un </em>Sequential Scan* sobre <code>products</code>, multiplicando dos columnas numéricas (numeric × smallint) en la CPU, y mantiene un acumulador de 128 bits para la suma. La precisión <code>numeric</code> evita errores de redondeo en operaciones financieras.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    P["products"] -->|Por cada tupla| Mult["unit_price × units_in_stock"]
-    Mult -->|Acumular| Acc["Acumulador SUM"]
-    Acc --> Out["Valorización total del inventario"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">unit_price × units_in_stock</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Acumular</span></div><div class="flow-node flow-node-step">Acumulador SUM</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Valorización total del inventario</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     SUM(unit_price * units_in_stock) AS valorizacion_total
@@ -765,10 +910,10 @@ FROM products;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>AVG(unit_price)</code> mantiene dos variables de estado internas durante el escaneo: suma acumulada (<code>sum</code>) y contador de tuplas no nulas (<code>count</code>). Al finalizar el escaneo, divide <code>sum / count</code>. Los valores <code>NULL</code> en <code>unit_price</code> son ignorados automáticamente por la función <code>AVG</code> según el estándar ANSI SQL.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    P["products"] -->|Escanear y agregar| State["sum += unit_price | count += 1"]
-    State -->|Fin de escaneo| Div["sum / count"]
-    Div --> Out["Precio promedio del catálogo"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">sum += unit_price | count += 1</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Fin de escaneo</span></div><div class="flow-node flow-node-step">sum / count</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Precio promedio del catálogo</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     ROUND(AVG(unit_price)::numeric, 2) AS precio_promedio
@@ -780,11 +925,10 @@ FROM products;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>MIN(unit_price)</code> y <code>MAX(unit_price)</code> son agregaciones que, en lugar de escanear todas las tuplas, pueden beneficiarse de un índice B-Tree. PostgreSQL puede obtener el valor mínimo y máximo leyendo la primera y última hoja del índice respectivamente, sin tocar el heap. Esto reduce el costo de E/S de O(n) a O(log n).</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    BTree["B-Tree (unit_price)"] -->|Primera hoja| Min["Mínimo: 2.50"]
-    BTree -->|Última hoja| Max["Máximo: 263.50"]
-    Min --> Out["Rango de precios del catálogo"]
-    Max --> Out</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">B-Tree (unit_price)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Última hoja</span></div><div class="flow-node flow-node-step">Máximo: 263.50</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Rango de precios del catálogo</div>
+<div class="flow-node flow-node-step">Mínimo: 2.50</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Rango de precios del catálogo</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     MIN(unit_price) AS precio_minimo,
@@ -798,10 +942,10 @@ FROM products;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>SUM(quantity <em> unit_price </em> (1 - discount))</code> realiza una operación aritmética de tres términos sobre <code>order_details</code>. PostgreSQL escanea la tabla aplicando la expresión a cada tupla y acumulando el resultado. El tipo <code>numeric</code> garantiza precisión exacta en el cálculo financiero del descuento.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    OD["order_details"] -->|Por tupla| Calc["quantity × unit_price × (1 - discount)"]
-    Calc -->|Agrupar por producto| Group["GROUP BY product_id"]
-    Group -->|SUM acumulado| Out["Ingreso total por producto"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">order_details</div>
+<div class="flow-node flow-node-step">quantity × unit_price × (1 - discount)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Agrupar por producto</span></div><div class="flow-node flow-node-step">GROUP BY product_id</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">SUM acumulado</span></div><div class="flow-node flow-node-step">Ingreso total por producto</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     product_id,
@@ -816,9 +960,10 @@ ORDER BY ingreso_total DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>COUNT(*) FILTER (WHERE freight &gt; 200)</code> es una extensión PostgreSQL que permite agregación condicional sin subconsultas ni <code>CASE</code>. El motor evalúa el <code>FILTER</code> como una condición booleana durante la agregación: incrementa el contador solo si la condición es TRUE. Esto evita escanear la tabla múltiples veces.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O["orders"] -->|Scan único| Agg["COUNT(*) con FILTER condicional"]
-    Agg -->|Solo suma si freight > 200| Out["Total pedidos | pedidos con flete > 200"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">COUNT(*) con FILTER condicional</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Solo suma si freight > 200</span></div><div class="flow-node flow-node-step">Total pedidos | pedidos con flete > 200</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     COUNT(*) AS total_pedidos,
@@ -831,10 +976,10 @@ FROM orders;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>AVG(freight) FILTER (WHERE EXTRACT(YEAR FROM order_date) = 1997)</code> permite calcular promedios condicionales en un solo pase de la tabla. <code>EXTRACT(YEAR FROM order_date)</code> convierte la fecha a entero en la CPU. El motor mantiene múltiples estados de agregación simultáneamente (uno por cada combinación de <code>FILTER</code>).</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    O["orders"] -->|Un solo escaneo| State["Estado SUM/COUNT por año"]
-    State -->|Aislar 1997| Div["AVG 1997 = SUM(freight_1997) / COUNT_1997"]
-    Div --> Out["Flete promedio del año 1997"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">Estado SUM/COUNT por año</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Aislar 1997</span></div><div class="flow-node flow-node-step">AVG 1997 = SUM(freight_1997) / COUNT_1997</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Flete promedio del año 1997</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     ROUND(AVG(freight) FILTER (WHERE EXTRACT(YEAR FROM order_date) = 1996)::numeric, 2) AS flete_promedio_1996,
@@ -848,9 +993,10 @@ FROM orders;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>COUNT(territory_id) FILTER (WHERE territory_id IS NOT NULL)</code> combina agregación con filtro condicional. PostgreSQL escanea <code>employee_territories</code> una sola vez, agrupa por <code>employee_id</code> aplicando el filtro, y emite el conteo. Si la tabla tiene un índice compuesto en <code>(employee_id, territory_id)</code>, el motor puede usar un <em>Index-Only Scan</em> para evitar leer el heap.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    ET["employee_territories"] -->|GROUP BY employee_id| Agg["COUNT con FILTER condicional"]
-    Agg -->|Por empleado| Out["employee_id | total_territorios"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employee_territories</div>
+<div class="flow-node flow-node-step">COUNT con FILTER condicional</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Por empleado</span></div><div class="flow-node flow-node-step">employee_id | total_territorios</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     employee_id,
@@ -866,9 +1012,10 @@ ORDER BY total_territorios DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La combinación de múltiples <code>FILTER</code> en una sola consulta permite calcular <code>COUNT</code>, <code>MIN</code>, <code>MAX</code>, <code>AVG</code> condicionales en un único escaneo de tabla. PostgreSQL ejecuta un <em>HashAggregate</em> sobre <code>category_id</code> y mantiene acumuladores separados para cada condición <code>FILTER</code>, maximizando la eficiencia del plan de ejecución.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    P["products"] -->|Un escaneo + HashAggregate| Filters["COUNT FILTER | AVG FILTER | MIN FILTER"]
-    Filters -->|Por categoría| Out["category_id | stats condicionales"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">COUNT FILTER | AVG FILTER | MIN FILTER</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Por categoría</span></div><div class="flow-node flow-node-step">category_id | stats condicionales</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     category_id,
@@ -886,11 +1033,11 @@ ORDER BY category_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>INNER JOIN orders o ON o.customer_id = c.customer_id</code> cruza dos tablas por una clave foránea. El optimizador selecciona el algoritmo de unión basado en estadísticas: si <code>customers</code> es pequeña, usa <em>Hash Join</em> (construye tabla hash de customers en <code>work_mem</code>); si ambas son grandes, usa <em>Merge Join</em> tras ordenar por la clave. PostgreSQL estima cardinalidades usando el muestreo de <code>pg_class</code> y <code>pg_statistic</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    C["customers (dim)"] -->|Hash Table en work_mem| HT["Hash (customer_id)"]
-    O["orders (fact)"] -->|Sondear| HT
-    HT -->|Coincidencia| Join["Filas combinadas"]
-    Join --> Out["order_id | company_name | order_date"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers (dim)</div>
+<div class="flow-node flow-node-step">Hash (customer_id)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Coincidencia</span></div><div class="flow-node flow-node-step">Filas combinadas</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">order_id | company_name | order_date</div>
+<div class="flow-node flow-node-step">orders (fact)</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     o.order_id,
@@ -908,10 +1055,10 @@ LIMIT 20;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>INNER JOIN categories c ON p.category_id = c.category_id</code> cruza la tabla transaccional <code>products</code> con la dimensión <code>categories</code>. <code>category_id</code> es clave primaria indexada en <code>categories</code>, por lo que PostgreSQL usa un <em>Nested Loop Join</em> con un <em>Index Scan</em> en la PK de categories. La pequeña cardinalidad de <code>categories</code> (8 filas) hace que el índice quepa completamente en caché.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    P["products (Seq Scan)"] -->|Por cada producto| NL["Nested Loop"]
-    NL -->|Index Scan en PK| C["categories (B-Tree)"]
-    C -->|Tupla devuelta| Out["product_name + category_name"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products (Seq Scan)</div>
+<div class="flow-node flow-node-step">Nested Loop</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Index Scan en PK</span></div><div class="flow-node flow-node-step">categories (B-Tree)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Tupla devuelta</span></div><div class="flow-node flow-node-step">product_name + category_name</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     p.product_id,
@@ -928,10 +1075,11 @@ ORDER BY p.product_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>INNER JOIN employees e ON o.employee_id = e.employee_id</code> empareja <code>orders</code> (FK <code>employee_id</code>) con <code>employees</code> (PK <code>employee_id</code>). Dado que <code>employee_id</code> es <code>smallint</code>, la comparación es extremadamente rápida a nivel de CPU. El planificador puede elegir <em>Hash Join</em> si la tabla de empleados cabe en <code>work_mem</code>, o <em>Nested Loop</em> con <em>Index Scan</em> en la PK.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    O["orders (FK employee_id)"] -->|Cruzar por entero| Join["INNER JOIN"]
-    E["employees (PK employee_id)"] --> Join
-    Join --> Out["order_id + nombre_empleado"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders (FK employee_id)</div>
+<div class="flow-node flow-node-step">INNER JOIN</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">order_id + nombre_empleado</div>
+<div class="flow-node flow-node-step">employees (PK employee_id)</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     o.order_id,
@@ -948,11 +1096,11 @@ ORDER BY o.order_date DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El JOIN entre <code>order_details</code> y <code>products</code> utiliza la FK <code>product_id</code>. <code>order_details</code> es una tabla detalle con alta cardinalidad. PostgreSQL típicamente selecciona un <em>Hash Join</em> donde <code>products</code> (tabla pequeña) se carga como hash y <code>order_details</code> (tabla grande) se escanea secuencialmente para sondear el hash en tiempo O(1) por tupla.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    P["products (Hash)"] -->|Cargar en work_mem| HT["Hash Table (product_id)"]
-    OD["order_details (Scan)"] -->|Sondear por product_id| HT
-    HT -->|Hit| Join["Detalle + Nombre de producto"]
-    Join --> Out["order_id | product_name | quantity"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products (Hash)</div>
+<div class="flow-node flow-node-step">Hash Table (product_id)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Hit</span></div><div class="flow-node flow-node-step">Detalle + Nombre de producto</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">order_id | product_name | quantity</div>
+<div class="flow-node flow-node-step">order_details (Scan)</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     od.order_id,
@@ -971,10 +1119,10 @@ ORDER BY od.quantity DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El JOIN entre <code>products</code> y <code>suppliers</code> cruza por <code>supplier_id</code>. La tabla <code>suppliers</code> es pequeña (~29 filas) y tiene un índice B-Tree en <code>supplier_id</code>. PostgreSQL elige un <em>Nested Loop Join</em> donde por cada producto busca rápidamente el proveedor en el índice, resultando en un plan de ejecución altamente eficiente.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    P["products"] -->|Nested Loop| NL["Búsqueda por supplier_id"]
-    NL -->|Index Scan en PK| S["suppliers (B-Tree)"]
-    S --> Out["product_name + company_name"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">Búsqueda por supplier_id</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Index Scan en PK</span></div><div class="flow-node flow-node-step">suppliers (B-Tree)</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">product_name + company_name</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     p.product_id,
@@ -992,10 +1140,10 @@ ORDER BY s.company_name, p.product_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>INNER JOIN shippers s ON o.ship_via = s.shipper_id</code> cruza <code>orders</code> con <code>shippers</code> (solo 3 registros). El optimizador de PostgreSQL trata esta tabla como una dimensión despreciable en costo y aplica un <em>Nested Loop Join</em>. Con el índice en la PK de <code>shippers</code>, cada búsqueda es O(log n) donde n = 3, es decir, casi instantánea.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O["orders (Seq Scan)"] -->|Por cada pedido| NL["Nested Loop"]
-    NL -->|Index Scan| S["shippers (PK shipper_id)"]
-    S --> Out["order_id + company_name (transportista)"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders (Seq Scan)</div>
+<div class="flow-node flow-node-step">Nested Loop</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Index Scan</span></div><div class="flow-node flow-node-step">shippers (PK shipper_id)</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">order_id + company_name (transportista)</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     o.order_id,
@@ -1012,10 +1160,10 @@ ORDER BY o.freight DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Dos JOINs consecutivos (<code>orders → customers</code> y <code>orders → employees</code>) son evaluados por el optimizador como un árbol de uniones. PostgreSQL puede elegir un orden diferente al sintáctico si las estadísticas lo justifican. Generalmente une primero <code>orders</code> con la tabla más pequeña (<code>employees</code>) y luego con <code>customers</code>, minimizando el tamaño del conjunto intermedio.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O["orders"] -->|INNER JOIN| C["customers"]
-    O -->|INNER JOIN| E["employees"]
-    C & E -->|Combinación| Out["order_id | cliente | empleado"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">INNER JOIN</span></div><div class="flow-node flow-node-step">employees</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Combinación</span></div><div class="flow-node flow-node-step">order_id | cliente | empleado</div>
+<div class="flow-node flow-node-step">customers</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     o.order_id,
@@ -1034,10 +1182,10 @@ LIMIT 30;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El optimizador encadena dos JOINs: <code>order_details → products → categories</code>. PostgreSQL evalúa el plan óptimo uniendo primero <code>order_details</code> con <code>products</code> (relación directa por <code>product_id</code>), y luego el conjunto resultante con <code>categories</code>. Cada JOIN reduce progresivamente la cardinalidad.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    OD["order_details"] -->|JOIN 1| P["products"]
-    P -->|JOIN 2| C["categories"]
-    C --> Out["order_id | product_name | category_name | quantity"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">order_details</div>
+<div class="flow-node flow-node-step">products</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">JOIN 2</span></div><div class="flow-node flow-node-step">categories</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">order_id | product_name | category_name | quantity</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     od.order_id,
@@ -1057,12 +1205,12 @@ ORDER BY od.quantity DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El optimizador resuelve tres JOINs: <code>products → suppliers</code> y <code>products → categories</code>. Con ambas tablas auxiliares siendo pequeñas, PostgreSQL carga ambas en <code>work_mem</code> como tablas hash y escanea <code>products</code> una sola vez, sondando ambas estructuras hash simultáneamente. Esto resulta en complejidad O(n) donde n es el número de productos.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    S["suppliers (Hash)"] -->|Cargar| HashS["Hash S"]
-    C["categories (Hash)"] -->|Cargar| HashC["Hash C"]
-    P["products (Scan)"] -->|Sondear HashS| HashS
-    P -->|Sondear HashC| HashC
-    HashC --> Out["producto + categoria + proveedor"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">suppliers (Hash)</div>
+<div class="flow-node flow-node-step">Hash S</div>
+<div class="flow-node flow-node-step">categories (Hash)</div>
+<div class="flow-node flow-node-step">products (Scan)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Sondear HashC</span></div><div class="flow-node flow-node-step">Hash C</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">producto + categoria + proveedor</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     p.product_id,
@@ -1082,11 +1230,13 @@ ORDER BY p.product_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Cuatro JOINs encadenados: <code>orders → customers</code>, <code>orders → employees</code>, <code>orders → shippers</code>. El optimizador de PostgreSQL evalúa múltiples órdenes de join usando el optimizador genético (GEQO) cuando hay más de 8 tablas. Para 4 tablas, la búsqueda exhaustiva encuentra el plan óptimo, típicamente un <em>Hash Join</em> central con <code>orders</code> como tabla conductora.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O["orders (Tabla Central)"] -->|JOIN| C["customers"]
-    O -->|JOIN| E["employees"]
-    O -->|JOIN| S["shippers"]
-    C & E & S -->|Consolidación| Out["Reporte completo de órdenes"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders (Tabla Central)</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">JOIN</span></div><div class="flow-node flow-node-step">employees</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">JOIN</span></div><div class="flow-node flow-node-step">shippers</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Consolidación</span></div><div class="flow-node flow-node-step">Reporte completo de órdenes</div></div>
+</div>
+<div class="flow-node flow-node-step">customers</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     o.order_id,
@@ -1108,12 +1258,13 @@ LIMIT 50;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LEFT JOIN customers c LEFT JOIN orders o ON c.customer_id = o.customer_id</code> preserva todas las filas de <code>customers</code>, incluso aquellas sin pedidos. El optimizador aplica un <em>Hash Left Join</em>: construye una tabla hash con <code>orders</code> indexada por <code>customer_id</code>, escanea <code>customers</code>, y para cada registro busca en el hash. Si no encuentra coincidencia, rellena las columnas de <code>orders</code> con <code>NULL</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    C["customers (Izquierda - Preservada)"] -->|LEFT JOIN| O["orders (Derecha)"]
-    O -->|Sin coincidencia → NULL| Null["o.order_id = NULL"]
-    O -->|Con coincidencia| Match["Fila combinada"]
-    Null --> Out["Todos los clientes (con o sin pedidos)"]
-    Match --> Out</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers (Izquierda - Preservada)</div>
+<div class="flow-node flow-node-step">orders (Derecha)</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Sin coincidencia → NULL</span></div><div class="flow-node flow-node-step">o.order_id = NULL</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Todos los clientes (con o sin pedidos)</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Con coincidencia</span></div><div class="flow-node flow-node-step">Fila combinada</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Todos los clientes (con o sin pedidos)</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     c.customer_id,
@@ -1130,9 +1281,10 @@ ORDER BY c.company_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LEFT JOIN products p LEFT JOIN order_details od ON p.product_id = od.product_id</code> preserva todos los productos. El optimizador aplica un <em>Hash Left Join</em> donde <code>products</code> es la tabla de origen. Si un producto nunca se ha vendido, las columnas de <code>order_details</code> aparecen como <code>NULL</code>. Este patrón permite detectar productos obsoletos.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    P["products (Preservada)"] -->|LEFT JOIN| OD["order_details"]
-    OD -->|NULL si no hay ventas| Out["Todos los productos con/sin ventas"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products (Preservada)</div>
+<div class="flow-node flow-node-step">order_details</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">NULL si no hay ventas</span></div><div class="flow-node flow-node-step">Todos los productos con/sin ventas</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     p.product_id,
@@ -1150,9 +1302,10 @@ ORDER BY p.product_name, od.order_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LEFT JOIN employees e LEFT JOIN orders o ON e.employee_id = o.employee_id</code> preserva empleados incluso si no tienen pedidos. El optimizador aplica <em>Nested Loop Left Join</em> si <code>employees</code> es pequeña; cada empleado busca sus pedidos mediante un <em>Index Scan</em> en <code>orders(employee_id)</code>. Los empleados sin pedidos retornan <code>NULL</code> en las columnas de <code>orders</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    E["employees (9 registros)"] -->|LEFT JOIN| O["orders"]
-    O -->|NULL si no gestionó pedidos| Out["Todos los empleados"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees (9 registros)</div>
+<div class="flow-node flow-node-step">orders</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">NULL si no gestionó pedidos</span></div><div class="flow-node flow-node-step">Todos los empleados</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     e.employee_id,
@@ -1170,10 +1323,10 @@ ORDER BY e.employee_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El patrón <em>Anti-Join</em>: <code>LEFT JOIN</code> + <code>WHERE o.order_id IS NULL</code> identifica clientes sin pedidos. PostgreSQL optimiza esto como un <em>Hash Anti-Join</em>: construye un hash set con los <code>customer_id</code> que existen en <code>orders</code> y luego escanea <code>customers</code> descartando aquellos que están en el hash. Esto es mucho más eficiente que <code>NOT IN (SELECT customer_id FROM orders)</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    C["customers"] -->|Hash Anti-Join| HASH["Hash Set de customer_id con pedidos"]
-    HASH -->|Excluir si existe en hash| Filter["WHERE o.order_id IS NULL"]
-    Filter --> Out["Clientes sin pedidos (0 coincidencias en orders)"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">Hash Set de customer_id con pedidos</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Excluir si existe en hash</span></div><div class="flow-node flow-node-decision">WHERE o.order_id IS NULL</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Clientes sin pedidos (0 coincidencias en orders)</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     c.customer_id,
@@ -1190,10 +1343,12 @@ WHERE o.order_id IS NULL;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><em>Anti-Join</em> entre <code>products</code> y <code>order_details</code>. PostgreSQL detecta el patrón y ejecuta un <em>Merge Anti-Join</em> si ambas tablas están ordenadas por <code>product_id</code>, o un <em>Hash Anti-Join</em> en caso contrario. El motor evita escanear toda la tabla <code>order_details</code> para cada producto gracias al uso de la estructura hash en memoria.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    P["products"] -->|LEFT JOIN + IS NULL| Anti["Hash Anti-Join"]
-    OD["order_details"] -->|Construir hash set| HASH["Hash Set (product_id con ventas)"]
-    Anti -->|Excluir productos vendidos| Out["Productos sin ventas registradas"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">Hash Anti-Join</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Excluir productos vendidos</span></div><div class="flow-node flow-node-step">Productos sin ventas registradas</div>
+<div class="flow-node flow-node-step">order_details</div>
+<div class="flow-node flow-node-step">Hash Set (product_id con ventas)</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     p.product_id,
@@ -1210,9 +1365,10 @@ WHERE od.product_id IS NULL;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>SELF JOIN</code> sobre <code>employees</code> usando la FK <code>reports_to</code> que apunta a <code>employee_id</code>. PostgreSQL crea dos instancias lógicas de la misma tabla física en memoria (alias <code>e</code> para subordinados, <code>m</code> para managers). El <code>LEFT JOIN</code> preserva al empleado raíz (Andrew Fuller, que reporta a NULL). El motor ejecuta un <em>Nested Loop</em> con <em>Index Scan</em> sobre la PK <code>employee_id</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    E["employees e (Subordinados)"] -->|LEFT JOIN| M["employees m (Managers)"]
-    M -->|reports_to = employee_id| Out["Empleado → su jefe directo"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees e (Subordinados)</div>
+<div class="flow-node flow-node-step">employees m (Managers)</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">reports_to = employee_id</span></div><div class="flow-node flow-node-step">Empleado → su jefe directo</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     e.employee_id,
@@ -1230,10 +1386,10 @@ ORDER BY e.employee_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Se encadenan tres <code>LEFT JOINs</code>: <code>customers → orders → employees</code>. El optimizador preserva todos los clientes y aplica los JOINs secuencialmente. El orden de los JOINs es crítico: si un cliente tiene pedidos, también se muestra el empleado que lo gestionó. Si no, todo aparece como <code>NULL</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    C["customers"] -->|LEFT JOIN| O["orders"]
-    O -->|LEFT JOIN| E["employees"]
-    E -->|Consolidación| Out["clientes | pedidos | empleados (con nulos)"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">orders</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">LEFT JOIN</span></div><div class="flow-node flow-node-step">employees</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Consolidación</span></div><div class="flow-node flow-node-step">clientes | pedidos | empleados (con nulos)</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     c.company_name AS cliente,
@@ -1252,11 +1408,10 @@ ORDER BY c.company_name, o.order_date;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Cuatro tablas encadenadas con <code>LEFT JOIN</code>: <code>customers → orders → order_details → products</code>. El optimizador procesa esta cadena como un árbol de uniones externas. La presencia de múltiples <code>LEFT JOINs</code> restringe las opciones de reordenamiento del optimizador, ya que debe respetar la semántica de preservación de la tabla izquierda.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    C["customers"] -->|LEFT| O["orders"]
-    O -->|LEFT| OD["order_details"]
-    OD -->|LEFT| P["products"]
-    P --> Out["Factura: cliente → pedido → detalle → producto"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">orders</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">LEFT</span></div><div class="flow-node flow-node-step">order_details</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">LEFT</span></div><div class="flow-node flow-node-step">products</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Factura: cliente → pedido → detalle → producto</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     c.company_name AS cliente,
@@ -1278,10 +1433,10 @@ ORDER BY c.company_name, o.order_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Se enlazan tres <code>LEFT JOINs</code>: <code>suppliers → products → order_details</code>. El optimizador preserva todos los proveedores. Si un proveedor no tiene productos, o si un producto no tiene ventas, las columnas correspondientes aparecen como <code>NULL</code>. El motor puede usar <em>Hash Left Join</em> para manejar esta cadena de manera eficiente.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    S["suppliers"] -->|LEFT| P["products"]
-    P -->|LEFT| OD["order_details"]
-    OD -->|Agregación por proveedor| Out["Proveedor | productos | ingresos"]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">suppliers</div>
+<div class="flow-node flow-node-step">products</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">LEFT</span></div><div class="flow-node flow-node-step">order_details</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Agregación por proveedor</span></div><div class="flow-node flow-node-step">Proveedor | productos | ingresos</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     s.company_name AS proveedor,
@@ -1300,12 +1455,13 @@ ORDER BY s.company_name, ingreso_generado DESC NULLS LAST;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Consulta final que integra <code>employees</code>, <code>orders</code>, <code>customers</code> y <code>shippers</code> con <code>LEFT JOINs</code> para preservar todos los registros de cada entidad. El optimizador debe resolver un grafo de uniones externas, respetando la semántica de cada <code>LEFT JOIN</code>. PostgreSQL utiliza el optimizador genético (GEQO) para encontrar el orden de JOIN más eficiente cuando hay múltiples tablas.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    E["employees"] -->|LEFT| O["orders"]
-    O -->|LEFT| C["customers"]
-    O -->|LEFT| S["shippers"]
-    C -->|Consolidación ejecutiva| Out["empleado | pedido | cliente | transportista"]
-    S --> Out</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees</div>
+<div class="flow-node flow-node-step">orders</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">LEFT</span></div><div class="flow-node flow-node-step">customers</div><div class="flow-arrow-vertical">↓ <span class="arrow-label">Consolidación ejecutiva</span></div><div class="flow-node flow-node-step">empleado | pedido | cliente | transportista</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">LEFT</span></div><div class="flow-node flow-node-step">shippers</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">empleado | pedido | cliente | transportista</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     e.first_name || ' ' || e.last_name AS empleado,
@@ -1334,10 +1490,6 @@ ORDER BY o.order_date DESC NULLS LAST;</code></pre></div>
         </footer>
     </div>
 
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
     <script>
         const themeToggleBtn = document.getElementById('theme-toggle');
         

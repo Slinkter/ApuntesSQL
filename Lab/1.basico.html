@@ -256,20 +256,124 @@
             font-size: inherit !important;
         }
 
-        /* Mermaid blocks responsive */
-        .mermaid-container {
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background-color: var(--code-bg);
+        /* Pure HTML Flowchart styling (Replacing Mermaid) */
+        .pure-html-flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1.5rem 1rem;
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            background-color: var(--code-bg);
         }
 
-        .mermaid {
+        .flow-node {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-align: center;
+            border: 1px solid var(--border);
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            min-width: 200px;
+            max-width: 100%;
+        }
+
+        .flow-node-step {
+            border-left: 4px solid var(--primary);
+        }
+
+        .flow-node-decision {
+            border-left: 4px solid var(--accent);
+            background-color: rgba(255, 51, 51, 0.04);
+        }
+
+        .flow-arrow-vertical {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin: 0.5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: 700;
+        }
+        
+        .arrow-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }
+
+        .flow-branches-wrapper {
             display: flex;
             justify-content: center;
+            gap: 1.5rem;
+            width: 100%;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .flow-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .branch-label {
+            font-size: 0.7rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.1rem 0.4rem;
+            margin-top: 0.1rem;
+            font-weight: 700;
+        }
+
+        /* Pure HTML Sequence Diagram styling */
+        .pure-html-sequence {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            background-color: var(--code-bg);
+        }
+
+        .seq-step {
+            border-left: 2px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seq-actors {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .seq-message {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .seq-note {
+            font-size: 0.85rem;
+            font-style: italic;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            color: var(--text-muted);
+        }
+        
+        .seq-note-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
         }
 
         /* Callout Boxes */
@@ -293,7 +397,7 @@
         }
 
         .callout-analogy {
-            background-color: rgba(192, 108, 84, 0.08); /* Accent transparent */
+            background-color: rgba(255, 51, 51, 0.04);
             border-color: var(--accent);
             color: var(--text-main);
         }
@@ -342,13 +446,13 @@
 <p>3. <code>SELECT</code>: Proyectar únicamente las columnas solicitadas.</p>
 <p>4. <code>ORDER BY</code>: Ejecutar un algoritmo de ordenamiento (ej. <em>QuickSort</em> si cabe en <code>work_mem</code>, o <em>External Merge</em> en disco) sobre el set resultante.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    A[Disk: products table] -->|Seq Scan / Index Scan| B(Buffer: FROM products)
-    B --> C{WHERE unit_price > 20 \n AND discontinued = 0}
-    C -->|Filtro Fallido| D[Descartar Tupla]
-    C -->|Filtro Exitoso| E[Memoria: SELECT product_name, unit_price]
-    E --> F[work_mem: ORDER BY product_name ASC]
-    F --> G[Client: ResultSet]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">Disk: products table</div>
+<div class="flow-node flow-node-step">Buffer: FROM products</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-decision">WHERE unit_price > 20   AND discontinued = 0</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Filtro Fallido</span></div><div class="flow-node flow-node-step">Descartar Tupla</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Filtro Exitoso</span></div><div class="flow-node flow-node-step">Memoria: SELECT product_name, unit_price</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">work_mem: ORDER BY product_name ASC</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Client: ResultSet</div></div>
+</div>
+</div>
 <h4>💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>EXPLAIN (ANALYZE, BUFFERS)
 SELECT 
@@ -374,20 +478,15 @@ ORDER BY
 <h4>🧠 1. Marco Conceptual del Optimizador</h4>
 <p>Este ejercicio evalúa la combinación de ordenamiento y limitación. Al solicitar un <code>LIMIT 5</code> junto a un <code>ORDER BY</code>, PostgreSQL puede emplear una optimización conocida como <em>Top-N Heapsort</em>. En lugar de ordenar toda la tabla y luego cortar los primeros 5 registros, el motor mantiene un <em>min-heap</em> en memoria (limitado a 5 elementos). Esto reduce drásticamente el consumo de <code>work_mem</code> y el tiempo de CPU, transformando una complejidad <code>O(N log N)</code> en <code>O(N log K)</code>, donde <code>K = 5</code>.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">sequenceDiagram
-    participant Executor
-    participant Heap (work_mem)
-    participant Relation (FROM)
-    
-    Executor->>Relation: Solicita primera tupla
-    Relation-->>Executor: Empleado A
-    Executor->>Heap: Inserta en Min-Heap (K=5)
-    Note over Executor,Heap: Repite hasta recorrer tabla
-    Executor->>Heap: Compara nueva tupla con raíz del Heap
-    alt Es más reciente
-        Heap-->>Heap: Reemplaza y balancea árbol
-    end
-    Executor->>Client: Devuelve nodos ordenados del Heap</pre></div>
+<div class="pure-html-sequence">
+<div class="seq-step"><div class="seq-actors"><span class="actor-source">Executor</span> ➔ <span class="actor-target">Relation</span></div><div class="seq-message">Solicita primera tupla</div></div>
+<div class="seq-step"><div class="seq-actors"><span class="actor-source">Relation-</span> ➔ <span class="actor-target">Executor</span></div><div class="seq-message">Empleado A</div></div>
+<div class="seq-step"><div class="seq-actors"><span class="actor-source">Executor</span> ➔ <span class="actor-target">Heap</span></div><div class="seq-message">Inserta en Min-Heap (K=5)</div></div>
+<div class="seq-note"><span class="seq-note-title">Nota:</span> Repite hasta recorrer tabla</div>
+<div class="seq-step"><div class="seq-actors"><span class="actor-source">Executor</span> ➔ <span class="actor-target">Heap</span></div><div class="seq-message">Compara nueva tupla con raíz del Heap</div></div>
+<div class="seq-step"><div class="seq-actors"><span class="actor-source">Heap-</span> ➔ <span class="actor-target">Heap</span></div><div class="seq-message">Reemplaza y balancea árbol</div></div>
+<div class="seq-step"><div class="seq-actors"><span class="actor-source">Executor</span> ➔ <span class="actor-target">Client</span></div><div class="seq-message">Devuelve nodos ordenados del Heap</div></div>
+</div>
 <h4>💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>EXPLAIN (ANALYZE, BUFFERS)
 SELECT 
@@ -411,14 +510,16 @@ LIMIT 5;</code></pre></div>
 <h4>🧠 1. Marco Conceptual del Optimizador</h4>
 <p>El estándar ANSI SQL opera bajo una lógica trivalente (Verdadero, Falso, Desconocido). Comparar un <code>NULL</code> mediante el operador <code>=</code> siempre resultará en <code>UNKNOWN</code> (Desconocido), por lo que el predicado de filtro descartará la fila. Es imperativo utilizar la función <code>IS NULL</code>. Para el formateo en la proyección (SELECT), PostgreSQL evalúa funciones escalares como <code>COALESCE</code> durante la fase de transformación de salida, fila por fila. <code>COALESCE</code> cortocircuita y devuelve el primer argumento no nulo.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    A[(Table: customers)] --> B[Eval: region IS NULL]
-    B -->|Verdadero| C[Proyección: SELECT]
-    B -->|Falso/Unknown| D[Drop Fila]
-    C --> E{Es NULL?}
-    E -->|Sí| F[Transformar a 'N/A']
-    E -->|No| G[Mantener valor]
-    F --> H[ResultSet]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">(Table: customers)</div>
+<div class="flow-node flow-node-decision">Eval: region IS NULL</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Verdadero</span></div><div class="flow-node flow-node-step">Proyección: SELECT</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-decision">Es NULL?</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Sí</span></div><div class="flow-node flow-node-step">Transformar a 'N/A'</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">ResultSet</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step">Mantener valor</div></div>
+</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Falso/Unknown</span></div><div class="flow-node flow-node-step">Drop Fila</div></div>
+</div>
+</div>
 <h4>💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>EXPLAIN (ANALYZE, BUFFERS)
 SELECT 
@@ -442,10 +543,6 @@ WHERE
         </footer>
     </div>
 
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
     <script>
         const themeToggleBtn = document.getElementById('theme-toggle');
         

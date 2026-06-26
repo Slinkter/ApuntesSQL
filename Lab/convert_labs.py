@@ -1,6 +1,148 @@
 import re
 import os
 
+def parse_mermaid_to_html(mermaid_content):
+    lines = [line.strip() for line in mermaid_content.split('\n') if line.strip()]
+    if not lines:
+        return ""
+    
+    diagram_type = lines[0].lower()
+    
+    # 1. FLOWCHARTS
+    if 'flowchart' in diagram_type or 'graph' in diagram_type:
+        nodes = {}
+        connections = []
+        
+        # Regex to match nodes: A[Label], B(Label), C{Label}, A[(Label)], etc.
+        node_regex = re.compile(r'([a-zA-Z0-9_-]+)(?:\["?(.*?)"?\]|\("?(.*?)"?\)|\{"?(.*?)"?\}|\(\("?(.*?)"?\)\))')
+        # Regex to match connections: A --> B or A -->|Label| B
+        conn_regex = re.compile(r'([a-zA-Z0-9_-]+)\s*-->\s*(?:\|(.*?)\|)?\s*([a-zA-Z0-9_-]+)')
+        
+        for line in lines[1:]:
+            # Parse connections first
+            conn_match = conn_regex.search(line)
+            if conn_match:
+                source, label, target = conn_match.groups()
+                connections.append({
+                    'source': source,
+                    'target': target,
+                    'label': label if label else ""
+                })
+            
+            # Parse nodes to collect custom labels
+            for match in node_regex.finditer(line):
+                node_id = match.group(1)
+                # Find the first non-empty group for the label
+                label = next((g for g in match.groups()[1:] if g), node_id)
+                nodes[node_id] = label.replace(r'\n', ' ').strip()
+        
+        # Build a sequential flow representation in HTML
+        html = ['<div class="pure-html-flowchart">']
+        
+        # Determine execution order (simple linear / branching layout helper)
+        seen_targets = {c['target'] for c in connections}
+        roots = [n for n in nodes if n not in seen_targets]
+        
+        if not roots and nodes:
+            roots = [list(nodes.keys())[0]]
+            
+        def render_node(node_id, visited=None):
+            if visited is None:
+                visited = set()
+            if node_id in visited:
+                lbl = nodes.get(node_id, node_id)
+                return f'<div class="flow-node flow-node-step opacity-50 font-mono text-xs">↺ {lbl}</div>'
+            
+            # Add to visited
+            visited.add(node_id)
+            
+            label = nodes.get(node_id, node_id)
+            # Check if this node is a decision block
+            is_decision = '{' in label or '?' in label or 'WHERE' in label or 'Filter' in label or 'Eval' in label
+            node_class = "flow-node-decision" if is_decision else "flow-node-step"
+            
+            node_html = f'<div class="flow-node {node_class}">{label}</div>'
+            
+            # Find outgoing connections
+            outgoings = [c for c in connections if c['source'] == node_id]
+            if outgoings:
+                # If branching (decision)
+                if len(outgoings) > 1:
+                    branch_html = ['<div class="flow-branches-wrapper">']
+                    for conn in outgoings:
+                        branch_label = f'<span class="branch-label">{conn["label"]}</span>' if conn['label'] else ''
+                        branch_html.append(f'<div class="flow-branch"><div class="flow-arrow-vertical">↓ {branch_label}</div>{render_node(conn["target"], visited.copy())}</div>')
+                    branch_html.append('</div>')
+                    return node_html + '\n'.join(branch_html)
+                else:
+                    conn = outgoings[0]
+                    arrow_label = f'<span class="arrow-label">{conn["label"]}</span>' if conn['label'] else ''
+                    return f'{node_html}<div class="flow-arrow-vertical">↓ {arrow_label}</div>{render_node(conn["target"], visited)}'
+            return node_html
+
+        for root in roots:
+            html.append(render_node(root))
+            
+        html.append('</div>')
+        return '\n'.join(html)
+
+    # 2. SEQUENCE DIAGRAMS
+    elif 'sequencediagram' in diagram_type:
+        participants = []
+        steps = []
+        
+        part_regex = re.compile(r'participant\s+(.*)')
+        msg_regex = re.compile(r'([a-zA-Z0-9_ -]+)\s*->>\s*([a-zA-Z0-9_ -]+):\s*(.*)')
+        note_regex = re.compile(r'Note\s+over\s+(.*):\s*(.*)')
+        
+        for line in lines[1:]:
+            part_match = part_regex.match(line)
+            if part_match:
+                participants.append(part_match.group(1).strip())
+                continue
+                
+            msg_match = msg_regex.match(line)
+            if msg_match:
+                source, target, msg = msg_match.groups()
+                steps.append({
+                    'type': 'message',
+                    'source': source.strip(),
+                    'target': target.strip(),
+                    'content': msg.strip()
+                })
+                continue
+                
+            note_match = note_regex.match(line)
+            if note_match:
+                over, note_text = note_match.groups()
+                steps.append({
+                    'type': 'note',
+                    'over': over.strip(),
+                    'content': note_text.strip()
+                })
+                
+        # Fallback if participants not explicitly declared
+        if not participants:
+            seen_parts = set()
+            for s in steps:
+                if s['type'] == 'message':
+                    seen_parts.add(s['source'])
+                    seen_parts.add(s['target'])
+            participants = list(seen_parts)
+
+        # Render sequence as a clean timelines chat block
+        html = ['<div class="pure-html-sequence">']
+        for step in steps:
+            if step['type'] == 'message':
+                html.append(f'<div class="seq-step"><div class="seq-actors"><span class="actor-source">{step["source"]}</span> ➔ <span class="actor-target">{step["target"]}</span></div><div class="seq-message">{step["content"]}</div></div>')
+            elif step['type'] == 'note':
+                html.append(f'<div class="seq-note"><span class="seq-note-title">Nota:</span> {step["content"]}</div>')
+        html.append('</div>')
+        return '\n'.join(html)
+        
+    return f'<pre class="raw-diagram"><code>{mermaid_content}</code></pre>'
+
+
 def markdown_to_html(md_content, title):
     # Split into lines
     lines = md_content.split('\n')
@@ -13,15 +155,16 @@ def markdown_to_html(md_content, title):
     quote_lines = []
 
     for line in lines:
-        # Code Blocks (keep their raw code lines, we will escape later)
+        # Code Blocks
         if line.strip().startswith('```'):
             if in_code_block:
                 in_code_block = False
                 code_content = '\n'.join(code_lines)
-                escaped_code = code_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                 if code_lang == 'mermaid':
-                    html_body.append(f'<div class="mermaid-container"><pre class="mermaid">{code_content}</pre></div>')
+                    html_flow = parse_mermaid_to_html(code_content)
+                    html_body.append(html_flow)
                 else:
+                    escaped_code = code_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                     html_body.append(f'<div class="code-block-wrapper"><div class="code-lang-badge">{code_lang.upper()}</div><pre><code>{escaped_code}</code></pre></div>')
                 code_lines = []
             else:
@@ -45,7 +188,6 @@ def markdown_to_html(md_content, title):
         elif in_quote:
             in_quote = False
             quote_text = ' '.join(quote_lines)
-            # Restore formatting tags (bold, italic, code, links) after escaping
             quote_text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', quote_text)
             quote_text = re.sub(r'\*(.*?)\*', r'<em>\1</em>', quote_text)
             quote_text = re.sub(r'`(.*?)`', r'<code>\1</code>', quote_text)
@@ -361,20 +503,124 @@ def markdown_to_html(md_content, title):
             font-size: inherit !important;
         }}
 
-        /* Mermaid blocks responsive */
-        .mermaid-container {{
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background-color: var(--code-bg);
+        /* Pure HTML Flowchart styling (Replacing Mermaid) */
+        .pure-html-flowchart {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1.5rem 1rem;
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            background-color: var(--code-bg);
         }}
 
-        .mermaid {{
+        .flow-node {{
+            padding: 0.75rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-align: center;
+            border: 1px solid var(--border);
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            min-width: 200px;
+            max-width: 100%;
+        }}
+
+        .flow-node-step {{
+            border-left: 4px solid var(--primary);
+        }}
+
+        .flow-node-decision {{
+            border-left: 4px solid var(--accent);
+            background-color: rgba(255, 51, 51, 0.04);
+        }}
+
+        .flow-arrow-vertical {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin: 0.5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: 700;
+        }}
+        
+        .arrow-label {{
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }}
+
+        .flow-branches-wrapper {{
             display: flex;
             justify-content: center;
+            gap: 1.5rem;
+            width: 100%;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }}
+
+        .flow-branch {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 180px;
+        }}
+
+        .branch-label {{
+            font-size: 0.7rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.1rem 0.4rem;
+            margin-top: 0.1rem;
+            font-weight: 700;
+        }}
+
+        /* Pure HTML Sequence Diagram styling */
+        .pure-html-sequence {{
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            background-color: var(--code-bg);
+        }}
+
+        .seq-step {{
+            border-left: 2px solid var(--accent);
+            padding-left: 1rem;
+        }}
+
+        .seq-actors {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }}
+
+        .seq-message {{
+            font-size: 0.9rem;
+            font-weight: 600;
+        }}
+
+        .seq-note {{
+            font-size: 0.85rem;
+            font-style: italic;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            color: var(--text-muted);
+        }}
+        
+        .seq-note-title {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
         }}
 
         /* Callout Boxes */
@@ -398,7 +644,7 @@ def markdown_to_html(md_content, title):
         }}
 
         .callout-analogy {{
-            background-color: rgba(192, 108, 84, 0.08); /* Accent transparent */
+            background-color: rgba(255, 51, 51, 0.04);
             border-color: var(--accent);
             color: var(--text-main);
         }}
@@ -441,10 +687,6 @@ def markdown_to_html(md_content, title):
         </footer>
     </div>
 
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({{ startOnLoad: true, theme: 'neutral' }});
-    </script>
     <script>
         const themeToggleBtn = document.getElementById('theme-toggle');
         

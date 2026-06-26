@@ -256,20 +256,124 @@
             font-size: inherit !important;
         }
 
-        /* Mermaid blocks responsive */
-        .mermaid-container {
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background-color: var(--code-bg);
+        /* Pure HTML Flowchart styling (Replacing Mermaid) */
+        .pure-html-flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1.5rem 1rem;
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            background-color: var(--code-bg);
         }
 
-        .mermaid {
+        .flow-node {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-align: center;
+            border: 1px solid var(--border);
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            min-width: 200px;
+            max-width: 100%;
+        }
+
+        .flow-node-step {
+            border-left: 4px solid var(--primary);
+        }
+
+        .flow-node-decision {
+            border-left: 4px solid var(--accent);
+            background-color: rgba(255, 51, 51, 0.04);
+        }
+
+        .flow-arrow-vertical {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin: 0.5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: 700;
+        }
+        
+        .arrow-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }
+
+        .flow-branches-wrapper {
             display: flex;
             justify-content: center;
+            gap: 1.5rem;
+            width: 100%;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .flow-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .branch-label {
+            font-size: 0.7rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.1rem 0.4rem;
+            margin-top: 0.1rem;
+            font-weight: 700;
+        }
+
+        /* Pure HTML Sequence Diagram styling */
+        .pure-html-sequence {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            background-color: var(--code-bg);
+        }
+
+        .seq-step {
+            border-left: 2px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .seq-actors {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .seq-message {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .seq-note {
+            font-size: 0.85rem;
+            font-style: italic;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            color: var(--text-muted);
+        }
+        
+        .seq-note-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
         }
 
         /* Callout Boxes */
@@ -293,7 +397,7 @@
         }
 
         .callout-analogy {
-            background-color: rgba(192, 108, 84, 0.08); /* Accent transparent */
+            background-color: rgba(255, 51, 51, 0.04);
             border-color: var(--accent);
             color: var(--text-main);
         }
@@ -336,16 +440,12 @@
 <h4>🧠 1. Marco Conceptual del Optimizador</h4>
 <p>PostgreSQL materializa el CTE por defecto, ejecutando la subconsulta <code>WITH</code> una sola vez y almacenando el resultado en una tabla temporal. Esto evita re-evaluar los JOIN y agregaciones en cada referencia externa. Sin estadísticas sobre la CTE materializada, el optimizador asume distribución uniforme, lo que puede subestimar filas si el CTE tiene filtros muy selectivos o producir planes subóptimos en JOINs posteriores.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    O[orders] --> J1[JOIN con order_details]
-    OD[order_details] --> J1
-    J1 --> G1[GROUP BY customer_id]
-    G1 --> CTE[CTE materializada: ventas_por_cliente]
-    CTE --> J2[JOIN con customers]
-    C[customers] --> J2
-    J2 --> S[ORDER BY total DESC]
-    S --> L[LIMIT 10]
-    L --> R[Resultado: Top 10 clientes]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">JOIN con order_details</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY customer_id</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">CTE materializada: ventas_por_cliente</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN con customers</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">ORDER BY total DESC</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">LIMIT 10</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: Top 10 clientes</div>
+<div class="flow-node flow-node-step">order_details</div>
+<div class="flow-node flow-node-step">customers</div>
+</div>
 <h4>💻 3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH ventas_por_cliente AS (
     SELECT
@@ -377,14 +477,11 @@ LIMIT 10;</code></pre></div>
 <h4>🧠 1. Marco Conceptual del Optimizador</h4>
 <p>Varias CTEs en un mismo <code>WITH</code> se ejecutan secuencialmente; cada una puede referenciar CTEs anteriores. PostgreSQL no paraleliza CTEs entre sí. Si una CTE no se referencia, PostgreSQL la omite automáticamente (optimización <em>dead CTE removal</em>). El plan resultante encadena los escaneos de cada CTE como nodos independientes.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O[orders] --> CTE1[CTE1: ingresos por mes]
-    OD[order_details] --> CTE1
-    O --> CTE2[CTE2: fletes por mes]
-    CTE1 --> J[JOIN por mes]
-    CTE2 --> J
-    J --> S[SELECT final con diferencia]
-    S --> R[Resultado]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">CTE2: fletes por mes</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN por mes</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">SELECT final con diferencia</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado</div>
+<div class="flow-node flow-node-step">CTE1: ingresos por mes</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN por mes</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">SELECT final con diferencia</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado</div>
+<div class="flow-node flow-node-step">order_details</div>
+</div>
 <h4>💻 3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH ingresos_mensuales AS (
     SELECT
@@ -420,15 +517,15 @@ ORDER BY i.mes;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>En PostgreSQL 12+, <code>WITH ... AS MATERIALIZED</code> fuerza la materialización de la CTE en una tabla temporal, incluso si el optimizador preferiría inlining. Útil cuando la CTE es computacionalmente costosa y se referencia múltiples veces. La materialización actúa como un <em>optimizer fence</em>: evita que restricciones de la consulta externa se propaguen al interior de la CTE.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    E[employees] --> CTE[CTE MATERIALIZED: empleados_metricas]
-    O[orders] --> CTE
-    OD[order_details] --> CTE
-    CTE --> Q1[Consulta 1: mayores ingresos]
-    CTE --> Q2[Consulta 2: menores ingresos]
-    Q1 --> UNION
-    Q2 --> UNION
-    UNION --> R[Resultado combinado]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees</div>
+<div class="flow-node flow-node-step">CTE MATERIALIZED: empleados_metricas</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Consulta 1: mayores ingresos</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">UNION</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado combinado</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Consulta 2: menores ingresos</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">UNION</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado combinado</div></div>
+</div>
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">order_details</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH MATERIALIZED metricas_empleados AS (
     SELECT
@@ -456,14 +553,13 @@ ORDER BY ingresos_generados DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>NOT MATERIALIZED</code> fuerza el inlining de la CTE: PostgreSQL expande la definición de la CTE directamente en el plan de la consulta principal, permitiendo que el optimizador aplique poda de columnas, empuje de filtros y reordenamiento de JOINs. Ideal para CTE simples que se referencian una sola vez.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    C[customers] --> NJ[Nested Loop JOIN]
-    O[orders] --> NJ
-    NJ --> F[Filtro: ranking <= 3]
-    F --> R[Resultado: 3 últimos pedidos]
-    subgraph CTE_inlineada
-        O2[orders] --> W[row_number OVER PARTITION]
-    end</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">Nested Loop JOIN</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Filtro: ranking <= 3</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: 3 últimos pedidos</div>
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">row_number OVER PARTITION</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH NOT MATERIALIZED pedidos_ordenados AS (
     SELECT
@@ -496,13 +592,12 @@ ORDER BY c.company_name, po.order_date DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>PostgreSQL implementa <code>FILTER (WHERE ...)</code> como un escaneo único de la tabla con evaluación condicional de la agregación, en lugar de múltiples subconsultas. El optimizador traduce cada <code>FILTER</code> a un nodo <code>Aggregate</code> con múltiples condiciones. Esto reduce los escaneos de tabla comparado con múltiples subconsultas separadas.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    CAT[categories] --> J1[JOIN]
-    P[products] --> J1
-    J1 --> J2[JOIN]
-    OD[order_details] --> J2
-    J2 --> A[Aggregate con FILTER x 4]
-    A --> R[Resultado: ingresos Q1-Q4 por categoría]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">categories</div>
+<div class="flow-node flow-node-step">JOIN</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Aggregate con FILTER x 4</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: ingresos Q1-Q4 por categoría</div>
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">order_details</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH ventas_trimestrales AS (
     SELECT
@@ -535,13 +630,12 @@ ORDER BY total_anual DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Combinar una CTE de productos con una de pedidos recientes mediante <code>ANTI JOIN</code>. PostgreSQL implementa el <code>NOT EXISTS</code> como un plan de <code>Hash Anti Join</code> (tabla pequeña en hash) o <code>Merge Anti Join</code> si los datos están ordenados. El optimizador elige el algoritmo basado en estadísticas de cardinalidad y <code>work_mem</code> disponible.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    P[products] --> ANTI[Hash Anti JOIN]
-    OD[order_details] --> J1[JOIN con orders]
-    O[orders] --> J1
-    J1 --> F1[FILTER: order_date >= -90 días]
-    F1 --> ANTI
-    ANTI --> R[Resultado: productos sin ventas]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">order_details</div>
+<div class="flow-node flow-node-step">JOIN con orders</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FILTER: order_date >= -90 días</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Hash Anti JOIN</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: productos sin ventas</div>
+<div class="flow-node flow-node-step">orders</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH productos_activos AS (
     SELECT DISTINCT od.product_id
@@ -571,11 +665,10 @@ ORDER BY p.product_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La CTE calcula el nivel de inventario neto (<code>units_in_stock - units_on_order</code>) y lo compara con <code>reorder_level</code>. PostgreSQL puede usar un <code>Index Scan</code> en <code>products</code> si hay un índice compuesto en <code>(reorder_level, units_in_stock)</code>. Sin índice, hará <code>Seq Scan</code> completo con filtro.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    P[products] --> CTE[CTE: inventario neto]
-    CTE --> F[FILTER: neto < reorder_level]
-    F --> S[ORDER BY prioridad]
-    S --> R[Resultado: alerta de reorden]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">CTE: inventario neto</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FILTER: neto < reorder_level</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">ORDER BY prioridad</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: alerta de reorden</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH estado_inventario AS (
     SELECT
@@ -615,11 +708,11 @@ ORDER BY
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>pg_stat_user_tables</code> y <code>pg_class</code> son vistas del catálogo del sistema. PostgreSQL mantiene estadísticas en <code>pg_statistic</code> y las usa para estimar cardinalidad. Tablas con <code>n_mod_since_analyze</code> alto y <code>last_analyze</code> viejo pueden producir planes subóptimos.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    S[pg_stat_user_tables] --> CTE[CTE: tablas con análisis viejo]
-    C[pg_class] --> CTE
-    CTE --> F[FILTER: sin analyze > 1 día]
-    F --> R[Resultado: tablas para VACUUM/ANALYZE]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">pg_stat_user_tables</div>
+<div class="flow-node flow-node-step">CTE: tablas con análisis viejo</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FILTER: sin analyze > 1 día</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: tablas para VACUUM/ANALYZE</div>
+<div class="flow-node flow-node-step">pg_class</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH diagnostico_tablas AS (
     SELECT
@@ -651,14 +744,12 @@ ORDER BY n_dead_tup DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>PostgreSQL no tiene <code>UPDATE ... FROM ... RETURNING</code> con CTEs de forma nativa multi-target. La CTE combinada con <code>RETURNING</code> permite capturar los valores post-operación en un solo viaje de ida y vuelta (round-trip). El <code>RETURNING</code> se ejecuta en la fase de ejecución del plan, después de aplicar el filtro <code>WHERE</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    subgraph Transaccion
-        UP[UPDATE: descontar stock producto A] --> R1[RETURNING new stock]
-        UP2[UPDATE: incrementar stock producto B] --> R2[RETURNING new stock]
-        R1 --> CTE[CTE: resultados combinados]
-        R2 --> CTE
-        CTE --> COMMIT
-    end</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">UPDATE: descontar stock producto A</div>
+<div class="flow-node flow-node-step">RETURNING new stock</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">CTE: resultados combinados</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">COMMIT</div>
+<div class="flow-node flow-node-step">UPDATE: incrementar stock producto B</div>
+<div class="flow-node flow-node-step">RETURNING new stock</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">CTE: resultados combinados</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">COMMIT</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>BEGIN;
 
@@ -693,14 +784,13 @@ COMMIT;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El <code>INSERT ... ON CONFLICT DO UPDATE</code> (UPSERT) ejecuta un escaneo de índice único. Si encuentra un conflicto, realiza un <code>UPDATE</code> en el mismo bloque del plan, sin necesidad de una transacción separada o lógica aplicación. PostgreSQL usa el índice único especificado en <code>ON CONFLICT</code> para detectar la colisión.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    CTE[CTE: datos a insertar] --> INSERT[INSERT con ON CONFLICT]
-    INSERT --> CHECK{Existe customer_id}
-    CHECK -->|No| I[INSERT]
-    CHECK -->|Si| U[UPDATE: actualizar datos]
-    I --> R[RETURNING]
-    U --> R
-    R --> Result[Resultado: filas insertadas/actualizadas]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">CTE: datos a insertar</div>
+<div class="flow-node flow-node-step">INSERT con ON CONFLICT</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Existe customer_id</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step">INSERT</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">RETURNING</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: filas insertadas/actualizadas</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Si</span></div><div class="flow-node flow-node-step">UPDATE: actualizar datos</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">RETURNING</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: filas insertadas/actualizadas</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH datos_nuevos (customer_id, company_name, contact_name, city, country) AS (
     VALUES
@@ -727,15 +817,13 @@ RETURNING customer_id, company_name, (xmax = 0) AS fue_insertado;</code></pre></
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>PostgreSQL ejecuta la CTE recursiva en iteraciones: (1) ejecuta el miembro ancla, (2) en cada iteración ejecuta el miembro recursivo usando como entrada el resultado de la iteración anterior, (3) acumula resultados con <code>UNION ALL</code>. El optimizador planea un nodo <code>Recursive Union</code> con dos subplanes: el ancla (ejecutado una vez) y el paso recursivo (ejecutado N veces). No hay límite teórico de profundidad, pero <code>max_recursion_depth</code> (por defecto 100) previene bucles infinitos.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    E[employees: reports_to IS NULL] --> A[Ancla: nivel 0]
-    A --> WT[Working Table: empleados nivel actual]
-    WT --> R[Recursión: JOIN con employees]
-    R --> WT2[Nueva Working Table]
-    WT2 --> CHECK{Working Table vacia}
-    CHECK -->|No| R
-    CHECK -->|Si| UNION[UNION ALL de todas las iteraciones]
-    UNION --> S[ORDER BY nivel, nombre]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees: reports_to IS NULL</div>
+<div class="flow-node flow-node-step">Ancla: nivel 0</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Working Table: empleados nivel actual</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Recursión: JOIN con employees</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Nueva Working Table</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Working Table vacia</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step opacity-50 font-mono text-xs">↺ Recursión: JOIN con employees</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Si</span></div><div class="flow-node flow-node-step">UNION ALL de todas las iteraciones</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">ORDER BY nivel, nombre</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH RECURSIVE organigrama AS (
     -- Ancla: empleados sin jefe (Andrew Fuller)
@@ -776,14 +864,13 @@ ORDER BY ruta;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La CTE recursiva con filtro en el ancla (<code>WHERE reports_to = 2</code>) restringe el punto de partida a un empleado específico. PostgreSQL aplica el filtro directamente sobre la tabla <code>employees</code> usando un índice en <code>reports_to</code> si existe. La recursión solo explorará la sub-rama del árbol.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    E[employees WHERE reports_to=2] --> A[Ancla: subordinados directos]
-    A --> WT
-    WT --> R[JOIN con employees para subordinados]
-    R --> CHECK{Hay filas nuevas}
-    CHECK -->|Si| WT
-    CHECK -->|No| FIN[UNION ALL]
-    FIN --> S[Resultado con nivel y ruta]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-decision">employees WHERE reports_to=2</div>
+<div class="flow-node flow-node-step">Ancla: subordinados directos</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">WT</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN con employees para subordinados</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Hay filas nuevas</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Si</span></div><div class="flow-node flow-node-step opacity-50 font-mono text-xs">↺ WT</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step">UNION ALL</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado con nivel y ruta</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH RECURSIVE subordinados AS (
     -- Ancla: empleados que reportan directamente al gerente 2
@@ -824,14 +911,13 @@ ORDER BY ruta;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>generate_series</code> dentro de una CTE recursiva puede generar secuencias de fechas con reglas de negocio. PostgreSQL optimiza <code>generate_series</code> como un <em>set-returning function</em> (SRF) que produce filas incrementalmente. La recursión itera día a día, evaluando condiciones como día de semana. El plan de ejecución muestra un nodo <code>Result</code> con <code>Function Scan</code> sobre <code>generate_series</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    GS[generate_series fecha_inicio] --> A[Ancla: primer día]
-    A --> R[Recursión: día + 1]
-    R --> CHECK{día > fecha_fin}
-    CHECK -->|No| R
-    CHECK -->|Si| UNION
-    UNION --> F[FILTER: día hábil]
-    F --> OUT[Resultado: días hábiles]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">generate_series fecha_inicio</div>
+<div class="flow-node flow-node-step">Ancla: primer día</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Recursión: día + 1</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">día > fecha_fin</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step opacity-50 font-mono text-xs">↺ Recursión: día + 1</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Si</span></div><div class="flow-node flow-node-step">UNION</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FILTER: día hábil</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: días hábiles</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH RECURSIVE calendario AS (
     -- Ancla: fecha de inicio
@@ -864,14 +950,13 @@ ORDER BY fecha;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Agregar métricas (ingresos, pedidos) por subordinados requiere recorrer el árbol hacia arriba. PostgreSQL ejecuta la recursión completa primero, luego aplica las agregaciones. La CTE recursiva construye la relación empleado-subordinado; la consulta externa utiliza esa relación para hacer <code>SUM</code> y <code>COUNT</code> agrupando por manager.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    E[employees] --> R[Recursive CTE: todos los pares manager-subordinado]
-    OD[order_details] --> J1[JOIN con orders]
-    O[orders] --> J1
-    J1 --> J2[JOIN con CTE]
-    R --> J2
-    J2 --> G[GROUP BY manager]
-    G --> OUT[Resultado: métricas agregadas]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees</div>
+<div class="flow-node flow-node-step">Recursive CTE: todos los pares manager-subordinado</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN con CTE</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY manager</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: métricas agregadas</div>
+<div class="flow-node flow-node-step">order_details</div>
+<div class="flow-node flow-node-step">JOIN con orders</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN con CTE</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY manager</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: métricas agregadas</div>
+<div class="flow-node flow-node-step">orders</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH RECURSIVE equipo AS (
     -- Ancla: cada empleado es su propio líder
@@ -914,14 +999,13 @@ ORDER BY ingresos_del_equipo DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La tabla <code>employee_territories</code> forma un grafo bipartito empleado-territorio. La CTE recursiva puede recorrer territorios conectados a través de empleados compartidos. PostgreSQL ejecuta la recursión como búsqueda en anchura (BFS), ya que cada iteración explora los vecinos del nivel anterior.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    ET[employee_territories] --> A[Ancla: territorios del empleado 1]
-    A --> WT
-    WT --> R[JOIN: otros empleados en esos territorios]
-    R --> R2[JOIN: territorios de esos empleados]
-    R2 --> CHECK{Territorio nuevo}
-    CHECK -->|Si| WT
-    CHECK -->|No| FIN</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employee_territories</div>
+<div class="flow-node flow-node-step">Ancla: territorios del empleado 1</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">WT</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN: otros empleados en esos territorios</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN: territorios de esos empleados</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Territorio nuevo</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Si</span></div><div class="flow-node flow-node-step opacity-50 font-mono text-xs">↺ WT</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step">FIN</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH RECURSIVE red_territorios AS (
     -- Ancla: territorios del empleado inicial
@@ -957,12 +1041,13 @@ ORDER BY profundidad, territory_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La recursión inversa navega desde un nodo hoja hacia la raíz cambiando la dirección del JOIN. En lugar de <code>e.reports_to = o.employee_id</code> (padre a hijo), usa <code>o.reports_to = e.employee_id</code> (hijo a padre). PostgreSQL ejecuta esta variante con un <code>Index Scan</code> en <code>reports_to</code> por cada iteración.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    E[employees WHERE employee_id=8] --> A[Ancla: empleado objetivo]
-    A --> R[JOIN: encontrar jefe]
-    R --> CHECK{reports_to IS NULL}
-    CHECK -->|No| R
-    CHECK -->|Si| FIN</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-decision">employees WHERE employee_id=8</div>
+<div class="flow-node flow-node-step">Ancla: empleado objetivo</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN: encontrar jefe</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">reports_to IS NULL</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step opacity-50 font-mono text-xs">↺ JOIN: encontrar jefe</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Si</span></div><div class="flow-node flow-node-step">FIN</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH RECURSIVE cadena_mando AS (
     -- Ancla: empleado hoja
@@ -1007,16 +1092,18 @@ ORDER BY nivel DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Múltiples anclas en una CTE recursiva se unen con <code>UNION ALL</code> en la fase inicial. PostgreSQL ejecuta cada ancla por separado y combina los resultados en la <em>Working Table</em> inicial. Cada ancla puede tener diferentes filtros (ej. gerentes de diferentes regiones).</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    E1[employees: title like Manager] --> A1[Ancla 1]
-    E2[employees: title like Vice] --> A2[Ancla 2]
-    A1 --> UNION[UNION ALL anclas]
-    A2 --> UNION
-    UNION --> WT[Working Table inicial]
-    WT --> R[Recursión: subordinados]
-    R --> CHECK{Nuevos}
-    CHECK -->|Si| WT
-    CHECK -->|No| FIN</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees: title like Manager</div>
+<div class="flow-node flow-node-step">Ancla 1</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">UNION ALL anclas</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Working Table inicial</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Recursión: subordinados</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Nuevos</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Si</span></div><div class="flow-node flow-node-step opacity-50 font-mono text-xs">↺ Working Table inicial</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step">FIN</div></div>
+</div>
+<div class="flow-node flow-node-step">employees: title like Vice</div>
+<div class="flow-node flow-node-step">Ancla 2</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">UNION ALL anclas</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Working Table inicial</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Recursión: subordinados</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Nuevos</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Si</span></div><div class="flow-node flow-node-step opacity-50 font-mono text-xs">↺ Working Table inicial</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step">FIN</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH RECURSIVE gerentes_y_equipos AS (
     -- Ancla 1: gerentes de ventas
@@ -1072,11 +1159,12 @@ ORDER BY nivel, ruta_gerente;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Aunque <code>categories</code> no tiene <code>parent_category_id</code> en Northwind, podemos simular una jerarquía o procesar agrupaciones. La CTE recursiva funciona con cualquier estructura que tenga una referencia auto-relacional. Si no existe la columna, se puede simular con una tabla derivada o <code>VALUES</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    CAT[categories] --> A[Ancla: categorías raíz]
-    P[products] --> R[Recursión: productos por categoría]
-    R --> G[GROUP BY categoría padre]
-    G --> OUT[Resultado: jerarquía de categorías]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">categories</div>
+<div class="flow-node flow-node-step">Ancla: categorías raíz</div>
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">Recursión: productos por categoría</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY categoría padre</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: jerarquía de categorías</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH RECURSIVE jerarquia_categorias AS (
     -- Simulamos una jerarquía: Beverages (1) y Condiments (2) como raíces
@@ -1125,13 +1213,13 @@ ORDER BY ruta;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La detección de ciclos es crítica en grafos que pueden tener referencias circulares. PostgreSQL no tiene detección automática de ciclos en CTE recursivas; debe implementarse manualmente con un array de nodos visitados. El optimizador no puede optimizar esta protección; la verificación <code>NOT (id = ANY(visitados))</code> se ejecuta en cada iteración.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    E[employees] --> A[Ancla: empleado 1 con array visitado]
-    A --> WT
-    WT --> R[Recursión: subordinados]
-    R --> CHECK_CYCLE{empleado ya visitado}
-    CHECK_CYCLE -->|No, seguro| WT
-    CHECK_CYCLE -->|Si, ciclo detectado| DETECTED((CICLO DETECTADO))</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">employees</div>
+<div class="flow-node flow-node-step">Ancla: empleado 1 con array visitado</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">WT</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Recursión: subordinados</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">empleado ya visitado</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No, seguro</span></div><div class="flow-node flow-node-step opacity-50 font-mono text-xs">↺ WT</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Si, ciclo detectado</span></div><div class="flow-node flow-node-step">(CICLO DETECTADO</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH RECURSIVE exploracion_segura AS (
     -- Ancla: comenzar desde el CEO
@@ -1176,12 +1264,9 @@ ORDER BY nivel, nombre;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La CTE recursiva puede simular proyecciones iterativas donde cada paso depende del anterior. PostgreSQL ejecuta esto como un bucle numérico: cada iteración produce una fila con el período siguiente. El plan muestra <code>Recursive Union</code> con un <code>Result</code> ancla y un <code>Result</code> recursivo con operaciones aritméticas.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    BASE[Ancla: ventas del mes base] --> R[Recursión: mes + 1]
-    R --> CALC[proyección = anterior * (1 + tasa)]
-    CALC --> CHECK{mes < 12}
-    CHECK -->|Si| R
-    CHECK -->|No| FIN[Resultado: 12 meses proyectados]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">Ancla: ventas del mes base</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH RECURSIVE proyeccion_mensual AS (
     -- Ancla: ventas base del último mes con datos
@@ -1220,13 +1305,11 @@ ORDER BY mes_proyectado;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LAG(ventas, 1)</code> accede al valor de la fila anterior dentro de la misma partición. PostgreSQL implementa funciones de ventana en un nodo <code>WindowAgg</code> después de la agregación. El plan ordena los datos por <code>employee_id, mes</code> (explícito o implícito en <code>ORDER BY</code> de la ventana) y luego aplica la función en una sola pasada.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    O[orders] --> J1[JOIN order_details]
-    OD[order_details] --> J1
-    J1 --> G[GROUP BY employee_id, mes]
-    G --> W[WindowAgg: LAG]
-    W --> CALC[diferencia = actual - anterior]
-    CALC --> OUT[Resultado: variación mensual]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">JOIN order_details</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY employee_id, mes</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">WindowAgg: LAG</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">diferencia = actual - anterior</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: variación mensual</div>
+<div class="flow-node flow-node-step">order_details</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH ventas_mensuales_emp AS (
     SELECT
@@ -1257,12 +1340,10 @@ ORDER BY empleado, v.mes;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LEAD</code> accede al valor futuro. Combinado con un filtro externo (<code>WHERE diferencia &lt; -0.5</code>) permite detectar umbrales de alerta. PostgreSQL aplica el filtro después de la ventana, en un nodo <code>Filter</code> sobre <code>WindowAgg</code>. No hay predicado push-down posible para filtros sobre funciones de ventana.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    O[orders] --> G[GROUP BY customer_id, mes]
-    G --> W[WindowAgg: LEAD]
-    W --> CALC[tasa_retención = siguiente / actual]
-    CALC --> F[FILTER: retención < 0.5]
-    F --> OUT[Clientes en riesgo]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">GROUP BY customer_id, mes</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">WindowAgg: LEAD</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">tasa_retención = siguiente / actual</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FILTER: retención < 0.5</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Clientes en riesgo</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH frecuencia_cliente AS (
     SELECT
@@ -1303,11 +1384,11 @@ ORDER BY tasa_retencion_pct ASC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>ROWS BETWEEN 6 PRECEDING AND CURRENT ROW</code> define un marco físico de 7 filas. PostgreSQL materializa el frame en memoria dentro del nodo <code>WindowAgg</code>. Si <code>work_mem</code> es insuficiente, escribe en disco temporal. A diferencia de <code>RANGE BETWEEN</code>, <code>ROWS BETWEEN</code> cuenta filas exactas, no valores duplicados.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    O[orders] --> G[GROUP BY fecha]
-    OD[order_details] --> G
-    G --> W[WindowAgg: AVG con ROWS 6 PRECEDING]
-    W --> OUT[Resultado: ventas diarias + promedio 7 días]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">GROUP BY fecha</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">WindowAgg: AVG con ROWS 6 PRECEDING</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado: ventas diarias + promedio 7 días</div>
+<div class="flow-node flow-node-step">order_details</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH ventas_diarias AS (
     SELECT
@@ -1345,13 +1426,11 @@ ORDER BY fecha;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> con <code>ORDER BY mes</code> acumula todas las filas desde el inicio hasta el valor actual de la ordenación. <code>RANGE</code> agrupa filas con el mismo valor de <code>ORDER BY</code> en el frame, a diferencia de <code>ROWS</code>. Si hay meses sin ventas, <code>RANGE</code> los ignora; para forzar continuidad se necesita <code>generate_series</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    GS[generate_series: meses continuos] --> G[LEFT JOIN con ventas]
-    O[orders] --> J1
-    OD[order_details] --> J1
-    J1 --> G
-    G --> W[WindowAgg: RANGE UNBOUNDED PRECEDING]
-    W --> OUT[Ventas acumuladas sin saltos]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">generate_series: meses continuos</div>
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">order_details</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH meses AS (
     SELECT generate_series(
@@ -1392,10 +1471,10 @@ ORDER BY m.mes;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>FIRST_VALUE(precio) OVER (PARTITION BY category_id ORDER BY precio DESC)</code> obtiene el precio del primer producto en cada partición según el orden. PostgreSQL calcula <code>FIRST_VALUE</code> en el nodo <code>WindowAgg</code> evaluando la primera fila del frame. Sin embargo, para top-N, <code>DISTINCT ON</code> o <code>LATERAL</code> suelen ser más eficientes.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    P[products] --> W[WindowAgg: FIRST_VALUE por categoría]
-    W --> F[FILTER: precio = first_value]
-    F --> OUT[Producto más caro por categoría]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">WindowAgg: FIRST_VALUE por categoría</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FILTER: precio = first_value</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Producto más caro por categoría</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH productos_por_categoria AS (
     SELECT
@@ -1438,10 +1517,10 @@ ORDER BY category_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LAST_VALUE</code> requiere un frame explícito que incluya el final de la partición (<code>ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING</code>), porque el frame por defecto termina en <code>CURRENT ROW</code>. Sin esto, <code>LAST_VALUE</code> devuelve el valor de la fila actual. Esta es una trampa clásica de entrevista.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    P[products] --> W[WindowAgg: LAST_VALUE con frame FOLLOWING]
-    W --> F[FILTER: es el más barato]
-    F --> OUT[Producto más barato por categoría]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">WindowAgg: LAST_VALUE con frame FOLLOWING</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FILTER: es el más barato</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Producto más barato por categoría</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH precios_categoria AS (
     SELECT
@@ -1475,12 +1554,11 @@ ORDER BY category_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>NTH_VALUE(columna, N)</code> accede al enésimo valor del frame. PostgreSQL lo implementa en el nodo <code>WindowAgg</code> manteniendo un buffer deslizante de N filas. <code>NTH_VALUE</code> es menos eficiente que <code>ROW_NUMBER</code> con filtro porque el primero debe mantener el frame completo mientras que <code>ROW_NUMBER</code> solo necesita contar.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    OD[order_details] --> G[GROUP BY product_id, category_id]
-    P[products] --> G
-    G --> W[WindowAgg: NTH_VALUE por categoría]
-    W --> F[FILTER: rn = 3]
-    F --> OUT[Tercer producto más vendido]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">order_details</div>
+<div class="flow-node flow-node-step">GROUP BY product_id, category_id</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">WindowAgg: NTH_VALUE por categoría</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FILTER: rn = 3</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Tercer producto más vendido</div>
+<div class="flow-node flow-node-step">products</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH ventas_producto AS (
     SELECT
@@ -1526,12 +1604,10 @@ ORDER BY category_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>ROW_NUMBER</code> asigna números únicos, <code>RANK</code> deja huecos en empates, <code>DENSE_RANK</code> no deja huecos. PostgreSQL implementa estas tres en el nodo <code>WindowAgg</code> con diferente lógica de numeración. <code>DENSE_RANK</code> requiere un buffer adicional para contar valores distintos.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    O[orders] --> J1
-    OD[order_details] --> J1
-    J1 --> G[GROUP BY customer_id]
-    G --> W[WindowAgg: 3 funciones de ranking]
-    W --> OUT[Comparación de rankings]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">order_details</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH facturacion_clientes AS (
     SELECT
@@ -1566,12 +1642,11 @@ LIMIT 20;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>NTILE(4)</code> divide las filas en 4 grupos lo más equitativamente posible. PostgreSQL usa <code>NTILE</code> en el nodo <code>WindowAgg</code>, calculando el tamaño de cada bucket = <code>(filas + offset - 1) / num_buckets</code>. Es útil para segmentación percentilar pero no reemplaza <code>PERCENT_RANK</code> para distribución continua.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    P[products] --> J1[JOIN]
-    OD[order_details] --> J1
-    J1 --> G[GROUP BY product_id]
-    G --> W[WindowAgg: NTILE 4]
-    W --> OUT[Cuartiles por rentabilidad]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">JOIN</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY product_id</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">WindowAgg: NTILE 4</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Cuartiles por rentabilidad</div>
+<div class="flow-node flow-node-step">order_details</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH rentabilidad_producto AS (
     SELECT
@@ -1611,10 +1686,10 @@ ORDER BY ingresos DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>PERCENT_RANK</code> calcula <code>(rank - 1) / (total_filas - 1)</code>. <code>CUME_DIST</code> calcula <code>posición / total_filas</code>. PostgreSQL implementa ambas en el nodo <code>WindowAgg</code>. <code>CUME_DIST</code> es útil para umbrales tipo top 10% más caro. <code>PERCENT_RANK</code> es más adecuado para distribuciones uniformes.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    P[products] --> W[WindowAgg: PERCENT_RANK y CUME_DIST]
-    W --> S[ORDER BY precio DESC]
-    S --> OUT[Distribución percentilar]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">WindowAgg: PERCENT_RANK y CUME_DIST</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">ORDER BY precio DESC</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Distribución percentilar</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH distribucion_precios AS (
     SELECT
@@ -1651,11 +1726,12 @@ ORDER BY unit_price DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LATERAL</code> permite que la subconsulta interna haga referencia a columnas de la tabla externa. PostgreSQL ejecuta <code>LATERAL</code> como un <em>Nested Loop</em>: para cada fila de la tabla externa, ejecuta la subconsulta. Con un índice en <code>products(category_id, unit_price DESC)</code>, cada iteración es un <code>Index Scan</code> con <code>LIMIT 3</code>, extremadamente eficiente.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    C[categories] --> NL[Nested Loop]
-    subquery[SELECT: 3 productos por categoría] --> NL
-    P[products INDEX: category_id, price] --> subquery
-    NL --> OUT[Top 3 por categoría]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">categories</div>
+<div class="flow-node flow-node-step">Nested Loop</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Top 3 por categoría</div>
+<div class="flow-node flow-node-step">SELECT: 3 productos por categoría</div>
+<div class="flow-node flow-node-step">products INDEX: category_id, price</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     c.category_name,
@@ -1680,11 +1756,11 @@ ORDER BY c.category_name, p.unit_price DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Similar al anterior, pero sobre <code>orders</code> con filtro por <code>customer_id</code>. PostgreSQL usa un <code>Nested Loop</code> con <code>Index Scan</code> en <code>orders(customer_id, order_date DESC)</code>. Sin este índice, haría <code>Seq Scan</code> completo con <code>ORDER BY</code> para cada cliente, catastrófico para miles de clientes.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    C[customers] --> NL[Nested Loop]
-    O[orders INDEX: customer_id, date DESC] --> NL
-    NL --> LIMIT[LIMIT 5 por cliente]
-    LIMIT --> OUT[Últimos 5 pedidos por cliente]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">Nested Loop</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">LIMIT 5 por cliente</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Últimos 5 pedidos por cliente</div>
+<div class="flow-node flow-node-step">orders INDEX: customer_id, date DESC</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     c.company_name,
@@ -1711,11 +1787,11 @@ ORDER BY c.company_name, ultimos_pedidos.order_date DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LATERAL</code> con <code>ORDER BY</code> y <code>LIMIT 1</code> encuentra el valor extremo por grupo. PostgreSQL puede usar un <code>Index Scan</code> con <code>LIMIT</code> que explora solo las filas necesarias del índice, en lugar de escanear todas las filas del grupo.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    S[suppliers] --> NL[Nested Loop]
-    P[products INDEX: supplier_id, price] --> NL
-    NL --> L[LIMIT 1: producto más caro]
-    L --> OUT[Proveedor + producto estrella]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">suppliers</div>
+<div class="flow-node flow-node-step">Nested Loop</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">LIMIT 1: producto más caro</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Proveedor + producto estrella</div>
+<div class="flow-node flow-node-step">products INDEX: supplier_id, price</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     s.company_name AS proveedor,
@@ -1741,14 +1817,11 @@ ORDER BY producto_estrella.unit_price DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La extensión <code>tablefunc</code> instala la función <code>crosstab()</code> que pivotea filas a columnas. PostgreSQL ejecuta dos consultas: (1) la consulta de datos fuente que produce filas ordenadas, y (2) la consulta de categorías que define las columnas. El plan muestra <code>Function Scan</code> sobre <code>crosstab</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    O[orders] --> J1
-    OD[order_details] --> J1
-    J1 --> J2
-    P[products] --> J2
-    J2 --> G[GROUP BY categoría, año]
-    G --> CT[crosstab: fila a columna]
-    CT --> OUT[Matriz categoría × año]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">order_details</div>
+<div class="flow-node flow-node-step">products</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>-- Requiere: CREATE EXTENSION IF NOT EXISTS tablefunc;
 
@@ -1784,11 +1857,11 @@ ORDER BY category_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>generate_series(1, 12)</code> produce las 12 columnas de meses. <code>crosstab</code> con una subconsulta dinámica permite pivotar sin codificar cada mes. PostgreSQL ejecuta la subconsulta de categorías como un <code>Function Scan</code> sobre <code>generate_series</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    O[orders] --> G[GROUP BY customer_id, mes]
-    G --> CT[crosstab con generate_series]
-    GS[generate_series 1-12] --> CT
-    CT --> OUT[Matriz clientes × meses]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">GROUP BY customer_id, mes</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">crosstab con generate_series</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Matriz clientes × meses</div>
+<div class="flow-node flow-node-step">generate_series 1-12</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>-- Requiere: CREATE EXTENSION IF NOT EXISTS tablefunc;
 
@@ -1821,15 +1894,12 @@ LIMIT 20;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El análisis de cohortes agrupa clientes por mes de primera compra y calcula cuántos vuelven a comprar en meses posteriores. PostgreSQL ejecuta: (1) CTE de cohorte (primer pedido por cliente), (2) CTE de actividad mensual, (3) JOIN para calcular edad de cohorte. El plan muestra tres nodos <code>Aggregate</code> encadenados.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O[orders] --> A1[MIN: primera compra por cliente]
-    O2[orders] --> A2[DISTINCT: meses activos]
-    A1 --> J[JOIN por customer_id]
-    A2 --> J
-    J --> AGE[Calcular edad cohorte: meses_desde_adquisicion]
-    AGE --> G[GROUP BY cohorte, edad]
-    G --> PIVOT[Pivotar a matriz]
-    PIVOT --> OUT[Matriz de retención]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">MIN: primera compra por cliente</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN por customer_id</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Calcular edad cohorte: meses_desde_adquisicion</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY cohorte, edad</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Pivotar a matriz</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Matriz de retención</div>
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">DISTINCT: meses activos</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN por customer_id</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Calcular edad cohorte: meses_desde_adquisicion</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY cohorte, edad</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Pivotar a matriz</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Matriz de retención</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH cohorte AS (
     SELECT
@@ -1881,14 +1951,13 @@ ORDER BY cohorte_mes;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Extiende el análisis de cohortes con una dimensión geográfica. PostgreSQL agrupa por <code>cohorte_mes, pais</code>. El plan muestra un <code>GroupAggregate</code> sobre la combinación de ambas columnas. Sin índices, puede requerir un <code>Sort</code> costoso.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O[orders] --> J[Cohorte: primera compra + país]
-    C[customers] --> J
-    O2[orders] --> A[DISTINCT meses activos]
-    J --> JOIN[JOIN por cliente + país]
-    A --> JOIN
-    JOIN --> G[GROUP BY cohorte, país, edad]
-    G --> OUT[Retención por país]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">Cohorte: primera compra + país</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN por cliente + país</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY cohorte, país, edad</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Retención por país</div>
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">DISTINCT meses activos</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN por cliente + país</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY cohorte, país, edad</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Retención por país</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH cohorte_cliente AS (
     SELECT
@@ -1934,14 +2003,12 @@ ORDER BY cc.country, cc.cohorte_mes;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Segmenta clientes según su comportamiento en dos períodos: activos en ambos (recurrentes), activos solo en el primero (perdidos), activos solo en el segundo (nuevos). PostgreSQL ejecuta JOINs con filtros de fecha y <code>LEFT JOIN</code> con <code>IS NULL</code> para detectar ausencia.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    O1[orders 1997] --> A1[Clientes activos en período 1]
-    O2[orders 1998] --> A2[Clientes activos en período 2]
-    A1 --> FULL[FULL OUTER JOIN]
-    A2 --> FULL
-    FULL --> SEGMENT[CASE: nuevo / recurrente / perdido]
-    SEGMENT --> G[GROUP BY segmento]
-    G --> OUT[Conteo por segmento]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders 1997</div>
+<div class="flow-node flow-node-step">Clientes activos en período 1</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FULL OUTER JOIN</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">CASE: nuevo / recurrente / perdido</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY segmento</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Conteo por segmento</div>
+<div class="flow-node flow-node-step">orders 1998</div>
+<div class="flow-node flow-node-step">Clientes activos en período 2</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FULL OUTER JOIN</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">CASE: nuevo / recurrente / perdido</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">GROUP BY segmento</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Conteo por segmento</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH p1 AS (
     SELECT DISTINCT customer_id
@@ -1986,11 +2053,12 @@ ORDER BY
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LATERAL</code> con <code>NOT EXISTS</code> dentro evalúa la condición de ausencia por cada cliente. PostgreSQL puede convertir el <code>NOT EXISTS</code> en un <code>Anti JOIN</code> si la subconsulta es simple. Con <code>LATERAL</code>, la subconsulta puede referenciar <code>customer_id</code> del exterior, actuando como subconsulta correlacionada pero más explícita.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    C[customers] --> NL[Nested Loop: LATERAL]
-    each_cliente[NOT EXISTS en 1998] --> NL
-    O1997[orders 1998 indexed] --> each_cliente
-    NL --> OUT[Clientes perdidos entre años]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">Nested Loop: LATERAL</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Clientes perdidos entre años</div>
+<div class="flow-node flow-node-step">NOT EXISTS en 1998</div>
+<div class="flow-node flow-node-step">orders 1998 indexed</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     c.customer_id,
@@ -2029,12 +2097,11 @@ ORDER BY pedidos_1997.total_1997 DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LIMIT 1 OFFSET 1</code> dentro de <code>LATERAL</code> obtiene el segundo valor extremo. PostgreSQL ejecuta el <code>Index Scan</code> con <code>LIMIT</code> + <code>OFFSET</code> escaneando las primeras 2 filas del índice y descartando la primera. Esto es más eficiente que <code>ROW_NUMBER</code> + filtro porque no requiere ordenar todas las filas de la categoría.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    C[categories] --> NL[Nested Loop]
-    P[products INDEX: category_id, price DESC] --> NL
-    NL --> O[OFFSET 1: salta el más caro]
-    O --> L[LIMIT 1: toma el segundo]
-    L --> OUT[Segundo más caro por categoría]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">categories</div>
+<div class="flow-node flow-node-step">Nested Loop</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">OFFSET 1: salta el más caro</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">LIMIT 1: toma el segundo</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Segundo más caro por categoría</div>
+<div class="flow-node flow-node-step">products INDEX: category_id, price DESC</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     c.category_name,
@@ -2060,13 +2127,13 @@ ORDER BY segundo.unit_price DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>EXPLAIN (ANALYZE, BUFFERS)</code> ejecuta realmente la consulta y devuelve: tiempos reales por nodo, filas estimadas vs reales, buffers compartidos leídos (hit = caché, read = disco). El optimizador estima costos basado en estadísticas de <code>pg_statistic</code>. Discrepancias grandes entre filas estimadas y reales indican estadísticas desactualizadas.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    EXPLAIN[EXPLAIN ANALYZE] --> EJ[Ejecuta la consulta real]
-    EJ --> COLECTA[Mide tiempos y buffers]
-    COLECTA --> LECTURA[Lee shared_buffers: hit vs read]
-    COLECTA --> ESTIMACION[Compara filas estimadas vs reales]
-    ESTIMACION --> DIAG[Diagnóstico: Seq Scan, Hash Join, etc.]
-    DIAG --> RECOM[Recomendación: índice, ANALYZE, CTE]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">EXPLAIN ANALYZE</div>
+<div class="flow-node flow-node-step">Ejecuta la consulta real</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Mide tiempos y buffers</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Lee shared_buffers: hit vs read</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Compara filas estimadas vs reales</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Diagnóstico: Seq Scan, Hash Join, etc.</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Recomendación: índice, ANALYZE, CTE</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>EXPLAIN (ANALYZE, BUFFERS, COSTS, VERBOSE)
 SELECT
@@ -2093,16 +2160,12 @@ LIMIT 10;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Sin índice en <code>customers(country)</code>, PostgreSQL hace <code>Seq Scan</code> (lectura secuencial de toda la tabla). Con índice, hace <code>Index Scan</code> (búsqueda B-Tree a acceso directo a las páginas de datos). El plan cambia de <code>Seq Scan</code> (costo ~22) a <code>Index Scan</code> (costo ~4), y los buffers compartidos se reducen drásticamente.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    subgraph Antes del índice
-        C[customers] --> SS[Seq Scan: lee TODA la tabla]
-        SS --> F[FILTER: country = 'Germany']
-        F --> J1[JOIN con orders]
-    end
-    subgraph Después del índice
-        C2[customers] --> IS[Index Scan: busca solo Germany]
-        IS --> J2[JOIN con orders]
-    end</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">Seq Scan: lee TODA la tabla</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">FILTER: country = 'Germany'</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN con orders</div>
+<div class="flow-node flow-node-step">customers</div>
+<div class="flow-node flow-node-step">Index Scan: busca solo Germany</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">JOIN con orders</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>-- ANTES: Sin índice
 EXPLAIN (ANALYZE, BUFFERS)
@@ -2131,11 +2194,10 @@ DROP INDEX IF EXISTS idx_customers_country;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>pg_stat_user_tables</code> expone métricas de actividad: <code>n_live_tup</code>, <code>n_dead_tup</code>, <code>n_mod_since_analyze</code>, <code>last_analyze</code>, <code>last_vacuum</code>. Una tabla con muchas tuplas muertas obliga a <code>Seq Scan</code> porque el mapa de visibilidad está fragmentado. <code>VACUUM</code> recupera espacio y marca páginas como visibles, permitiendo <code>Index Only Scan</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    PG[pg_stat_user_tables] --> CTE[CTE: métricas por tabla]
-    CTE --> F[Filtro: dead_tup > 10% o mod > 10k]
-    F --> RECOM[Recomendación: VACUUM / ANALYZE]
-    RECOM --> PRIORIDAD[Priorizar por tamaño y actividad]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">pg_stat_user_tables</div>
+<div class="flow-node flow-node-step">CTE: métricas por tabla</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Filtro: dead_tup > 10% o mod > 10k</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Recomendación: VACUUM / ANALYZE</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Priorizar por tamaño y actividad</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH diagnostico_mantenimiento AS (
     SELECT
@@ -2180,12 +2242,10 @@ ORDER BY
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>pg_stat_all_tables</code> registra <code>seq_scan</code>, <code>seq_tup_read</code>, <code>idx_scan</code>, <code>idx_tup_fetch</code>. Una tabla con muchos <code>seq_scan</code> y <code>seq_tup_read</code> altos y pocos <code>idx_scan</code> indica falta de índices. <code>pg_stat_user_indexes</code> mide uso de índices existentes; índices con <code>idx_scan = 0</code> son candidatos a eliminación.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    PG[pg_stat_all_tables] --> IDX[pg_stat_user_indexes]
-    PG --> F[Filtro: seq_scan >> idx_scan]
-    F --> CAND[Tablas candidatas a índice]
-    IDX --> ZERO[Filtro: idx_scan = 0]
-    ZERO --> UNUSED[Índices no utilizados]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">pg_stat_all_tables</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Filtro: seq_scan >> idx_scan</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Tablas candidatas a índice</div>
+<div class="flow-node flow-node-step">pg_stat_user_indexes</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Filtro: idx_scan = 0</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Índices no utilizados</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH analisis_escaneos AS (
     SELECT
@@ -2224,18 +2284,14 @@ LIMIT 10;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>PostgreSQL elige entre: (1) <strong>Nested Loop</strong>: O(N×M), óptimo para conjuntos pequeños con índice; (2) <strong>Hash Join</strong>: O(N+M), construye hash table en memoria (<code>work_mem</code>), óptimo para un conjunto mediano y otro grande; (3) <strong>Merge Join</strong>: O(N log N + M log M), requiere datos ordenados, óptimo para rangos.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    subgraph Hash Join
-        O1[orders FILTRADO] --> H[Build Hash Table]
-        OD1[order_details] --> P[Probe: JOIN]
-        H --> P
-        P --> R1[Resultado]
-    end
-    subgraph Nested Loop
-        O2[orders] --> NL[Para cada fila...]
-        IDX[Index: order_details] --> NL
-        NL --> R2[Resultado]
-    end</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">orders FILTRADO</div>
+<div class="flow-node flow-node-step">Build Hash Table</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Probe: JOIN</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado</div>
+<div class="flow-node flow-node-step">order_details</div>
+<div class="flow-node flow-node-step">orders</div>
+<div class="flow-node flow-node-step">Para cada fila...</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Resultado</div>
+<div class="flow-node flow-node-step">Index: order_details</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>-- Fuerza Hash Join (por defecto si work_mem suficiente)
 SET enable_nestloop = OFF;
@@ -2275,14 +2331,12 @@ RESET enable_mergejoin;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Un índice parcial cubre solo un subconjunto de filas definido por <code>WHERE</code>. Es más pequeño y eficiente que un índice completo. Para consultas que siempre filtran por <code>discontinued = 0</code>, un índice parcial <code>WHERE discontinued = 0</code> indexa solo los productos activos, reduciendo tamaño y mantenimiento.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    subgraph Índice completo
-        PALL[products: 77 filas] --> IDX_ALL[Índice B-Tree: 77 entradas]
-    end
-    subgraph Índice parcial
-        PACT[products WHERE discontinued=0] --> IDX_PART[Índice B-Tree: ~69 entradas]
-    end
-    IDX_PART --> SCAN[Index Scan más pequeño]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products: 77 filas</div>
+<div class="flow-node flow-node-step">Índice B-Tree: 77 entradas</div>
+<div class="flow-node flow-node-decision">products WHERE discontinued=0</div>
+<div class="flow-node flow-node-step">Índice B-Tree: ~69 entradas</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Index Scan más pequeño</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>-- Crear índice parcial: solo productos activos
 CREATE INDEX idx_products_active ON products(product_name)
@@ -2317,17 +2371,12 @@ WHERE discontinued = 0;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Un índice compuesto <code>(category_id, unit_price DESC)</code> sirve consultas que filtran por categoría y ordenan por precio. PostgreSQL puede hacer <code>Index Only Scan</code> si todas las columnas necesarias están en el índice. El orden de las columnas importa: primero la columna de igualdad, luego la de ordenamiento.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    subgraph Sin índice compuesto
-        P1[products] --> SS[Seq Scan: lee todo]
-        SS --> F1[Filtra category_id]
-        F1 --> S1[Sort por unit_price]
-    end
-    subgraph Con índice compuesto
-        P2[products] --> IS[Index Scan: (cat, price)]
-        IS --> F2[Filtra category_id integrado]
-        F2 --> NO_SORT[Datos ya ordenados por price]
-    end</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">Seq Scan: lee todo</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Filtra category_id</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Sort por unit_price</div>
+<div class="flow-node flow-node-step">products</div>
+<div class="flow-node flow-node-step">Index Scan: (cat, price)</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Filtra category_id integrado</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Datos ya ordenados por price</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>-- Crear índice compuesto
 CREATE INDEX idx_products_cat_price ON products(category_id, unit_price DESC);
@@ -2358,15 +2407,12 @@ DROP INDEX IF EXISTS idx_products_cat_price;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Materializar una CTE (por defecto o explícita) crea una barrera de optimización: el optimizador no puede empujar filtros de la consulta externa hacia dentro de la CTE. Con <code>NOT MATERIALIZED</code>, el optimizador fusiona la CTE con la consulta externa y puede aplicar push-down de predicados.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    subgraph MATERIALIZED
-        CTE[CTE: todas las órdenes] --> TEMP[Tabla temporal]
-        TEMP --> EXT[SELECT externo filtra]
-    end
-    subgraph NOT MATERIALIZED
-        CTE2[CTE: misma definición] --> EXT2[Filtro push-down]
-        EXT2 --> IOE[Index Scan en orders]
-    end</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">CTE: todas las órdenes</div>
+<div class="flow-node flow-node-step">Tabla temporal</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">SELECT externo filtra</div>
+<div class="flow-node flow-node-step">CTE: misma definición</div>
+<div class="flow-node flow-node-step">Filtro push-down</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Index Scan en orders</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>-- Versión MATERIALIZED (por defecto)
 EXPLAIN (ANALYZE, BUFFERS)
@@ -2399,13 +2445,14 @@ WHERE customer_id = 'ALFKI';</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Índices duplicados o redundantes degradan el rendimiento de escritura (INSERT/UPDATE/DELETE deben mantenerlos todos) sin beneficio en lectura. <code>pg_index</code> almacena la definición de cada índice. Comparando <code>indkey</code> y <code>indexprs</code> se pueden identificar índices que son subconjunto de otros.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart LR
-    PG[pg_index + pg_class] --> J1[JOIN para lista de índices]
-    PG2[pg_stat_user_indexes] --> J1
-    J1 --> COMP[Comparar definiciones]
-    COMP --> DUP[Identificar duplicados]
-    COMP --> REDUN[Identificar redundantes]
-    DUP --> RECOM[Recomendación: DROP]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">pg_index + pg_class</div>
+<div class="flow-node flow-node-step">JOIN para lista de índices</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Comparar definiciones</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Identificar duplicados</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Recomendación: DROP</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Identificar redundantes</div></div>
+</div>
+<div class="flow-node flow-node-step">pg_stat_user_indexes</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH info_indices AS (
     SELECT
@@ -2456,23 +2503,22 @@ ORDER BY tabla, estado, idx_scan;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Un workflow de optimización sigue estos pasos: (1) Capturar consulta lenta (logs, pg_stat_statements, o manual), (2) Ejecutar <code>EXPLAIN (ANALYZE, BUFFERS)</code>, (3) Identificar nodos costosos (Seq Scan, Sort, Hash), (4) Verificar estadísticas (<code>last_analyze</code>), (5) Crear/revisar índices, (6) Reevaluar con <code>EXPLAIN ANALYZE</code>, (7) Documentar mejora. PostgreSQL 15+ añade <code>EXPLAIN (ANALYZE, SETTINGS)</code> para ver configuración relevante.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><pre class="mermaid">flowchart TD
-    Q[Consulta lenta] --> E1[EXPLAIN ANALYZE BUFFERS]
-    E1 --> A{Seq Scan en tabla grande}
-    A -->|Sí| IDX[Crear índice]
-    A -->|No| B{Discrepancia rows estimadas vs reales}
-    B -->|Sí| ANZ[ANALYZE]
-    B -->|No| C{Sort en memoria insuficiente}
-    C -->|Sí| WM[Ajustar work_mem]
-    C -->|No| D{CTE materializada innecesaria}
-    D -->|Sí| CTE[NOT MATERIALIZED]
-    D -->|No| REWRITE[Revisar rewrite de consulta]
-    IDX --> E2[EXPLAIN ANALYZE de verificación]
-    ANZ --> E2
-    WM --> E2
-    CTE --> E2
-    REWRITE --> E2
-    E2 --> DOC[Documentar mejora]</pre></div>
+<div class="pure-html-flowchart">
+<div class="flow-node flow-node-step">Consulta lenta</div>
+<div class="flow-node flow-node-step">EXPLAIN ANALYZE BUFFERS</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Seq Scan en tabla grande</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Sí</span></div><div class="flow-node flow-node-step">Crear índice</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">EXPLAIN ANALYZE de verificación</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Documentar mejora</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step">Discrepancia rows estimadas vs reales</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Sí</span></div><div class="flow-node flow-node-step">ANALYZE</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">EXPLAIN ANALYZE de verificación</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Documentar mejora</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step">Sort en memoria insuficiente</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Sí</span></div><div class="flow-node flow-node-step">Ajustar work_mem</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">EXPLAIN ANALYZE de verificación</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Documentar mejora</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step">CTE materializada innecesaria</div><div class="flow-branches-wrapper">
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">Sí</span></div><div class="flow-node flow-node-step">NOT MATERIALIZED</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">EXPLAIN ANALYZE de verificación</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Documentar mejora</div></div>
+<div class="flow-branch"><div class="flow-arrow-vertical">↓ <span class="branch-label">No</span></div><div class="flow-node flow-node-step">Revisar rewrite de consulta</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">EXPLAIN ANALYZE de verificación</div><div class="flow-arrow-vertical">↓ </div><div class="flow-node flow-node-step">Documentar mejora</div></div>
+</div></div>
+</div></div>
+</div></div>
+</div>
+</div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>-- PASO 1: Capturar consulta original
 EXPLAIN (ANALYZE, BUFFERS, SETTINGS)
@@ -2534,10 +2580,6 @@ SELECT 'Despues: Index Scan en orders, Hash Join, 150 buffers';</code></pre></di
         </footer>
     </div>
 
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
     <script>
         const themeToggleBtn = document.getElementById('theme-toggle');
         
