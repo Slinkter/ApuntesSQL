@@ -20,7 +20,7 @@ def markdown_to_html(md_content, title):
                 code_content = '\n'.join(code_lines)
                 escaped_code = code_content.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
                 if code_lang == 'mermaid':
-                    html_body.append(f'<div class="mermaid-container"><div class="mermaid">{escaped_code}</div></div>')
+                    html_body.append(f'<div class="mermaid-container"><pre class="mermaid">{code_content}</pre></div>')
                 else:
                     html_body.append(f'<div class="code-block-wrapper"><div class="code-lang-badge">{code_lang.upper()}</div><pre><code>{escaped_code}</code></pre></div>')
                 code_lines = []

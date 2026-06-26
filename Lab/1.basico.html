@@ -342,13 +342,13 @@
 <p>3. <code>SELECT</code>: Proyectar únicamente las columnas solicitadas.</p>
 <p>4. <code>ORDER BY</code>: Ejecutar un algoritmo de ordenamiento (ej. <em>QuickSort</em> si cabe en <code>work_mem</code>, o <em>External Merge</em> en disco) sobre el set resultante.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    A[Disk: products table] --&gt;|Seq Scan / Index Scan| B(Buffer: FROM products)
-    B --&gt; C{WHERE unit_price &gt; 20 \n AND discontinued = 0}
-    C --&gt;|Filtro Fallido| D[Descartar Tupla]
-    C --&gt;|Filtro Exitoso| E[Memoria: SELECT product_name, unit_price]
-    E --&gt; F[work_mem: ORDER BY product_name ASC]
-    F --&gt; G[Client: ResultSet]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    A[Disk: products table] -->|Seq Scan / Index Scan| B(Buffer: FROM products)
+    B --> C{WHERE unit_price > 20 \n AND discontinued = 0}
+    C -->|Filtro Fallido| D[Descartar Tupla]
+    C -->|Filtro Exitoso| E[Memoria: SELECT product_name, unit_price]
+    E --> F[work_mem: ORDER BY product_name ASC]
+    F --> G[Client: ResultSet]</pre></div>
 <h4>💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>EXPLAIN (ANALYZE, BUFFERS)
 SELECT 
@@ -374,20 +374,20 @@ ORDER BY
 <h4>🧠 1. Marco Conceptual del Optimizador</h4>
 <p>Este ejercicio evalúa la combinación de ordenamiento y limitación. Al solicitar un <code>LIMIT 5</code> junto a un <code>ORDER BY</code>, PostgreSQL puede emplear una optimización conocida como <em>Top-N Heapsort</em>. En lugar de ordenar toda la tabla y luego cortar los primeros 5 registros, el motor mantiene un <em>min-heap</em> en memoria (limitado a 5 elementos). Esto reduce drásticamente el consumo de <code>work_mem</code> y el tiempo de CPU, transformando una complejidad <code>O(N log N)</code> en <code>O(N log K)</code>, donde <code>K = 5</code>.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">sequenceDiagram
+<div class="mermaid-container"><pre class="mermaid">sequenceDiagram
     participant Executor
     participant Heap (work_mem)
     participant Relation (FROM)
     
-    Executor-&gt;&gt;Relation: Solicita primera tupla
-    Relation--&gt;&gt;Executor: Empleado A
-    Executor-&gt;&gt;Heap: Inserta en Min-Heap (K=5)
+    Executor->>Relation: Solicita primera tupla
+    Relation-->>Executor: Empleado A
+    Executor->>Heap: Inserta en Min-Heap (K=5)
     Note over Executor,Heap: Repite hasta recorrer tabla
-    Executor-&gt;&gt;Heap: Compara nueva tupla con raíz del Heap
+    Executor->>Heap: Compara nueva tupla con raíz del Heap
     alt Es más reciente
-        Heap--&gt;&gt;Heap: Reemplaza y balancea árbol
+        Heap-->>Heap: Reemplaza y balancea árbol
     end
-    Executor-&gt;&gt;Client: Devuelve nodos ordenados del Heap</div></div>
+    Executor->>Client: Devuelve nodos ordenados del Heap</pre></div>
 <h4>💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>EXPLAIN (ANALYZE, BUFFERS)
 SELECT 
@@ -411,14 +411,14 @@ LIMIT 5;</code></pre></div>
 <h4>🧠 1. Marco Conceptual del Optimizador</h4>
 <p>El estándar ANSI SQL opera bajo una lógica trivalente (Verdadero, Falso, Desconocido). Comparar un <code>NULL</code> mediante el operador <code>=</code> siempre resultará en <code>UNKNOWN</code> (Desconocido), por lo que el predicado de filtro descartará la fila. Es imperativo utilizar la función <code>IS NULL</code>. Para el formateo en la proyección (SELECT), PostgreSQL evalúa funciones escalares como <code>COALESCE</code> durante la fase de transformación de salida, fila por fila. <code>COALESCE</code> cortocircuita y devuelve el primer argumento no nulo.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    A[(Table: customers)] --&gt; B[Eval: region IS NULL]
-    B --&gt;|Verdadero| C[Proyección: SELECT]
-    B --&gt;|Falso/Unknown| D[Drop Fila]
-    C --&gt; E{Es NULL?}
-    E --&gt;|Sí| F[Transformar a 'N/A']
-    E --&gt;|No| G[Mantener valor]
-    F --&gt; H[ResultSet]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    A[(Table: customers)] --> B[Eval: region IS NULL]
+    B -->|Verdadero| C[Proyección: SELECT]
+    B -->|Falso/Unknown| D[Drop Fila]
+    C --> E{Es NULL?}
+    E -->|Sí| F[Transformar a 'N/A']
+    E -->|No| G[Mantener valor]
+    F --> H[ResultSet]</pre></div>
 <h4>💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>EXPLAIN (ANALYZE, BUFFERS)
 SELECT 

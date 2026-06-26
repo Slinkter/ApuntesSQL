@@ -337,14 +337,14 @@
 <h4>🧠 1. Marco Conceptual del Optimizador</h4>
 <p>Al utilizar <code>GROUP BY</code>, PostgreSQL debe agrupar tuplas que comparten la misma clave de agrupación. El motor seleccionará entre un <em>HashAggregate</em> (construyendo una tabla hash en memoria si cabe en <code>work_mem</code>) o un <em>GroupAggregate</em> (que requiere que los datos estén previamente ordenados). La cláusula <code>HAVING</code> actúa como un filtro secundario aplicado <em>después</em> de la agregación, a diferencia de <code>WHERE</code>, que filtra <em>antes</em>. Si el volumen de grupos es pequeño, el <em>HashAggregate</em> es típicamente el plan elegido por su menor costo de I/O.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    A[Seq Scan: orders &amp; order_details] --&gt; B(Hash Join)
-    B --&gt; C{work_mem: HashAggregate \n GROUP BY employee_id}
-    C --&gt; D[Calcular SUM: total_sales]
-    D --&gt; E{HAVING \n total_sales &gt; 100000}
-    E --&gt;|Falla| F[Descartar Grupo]
-    E --&gt;|Pasa| G[work_mem: Sort \n ORDER BY total_sales DESC]
-    G --&gt; H[Client: ResultSet]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    A[Seq Scan: orders & order_details] --> B(Hash Join)
+    B --> C{work_mem: HashAggregate \n GROUP BY employee_id}
+    C --> D[Calcular SUM: total_sales]
+    D --> E{HAVING \n total_sales > 100000}
+    E -->|Falla| F[Descartar Grupo]
+    E -->|Pasa| G[work_mem: Sort \n ORDER BY total_sales DESC]
+    G --> H[Client: ResultSet]</pre></div>
 <h4>💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>EXPLAIN (ANALYZE, BUFFERS)
 SELECT 
@@ -373,14 +373,14 @@ ORDER BY
 <h4>🧠 1. Marco Conceptual del Optimizador</h4>
 <p>La resolución de múltiples <em>JOINs</em> requiere que el motor determine el orden óptimo de combinación (Join Tree). Para unir <code>order_details</code>, <code>products</code> y <code>categories</code>, el planificador evaluará estadísticas. Generalmente, elegirá un <em>Hash Join</em> si las tablas internas caben en memoria, construyendo un <em>Hash Table</em> sobre la relación más pequeña (ej. <code>categories</code> o <code>products</code>) y escaneando la más grande (<code>order_details</code>) para encontrar coincidencias. Si existen índices efectivos y alta selectividad, podría optar por un <em>Nested Loop Join</em>.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    A[Seq Scan: categories] --&gt;|Build| B(Hash Table 1)
-    C[Seq Scan: products] --&gt;|Probe &amp; Build| D(Hash Table 2 + Hash Join)
-    B --&gt; D
-    E[Seq Scan: order_details] --&gt;|Probe| F(Hash Join Final)
-    D --&gt; F
-    F --&gt; G[Proyección: SELECT]
-    G --&gt; H[Client: ResultSet]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    A[Seq Scan: categories] -->|Build| B(Hash Table 1)
+    C[Seq Scan: products] -->|Probe & Build| D(Hash Table 2 + Hash Join)
+    B --> D
+    E[Seq Scan: order_details] -->|Probe| F(Hash Join Final)
+    D --> F
+    F --> G[Proyección: SELECT]
+    G --> H[Client: ResultSet]</pre></div>
 <h4>💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>EXPLAIN (ANALYZE, BUFFERS)
 SELECT 
@@ -407,13 +407,13 @@ INNER JOIN
 <h4>🧠 1. Marco Conceptual del Optimizador</h4>
 <p>Para resolver consultas de exclusión o "ausencia de", el patrón clásico es un <code>LEFT JOIN</code> acoplado con una validación <code>IS NULL</code> sobre la llave foránea del lado derecho. A nivel de ejecución lógica, el motor procesa un <em>Anti-Join</em>. Un <em>Hash Anti Join</em> o <em>Merge Anti Join</em> es altamente eficiente, ya que el motor puede detener la búsqueda para un producto tan pronto como encuentra la primera orden asociada, descartando la tupla inmediatamente y emitiendo solo aquellas que jamás encontraron coincidencia.</p>
 <h4>📊 2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    A[Seq Scan: products] --&gt; B(LEFT JOIN)
-    C[Index/Seq Scan: order_details] --&gt; B
-    B --&gt; D{od.order_id IS NULL?}
-    D --&gt;|Falso: Tiene órdenes| E[Descartar]
-    D --&gt;|Verdadero: Anti-Join match| F[Proyectar Producto]
-    F --&gt; G[Client: ResultSet]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    A[Seq Scan: products] --> B(LEFT JOIN)
+    C[Index/Seq Scan: order_details] --> B
+    B --> D{od.order_id IS NULL?}
+    D -->|Falso: Tiene órdenes| E[Descartar]
+    D -->|Verdadero: Anti-Join match| F[Proyectar Producto]
+    F --> G[Client: ResultSet]</pre></div>
 <h4>💻 3. Solución SQL (Validada para AWS EC2/Docker)</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>EXPLAIN (ANALYZE, BUFFERS)
 SELECT 

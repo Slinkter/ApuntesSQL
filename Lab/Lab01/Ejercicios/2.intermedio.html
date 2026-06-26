@@ -333,11 +333,11 @@
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La cláusula <code>GROUP BY country</code> fuerza a PostgreSQL a elegir entre dos algoritmos físicos de agregación: <strong>HashAggregate</strong> (construye una tabla hash en <code>work_mem</code> con clave <code>country</code>) o <strong>GroupAggregate</strong> (ordena primero por <code>country</code> y luego agrupa linealmente). Para una tabla de 91 filas con baja cardinalidad (≈21 países), HashAggregate es la estrategia óptima. El filtro posterior con <code>HAVING COUNT(*) &gt; 5</code> descarta grupos enteros en la fase de post-agregación, reduciendo el conjunto antes de la proyección final.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    C["customers (91 filas)"] --&gt;|Seq Scan / Lectura Heap| Agg["HashAggregate (work_mem)"]
-    Agg --&gt;|Clave: country, Acumulador: COUNT(*)| Groups["Grupos: 21 países"]
-    Groups --&gt;|HAVING COUNT(*) &gt; 5| Filtered["Países con &gt; 5 clientes"]
-    Filtered --&gt;|ORDER BY total DESC| Out["Reporte ordenado descendentemente"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    C["customers (91 filas)"] -->|Seq Scan / Lectura Heap| Agg["HashAggregate (work_mem)"]
+    Agg -->|Clave: country, Acumulador: COUNT(*)| Groups["Grupos: 21 países"]
+    Groups -->|HAVING COUNT(*) > 5| Filtered["Países con > 5 clientes"]
+    Filtered -->|ORDER BY total DESC| Out["Reporte ordenado descendentemente"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     country,
@@ -353,10 +353,10 @@ ORDER BY total_clientes DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>GROUP BY category_id</code> sobre la tabla <code>products</code> (77 filas, 8 categorías) fuerza una agregación por clave foránea. El optimizador lee secuencialmente la tabla, extrayendo <code>category_id</code> y <code>product_id</code> (tupla de ancho mínimo), y aplica HashAggregate. <code>HAVING COUNT(<em>) &gt; 10</code> retiene solo categorías con alta densidad de SKUs. Si existe un índice en <code>products(category_id)</code>, PostgreSQL puede realizar un </em>Index-Only Scan* para leer solo la clave, evitando el Heap.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    P["products (Heap)"] --&gt;|Index-Only Scan en category_id + product_id| IO["Índice B-Tree"]
-    IO --&gt;|Conteo por clave| Agg["HashAggregate: COUNT(*)"]
-    Agg --&gt;|HAVING &gt; 10| Out["Categorías con más de 10 productos"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    P["products (Heap)"] -->|Index-Only Scan en category_id + product_id| IO["Índice B-Tree"]
+    IO -->|Conteo por clave| Agg["HashAggregate: COUNT(*)"]
+    Agg -->|HAVING > 10| Out["Categorías con más de 10 productos"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     category_id,
@@ -372,11 +372,11 @@ ORDER BY total_productos DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La consulta agrupa <code>orders</code> por <code>employee_id</code> (830 filas, 9 empleados). El optimizador lee secuencialmente la tabla transaccional, proyecta solo <code>employee_id</code> y <code>order_id</code> (tupla angosta), y acumula el contador. <code>HAVING COUNT(order_id) &gt; 80</code> filtra los 3 empleados top. El planificador puede optar por GroupAggregate si <code>orders</code> está físicamente ordenada por <code>employee_id</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders (Seq Scan)"] --&gt;|Proyecto employee_id, order_id| Agg["GroupAggregate / HashAggregate"]
-    Agg --&gt;|employee_id, COUNT(*)| Groups["9 grupos (uno por empleado)"]
-    Groups --&gt;|HAVING COUNT(*) &gt; 80| Top["Empleados con &gt; 80 pedidos"]
-    Top --&gt;|ORDER BY total DESC| Out["Ranking de productividad"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders (Seq Scan)"] -->|Proyecto employee_id, order_id| Agg["GroupAggregate / HashAggregate"]
+    Agg -->|employee_id, COUNT(*)| Groups["9 grupos (uno por empleado)"]
+    Groups -->|HAVING COUNT(*) > 80| Top["Empleados con > 80 pedidos"]
+    Top -->|ORDER BY total DESC| Out["Ranking de productividad"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     employee_id,
@@ -392,12 +392,12 @@ ORDER BY total_pedidos DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Requiere un <code>INNER JOIN</code> entre <code>suppliers</code> y <code>products</code> antes de agrupar. PostgreSQL aplica Predicate Pushdown: primero une ambas tablas (Hash Join: <code>suppliers</code> es la tabla pequeña de 29 filas, se construye hash en <code>supplier_id</code>), luego agrupa por <code>supplier_id, company_name</code> y cuenta productos. <code>HAVING COUNT(p.product_id) &gt; 3</code> retorna proveedores con cartera sustancial.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    S["suppliers (29 filas)"] --&gt;|Hash Build| HT["Hash Table (supplier_id)"]
-    P["products (77 filas)"] --&gt;|Hash Probe| HT
-    HT --&gt;|INNER JOIN| J["Conjunto: supplier_id, company_name, product_id"]
-    J --&gt;|GROUP BY supplier_id| Agg["COUNT(product_id)"]
-    Agg --&gt;|HAVING &gt; 3| Out["Proveedores con &gt; 3 productos"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    S["suppliers (29 filas)"] -->|Hash Build| HT["Hash Table (supplier_id)"]
+    P["products (77 filas)"] -->|Hash Probe| HT
+    HT -->|INNER JOIN| J["Conjunto: supplier_id, company_name, product_id"]
+    J -->|GROUP BY supplier_id| Agg["COUNT(product_id)"]
+    Agg -->|HAVING > 3| Out["Proveedores con > 3 productos"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     s.supplier_id,
@@ -415,11 +415,11 @@ ORDER BY total_productos DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Consulta que une <code>orders</code> con <code>order_details</code> (830 × 2155 filas) para calcular facturación por cliente. El optimizador ejecuta un Hash Join entre ambas tablas (tabla intermedia aproximada de 2155 filas), agrupa por <code>customer_id</code> y suma <code>(quantity <em> unit_price </em> (1 - discount))</code>. <code>HAVING SUM(...) &gt; 5000</code> filtra solo los clientes de alto valor. La expresión aritmética se evalúa en la CPU por cada tupla antes de la agregación.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders"] --&gt;|Hash Join| OD["order_details"]
-    OD --&gt;|product_id, quantity, unit_price, discount| Calc["Cálculo: quantity * unit_price * (1 - discount)"]
-    Calc --&gt;|GROUP BY customer_id| Agg["SUM(facturacion)"]
-    Agg --&gt;|HAVING SUM &gt; 5000| Out["Clientes premium"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders"] -->|Hash Join| OD["order_details"]
+    OD -->|product_id, quantity, unit_price, discount| Calc["Cálculo: quantity * unit_price * (1 - discount)"]
+    Calc -->|GROUP BY customer_id| Agg["SUM(facturacion)"]
+    Agg -->|HAVING SUM > 5000| Out["Clientes premium"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     o.customer_id,
@@ -436,11 +436,11 @@ ORDER BY facturacion_total DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Agrupa <code>order_details</code> por <code>product_id</code>, sumando <code>quantity</code>. Con 2155 filas, el HashAggregate es eficiente. <code>HAVING SUM(quantity) &gt; 200</code> descarta productos de baja rotación. El planificador proyecta solo <code>product_id</code> y <code>quantity</code> desde el Heap, minimizando el ancho de tupla en memoria.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    OD["order_details (Seq Scan)"] --&gt;|Proyecto: product_id, quantity| Agg["HashAggregate (work_mem)"]
-    Agg --&gt;|SUM(quantity) GROUP BY product_id| Groups["77 grupos"]
-    Groups --&gt;|HAVING SUM &gt; 200| Filtered["Productos alta rotación"]
-    Filtered --&gt;|ORDER BY total DESC| Out["Top ventas por cantidad"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    OD["order_details (Seq Scan)"] -->|Proyecto: product_id, quantity| Agg["HashAggregate (work_mem)"]
+    Agg -->|SUM(quantity) GROUP BY product_id| Groups["77 grupos"]
+    Groups -->|HAVING SUM > 200| Filtered["Productos alta rotación"]
+    Filtered -->|ORDER BY total DESC| Out["Top ventas por cantidad"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     product_id,
@@ -456,10 +456,10 @@ ORDER BY unidades_vendidas DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>GROUP BY EXTRACT(YEAR FROM order_date)</code> fuerza la evaluación de la función <code>EXTRACT</code> sobre cada tupla de <code>orders</code> (830 filas). PostgreSQL convierte la fecha a un entero de año y agrupa sobre ese valor derivado. El optimizador no puede usar un índice B-Tree en <code>order_date</code> para Index-Only Scan porque la expresión no es idéntica a la columna subyacente (<code>order_date</code> vs <code>EXTRACT</code>). <code>HAVING COUNT(*) &gt; 100</code> retiene años con alta actividad.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders (Heap)"] --&gt;|Seq Scan| Extract["EXTRACT(YEAR FROM order_date)"]
-    Extract --&gt;|Año como entero| Agg["HashAggregate: GROUP BY año"]
-    Agg --&gt;|HAVING COUNT &gt; 100| Out["Años con &gt; 100 pedidos"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders (Heap)"] -->|Seq Scan| Extract["EXTRACT(YEAR FROM order_date)"]
+    Extract -->|Año como entero| Agg["HashAggregate: GROUP BY año"]
+    Agg -->|HAVING COUNT > 100| Out["Años con > 100 pedidos"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     EXTRACT(YEAR FROM order_date)::int AS anio,
@@ -475,10 +475,10 @@ ORDER BY anio;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>GROUP BY ship_country</code> sobre 830 pedidos. <code>AVG(freight)</code> calcula la media aritmética manteniendo dos variables de estado transitorias (suma acumulada y contador). <code>HAVING AVG(freight) &gt; 50</code> filtra países con costo logístico alto. El planificador puede usar un índice en <code>ship_country</code> si existe para reducir el Heap Scan, aunque la tabla es pequeña.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    O["orders"] --&gt;|Seq Scan| Agg["HashAggregate: AVG(freight)"]
-    Agg --&gt;|ship_country, avg_freight| Groups["21 países destino"]
-    Groups --&gt;|HAVING AVG &gt; 50| Filtered["Países con flete costoso"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    O["orders"] -->|Seq Scan| Agg["HashAggregate: AVG(freight)"]
+    Agg -->|ship_country, avg_freight| Groups["21 países destino"]
+    Groups -->|HAVING AVG > 50| Filtered["Países con flete costoso"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     ship_country,
@@ -495,10 +495,10 @@ ORDER BY flete_promedio DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>GROUP BY city</code> sobre <code>employees</code> (9 filas). El Optimizador ejecuta un Seq Scan trivial y HashAggregate en <code>work_mem</code>. <code>HAVING COUNT(*) &gt; 1</code> filtra ciudades con más de un empleado. La cardinalidad es tan baja que el plan es prácticamente instantáneo, pero el ejercicio refuerza el concepto de agrupamiento con filtro.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    E["employees (9 filas)"] --&gt;|Seq Scan| Agg["HashAggregate"]
-    Agg --&gt;|GROUP BY city| Groups["Ciudades agrupadas"]
-    Groups --&gt;|HAVING COUNT(*) &gt; 1| Out["Ciudades con 2+ empleados"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    E["employees (9 filas)"] -->|Seq Scan| Agg["HashAggregate"]
+    Agg -->|GROUP BY city| Groups["Ciudades agrupadas"]
+    Groups -->|HAVING COUNT(*) > 1| Out["Ciudades con 2+ empleados"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     city,
@@ -514,10 +514,10 @@ ORDER BY total_empleados DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>GROUP BY category_id</code> sobre <code>products</code>, calculando <code>AVG(unit_price)</code>. PostgreSQL debe leer la columna <code>unit_price</code> (numeric) y <code>category_id</code> (int). <code>HAVING AVG(unit_price) &gt; 25</code> retiene categorías cuyo precio promedio excede 25. Si existe un índice compuesto en <code>(category_id, unit_price)</code>, el optimizador puede ejecutar un <em>Index-Only Scan</em> evitando la lectura del Heap.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    P["products (Heap)"] --&gt;|Index-Only Scan| Idx["Índice (category_id, unit_price)"]
-    Idx --&gt;|GROUP BY category_id| Agg["AVG(unit_price)"]
-    Agg --&gt;|HAVING AVG &gt; 25| Out["Categorías premium"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    P["products (Heap)"] -->|Index-Only Scan| Idx["Índice (category_id, unit_price)"]
+    Idx -->|GROUP BY category_id| Agg["AVG(unit_price)"]
+    Agg -->|HAVING AVG > 25| Out["Categorías premium"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     category_id,
@@ -534,15 +534,15 @@ ORDER BY precio_promedio DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La subconsulta escalar <code>(SELECT MAX(unit_price) FROM products)</code> se ejecuta una sola vez en la fase de iniciación de la consulta externa. PostgreSQL la trata como una constante paramétrica (el planificador la materializa como un <code>Result</code> node). El valor resultante se une implícitamente a cada fila de <code>products</code> sin costo adicional de E/S. La tabla se escanea dos veces: una para la subconsulta (Seq Scan con agregación) y otra para la externa.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
     subgraph Subconsulta
-        P1["products (Seq Scan)"] --&gt;|MAX(unit_price)| MaxVal["Constante: 263.50"]
+        P1["products (Seq Scan)"] -->|MAX(unit_price)| MaxVal["Constante: 263.50"]
     end
     subgraph Consulta externa
-        P2["products (Seq Scan 2)"] --&gt;|Filtro: unit_price = MAX| Filter["unit_price = 263.50"]
-        Filter --&gt; Out["Producto más caro"]
+        P2["products (Seq Scan 2)"] -->|Filtro: unit_price = MAX| Filter["unit_price = 263.50"]
+        Filter --> Out["Producto más caro"]
     end
-    MaxVal --&gt; Filter</div></div>
+    MaxVal --> Filter</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     product_id,
@@ -560,10 +560,10 @@ WHERE unit_price = (
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La subconsulta <code>SELECT supplier_id FROM suppliers WHERE country = 'Japan'</code> se ejecuta primero (materializada como tabla hash o resultado literal) y luego la externa usa <code>IN</code> para sondear. PostgreSQL transforma internamente <code>IN (subquery)</code> en un <code>Semi Join</code> (<code>Hash Semi Join</code>) si la subconsulta no es correlacionada, evitando duplicados. La tabla <code>suppliers</code> tiene 29 filas; el Hash Semi Join es óptimo.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    S["suppliers (29 filas)"] --&gt;|Filtro: country = 'Japan'| SubQ["Hash Set: supplier_ids"]
-    P["products (77 filas)"] --&gt;|Sondeo en Hash Set| Semi["Hash Semi Join"]
-    Semi --&gt;|Coincidencia| Out["Productos de proveedores japoneses"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    S["suppliers (29 filas)"] -->|Filtro: country = 'Japan'| SubQ["Hash Set: supplier_ids"]
+    P["products (77 filas)"] -->|Sondeo en Hash Set| Semi["Hash Semi Join"]
+    Semi -->|Coincidencia| Out["Productos de proveedores japoneses"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     product_id,
@@ -583,12 +583,12 @@ ORDER BY product_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La subconsulta <code>SELECT AVG(p2.unit_price) FROM products p2 WHERE p2.category_id = p1.category_id</code> está correlacionada: hace referencia a <code>p1.category_id</code> de la consulta externa. PostgreSQL la ejecuta una vez <strong>por cada fila</strong> de la tabla externa (77 filas), resultando en un plan con <code>InitPlan</code> o <code>SubPlan</code>. Esto puede forzar un <code>Nested Loop</code> implícito con costo $O(N \times M)$. La subconsulta calcula <code>AVG</code> sobre el subconjunto de productos de la misma categoría.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    P1["products p1 (77 filas)"] --&gt;|Para cada fila| Loop["SubPlan (correlacionado)"]
-    Loop --&gt;|Filtra p2.category_id = p1.category_id| P2["products p2 (Subconjunto por categoría)"]
-    P2 --&gt;|AVG(unit_price)| Avg["Promedio de la categoría"]
-    Avg --&gt;|¿p1.unit_price &gt; AVG?| Check{"unit_price &gt; promedio"}
-    Check --&gt;|Sí| Out["Producto sobre el promedio"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    P1["products p1 (77 filas)"] -->|Para cada fila| Loop["SubPlan (correlacionado)"]
+    Loop -->|Filtra p2.category_id = p1.category_id| P2["products p2 (Subconjunto por categoría)"]
+    P2 -->|AVG(unit_price)| Avg["Promedio de la categoría"]
+    Avg -->|¿p1.unit_price > AVG?| Check{"unit_price > promedio"}
+    Check -->|Sí| Out["Producto sobre el promedio"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     product_name,
@@ -608,10 +608,10 @@ ORDER BY category_id, unit_price DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La subconsulta en <code>FROM</code> (derived table) calcula <code>COUNT(product_id)</code> por <code>order_id</code> (2155 filas agrupadas en ≈830 grupos). PostgreSQL materializa este resultado como una tabla temporal en memoria. Luego la consulta externa calcula <code>AVG(total_productos)</code> sobre esa tabla virtual. El optimizador no puede propagar condiciones de filtro hacia la derived table porque no hay cláusula <code>WHERE</code> externa.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    OD["order_details (2155 filas)"] --&gt;|GROUP BY order_id| Agg["COUNT(product_id) por pedido"]
-    Agg --&gt;|Materializar| DT["Derived Table (830 filas)"]
-    DT --&gt;|AVG(total_productos)| Out["Promedio de ítems por pedido"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    OD["order_details (2155 filas)"] -->|GROUP BY order_id| Agg["COUNT(product_id) por pedido"]
+    Agg -->|Materializar| DT["Derived Table (830 filas)"]
+    DT -->|AVG(total_productos)| Out["Promedio de ítems por pedido"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     ROUND(AVG(total_productos)::numeric, 2) AS promedio_items_por_pedido
@@ -629,11 +629,11 @@ FROM (
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>EXISTS</code> ejecuta un <strong>Semi Join</strong> lógico. PostgreSQL evaluará <code>EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.customer_id)</code> y detendrá el escaneo interno en cuanto encuentre <strong>la primera</strong> coincidencia para cada cliente (short-circuit evaluation). Esto es radicalmente más eficiente que <code>IN</code> cuando la subconsulta puede retornar muchas filas. El <code>SELECT 1</code> es una convención: PostgreSQL ignora el contenido del SELECT dentro de EXISTS.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    C["customers (91 filas)"] --&gt;|Para cada cliente| Loop["Semi Join Search"]
-    Loop --&gt;|¿Existe orden para este customer_id?| O["orders (Index Scan en customer_id)"]
-    O --&gt;|Primera coincidencia encontrada| Stop["STOP (Short-circuit)"]
-    Stop --&gt;|Sí| Out["Cliente con actividad"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    C["customers (91 filas)"] -->|Para cada cliente| Loop["Semi Join Search"]
+    Loop -->|¿Existe orden para este customer_id?| O["orders (Index Scan en customer_id)"]
+    O -->|Primera coincidencia encontrada| Stop["STOP (Short-circuit)"]
+    Stop -->|Sí| Out["Cliente con actividad"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     customer_id,
@@ -653,10 +653,10 @@ ORDER BY company_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>NOT EXISTS</code> implementa un <strong>Anti Join</strong> lógico: retorna todas las filas de la tabla izquierda que <strong>no</strong> tienen correspondencia en la derecha. PostgreSQL ejecuta un <code>Hash Anti Join</code>: construye un conjunto hash con los <code>product_id</code> de <code>order_details</code> (2155 filas) y luego escanea <code>products</code> (77 filas) verificando ausencia en el hash. Es inmune al problema de NULL que afecta a <code>NOT IN</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    OD["order_details"] --&gt;|Build: Hash Set de product_id| HT["Hash Set (2155 claves)"]
-    P["products (77 filas)"] --&gt;|Probe: ¿product_id no existe?| Anti["Hash Anti Join"]
-    Anti --&gt;|No encontrado| Out["Productos sin ventas"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    OD["order_details"] -->|Build: Hash Set de product_id| HT["Hash Set (2155 claves)"]
+    P["products (77 filas)"] -->|Probe: ¿product_id no existe?| Anti["Hash Anti Join"]
+    Anti -->|No encontrado| Out["Productos sin ventas"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     product_id,
@@ -675,10 +675,10 @@ WHERE NOT EXISTS (
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>&gt; ANY (subquery)</code> retorna <code>TRUE</code> si el valor de la izquierda es mayor que <strong>al menos un</strong> valor de la subconsulta. PostgreSQL ejecuta la subconsulta interna primero (productos de categoría 1), materializa los precios, y para cada producto externo evalúa la comparación. Internamente puede reescribirse como <code>unit_price &gt; (SELECT MIN(unit_price) FROM products WHERE category_id = 1)</code> si el optimizador detecta la equivalencia semántica.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    SubQ["Subconsulta: precios categoría 1"] --&gt;|Materializar lista| Set["Set de precios"]
-    P["products (todas categorías)"] --&gt;|Por cada producto: unit_price &gt; ANY(set)| Eval["Evaluar &gt; ANY"]
-    Eval --&gt;|TRUE| Out["Productos más caros que alguno de categoría 1"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    SubQ["Subconsulta: precios categoría 1"] -->|Materializar lista| Set["Set de precios"]
+    P["products (todas categorías)"] -->|Por cada producto: unit_price > ANY(set)| Eval["Evaluar > ANY"]
+    Eval -->|TRUE| Out["Productos más caros que alguno de categoría 1"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     product_id,
@@ -699,10 +699,10 @@ ORDER BY unit_price;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>&gt; ALL (subquery)</code> retorna <code>TRUE</code> solo si el valor supera <strong>todos</strong> los valores de la subconsulta. PostgreSQL reescribe internamente como <code>unit_price &gt; (SELECT MAX(unit_price) FROM products WHERE category_id = 1)</code>. La subconsulta se ejecuta una vez como <code>InitPlan</code>, produciendo una constante.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    SubQ["Subconsulta: MAX(price) categoría 1"] --&gt;|Constante| MaxVal["263.50"]
-    P["products"] --&gt;|Filtro: unit_price &gt; 263.50| Filter["unit_price &gt; MAX"]
-    Filter --&gt; Out["Productos más caros que toda categoría 1"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    SubQ["Subconsulta: MAX(price) categoría 1"] -->|Constante| MaxVal["263.50"]
+    P["products"] -->|Filtro: unit_price > 263.50| Filter["unit_price > MAX"]
+    Filter --> Out["Productos más caros que toda categoría 1"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     product_id,
@@ -723,11 +723,11 @@ ORDER BY unit_price;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La subconsulta escalar en <code>SELECT</code> calcula <code>MAX(order_date)</code> para cada cliente. Por cada fila de <code>customers</code> (91 filas), PostgreSQL ejecuta la subconsulta correlacionada sobre <code>orders</code> (830 filas) usando un <code>Index Scan</code> en <code>orders(customer_id)</code> para localizar la fecha máxima. Si no existe índice, el plan sería un Seq Scan de orders por cada cliente (91 × 830 = 75,530 operaciones de E/S).</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    C["customers (91 filas)"] --&gt;|Por cada fila| Init["SubPlan"]
-    Init --&gt;|Index Scan: customer_id = c.customer_id| O["orders (Index Scan)"]
-    O --&gt;|MAX(order_date)| MaxDate["Última fecha de compra"]
-    MaxDate --&gt;|Proyectar como columna| Out["customer_id, company_name, ultima_compra"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    C["customers (91 filas)"] -->|Por cada fila| Init["SubPlan"]
+    Init -->|Index Scan: customer_id = c.customer_id| O["orders (Index Scan)"]
+    O -->|MAX(order_date)| MaxDate["Última fecha de compra"]
+    MaxDate -->|Proyectar como columna| Out["customer_id, company_name, ultima_compra"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     customer_id,
@@ -746,11 +746,11 @@ ORDER BY ultima_compra DESC NULLS LAST;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Consulta de tres niveles de anidación: la subconsulta más interna calcula ingresos por producto desde <code>order_details</code>; la intermedia ordena y limita a 5; la externa agrega el nombre del producto con un JOIN adicional. PostgreSQL ejecuta las subconsultas de adentro hacia afuera. La derived table <code>product_revenue</code> se materializa en memoria (77 filas, tabla pequeña).</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    OD["order_details"] --&gt;|SUM(quantity * unit_price * (1 - discount)) GROUP BY product_id| Rev["Ingresos por producto"]
-    Rev --&gt;|ORDER BY DESC LIMIT 5| Top5["Top 5 product_id"]
-    Top5 --&gt;|INNER JOIN products| P["products"]
-    P --&gt; Out["product_id, product_name, ingresos"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    OD["order_details"] -->|SUM(quantity * unit_price * (1 - discount)) GROUP BY product_id| Rev["Ingresos por producto"]
+    Rev -->|ORDER BY DESC LIMIT 5| Top5["Top 5 product_id"]
+    Top5 -->|INNER JOIN products| P["products"]
+    P --> Out["product_id, product_name, ingresos"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     p.product_id,
@@ -774,9 +774,9 @@ ORDER BY r.ingresos_totales DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La expresión <code>CASE</code> se evalúa en la fase de proyección de tuplas (después de <code>WHERE</code>, antes de <code>ORDER BY</code>). PostgreSQL implementa <code>CASE</code> como una serie de comparaciones booleanas en CPU: la primera condición verdadera cortocircuita la evaluación. No hay impacto en el plan de acceso a disco; es puramente computacional en la capa de proyección.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    P["products (Seq Scan)"] --&gt;|unit_price| Case{"CASE WHEN unit_price &lt; 20 THEN 'Económico'\nWHEN unit_price &lt;= 50 THEN 'Intermedio'\nELSE 'Premium'"}
-    Case --&gt;|Categoría calculada| Out["product_name, unit_price, categoria_costo"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    P["products (Seq Scan)"] -->|unit_price| Case{"CASE WHEN unit_price < 20 THEN 'Económico'\nWHEN unit_price <= 50 THEN 'Intermedio'\nELSE 'Premium'"}
+    Case -->|Categoría calculada| Out["product_name, unit_price, categoria_costo"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     product_name,
@@ -795,9 +795,9 @@ ORDER BY unit_price;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>CASE</code> searched evalúa condiciones booleanas arbitrarias. Similar al ejercicio anterior, la evaluación es puramente computacional en la capa de proyección. La función se aplica a cada una de las 91 filas de <code>customers</code>, con cortocircuito en la primera coincidencia. Las condiciones con <code>IN</code> son evaluadas como comparación de conjunto (el motor expande <code>IN</code> a una serie de <code>OR</code>).</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    C["customers (91 filas)"] --&gt;|country| Case{"CASE WHEN country IN ('USA','Canada','Mexico') THEN 'Norteamérica'\nWHEN country IN ('UK','Germany','France','Spain','Italy') THEN 'Europa'\nELSE 'Resto del Mundo'"}
-    Case --&gt;|zona_logistica| Out["company_name, country, zona_logistica"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    C["customers (91 filas)"] -->|country| Case{"CASE WHEN country IN ('USA','Canada','Mexico') THEN 'Norteamérica'\nWHEN country IN ('UK','Germany','France','Spain','Italy') THEN 'Europa'\nELSE 'Resto del Mundo'"}
+    Case -->|zona_logistica| Out["company_name, country, zona_logistica"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     company_name,
@@ -816,10 +816,10 @@ ORDER BY country;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>COUNT(*) FILTER (WHERE ...)</code> es una extensión PostgreSQL que implementa agregación condicional sin subconsultas. Internamente, la función de ventana/agregación mantiene un contador que solo se incrementa cuando el <code>FILTER</code> es <code>TRUE</code>. El <code>FILTER</code> se evalúa tupla por tupla durante el escaneo, y la agregación acumula en una sola pasada sobre los datos. Esto evita escanear la tabla múltiples veces o usar costosos <code>CASE</code> dentro de <code>COUNT</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    C["customers (Seq Scan)"] --&gt;|Filtros condicionales| Filters["FILTER: country IN ('USA','Canada','Mexico')\nFILTER: country IN ('UK','Germany','France','Spain','Italy')\nFILTER: ELSE"]
-    Filters --&gt;|Tres contadores| Agg["COUNT(*) FILTER 1 | COUNT(*) FILTER 2 | COUNT(*) FILTER 3"]
-    Agg --&gt; Out["Norteamérica: 16 | Europa: 45 | Resto: 30"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    C["customers (Seq Scan)"] -->|Filtros condicionales| Filters["FILTER: country IN ('USA','Canada','Mexico')\nFILTER: country IN ('UK','Germany','France','Spain','Italy')\nFILTER: ELSE"]
+    Filters -->|Tres contadores| Agg["COUNT(*) FILTER 1 | COUNT(*) FILTER 2 | COUNT(*) FILTER 3"]
+    Agg --> Out["Norteamérica: 16 | Europa: 45 | Resto: 30"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT
     COUNT(*) FILTER (
@@ -839,11 +839,11 @@ FROM customers;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>SUM(CASE WHEN ... THEN value ELSE 0 END)</code> implementa un pivote manual (filas a columnas). PostgreSQL evalúa el <code>CASE</code> para cada tupla de <code>order_details</code> JOIN <code>orders</code> (2155 filas), y la función <code>SUM</code> acumula selectivamente. El optimizador no puede indexar sobre la expresión condicional, por lo que el plan es un Hash Join seguido de HashAggregate con múltiples acumuladores.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders"] --&gt;|INNER JOIN| OD["order_details"]
-    OD --&gt;|Cálculo por fila| Case{"CASE WHEN EXTRACT(YEAR FROM order_date) = 1996 THEN importe ELSE 0\nCASE WHEN EXTRACT(YEAR FROM order_date) = 1997 THEN importe ELSE 0\nCASE WHEN EXTRACT(YEAR FROM order_date) = 1998 THEN importe ELSE 0"}
-    Case --&gt;|GROUP BY customer_id| Agg["SUM(1996), SUM(1997), SUM(1998)"]
-    Agg --&gt; Out["customer_id, ventas_1996, ventas_1997, ventas_1998"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders"] -->|INNER JOIN| OD["order_details"]
+    OD -->|Cálculo por fila| Case{"CASE WHEN EXTRACT(YEAR FROM order_date) = 1996 THEN importe ELSE 0\nCASE WHEN EXTRACT(YEAR FROM order_date) = 1997 THEN importe ELSE 0\nCASE WHEN EXTRACT(YEAR FROM order_date) = 1998 THEN importe ELSE 0"}
+    Case -->|GROUP BY customer_id| Agg["SUM(1996), SUM(1997), SUM(1998)"]
+    Agg --> Out["customer_id, ventas_1996, ventas_1997, ventas_1998"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     o.customer_id,
@@ -864,10 +864,10 @@ ORDER BY o.customer_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>CASE</code> con funciones de fecha (<code>AGE</code>, <code>EXTRACT</code>). <code>AGE(hire_date)</code> retorna un intervalo; <code>EXTRACT(YEAR FROM AGE(...))</code> extrae los años. La evaluación se realiza en la proyección sobre 9 filas. PostgreSQL optimiza la función <code>AGE</code> como immutable para el mismo valor de entrada, permitiendo cacheo de resultados.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    E["employees (Seq Scan)"] --&gt;|hire_date| Age["EXTRACT(YEAR FROM AGE(hire_date))"]
-    Age --&gt;|Años de antigüedad| Case{"CASE WHEN &gt;= 30 THEN 'Veterano'\nWHEN &gt;= 20 THEN 'Senior'\nWHEN &gt;= 10 THEN 'Experimentado'\nELSE 'Nuevo'"}
-    Case --&gt; Out["employee_id, nombre, antigüedad, categoria"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    E["employees (Seq Scan)"] -->|hire_date| Age["EXTRACT(YEAR FROM AGE(hire_date))"]
+    Age -->|Años de antigüedad| Case{"CASE WHEN >= 30 THEN 'Veterano'\nWHEN >= 20 THEN 'Senior'\nWHEN >= 10 THEN 'Experimentado'\nELSE 'Nuevo'"}
+    Case --> Out["employee_id, nombre, antigüedad, categoria"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     employee_id,
@@ -888,10 +888,10 @@ ORDER BY anios_antiguedad DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>CASE</code> dentro de <code>ORDER BY</code> permite ordenamiento customizado. El motor evalúa el <code>CASE</code> para cada fila durante la fase de ordenamiento (después de <code>SELECT</code>). Si el conjunto es grande, la expresión se evalúa antes del sort y se almacena como clave de ordenamiento en <code>work_mem</code>. No hay impacto en el plan de acceso, pero la expresión puede aumentar la memoria requerida para el sort.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    C["customers (Seq Scan)"] --&gt;|country| Case{"CASE WHEN country = 'USA' THEN 1\nWHEN country = 'Germany' THEN 2\nWHEN country = 'UK' THEN 3\nELSE 4"}
-    Case --&gt;|Clave de orden personalizada| Sort["ORDER BY CASE priority, country"]
-    Sort --&gt; Out["Clientes USA primero, luego Germany, luego UK, luego resto"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    C["customers (Seq Scan)"] -->|country| Case{"CASE WHEN country = 'USA' THEN 1\nWHEN country = 'Germany' THEN 2\nWHEN country = 'UK' THEN 3\nELSE 4"}
+    Case -->|Clave de orden personalizada| Sort["ORDER BY CASE priority, country"]
+    Sort --> Out["Clientes USA primero, luego Germany, luego UK, luego resto"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     customer_id,
@@ -913,11 +913,11 @@ ORDER BY
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Combinación de <code>FILTER</code> (para agregación condicional nativa) y <code>CASE</code> (para lógica compleja). PostgreSQL evalúa ambos en la misma pasada de agregación. <code>FILTER</code> es puramente una condición booleana que el acumulador verifica; <code>CASE</code> es una expresión evaluada antes de pasar el valor al acumulador.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders"] --&gt;|INNER JOIN| OD["order_details"]
-    OD --&gt;|Para cada fila| Case{"CASE WHEN EXTRACT(QUARTER FROM order_date) = 1 THEN importe ELSE 0\n... para 4 trimestres"}
-    Case --&gt;|COUNT(*) FILTER (WHERE discount &gt; 0)| Agg["SUM por trimestre, COUNT con descuento"]
-    Agg --&gt;|GROUP BY employee_id| Out["employee_id, Q1, Q2, Q3, Q4, pedidos_con_descuento"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders"] -->|INNER JOIN| OD["order_details"]
+    OD -->|Para cada fila| Case{"CASE WHEN EXTRACT(QUARTER FROM order_date) = 1 THEN importe ELSE 0\n... para 4 trimestres"}
+    Case -->|COUNT(*) FILTER (WHERE discount > 0)| Agg["SUM por trimestre, COUNT con descuento"]
+    Agg -->|GROUP BY employee_id| Out["employee_id, Q1, Q2, Q3, Q4, pedidos_con_descuento"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     o.employee_id,
@@ -941,10 +941,10 @@ ORDER BY o.employee_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>CASE</code> dentro de <code>HAVING</code> permite filtrar grupos basados en agregaciones condicionales. El motor agrupa primero, calcula las agregaciones condicionales para cada grupo, y luego aplica <code>HAVING</code>. En este caso, <code>SUM(CASE WHEN unit_price &gt; 30 THEN 1 ELSE 0 END)</code> cuenta productos caros por categoría, y <code>HAVING</code> retiene categorías con al menos 3 productos caros.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    P["products (Seq Scan)"] --&gt;|GROUP BY category_id| Agg["SUM(CASE WHEN unit_price &gt; 30 THEN 1 ELSE 0 END) AS productos_caros\nCOUNT(*) AS total"]
-    Agg --&gt;|HAVING productos_caros &gt;= 3| Filtered["Categorías con &gt;=3 productos &gt; 30"]
-    Filtered --&gt;|Cociente: productos_caros / total| Out["category_id, ratio"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    P["products (Seq Scan)"] -->|GROUP BY category_id| Agg["SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END) AS productos_caros\nCOUNT(*) AS total"]
+    Agg -->|HAVING productos_caros >= 3| Filtered["Categorías con >=3 productos > 30"]
+    Filtered -->|Cociente: productos_caros / total| Out["category_id, ratio"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     category_id,
@@ -965,10 +965,10 @@ ORDER BY porcentaje_caros DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>CASE</code> anidados se evalúan de adentro hacia afuera. Cada nivel de anidamiento agrega comparaciones booleanas adicionales. PostgreSQL evalúa el <code>CASE</code> más interno primero, y su resultado alimenta el <code>CASE</code> externo. No hay penalización significativa de rendimiento para anidamientos poco profundos (2-3 niveles) sobre conjuntos pequeños como 2155 filas.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    OD["order_details"] --&gt;|discount| Inner{"CASE interno: \nWHEN discount = 0 THEN 'Sin descuento'\nWHEN discount &lt;= 0.05 THEN 'Descuento bajo'\nWHEN discount &lt;= 0.15 THEN 'Descuento medio'\nELSE 'Descuento alto'"}
-    Inner --&gt;|categoria_1| Outer{"CASE externo:\nWHEN 'Sin descuento' THEN 'Precio completo'\nWHEN 'Descuento bajo' THEN 'Mínima promoción'\nELSE 'En promoción'"}
-    Outer --&gt; Out["order_id, product_id, discount, clasificacion"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    OD["order_details"] -->|discount| Inner{"CASE interno: \nWHEN discount = 0 THEN 'Sin descuento'\nWHEN discount <= 0.05 THEN 'Descuento bajo'\nWHEN discount <= 0.15 THEN 'Descuento medio'\nELSE 'Descuento alto'"}
+    Inner -->|categoria_1| Outer{"CASE externo:\nWHEN 'Sin descuento' THEN 'Precio completo'\nWHEN 'Descuento bajo' THEN 'Mínima promoción'\nELSE 'En promoción'"}
+    Outer --> Out["order_id, product_id, discount, clasificacion"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     order_id,
@@ -992,11 +992,11 @@ ORDER BY discount DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Este es un pivote manual completo: <code>SUM(CASE WHEN country IN (...) THEN importe END)</code> para cada región. La tabla <code>orders</code> se une con <code>order_details</code> (2155 filas), se agrupa por <code>employee_id</code>, y se calculan 4 acumuladores simultáneos en una sola pasada. El optimizador no puede usar índices en las expresiones CASE.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders"] --&gt;|JOIN ship_country| OD["order_details"]
-    OD --&gt;|importe| Cases["4 acumuladores CASE"]
-    Cases --&gt;|GROUP BY employee_id| Agg["SUM(USA), SUM(Europa), SUM(Latam), SUM(Resto)"]
-    Agg --&gt;|ORDER BY employee_id| Out["employee_id, usa, europa, latam, resto"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders"] -->|JOIN ship_country| OD["order_details"]
+    OD -->|importe| Cases["4 acumuladores CASE"]
+    Cases -->|GROUP BY employee_id| Agg["SUM(USA), SUM(Europa), SUM(Latam), SUM(Resto)"]
+    Agg -->|ORDER BY employee_id| Out["employee_id, usa, europa, latam, resto"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     o.employee_id,
@@ -1019,10 +1019,10 @@ ORDER BY o.employee_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>El <code>SELF JOIN</code> crea dos instancias lógicas de la misma tabla física <code>employees</code> en el plan de ejecución. El optimizador asigna alias <code>e</code> (empleado) y <code>m</code> (manager) a dos instancias separadas en memoria. La condición <code>e.reports_to = m.employee_id</code> se resuelve mediante un <code>Hash Join</code> si no hay índice, o un <code>Nested Loop</code> con Index Scan si existe un índice en <code>reports_to</code>. Como la tabla tiene solo 9 filas, el plan es trivial.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    E["employees e (Subordinados)"] --&gt;|e.reports_to = m.employee_id| Join["INNER JOIN (SELF)"]
-    M["employees m (Managers)"] --&gt; Join
-    Join --&gt;|Coincidencia| Out["empleado | cargo_empleado | manager | cargo_manager"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    E["employees e (Subordinados)"] -->|e.reports_to = m.employee_id| Join["INNER JOIN (SELF)"]
+    M["employees m (Managers)"] --> Join
+    Join -->|Coincidencia| Out["empleado | cargo_empleado | manager | cargo_manager"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     e.employee_id,
@@ -1040,12 +1040,12 @@ ORDER BY e.employee_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>SELF JOIN no-equitativo: <code>e1.reports_to = e2.reports_to AND e1.employee_id &lt;&gt; e2.employee_id</code>. El optimizador cruza la tabla consigo misma encontrando pares de empleados que reportan al mismo jefe. El plan es un <code>Nested Loop</code> sobre las 9 filas con filtro adicional de desigualdad. La tabla es tan pequeña que el plan es instantáneo.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    E1["employees e1"] --&gt;|e1.reports_to = e2.reports_to| Cross["Cruce cruzado"]
-    E2["employees e2"] --&gt; Cross
-    Cross --&gt;|Filtro: e1.employee_id &lt;&gt; e2.employee_id| Filter["Excluir mismo empleado"]
-    Filter --&gt;|e1.employee_id &lt; e2.employee_id| Dedup["Eliminar pares duplicados"]
-    Dedup --&gt; Out["e1 (colega) | e2 (colega) | manager_id"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    E1["employees e1"] -->|e1.reports_to = e2.reports_to| Cross["Cruce cruzado"]
+    E2["employees e2"] --> Cross
+    Cross -->|Filtro: e1.employee_id <> e2.employee_id| Filter["Excluir mismo empleado"]
+    Filter -->|e1.employee_id < e2.employee_id| Dedup["Eliminar pares duplicados"]
+    Dedup --> Out["e1 (colega) | e2 (colega) | manager_id"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     e1.employee_id AS empleado1_id,
@@ -1064,12 +1064,12 @@ ORDER BY e1.reports_to, e1.employee_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>FULL OUTER JOIN</code> preserva filas de ambas tablas. PostgreSQL implementa el <code>FULL OUTER JOIN</code> como la combinación de un <code>LEFT JOIN</code> y un <code>RIGHT JOIN</code> con <code>UNION</code>, o más eficientemente como un <code>Hash Join</code> con marcadores de presencia. Las filas sin correspondencia se rellenan con <code>NULL</code>. <code>employee_territories</code> es la tabla puente; al hacer FULL JOIN directo entre <code>employees</code> y <code>employee_territories</code>, se preservan empleados sin territorio y territorios sin empleado.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    E["employees"] --&gt;|FULL OUTER JOIN| ET["employee_territories"]
-    ET --&gt;|Coincidencia| Match["filas emparejadas"]
-    E --&gt;|Sin coincidencia| LeftNull["Empleados sin territorio (NULLs a la derecha)"]
-    ET --&gt;|Sin coincidencia| RightNull["Territorios sin empleado (NULLs a la izquierda)"]
-    Match &amp; LeftNull &amp; RightNull --&gt; Out["Resultado FULL OUTER"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    E["employees"] -->|FULL OUTER JOIN| ET["employee_territories"]
+    ET -->|Coincidencia| Match["filas emparejadas"]
+    E -->|Sin coincidencia| LeftNull["Empleados sin territorio (NULLs a la derecha)"]
+    ET -->|Sin coincidencia| RightNull["Territorios sin empleado (NULLs a la izquierda)"]
+    Match & LeftNull & RightNull --> Out["Resultado FULL OUTER"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     e.employee_id,
@@ -1085,10 +1085,10 @@ ORDER BY e.employee_id NULLS LAST, et.territory_id NULLS LAST;</code></pre></div
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>FULL OUTER JOIN entre <code>customers</code> (91 filas) y <code>orders</code> (830 filas). PostgreSQL construye un Hash Join con marcadores de presencia. Clientes sin pedidos aparecen con <code>NULL</code> en columnas de <code>orders</code>; pedidos huérfanos (sin cliente válido) aparecen con <code>NULL</code> en columnas de <code>customers</code>. Esto permite detectar inconsistencias de integridad referencial.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    C["customers"] --&gt;|FULL JOIN| O["orders"]
-    O --&gt;|customer_id| Join["Hash Full Join"]
-    Join --&gt; Out["Todos los clientes (con/sin pedidos) + Pedidos huérfanos (si existen)"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    C["customers"] -->|FULL JOIN| O["orders"]
+    O -->|customer_id| Join["Hash Full Join"]
+    Join --> Out["Todos los clientes (con/sin pedidos) + Pedidos huérfanos (si existen)"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     c.customer_id AS id_cliente,
@@ -1105,12 +1105,12 @@ ORDER BY c.customer_id NULLS LAST, o.order_id NULLS LAST;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Consulta que une 5 tablas: <code>order_details</code> → <code>products</code> → <code>categories</code> → <code>suppliers</code> → <code>orders</code>. El optimizador usa algoritmos genéticos (GEQO) para determinar el orden óptimo de joins. Con 5 tablas pequeñas, el plan típico comienza JOINeando <code>order_details</code> con <code>products</code> (índice en PK), luego <code>categories</code> (índice en PK), luego <code>suppliers</code> (índice en PK), y finalmente <code>orders</code>. Cada JOIN reduce la cardinalidad del conjunto intermedio.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    OD["order_details"] --&gt;|product_id| P["products"]
-    P --&gt;|category_id| C["categories"]
-    P --&gt;|supplier_id| S["suppliers"]
-    OD --&gt;|order_id| O["orders"]
-    C &amp; S &amp; O --&gt; Out["order_id | product_name | category_name | supplier_name | order_date"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    OD["order_details"] -->|product_id| P["products"]
+    P -->|category_id| C["categories"]
+    P -->|supplier_id| S["suppliers"]
+    OD -->|order_id| O["orders"]
+    C & S & O --> Out["order_id | product_name | category_name | supplier_name | order_date"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     od.order_id,
@@ -1133,11 +1133,11 @@ ORDER BY od.order_id, p.product_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>4 tablas: <code>orders</code> → <code>customers</code>, <code>orders</code> → <code>employees</code>, <code>orders</code> → <code>shippers</code>. El optimizador usa <code>orders</code> como tabla central (tabla de hechos en esquema estrella). Como <code>customers</code> (91), <code>employees</code> (9), y <code>shippers</code> (3) son tablas pequeñas, el optimizador construye Hash Joins secuenciales, agregando cada tabla dimensión al conjunto intermedio. El plan es un <code>Nested Loop</code> con índices.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders (Tabla de hechos)"] --&gt;|customer_id| C["customers"]
-    O --&gt;|employee_id| E["employees"]
-    O --&gt;|ship_via| S["shippers"]
-    C &amp; E &amp; S --&gt;|Hash Joins secuenciales| Out["Reporte consolidado de operaciones"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders (Tabla de hechos)"] -->|customer_id| C["customers"]
+    O -->|employee_id| E["employees"]
+    O -->|ship_via| S["shippers"]
+    C & E & S -->|Hash Joins secuenciales| Out["Reporte consolidado de operaciones"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     o.order_id,
@@ -1159,10 +1159,10 @@ LIMIT 20;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>RIGHT JOIN</code> es la imagen espejo de <code>LEFT JOIN</code>. El parser de PostgreSQL reescribe internamente <code>RIGHT JOIN</code> como <code>LEFT JOIN</code> invirtiendo el orden de las tablas en el árbol sintáctico. <code>orders RIGHT JOIN employees</code> es equivalente a <code>employees LEFT JOIN orders</code>. Es una transformación puramente sintáctica: el optimizador genera el mismo plan físico independientemente.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders (izquierda en código)"] --&gt;|RIGHT JOIN| E["employees (derecha — preservada)"]
-    E --&gt;|Parser reescribe como LEFT JOIN| Rewrite["employees LEFT JOIN orders"]
-    Rewrite --&gt; Out["Todos los empleados con/sin pedidos"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders (izquierda en código)"] -->|RIGHT JOIN| E["employees (derecha — preservada)"]
+    E -->|Parser reescribe como LEFT JOIN| Rewrite["employees LEFT JOIN orders"]
+    Rewrite --> Out["Todos los empleados con/sin pedidos"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     e.employee_id,
@@ -1179,11 +1179,11 @@ ORDER BY e.employee_id;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>CROSS JOIN</code> genera el producto cartesiano de dos tablas (77 × 8 = 616 filas). El optimizador implementa el CROSS JOIN como un <code>Nested Loop</code> sin condición de join. El filtro <code>WHERE p.category_id = c.category_id</code> transforma el CROSS JOIN en un INNER JOIN lógico. En PostgreSQL, escribir <code>FROM products p, categories c WHERE p.category_id = c.category_id</code> es equivalente a <code>CROSS JOIN</code> + <code>WHERE</code>. El optimizador trata ambas formulaciones de forma idéntica.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    P["products (77 filas)"] --&gt;|CROSS JOIN| Cart["Producto Cartesiano (77 × 8 = 616 filas)"]
-    C["categories (8 filas)"] --&gt; Cart
-    Cart --&gt;|Filtro: p.category_id = c.category_id| Filter["Filtrar a 77 filas"]
-    Filter --&gt; Out["product_name, category_name"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    P["products (77 filas)"] -->|CROSS JOIN| Cart["Producto Cartesiano (77 × 8 = 616 filas)"]
+    C["categories (8 filas)"] --> Cart
+    Cart -->|Filtro: p.category_id = c.category_id| Filter["Filtrar a 77 filas"]
+    Filter --> Out["product_name, category_name"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     p.product_name,
@@ -1200,10 +1200,10 @@ ORDER BY c.category_name, p.product_name;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>La condición de JOIN puede incluir múltiples predicados más allá de la FK. <code>INNER JOIN order_details od ON o.order_id = od.order_id AND od.discount &gt; 0</code> filtra los detalles con descuento <strong>durante</strong> la operación de JOIN, no después. El optimizador puede usar un <code>Hash Join</code> donde la tabla hash solo contiene filas con <code>discount &gt; 0</code>, reduciendo el tamaño de la estructura hash en memoria.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders"] --&gt;|Hash Join| HT["Hash Table (order_details con discount &gt; 0)"]
-    OD["order_details"] --&gt;|Filtro: discount &gt; 0 (durante build)| HT
-    HT --&gt;|Sondeo por order_id| Out["Pedidos con al menos un detalle con descuento"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders"] -->|Hash Join| HT["Hash Table (order_details con discount > 0)"]
+    OD["order_details"] -->|Filtro: discount > 0 (durante build)| HT
+    HT -->|Sondeo por order_id| Out["Pedidos con al menos un detalle con descuento"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     o.order_id,
@@ -1221,10 +1221,10 @@ ORDER BY od.discount DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LATERAL</code> permite que la subconsulta en <code>FROM</code> referencie columnas de tablas precedentes en el mismo <code>FROM</code>. Es una alternativa a subconsultas correlacionadas. Para cada fila de <code>customers</code> (91 filas), PostgreSQL ejecuta la subconsulta lateral que obtiene el último pedido usando <code>ORDER BY order_date DESC LIMIT 1</code>. El plan es un <code>Nested Loop</code> con <code>Limit</code> — para cada cliente, un Index Scan en <code>orders(customer_id, order_date)</code> encuentra la última fecha instantáneamente.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    C["customers (91 filas)"] --&gt;|Para cada fila| Loop["Nested Loop"]
-    Loop --&gt;|Index Scan: customer_id, ORDER BY order_date DESC LIMIT 1| O["orders (Index Scan)"]
-    O --&gt;|Último pedido| Out["customer_id, company_name, order_id, order_date"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    C["customers (91 filas)"] -->|Para cada fila| Loop["Nested Loop"]
+    Loop -->|Index Scan: customer_id, ORDER BY order_date DESC LIMIT 1| O["orders (Index Scan)"]
+    O -->|Último pedido| Out["customer_id, company_name, order_id, order_date"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     c.customer_id,
@@ -1247,10 +1247,10 @@ ORDER BY ultimo_pedido.order_date DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>ROW_NUMBER() OVER (ORDER BY unit_price DESC)</code> asigna números secuenciales únicos (1, 2, 3, ...) basados en el orden descendente de <code>unit_price</code>. La función de ventana opera <strong>después</strong> de <code>WHERE</code>, <code>GROUP BY</code> y <code>HAVING</code>, pero <strong>antes</strong> de <code>ORDER BY</code> final y <code>LIMIT</code>. PostgreSQL evalúa la ventana en una fase separada del plan de ejecución (WindowAgg node), que ordena las filas en <code>work_mem</code> y aplica la numeración.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    P["products (Seq Scan)"] --&gt;|Ordenar por unit_price DESC| Sort["Sort Node (work_mem)"]
-    Sort --&gt;|WindowAgg| Win["ROW_NUMBER() OVER (ORDER BY unit_price DESC)"]
-    Win --&gt;|Numeración secuencial| Out["product_name, unit_price, ranking_secuencial"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    P["products (Seq Scan)"] -->|Ordenar por unit_price DESC| Sort["Sort Node (work_mem)"]
+    Sort -->|WindowAgg| Win["ROW_NUMBER() OVER (ORDER BY unit_price DESC)"]
+    Win -->|Numeración secuencial| Out["product_name, unit_price, ranking_secuencial"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     product_name,
@@ -1265,11 +1265,11 @@ ORDER BY ranking_secuencial;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>RANK() OVER (PARTITION BY category_id ORDER BY unit_price DESC)</code> y <code>DENSE_RANK()</code> difieren en el tratamiento de empates. <code>RANK</code> genera saltos después de un empate (1, 1, 3, ...), <code>DENSE_RANK</code> no (1, 1, 2, ...). El WindowAgg particiona las filas por <code>category_id</code>, ordena por precio dentro de cada partición, y asigna rangos. Las particiones se procesan secuencialmente en memoria; si hay muchas particiones, PostgreSQL puede derramar a disco.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    P["products"] --&gt;|PARTITION BY category_id| Partition["Particiones por categoría"]
-    Partition --&gt;|ORDER BY unit_price DESC| Sort["Ordenar dentro de cada partición"]
-    Sort --&gt;|RANK() vs DENSE_RANK()| Win["WindowAgg"]
-    Win --&gt;|Con empates| Out["category_id, product_name, unit_price, rank, dense_rank"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    P["products"] -->|PARTITION BY category_id| Partition["Particiones por categoría"]
+    Partition -->|ORDER BY unit_price DESC| Sort["Ordenar dentro de cada partición"]
+    Sort -->|RANK() vs DENSE_RANK()| Win["WindowAgg"]
+    Win -->|Con empates| Out["category_id, product_name, unit_price, rank, dense_rank"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     category_id,
@@ -1286,10 +1286,10 @@ ORDER BY category_id, rango_con_saltos;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p>Para obtener el top-N por grupo, se usa una subconsulta con ventana que asigna <code>ROW_NUMBER()</code> por partición, y luego la externa filtra <code>WHERE rn &lt;= 3</code>. PostgreSQL ejecuta primero el WindowAgg internamente (ordena por categoría y precio), numera las filas, y luego la consulta externa aplica el filtro. No hay un operador específico "Top-N por grupo" en el optimizador; se implementa como WindowAgg + Filter.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    P["products"] --&gt;|PARTITION BY category_id ORDER BY unit_price DESC| Win["WindowAgg: ROW_NUMBER()"]
-    Win --&gt;|WHERE rn &lt;= 3| Filter["Filtro externo"]
-    Filter --&gt;|Solo 3 por categoría| Out["Top 3 productos más caros por categoría"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    P["products"] -->|PARTITION BY category_id ORDER BY unit_price DESC| Win["WindowAgg: ROW_NUMBER()"]
+    Win -->|WHERE rn <= 3| Filter["Filtro externo"]
+    Filter -->|Solo 3 por categoría| Out["Top 3 productos más caros por categoría"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH ranked_products AS (
     SELECT 
@@ -1320,10 +1320,10 @@ ORDER BY rp.category_id, rp.rn;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LAG(order_date, 1) OVER (PARTITION BY customer_id ORDER BY order_date)</code> accede a la fila anterior dentro de la misma partición de cliente. El WindowAgg mantiene un buffer de una fila por partición para proporcionar el valor <code>LAG</code>. Si no hay fila anterior, retorna <code>NULL</code>. La diferencia de fechas se calcula con el operador de resta de PostgreSQL, que retorna un <code>interval</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders"] --&gt;|PARTITION BY customer_id ORDER BY order_date| Win["WindowAgg: LAG(order_date)"]
-    Win --&gt;|order_date - LAG = dias_entre_pedidos| Calc["Diferencia de fechas (interval)"]
-    Calc --&gt; Out["customer_id, order_id, order_date, order_date_anterior, dias_diferencia"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders"] -->|PARTITION BY customer_id ORDER BY order_date| Win["WindowAgg: LAG(order_date)"]
+    Win -->|order_date - LAG = dias_entre_pedidos| Calc["Diferencia de fechas (interval)"]
+    Calc --> Out["customer_id, order_id, order_date, order_date_anterior, dias_diferencia"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     customer_id,
@@ -1346,9 +1346,9 @@ ORDER BY customer_id, order_date;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>LEAD(order_date, 1) OVER (PARTITION BY customer_id ORDER BY order_date)</code> proporciona la siguiente fecha de pedido para cada fila. Similar a <code>LAG</code>, pero mirando hacia adelante. El WindowAgg procesa las filas en orden y almacena en un buffer la fila siguiente. Si es la última fila de la partición, retorna <code>NULL</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    O["orders"] --&gt;|PARTITION BY customer_id ORDER BY order_date| Win["WindowAgg: LEAD(order_date)"]
-    Win --&gt;|order_date_actual | LEAD | lead_date| Out["customer_id, order_id, order_date, proximo_pedido"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    O["orders"] -->|PARTITION BY customer_id ORDER BY order_date| Win["WindowAgg: LEAD(order_date)"]
+    Win -->|order_date_actual | LEAD | lead_date| Out["customer_id, order_id, order_date, proximo_pedido"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     customer_id,
@@ -1367,10 +1367,10 @@ ORDER BY customer_id, order_date;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>SUM(ingresos_mes) OVER (ORDER BY periodo_mes ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)</code> calcula un acumulado histórico. El CTE <code>monthly_revenue</code> primero computa los ingresos mensuales (GROUP BY), luego la ventana suma acumulativamente. La cláusula <code>ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> define el frame desde el inicio hasta la fila actual. Si se omite, <code>SUM OVER</code> por defecto usa <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code>.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    O["orders"] --&gt;|JOIN + GROUP BY mes| MR["CTE: monthly_revenue (ingresos por mes)"]
-    MR --&gt;|SUM OVER (ORDER BY mes)| Win["WindowAgg: SUM(frame: unbounded preceding → current row)"]
-    Win --&gt;|Acumulado| Out["periodo_mes, ingresos_mes, ingresos_acumulados"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    O["orders"] -->|JOIN + GROUP BY mes| MR["CTE: monthly_revenue (ingresos por mes)"]
+    MR -->|SUM OVER (ORDER BY mes)| Win["WindowAgg: SUM(frame: unbounded preceding → current row)"]
+    Win -->|Acumulado| Out["periodo_mes, ingresos_mes, ingresos_acumulados"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH monthly_revenue AS (
     SELECT 
@@ -1396,10 +1396,10 @@ ORDER BY periodo_mes;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>AVG(unit_price) OVER (PARTITION BY category_id)</code> calcula el precio promedio de la categoría <strong>sin colapsar filas</strong>. A diferencia de <code>GROUP BY</code>, la ventana preserva cada producto individual. El WindowAgg calcula el promedio por partición y replica el mismo valor en todas las filas de esa partición. La diferencia <code>unit_price - AVG(...)</code> muestra la desviación de cada producto respecto al promedio de su categoría.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart LR
-    P["products"] --&gt;|PARTITION BY category_id| Win["WindowAgg: AVG(unit_price)"]
-    Win --&gt;|unit_price - avg_categoria| Calc["Desviación del promedio"]
-    Calc --&gt; Out["product_name, category_id, unit_price, promedio_categoria, desviacion"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart LR
+    P["products"] -->|PARTITION BY category_id| Win["WindowAgg: AVG(unit_price)"]
+    Win -->|unit_price - avg_categoria| Calc["Desviación del promedio"]
+    Calc --> Out["product_name, category_id, unit_price, promedio_categoria, desviacion"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     product_name,
@@ -1416,10 +1416,10 @@ ORDER BY category_id, unit_price;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>FIRST_VALUE(unit_price) OVER (PARTITION BY category_id ORDER BY unit_price DESC)</code> retorna el precio del primer producto en el frame (el más caro). <code>LAST_VALUE(unit_price) OVER (PARTITION BY category_id ORDER BY unit_price DESC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)</code> retorna el último (el más barato). Sin el frame <code>UNBOUNDED FOLLOWING</code>, <code>LAST_VALUE</code> solo vería hasta la fila actual.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    P["products"] --&gt;|PARTITION BY category_id ORDER BY unit_price DESC| Win["WindowAgg: FIRST_VALUE + LAST_VALUE"]
-    Win --&gt;|Frame: UNBOUNDED PRECEDING TO UNBOUNDED FOLLOWING| Frame["Frame completo por partición"]
-    Frame --&gt; Out["category_id, product_name, unit_price, mas_caro, mas_barato"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    P["products"] -->|PARTITION BY category_id ORDER BY unit_price DESC| Win["WindowAgg: FIRST_VALUE + LAST_VALUE"]
+    Win -->|Frame: UNBOUNDED PRECEDING TO UNBOUNDED FOLLOWING| Frame["Frame completo por partición"]
+    Frame --> Out["category_id, product_name, unit_price, mas_caro, mas_barato"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     category_id,
@@ -1443,14 +1443,14 @@ ORDER BY category_id, unit_price DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>NTILE(4) OVER (ORDER BY total_pedidos DESC)</code> divide el conjunto ordenado en 4 grupos (cuartiles) lo más equitativamente posible. Si hay 91 clientes, NTILE asigna 23 filas a algunos cuartiles y 22 a otros. El WindowAgg necesita conocer el número total de filas para determinar el tamaño de cada bucket, por lo que puede requerir dos pasadas sobre los datos.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    C["customers"] --&gt;|LEFT JOIN| O["orders"]
-    O --&gt;|GROUP BY customer_id| Agg["COUNT(order_id) por cliente"]
-    Agg --&gt;|NTILE(4) OVER (ORDER BY pedidos DESC)| Win["WindowAgg: NTILE"]
-    Win --&gt;|Cuartil 1 (top 25%)| Q1["Clientes Premium"]
-    Win --&gt;|Cuartil 2| Q2["Clientes Regulares"]
-    Win --&gt;|Cuartil 3| Q3["Clientes Ocasionales"]
-    Win --&gt;|Cuartil 4| Q4["Clientes Inactivos"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    C["customers"] -->|LEFT JOIN| O["orders"]
+    O -->|GROUP BY customer_id| Agg["COUNT(order_id) por cliente"]
+    Agg -->|NTILE(4) OVER (ORDER BY pedidos DESC)| Win["WindowAgg: NTILE"]
+    Win -->|Cuartil 1 (top 25%)| Q1["Clientes Premium"]
+    Win -->|Cuartil 2| Q2["Clientes Regulares"]
+    Win -->|Cuartil 3| Q3["Clientes Ocasionales"]
+    Win -->|Cuartil 4| Q4["Clientes Inactivos"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>WITH customer_orders AS (
     SELECT 
@@ -1475,11 +1475,11 @@ ORDER BY cuartil, total_pedidos DESC;</code></pre></div>
 <h4>1. Marco Conceptual del Optimizador</h4>
 <p><code>SUM(quantity) FILTER (WHERE discount &gt; 0) OVER (PARTITION BY product_id ORDER BY order_id)</code> combina dos conceptos avanzados: <code>FILTER</code> dentro de una window function. PostgreSQL aplica primero el filtro a cada fila dentro de la ventana; las filas que no cumplen la condición se excluyen del acumulador. El WindowAgg mantiene un acumulador que solo se actualiza cuando <code>discount &gt; 0</code>. Esto permite calcular, por ejemplo, la suma acumulada de unidades vendidas <strong>con descuento</strong> para cada producto.</p>
 <h4>2. Diagrama de Flujo de Datos</h4>
-<div class="mermaid-container"><div class="mermaid">flowchart TD
-    OD["order_details"] --&gt;|PARTITION BY product_id ORDER BY order_id| Win["WindowAgg"]
-    Win --&gt;|FILTER (WHERE discount &gt; 0)| Filtered["Solo filas con descuento"]
-    Filtered --&gt;|SUM(quantity) ventana| Sum["Acumulado condicional"]
-    Sum --&gt; Out["order_id, product_id, quantity, discount, unidades_con_descuento_acum"]</div></div>
+<div class="mermaid-container"><pre class="mermaid">flowchart TD
+    OD["order_details"] -->|PARTITION BY product_id ORDER BY order_id| Win["WindowAgg"]
+    Win -->|FILTER (WHERE discount > 0)| Filtered["Solo filas con descuento"]
+    Filtered -->|SUM(quantity) ventana| Sum["Acumulado condicional"]
+    Sum --> Out["order_id, product_id, quantity, discount, unidades_con_descuento_acum"]</pre></div>
 <h4>3. Código de Solución</h4>
 <div class="code-block-wrapper"><div class="code-lang-badge">SQL</div><pre><code>SELECT 
     order_id,
