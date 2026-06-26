@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>2. Ejercicios SQL Nivel Intermedio</title>
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -25,19 +28,38 @@
             --radius-lg: 0px;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-main: #0a0a0a;   /* Deep Ashen Black */
-                --bg-card: #121212;
-                --text-main: #f0f0f0;
-                --text-muted: #888888;
-                --primary: #ffffff;
-                --accent: #ff5555;    /* Swiss Bright Red */
-                --border: #333333;
-                --code-bg: #181818;
-                --code-text: #ff5555;
-                --shadow: none;
-            }
+        :root.dark {
+            --bg-main: #0a0a0a;   /* Deep Ashen Black */
+            --bg-card: #121212;
+            --text-main: #f0f0f0;
+            --text-muted: #888888;
+            --primary: #ffffff;
+            --accent: #ff5555;    /* Swiss Bright Red */
+            --border: #333333;
+            --code-bg: #181818;
+            --code-text: #ff5555;
+            --shadow: none;
+        }
+
+        /* Swiss Minimalist Theme Switcher Button */
+        .theme-toggle-btn {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+            padding: 0.35rem 0.75rem;
+            border: 1px solid var(--border);
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .theme-toggle-btn:hover {
+            background-color: var(--primary);
+            color: var(--bg-main);
         }
 
         /* Reset and Base Styles */
@@ -292,6 +314,7 @@
     </style>
 </head>
 <body>
+    <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
     <div class="wrapper">
         <header>
             <h1>2. Ejercicios SQL Nivel Intermedio</h1>
@@ -1475,5 +1498,34 @@ ORDER BY product_id, order_id;</code></pre></div>
             <p>© 2026 PostgreSQL Academy | Academia de Arquitectura de Datos</p>
         </footer>
     </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        
+        function updateToggleText() {
+            if (document.documentElement.classList.contains('dark')) {
+                themeToggleBtn.textContent = '[ MODO: CLARO ]';
+            } else {
+                themeToggleBtn.textContent = '[ MODO: OSCURO ]';
+            }
+        }
+        
+        updateToggleText();
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+            updateToggleText();
+        });
+    </script>
 </body>
 </html>
