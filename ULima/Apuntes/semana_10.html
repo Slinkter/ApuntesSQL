@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
 
     <script>
@@ -13,10 +13,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 10 - JOINs y Subconsultas</title>
-    <link rel="stylesheet" href="master.css">
-    <script src="canvas-ui.js"></script>
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-<style>
+<script src="canvas-ui.js"></script>
+    <!-- Tailwind v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+
         @custom-variant dark (&:where(.dark, .dark *));
         .theme-toggle-btn {
             position: fixed;
@@ -46,14 +47,19 @@
             background-color: #ffffff;
             color: #111111;
         }
-</style>
+
+        @theme {
+            --color-primary: var(--color-indigo-600);
+            --color-primary-dark: var(--color-indigo-400);
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
 <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">JOINs y Subconsultas</h1>
-        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 10 | Ingenieria de Datos | ULima 2013-2</p>
+        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 10 <span class="mx-2">&bull;</span> Ingenieria de Datos  <span class="mx-2">&bull;</span> ULima 2013-2</p>
     </div>
 </header>
 
@@ -131,7 +137,8 @@
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tablas de Referencia (Ejemplo)</h3>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Para ilustrar las uniones, utilizaremos las siguientes tablas basadas en la estructura del negocio:</p>
-<pre><code>-- Tabla: EMP (Empleados)
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>-- Tabla: EMP (Empleados)
 EMPNO ENAME          DEPTNO
 ----- -------------- ------
     1 Smith              50
@@ -158,43 +165,52 @@ ID NAME
  2 South America
  3 Africa / Middle East
  4 Asia
- 5 Europe</code></pre>
+ 5 Europe</code>
+</div>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Cross Join (Producto Cartesiano):</strong></p>
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Se genera cuando la condición de JOIN se omite o es inválida. Todas las filas de la primera tabla se juntan con todas las de la segunda tabla.</p>
-<pre><code>-- Consulta de Producto Cartesiano
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>-- Consulta de Producto Cartesiano
 SELECT EMP.empno, EMP.ename, DEPT.deptno, DEPT.dname
 FROM   emp CROSS JOIN dept;
--- O equivalentemente: SELECT * FROM emp, dept;</code></pre>
+-- O equivalentemente: SELECT * FROM emp, dept;</code>
+</div>
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Si <code>EMP</code> tiene 14 filas y <code>DEPT</code> tiene 4 filas, el resultado tendrá 56 filas (14 &times; 4):</p>
-<pre><code>-- Detalle del Producto Cartesiano (EMP X DEPT)
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>-- Detalle del Producto Cartesiano (EMP X DEPT)
 7369 SMITH CLERK 7902 17-DEC-80 800 20 10 ACCOUNTING NEW YORK
 7369 SMITH CLERK 7902 17-DEC-80 800 20 20 RESEARCH DALLAS
 7369 SMITH CLERK 7902 17-DEC-80 800 20 30 SALES CHICAGO
 7369 SMITH CLERK 7902 17-DEC-80 800 20 40 OPERATIONS BOSTON
 7499 ALLEN SALESMAN 7698 20-Feb-81 1600 300 30 10 ACCOUNTING NEW YORK
-... (etcétera)</code></pre>
+... (etcétera)</code>
+</div>
         </div>
 
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Variables Tupla (Alias)</h2>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Simplifican las consultas mediante alias en los nombres de tablas. Son obligatorias cuando hay nombres de columna identicos entre tablas.</p>
-        <pre><code>SELECT C.nombre, OP.numero_orden, OP.numero_embarques
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT C.nombre, OP.numero_orden, OP.numero_embarques
 FROM   orden_pedido OP JOIN cliente C
-  ON   OP.id_cliente = C.id_cliente;</code></pre>
+  ON   OP.id_cliente = C.id_cliente;</code>
+</div>
 
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Tipos de JOIN</h2>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Equijoin</h3>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Resulta cuando el valor de una columna corresponde explicitamente al valor de alguna columna de otra tabla, usando el operador <code>=</code>.</p>
-        <pre><code>SELECT table1.column, table2.column
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT table1.column, table2.column
 FROM   table1 JOIN table2
   ON   table1.column1 = table2.column2;
 
 -- Ejemplo practico
 SELECT C.nombre, OP.numero_orden, OP.numero_embarques
 FROM   orden_pedido OP JOIN cliente C
-  ON   OP.id_cliente = C.id_cliente;</code></pre>
+  ON   OP.id_cliente = C.id_cliente;</code>
+</div>
 
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Cada nombre de columna debe ser precedido por el nombre de la tabla (o su alias). Si las columnas tienen el mismo nombre en ambas tablas, el alias es obligatorio.</p>
@@ -202,19 +218,23 @@ FROM   orden_pedido OP JOIN cliente C
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Non-Equijoin</h3>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Resulta cuando la condicion de JOIN utiliza un operador diferente a la igualdad: <code>BETWEEN</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&lt;&gt;</code>.</p>
-        <pre><code>SELECT L.nombre_linea
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT L.nombre_linea
 FROM   producto P JOIN linea_producto L
   ON   P.precio BETWEEN L.meta_venta_min AND L.meta_venta_max
-  AND  P.idprod = L.idprod;</code></pre>
+  AND  P.idprod = L.idprod;</code>
+</div>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Self Join</h3>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Utilizado para unir filas de una misma tabla con relacion recursiva. Se simulan dos tablas en el FROM creando 2 alias diferentes para la misma tabla.</p>
-        <pre><code>SELECT E.nombre || 'trabaja para ' || J.nombre
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT E.nombre || 'trabaja para ' || J.nombre
 FROM   empleado E JOIN empleado J
   ON   E.cod_jefe = J.cod_emp;
 
 -- Explicacion: E es el empleado, J es su jefe.
--- E.cod_jefe = J.cod_emp relaciona cada empleado con su jefe.</code></pre>
+-- E.cod_jefe = J.cod_emp relaciona cada empleado con su jefe.</code>
+</div>
 
         <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Precaucion:</strong> En Self Join siempre use alias obligatorios. Sin alias, el SQL no puede distinguir entre las dos instancias de la misma tabla.</p>
@@ -226,20 +246,26 @@ FROM   empleado E JOIN empleado J
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis basica</strong></p>
         </div>
-        <pre><code>SELECT table1.column, table2.column
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT table1.column, table2.column
 FROM   table1 LEFT OUTER JOIN table2
   ON   table1.column1 = table2.column2;
--- Incluye todas las filas de table1, aunque no tengan correspondencia en table2</code></pre>
+-- Incluye todas las filas de table1, aunque no tengan correspondencia en table2</code>
+</div>
 
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo LEFT JOIN:</strong> Todos los clientes, incluso aquellos sin ordenes de pedido.</p>
-        <pre><code>SELECT nombre, numero_orden, numero_embarques
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT nombre, numero_orden, numero_embarques
 FROM   cliente LEFT OUTER JOIN orden_pedido
-  ON   cliente.id_cliente = orden_pedido.id_cliente;</code></pre>
+  ON   cliente.id_cliente = orden_pedido.id_cliente;</code>
+</div>
 
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo RIGHT JOIN:</strong> Equivalente al anterior, intercambiando el orden de las tablas.</p>
-        <pre><code>SELECT nombre, numero_orden, numero_embarques
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT nombre, numero_orden, numero_embarques
 FROM   orden_pedido RIGHT OUTER JOIN cliente
-  ON   cliente.id_cliente = orden_pedido.id_cliente;</code></pre>
+  ON   cliente.id_cliente = orden_pedido.id_cliente;</code>
+</div>
 
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
@@ -281,12 +307,14 @@ FROM   orden_pedido RIGHT OUTER JOIN cliente
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis general</strong></p>
         </div>
-        <pre><code>SELECT select_list
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT select_list
 FROM   table
 WHERE  expr operator (
   SELECT select_list
   FROM   table
-);</code></pre>
+);</code>
+</div>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Reglas para Subconsultas</h3>
         <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
@@ -300,7 +328,8 @@ WHERE  expr operator (
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Procesamiento de Subconsultas Anidadas</h3>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Ejemplo paso a paso:</p>
-        <pre><code>SELECT numero_embarques
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT numero_embarques
 FROM   orden_pedido
 WHERE  id_cliente = (
   SELECT id_cliente
@@ -311,17 +340,20 @@ WHERE  id_cliente = (
 -- 1. La subconsulta se ejecuta primero:
 --    SELECT id_cliente FROM cliente WHERE nombre = 'JUAN'  → retorna 990
 -- 2. El resultado (990) se pasa a la consulta principal:
---    SELECT numero_embarques FROM orden_pedido WHERE id_cliente = 990</code></pre>
+--    SELECT numero_embarques FROM orden_pedido WHERE id_cliente = 990</code>
+</div>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Subconsultas de Fila Simple</h3>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La subconsulta retorna una sola fila. Solo usa operadores de fila simple: <code>= &gt; &gt;= &lt; &lt;= &lt;&gt;</code>.</p>
-        <pre><code>-- Cliente que ha generado el maximo numero de embarques
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>-- Cliente que ha generado el maximo numero de embarques
 SELECT id_cliente
 FROM   orden_pedido
 WHERE  numero_embarques = (
   SELECT MAX(numero_embarques)
   FROM   orden_pedido
-);</code></pre>
+);</code>
+</div>
 
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Si la subconsulta retorna mas de una fila y se usa un operador de fila simple, el motor lanza un error: <code>ORA-01427: single-row subquery returns more than one row</code>. En PostgreSQL: <code>ERROR: more than one row returned by a subquery used as an expression</code>.</p>
@@ -351,14 +383,16 @@ WHERE  numero_embarques = (
         </table>
         </div>
 
-        <pre><code>-- Clientes NACIONALES o INTERNACIONALES con ordenes de pedido
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>-- Clientes NACIONALES o INTERNACIONALES con ordenes de pedido
 SELECT numero_embarques
 FROM   orden_pedido
 WHERE  id_cliente IN (
   SELECT id_cliente
   FROM   cliente
   WHERE  tipo = 'NAC' OR tipo = 'INT'
-);</code></pre>
+);</code>
+</div>
 
         <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Subconsultas</span>
 

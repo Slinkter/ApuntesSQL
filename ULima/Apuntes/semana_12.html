@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
 
     <script>
@@ -13,10 +13,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 12 - PL/SQL: Bloques, Variables y Cursores</title>
-    <link rel="stylesheet" href="master.css">
-    <script src="canvas-ui.js"></script>
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-<style>
+<script src="canvas-ui.js"></script>
+    <!-- Tailwind v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+
         @custom-variant dark (&:where(.dark, .dark *));
         .theme-toggle-btn {
             position: fixed;
@@ -46,14 +47,19 @@
             background-color: #ffffff;
             color: #111111;
         }
-</style>
+
+        @theme {
+            --color-primary: var(--color-indigo-600);
+            --color-primary-dark: var(--color-indigo-400);
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
 <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">PL/SQL: Estructura, Variables y Cursores</h1>
-        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 12 | Ingenieria de Datos | ULima 2013-2</p>
+        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 12 <span class="mx-2">&bull;</span> Ingenieria de Datos  <span class="mx-2">&bull;</span> ULima 2013-2</p>
     </div>
 </header>
 
@@ -164,19 +170,24 @@
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo: Bloque anonimo basico</strong></p>
         </div>
-        <pre><code>DECLARE
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>DECLARE
   v_mensaje VARCHAR2(50) := 'Hola, PL/SQL!';
 BEGIN
   DBMS_OUTPUT.PUT_LINE(v_mensaje);
 END;
-/</code></pre>
+/</code>
+</div>
 
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Declaracion de Variables</h2>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las variables se declaran en la seccion DECLARE con la siguiente sintaxis:</p>
-        <pre><code>identificador [CONSTANT] tipo_dato [NOT NULL] [:= | DEFAULT expr];</code></pre>
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>identificador [CONSTANT] tipo_dato [NOT NULL] [:= | DEFAULT expr];</code>
+</div>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplos de declaracion</h3>
-        <pre><code>DECLARE
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>DECLARE
   v_estado_civil     CHAR(1);
   v_total_sal        NUMBER(9,2) := 0;
   v_fecha_orden      DATE := SYSDATE + 7;
@@ -187,36 +198,45 @@ END;
 BEGIN
   NULL;  -- sentencia que no hace nada (placeholder)
 END;
-/</code></pre>
+/</code>
+</div>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tipos Especiales: %TYPE y %ROWTYPE</h3>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PL/SQL ofrece tipos derivados que se adaptan automaticamente a la estructura de la base de datos:</p>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>%TYPE</strong> Hereda el tipo de dato de una columna existente.</p>
-            <pre><code>v_debito  cuenta.credito%TYPE;  -- mismo tipo que cuenta.credito</code></pre>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>v_debito  cuenta.credito%TYPE;  -- mismo tipo que cuenta.credito</code>
+</div>
         </div>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>%ROWTYPE</strong> Hereda la estructura completa de una tabla (todas sus columnas).</p>
-            <pre><code>v_dept_reg  dept%ROWTYPE;
--- v_dept_reg.deptno, v_dept_reg.dname, v_dept_reg.loc disponibles</code></pre>
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>v_dept_reg  dept%ROWTYPE;
+-- v_dept_reg.deptno, v_dept_reg.dname, v_dept_reg.loc disponibles</code>
+</div>
         </div>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Registros definidos por el usuario (RECORD)</strong></p>
-            <pre><code>TYPE emp_record_type IS RECORD (
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>TYPE emp_record_type IS RECORD (
   apellido  VARCHAR2(25),
   cargo_id  VARCHAR2(10),
   salario   NUMBER(8,2)
-);</code></pre>
+);</code>
+</div>
         </div>
 
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Tablas PL/SQL (arrays asociativos)</strong></p>
-            <pre><code>TYPE dept_table_type IS TABLE OF
+            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>TYPE dept_table_type IS TABLE OF
   emp.apellido%TYPE
-  INDEX BY BINARY_INTEGER;</code></pre>
+  INDEX BY BINARY_INTEGER;</code>
+</div>
         </div>
 
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Funciones Built-in (Manipulación y Conversión)</h2>
@@ -351,16 +371,22 @@ END;
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Permiten convertir tipos de datos de forma explícita:</p>
         <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
             <li><strong><code>TO_CHAR(n|d, format)</code>:</strong> Convierte número o fecha a cadena de caracteres. Ejemplos:
-                <pre><code>TO_CHAR(55000, '$99,999.00') -- Retorna "$55,000.00"
-TO_CHAR(TRUNC(SYSDATE), 'DD MONTH YYYY') -- Retorna p.ej. "26 JUNIO 2026"</code></pre>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>TO_CHAR(55000, '$99,999.00') -- Retorna "$55,000.00"
+TO_CHAR(TRUNC(SYSDATE), 'DD MONTH YYYY') -- Retorna p.ej. "26 JUNIO 2026"</code>
+</div>
             </li>
             <li><strong><code>TO_DATE(str, format)</code>:</strong> Convierte cadena a tipo DATE. Ejemplos:
-                <pre><code>TO_DATE('25/12/2007', 'DD/MM/YYYY')
-TO_DATE('01-Jan-90', 'DD-Mon-RR')</code></pre>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>TO_DATE('25/12/2007', 'DD/MM/YYYY')
+TO_DATE('01-Jan-90', 'DD-Mon-RR')</code>
+</div>
             </li>
             <li><strong><code>TO_NUMBER(str)</code>:</strong> Convierte cadena a tipo numérico. Ejemplos:
-                <pre><code>TO_NUMBER('0100') -- Retorna 100
-TO_NUMBER('1000.10') -- Retorna 1000.10</code></pre>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>TO_NUMBER('0100') -- Retorna 100
+TO_NUMBER('1000.10') -- Retorna 1000.10</code>
+</div>
             </li>
         </ul>
 
@@ -374,40 +400,48 @@ TO_NUMBER('1000.10') -- Retorna 1000.10</code></pre>
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Estructuras de Control</h2>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Condicional: IF</h3>
-        <pre><code>IF condicion1 THEN
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>IF condicion1 THEN
   secuencia_de_instrucciones1;
 ELSIF condicion2 THEN
   secuencia_de_instrucciones2;
 ELSE
   secuencia_de_instrucciones3;
-END IF;</code></pre>
+END IF;</code>
+</div>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Bucles</h3>
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>LOOP basico con EXIT WHEN</strong></p>
         </div>
-        <pre><code>LOOP
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>LOOP
   secuencia_de_instrucciones;
   EXIT WHEN condicion;
-END LOOP;</code></pre>
+END LOOP;</code>
+</div>
 
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>WHILE LOOP</strong></p>
         </div>
-        <pre><code>WHILE condicion LOOP
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>WHILE condicion LOOP
   secuencia_de_instrucciones;
-END LOOP;</code></pre>
+END LOOP;</code>
+</div>
 
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>FOR LOOP (con y sin REVERSE)</strong></p>
         </div>
-        <pre><code>FOR contador IN 1..10 LOOP
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>FOR contador IN 1..10 LOOP
   secuencia_de_instrucciones;
 END LOOP;
 
 FOR contador IN REVERSE 10..1 LOOP
   secuencia_de_instrucciones;
-END LOOP;</code></pre>
+END LOOP;</code>
+</div>
 
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Cursores</h2>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un cursor es un puntero a un conjunto de resultados. Permite procesar fila por fila cuando se necesita logica procedural que no puede expresarse en SQL puro.</p>
@@ -487,7 +521,8 @@ END LOOP;</code></pre>
         </div>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Programa Simple con Cursor (FETCH explicito)</h3>
-        <pre><code>DECLARE
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>DECLARE
   CURSOR ejecursor IS
     SELECT nombre, salario FROM empleado
     WHERE salario &lt; 5000;
@@ -502,11 +537,13 @@ BEGIN
   END LOOP;
   CLOSE ejecursor;
 END;
-/</code></pre>
+/</code>
+</div>
 
         <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Programa Simple con Cursor (FOR LOOP simplificado)</h3>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El FOR LOOP simplifica el manejo: abre, fetchea y cierra automaticamente el cursor.</p>
-        <pre><code>DECLARE
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>DECLARE
   CURSOR ejecursor IS
     SELECT nombre, salario FROM empleado
     WHERE salario &lt; 5000;
@@ -516,7 +553,8 @@ BEGIN
     VALUES (ejecursor_rec.nombre, ejecursor_rec.salario);
   END LOOP;
 END;
-/</code></pre>
+/</code>
+</div>
 
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Diferencia clave:</strong> Con FETCH explicito controlamos manualmente apertura, lectura y cierre. Con FOR LOOP, PL/SQL maneja automaticamente el ciclo de vida del cursor. El FOR LOOP es mas seguro (no hay riesgo de olvidar CLOSE) y mas legible.</p>

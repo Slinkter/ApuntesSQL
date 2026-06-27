@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
 
     <script>
@@ -13,10 +13,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 02 - Introduccion a las BD y su Ciclo de Vida</title>
-    <link rel="stylesheet" href="master.css">
-    <script src="canvas-ui.js"></script>
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-<style>
+<script src="canvas-ui.js"></script>
+    <!-- Tailwind v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+
         @custom-variant dark (&:where(.dark, .dark *));
         .theme-toggle-btn {
             position: fixed;
@@ -46,14 +47,19 @@
             background-color: #ffffff;
             color: #111111;
         }
-</style>
+
+        @theme {
+            --color-primary: var(--color-indigo-600);
+            --color-primary-dark: var(--color-indigo-400);
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
 <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Introduccion a las Bases de Datos y su Ciclo de Vida</h1>
-        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 02 | Ingenieria de Datos | ULima 2013-2</p>
+        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 02 <span class="mx-2">&bull;</span> Ingenieria de Datos  <span class="mx-2">&bull;</span> ULima 2013-2</p>
     </div>
 </header>
 
@@ -92,7 +98,7 @@
                 </li>
             </ul>
         </div>
-        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6" style="margin-top:1.5rem;padding:1rem;">
+        <div class="bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl p-6 border border-emerald-100 dark:border-emerald-900/50 mb-6">
             <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
             <ul class="space-y-4">
                 <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Inicio &mdash; Indice del Curso</a></li>

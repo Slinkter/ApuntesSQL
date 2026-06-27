@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
 
     <script>
@@ -14,10 +14,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Semana 06 - Modelamiento de Datos (ERD)</title>
-<link href="master.css" rel="stylesheet"/>
 <script src="canvas-ui.js"></script>
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-<style>
+    <!-- Tailwind v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+
         @custom-variant dark (&:where(.dark, .dark *));
         .theme-toggle-btn {
             position: fixed;
@@ -47,18 +48,31 @@
             background-color: #ffffff;
             color: #111111;
         }
-</style>
+
+        @theme {
+            --color-primary: var(--color-indigo-600);
+            --color-primary-dark: var(--color-indigo-400);
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
-<div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
-<h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Modelamiento de Datos (Entidad-Relacion)</h1>
-<p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 06 | DER | Ingenieria de Datos</p>
-</div>
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            Modelamiento de Datos (Entidad-Relacion)
+        </h1>
+        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+            Semana 06 <span class="mx-2">&bull;</span> DER  <span class="mx-2">&bull;</span> Ingenieria de Datos
+        </p>
+    </div>
+</header>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
 <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
-<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h2>
-<ul class="space-y-4">
+        <!-- Keywords -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-md transition-shadow">
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
+            <ul class="space-y-4">
 <li class="text-sm"><strong>Entidad</strong> Objeto del mundo real sobre el que se almacenan datos</li>
 <li class="text-sm"><strong>Relacion</strong> Asociacion entre dos o mas entidades</li>
 <li class="text-sm"><strong>Cardinalidad</strong> 1:1, 1:N, N:N</li>
@@ -66,13 +80,18 @@
 <li class="text-sm"><strong>FK</strong> Clave foranea, vincula entidades</li>
 <li class="text-sm"><strong>Supertipo/Subtipo</strong> Jerarquia de herencia</li>
 </ul>
-<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Recursos</h2>
-<ul class="space-y-4">
-<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="index.html">Indice del Curso</a></li>
-<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_05.html">Semana 05</a></li>
-<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_07.html">Semana 07</a></li>
-</ul>
-</aside>
+        </div>
+
+        <!-- Resources -->
+        <div class="bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 p-5">
+            <h3 class="text-xs font-bold tracking-wider text-emerald-600 dark:text-emerald-500 uppercase mb-4">Recursos</h3>
+            <ul class="space-y-3 text-sm font-medium">
+                <li><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">&larr; Inicio — Índice del Curso</a></li>
+                <li><a href="semana_05.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">← Semana Anterior</a></li>
+                <li><a href="semana_07.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">Siguiente Semana →</a></li>
+            </ul>
+        </div>
+    </aside>
 <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
         
         <!-- Enfoque Arquitecto: Conceptos Avanzados de DER -->
@@ -104,7 +123,7 @@
         
 
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p><strong>Objetivos de Aprendizaje</strong></p>
+<h4 class="text-blue-800 dark:text-blue-300 font-bold mb-3 flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Objetivos de Aprendizaje</h4>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li >Comprender el modelamiento de datos como fase critica del desarrollo</li>
 <li >Identificar entidades, relaciones, atributos y cardinalidades</li>
@@ -344,10 +363,10 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
             </div>
         </section>
 
-<div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
-<a class="nav__link" href="semana_05.html">Semana 05</a>
-<a class="nav__link" href="semana_07.html">Semana 07</a>
-</div>
+<nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+            <a href="semana_05.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Semana 05</a>
+            <a href="semana_07.html" class="px-5 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm">Semana 07</a>
+        </nav>
 </main>
 </div>
 <script>

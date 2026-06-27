@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
 
     <script>
@@ -14,9 +14,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Semana 08 - Examen Parcial</title>
-<link href="master.css" rel="stylesheet"/>
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-<style>
+    <!-- Tailwind v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+
         @custom-variant dark (&:where(.dark, .dark *));
         .theme-toggle-btn {
             position: fixed;
@@ -46,18 +47,31 @@
             background-color: #ffffff;
             color: #111111;
         }
-</style>
+
+        @theme {
+            --color-primary: var(--color-indigo-600);
+            --color-primary-dark: var(--color-indigo-400);
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
-<div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
-<h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Examen Parcial</h1>
-<p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 08 | Cobertura: Semanas 01-07 | Ingenieria de Datos</p>
-</div>
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            Examen Parcial
+        </h1>
+        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+            Semana 08 <span class="mx-2">&bull;</span> Cobertura: Semanas 01-07  <span class="mx-2">&bull;</span> Ingenieria de Datos
+        </p>
+    </div>
+</header>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
 <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
-<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Temas Evaluados</h2>
-<ul class="space-y-4">
+        <!-- Keywords -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-md transition-shadow">
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Temas Evaluados</h3>
+            <ul class="space-y-4">
 <li class="text-sm"><strong>Fundamentos BD</strong> Semana 01</li>
 <li class="text-sm"><strong>Modelo Relacional</strong> Semana 02</li>
 <li class="text-sm"><strong>DDL</strong> Semana 03</li>
@@ -65,13 +79,18 @@
 <li class="text-sm"><strong>Modelamiento E-R</strong> Semana 06</li>
 <li class="text-sm"><strong>Normalizacion</strong> Semana 07</li>
 </ul>
-<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Recursos</h2>
-<ul class="space-y-4">
-<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="index.html">Indice del Curso</a></li>
-<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_07.html">Semana 07</a></li>
-<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_09.html">Semana 09</a></li>
-</ul>
-</aside>
+        </div>
+
+        <!-- Resources -->
+        <div class="bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 p-5">
+            <h3 class="text-xs font-bold tracking-wider text-emerald-600 dark:text-emerald-500 uppercase mb-4">Recursos</h3>
+            <ul class="space-y-3 text-sm font-medium">
+                <li><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">&larr; Inicio — Índice del Curso</a></li>
+                <li><a href="semana_07.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">← Semana Anterior</a></li>
+                <li><a href="semana_09.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">Siguiente Semana →</a></li>
+            </ul>
+        </div>
+    </aside>
 <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
         
         <!-- Enfoque Arquitecto: Validación del Parcial -->
@@ -444,11 +463,13 @@ PROYECTO(cod_proy PK, nombre, fecha_inicio)</div>
 <li >cod_curso rarr nom_curso, creditos (dependencia parcial respecto a PK compuesta)</li>
 </ul>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Despues de 2FN y 3FN:</strong></p>
-<pre>MATRICULA (cod_matricula PK, cod_alumno FK, ciclo)
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+MATRICULA (cod_matricula PK, cod_alumno FK, ciclo)
 ALUMNO (cod_alumno PK, nom_alumno)
 CURSO (cod_curso PK, nom_curso, creditos)
 DETALLE_MATRICULA (cod_matricula FK, cod_curso FK, nota)
-  -- PK compuesta: (cod_matricula, cod_curso)</pre>
+  -- PK compuesta: (cod_matricula, cod_curso)
+</div>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 2: Libros_Prestamos</strong></p>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PK: <code>(prestamo_id, libro_id)</code></p>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Dependencias identificadas:</strong></p>
@@ -458,14 +479,17 @@ DETALLE_MATRICULA (cod_matricula FK, cod_curso FK, nota)
 <li >libro_id rarr libro_titulo, libro_autor (parcial)</li>
 </ul>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Despues de 3FN (5 tablas):</strong></p>
-<pre>PRESTAMO (prestamo_id PK, socio_id FK, fecha_prestamo, fecha_devolucion)
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+PRESTAMO (prestamo_id PK, socio_id FK, fecha_prestamo, fecha_devolucion)
 SOCIO (socio_id PK, socio_nombre, socio_telefono)
 LIBRO (libro_id PK, libro_titulo, libro_autor)
 DETALLE_PRESTAMO (prestamo_id FK, libro_id FK) -- PK compuesta
--- Nota: fecha_devolucion depende de prestamo_id, no del libro individual</pre>
+-- Nota: fecha_devolucion depende de prestamo_id, no del libro individual
+</div>
 <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Seccion 4: SQL - Soluciones</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 1 - DDL:</strong></p>
-<pre>CREATE TABLE departamento (
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+CREATE TABLE departamento (
     cod_depto CHAR(3) PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     presupuesto DECIMAL(10,2) CHECK (presupuesto > 0)
@@ -478,9 +502,11 @@ CREATE TABLE empleado (
     cod_depto CHAR(3),
     FOREIGN KEY (cod_depto) REFERENCES departamento(cod_depto)
     ON DELETE CASCADE
-);</pre>
+);
+</div>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 2 - INSERT:</strong></p>
-<pre>BEGIN;
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+BEGIN;
 
 INSERT INTO departamento VALUES
     ('TI', 'Tecnologia Informatica', 50000.00),
@@ -491,24 +517,31 @@ INSERT INTO empleado (cod_emp, nombre, salario, cod_depto) VALUES
     (2, 'Luis Gomez', 3200.00, 'TI'),
     (3, 'Pedro Diaz', 1800.00, 'VEN');
 
-COMMIT;</pre>
+COMMIT;
+</div>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 3 - UPDATE:</strong></p>
-<pre>UPDATE empleado
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+UPDATE empleado
 SET salario = salario * 1.15
-WHERE cod_depto = (SELECT cod_depto FROM departamento WHERE nombre = 'TI');</pre>
+WHERE cod_depto = (SELECT cod_depto FROM departamento WHERE nombre = 'TI');
+</div>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 4 - DELETE:</strong></p>
-<pre>DELETE FROM empleado
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+DELETE FROM empleado
 WHERE salario < 1500
-  AND cod_depto = (SELECT cod_depto FROM departamento WHERE nombre = 'VENTAS');</pre>
+  AND cod_depto = (SELECT cod_depto FROM departamento WHERE nombre = 'VENTAS');
+</div>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 5 - SELECT con JOIN:</strong></p>
-<pre>SELECT e.nombre AS empleado,
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+SELECT e.nombre AS empleado,
        d.nombre AS departamento,
        p.nombre AS proyecto
 FROM empleado e
 JOIN departamento d ON e.cod_depto = d.cod_depto
 LEFT JOIN proyecto p ON d.cod_depto = p.cod_depto
 WHERE e.salario > (SELECT AVG(salario) FROM empleado)
-ORDER BY e.salario DESC;</pre>
+ORDER BY e.salario DESC;
+</div>
 <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 <p><strong>Fin del solucionario.</strong> Puntaje total: 100. Puntaje minimo aprobatorio: 60. Revise que cada respuesta este correctamente justificada.</p>
 </div>
@@ -590,10 +623,10 @@ ORDER BY e.salario DESC;</pre>
             </div>
         </section>
 
-<div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
-<a class="nav__link" href="semana_07.html">Semana 07</a>
-<a class="nav__link" href="semana_09.html">Semana 09</a>
-</div>
+<nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+            <a href="semana_07.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Semana 07</a>
+            <a href="semana_09.html" class="px-5 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm">Semana 09</a>
+        </nav>
 </main>
 </div>
 

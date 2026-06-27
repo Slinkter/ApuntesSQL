@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
 
     <script>
@@ -14,10 +14,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Semana 05 - DML y Consultas Simples</title>
-<link href="master.css" rel="stylesheet"/>
 <script src="canvas-ui.js"></script>
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-<style>
+    <!-- Tailwind v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+
         @custom-variant dark (&:where(.dark, .dark *));
         .theme-toggle-btn {
             position: fixed;
@@ -47,18 +48,31 @@
             background-color: #ffffff;
             color: #111111;
         }
-</style>
+
+        @theme {
+            --color-primary: var(--color-indigo-600);
+            --color-primary-dark: var(--color-indigo-400);
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
-<div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
-<h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">DML y Consultas Simples</h1>
-<p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 05 | Lenguaje de Manipulacion de Datos | Ingenieria de Datos</p>
-</div>
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            DML y Consultas Simples
+        </h1>
+        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+            Semana 05 <span class="mx-2">&bull;</span> Lenguaje de Manipulacion de Datos  <span class="mx-2">&bull;</span> Ingenieria de Datos
+        </p>
+    </div>
+</header>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
 <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
-<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h2>
-<ul class="space-y-4">
+        <!-- Keywords -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-md transition-shadow">
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
+            <ul class="space-y-4">
 <li class="text-sm"><strong>INSERT</strong> Agregar filas a una tabla</li>
 <li class="text-sm"><strong>UPDATE</strong> Modificar valores existentes</li>
 <li class="text-sm"><strong>DELETE</strong> Eliminar filas de una tabla</li>
@@ -66,13 +80,18 @@
 <li class="text-sm"><strong>WHERE</strong> Clausula de filtrado condicional</li>
 <li class="text-sm"><strong>DISTINCT</strong> Valores unicos sin duplicados</li>
 </ul>
-<h2 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Recursos</h2>
-<ul class="space-y-4">
-<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="index.html">Indice del Curso</a></li>
-<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_04.html">Semana 04</a></li>
-<li class="text-sm"><a class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors" href="semana_06.html">Semana 06</a></li>
-</ul>
-</aside>
+        </div>
+
+        <!-- Resources -->
+        <div class="bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 p-5">
+            <h3 class="text-xs font-bold tracking-wider text-emerald-600 dark:text-emerald-500 uppercase mb-4">Recursos</h3>
+            <ul class="space-y-3 text-sm font-medium">
+                <li><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">&larr; Inicio — Índice del Curso</a></li>
+                <li><a href="semana_04.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">← Semana Anterior</a></li>
+                <li><a href="semana_06.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">Siguiente Semana →</a></li>
+            </ul>
+        </div>
+    </aside>
 <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
         
         <!-- Enfoque Arquitecto: DML e Internals de MVCC -->
@@ -104,7 +123,7 @@
         
 
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p><strong>Objetivos de Aprendizaje</strong></p>
+<h4 class="text-blue-800 dark:text-blue-300 font-bold mb-3 flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Objetivos de Aprendizaje</h4>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li >Comprender los lenguajes de la Base de Datos Relacional (DDL, DML, DCL)</li>
 <li >Insertar nuevas filas con INSERT</li>
@@ -126,11 +145,14 @@
 </ul>
 <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. INSERT - Insercion de Datos</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Aniade una nueva fila a una tabla existente. Todos los campos con restriccion NOT NULL deben recibir un valor.</p>
-<pre>INSERT INTO table [column, column...]
-VALUES (valor1, valor2, ...);</pre>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+INSERT INTO table [column, column...]
+VALUES (valor1, valor2, ...);
+</div>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Ejemplo:</strong> Tabla <code>cliente</code> y <code>orden_pedido</code>.</p>
-<pre>CREATE TABLE cliente (
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+CREATE TABLE cliente (
     codigo_cliente NUMBER(5) PRIMARY KEY,
     nombre VARCHAR2(25) NOT NULL,
     apellido VARCHAR2(50) NOT NULL,
@@ -149,43 +171,54 @@ INSERT INTO cliente
 VALUES (1, 'JOSE', 'PARDO', '01-4414896');
 
 INSERT INTO orden_pedido
-VALUES (555, '25-OCT-07', '05-OCT-07', 5, 1);</pre>
+VALUES (555, '25-OCT-07', '05-OCT-07', 5, 1);
+</div>
 </div>
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p><strong>Nota:</strong> Se puede especificar la lista de columnas. El valor NULL es valido para campos sin restriccion NOT NULL.</p>
 </div>
 <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. UPDATE - Modificacion de Datos</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Modifica el valor de uno o varios campos en filas existentes. Puede elegir las filas mediante la clausula WHERE.</p>
-<pre>UPDATE table
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+UPDATE table
 SET column = nuevo_valor | expresion
-[WHERE condicion {AND|OR} condicion...];</pre>
+[WHERE condicion {AND|OR} condicion...];
+</div>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Ejemplo:</strong> Cambiar numero de embarques de la orden 555 y telefono del cliente 1.</p>
-<pre>UPDATE orden_pedido
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+UPDATE orden_pedido
 SET numero_embarques = 3
 WHERE numero_orden = 555;
 
 UPDATE cliente
 SET telefono = '01-4367788'
-WHERE codigo_cliente = 1;</pre>
+WHERE codigo_cliente = 1;
+</div>
 </div>
 <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 <p><strong>Precaucion:</strong> Si omite la clausula WHERE, se actualizan TODAS las filas de la tabla. Siempre verifique primero con un SELECT.</p>
 </div>
 <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. DELETE - Eliminacion de Datos</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Elimina una o mas filas de una tabla. La clausula WHERE determina cuales filas se eliminan.</p>
-<pre>DELETE FROM table
-[WHERE condicion {AND|OR} condicion...];</pre>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+DELETE FROM table
+[WHERE condicion {AND|OR} condicion...];
+</div>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Ejemplo:</strong> Eliminar la orden de pedido numero 555.</p>
-<pre>DELETE FROM orden_pedido
-WHERE numero_orden = 555;</pre>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+DELETE FROM orden_pedido
+WHERE numero_orden = 555;
+</div>
 </div>
 <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. SELECT - Consulta de Datos</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Permite consultar la informacion contenida en una o varias tablas. Es la instruccion DML mas utilizada.</p>
-<pre>SELECT ALL|*|DISTINCT|(column, column...)
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+SELECT ALL|*|DISTINCT|(column, column...)
 FROM table
-[WHERE condicion {AND|OR} condicion...];</pre>
+[WHERE condicion {AND|OR} condicion...];
+</div>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li ><code>ALL</code> o <code>*</code> muestra todas las columnas y todas las filas</li>
 <li ><code>DISTINCT</code> elimina duplicados en los resultados</li>
@@ -193,12 +226,14 @@ FROM table
 </ul>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Ejemplos de SELECT:</strong></p>
-<pre>SELECT ALL FROM orden_pedido;
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+SELECT ALL FROM orden_pedido;
 SELECT * FROM cliente;
 SELECT * FROM cliente WHERE codigo_cliente = 1;
 SELECT DISTINCT nombre FROM cliente;
 SELECT nombre, apellido FROM cliente
-WHERE codigo_cliente = 1;</pre>
+WHERE codigo_cliente = 1;
+</div>
 </div>
 <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Operadores en la clausula WHERE</h2>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
@@ -330,10 +365,10 @@ WHERE codigo_cliente = 1;</pre>
             </div>
         </section>
 
-<div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
-<a class="nav__link" href="semana_04.html">Semana 04</a>
-<a class="nav__link" href="semana_06.html">Semana 06</a>
-</div>
+<nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+            <a href="semana_04.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Semana 04</a>
+            <a href="semana_06.html" class="px-5 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm">Semana 06</a>
+        </nav>
 </main>
 </div>
 <script>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
 
     <script>
@@ -13,10 +13,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semana 11 - GROUP BY, HAVING y Funciones de Grupo</title>
-    <link rel="stylesheet" href="master.css">
-    <script src="canvas-ui.js"></script>
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-<style>
+<script src="canvas-ui.js"></script>
+    <!-- Tailwind v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+
         @custom-variant dark (&:where(.dark, .dark *));
         .theme-toggle-btn {
             position: fixed;
@@ -46,14 +47,19 @@
             background-color: #ffffff;
             color: #111111;
         }
-</style>
+
+        @theme {
+            --color-primary: var(--color-indigo-600);
+            --color-primary-dark: var(--color-indigo-400);
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
 <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Funciones de Grupo y Agrupamiento</h1>
-        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 11 | Ingenieria de Datos | ULima 2013-2</p>
+        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 11 <span class="mx-2">&bull;</span> Ingenieria de Datos  <span class="mx-2">&bull;</span> ULima 2013-2</p>
     </div>
 </header>
 
@@ -168,7 +174,8 @@
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo completo:</strong> Estadisticas de ordenes de pedido del mes 07.</p>
         </div>
-        <pre><code>SELECT MIN(numero_embarques) AS minimo,
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT MIN(numero_embarques) AS minimo,
        MAX(numero_embarques) AS maximo,
        AVG(numero_embarques) AS promedio,
        SUM(numero_embarques) AS total
@@ -177,7 +184,8 @@ WHERE  fecha_llenado LIKE '%07';
 
 -- Conteo de clientes
 SELECT COUNT(*) AS total_clientes
-FROM   cliente;</code></pre>
+FROM   cliente;</code>
+</div>
 
         <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Comportamiento con NULL:</strong> <code>AVG</code>, <code>SUM</code>, <code>MIN</code>, <code>MAX</code> ignoran NULL. <code>COUNT(*)</code> cuenta todas las filas; <code>COUNT(columna)</code> solo cuenta los valores no nulos.</p>
@@ -189,20 +197,24 @@ FROM   cliente;</code></pre>
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis general</strong></p>
         </div>
-        <pre><code>SELECT columna, grupo_funcion
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT columna, grupo_funcion
 FROM   tabla
 [WHERE condicion]
 [GROUP BY expresion]
-[ORDER BY columna];</code></pre>
+[ORDER BY columna];</code>
+</div>
 
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo:</strong> Contar clientes por tipo, solo aquellos cuyo apellido comienza con 'A', ordenados descendentemente.</p>
         </div>
-        <pre><code>SELECT tipo, COUNT(*) AS cantidad
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT tipo, COUNT(*) AS cantidad
 FROM   cliente
 WHERE  apellido LIKE 'A%'
 GROUP BY tipo
-ORDER BY tipo DESC;</code></pre>
+ORDER BY tipo DESC;</code>
+</div>
 
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Este query:</p>
         <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
@@ -222,20 +234,24 @@ ORDER BY tipo DESC;</code></pre>
         <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis general</strong></p>
         </div>
-        <pre><code>SELECT columna, grupo_funcion
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT columna, grupo_funcion
 FROM   tabla
 [WHERE condicion]
 [GROUP BY expresion]
 [HAVING condicion_grupo]
-[ORDER BY columna];</code></pre>
+[ORDER BY columna];</code>
+</div>
 
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo:</strong> Clientes que han generado mas de 5 ordenes de pedido.</p>
         </div>
-        <pre><code>SELECT id_cliente, COUNT(*) AS total_ordenes
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT id_cliente, COUNT(*) AS total_ordenes
 FROM   orden_pedido
 GROUP BY id_cliente
-HAVING COUNT(*) > 5;</code></pre>
+HAVING COUNT(*) > 5;</code>
+</div>
 
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
         <table class="w-full text-left border-collapse">
@@ -271,7 +287,8 @@ HAVING COUNT(*) > 5;</code></pre>
         <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
             <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo:</strong> Clientes cuyo numero de ordenes supera el promedio de ordenes de todos los clientes.</p>
         </div>
-        <pre><code>SELECT id_cliente, COUNT(*) AS total_ordenes
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<code>SELECT id_cliente, COUNT(*) AS total_ordenes
 FROM   orden_pedido
 GROUP BY id_cliente
 HAVING COUNT(*) > (
@@ -281,7 +298,8 @@ HAVING COUNT(*) > (
 );
 
 -- La subconsulta calcula el promedio de ordenes por cliente
--- Luego HAVING filtra solo los que estan por encima de ese promedio</code></pre>
+-- Luego HAVING filtra solo los que estan por encima de ese promedio</code>
+</div>
 
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Orden de ejecucion completo:</p>
         <ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
