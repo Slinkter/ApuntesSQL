@@ -1,8 +1,29 @@
 <!DOCTYPE html>
-
 <html lang="es" class="scroll-smooth">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <title>Semana 07 - Normalizacion 1FN, 2FN, 3FN</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind v4 CDN -->
+    <script src="canvas-ui.js"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @custom-variant dark (&:where(.dark, .dark *));
+        @theme {
+            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --color-primary: #6750A4;
+            --color-primary-dark: #D0BCFF;
+            --color-surface-light: #FEF7FF;
+            --color-surface-dark: #141218;
+            --color-outline-light: #79747E;
+            --color-outline-dark: #938F99;
+        }
+    </style>
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -11,134 +32,125 @@
         }
     </script>
 
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Semana 07 - Normalizacion 1FN, 2FN, 3FN</title>
-<script src="canvas-ui.js"></script>
-    <!-- Tailwind v4 CDN -->
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: isDark ? 'dark' : 'default',
+                securityLevel: 'loose',
+                flowchart: { useMaxWidth: true, htmlLabels: true }
+            });
+        });
+    </script>
 
-        @custom-variant dark (&:where(.dark, .dark *));
-        .theme-toggle-btn {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 100;
-            padding: 0.35rem 0.75rem;
-            border: 1px solid #111111;
-            background-color: #ffffff;
-            color: #111111;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        html.dark .theme-toggle-btn {
-            border-color: #333333;
-            background-color: #121212;
-            color: #f0f0f0;
-        }
-        .theme-toggle-btn:hover {
-            background-color: #111111;
-            color: #ffffff;
-        }
-        html.dark .theme-toggle-btn:hover {
-            background-color: #ffffff;
-            color: #111111;
-        }
-
-        @theme {
-            --color-primary: var(--color-indigo-600);
-            --color-primary-dark: var(--color-indigo-400);
-        }
-    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
-<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+<body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <!-- Sun icon -->
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+        </svg>
+        <!-- Moon icon -->
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+        </svg>
+    </button>
+
+
+    <!-- Header (M3 Tonal App Bar) -->
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+            <div class="pr-6">
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
             Normalizacion: Primera, Segunda y Tercera Forma Normal
         </h1>
-        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">
-            Semana 07 <span class="mx-2">&bull;</span> Diseno Logico  <span class="mx-2">&bull;</span> Ingenieria de Datos
+                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+            Semana 07 • Diseno Logico  • Ingenieria de Datos
         </p>
-    </div>
-</header>
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
-<aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
-        <!-- Keywords -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-4">
-<li class="text-sm"><strong>Normalizacion</strong> Proceso de descomposicion para eliminar redundancia</li>
-<li class="text-sm"><strong>1FN</strong> Valores atomicos, sin grupos repetitivos</li>
-<li class="text-sm"><strong>2FN</strong> Dependencia funcional completa de la PK</li>
-<li class="text-sm"><strong>3FN</strong> Sin dependencias transitivas entre atributos no clave</li>
-<li class="text-sm"><strong>Anomalia</strong> Problemas de insercion, eliminacion, actualizacion</li>
-<li class="text-sm"><strong>Dependencia Funcional</strong> A determina B: A rarr B</li>
-</ul>
+            </div>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
+    </header>
 
-        <!-- Resources -->
-        <div class="bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 p-5">
-            <h3 class="text-xs font-bold tracking-wider text-emerald-600 dark:text-emerald-500 uppercase mb-4">Recursos</h3>
-            <ul class="space-y-3 text-sm font-medium">
-                <li><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">&larr; Inicio — Índice del Curso</a></li>
-                <li><a href="semana_06.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">← Semana Anterior</a></li>
-                <li><a href="semana_08.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors flex items-center gap-2">Siguiente Semana →</a></li>
-            </ul>
-        </div>
-    </aside>
-<main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
-        
-        <!-- Enfoque Arquitecto: Normalización y Armstrong -->
-        <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">La Teoría de Normalización de Codd</h3>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+    <!-- Layout Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
+        <!-- Main Content -->
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+            <article class="prose dark:prose-invert max-w-none">
+    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
+    <div class="my-6">
+        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
+            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
+                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
+                    🗺️ Mapa Conceptual y Relación de Términos
+                </span>
+                <span class="transition group-open:rotate-180">
+                    <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </span>
+            </summary>
+            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
+                <pre class="mermaid bg-transparent">
+graph TD
+    S07[Normalización] --> Anomalies[Eliminación de Anomalías]
+    Anomalies --> Ins[Anomalía de Inserción]
+    Anomalies --> Mod[Anomalía de Modificación]
+    Anomalies --> Del[Anomalía de Eliminación]
+    S07 --> Forms[Formas Normales]
+    Forms --> 1FN[1FN: Valores Atómicos y sin Grupos Repetidos]
+    Forms --> 2FN[2FN: Cumplir 1FN + Dependencia Funcional Completa]
+    Forms --> 3FN[3FN: Cumplir 2FN + Sin Dependencias Transitivas]
+                </pre>
+            </div>
+        </details>
+    </div>
+
+                
+<article class="prose dark:prose-invert max-w-none">
+<article class="prose dark:prose-invert max-w-none">
+<!-- Enfoque Arquitecto: Normalización y Armstrong -->
+<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">La Teoría de Normalización de Codd</h3>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 La normalización es el proceso formal de descomposición de relaciones para eliminar la redundancia y prevenir anomalías transaccionales. Se apoya en el estudio de las <strong>Dependencias Funcionales (DF)</strong> y se rige por reglas matemáticas como los Axiomas de Armstrong (Reflexividad, Aumento y Transitividad).
             </p>
-            <ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li><strong>1FN:</strong> Valores atómicos en cada atributo. Sin grupos repetitivos.</li>
-                <li><strong>2FN:</strong> Cumple 1FN y todos los atributos no clave tienen dependencia funcional completa respecto a la Clave Primaria (no dependen de partes de una PK compuesta).</li>
-                <li><strong>3FN:</strong> Cumple 2FN y no existen dependencias transitivas (ningún atributo no clave depende de otro atributo no clave).</li>
-            </ul>
-        </section>
-        
-        
-        <!-- Enfoque Cloud: Normalización y Latencia I/O -->
-        <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Impacto de la Normalización en la Latencia Cloud</h3>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li><strong>1FN:</strong> Valores atómicos en cada atributo. Sin grupos repetitivos.</li>
+<li><strong>2FN:</strong> Cumple 1FN y todos los atributos no clave tienen dependencia funcional completa respecto a la Clave Primaria (no dependen de partes de una PK compuesta).</li>
+<li><strong>3FN:</strong> Cumple 2FN y no existen dependencias transitivas (ningún atributo no clave depende de otro atributo no clave).</li>
+</ul>
+</section>
+<!-- Enfoque Cloud: Normalización y Latencia I/O -->
+<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Impacto de la Normalización en la Latencia Cloud</h3>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
                 Un diseño altamente normalizado (3FN o superior) ahorra espacio físico en disco y mantiene la consistencia relacional. Sin embargo, en bases de datos cloud, consultas complejas que requieren múltiples JOINs para reconstruir una entidad de negocio pueden degradar la latencia de respuesta debido al I/O de red necesario para combinar datos dispersos en disco.
             </p>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
-                <strong>Recomendación:</strong> Normalice siempre por diseño original. Si el rendimiento lo exige bajo perfiles reales de carga, aplique estrategias de desnormalización controlada acompañadas de vistas materializadas.
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+<strong>Recomendación:</strong> Normalice siempre por diseño original. Si el rendimiento lo exige bajo perfiles reales de carga, aplique estrategias de desnormalización controlada acompañadas de vistas materializadas.
             </p>
-        </section>
-        
-
+</section>
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<h4 class="text-blue-800 dark:text-blue-300 font-bold mb-3 flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Objetivos de Aprendizaje</h4>
+<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Objetivos de Aprendizaje</h4>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li >Entender el proposito de la normalizacion</li>
-<li >Identificar anomalias de insercion, eliminacion y modificacion</li>
-<li >Aplicar la Primera Forma Normal (1FN)</li>
-<li >Aplicar la Segunda Forma Normal (2FN)</li>
-<li >Aplicar la Tercera Forma Normal (3FN)</li>
+<li>Entender el proposito de la normalizacion</li>
+<li>Identificar anomalias de insercion, eliminacion y modificacion</li>
+<li>Aplicar la Primera Forma Normal (1FN)</li>
+<li>Aplicar la Segunda Forma Normal (2FN)</li>
+<li>Aplicar la Tercera Forma Normal (3FN)</li>
 </ul>
 </div>
 <div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 <p><strong>Insight del Arquitecto:</strong> La normalizacion evita la duplicacion innecesaria de datos y las inconsistencias. Sin embargo, en sistemas OLAP/Data Warehouse la desnormalizacion es comun para mejorar rendimiento de consultas. La clave: entender la teoria para saber cuando romper las reglas.</p>
 </div>
-<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Que es la Normalizacion?</h2>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">1. Que es la Normalizacion?</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Es el proceso de descomposicion de relaciones con anomalias para producir relaciones bien estructuradas y mas pequenas. Valida y mejora el diseno logico satisfaciendo restricciones que evitan la duplicacion innecesaria de datos.</p>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p><strong>Relacion bien estructurada:</strong> Contiene minima redundancia y permite anadir, eliminar y actualizar registros sin causar inconsistencias.</p>
 </div>
-<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. El Problema: Anomalias</h2>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">2. El Problema: Anomalias</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Considere la siguiente tabla NO normalizada de docentes y cursos:</p>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
 <div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
@@ -190,21 +202,21 @@
 <div class="p-4 text-slate-600 dark:text-slate-400">2,700</div>
 </div>
 </div></div>
-<h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tipos de Anomalias</h2>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Tipos de Anomalias</h2>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li ><strong>Insercion:</strong> No se puede registrar un docente que aun no ha tomado ningun curso.</li>
-<li ><strong>Eliminacion:</strong> Si se elimina el registro del codigo 43000, se pierde toda la informacion del docente.</li>
-<li ><strong>Modificacion:</strong> Si el docente 42000 recibe un aumento, debe actualizarse en multiples filas.</li>
+<li><strong>Insercion:</strong> No se puede registrar un docente que aun no ha tomado ningun curso.</li>
+<li><strong>Eliminacion:</strong> Si se elimina el registro del codigo 43000, se pierde toda la informacion del docente.</li>
+<li><strong>Modificacion:</strong> Si el docente 42000 recibe un aumento, debe actualizarse en multiples filas.</li>
 </ul>
-<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Dependencia Funcional y Claves</h2>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">3. Dependencia Funcional y Claves</h2>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p><strong>Dependencia Funcional:</strong> El valor de un atributo A (determinante) determina el valor de otro atributo B. Se denota A rarr B.</p>
 </div>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li ><strong>Clave Candidata:</strong> Identificador unico. Una o varias claves que podrian convertirse en la clave primaria (ej. codigo de empleado y DNI).</li>
-<li >Cada campo no clave es funcionalmente dependiente de cada clave candidata.</li>
+<li><strong>Clave Candidata:</strong> Identificador unico. Una o varias claves que podrian convertirse en la clave primaria (ej. codigo de empleado y DNI).</li>
+<li>Cada campo no clave es funcionalmente dependiente de cada clave candidata.</li>
 </ul>
-<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Primera Forma Normal (1FN)</h2>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">4. Primera Forma Normal (1FN)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Elimina grupos repetitivos y garantiza que cada atributo tenga valores atomicos (no multivaluados).</p>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Ejemplo - Tabla factura antes de 1FN:</strong> La tabla original combinaba datos de factura y productos en una sola fila con grupos repetitivos.</p>
@@ -263,14 +275,14 @@ Linea_Factura (nro_factura, cod_articulo,
 <div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 <p><strong>Insight del Arquitecto:</strong> En la vida real, la mayoria de tablas ya estan en 1FN porque los disenadores evitan grupos repetitivos. Sin embargo, los sistemas legacy (como archivos de mainframe) suelen violar 1FN con campos multivaluados separados por comas.</p>
 </div>
-<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Segunda Forma Normal (2FN)</h2>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">5. Segunda Forma Normal (2FN)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una tabla esta en 2FN si: (1) esta en 1FN y (2) cada atributo no clave depende funcionalmente de TODA la clave primaria (dependencia funcional total), no de parte de ella.</p>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Dependencias Parciales en Linea_Factura:</strong></p>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La clave primaria de Linea_Factura es compuesta: <code>(nro_factura, cod_articulo)</code>. Sin embargo:</p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li ><code>desc_articulo</code> y <code>prec_unitario</code> dependen solo de <code>cod_articulo</code> (dependencia parcial)</li>
-<li ><code>cant</code> y <code>prec_total</code> dependen de la PK completa</li>
+<li><code>desc_articulo</code> y <code>prec_unitario</code> dependen solo de <code>cod_articulo</code> (dependencia parcial)</li>
+<li><code>cant</code> y <code>prec_total</code> dependen de la PK completa</li>
 </ul>
 <p><strong>Resultado 2FN:</strong> Separar las dependencias parciales.</p>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
@@ -282,7 +294,7 @@ Linea_Factura (nro_factura, cod_articulo,
 -- Articulo (cod_articulo, desc_articulo, prec_unitario)
 </div>
 </div>
-<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">6. Tercera Forma Normal (3FN)</h2>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">6. Tercera Forma Normal (3FN)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una tabla esta en 3FN si: (1) esta en 2FN y (2) no existen dependencias transitivas (un atributo no clave determina funcionalmente a otro u otros atributos no clave).</p>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Dependencia Transitiva en Factura:</strong></p>
@@ -350,99 +362,195 @@ Linea_Factura (nro_factura, cod_articulo,
 </div>
 </div></div>
 <ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300" style="list-style: decimal;">
-<li >Identifique la clave primaria</li>
-<li >Identifique las anomalias actuales</li>
-<li >Normalice hasta 3FN (muestre las tablas resultantes)</li>
+<li>Identifique la clave primaria</li>
+<li>Identifique las anomalias actuales</li>
+<li>Normalice hasta 3FN (muestre las tablas resultantes)</li>
 </ol>
 </div>
 <div class="canvas-container">
 <canvas height="360" id="canvas_07" width="800"></canvas>
 <div class="canvas-controls" id="controls_07"></div>
 </div>
-
-        <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-                </span>
+<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
+<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
                 💡 Tips del Profesor
             </h2>
-            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-                <div class="flex gap-3">
-                    <span class="text-amber-500 font-bold">&bull;</span>
-                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Identifique anomalías a tiempo:</strong> Si al insertar un nuevo registro se ve obligado a inventar datos temporales para campos obligatorios, su diseño sufre anomalías de inserción y requiere normalización.</p>
-                </div>
-                <div class="flex gap-3">
-                    <span class="text-amber-500 font-bold">&bull;</span>
-                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite dependencias transitivas:</strong> Si una columna C depende de B, y B depende de la clave primaria A, entonces C debe migrarse a una tabla independiente junto con B.</p>
-                </div>
-                <div class="flex gap-3">
-                    <span class="text-amber-500 font-bold">&bull;</span>
-                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Guarde datos en su forma más atómica:</strong> No concatene nombres y apellidos en una sola columna; separarlos facilita el uso de índices b-tree para ordenamientos.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="mt-10">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-                <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                </span>
+<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
+<div class="flex gap-3">
+<span class="text-amber-500 font-bold">•</span>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Identifique anomalías a tiempo:</strong> Si al insertar un nuevo registro se ve obligado a inventar datos temporales para campos obligatorios, su diseño sufre anomalías de inserción y requiere normalización.</p>
+</div>
+<div class="flex gap-3">
+<span class="text-amber-500 font-bold">•</span>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite dependencias transitivas:</strong> Si una columna C depende de B, y B depende de la clave primaria A, entonces C debe migrarse a una tabla independiente junto con B.</p>
+</div>
+<div class="flex gap-3">
+<span class="text-amber-500 font-bold">•</span>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Guarde datos en su forma más atómica:</strong> No concatene nombres y apellidos en una sola columna; separarlos facilita el uso de índices b-tree para ordenamientos.</p>
+</div>
+</div>
+</section>
+<section class="mt-10">
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
                 ✍️ Autoevaluación y Ejercicios Prácticos
             </h2>
-            <div class="space-y-4">
-                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-                        <span class="flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
+<div class="space-y-4">
+<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+<span class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
                             ¿Qué es una anomalía de modificación en una tabla desnormalizada?
                         </span>
-                        <span class="transition group-open:rotate-180">
-                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Es la inconsistencia que surge cuando un dato duplicado se actualiza en un registro pero no en los demás, dejando a la base de datos en un estado contradictorio.</p>
-                    </div>
-                </details>
-                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-                        <span class="flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
+<span class="transition group-open:rotate-180">
+<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</summary>
+<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Es la inconsistencia que surge cuando un dato duplicado se actualiza en un registro pero no en los demás, dejando a la base de datos en un estado contradictorio.</p>
+</div>
+</details>
+<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+<span class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
                             ¿Cuándo se aplica la Segunda Forma Normal (2FN)?
                         </span>
-                        <span class="transition group-open:rotate-180">
-                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Solo es relevante cuando la tabla posee una clave primaria compuesta. Exige que ningún atributo no clave dependa únicamente de una parte de esa clave primaria.</p>
-                    </div>
-                </details>
-                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-                        <span class="flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
+<span class="transition group-open:rotate-180">
+<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</summary>
+<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Solo es relevante cuando la tabla posee una clave primaria compuesta. Exige que ningún atributo no clave dependa únicamente de una parte de esa clave primaria.</p>
+</div>
+</details>
+<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+<span class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
                             ¿Cuál es la regla de oro de la Tercera Forma Normal (3FN)?
                         </span>
-                        <span class="transition group-open:rotate-180">
-                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Que los atributos no clave dependan directamente de la clave primaria, de toda la clave primaria y de nada más que de la clave primaria ('so help me Codd').</p>
-                    </div>
-                </details>
-            </div>
-        </section>
-
-<nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
-            <a href="semana_06.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Semana 06</a>
-            <a href="semana_08.html" class="px-5 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm">Semana 08</a>
-        </nav>
-</main>
+<span class="transition group-open:rotate-180">
+<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</summary>
+<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Que los atributos no clave dependan directamente de la clave primaria, de toda la clave primaria y de nada más que de la clave primaria ('so help me Codd').</p>
 </div>
+</details>
+</div>
+</section>
+</article>
+</article>
+
+            </article>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
+        <!-- Keywords (M3 Outlined Card) -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-850 p-6 shadow-sm hover:shadow-md transition-shadow">
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
+            <ul class="space-y-2">
+                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Normalizacion</strong> Proceso de descomposicion para eliminar redundancia</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>1FN</strong> Valores atomicos, sin grupos repetitivos</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>2FN</strong> Dependencia funcional completa de la PK</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>3FN</strong> Sin dependencias transitivas entre atributos no clave</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Anomalia</strong> Problemas de insercion, eliminacion, actualizacion</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Dependencia Funcional</strong> A determina B: A rarr B</li>
+
+            </ul>
+        </div>
+        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
+        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
+            <ul class="space-y-3 text-sm">
+                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
+                <li><a href="semana_06.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 06</a></li>
+                <li><a href="semana_08.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 08 →</a></li>
+            </ul>
+        </div>
+
+        </aside>
+    </div>
+
+    <!-- M3 Bottom Navigation Bar (Mobile only) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
+            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+        </a>
+        <a href="semana_06.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
+            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+        </a>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
+            </svg>
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+        </button>
+        <a href="semana_08.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
+            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
+        </a>
+    </nav>
+
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleM3Btn = document.getElementById('theme-toggle-m3');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const m3ThemeIconLight = document.getElementById('m3-theme-icon-light');
+        const m3ThemeIconDark = document.getElementById('m3-theme-icon-dark');
+
+        function updateToggleText() {
+            const isDark = document.documentElement.classList.contains('dark');
+            if (isDark) {
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
+                if (m3ThemeIconLight) m3ThemeIconLight.classList.remove('hidden');
+                if (m3ThemeIconDark) m3ThemeIconDark.classList.add('hidden');
+            } else {
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+                if (m3ThemeIconLight) m3ThemeIconLight.classList.add('hidden');
+                if (m3ThemeIconDark) m3ThemeIconDark.classList.remove('hidden');
+            }
+        }
+
+        updateToggleText();
+
+        const toggleTheme = () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+            updateToggleText();
+        };
+
+        if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+        if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
+    </script>
+
 <script>
 var tables07 = [
     { title: '0FN: Tabla Original (datos repetidos)', cols: ['Factura#', 'Cliente', 'Producto', 'Precio'], rows: [['F001','Juan','Laptop','2500'],['F001','Juan','Mouse','50'],['F002','Ana','Teclado','120'],['F002','Ana','Monitor','800']], highlight: undefined, extra: 'Redundancia: Juan y Ana aparecen repetidos' },
@@ -460,31 +568,5 @@ CanvasUI.addControls('controls_07', {
     reset: function() { step07 = 0; var c = CanvasUI.getContext('canvas_07'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, tables07, 0); }
 });
 </script>
-
-    <script>
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        
-        function updateToggleText() {
-            if (document.documentElement.classList.contains('dark')) {
-                themeToggleBtn.textContent = '[ MODO: CLARO ]';
-            } else {
-                themeToggleBtn.textContent = '[ MODO: OSCURO ]';
-            }
-        }
-        
-        updateToggleText();
-
-        themeToggleBtn.addEventListener('click', () => {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('color-theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('color-theme', 'dark');
-            }
-            updateToggleText();
-        });
-    </script>
 </body>
-
 </html>

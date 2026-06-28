@@ -1,7 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <title>Ingeniería de Datos — Índice del Curso</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @custom-variant dark (&:where(.dark, .dark *));
+        @theme {
+            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --color-primary: #6750A4;
+            --color-primary-dark: #D0BCFF;
+            --color-surface-light: #FEF7FF;
+            --color-surface-dark: #141218;
+        }
+    </style>
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -10,171 +29,298 @@
         }
     </script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ingenieria de Datos — Indice del Curso</title>
-    <link rel="stylesheet" href="master.css">
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-<style>
-        @custom-variant dark (&:where(.dark, .dark *));
-        .theme-toggle-btn {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 100;
-            padding: 0.35rem 0.75rem;
-            border: 1px solid #111111;
-            background-color: #ffffff;
-            color: #111111;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        html.dark .theme-toggle-btn {
-            border-color: #333333;
-            background-color: #121212;
-            color: #f0f0f0;
-        }
-        .theme-toggle-btn:hover {
-            background-color: #111111;
-            color: #ffffff;
-        }
-        html.dark .theme-toggle-btn:hover {
-            background-color: #ffffff;
-            color: #111111;
-        }
-</style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300 p-6 md:p-12">
-    <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
-    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-12 shadow-xl text-center max-w-5xl mx-auto mb-12 relative overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-1.5 before:bg-gradient-to-r before:from-blue-600 before:to-emerald-500">
-        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3">Ingenieria de Datos</h1>
-        <p class="text-base md:text-lg font-medium text-slate-500 dark:text-slate-400">Universidad de Lima | 16 Semanas | Silabo 2013-2</p>
+<body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-350 antialiased font-sans transition-colors duration-300 p-4 pb-20 md:p-12">
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <!-- Sun icon -->
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+        </svg>
+        <!-- Moon icon -->
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+        </svg>
+    </button>
+
+
+    <!-- Header title card (M3 Banner Style) -->
+    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 md:p-12 shadow-xl text-center max-w-5xl mx-auto mb-8 md:mb-12 relative overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-1.5 before:bg-gradient-to-r before:from-blue-600 before:to-emerald-500">
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3">Ingeniería de Datos</h1>
+        <p class="text-sm md:text-lg font-medium text-slate-500 dark:text-slate-400">Universidad de Lima | 16 Semanas | Sílabo 2013-2</p>
     </div>
 
-    <div class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-slate-200 before:dark:bg-slate-800 after:h-px after:flex-1 after:bg-slate-200 after:dark:bg-slate-800 max-w-5xl mx-auto">Semanas 1-7: Fundamentos y Diseno de BD</div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S01</span> Fundamentos de Informacion</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">Dato vs Informacion, Sistemas Tradicionales, Enfoque DBMS, Componentes, SDLC, Evolucion de BD.</p>
-            <a href="semana_01.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 1 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+    <!-- Weeks sections -->
+    <div class="text-xs font-bold tracking-wider text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 uppercase mt-8 md:mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-slate-200 before:dark:bg-slate-800 after:h-px after:flex-1 after:bg-slate-200 after:dark:bg-slate-800 max-w-5xl mx-auto">Semanas 1-7: Fundamentos y Diseno de BD</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:p-5 md:p-6 max-w-5xl mx-auto mb-8 md:mb-12">
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S01</span> Fundamentos de Informacion</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Dato vs Informacion, Sistemas Tradicionales, Enfoque DBMS, Componentes, SDLC, Evolucion de BD.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_01.html">Ver Semana 1 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S02</span> Sistema de Gestion de BD</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Arquitectura 3 niveles, Independencia de Datos, Tipos de BD, Funciones del DBMS, ACID.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_02.html">Ver Semana 2 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S03</span> Bases de Datos Relacionales</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Conceptos BDR, Terminologia, Restricciones de Integridad, PK y FK.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_03.html">Ver Semana 3 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S04</span> DDL y Administracion</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">CREATE TABLE, ALTER TABLE, DROP TABLE, Constraints, Secuencias, Vistas, Indices B-Tree.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_04.html">Ver Semana 4 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S05</span> DML y Consultas Simples</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">INSERT, UPDATE, DELETE, SELECT, WHERE, ORDER BY, DISTINCT, Transacciones DML.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_05.html">Ver Semana 5 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S06</span> Modelamiento E-R</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Entidades Fuertes y Debiles, Relaciones, Cardinalidad, DER, Supertipos y Subtipos.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_06.html">Ver Semana 6 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S07</span> Normalizacion (1FN-3FN)</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">1FN, 2FN, 3FN, Dependencias Funcionales, Anomalias de Insercion/Eliminacion/Modificacion.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_07.html">Ver Semana 7 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+</div>
+<div class="text-xs font-bold tracking-wider text-rose-500 dark:text-rose-400 uppercase mt-8 md:mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-rose-200/50 before:dark:bg-rose-900/30 after:h-px after:flex-1 after:bg-rose-200/50 after:dark:bg-rose-900/30 max-w-5xl mx-auto">Semana 8: Examen Parcial</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:p-5 md:p-6 max-w-5xl mx-auto mb-8 md:mb-12">
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border-l-4 border-l-rose-500 border-y border-r border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-l-rose-600 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">PARCIAL</span> Evaluacion Parcial</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Cobertura: Semanas 01-07. Teoria, Modelamiento E-R, Normalizacion y SQL. Incluye solucionario.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-500 dark:hover:text-rose-300 transition-colors mt-auto" href="semana_08.html">Ver Examen Parcial <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+</div>
+<div class="text-xs font-bold tracking-wider text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 uppercase mt-8 md:mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-slate-200 before:dark:bg-slate-800 after:h-px after:flex-1 after:bg-slate-200 after:dark:bg-slate-800 max-w-5xl mx-auto">Semanas 9-15: Avanzado y Data Warehouse</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:p-5 md:p-6 max-w-5xl mx-auto mb-8 md:mb-12">
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S09</span> BCNF, 4FN, 5FN, Desnormalizacion</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Forma Normal Boyce-Codd, Dependencias Multivaluadas (4FN), Dependencias de Join (5FN), Desnormalizacion.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_09.html">Ver Semana 9 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S10</span> JOINs y Subconsultas</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Equijoin, Non-Equijoin, Self Join, Outer Join, Subconsultas de Fila Simple y Multiple.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_10.html">Ver Semana 10 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S11</span> GROUP BY, HAVING, Agregacion</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">MIN, MAX, AVG, SUM, COUNT, GROUP BY, HAVING vs WHERE, Funciones de Grupo.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_11.html">Ver Semana 11 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S12</span> PL/SQL: Bloques y Cursores</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Estructura PL/SQL, Variables %TYPE/%ROWTYPE, IF/LOOP/WHILE, Cursores Implicitos y Explicitos.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_12.html">Ver Semana 12 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S13</span> Procedimientos y Triggers</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Procedimientos, Funciones, Triggers BEFORE/AFTER, :NEW/:OLD, Paquetes.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_13.html">Ver Semana 13 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S14</span> Data Warehouse</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">BI, Star vs Snowflake Schema, ETL, ROLAP/MOLAP/HOLAP, Fact Tables y Dimension Tables.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_14.html">Ver Semana 14 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S15</span> Alta Disponibilidad</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">SLA y 9s, HOT/WARM/COLD Standby, Log Shipping, Mirroring, Failover Clustering, AlwaysOn.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto" href="semana_15.html">Ver Semana 15 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+</div>
+<div class="text-xs font-bold tracking-wider text-rose-500 dark:text-rose-400 uppercase mt-8 md:mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-rose-200/50 before:dark:bg-rose-900/30 after:h-px after:flex-1 after:bg-rose-200/50 after:dark:bg-rose-900/30 max-w-5xl mx-auto">Semana 16: Examen Final</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:p-5 md:p-6 max-w-5xl mx-auto mb-8 md:mb-12">
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 dark:bg-slate-900 border-l-4 border-l-rose-500 border-y border-r border-slate-200 dark:border-slate-800 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-l-rose-600 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">FINAL</span> Evaluacion Final</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 dark:text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Cobertura: Semanas 09-15. Teoria Avanzada, PL/SQL, Consultas Complejas, Data Warehouse. Incluye solucionario.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-500 dark:hover:text-rose-300 transition-colors mt-auto" href="semana_16.html">Ver Examen Final <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
+</div>
+</div>
+<div class="text-xs font-bold tracking-wider text-emerald-600 dark:text-emerald-400 uppercase mt-8 md:mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-emerald-100 before:dark:bg-emerald-950 after:h-px after:flex-1 after:bg-emerald-100 after:dark:bg-emerald-950 max-w-5xl mx-auto">Laboratorios y Guías Extras</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:p-5 md:p-6 max-w-5xl mx-auto mb-8 md:mb-12">
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">LAB</span> Consultas Básicas</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-400 text-sm mb-4 flex-grow">Sentencia SELECT, filtros condicionales WHERE, lógica CASE WHEN y funciones de texto.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto" href="extra_sql_consultas_basicas.html">Ver Laboratorio →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">REF</span> Funciones Comunes</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-400 text-sm mb-4 flex-grow">Referencia completa de funciones en SQL: fechas, cadenas de texto, matemáticas.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto" href="extra_sql_funciones.html">Ver Referencia →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">LAB</span> Vistas y CTEs</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-400 text-sm mb-4 flex-grow">Uso de WITH (CTEs), Vistas Temporales y Materializadas para modularizar consultas.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto" href="extra_sql_vistas_ctes.html">Ver Laboratorio →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">LAB</span> Agrupamientos SQL</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-400 text-sm mb-4 flex-grow">Ejercicios avanzados con GROUP BY, HAVING y combinaciones de agregación.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto" href="extra_sql_agrupamiento.html">Ver Laboratorio →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">PL</span> PL/pgSQL Básico</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-400 text-sm mb-4 flex-grow">Sintaxis elemental, variables, condicionales y flujos repetitivos en PL/pgSQL.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto" href="extra_plpgsql_intro.html">Ver Introducción →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">PL</span> PL/pgSQL Avanzado</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-400 text-sm mb-4 flex-grow">Manejo de excepciones, cursores explícitos y optimización de triggers procedimentales.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto" href="extra_plpgsql_adv.html">Ver Avanzado →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">OPT</span> Optimización SQL</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-400 text-sm mb-4 flex-grow">Análisis del plan de ejecución EXPLAIN, uso estratégico de índices B-Tree y Hash.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto" href="extra_optimizacion.html">Ver Optimización →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">SEG</span> Seguridad Avanzada</h3>
+<p class="text-slate-700 dark:text-slate-350 dark:text-slate-400 text-sm mb-4 flex-grow">Políticas de seguridad a nivel de fila (RLS), encriptación y perfiles de acceso.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto" href="extra_seguridad_adv.html">Ver Seguridad →</a>
+</div>
+</div>
+<div class="text-xs font-bold tracking-wider text-emerald-600 dark:text-emerald-400 uppercase mt-8 md:mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-emerald-100 before:dark:bg-emerald-950 after:h-px after:flex-1 after:bg-emerald-100 after:dark:bg-emerald-950 max-w-5xl mx-auto">Laboratorios y Guías Extras</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:p-6 max-w-5xl mx-auto mb-8 md:mb-12">
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">LAB</span> Consultas Básicas</h3>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Sentencia SELECT, filtros condicionales WHERE, lógica CASE WHEN y funciones de texto.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2" href="extra_sql_consultas_basicas.html">Ver Laboratorio →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">REF</span> Funciones Comunes</h3>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Referencia completa de funciones en SQL: fechas, cadenas de texto, matemáticas.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2" href="extra_sql_funciones.html">Ver Referencia →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">LAB</span> Vistas y CTEs</h3>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Uso de WITH (CTEs), Vistas Temporales y Materializadas para modularizar consultas.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2" href="extra_sql_vistas_ctes.html">Ver Laboratorio →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">LAB</span> Agrupamientos SQL</h3>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Ejercicios avanzados con GROUP BY, HAVING y combinaciones de agregación.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2" href="extra_sql_agrupamiento.html">Ver Laboratorio →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">PL</span> PL/pgSQL Básico</h3>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Sintaxis elemental, variables, condicionales y flujos repetitivos en PL/pgSQL.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2" href="extra_plpgsql_intro.html">Ver Introducción →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">PL</span> PL/pgSQL Avanzado</h3>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Manejo de excepciones, cursores explícitos y optimización de triggers procedimentales.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2" href="extra_plpgsql_adv.html">Ver Avanzado →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">OPT</span> Optimización SQL</h3>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Análisis del plan de ejecución EXPLAIN, uso estratégico de índices B-Tree y Hash.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2" href="extra_optimizacion.html">Ver Optimización →</a>
+</div>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+<h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">SEG</span> Seguridad Avanzada</h3>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Políticas de seguridad a nivel de fila (RLS), encriptación y perfiles de acceso.</p>
+<a class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2" href="extra_seguridad_adv.html">Ver Seguridad →</a>
+</div>
+</div>
+    
+    <!-- Extra sections -->
+    
+    <div class="text-xs font-bold tracking-wider text-emerald-600 dark:text-emerald-400 uppercase mt-8 md:mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-emerald-100 before:dark:bg-emerald-950 after:h-px after:flex-1 after:bg-emerald-100 after:dark:bg-emerald-950 max-w-5xl mx-auto">Laboratorios y Guías Extras</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16 md:mb-12">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+            <h3><span class="px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">LAB</span> Consultas Básicas</h3>
+            <p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Sentencia SELECT, filtros condicionales WHERE, lógica CASE WHEN y funciones de texto.</p>
+            <a href="extra_sql_consultas_basicas.html" class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2">Ver Laboratorio &rarr;</a>
         </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S02</span> Sistema de Gestion de BD</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">Arquitectura 3 niveles, Independencia de Datos, Tipos de BD, Funciones del DBMS, ACID.</p>
-            <a href="semana_02.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 2 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+            <h3><span class="px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">REF</span> Funciones Comunes</h3>
+            <p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Referencia completa de funciones en SQL: fechas, cadenas de texto, matemáticas.</p>
+            <a href="extra_sql_funciones.html" class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2">Ver Referencia &rarr;</a>
         </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S03</span> Bases de Datos Relacionales</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">Conceptos BDR, Terminologia, Restricciones de Integridad, PK y FK.</p>
-            <a href="semana_03.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 3 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+            <h3><span class="px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">LAB</span> Vistas y CTEs</h3>
+            <p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Uso de WITH (CTEs), Vistas Temporales y Materializadas para modularizar consultas.</p>
+            <a href="extra_sql_vistas_ctes.html" class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2">Ver Laboratorio &rarr;</a>
         </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S04</span> DDL y Administracion</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">CREATE TABLE, ALTER TABLE, DROP TABLE, Constraints, Secuencias, Vistas, Indices B-Tree.</p>
-            <a href="semana_04.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 4 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+            <h3><span class="px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">LAB</span> Agrupamientos SQL</h3>
+            <p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Ejercicios avanzados con GROUP BY, HAVING y combinaciones de agregación.</p>
+            <a href="extra_sql_agrupamiento.html" class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2">Ver Laboratorio &rarr;</a>
         </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S05</span> DML y Consultas Simples</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">INSERT, UPDATE, DELETE, SELECT, WHERE, ORDER BY, DISTINCT, Transacciones DML.</p>
-            <a href="semana_05.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 5 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+            <h3><span class="px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">PL</span> PL/pgSQL Básico</h3>
+            <p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Sintaxis elemental, variables, condicionales y flujos repetitivos en PL/pgSQL.</p>
+            <a href="extra_plpgsql_intro.html" class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2">Ver Introducción &rarr;</a>
         </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S06</span> Modelamiento E-R</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">Entidades Fuertes y Debiles, Relaciones, Cardinalidad, DER, Supertipos y Subtipos.</p>
-            <a href="semana_06.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 6 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+            <h3><span class="px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">PL</span> PL/pgSQL Avanzado</h3>
+            <p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Manejo de excepciones, cursores explícitos y optimización de triggers procedimentales.</p>
+            <a href="extra_plpgsql_adv.html" class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2">Ver Avanzado &rarr;</a>
         </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S07</span> Normalizacion (1FN-3FN)</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">1FN, 2FN, 3FN, Dependencias Funcionales, Anomalias de Insercion/Eliminacion/Modificacion.</p>
-            <a href="semana_07.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 7 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+            <h3><span class="px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">OPT</span> Optimización SQL</h3>
+            <p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Análisis del plan de ejecución EXPLAIN, uso estratégico de índices B-Tree y Hash.</p>
+            <a href="extra_optimizacion.html" class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2">Ver Optimización &rarr;</a>
+        </div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 flex flex-col justify-between">
+            <h3><span class="px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">SEG</span> Seguridad Avanzada</h3>
+            <p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Políticas de seguridad a nivel de fila (RLS), encriptación y perfiles de acceso.</p>
+            <a href="extra_seguridad_adv.html" class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors mt-auto py-2">Ver Seguridad &rarr;</a>
         </div>
     </div>
 
-    <div class="text-xs font-bold tracking-wider text-rose-500 dark:text-rose-400 uppercase mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-rose-200/50 before:dark:bg-rose-900/30 after:h-px after:flex-1 after:bg-rose-200/50 after:dark:bg-rose-900/30 max-w-5xl mx-auto">Semana 8: Examen Parcial</div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
-        <div class="bg-white dark:bg-slate-900 border-l-4 border-l-rose-500 border-y border-r border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-l-rose-600 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">PARCIAL</span> Evaluacion Parcial</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">Cobertura: Semanas 01-07. Teoria, Modelamiento E-R, Normalizacion y SQL. Incluye solucionario.</p>
-            <a href="semana_08.html" class="inline-flex items-center gap-1 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-500 dark:hover:text-rose-300 transition-colors mt-auto">Ver Examen Parcial <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
-        </div>
-    </div>
 
-    <div class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-slate-200 before:dark:bg-slate-800 after:h-px after:flex-1 after:bg-slate-200 after:dark:bg-slate-800 max-w-5xl mx-auto">Semanas 9-15: Avanzado y Data Warehouse</div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S09</span> BCNF, 4FN, 5FN, Desnormalizacion</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">Forma Normal Boyce-Codd, Dependencias Multivaluadas (4FN), Dependencias de Join (5FN), Desnormalizacion.</p>
-            <a href="semana_09.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 9 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
-        </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S10</span> JOINs y Subconsultas</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">Equijoin, Non-Equijoin, Self Join, Outer Join, Subconsultas de Fila Simple y Multiple.</p>
-            <a href="semana_10.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 10 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
-        </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S11</span> GROUP BY, HAVING, Agregacion</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">MIN, MAX, AVG, SUM, COUNT, GROUP BY, HAVING vs WHERE, Funciones de Grupo.</p>
-            <a href="semana_11.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 11 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
-        </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S12</span> PL/SQL: Bloques y Cursores</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">Estructura PL/SQL, Variables %TYPE/%ROWTYPE, IF/LOOP/WHILE, Cursores Implicitos y Explicitos.</p>
-            <a href="semana_12.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 12 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
-        </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S13</span> Procedimientos y Triggers</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">Procedimientos, Funciones, Triggers BEFORE/AFTER, :NEW/:OLD, Paquetes.</p>
-            <a href="semana_13.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 13 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
-        </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S14</span> Data Warehouse</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">BI, Star vs Snowflake Schema, ETL, ROLAP/MOLAP/HOLAP, Fact Tables y Dimension Tables.</p>
-            <a href="semana_14.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 14 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
-        </div>
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S15</span> Alta Disponibilidad</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">SLA y 9s, HOT/WARM/COLD Standby, Log Shipping, Mirroring, Failover Clustering, AlwaysOn.</p>
-            <a href="semana_15.html" class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto">Ver Semana 15 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
-        </div>
-    </div>
-
-    <div class="text-xs font-bold tracking-wider text-rose-500 dark:text-rose-400 uppercase mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-rose-200/50 before:dark:bg-rose-900/30 after:h-px after:flex-1 after:bg-rose-200/50 after:dark:bg-rose-900/30 max-w-5xl mx-auto">Semana 16: Examen Final</div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
-        <div class="bg-white dark:bg-slate-900 border-l-4 border-l-rose-500 border-y border-r border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-l-rose-600 transition-all duration-300 flex flex-col justify-between">
-            <h3><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">FINAL</span> Evaluacion Final</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 flex-grow">Cobertura: Semanas 09-15. Teoria Avanzada, PL/SQL, Consultas Complejas, Data Warehouse. Incluye solucionario.</p>
-            <a href="semana_16.html" class="inline-flex items-center gap-1 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-500 dark:hover:text-rose-300 transition-colors mt-auto">Ver Examen Final <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
-        </div>
-    </div>
-
-    <div class="max-w-5xl mx-auto mt-16 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm mb-20">
-        <h3 class="text-xl font-bold text-slate-950 dark:text-slate-50 mb-6 pb-3 border-b border-slate-200 dark:border-slate-800">Plan Maestro de Formación (16 Semanas)</h3>
-        <ul class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <li class="bg-white dark:bg-slate-850 p-5 rounded-2xl border border-slate-200 dark:border-slate-800/80 text-sm font-medium text-slate-700 dark:text-slate-300 shadow-sm hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all duration-300"><strong>Fase 1 (S01-S07):</strong> Fundamentos, Modelamiento y Normalizacion</li>
-            <li class="bg-white dark:bg-slate-850 p-5 rounded-2xl border border-slate-200 dark:border-slate-800/80 text-sm font-medium text-slate-700 dark:text-slate-300 shadow-sm hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all duration-300"><strong>Fase 2 (S09-S13):</strong> SQL Avanzado y PL/SQL</li>
-            <li class="bg-white dark:bg-slate-850 p-5 rounded-2xl border border-slate-200 dark:border-slate-800/80 text-sm font-medium text-slate-700 dark:text-slate-300 shadow-sm hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition-all duration-300"><strong>Fase 3 (S14-S15):</strong> Data Warehouse y Alta Disponibilidad</li>
-        </ul>
-    </div>
+    <!-- M3 Bottom Navigation Bar (Mobile only) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
+        <a href="index.html" class="flex flex-col items-center justify-center text-primary dark:text-primary-dark active:scale-95 transition-all w-16 h-14 touch-manipulation">
+            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            <span class="text-[9px] font-bold tracking-wide mt-1">Índice</span>
+        </a>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
+            </svg>
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+        </button>
+    </nav>
 
     <script>
         const themeToggleBtn = document.getElementById('theme-toggle');
-        
+        const themeToggleM3Btn = document.getElementById('theme-toggle-m3');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const m3ThemeIconLight = document.getElementById('m3-theme-icon-light');
+        const m3ThemeIconDark = document.getElementById('m3-theme-icon-dark');
+
         function updateToggleText() {
-            if (document.documentElement.classList.contains('dark')) {
-                themeToggleBtn.textContent = '[ MODO: CLARO ]';
+            const isDark = document.documentElement.classList.contains('dark');
+            if (isDark) {
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
+                if (m3ThemeIconLight) m3ThemeIconLight.classList.remove('hidden');
+                if (m3ThemeIconDark) m3ThemeIconDark.classList.add('hidden');
             } else {
-                themeToggleBtn.textContent = '[ MODO: OSCURO ]';
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+                if (m3ThemeIconLight) m3ThemeIconLight.classList.add('hidden');
+                if (m3ThemeIconDark) m3ThemeIconDark.classList.remove('hidden');
             }
         }
-        
+
         updateToggleText();
 
-        themeToggleBtn.addEventListener('click', () => {
+        const toggleTheme = () => {
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
                 localStorage.setItem('color-theme', 'light');
@@ -183,8 +329,11 @@
                 localStorage.setItem('color-theme', 'dark');
             }
             updateToggleText();
-        });
-    </script>
-</body>
+        };
 
+        if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+        if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
+    </script>
+
+</body>
 </html>

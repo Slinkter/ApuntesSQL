@@ -1,7 +1,29 @@
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <title>Semana 12 - PL/SQL: Bloques, Variables y Cursores</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind v4 CDN -->
+    <script src="canvas-ui.js"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @custom-variant dark (&:where(.dark, .dark *));
+        @theme {
+            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --color-primary: #6750A4;
+            --color-primary-dark: #D0BCFF;
+            --color-surface-light: #FEF7FF;
+            --color-surface-dark: #141218;
+            --color-outline-light: #79747E;
+            --color-outline-dark: #938F99;
+        }
+    </style>
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -10,167 +32,155 @@
         }
     </script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 12 - PL/SQL: Bloques, Variables y Cursores</title>
-<script src="canvas-ui.js"></script>
-    <!-- Tailwind v4 CDN -->
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: isDark ? 'dark' : 'default',
+                securityLevel: 'loose',
+                flowchart: { useMaxWidth: true, htmlLabels: true }
+            });
+        });
+    </script>
 
-        @custom-variant dark (&:where(.dark, .dark *));
-        .theme-toggle-btn {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 100;
-            padding: 0.35rem 0.75rem;
-            border: 1px solid #111111;
-            background-color: #ffffff;
-            color: #111111;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        html.dark .theme-toggle-btn {
-            border-color: #333333;
-            background-color: #121212;
-            color: #f0f0f0;
-        }
-        .theme-toggle-btn:hover {
-            background-color: #111111;
-            color: #ffffff;
-        }
-        html.dark .theme-toggle-btn:hover {
-            background-color: #ffffff;
-            color: #111111;
-        }
-
-        @theme {
-            --color-primary: var(--color-indigo-600);
-            --color-primary-dark: var(--color-indigo-400);
-        }
-    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
-<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">PL/SQL: Estructura, Variables y Cursores</h1>
-        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 12 <span class="mx-2">&bull;</span> Ingenieria de Datos  <span class="mx-2">&bull;</span> ULima 2013-2</p>
-    </div>
-</header>
+<body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <!-- Sun icon -->
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+        </svg>
+        <!-- Moon icon -->
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+        </svg>
+    </button>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
-    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
-        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">PALABRAS CLAVE</h3>
-        <ul class="space-y-4">
-            <li class="text-sm"><strong>&sect; PL/SQL</strong>Lenguaje procedural embebido en el motor de BD (Oracle / PostgreSQL PL/pgSQL).</li>
-            <li class="text-sm"><strong>&sect; Bloque PL/SQL</strong>Unidad basica: DECLARE + BEGIN + EXCEPTION + END.</li>
-            <li class="text-sm"><strong>&sect; %TYPE</strong>Declara variable con el tipo de una columna existente.</li>
-            <li class="text-sm"><strong>&sect; %ROWTYPE</strong>Declara registro con la estructura completa de una tabla.</li>
-            <li class="text-sm"><strong>&sect; Cursor</strong>Puntero a un conjunto de resultados para recorrer fila por fila.</li>
-            <li class="text-sm"><strong>&sect; FETCH</strong>Instruccion que carga la fila actual del cursor en variables.</li>
-        </ul>
-        <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-sidebar);border-radius:var(--radius-md);">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
-            <ul class="space-y-4">
-                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Inicio</a></li>
-                <li class="text-sm"><a href="semana_11.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 11</a></li>
-                <li class="text-sm"><a href="semana_13.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Siguiente</a></li>
-            </ul>
+
+    <!-- Header (M3 Tonal App Bar) -->
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+            <div class="pr-6">
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">PL/SQL: Estructura, Variables y Cursores</h1>
+                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 12 • Ingenieria de Datos  • ULima 2013-2</p>
+            </div>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
-    </aside>
+    </header>
 
-    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
-        
-        <!-- Enfoque Arquitecto: Fundamentos de PL/pgSQL -->
-        <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">La Arquitectura del Lenguaje Procedimental PL/pgSQL</h3>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+    <!-- Layout Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
+        <!-- Main Content -->
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+            <article class="prose dark:prose-invert max-w-none">
+    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
+    <div class="my-6">
+        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
+            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
+                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
+                    🗺️ Mapa Conceptual y Relación de Términos
+                </span>
+                <span class="transition group-open:rotate-180">
+                    <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </span>
+            </summary>
+            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
+                <pre class="mermaid bg-transparent">
+graph TD
+    S12[Introducción a PL/pgSQL] --> Block[Estructura de Bloque]
+    Block --> Decl[DECLARE: Declaración de Variables e Identificadores]
+    Block --> Begin[BEGIN: Bloque de Instrucciones Ejecutables]
+    Block --> Exception[EXCEPTION: Captura de Errores y Excepciones]
+    S12 --> Controls[Control de Flujos]
+    Controls --> Conditional[IF / THEN / ELSE y CASE]
+    Controls --> Loops[Loops: LOOP, WHILE, FOR]
+                </pre>
+            </div>
+        </details>
+    </div>
+
+                
+<article class="prose dark:prose-invert max-w-none">
+<article class="prose dark:prose-invert max-w-none">
+<!-- Enfoque Arquitecto: Fundamentos de PL/pgSQL -->
+<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">La Arquitectura del Lenguaje Procedimental PL/pgSQL</h3>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 PL/pgSQL es un lenguaje de programación procedural estructurado que amplía las capacidades declarativas de SQL. Permite la ejecución de lógica compleja directamente en el servidor de base de datos a través de:
             </p>
-            <ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li><strong>Bloques Estructurados:</strong> Uso de secciones <code>DECLARE</code>, <code>BEGIN</code> y <code>END;</code>.</li>
-                <li><strong>Tipado Seguro:</strong> Uso de atributos dinámicos como <code>%TYPE</code> (hereda el tipo de una columna) y <code>%ROWTYPE</code> (hereda la estructura completa de una fila).</li>
-                <li><strong>Control de Flujo:</strong> Estructuras de decisión (<code>IF-THEN-ELSE</code>) y bucles iterativos avanzados para recorrer cursores.</li>
-            </ul>
-        </section>
-        
-        
-        <!-- Enfoque Cloud: Planes de Ejecución Cacheables -->
-        <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Optimización de PL/pgSQL en Instancias Gestionadas</h3>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li><strong>Bloques Estructurados:</strong> Uso de secciones <code>DECLARE</code>, <code>BEGIN</code> y <code>END;</code>.</li>
+<li><strong>Tipado Seguro:</strong> Uso de atributos dinámicos como <code>%TYPE</code> (hereda el tipo de una columna) y <code>%ROWTYPE</code> (hereda la estructura completa de una fila).</li>
+<li><strong>Control de Flujo:</strong> Estructuras de decisión (<code>IF-THEN-ELSE</code>) y bucles iterativos avanzados para recorrer cursores.</li>
+</ul>
+</section>
+<!-- Enfoque Cloud: Planes de Ejecución Cacheables -->
+<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Optimización de PL/pgSQL en Instancias Gestionadas</h3>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
                 Una ventaja crítica de PL/pgSQL es que el motor compila y cachea los planes de ejecución de las sentencias SQL contenidas en sus funciones la primera vez que se invocan dentro de una sesión de base de datos.
             </p>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
-                <strong>Gotcha de Memoria:</strong> El uso excesivo de variables temporales de tipo registro o el retorno de grandes conjuntos de datos usando cursores explícitos sin límites puede saturar la memoria RAM asignada a la sesión del cliente en RDS.
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+<strong>Gotcha de Memoria:</strong> El uso excesivo de variables temporales de tipo registro o el retorno de grandes conjuntos de datos usando cursores explícitos sin límites puede saturar la memoria RAM asignada a la sesión del cliente en RDS.
             </p>
-        </section>
-        
-
-        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
-            <h4 class="text-blue-800 dark:text-blue-300 font-bold mb-3 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+</section>
+<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
+<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 Objetivos de Aprendizaje
             </h4>
-            <ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
-                <li>Comprender la estructura de un bloque PL/SQL: DECLARE, BEGIN, EXCEPTION, END.</li>
-                <li>Declarar variables usando tipado directo, %TYPE y %ROWTYPE.</li>
-                <li>Usar estructuras de control: IF, LOOP, WHILE, FOR.</li>
-                <li>Implementar cursores implicitos y explicitos para procesamiento fila a fila.</li>
-            </ul>
-        </div>
-
-        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto</h4>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PL/SQL (y su equivalente en PostgreSQL, PL/pgSQL) permite mover la logica de negocio al servidor de base de datos. Esto reduce el trafico de red y centraliza las reglas. Sin embargo, use este poder con responsabilidad: la logica compleja en la base de datos es mas dificil de versionar, probar y escalar horizontalmente. Reserve PL/SQL para operaciones intensivas en datos (ETL, validacion de integridad, auditoria).</p>
-        </section>
-
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Estructura de un Programa PL/SQL</h2>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Todo programa PL/SQL se compone de cuatro secciones, aunque solo BEGIN y END son obligatorias:</p>
-
-        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-slate-50 dark:bg-slate-800/50">
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Seccion</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Obligatorio</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>DECLARE</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Opcional</td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Variables, restricciones, cursores y excepciones definidas por el usuario</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>BEGIN</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Obligatorio</td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Sentencias SQL y sentencias de control PL/SQL</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>EXCEPTION</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Opcional</td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Acciones a ejecutar cuando ocurren errores</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>END;</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Obligatorio</td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Cierra el bloque</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-
-        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo: Bloque anonimo basico</strong></p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
+<li>Comprender la estructura de un bloque PL/SQL: DECLARE, BEGIN, EXCEPTION, END.</li>
+<li>Declarar variables usando tipado directo, %TYPE y %ROWTYPE.</li>
+<li>Usar estructuras de control: IF, LOOP, WHILE, FOR.</li>
+<li>Implementar cursores implicitos y explicitos para procesamiento fila a fila.</li>
+</ul>
+</div>
+<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Insight del Arquitecto</h4>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PL/SQL (y su equivalente en PostgreSQL, PL/pgSQL) permite mover la logica de negocio al servidor de base de datos. Esto reduce el trafico de red y centraliza las reglas. Sin embargo, use este poder con responsabilidad: la logica compleja en la base de datos es mas dificil de versionar, probar y escalar horizontalmente. Reserve PL/SQL para operaciones intensivas en datos (ETL, validacion de integridad, auditoria).</p>
+</section>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">1. Estructura de un Programa PL/SQL</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Todo programa PL/SQL se compone de cuatro secciones, aunque solo BEGIN y END son obligatorias:</p>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+<table class="w-full text-left border-collapse my-6">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Seccion</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Obligatorio</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
+</tr>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>DECLARE</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Opcional</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Variables, restricciones, cursores y excepciones definidas por el usuario</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>BEGIN</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Obligatorio</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Sentencias SQL y sentencias de control PL/SQL</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>EXCEPTION</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Opcional</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Acciones a ejecutar cuando ocurren errores</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>END;</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Obligatorio</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Cierra el bloque</td>
+</tr>
+</tbody>
+</th></table>
+</div>
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo: Bloque anonimo basico</strong></p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>DECLARE
   v_mensaje VARCHAR2(50) := 'Hola, PL/SQL!';
 BEGIN
@@ -178,15 +188,13 @@ BEGIN
 END;
 /</code>
 </div>
-
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Declaracion de Variables</h2>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las variables se declaran en la seccion DECLARE con la siguiente sintaxis:</p>
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">2. Declaracion de Variables</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las variables se declaran en la seccion DECLARE con la siguiente sintaxis:</p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>identificador [CONSTANT] tipo_dato [NOT NULL] [:= | DEFAULT expr];</code>
 </div>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ejemplos de declaracion</h3>
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Ejemplos de declaracion</h3>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>DECLARE
   v_estado_civil     CHAR(1);
   v_total_sal        NUMBER(9,2) := 0;
@@ -200,207 +208,191 @@ BEGIN
 END;
 /</code>
 </div>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tipos Especiales: %TYPE y %ROWTYPE</h3>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PL/SQL ofrece tipos derivados que se adaptan automaticamente a la estructura de la base de datos:</p>
-
-        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>%TYPE</strong> Hereda el tipo de dato de una columna existente.</p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Tipos Especiales: %TYPE y %ROWTYPE</h3>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PL/SQL ofrece tipos derivados que se adaptan automaticamente a la estructura de la base de datos:</p>
+<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>%TYPE</strong> Hereda el tipo de dato de una columna existente.</p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>v_debito  cuenta.credito%TYPE;  -- mismo tipo que cuenta.credito</code>
 </div>
-        </div>
-
-        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>%ROWTYPE</strong> Hereda la estructura completa de una tabla (todas sus columnas).</p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+</div>
+<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>%ROWTYPE</strong> Hereda la estructura completa de una tabla (todas sus columnas).</p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>v_dept_reg  dept%ROWTYPE;
 -- v_dept_reg.deptno, v_dept_reg.dname, v_dept_reg.loc disponibles</code>
 </div>
-        </div>
-
-        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Registros definidos por el usuario (RECORD)</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+</div>
+<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Registros definidos por el usuario (RECORD)</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>TYPE emp_record_type IS RECORD (
   apellido  VARCHAR2(25),
   cargo_id  VARCHAR2(10),
   salario   NUMBER(8,2)
 );</code>
 </div>
-        </div>
-
-        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Tablas PL/SQL (arrays asociativos)</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+</div>
+<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Tablas PL/SQL (arrays asociativos)</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>TYPE dept_table_type IS TABLE OF
   emp.apellido%TYPE
   INDEX BY BINARY_INTEGER;</code>
 </div>
-        </div>
-
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Funciones Built-in (Manipulación y Conversión)</h2>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PL/SQL incluye funciones integradas para la manipulación de caracteres, cálculos numéricos, operaciones de fecha y conversiones de tipo.</p>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Funciones de Manipulación de Caracteres</h3>
-        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-slate-50 dark:bg-slate-800/50">
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción / Ejemplo</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Resultado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>CONCAT(str1, str2)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Concatena dos cadenas: <code>CONCAT('Hola', 'Mundo')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">"HolaMundo"</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>SUBSTR(str, pos, len)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Extrae parte de una cadena: <code>SUBSTR('HolaMundo', 1, 5)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">"HolaM"</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>LENGTH(str)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Retorna la longitud de la cadena: <code>LENGTH('HolaMundo')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">9</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>INSTR(str, char)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Encuentra la posición de un carácter: <code>INSTR('HolaMundo', 'M')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">5</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>LPAD(col, len, pad)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Rellena a la izquierda: <code>LPAD(salario, 10, '*')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">"*****24000"</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>RPAD(col, len, pad)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Rellena a la derecha: <code>RPAD(salario, 10, '*')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">"24000*****"</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>TRIM(char FROM str)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Remueve caracteres extremos: <code>TRIM('H' FROM 'HolaMundo')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">"olaMundo"</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Funciones Numéricas</h3>
-        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-slate-50 dark:bg-slate-800/50">
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción / Ejemplo</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Resultado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ROUND(n, d)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Redondea a d decimales: <code>ROUND(45.926, 2)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">45.93</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>TRUNC(n, d)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Trunca a d decimales: <code>TRUNC(45.926, 2)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">45.92</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>MOD(m, n)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Retorna el residuo de la división: <code>MOD(1600, 300)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">100</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Funciones de Fecha</h3>
-        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-slate-50 dark:bg-slate-800/50">
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción / Ejemplo</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Resultado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>MONTHS_BETWEEN(d1, d2)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Meses entre d1 y d2: <code>MONTHS_BETWEEN('01-SEP-95', '11-JAN-94')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">19.6774194</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ADD_MONTHS(d, n)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Suma n meses a una fecha: <code>ADD_MONTHS('11-JAN-94', 6)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">11-JUL-94</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>NEXT_DAY(d, day)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Próximo día especificado: <code>NEXT_DAY('10-JUN-08', 'TUESDAY')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">17-JUN-08</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>LAST_DAY(d)</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Último día del mes: <code>LAST_DAY('01-FEB-08')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">29-FEB-08</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ROUND(d, 'YEAR'|'MONTH')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Redondea la fecha al año o mes más cercano</td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Fecha redondeada</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>TRUNC(d, 'YEAR'|'MONTH')</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Trunca la fecha al inicio de año o mes</td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Fecha truncada</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Funciones de Conversión de Datos</h3>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Permiten convertir tipos de datos de forma explícita:</p>
-        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-            <li><strong><code>TO_CHAR(n|d, format)</code>:</strong> Convierte número o fecha a cadena de caracteres. Ejemplos:
+</div>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">3. Funciones Built-in (Manipulación y Conversión)</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PL/SQL incluye funciones integradas para la manipulación de caracteres, cálculos numéricos, operaciones de fecha y conversiones de tipo.</p>
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Funciones de Manipulación de Caracteres</h3>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+<table class="w-full text-left border-collapse my-6">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Función</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripción / Ejemplo</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Resultado</th>
+</tr>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>CONCAT(str1, str2)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Concatena dos cadenas: <code>CONCAT('Hola', 'Mundo')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">"HolaMundo"</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>SUBSTR(str, pos, len)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Extrae parte de una cadena: <code>SUBSTR('HolaMundo', 1, 5)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">"HolaM"</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>LENGTH(str)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Retorna la longitud de la cadena: <code>LENGTH('HolaMundo')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">9</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>INSTR(str, char)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Encuentra la posición de un carácter: <code>INSTR('HolaMundo', 'M')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">5</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>LPAD(col, len, pad)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Rellena a la izquierda: <code>LPAD(salario, 10, '*')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">"*****24000"</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>RPAD(col, len, pad)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Rellena a la derecha: <code>RPAD(salario, 10, '*')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">"24000*****"</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>TRIM(char FROM str)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Remueve caracteres extremos: <code>TRIM('H' FROM 'HolaMundo')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">"olaMundo"</td>
+</tr>
+</tbody>
+</th></table>
+</div>
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Funciones Numéricas</h3>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+<table class="w-full text-left border-collapse my-6">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Función</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripción / Ejemplo</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Resultado</th>
+</tr>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>ROUND(n, d)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Redondea a d decimales: <code>ROUND(45.926, 2)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">45.93</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>TRUNC(n, d)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Trunca a d decimales: <code>TRUNC(45.926, 2)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">45.92</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>MOD(m, n)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Retorna el residuo de la división: <code>MOD(1600, 300)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">100</td>
+</tr>
+</tbody>
+</th></table>
+</div>
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Funciones de Fecha</h3>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+<table class="w-full text-left border-collapse my-6">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Función</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripción / Ejemplo</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Resultado</th>
+</tr>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>MONTHS_BETWEEN(d1, d2)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Meses entre d1 y d2: <code>MONTHS_BETWEEN('01-SEP-95', '11-JAN-94')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">19.6774194</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>ADD_MONTHS(d, n)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Suma n meses a una fecha: <code>ADD_MONTHS('11-JAN-94', 6)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">11-JUL-94</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>NEXT_DAY(d, day)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Próximo día especificado: <code>NEXT_DAY('10-JUN-08', 'TUESDAY')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">17-JUN-08</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>LAST_DAY(d)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Último día del mes: <code>LAST_DAY('01-FEB-08')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">29-FEB-08</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>ROUND(d, 'YEAR'|'MONTH')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Redondea la fecha al año o mes más cercano</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Fecha redondeada</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>TRUNC(d, 'YEAR'|'MONTH')</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Trunca la fecha al inicio de año o mes</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Fecha truncada</td>
+</tr>
+</tbody>
+</th></table>
+</div>
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Funciones de Conversión de Datos</h3>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Permiten convertir tipos de datos de forma explícita:</p>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li><strong><code>TO_CHAR(n|d, format)</code>:</strong> Convierte número o fecha a cadena de caracteres. Ejemplos:
                 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>TO_CHAR(55000, '$99,999.00') -- Retorna "$55,000.00"
 TO_CHAR(TRUNC(SYSDATE), 'DD MONTH YYYY') -- Retorna p.ej. "26 JUNIO 2026"</code>
 </div>
-            </li>
-            <li><strong><code>TO_DATE(str, format)</code>:</strong> Convierte cadena a tipo DATE. Ejemplos:
+</li>
+<li><strong><code>TO_DATE(str, format)</code>:</strong> Convierte cadena a tipo DATE. Ejemplos:
                 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>TO_DATE('25/12/2007', 'DD/MM/YYYY')
 TO_DATE('01-Jan-90', 'DD-Mon-RR')</code>
 </div>
-            </li>
-            <li><strong><code>TO_NUMBER(str)</code>:</strong> Convierte cadena a tipo numérico. Ejemplos:
+</li>
+<li><strong><code>TO_NUMBER(str)</code>:</strong> Convierte cadena a tipo numérico. Ejemplos:
                 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>TO_NUMBER('0100') -- Retorna 100
 TO_NUMBER('1000.10') -- Retorna 1000.10</code>
 </div>
-            </li>
-        </ul>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Otras Funciones del Sistema</h3>
-        <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-            <li><strong><code>NVL(expr1, expr2)</code>:</strong> Sustituye valores nulos. Retorna <code>expr2</code> si <code>expr1</code> es NULL.</li>
-            <li><strong><code>NVL2(expr1, expr2, expr3)</code>:</strong> Si <code>expr1</code> no es NULL retorna <code>expr2</code>, de lo contrario retorna <code>expr3</code>.</li>
-            <li><strong><code>DECODE(col|expr, busqueda1, res1, busqueda2, res2, ..., default)</code>:</strong> Estructura condicional inline (similar a un IF-THEN-ELSE o CASE en SQL).</li>
-        </ul>
-
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">4. Estructuras de Control</h2>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Condicional: IF</h3>
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+</li>
+</ul>
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Otras Funciones del Sistema</h3>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li><strong><code>NVL(expr1, expr2)</code>:</strong> Sustituye valores nulos. Retorna <code>expr2</code> si <code>expr1</code> es NULL.</li>
+<li><strong><code>NVL2(expr1, expr2, expr3)</code>:</strong> Si <code>expr1</code> no es NULL retorna <code>expr2</code>, de lo contrario retorna <code>expr3</code>.</li>
+<li><strong><code>DECODE(col|expr, busqueda1, res1, busqueda2, res2, ..., default)</code>:</strong> Estructura condicional inline (similar a un IF-THEN-ELSE o CASE en SQL).</li>
+</ul>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">4. Estructuras de Control</h2>
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Condicional: IF</h3>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>IF condicion1 THEN
   secuencia_de_instrucciones1;
 ELSIF condicion2 THEN
@@ -409,31 +401,28 @@ ELSE
   secuencia_de_instrucciones3;
 END IF;</code>
 </div>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Bucles</h3>
-        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>LOOP basico con EXIT WHEN</strong></p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Bucles</h3>
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>LOOP basico con EXIT WHEN</strong></p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>LOOP
   secuencia_de_instrucciones;
   EXIT WHEN condicion;
 END LOOP;</code>
 </div>
-
-        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>WHILE LOOP</strong></p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>WHILE LOOP</strong></p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>WHILE condicion LOOP
   secuencia_de_instrucciones;
 END LOOP;</code>
 </div>
-
-        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>FOR LOOP (con y sin REVERSE)</strong></p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>FOR LOOP (con y sin REVERSE)</strong></p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>FOR contador IN 1..10 LOOP
   secuencia_de_instrucciones;
 END LOOP;
@@ -442,86 +431,80 @@ FOR contador IN REVERSE 10..1 LOOP
   secuencia_de_instrucciones;
 END LOOP;</code>
 </div>
-
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">5. Cursores</h2>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un cursor es un puntero a un conjunto de resultados. Permite procesar fila por fila cuando se necesita logica procedural que no puede expresarse en SQL puro.</p>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Cursores Implicitos</h3>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Toda sentencia SQL en PL/SQL tiene un cursor implicito asociado. Sus atributos permiten monitorear la operacion:</p>
-        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-slate-50 dark:bg-slate-800/50">
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Atributo</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>%ISOPEN</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Booleano</td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">TRUE si el cursor esta abierto</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>%NOTFOUND</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Booleano</td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">TRUE si el ultimo FETCH no trajo filas</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>%FOUND</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Booleano</td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">TRUE mientras el ultimo FETCH trae una fila</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>%ROWCOUNT</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Numerico</td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Total de filas retornadas hasta el momento</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Cursores Explicitos: Ciclo de Vida</h3>
-        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El ciclo completo de un cursor explicito tiene 4 pasos:</p>
-            <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                <tr class="bg-slate-50 dark:bg-slate-800/50">
-                        <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Paso</th>
-                        <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Comando</th>
-                        <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">1</td>
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>DECLARE CURSOR</code></td>
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Crear el cursor con la sentencia SELECT</td>
-                    </tr>
-                    <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">2</td>
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>OPEN</code></td>
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Abrir el cursor (ejecuta el SELECT)</td>
-                    </tr>
-                    <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">3</td>
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>FETCH</code></td>
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Cargar la fila actual en variables</td>
-                    </tr>
-                    <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">4</td>
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>CLOSE</code></td>
-                        <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Cerrar el cursor</td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Programa Simple con Cursor (FETCH explicito)</h3>
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">5. Cursores</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un cursor es un puntero a un conjunto de resultados. Permite procesar fila por fila cuando se necesita logica procedural que no puede expresarse en SQL puro.</p>
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Cursores Implicitos</h3>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Toda sentencia SQL en PL/SQL tiene un cursor implicito asociado. Sus atributos permiten monitorear la operacion:</p>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+<table class="w-full text-left border-collapse my-6">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Atributo</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
+</tr>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>%ISOPEN</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Booleano</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">TRUE si el cursor esta abierto</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>%NOTFOUND</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Booleano</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">TRUE si el ultimo FETCH no trajo filas</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>%FOUND</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Booleano</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">TRUE mientras el ultimo FETCH trae una fila</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>%ROWCOUNT</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Numerico</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Total de filas retornadas hasta el momento</td>
+</tr>
+</tbody>
+</th></table>
+</div>
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Cursores Explicitos: Ciclo de Vida</h3>
+<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El ciclo completo de un cursor explicito tiene 4 pasos:</p>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+<table class="w-full text-left border-collapse my-6">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Paso</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Comando</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
+</tr>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">1</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>DECLARE CURSOR</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Crear el cursor con la sentencia SELECT</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">2</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>OPEN</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Abrir el cursor (ejecuta el SELECT)</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">3</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>FETCH</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Cargar la fila actual en variables</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">4</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>CLOSE</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Cerrar el cursor</td>
+</tr>
+</tbody>
+</th></table>
+</div>
+</div>
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Programa Simple con Cursor (FETCH explicito)</h3>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>DECLARE
   CURSOR ejecursor IS
     SELECT nombre, salario FROM empleado
@@ -539,10 +522,9 @@ BEGIN
 END;
 /</code>
 </div>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Programa Simple con Cursor (FOR LOOP simplificado)</h3>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El FOR LOOP simplifica el manejo: abre, fetchea y cierra automaticamente el cursor.</p>
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Programa Simple con Cursor (FOR LOOP simplificado)</h3>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El FOR LOOP simplifica el manejo: abre, fetchea y cierra automaticamente el cursor.</p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>DECLARE
   CURSOR ejecursor IS
     SELECT nombre, salario FROM empleado
@@ -555,148 +537,238 @@ BEGIN
 END;
 /</code>
 </div>
-
-        <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Diferencia clave:</strong> Con FETCH explicito controlamos manualmente apertura, lectura y cierre. Con FOR LOOP, PL/SQL maneja automaticamente el ciclo de vida del cursor. El FOR LOOP es mas seguro (no hay riesgo de olvidar CLOSE) y mas legible.</p>
-        </div>
-
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Excepciones Predefinidas</h3>
-        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-slate-50 dark:bg-slate-800/50">
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Excepcion</th>
-                    <th class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Causa</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>NO_DATA_FOUND</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">SELECT INTO no retorna filas</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>TOO_MANY_ROWS</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">SELECT INTO retorna mas de una fila</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>DUP_VAL_ON_INDEX</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Insercion de valor duplicado en columna unica</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>ZERO_DIVIDE</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Division entre cero</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>INVALID_CURSOR</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Operacion ilegal sobre un cursor</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>CURSOR_ALREADY_OPEN</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Intento de abrir un cursor ya abierto</td>
-                </tr>
-                <tr class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed"><code>VALUE_ERROR</code></td>
-                    <td class="p-4 text-slate-700 dark:text-slate-300 leading-relaxed">Error de conversion o truncamiento</td>
-                </tr>
-            </tbody>
-        </table>
-        </div>
-
-        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">PL/SQL</span>
-
-        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Insight del Arquitecto</h4>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En PostgreSQL, PL/pgSQL ofrece el mismo paradigma con sintaxis ligeramente diferente: <code>DECLARE</code> usa <code>$function$</code> o <code>LANGUAGE plpgsql</code>, los cursores se declaran con <code>CURSOR FOR</code> y el FOR LOOP con <code>FOR registro IN consulta LOOP</code>. La principal ventaja sobre Oracle PL/SQL es que PostgreSQL permite <code>RETURN QUERY</code> para devolver conjuntos directamente desde funciones. Siempre prefiera operaciones basadas en conjuntos (SET-based) sobre cursores: un solo UPDATE con WHERE suele ser mas rapido que un cursor con 10,000 FETCHs.</p>
-        </section>
-
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
-            <canvas id="canvas_12" width="800" height="360"></canvas>
-            <div id="controls_12" class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800"></div>
-        </div>
-        
-        <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-                </span>
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Diferencia clave:</strong> Con FETCH explicito controlamos manualmente apertura, lectura y cierre. Con FOR LOOP, PL/SQL maneja automaticamente el ciclo de vida del cursor. El FOR LOOP es mas seguro (no hay riesgo de olvidar CLOSE) y mas legible.</p>
+</div>
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Excepciones Predefinidas</h3>
+<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
+<table class="w-full text-left border-collapse my-6">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Excepcion</th>
+<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Causa</th>
+</tr>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>NO_DATA_FOUND</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">SELECT INTO no retorna filas</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>TOO_MANY_ROWS</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">SELECT INTO retorna mas de una fila</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>DUP_VAL_ON_INDEX</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Insercion de valor duplicado en columna unica</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>ZERO_DIVIDE</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Division entre cero</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>INVALID_CURSOR</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Operacion ilegal sobre un cursor</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>CURSOR_ALREADY_OPEN</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Intento de abrir un cursor ya abierto</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>VALUE_ERROR</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Error de conversion o truncamiento</td>
+</tr>
+</tbody>
+</th></table>
+</div>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">PL/SQL</span>
+<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Insight del Arquitecto</h4>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En PostgreSQL, PL/pgSQL ofrece el mismo paradigma con sintaxis ligeramente diferente: <code>DECLARE</code> usa <code>$function$</code> o <code>LANGUAGE plpgsql</code>, los cursores se declaran con <code>CURSOR FOR</code> y el FOR LOOP con <code>FOR registro IN consulta LOOP</code>. La principal ventaja sobre Oracle PL/SQL es que PostgreSQL permite <code>RETURN QUERY</code> para devolver conjuntos directamente desde funciones. Siempre prefiera operaciones basadas en conjuntos (SET-based) sobre cursores: un solo UPDATE con WHERE suele ser mas rapido que un cursor con 10,000 FETCHs.</p>
+</section>
+<div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
+<canvas height="360" id="canvas_12" width="800"></canvas>
+<div class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800" id="controls_12"></div>
+</div>
+<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
+<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
                 💡 Tips del Profesor
             </h2>
-            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-                <div class="flex gap-3">
-                    <span class="text-amber-500 font-bold">&bull;</span>
-                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Utilice %TYPE y %ROWTYPE:</strong> Evite harcodear tipos de datos en la declaración de variables de PL/pgSQL; si la columna física cambia en el DDL futuro, el bloque procedimental se adaptará automáticamente sin romperse.</p>
-                </div>
-                <div class="flex gap-3">
-                    <span class="text-amber-500 font-bold">&bull;</span>
-                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite lógica procedimental cuando baste SQL nativo:</strong> Las sentencias SQL declarativas son optimizadas de forma mucho más eficiente por el planificador que los bucles <code>LOOP</code> procedimentales fila por fila.</p>
-                </div>
-                <div class="flex gap-3">
-                    <span class="text-amber-500 font-bold">&bull;</span>
-                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Pruebe bloques anónimos con ROLLBACK:</strong> Para validar la lógica de scripts PL/pgSQL en producción, encapsule el bloque con un <code>BEGIN; ... ROLLBACK;</code> para evitar cambios permanentes accidentales.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="mt-10">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-                <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                </span>
+<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
+<div class="flex gap-3">
+<span class="text-amber-500 font-bold">•</span>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Utilice %TYPE y %ROWTYPE:</strong> Evite harcodear tipos de datos en la declaración de variables de PL/pgSQL; si la columna física cambia en el DDL futuro, el bloque procedimental se adaptará automáticamente sin romperse.</p>
+</div>
+<div class="flex gap-3">
+<span class="text-amber-500 font-bold">•</span>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite lógica procedimental cuando baste SQL nativo:</strong> Las sentencias SQL declarativas son optimizadas de forma mucho más eficiente por el planificador que los bucles <code>LOOP</code> procedimentales fila por fila.</p>
+</div>
+<div class="flex gap-3">
+<span class="text-amber-500 font-bold">•</span>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Pruebe bloques anónimos con ROLLBACK:</strong> Para validar la lógica de scripts PL/pgSQL en producción, encapsule el bloque con un <code>BEGIN; ... ROLLBACK;</code> para evitar cambios permanentes accidentales.</p>
+</div>
+</div>
+</section>
+<section class="mt-10">
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
                 ✍️ Autoevaluación y Ejercicios Prácticos
             </h2>
-            <div class="space-y-4">
-                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-                        <span class="flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
+<div class="space-y-4">
+<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+<span class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
                             ¿Qué ventaja tiene el uso de %TYPE en la declaración de variables?
                         </span>
-                        <span class="transition group-open:rotate-180">
-                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Garantiza la consistencia del tipo de datos con la columna física subyacente de la tabla, de modo que si se modifica el tipo de columna en el futuro mediante DDL, la función PL/pgSQL se mantiene válida automáticamente sin refactorizaciones.</p>
-                    </div>
-                </details>
-                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-                        <span class="flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
+<span class="transition group-open:rotate-180">
+<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</summary>
+<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Garantiza la consistencia del tipo de datos con la columna física subyacente de la tabla, de modo que si se modifica el tipo de columna en el futuro mediante DDL, la función PL/pgSQL se mantiene válida automáticamente sin refactorizaciones.</p>
+</div>
+</details>
+<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+<span class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
                             ¿Cómo maneja PostgreSQL el plan de ejecución de las consultas dentro de un bloque PL/pgSQL?
                         </span>
-                        <span class="transition group-open:rotate-180">
-                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">El motor compila la consulta y guarda el plan de ejecución en la memoria caché de la conexión actual. En invocaciones subsiguientes se reutiliza el plan, eliminando el costo de parsing y planificación.</p>
-                    </div>
-                </details>
-                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-                        <span class="flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
+<span class="transition group-open:rotate-180">
+<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</summary>
+<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">El motor compila la consulta y guarda el plan de ejecución en la memoria caché de la conexión actual. En invocaciones subsiguientes se reutiliza el plan, eliminando el costo de parsing y planificación.</p>
+</div>
+</details>
+<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+<span class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
                             ¿Qué diferencia hay entre un bloque anónimo DO y una función almacenada?
                         </span>
-                        <span class="transition group-open:rotate-180">
-                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Un bloque anónimo <code>DO</code> se compila y ejecuta al vuelo en una sola llamada y no se almacena de forma persistente en el diccionario de datos ni acepta parámetros de entrada, a diferencia de las funciones.</p>
-                    </div>
-                </details>
-            </div>
-        </section>
-
-<nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
-            <a href="index.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Volver al Índice</a>
-            <a href="semana_13.html" class="px-5 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm">Siguiente Semana</a>
-        </nav>
-    </main>
+<span class="transition group-open:rotate-180">
+<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</summary>
+<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Un bloque anónimo <code>DO</code> se compila y ejecuta al vuelo en una sola llamada y no se almacena de forma persistente en el diccionario de datos ni acepta parámetros de entrada, a diferencia de las funciones.</p>
 </div>
+</details>
+</div>
+</section>
+</article>
+</article>
+
+            </article>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
+        <!-- Keywords (M3 Outlined Card) -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-850 p-6 shadow-sm hover:shadow-md transition-shadow">
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
+            <ul class="space-y-2">
+                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ PL/SQL</strong>Lenguaje procedural embebido en el motor de BD (Oracle / PostgreSQL PL/pgSQL).</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ Bloque PL/SQL</strong>Unidad basica: DECLARE + BEGIN + EXCEPTION + END.</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ %TYPE</strong>Declara variable con el tipo de una columna existente.</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ %ROWTYPE</strong>Declara registro con la estructura completa de una tabla.</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ Cursor</strong>Puntero a un conjunto de resultados para recorrer fila por fila.</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ FETCH</strong>Instruccion que carga la fila actual del cursor en variables.</li>
+
+            </ul>
+        </div>
+        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
+        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
+            <ul class="space-y-3 text-sm">
+                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
+                <li><a href="semana_11.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 11</a></li>
+                <li><a href="semana_13.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 13 →</a></li>
+            </ul>
+        </div>
+
+        </aside>
+    </div>
+
+    <!-- M3 Bottom Navigation Bar (Mobile only) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
+            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+        </a>
+        <a href="semana_11.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
+            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+        </a>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
+            </svg>
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+        </button>
+        <a href="semana_13.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
+            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
+        </a>
+    </nav>
+
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleM3Btn = document.getElementById('theme-toggle-m3');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const m3ThemeIconLight = document.getElementById('m3-theme-icon-light');
+        const m3ThemeIconDark = document.getElementById('m3-theme-icon-dark');
+
+        function updateToggleText() {
+            const isDark = document.documentElement.classList.contains('dark');
+            if (isDark) {
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
+                if (m3ThemeIconLight) m3ThemeIconLight.classList.remove('hidden');
+                if (m3ThemeIconDark) m3ThemeIconDark.classList.add('hidden');
+            } else {
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+                if (m3ThemeIconLight) m3ThemeIconLight.classList.add('hidden');
+                if (m3ThemeIconDark) m3ThemeIconDark.classList.remove('hidden');
+            }
+        }
+
+        updateToggleText();
+
+        const toggleTheme = () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+            updateToggleText();
+        };
+
+        if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+        if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
+    </script>
+
 <script>
 var step12 = 0;
 var plsqlSteps = [
@@ -735,31 +807,5 @@ CanvasUI.addControls('controls_12', {
     reset: function() { step12 = 0; var c = CanvasUI.getContext('canvas_12'); if (c) draw12(c.ctx, c.W, c.H); }
 });
 </script>
-
-    <script>
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        
-        function updateToggleText() {
-            if (document.documentElement.classList.contains('dark')) {
-                themeToggleBtn.textContent = '[ MODO: CLARO ]';
-            } else {
-                themeToggleBtn.textContent = '[ MODO: OSCURO ]';
-            }
-        }
-        
-        updateToggleText();
-
-        themeToggleBtn.addEventListener('click', () => {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('color-theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('color-theme', 'dark');
-            }
-            updateToggleText();
-        });
-    </script>
 </body>
-
 </html>

@@ -1,7 +1,28 @@
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <title>Semana 16 - Examen Final (Mock)</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @custom-variant dark (&:where(.dark, .dark *));
+        @theme {
+            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --color-primary: #6750A4;
+            --color-primary-dark: #D0BCFF;
+            --color-surface-light: #FEF7FF;
+            --color-surface-dark: #141218;
+            --color-outline-light: #79747E;
+            --color-outline-dark: #938F99;
+        }
+    </style>
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -10,172 +31,141 @@
         }
     </script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semana 16 - Examen Final (Mock)</title>
-    <!-- Tailwind v4 CDN -->
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: isDark ? 'dark' : 'default',
+                securityLevel: 'loose',
+                flowchart: { useMaxWidth: true, htmlLabels: true }
+            });
+        });
+    </script>
 
-        @custom-variant dark (&:where(.dark, .dark *));
-        .theme-toggle-btn {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 100;
-            padding: 0.35rem 0.75rem;
-            border: 1px solid #111111;
-            background-color: #ffffff;
-            color: #111111;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        html.dark .theme-toggle-btn {
-            border-color: #333333;
-            background-color: #121212;
-            color: #f0f0f0;
-        }
-        .theme-toggle-btn:hover {
-            background-color: #111111;
-            color: #ffffff;
-        }
-        html.dark .theme-toggle-btn:hover {
-            background-color: #ffffff;
-            color: #111111;
-        }
-
-        @theme {
-            --color-primary: var(--color-indigo-600);
-            --color-primary-dark: var(--color-indigo-400);
-        }
-    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" class="theme-toggle-btn">[ MODO: OSCURO ]</button>
+<body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <!-- Sun icon -->
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+        </svg>
+        <!-- Moon icon -->
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+        </svg>
+    </button>
 
-<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Examen Final: Arquitectura de Datos</h1>
-        <p class="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">Semana 16 <span class="mx-2">&bull;</span> Evaluacion Integral (Semanas 09-15)  <span class="mx-2">&bull;</span> ULima 2013-2</p>
-    </div>
-</header>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
-    <aside class="w-full md:w-1/3 lg:w-1/4 flex flex-col gap-6 shrink-0">
-        <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">ESTRUCTURA DEL EXAMEN</h3>
-        <ul class="space-y-4">
-            <li class="text-sm"><strong>Teoria Avanzada</strong>10 preguntas (normalizacion, OLAP, HA)</li>
-            <li class="text-sm"><strong>PL/SQL</strong>3 ejercicios: procedimiento, funcion, trigger</li>
-            <li class="text-sm"><strong>Consultas</strong>5 ejercicios de SQL complejo</li>
-            <li class="text-sm"><strong>Data Warehouse</strong>2 ejercicios de diseno Star Schema</li>
-            <li class="text-sm"><strong>Solucionario</strong>Clave de respuestas al final</li>
-        </ul>
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px dashed var(--border);">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">RECURSOS</h3>
-            <ul class="space-y-4">
-                <li class="text-sm"><a href="index.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Indice del Curso</a></li>
-                <li class="text-sm"><a href="semana_15.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 15</a></li>
-                <li class="text-sm"><a href="semana_09.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 09 - 4FN, 5FN</a></li>
-                <li class="text-sm"><a href="semana_13.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 13 - PL/SQL</a></li>
-                <li class="text-sm"><a href="semana_14.html" class="text-emerald-700 dark:text-emerald-400 hover:text-emerald-500 transition-colors">Semana 14 - DW</a></li>
-            </ul>
+    <!-- Header (M3 Tonal App Bar) -->
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+            <div class="pr-6">
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Examen Final: Arquitectura de Datos</h1>
+                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 16 • Evaluacion Integral (Semanas 09-15)  • ULima 2013-2</p>
+            </div>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
-    </aside>
+    </header>
 
-    <main class="w-full md:w-2/3 lg:w-3/4 flex flex-col gap-10 pb-20">
-        
-        <!-- Enfoque Arquitecto: Consolidación del Curso -->
-        <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">La Evaluación Final: Maestría Relacional</h3>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+    <!-- Layout Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
+        <!-- Main Content -->
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+            <article class="prose dark:prose-invert max-w-none">
+    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
+    <div class="my-6">
+        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
+            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
+                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
+                    🗺️ Mapa Conceptual y Relación de Términos
+                </span>
+                <span class="transition group-open:rotate-180">
+                    <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </span>
+            </summary>
+            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
+                <pre class="mermaid bg-transparent">
+graph TD
+    S16[Repaso Final] --> Core[Fases Clave]
+    Core --> Phase1[Fase 1: Modelamiento y Normalización Avanzada BCNF/4FN]
+    Core --> Phase2[Fase 2: Consultas Complejas, Agrupación y PL/pgSQL]
+    Core --> Phase3[Fase 3: Inteligencia de Negocio DW y HA]
+                </pre>
+            </div>
+        </details>
+    </div>
+
+                
+<article class="prose dark:prose-invert max-w-none">
+<article class="prose dark:prose-invert max-w-none">
+<!-- Enfoque Arquitecto: Consolidación del Curso -->
+<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">La Evaluación Final: Maestría Relacional</h3>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 El examen mock final abarca de manera integral la teoría relacional completa: desde el modelado conceptual puro, pasando por la optimización física de índices, y finalizando en la implementación robusta de lógica procedimental PL/pgSQL y resiliencia en la nube.
             </p>
-        </section>
-        
-        
-        <!-- Enfoque Cloud: Checklist del Senior DBA -->
-        <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">La Perspectiva del DBA Cloud para el Examen Mock</h3>
-            <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+</section>
+<!-- Enfoque Cloud: Checklist del Senior DBA -->
+<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">La Perspectiva del DBA Cloud para el Examen Mock</h3>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
                 Para resolver con éxito los ejercicios de arquitectura y rendimiento del examen:
             </p>
-            <ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li>Valide que los índices creados cubran las condiciones de búsqueda en las consultas clave.</li>
-                <li>Garantice que las transacciones complejas usen niveles de aislamiento adecuados (READ COMMITTED / SERIALIZABLE).</li>
-                <li>Diseñe sus funciones procedimentales limitando el consumo de recursos en memoria RAM.</li>
-            </ul>
-        </section>
-        
-
-
-        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Evaluacion Final: Arquitectura de Datos (Semanas 09-15)</h2>
-
-        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-            <p><strong>Instrucciones:</strong> Resuelve las cuatro secciones. El tiempo estimado es de 120 minutos. Puntaje total: 100 puntos. Teoria: 40 pts (4 c/u). PL/SQL: 20 pts. Consultas: 25 pts (5 c/u). Data Warehouse: 15 pts.</p>
-        </div>
-
-        <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Consejos del Arquitecto</h4>
-            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li >Lee todas las preguntas antes de empezar.</li>
-                <li >En PL/SQL, verifica la sintaxis: cada bloque necesita BEGIN...END.</li>
-                <li >En consultas, piensa en el orden de ejecucion: FROM > WHERE > GROUP BY > HAVING > SELECT > ORDER BY.</li>
-                <li >En DW, identifica primero las medidas (numericas) y luego las dimensiones.</li>
-            </ul>
-        </section>
-
-        <!-- ==================== SECCION 1: TEORIA ==================== -->
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 1: Teoria Avanzada (40 puntos)</h2>
-
-        <div class="q-level">NIVEL BASICO (1-4)</div>
-
-        <strong class="question">1. (4 pts) Cual es la diferencia fundamental entre BCNF y 3FN? Proporciona un ejemplo donde una tabla este en 3FN pero no en BCNF.</strong>
-        <div class="answer"><em>Responde aqui:</em></div>
-
-        <strong class="question">2. (4 pts) Que es una dependencia multivaluada? Proporciona un ejemplo que ilustre por que la 4FN es necesaria.</strong>
-        <div class="answer"><em>Responde aqui:</em></div>
-
-        <strong class="question">3. (4 pts) Explica el concepto de desnormalizacion. En que contexto es beneficiosa y cuales son sus riesgos?</strong>
-        <div class="answer"><em>Responde aqui:</em></div>
-
-        <strong class="question">4. (4 pts) Cual es la diferencia entre OLTP y OLAP? Menciona dos caracteristicas distintivas de cada uno.</strong>
-        <div class="answer"><em>Responde aqui:</em></div>
-
-        <div class="q-level">NIVEL INTERMEDIO (5-7)</div>
-
-        <strong class="question">5. (4 pts) Compara Star Schema vs Snowflake Schema. Menciona ventajas y desventajas de cada uno para un Data Warehouse de ventas.</strong>
-        <div class="answer"><em>Responde aqui:</em></div>
-
-        <strong class="question">6. (4 pts) Explica ROLAP, MOLAP y HOLAP. En que escenario recomendarias MOLAP sobre ROLAP?</strong>
-        <div class="answer"><em>Responde aqui:</em></div>
-
-        <strong class="question">7. (4 pts) Define los modos de espera HOT, WARM y COLD standby. Asocia cada uno con una tecnologia de SQL Server.</strong>
-        <div class="answer"><em>Responde aqui:</em></div>
-
-        <div class="q-level">NIVEL AVANZADO (8-10)</div>
-
-        <strong class="question">8. (4 pts) Que es la 5FN (Project-Join Normal Form)? Por que se considera esoterica y en que contextos cobra relevancia?</strong>
-        <div class="answer"><em>Responde aqui:</em></div>
-
-        <strong class="question">9. (4 pts) Explica la diferencia entre RPO y RTO. Como impactan estas metricas en la eleccion de una tecnologia HA (Log Shipping vs Mirroring)?</strong>
-        <div class="answer"><em>Responde aqui:</em></div>
-
-        <strong class="question">10. (4 pts) Que es un indice Bitmap y por que es preferible en Data Warehousing sobre un indice B-tree tradicional?</strong>
-        <div class="answer"><em>Responde aqui:</em></div>
-
-        <!-- ==================== SECCION 2: PL/SQL ==================== -->
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 2: PL/SQL (20 puntos)</h2>
-
-        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-            <p><strong>Ejercicio 1: Procedimiento con IN/OUT (7 pts)</strong></p>
-            <p>Escribe un procedimiento almacenado llamado <code>obtener_estadisticas_empleado</code> que reciba como parametro IN el ID de un departamento y retorne (OUT) el numero total de empleados, el salario promedio y el salario maximo de ese departamento.</p>
-        </div>
-
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li>Valide que los índices creados cubran las condiciones de búsqueda en las consultas clave.</li>
+<li>Garantice que las transacciones complejas usen niveles de aislamiento adecuados (READ COMMITTED / SERIALIZABLE).</li>
+<li>Diseñe sus funciones procedimentales limitando el consumo de recursos en memoria RAM.</li>
+</ul>
+</section>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Evaluacion Final: Arquitectura de Datos (Semanas 09-15)</h2>
+<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
+<p><strong>Instrucciones:</strong> Resuelve las cuatro secciones. El tiempo estimado es de 120 minutos. Puntaje total: 100 puntos. Teoria: 40 pts (4 c/u). PL/SQL: 20 pts. Consultas: 25 pts (5 c/u). Data Warehouse: 15 pts.</p>
+</div>
+<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Consejos del Arquitecto</h4>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li>Lee todas las preguntas antes de empezar.</li>
+<li>En PL/SQL, verifica la sintaxis: cada bloque necesita BEGIN...END.</li>
+<li>En consultas, piensa en el orden de ejecucion: FROM &gt; WHERE &gt; GROUP BY &gt; HAVING &gt; SELECT &gt; ORDER BY.</li>
+<li>En DW, identifica primero las medidas (numericas) y luego las dimensiones.</li>
+</ul>
+</section>
+<!-- ==================== SECCION 1: TEORIA ==================== -->
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Seccion 1: Teoria Avanzada (40 puntos)</h2>
+<div class="q-level">NIVEL BASICO (1-4)</div>
+<strong class="question">1. (4 pts) Cual es la diferencia fundamental entre BCNF y 3FN? Proporciona un ejemplo donde una tabla este en 3FN pero no en BCNF.</strong>
+<div class="answer"><em>Responde aqui:</em></div>
+<strong class="question">2. (4 pts) Que es una dependencia multivaluada? Proporciona un ejemplo que ilustre por que la 4FN es necesaria.</strong>
+<div class="answer"><em>Responde aqui:</em></div>
+<strong class="question">3. (4 pts) Explica el concepto de desnormalizacion. En que contexto es beneficiosa y cuales son sus riesgos?</strong>
+<div class="answer"><em>Responde aqui:</em></div>
+<strong class="question">4. (4 pts) Cual es la diferencia entre OLTP y OLAP? Menciona dos caracteristicas distintivas de cada uno.</strong>
+<div class="answer"><em>Responde aqui:</em></div>
+<div class="q-level">NIVEL INTERMEDIO (5-7)</div>
+<strong class="question">5. (4 pts) Compara Star Schema vs Snowflake Schema. Menciona ventajas y desventajas de cada uno para un Data Warehouse de ventas.</strong>
+<div class="answer"><em>Responde aqui:</em></div>
+<strong class="question">6. (4 pts) Explica ROLAP, MOLAP y HOLAP. En que escenario recomendarias MOLAP sobre ROLAP?</strong>
+<div class="answer"><em>Responde aqui:</em></div>
+<strong class="question">7. (4 pts) Define los modos de espera HOT, WARM y COLD standby. Asocia cada uno con una tecnologia de SQL Server.</strong>
+<div class="answer"><em>Responde aqui:</em></div>
+<div class="q-level">NIVEL AVANZADO (8-10)</div>
+<strong class="question">8. (4 pts) Que es la 5FN (Project-Join Normal Form)? Por que se considera esoterica y en que contextos cobra relevancia?</strong>
+<div class="answer"><em>Responde aqui:</em></div>
+<strong class="question">9. (4 pts) Explica la diferencia entre RPO y RTO. Como impactan estas metricas en la eleccion de una tecnologia HA (Log Shipping vs Mirroring)?</strong>
+<div class="answer"><em>Responde aqui:</em></div>
+<strong class="question">10. (4 pts) Que es un indice Bitmap y por que es preferible en Data Warehousing sobre un indice B-tree tradicional?</strong>
+<div class="answer"><em>Responde aqui:</em></div>
+<!-- ==================== SECCION 2: PL/SQL ==================== -->
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Seccion 2: PL/SQL (20 puntos)</h2>
+<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
+<p><strong>Ejercicio 1: Procedimiento con IN/OUT (7 pts)</strong></p>
+<p>Escribe un procedimiento almacenado llamado <code>obtener_estadisticas_empleado</code> que reciba como parametro IN el ID de un departamento y retorne (OUT) el numero total de empleados, el salario promedio y el salario maximo de ese departamento.</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 -- Escribe tu solucion aqui:
 
@@ -186,13 +176,11 @@
 
 
 </div>
-
-        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-            <p><strong>Ejercicio 2: Funcion con retorno (7 pts)</strong></p>
-            <p>Crea una funcion llamada <code>categoria_cliente</code> que reciba el ID de un cliente y retorne un VARCHAR con su categoria basada en el total de compras: 'VIP' si > 10000, 'Regular' si entre 1000 y 10000, 'Basico' si menor a 1000.</p>
-        </div>
-
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
+<p><strong>Ejercicio 2: Funcion con retorno (7 pts)</strong></p>
+<p>Crea una funcion llamada <code>categoria_cliente</code> que reciba el ID de un cliente y retorne un VARCHAR con su categoria basada en el total de compras: 'VIP' si &gt; 10000, 'Regular' si entre 1000 y 10000, 'Basico' si menor a 1000.</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 -- Escribe tu solucion aqui:
 
@@ -203,13 +191,11 @@
 
 
 </div>
-
-        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-            <p><strong>Ejercicio 3: Trigger con :NEW / :OLD (6 pts)</strong></p>
-            <p>Crea un trigger <code>trg_auditar_precio</code> que se dispare BEFORE UPDATE del precio en la tabla <code>producto</code>. Debe verificar que el nuevo precio no sea mas del 50% superior al anterior. Si lo es, debe lanzar un error con <code>raise_application_error</code>.</p>
-        </div>
-
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
+<p><strong>Ejercicio 3: Trigger con :NEW / :OLD (6 pts)</strong></p>
+<p>Crea un trigger <code>trg_auditar_precio</code> que se dispare BEFORE UPDATE del precio en la tabla <code>producto</code>. Debe verificar que el nuevo precio no sea mas del 50% superior al anterior. Si lo es, debe lanzar un error con <code>raise_application_error</code>.</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 -- Escribe tu solucion aqui:
 
@@ -220,43 +206,33 @@
 
 
 </div>
-
-        <!-- ==================== SECCION 3: CONSULTAS ==================== -->
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 3: Consultas Complejas (25 puntos)</h2>
-
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Usa el siguiente esquema:</p>
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<!-- ==================== SECCION 3: CONSULTAS ==================== -->
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Seccion 3: Consultas Complejas (25 puntos)</h2>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Usa el siguiente esquema:</p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 cliente(id, nombre, email, ciudad, fecha_registro, activo)
 producto(id, nombre, categoria, precio, stock)
 pedido(id, cliente_id, fecha, total)
 detalle_pedido(id, pedido_id, producto_id, cantidad, precio_unitario)
 </div>
-
-        <strong class="question">1. (5 pts) Escribe una consulta que muestre el top 5 de clientes con mayor gasto total, incluyendo su numero de pedidos y el promedio por pedido. Solo clientes activos.</strong>
-        <div class="answer"><em>Escribe aqui:</em></div>
-
-        <strong class="question">2. (5 pts) Escribe una consulta que muestre para cada categoria de producto: cantidad total vendida, ingreso total y el producto mas vendido de esa categoria.</strong>
-        <div class="answer"><em>Escribe aqui:</em></div>
-
-        <strong class="question">3. (5 pts) Usando una subconsulta correlacionada, encuentra los clientes cuyo gasto total supera el promedio de gasto de todos los clientes de su misma ciudad.</strong>
-        <div class="answer"><em>Escribe aqui:</em></div>
-
-        <strong class="question">4. (5 pts) Muestra el mes con mayores ventas de cada ano. Usa funciones de ventana (ROW_NUMBER).</strong>
-        <div class="answer"><em>Escribe aqui:</em></div>
-
-        <strong class="question">5. (5 pts) Encuentra los productos que nunca han sido vendidos (usa NOT EXISTS o LEFT JOIN).</strong>
-        <div class="answer"><em>Escribe aqui:</em></div>
-
-        <!-- ==================== SECCION 4: DATA WAREHOUSE ==================== -->
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Seccion 4: Data Warehouse (15 puntos)</h2>
-
-        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-            <p><strong>Ejercicio 1: Diseno de Star Schema (8 pts)</strong></p>
-            <p>Una cadena de tiendas necesita analizar sus ventas. Requiere reportes por tienda, por producto, por fecha y por vendedor. Las metricas a analizar son: cantidad de unidades vendidas, monto total de venta, descuento aplicado y ganancia neta. Disena el esquema estrella identificando tablas de hechos y tablas de dimension, con sus columnas principales.</p>
-        </div>
-
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<strong class="question">1. (5 pts) Escribe una consulta que muestre el top 5 de clientes con mayor gasto total, incluyendo su numero de pedidos y el promedio por pedido. Solo clientes activos.</strong>
+<div class="answer"><em>Escribe aqui:</em></div>
+<strong class="question">2. (5 pts) Escribe una consulta que muestre para cada categoria de producto: cantidad total vendida, ingreso total y el producto mas vendido de esa categoria.</strong>
+<div class="answer"><em>Escribe aqui:</em></div>
+<strong class="question">3. (5 pts) Usando una subconsulta correlacionada, encuentra los clientes cuyo gasto total supera el promedio de gasto de todos los clientes de su misma ciudad.</strong>
+<div class="answer"><em>Escribe aqui:</em></div>
+<strong class="question">4. (5 pts) Muestra el mes con mayores ventas de cada ano. Usa funciones de ventana (ROW_NUMBER).</strong>
+<div class="answer"><em>Escribe aqui:</em></div>
+<strong class="question">5. (5 pts) Encuentra los productos que nunca han sido vendidos (usa NOT EXISTS o LEFT JOIN).</strong>
+<div class="answer"><em>Escribe aqui:</em></div>
+<!-- ==================== SECCION 4: DATA WAREHOUSE ==================== -->
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Seccion 4: Data Warehouse (15 puntos)</h2>
+<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
+<p><strong>Ejercicio 1: Diseno de Star Schema (8 pts)</strong></p>
+<p>Una cadena de tiendas necesita analizar sus ventas. Requiere reportes por tienda, por producto, por fecha y por vendedor. Las metricas a analizar son: cantidad de unidades vendidas, monto total de venta, descuento aplicado y ganancia neta. Disena el esquema estrella identificando tablas de hechos y tablas de dimension, con sus columnas principales.</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 -- Tablas de Dimension:
 
@@ -274,19 +250,17 @@ detalle_pedido(id, pedido_id, producto_id, cantidad, precio_unitario)
 
 
 </div>
-
-        <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-            <p><strong>Ejercicio 2: Identificacion de componentes (7 pts)</strong></p>
-            <p>Identifica en el esquema del ejercicio anterior:</p>
-            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li >Cuales son las medidas (facts / measures)?</li>
-                <li >Cuales son las dimensiones?</li>
-                <li >Que granularidad tiene la tabla de hechos?</li>
-                <li >Cuales serian las claves primarias de cada dimension?</li>
-            </ul>
-        </div>
-
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
+<p><strong>Ejercicio 2: Identificacion de componentes (7 pts)</strong></p>
+<p>Identifica en el esquema del ejercicio anterior:</p>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li>Cuales son las medidas (facts / measures)?</li>
+<li>Cuales son las dimensiones?</li>
+<li>Que granularidad tiene la tabla de hechos?</li>
+<li>Cuales serian las claves primarias de cada dimension?</li>
+</ul>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 -- Responde aqui:
 
@@ -297,40 +271,25 @@ detalle_pedido(id, pedido_id, producto_id, cantidad, precio_unitario)
 
 
 </div>
-
-        <hr>
-
-        <!-- ==================== SOLUCIONARIO ==================== -->
-        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Solucionario Completo</h3>
-            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Clave de respuestas</span>
-
-            <p><strong>Seccion 1: Teoria Avanzada</strong></p>
-
-            <p><strong>1. BCNF vs 3FN:</strong> 3FN permite dependencias transitivas donde el determinante no es clave candidata. BCNF exige que TODO determinante sea clave candidata. Ejemplo: Tabla <code>Profesor(curso, profesor, oficina)</code> donde un profesor dicta un curso y cada profesor tiene una oficina. Esta en 3FN (atributo no clave depende de otro no clave), pero no en BCNF porque <code>curso -> profesor</code> pero <code>profesor -> oficina</code> y <code>profesor</code> no es clave candidata.</p>
-
-            <p><strong>2. Dependencia multivaluada (MVD):</strong> Ocurre cuando la presencia de una fila implica la presencia de otras filas independientes. Ejemplo: <code>Empleado(nombre, proyecto, hobby)</code>. Un empleado puede tener varios proyectos y varios hobbies independientes. Se genera producto cartesiano. Solucion 4FN: separar en <code>Emp_Proyecto(nombre, proyecto)</code> y <code>Emp_Hobby(nombre, hobby)</code>.</p>
-
-            <p><strong>3. Desnormalizacion:</strong> Agregar redundancia intencional para mejorar rendimiento de lecturas (evitar JOINs). Contexto: Data Warehouses, sistemas OLAP, reportes. Riesgos: inconsistencias, mayor espacio, mantenimiento complejo.</p>
-
-            <p><strong>4. OLTP vs OLAP:</strong> OLTP = muchas transacciones simples, datos actualizados, usuarios operativos. OLAP = consultas complejas, datos historicos y agregados, usuarios analiticos/toma de decisiones.</p>
-
-            <p><strong>5. Star vs Snowflake:</strong> Star: desnormalizado, menos tablas, consultas rapidas, mas redundancia. Snowflake: normalizado, mas tablas, consultas lentas, menos redundancia. Star es preferido en DW por rendimiento.</p>
-
-            <p><strong>6. ROLAP vs MOLAP vs HOLAP:</strong> ROLAP = datos en BD relacional, escalable, lento. MOLAP = datos en cubo propietario, rapido, menos escalable. HOLAP = hibrido (detalle relacional, agregaciones en cubo). MOLAP recomendado cuando el rendimiento de consultas es critico y los datos cambian poco.</p>
-
-            <p><strong>7. Modos Standby:</strong> HOT = Mirroring/AlwaysOn (failover automatico, consistencia transaccional). WARM = Log Shipping (failover manual, posible perdida de datos). COLD = Backup/Restore (requiere restauracion completa, lento).</p>
-
-            <p><strong>8. 5FN (PJ/NF):</strong> Una tabla esta en 5FN si no puede descomponerse en tablas mas pequenas sin perder informacion al reconstruir con JOINs. Esoterica porque pocos casos practicos la requieren. Relevante en sistemas con restricciones de join complejas y Big Data.</p>
-
-            <p><strong>9. RPO vs RTO:</strong> RPO = perdida maxima de datos aceptable. RTO = tiempo maximo de recuperacion. Mirroring: RPO bajo (segundos o cero), RTO bajo (segundos). Log Shipping: RPO alto (minutos-horas), RTO alto (horas-dias).</p>
-
-            <p><strong>10. Indice Bitmap:</strong> Usa bits para representar valores de columnas con baja cardinalidad. Mas eficiente en espacio y velocidad para consultas ad-hoc en DW. B-tree es mejor para alta cardinalidad y busquedas puntuales.</p>
-
-            <p><strong>Seccion 2: PL/SQL</strong></p>
-
-            <p><strong>Ejercicio 1 - Procedimiento:</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<hr/>
+<!-- ==================== SOLUCIONARIO ==================== -->
+<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
+<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Solucionario Completo</h3>
+<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Clave de respuestas</span>
+<p><strong>Seccion 1: Teoria Avanzada</strong></p>
+<p><strong>1. BCNF vs 3FN:</strong> 3FN permite dependencias transitivas donde el determinante no es clave candidata. BCNF exige que TODO determinante sea clave candidata. Ejemplo: Tabla <code>Profesor(curso, profesor, oficina)</code> donde un profesor dicta un curso y cada profesor tiene una oficina. Esta en 3FN (atributo no clave depende de otro no clave), pero no en BCNF porque <code>curso -&gt; profesor</code> pero <code>profesor -&gt; oficina</code> y <code>profesor</code> no es clave candidata.</p>
+<p><strong>2. Dependencia multivaluada (MVD):</strong> Ocurre cuando la presencia de una fila implica la presencia de otras filas independientes. Ejemplo: <code>Empleado(nombre, proyecto, hobby)</code>. Un empleado puede tener varios proyectos y varios hobbies independientes. Se genera producto cartesiano. Solucion 4FN: separar en <code>Emp_Proyecto(nombre, proyecto)</code> y <code>Emp_Hobby(nombre, hobby)</code>.</p>
+<p><strong>3. Desnormalizacion:</strong> Agregar redundancia intencional para mejorar rendimiento de lecturas (evitar JOINs). Contexto: Data Warehouses, sistemas OLAP, reportes. Riesgos: inconsistencias, mayor espacio, mantenimiento complejo.</p>
+<p><strong>4. OLTP vs OLAP:</strong> OLTP = muchas transacciones simples, datos actualizados, usuarios operativos. OLAP = consultas complejas, datos historicos y agregados, usuarios analiticos/toma de decisiones.</p>
+<p><strong>5. Star vs Snowflake:</strong> Star: desnormalizado, menos tablas, consultas rapidas, mas redundancia. Snowflake: normalizado, mas tablas, consultas lentas, menos redundancia. Star es preferido en DW por rendimiento.</p>
+<p><strong>6. ROLAP vs MOLAP vs HOLAP:</strong> ROLAP = datos en BD relacional, escalable, lento. MOLAP = datos en cubo propietario, rapido, menos escalable. HOLAP = hibrido (detalle relacional, agregaciones en cubo). MOLAP recomendado cuando el rendimiento de consultas es critico y los datos cambian poco.</p>
+<p><strong>7. Modos Standby:</strong> HOT = Mirroring/AlwaysOn (failover automatico, consistencia transaccional). WARM = Log Shipping (failover manual, posible perdida de datos). COLD = Backup/Restore (requiere restauracion completa, lento).</p>
+<p><strong>8. 5FN (PJ/NF):</strong> Una tabla esta en 5FN si no puede descomponerse en tablas mas pequenas sin perder informacion al reconstruir con JOINs. Esoterica porque pocos casos practicos la requieren. Relevante en sistemas con restricciones de join complejas y Big Data.</p>
+<p><strong>9. RPO vs RTO:</strong> RPO = perdida maxima de datos aceptable. RTO = tiempo maximo de recuperacion. Mirroring: RPO bajo (segundos o cero), RTO bajo (segundos). Log Shipping: RPO alto (minutos-horas), RTO alto (horas-dias).</p>
+<p><strong>10. Indice Bitmap:</strong> Usa bits para representar valores de columnas con baja cardinalidad. Mas eficiente en espacio y velocidad para consultas ad-hoc en DW. B-tree es mejor para alta cardinalidad y busquedas puntuales.</p>
+<p><strong>Seccion 2: PL/SQL</strong></p>
+<p><strong>Ejercicio 1 - Procedimiento:</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 CREATE OR REPLACE PROCEDURE obtener_estadisticas_empleado(
     p_dept_id IN NUMBER,
@@ -346,9 +305,8 @@ BEGIN
     WHERE departamento_id = p_dept_id;
 END obtener_estadisticas_empleado;
 </div>
-
-            <p><strong>Ejercicio 2 - Funcion:</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<p><strong>Ejercicio 2 - Funcion:</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 CREATE OR REPLACE FUNCTION categoria_cliente(
     p_cliente_id IN NUMBER
@@ -362,34 +320,31 @@ BEGIN
     FROM pedido p
     WHERE p.cliente_id = p_cliente_id;
 
-    IF v_total_compras > 10000 THEN
+    IF v_total_compras &gt; 10000 THEN
         RETURN 'VIP';
-    ELSIF v_total_compras >= 1000 THEN
+    ELSIF v_total_compras &gt;= 1000 THEN
         RETURN 'Regular';
     ELSE
         RETURN 'Basico';
     END IF;
 END categoria_cliente;
 </div>
-
-            <p><strong>Ejercicio 3 - Trigger:</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<p><strong>Ejercicio 3 - Trigger:</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 CREATE OR REPLACE TRIGGER trg_auditar_precio
     BEFORE UPDATE OF precio ON producto
     FOR EACH ROW
 BEGIN
-    IF :NEW.precio > :OLD.precio * 1.5 THEN
+    IF :NEW.precio &gt; :OLD.precio * 1.5 THEN
         raise_application_error(-20001,
             'El incremento de precio no puede exceder el 50%');
     END IF;
 END trg_auditar_precio;
 </div>
-
-            <p><strong>Seccion 3: Consultas</strong></p>
-
-            <p><strong>1. Top 5 clientes por gasto:</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<p><strong>Seccion 3: Consultas</strong></p>
+<p><strong>1. Top 5 clientes por gasto:</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 SELECT c.id, c.nombre, c.email,
        COUNT(DISTINCT p.id) AS total_pedidos,
@@ -402,9 +357,8 @@ GROUP BY c.id, c.nombre, c.email
 ORDER BY gasto_total DESC
 LIMIT 5;
 </div>
-
-            <p><strong>2. Ventas por categoria:</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<p><strong>2. Ventas por categoria:</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 SELECT pr.categoria,
        SUM(dp.cantidad) AS cantidad_vendida,
@@ -420,16 +374,15 @@ FROM producto pr
 INNER JOIN detalle_pedido dp ON pr.id = dp.producto_id
 GROUP BY pr.categoria;
 </div>
-
-            <p><strong>3. Subconsulta correlacionada:</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<p><strong>3. Subconsulta correlacionada:</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 SELECT c.id, c.nombre, c.ciudad,
        SUM(p.total) AS gasto_total
 FROM cliente c
 INNER JOIN pedido p ON c.id = p.cliente_id
 GROUP BY c.id, c.nombre, c.ciudad
-HAVING SUM(p.total) > (
+HAVING SUM(p.total) &gt; (
     SELECT AVG(gasto_ciudad)
     FROM (
         SELECT SUM(p2.total) AS gasto_ciudad
@@ -440,9 +393,8 @@ HAVING SUM(p.total) > (
     ) sub
 );
 </div>
-
-            <p><strong>4. Mes con mayores ventas por ano:</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<p><strong>4. Mes con mayores ventas por ano:</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 WITH ventas_mensuales AS (
     SELECT EXTRACT(YEAR FROM p.fecha) AS anio,
@@ -461,9 +413,8 @@ FROM ventas_mensuales
 WHERE rn = 1
 ORDER BY anio;
 </div>
-
-            <p><strong>5. Productos nunca vendidos:</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<p><strong>5. Productos nunca vendidos:</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 SELECT pr.id, pr.nombre, pr.categoria
 FROM producto pr
@@ -473,11 +424,9 @@ WHERE NOT EXISTS (
     WHERE dp.producto_id = pr.id
 );
 </div>
-
-            <p><strong>Seccion 4: Data Warehouse</strong></p>
-
-            <p><strong>Ejercicio 1 - Star Schema:</strong></p>
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<p><strong>Seccion 4: Data Warehouse</strong></p>
+<p><strong>Ejercicio 1 - Star Schema:</strong></p>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 -- Tablas de Dimension
 CREATE TABLE DIM_TIENDA (
@@ -528,119 +477,170 @@ CREATE TABLE FACT_VENTAS (
     ganancia_neta NUMERIC(12,2)
 );
 </div>
+<p><strong>Ejercicio 2 - Identificacion:</strong></p>
+<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
+<li><strong>Medidas (Facts):</strong> unidades_vendidas, monto_total, descuento, ganancia_neta.</li>
+<li><strong>Dimensiones:</strong> Tienda, Producto, Tiempo, Vendedor.</li>
+<li><strong>Granularidad:</strong> Una fila por cada venta individual (transaccion).</li>
+<li><strong>Claves primarias:</strong> tienda_key (DIM_TIENDA), producto_key (DIM_PRODUCTO), tiempo_key (DIM_TIEMPO), vendedor_key (DIM_VENDEDOR).</li>
+</ul>
+</div>
+<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+<p><strong>Fin del examen.</strong> Revisa todas tus respuestas antes de entregar. Asegurate de que los bloques PL/SQL tengan la sintaxis correcta y que las consultas SQL se ejecuten sin errores sintacticos.</p>
+</div>
+<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
+<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+                💡 Tips del Profesor
+            </h2>
+<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
+<div class="flex gap-3">
+<span class="text-amber-500 font-bold">•</span>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Audite sus queries con EXPLAIN antes del despliegue:</strong> Un senior developer nunca asume que una consulta es rápida; la verifica con planes de ejecución reales.</p>
+</div>
+<div class="flex gap-3">
+<span class="text-amber-500 font-bold">•</span>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Aplique seguridad por diseño:</strong> Configure permisos de acceso restringidos y use Row-Level Security (RLS) en sus tablas de producción.</p>
+</div>
+<div class="flex gap-3">
+<span class="text-amber-500 font-bold">•</span>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Automatice backups de forma proactiva:</strong> Ninguna estrategia de alta disponibilidad reemplaza a una sólida y probada política de copias de seguridad en frío y Point-in-Time Recovery (PITR).</p>
+</div>
+</div>
+</section>
+<section class="mt-10">
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+                ✍️ Autoevaluación y Ejercicios Prácticos
+            </h2>
+<div class="space-y-4">
+<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+<span class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
+                            Cómo se previene el problema del table bloating en PostgreSQL en producción?
+                        </span>
+<span class="transition group-open:rotate-180">
+<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</summary>
+<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Mediante el ajuste constante de los parámetros del Autovacuum para procesar tuplas muertas de forma concurrente sin degradar el rendimiento general, o mediante reconstrucciones periódicas con pg_repack.</p>
+</div>
+</details>
+<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+<span class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
+                            Qué nivel de aislamiento de transacciones de SQL evita las lecturas no repetibles pero permite anomalías de serialización?
+                        </span>
+<span class="transition group-open:rotate-180">
+<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</summary>
+<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">El nivel de aislamiento es <code>REPEATABLE READ</code>. Evita lecturas sucias y no repetibles, pero requiere <code>SERIALIZABLE</code> para prevenir anomalías de escritura desordenada.</p>
+</div>
+</details>
+<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
+<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
+<span class="flex items-center gap-3">
+<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
+                            Cuál es el beneficio de separar el almacenamiento analítico (OLAP) del transaccional (OLTP)?
+                        </span>
+<span class="transition group-open:rotate-180">
+<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+</summary>
+<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Evita que las pesadas y costosas consultas analíticas de reportes que escanean millones de registros afecten el rendimiento de las transacciones rápidas de escrituras de los usuarios activos de la aplicación.</p>
+</div>
+</details>
+</div>
+</section>
+</article>
+</article>
 
-            <p><strong>Ejercicio 2 - Identificacion:</strong></p>
-            <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-                <li ><strong>Medidas (Facts):</strong> unidades_vendidas, monto_total, descuento, ganancia_neta.</li>
-                <li ><strong>Dimensiones:</strong> Tienda, Producto, Tiempo, Vendedor.</li>
-                <li ><strong>Granularidad:</strong> Una fila por cada venta individual (transaccion).</li>
-                <li ><strong>Claves primarias:</strong> tienda_key (DIM_TIENDA), producto_key (DIM_PRODUCTO), tiempo_key (DIM_TIEMPO), vendedor_key (DIM_VENDEDOR).</li>
+            </article>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
+        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
+        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
+            <ul class="space-y-3 text-sm">
+                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
+                <li><a href="semana_15.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 15</a></li>
+                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Fin — Índice Principal →</a></li>
             </ul>
         </div>
 
-        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-            <p><strong>Fin del examen.</strong> Revisa todas tus respuestas antes de entregar. Asegurate de que los bloques PL/SQL tengan la sintaxis correcta y que las consultas SQL se ejecuten sin errores sintacticos.</p>
-        </div>
+        </aside>
+    </div>
 
-        
-        <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-                </span>
-                💡 Tips del Profesor
-            </h2>
-            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-                <div class="flex gap-3">
-                    <span class="text-amber-500 font-bold">&bull;</span>
-                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Audite sus queries con EXPLAIN antes del despliegue:</strong> Un senior developer nunca asume que una consulta es rápida; la verifica con planes de ejecución reales.</p>
-                </div>
-                <div class="flex gap-3">
-                    <span class="text-amber-500 font-bold">&bull;</span>
-                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Aplique seguridad por diseño:</strong> Configure permisos de acceso restringidos y use Row-Level Security (RLS) en sus tablas de producción.</p>
-                </div>
-                <div class="flex gap-3">
-                    <span class="text-amber-500 font-bold">&bull;</span>
-                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Automatice backups de forma proactiva:</strong> Ninguna estrategia de alta disponibilidad reemplaza a una sólida y probada política de copias de seguridad en frío y Point-in-Time Recovery (PITR).</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="mt-10">
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-                <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                </span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-            <div class="space-y-4">
-                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-                        <span class="flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            Cómo se previene el problema del table bloating en PostgreSQL en producción?
-                        </span>
-                        <span class="transition group-open:rotate-180">
-                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Mediante el ajuste constante de los parámetros del Autovacuum para procesar tuplas muertas de forma concurrente sin degradar el rendimiento general, o mediante reconstrucciones periódicas con pg_repack.</p>
-                    </div>
-                </details>
-                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-                        <span class="flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            Qué nivel de aislamiento de transacciones de SQL evita las lecturas no repetibles pero permite anomalías de serialización?
-                        </span>
-                        <span class="transition group-open:rotate-180">
-                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">El nivel de aislamiento es <code>REPEATABLE READ</code>. Evita lecturas sucias y no repetibles, pero requiere <code>SERIALIZABLE</code> para prevenir anomalías de escritura desordenada.</p>
-                    </div>
-                </details>
-                <details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-                    <summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-                        <span class="flex items-center gap-3">
-                            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            Cuál es el beneficio de separar el almacenamiento analítico (OLAP) del transaccional (OLTP)?
-                        </span>
-                        <span class="transition group-open:rotate-180">
-                            <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </summary>
-                    <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">Evita que las pesadas y costosas consultas analíticas de reportes que escanean millones de registros afecten el rendimiento de las transacciones rápidas de escrituras de los usuarios activos de la aplicación.</p>
-                    </div>
-                </details>
-            </div>
-        </section>
-
-<nav class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
-            <a href="index.html" class="px-5 py-2.5 rounded-lg font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Volver al Índice</a>
-        </nav>
-    </main>
-</div>
-
+    <!-- M3 Bottom Navigation Bar (Mobile only) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
+            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+        </a>
+        <a href="semana_15.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
+            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+        </a>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
+            </svg>
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+        </button>
+        <a href="index.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
+            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
+        </a>
+    </nav>
 
     <script>
         const themeToggleBtn = document.getElementById('theme-toggle');
-        
+        const themeToggleM3Btn = document.getElementById('theme-toggle-m3');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const m3ThemeIconLight = document.getElementById('m3-theme-icon-light');
+        const m3ThemeIconDark = document.getElementById('m3-theme-icon-dark');
+
         function updateToggleText() {
-            if (document.documentElement.classList.contains('dark')) {
-                themeToggleBtn.textContent = '[ MODO: CLARO ]';
+            const isDark = document.documentElement.classList.contains('dark');
+            if (isDark) {
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
+                if (m3ThemeIconLight) m3ThemeIconLight.classList.remove('hidden');
+                if (m3ThemeIconDark) m3ThemeIconDark.classList.add('hidden');
             } else {
-                themeToggleBtn.textContent = '[ MODO: OSCURO ]';
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+                if (m3ThemeIconLight) m3ThemeIconLight.classList.add('hidden');
+                if (m3ThemeIconDark) m3ThemeIconDark.classList.remove('hidden');
             }
         }
-        
+
         updateToggleText();
 
-        themeToggleBtn.addEventListener('click', () => {
+        const toggleTheme = () => {
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
                 localStorage.setItem('color-theme', 'light');
@@ -649,8 +649,12 @@ CREATE TABLE FACT_VENTAS (
                 localStorage.setItem('color-theme', 'dark');
             }
             updateToggleText();
-        });
-    </script>
-</body>
+        };
 
+        if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+        if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
+    </script>
+
+
+</body>
 </html>
