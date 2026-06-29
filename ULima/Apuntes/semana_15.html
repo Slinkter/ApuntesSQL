@@ -11,17 +11,41 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+        <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
-            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --color-primary: #6750A4;
             --color-primary-dark: #D0BCFF;
             --color-surface-light: #FEF7FF;
-            --color-surface-dark: #141218;
-            --color-outline-light: #79747E;
-            --color-outline-dark: #938F99;
+            --color-surface-dark: #0A0A0C;
+            --color-slate-950: #050505;
+            --color-slate-900: #0D0D11;
+        
+            /* M3 custom color tokens */
+            --color-slate-350: #94a3b8;
+            --color-slate-650: #475569;
+            --color-m3-primary: #6750A4;
+            --color-m3-primary-dark: #D0BCFF;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.02em;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.625;
+            letter-spacing: -0.011em;
+        }
+        html.dark body {
+            color: #cbd5e1 !important;
+        }
+        html.dark .prose p, html.dark p {
+            color: #94a3b8 !important;
+        }
+        html.dark .prose strong, html.dark strong {
+            color: #f1f5f9 !important;
         }
     </style>
     <script>
@@ -50,15 +74,14 @@
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
-
 
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
@@ -74,8 +97,62 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
-            <article class="prose dark:prose-invert max-w-none">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+    <!-- M3 Step-by-Step Diagram -->
+    <div class="my-6">
+        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                📌 Proceso Paso a Paso: Mecanismo de Replicación Física Streaming (WAL)
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Cómo se sincroniza el estado de la base de datos primaria con el nodo standby.
+            </p>
+            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+  <g transform="translate(10, 15)">
+    <!-- Cliente -->
+    <rect x="0" y="20" width="130" height="60" rx="10" class="fill-blue-50 dark:fill-slate-800 stroke-blue-500 dark:stroke-blue-400" stroke-width="2" />
+    <text x="65" y="45" text-anchor="middle" class="fill-blue-700 dark:fill-blue-400 font-bold text-xs">Cliente (Query/DML)</text>
+    <text x="65" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Solicita escritura</text>
+
+    <!-- Arrow -->
+    <path d="M 130 50 L 175 50" stroke="#3b82f6" stroke-width="2" fill="none" />
+    <polygon points="175,50 168,46 168,54" fill="#3b82f6" />
+
+    <!-- Primaria -->
+    <rect x="180" y="20" width="170" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="265" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">Nodo Primario (Writable)</text>
+    <text x="265" y="53" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Escribe en Shared Buffers</text>
+    <text x="265" y="65" text-anchor="middle" class="fill-amber-600 dark:fill-amber-400 text-[8px] font-bold">Escribe WAL en disco</text>
+
+    <!-- Arrow -->
+    <path d="M 350 50 L 445 50" stroke="#a855f7" stroke-width="2" fill="none" />
+    <polygon points="445,50 438,46 438,54" fill="#a855f7" />
+    <text x="397.5" y="40" text-anchor="middle" class="fill-purple-600 dark:fill-purple-400 text-[9px] font-bold">WAL Sender</text>
+
+    <!-- Standby -->
+    <rect x="450" y="20" width="170" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="535" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">Nodo Standby (Read-Only)</text>
+    <text x="535" y="53" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">WAL Receiver recibe log</text>
+    <text x="535" y="65" text-anchor="middle" class="fill-emerald-600 dark:fill-emerald-400 text-[8px] font-bold">Aplica WAL a disco (Redo)</text>
+
+    <!-- Arrow (Failover) -->
+    <path d="M 620 50 L 655 50" stroke="#ef4444" stroke-width="2" fill="none" stroke-dasharray="4,4" />
+    <polygon points="655,50 648,46 648,54" fill="#ef4444" />
+    <text x="637.5" y="40" text-anchor="middle" class="fill-rose-600 dark:fill-rose-400 text-[8px] font-bold">Failover</text>
+
+    <!-- Promoción -->
+    <rect x="660" y="20" width="130" height="60" rx="10" class="fill-rose-50 dark:fill-slate-800 stroke-rose-500 dark:stroke-rose-400" stroke-width="2" />
+    <text x="725" y="45" text-anchor="middle" class="fill-rose-700 dark:fill-rose-400 font-bold text-xs">Promovido a Primario</text>
+    <text x="725" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Si Primario falla</text>
+  </g>
+</svg>
+            </div>
+        </div>
+    </div>
+
+            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
@@ -84,7 +161,7 @@
                     🗺️ Mapa Conceptual y Relación de Términos
                 </span>
                 <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </summary>
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
@@ -101,11 +178,11 @@ graph TD
     </div>
 
                 
-<article class="prose dark:prose-invert max-w-none">
-<article class="prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
 <!-- Enfoque Arquitecto: Alta Disponibilidad Teórica -->
 <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Fundamentos de Alta Disponibilidad (HA)</h3>
+<h3>Fundamentos de Alta Disponibilidad (HA)</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 La resiliencia en bases de datos relacionales garantiza la continuidad del negocio ante fallos físicos de hardware. Los conceptos clave incluyen:
             </p>
@@ -117,7 +194,7 @@ graph TD
 </section>
 <!-- Enfoque Cloud: Log Shipping, RDS y Aurora -->
 <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Replicación y Failover en la Nube</h3>
+<h3>Replicación y Failover en la Nube</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
                 Las estrategias de replicación en entornos cloud como AWS RDS e IBM Cloud se dividen en:
             </p>
@@ -131,84 +208,81 @@ graph TD
 <p><strong>Objetivos:</strong> Comprender los conceptos fundamentales de alta disponibilidad en bases de datos. Conocer las tecnologias de SQL Server para HA: Log Shipping, Database Mirroring, Failover Clustering y AlwaysOn. Entender los modos de espera HOT, WARM y COLD, y las metricas SLA, RPO y RTO.</p>
 </div>
 <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Insight del Arquitecto: HA no es solo tecnologia</h4>
+<h4>Insight del Arquitecto: HA no es solo tecnologia</h4>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La alta disponibilidad no es solo una decision tecnica -- es un compromiso de negocio. Cada "9" de disponibilidad cuesta exponencialmente mas. Pasar de 99.9% a 99.99% puede duplicar o triplicar el costo de infraestructura. La clave es alinear el SLA con el presupuesto y el impacto real del negocio. No todas las bases de datos necesitan 5 nueves.</p>
 </section>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">1. Conceptos Generales de HA</h2>
+<h2>1. Conceptos Generales de HA</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Alta Disponibilidad</span>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La alta disponibilidad es una solucion para minimizar o mitigar el impacto de paradas de sistemas. Idealmente, un sistema de base de datos deberia estar disponible las 24 horas del dia, cada dia. Implica redundancia de algun tipo y tecnicas para incrementar la disponibilidad.</p>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Acuerdos de Nivel de Servicio (SLA)</h3>
+<h3>Acuerdos de Nivel de Servicio (SLA)</h3>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Numero de 9s</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">% Disponibilidad</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tiempo de parada anual</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">2</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">99%</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">3 dias y 15 horas</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">2</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">99%</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">3 dias y 15 horas</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">3</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">99.9%</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">8 horas y 45 minutos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">3</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">99.9%</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">8 horas y 45 minutos</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">4</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">99.99%</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">52 minutos y 34 segundos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">4</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">99.99%</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">52 minutos y 34 segundos</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">5</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">99.999%</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">5 minutos y 15 segundos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">5</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">99.999%</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">5 minutos y 15 segundos</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Metricas Clave</h3>
+<h3>Metricas Clave</h3>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li><strong>RPO (Recovery Point Objective):</strong> Cantidad maxima de datos que se puede perder (medido en tiempo). Ej: RPO de 5 minutos = se pierden hasta 5 minutos de datos.</li>
 <li><strong>RTO (Recovery Time Objective):</strong> Tiempo maximo para recuperar el servicio tras una falla. Ej: RTO de 1 hora = el sistema debe estar operativo en 1 hora.</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">2. Modos de Espera (Standby Modes)</h2>
+<h2>2. Modos de Espera (Standby Modes)</h2>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Modo</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Failover</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>HOT Standby</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">El nodo secundario provee una copia transaccionalmente consistente de los datos del servidor primario. Deteccion automatica de errores y recuperacion.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Automatico</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>HOT Standby</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">El nodo secundario provee una copia transaccionalmente consistente de los datos del servidor primario. Deteccion automatica de errores y recuperacion.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Automatico</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>WARM Standby</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Se mantiene una copia de los datos en el secundario, pero los datos pueden o no ser confirmados concurrentemente. El error y recuperacion puede no ser automatico.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Manual</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>WARM Standby</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Se mantiene una copia de los datos en el secundario, pero los datos pueden o no ser confirmados concurrentemente. El error y recuperacion puede no ser automatico.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Manual</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>COLD Standby</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Servidor donde se pueden restaurar los datos. Se necesita OS apropiado, software y copia de seguridad. Puede llevar un tiempo considerable.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Manual (lento)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>COLD Standby</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Servidor donde se pueden restaurar los datos. Se necesita OS apropiado, software y copia de seguridad. Puede llevar un tiempo considerable.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Manual (lento)</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">3. Tecnologias de Alta Disponibilidad en SQL Server</h2>
+<h2>3. Tecnologias de Alta Disponibilidad en SQL Server</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">SQL Server 2012</span>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Caracteristica</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Database Mirroring</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Failover Clustering</th>
@@ -217,58 +291,58 @@ graph TD
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Unidad de falla</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Base de datos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Servidor</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Grupo de Bases de Datos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Base de datos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Unidad de falla</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Base de datos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Servidor</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Grupo de Bases de Datos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Base de datos</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Failover automatico</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Si (con testigo)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Si</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Si</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">No</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Failover automatico</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Si (con testigo)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Si</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Si</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">No</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Replicas de datos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">1</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">0</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">4</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Ilimitado</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Replicas de datos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">1</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">0</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">4</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Ilimitado</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Complejidad</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Media</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Media</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Alta</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Baja</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Complejidad</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Media</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Media</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Alta</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Baja</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Lectura en replica</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Solo con snapshot</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">N/A</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Solo lectura</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Solo lectura (entre restauraciones)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Lectura en replica</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Solo con snapshot</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">N/A</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Solo lectura</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Solo lectura (entre restauraciones)</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Perdida de datos (RPO)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Cero (sync) / Segundos (async)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">N/A</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Cero (sync) / Segundos (async)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Minutos a Horas</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Perdida de datos (RPO)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cero (sync) / Segundos (async)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">N/A</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cero (sync) / Segundos (async)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Minutos a Horas</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Tiempo recuperacion (RTO)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Segundos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Segundos a Minutos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Segundos (sync) / Minutos (async)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Horas a dias</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Tiempo recuperacion (RTO)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Segundos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Segundos a Minutos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Segundos (sync) / Minutos (async)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Horas a dias</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">4. Trasvase de Registro (Log Shipping)</h2>
+<h2>4. Trasvase de Registro (Log Shipping)</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Warm Standby</span>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El Log Shipping es una tecnologia madura y estable que permite mantener una base de datos secundaria actualizada mediante la copia y restauracion periodica de los archivos de registro de transacciones de la base de datos primaria.</p>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
@@ -295,7 +369,7 @@ graph TD
 <li>Perdida de datos potencial (RPO de minutos a horas).</li>
 </ul>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Pasos de Configuración de Trasvase de Registro</h3>
+<h3>Pasos de Configuración de Trasvase de Registro</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La implementación del Trasvase de Registro consta de seis pasos esenciales realizados a través de SSMS o scripts:</p>
 <ol class="space-y-4 pl-5 list-decimal text-slate-700 dark:text-slate-300 mb-6">
 <li><strong>Habilitar Trasvase:</strong> Habilitar la base de datos principal en las propiedades del servidor primario (modo de recuperación completo/FULL).</li>
@@ -305,7 +379,7 @@ graph TD
 <li><strong>Configurar Copia de Archivos (LSCopy):</strong> Definir la carpeta local en el servidor secundario donde se descargarán los archivos del log y configurar la retención (ej. 72 horas).</li>
 <li><strong>Configurar Restauración (LSRestore):</strong> Establecer si la base se mantiene en modo sin recuperación (NORECOVERY) o en modo de espera (STANDBY / Read-Only, permitiendo desconectar usuarios durante la restauración).</li>
 </ol>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Monitoreo y Conmutación por Código T-SQL</h3>
+<h3>Monitoreo y Conmutación por Código T-SQL</h3>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 -- En el servidor primario: monitoreo
@@ -323,7 +397,7 @@ EXEC sp_help_log_shipping_secondary_database
 -- Conmutación (Failover) manual (en caso de falla del primario)
 RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">5. Base de Datos Reflejada (Database Mirroring)</h2>
+<h2>5. Base de Datos Reflejada (Database Mirroring)</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Hot Standby</span>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El Database Mirroring es una solucion de software para incrementar la disponibilidad de la base de datos. Mantiene una copia actualizada (reflejo) en un servidor aparte para conmutacion en caso de falla del servidor principal.</p>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
@@ -334,11 +408,10 @@ RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;
 <li><strong>Servidor Testigo (opcional):</strong> Monitorea ambos servidores y permite failover automatico.</li>
 </ul>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Modos de Operacion</h3>
+<h3>Modos de Operacion</h3>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Modo</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Sincronizacion</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Perdida de datos</th>
@@ -346,27 +419,27 @@ RESTORE DATABASE AdventureWorks2012 WITH RECOVERY;
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>Alta Disponibilidad</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Sincronizado (con testigo)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Cero</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Automatico</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Alta Disponibilidad</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Sincronizado (con testigo)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cero</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Automatico</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>Alta Proteccion</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Sincronizado (sin testigo)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Cero</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Manual</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Alta Proteccion</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Sincronizado (sin testigo)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cero</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Manual</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>Alto Rendimiento</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Asincrono</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Posible (segundos)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Manual</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Alto Rendimiento</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Asincrono</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Posible (segundos)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Manual</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Pasos de Configuración de Reflejo de Base de Datos</h3>
+<h3>Pasos de Configuración de Reflejo de Base de Datos</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La configuración de una sesión de creación de reflejo (mirroring) requiere un orden estricto:</p>
 <ol class="space-y-4 pl-5 list-decimal text-slate-700 dark:text-slate-300 mb-6">
 <li><strong>Sincronizar la Base de Datos:</strong> Configurar la base de datos principal en modo de recuperación completo (FULL). Realizar un backup completo y de registro de transacciones, y restaurarlos en el servidor reflejo utilizando la opción <code>WITH NORECOVERY</code> (dejar la base en estado de restauración).</li>
@@ -403,7 +476,7 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;
 <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 <p><strong>Nota importante:</strong> Database Mirroring fue descontinuado en versiones posteriores de SQL Server en favor de AlwaysOn Availability Groups. Sin embargo, su estudio es fundamental para entender la evolucion de las tecnologias HA.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">6. Failover Clustering</h2>
+<h2>6. Failover Clustering</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Proteccion a nivel de instancia</span>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Failover Clustering protege contra fallos a nivel de servidor (instancia completa). Un cluster es un grupo de servidores independientes que trabajan juntos para aumentar la disponibilidad. Si un nodo falla, otro nodo asume automaticamente la carga de trabajo.</p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
@@ -413,7 +486,7 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;
 <li>No hay perdida de datos (disco compartido).</li>
 <li>Complejidad media de implementacion.</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">7. AlwaysOn Availability Groups</h2>
+<h2>7. AlwaysOn Availability Groups</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">SQL Server 2012+</span>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">AlwaysOn es la evolucion de las tecnologias HA en SQL Server 2012. Combina lo mejor de Failover Clustering y Database Mirroring, permitiendo hasta 4 replicas secundarias con capacidad de lectura.</p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
@@ -423,12 +496,12 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;
 <li>Failover automatico con hasta 2 replicas sincronas.</li>
 <li>Requiere Windows Server Failover Cluster (WSFC).</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">8. Interoperabilidad entre Tecnologias</h2>
+<h2>8. Interoperabilidad entre Tecnologias</h2>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p><strong>Log Shipping + Mirroring:</strong> La base de datos principal en una sesion de mirroring puede actuar tambien como base principal en una configuracion de log shipping. Las bases secundarias de log shipping deben residir en instancias distintas del servidor principal o reflejado.</p>
 <p><strong>Log Shipping + Replicacion:</strong> Pueden usarse conjuntamente, pero la replicacion no continua tras un failover de log shipping. En replicacion transaccional, el comportamiento depende de la opcion <code>sync with backup</code>.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">9. Ejercicios Propuestos</h2>
+<h2>9. Ejercicios Propuestos</h2>
 <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
 <p><strong>Ejercicio 1:</strong> Una empresa requiere 99.99% de disponibilidad para su base de datos de ventas. Calcula el tiempo de parada maximo permitido por ano y recomienda una tecnologia HA adecuada.</p>
 </div>
@@ -447,7 +520,7 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;
 </div>
 <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
 <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -469,7 +542,7 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;
 </div>
 </section>
 <section class="mt-10">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -483,7 +556,7 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;
                             Cuál es la diferencia fundamental entre replicación síncrona y asíncrona?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -497,7 +570,7 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;
                             Qué función cumple el proceso de Failover en una arquitectura Multi-AZ?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -511,7 +584,7 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;
                             Qué representa la métrica RPO en un plan de recuperación ante desastres?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -529,18 +602,18 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
         <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-850 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
             <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
             <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>SLA</strong>Acuerdo de nivel de servicio</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>9s</strong>Metrica de disponibilidad</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>HOT Standby</strong>Copia transaccionalmente consistente</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>WARM Standby</strong>Copia sin confirmacion concurrente</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>COLD Standby</strong>Requiere restauracion manual</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Failover Clustering</strong>Proteccion a nivel de instancia</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Mirroring</strong>Base de datos reflejada</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Log Shipping</strong>Trasvase de registro</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>RPO / RTO</strong>Recovery Point / Time Objective</li>
+                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>SLA</strong>Acuerdo de nivel de servicio</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>9s</strong>Metrica de disponibilidad</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>HOT Standby</strong>Copia transaccionalmente consistente</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>WARM Standby</strong>Copia sin confirmacion concurrente</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>COLD Standby</strong>Requiere restauracion manual</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Failover Clustering</strong>Proteccion a nivel de instancia</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Mirroring</strong>Base de datos reflejada</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Log Shipping</strong>Trasvase de registro</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>RPO / RTO</strong>Recovery Point / Time Objective</li>
 
             </ul>
         </div>
@@ -560,28 +633,28 @@ ALTER DATABASE AdventureWorks2012 SET PARTNER RESUME;
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
         <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
         </a>
         <a href="semana_14.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
         </a>
         <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
         </button>
         <a href="semana_16.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
             <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>

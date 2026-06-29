@@ -11,17 +11,41 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+        <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
-            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --color-primary: #6750A4;
             --color-primary-dark: #D0BCFF;
             --color-surface-light: #FEF7FF;
-            --color-surface-dark: #141218;
-            --color-outline-light: #79747E;
-            --color-outline-dark: #938F99;
+            --color-surface-dark: #0A0A0C;
+            --color-slate-950: #050505;
+            --color-slate-900: #0D0D11;
+        
+            /* M3 custom color tokens */
+            --color-slate-350: #94a3b8;
+            --color-slate-650: #475569;
+            --color-m3-primary: #6750A4;
+            --color-m3-primary-dark: #D0BCFF;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.02em;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.625;
+            letter-spacing: -0.011em;
+        }
+        html.dark body {
+            color: #cbd5e1 !important;
+        }
+        html.dark .prose p, html.dark p {
+            color: #94a3b8 !important;
+        }
+        html.dark .prose strong, html.dark strong {
+            color: #f1f5f9 !important;
         }
     </style>
     <script>
@@ -50,15 +74,14 @@
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
-
 
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
@@ -78,8 +101,58 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
-            <article class="prose dark:prose-invert max-w-none">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+    <!-- M3 Step-by-Step Diagram -->
+    <div class="my-6">
+        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                📌 Proceso Paso a Paso: Fases de Diseño Metodológico de Bases de Datos
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Desde los requisitos informales de negocio hasta la implementación y optimización final.
+            </p>
+            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+  <g transform="translate(10, 15)">
+    <!-- 1 -->
+    <rect x="0" y="20" width="165" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="82.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. Req. de Usuario</text>
+    <text x="82.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Historias de Usuario y Glosario</text>
+
+    <!-- Flecha -->
+    <path d="M 165 50 L 195 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="195,50 188,46 188,54" fill="#6366f1" />
+
+    <!-- 2 -->
+    <rect x="200" y="20" width="170" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="285" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. Diseño Conceptual</text>
+    <text x="285" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Modelo E-R independiente del DBMS</text>
+
+    <!-- Flecha -->
+    <path d="M 370 50 L 400 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="400,50 393,46 393,54" fill="#6366f1" />
+
+    <!-- 3 -->
+    <rect x="405" y="20" width="175" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="492.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Diseño Lógico</text>
+    <text x="492.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Normalización y Esquema Relacional</text>
+
+    <!-- Flecha -->
+    <path d="M 580 50 L 610 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="610,50 603,46 603,54" fill="#6366f1" />
+
+    <!-- 4 -->
+    <rect x="615" y="20" width="165" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+    <text x="697.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">4. Diseño Físico</text>
+    <text x="697.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">PostgreSQL DDL, Índices y Partición</text>
+  </g>
+</svg>
+            </div>
+        </div>
+    </div>
+
+            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
@@ -88,7 +161,7 @@
                     🗺️ Mapa Conceptual y Relación de Términos
                 </span>
                 <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </summary>
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
@@ -106,11 +179,11 @@ graph TD
     </div>
 
                 
-<article class="prose dark:prose-invert max-w-none">
-<article class="prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
 <!-- Enfoque Arquitecto: Conceptos Avanzados de DER -->
 <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Modelamiento Conceptual Relacional Puro</h3>
+<h3>Modelamiento Conceptual Relacional Puro</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 El diseño relacional formal se basa en modelar fielmente las reglas de negocio en el Diagrama Entidad-Relación (DER/ERD) antes de estructurar tablas físicas. Esto incluye conceptos como:
             </p>
@@ -122,7 +195,7 @@ graph TD
 </section>
 <!-- Enfoque Cloud: Herencia en Base de Datos Física -->
 <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Estrategias de Herencia de Tablas en PostgreSQL</h3>
+<h3>Estrategias de Herencia de Tablas en PostgreSQL</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
                 Al mapear la herencia del DER al esquema físico en PostgreSQL, existen tres aproximaciones clásicas:
             </p>
@@ -133,7 +206,7 @@ graph TD
 </ul>
 </section>
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Objetivos de Aprendizaje</h4>
+<h4><svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Objetivos de Aprendizaje</h4>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li>Comprender el modelamiento de datos como fase critica del desarrollo</li>
 <li>Identificar entidades, relaciones, atributos y cardinalidades</li>
@@ -145,19 +218,19 @@ graph TD
 <div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 <p><strong>Insight del Arquitecto:</strong> El modelamiento de datos es la parte mas importante del desarrollo de un sistema de informacion. Los datos tienden a ser mas estables que los procesos del negocio; un sistema orientado a datos tiene mayor vida util. Invertir tiempo en el DER reduce costos de mantenimiento futuro.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">1. Que es el Modelamiento de Datos?</h2>
+<h2>1. Que es el Modelamiento de Datos?</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Es una abstraccion del mundo real que representa como organizamos la informacion y expresa las reglas de negocio de una organizacion.</p>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p><strong>Regla de Negocio:</strong> Enunciado que define o limita un aspecto del negocio. Debe ser declarativa (describe el QUE, no el COMO), precisa, atomica, consistente y expresada en lenguaje natural estructurado.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">2. Entidad</h2>
+<h2>2. Entidad</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Coleccion de objetos del mundo real (personas, lugares, eventos, conceptos) que se distinguen de otros.</p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li><strong>Tipo Entidad:</strong> La clase general (ej. Empleado, Automovil, Curso). Corresponde a una tabla.</li>
 <li><strong>Instancia:</strong> Un ejemplar concreto (ej. Pedro Picapiedra, Renault). Corresponde a una fila.</li>
 <li>Se nombran con un sustantivo en singular: Cliente (no clientes).</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Clasificacion de Entidades</h2>
+<h2>Clasificacion de Entidades</h2>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
 <div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
 <div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo</div>
@@ -185,9 +258,9 @@ graph TD
 <div class="p-4 text-slate-600 dark:text-slate-400">Empleado (jefe-subordinado)</div>
 </div>
 </div></div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">3. Relacion</h2>
+<h2>3. Relacion</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Es una asociacion entre una o mas entidades que es de interes para la organizacion. Ejemplo: un alumno puede llevar uno o mas cursos (vinculo funcional) y un curso puede ser llevado por uno, ninguno o mas alumnos.</p>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Cardinalidad de Relaciones</h2>
+<h2>Cardinalidad de Relaciones</h2>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
 <div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
 <div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Cardinalidad</div>
@@ -206,18 +279,18 @@ graph TD
 <div class="p-4 text-slate-600 dark:text-slate-400">Muchas entidades en cada lado pueden estar asociadas</div>
 </div>
 </div></div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Cardinalidad Minima y Maxima</h2>
+<h2>Cardinalidad Minima y Maxima</h2>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li><strong>Cardinalidad Minima:</strong> Si es 0, la relacion es opcional; si es 1 o mas, es mandatoria.</li>
 <li><strong>Cardinalidad Maxima:</strong> El numero maximo de instancias que pueden asociarse.</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Grados de Relacion</h2>
+<h2>Grados de Relacion</h2>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li><strong>Unaria:</strong> Relacion sobre una misma entidad (ej. Empleado supervisa a Empleado). Cardinalidad 1:1 o 1:N.</li>
 <li><strong>Binaria:</strong> Relacion entre dos entidades. Es la mas comun. Puede ser 1:1, 1:N o N:N.</li>
 <li><strong>Ternaria:</strong> Relacion entre tres entidades (ej. Proveedor-Almacen-Articulo).</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">4. Claves y Restricciones de Integridad</h2>
+<h2>4. Claves y Restricciones de Integridad</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las claves garantizan la identificacion unica y la integridad referencial entre entidades.</p>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
 <div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
@@ -240,9 +313,9 @@ graph TD
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p><strong>Restricciones de Integridad:</strong> (1) Restricciones de dominio - todos los valores deben estar en el mismo dominio. (2) Restricciones de integridad - PK no nulas, FK debe coincidir con PK de otra entidad.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">5. Diagrama Entidad-Relacion (DER)</h2>
+<h2>5. Diagrama Entidad-Relacion (DER)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El modelo entidad/relacion es el modelo conceptual mas utilizado para el diseno conceptual de bases de datos. Fue introducido por Peter Chen en 1976.</p>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Construccion del DER (Notacion Ingenieria de Informacion)</h2>
+<h2>Construccion del DER (Notacion Ingenieria de Informacion)</h2>
 <div class="diagram-ascii">A --- asociada a Uno y Solo Un B --- A  +-------+  B
                                              |   1   |
                                              +-------+
@@ -253,7 +326,7 @@ A --- asociado a Un o Varios B      A  +----1-N---+  B
 A --- asociado a Cero o Varios B    A  +---0-N----+  B
 
 A --- asociado a Varios B           A  +----N-----+  B</div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Pasos para construir el DER</h2>
+<h2>Pasos para construir el DER</h2>
 <ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300" style="list-style: decimal;">
 <li>Graficar las entidades fuertes</li>
 <li>Graficar las entidades debiles</li>
@@ -261,7 +334,7 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
 <li>Graficar las entidades asociativas</li>
 <li>Graficar las relaciones unarias (recursivas)</li>
 </ol>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">6. Supertipos y Subtipos (Modelo E-R Extendido)</h2>
+<h2>6. Supertipos y Subtipos (Modelo E-R Extendido)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Mecanismo para representar jerarquias donde una entidad general se subdivide en subtipos especializados.</p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li><strong>Supertipo:</strong> Entidad que puede subdividirse en 2 o mas subtipos. Sus instancias pertenecen tanto al supertipo como al subtipo.</li>
@@ -297,7 +370,7 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
 </div>
 <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
 <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -319,7 +392,7 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
 </div>
 </section>
 <section class="mt-10">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -333,7 +406,7 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
                             ¿Qué es una relación débil en el Diagrama Entidad-Relación?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -347,7 +420,7 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
                             ¿Qué limitación tiene la estrategia de Tabla Única al mapear herencia?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -361,7 +434,7 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
                             ¿Cómo resuelve PostgreSQL una consulta SELECT sobre una tabla padre con INHERITS?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -379,15 +452,15 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
         <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-850 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
             <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
             <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Entidad</strong> Objeto del mundo real sobre el que se almacenan datos</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Relacion</strong> Asociacion entre dos o mas entidades</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Cardinalidad</strong> 1:1, 1:N, N:N</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>PK</strong> Clave primaria, identifica de forma unica</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>FK</strong> Clave foranea, vincula entidades</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Supertipo/Subtipo</strong> Jerarquia de herencia</li>
+                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Entidad</strong> Objeto del mundo real sobre el que se almacenan datos</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Relacion</strong> Asociacion entre dos o mas entidades</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Cardinalidad</strong> 1:1, 1:N, N:N</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>PK</strong> Clave primaria, identifica de forma unica</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>FK</strong> Clave foranea, vincula entidades</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Supertipo/Subtipo</strong> Jerarquia de herencia</li>
 
             </ul>
         </div>
@@ -407,28 +480,28 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
         <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
         </a>
         <a href="semana_05.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
         </a>
         <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
         </button>
         <a href="semana_07.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
             <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>

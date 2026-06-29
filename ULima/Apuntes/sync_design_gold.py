@@ -25,40 +25,34 @@ APUNTES_DIR = Path(__file__).parent
 # The canonical <style> block from semana_01 (gold standard)
 # ─────────────────────────────────────────────────────────
 GOLD_STYLE_BLOCK = """    <style type="text/tailwindcss">
-
         @custom-variant dark (&:where(.dark, .dark *));
-        .theme-toggle-btn {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 100;
-            padding: 0.35rem 0.75rem;
-            border: 1px solid #111111;
-            background-color: #ffffff;
-            color: #111111;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        html.dark .theme-toggle-btn {
-            border-color: #333333;
-            background-color: #121212;
-            color: #f0f0f0;
-        }
-        .theme-toggle-btn:hover {
-            background-color: #111111;
-            color: #ffffff;
-        }
-        html.dark .theme-toggle-btn:hover {
-            background-color: #ffffff;
-            color: #111111;
-        }
-
         @theme {
-            --color-primary: var(--color-indigo-600);
-            --color-primary-dark: var(--color-indigo-400);
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --color-primary: #6750A4;
+            --color-primary-dark: #D0BCFF;
+            --color-surface-light: #FEF7FF;
+            --color-surface-dark: #0A0A0C;
+            --color-slate-950: #050505;
+            --color-slate-900: #0D0D11;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.02em;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.625;
+            letter-spacing: -0.011em;
+        }
+        html.dark body {
+            color: #cbd5e1 !important;
+        }
+        html.dark .prose p, html.dark p {
+            color: #94a3b8 !important;
+        }
+        html.dark .prose strong, html.dark strong {
+            color: #f1f5f9 !important;
         }
     </style>"""
 

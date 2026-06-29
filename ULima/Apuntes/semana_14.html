@@ -11,17 +11,41 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+        <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
-            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --color-primary: #6750A4;
             --color-primary-dark: #D0BCFF;
             --color-surface-light: #FEF7FF;
-            --color-surface-dark: #141218;
-            --color-outline-light: #79747E;
-            --color-outline-dark: #938F99;
+            --color-surface-dark: #0A0A0C;
+            --color-slate-950: #050505;
+            --color-slate-900: #0D0D11;
+        
+            /* M3 custom color tokens */
+            --color-slate-350: #94a3b8;
+            --color-slate-650: #475569;
+            --color-m3-primary: #6750A4;
+            --color-m3-primary-dark: #D0BCFF;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.02em;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.625;
+            letter-spacing: -0.011em;
+        }
+        html.dark body {
+            color: #cbd5e1 !important;
+        }
+        html.dark .prose p, html.dark p {
+            color: #94a3b8 !important;
+        }
+        html.dark .prose strong, html.dark strong {
+            color: #f1f5f9 !important;
         }
     </style>
     <script>
@@ -50,15 +74,14 @@
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
-
 
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
@@ -74,8 +97,60 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
-            <article class="prose dark:prose-invert max-w-none">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+    <!-- M3 Step-by-Step Diagram -->
+    <div class="my-6">
+        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                📌 Proceso Paso a Paso: Arquitectura y Flujo del Proceso ETL
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                El pipeline clásico de carga de un Data Warehouse desde orígenes transaccionales.
+            </p>
+            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+  <g transform="translate(10, 15)">
+    <!-- Fuentes -->
+    <rect x="0" y="20" width="150" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="75" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">Orígenes (OLTP / Logs)</text>
+    <text x="75" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Sistemas transaccionales</text>
+
+    <!-- Arrow (Extract) -->
+    <path d="M 150 50 L 220 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="220,50 213,46 213,54" fill="#6366f1" />
+    <text x="185" y="40" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px] font-bold">EXTRACT</text>
+
+    <!-- Staging / Transform -->
+    <rect x="230" y="20" width="160" height="60" rx="10" class="fill-amber-50 dark:fill-slate-800 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
+    <text x="310" y="45" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-xs">Staging (Transformación)</text>
+    <text x="310" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Limpieza, calidad y tipos</text>
+
+    <!-- Arrow (Load) -->
+    <path d="M 390 50 L 460 50" stroke="#f59e0b" stroke-width="2" fill="none" />
+    <polygon points="460,50 453,46 453,54" fill="#f59e0b" />
+    <text x="425" y="40" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px] font-bold">LOAD</text>
+
+    <!-- Warehouse -->
+    <rect x="470" y="20" width="150" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="545" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">Data Warehouse (OLAP)</text>
+    <text x="545" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Modelo de Estrella (Hechos)</text>
+
+    <!-- Arrow -->
+    <path d="M 620 50 L 650 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="650,50 643,46 643,54" fill="#6366f1" />
+
+    <!-- BI / Analysis -->
+    <rect x="660" y="20" width="110" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+    <text x="715" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">Visualización</text>
+    <text x="715" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">BI, Reportes y IA</text>
+  </g>
+</svg>
+            </div>
+        </div>
+    </div>
+
+            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
@@ -84,7 +159,7 @@
                     🗺️ Mapa Conceptual y Relación de Términos
                 </span>
                 <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </summary>
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
@@ -102,11 +177,11 @@ graph TD
     </div>
 
                 
-<article class="prose dark:prose-invert max-w-none">
-<article class="prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
 <!-- Enfoque Arquitecto: Modelado Multidimensional -->
 <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Modelado de Datos Dimensional: Kimball vs. Inmon</h3>
+<h3>Modelado de Datos Dimensional: Kimball vs. Inmon</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 El almacenamiento analítico para Business Intelligence (Data Warehouses) requiere una estructura optimizada para consultas agregadas y reportes rápidos:
             </p>
@@ -118,7 +193,7 @@ graph TD
 </section>
 <!-- Enfoque Cloud: Data Warehouses Modernos y ETL -->
 <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Arquitectura DW en la Nube y Procesos ETL</h3>
+<h3>Arquitectura DW en la Nube y Procesos ETL</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
                 En entornos cloud empresariales, el Data Warehouse migra hacia motores columnares dedicados (como <strong>AWS Redshift</strong> o <strong>Google BigQuery</strong>), los cuales almacenan los datos por columnas en lugar de filas para acelerar las agregaciones masivas.
             </p>
@@ -130,10 +205,10 @@ graph TD
 <p><strong>Objetivos:</strong> Comprender los fundamentos de Data Warehousing y Business Intelligence. Diferenciar sistemas OLTP de OLAP. Disenar esquemas estrella y copo de nieve. Conocer el proceso ETL y los tipos de implementacion de cubos OLAP.</p>
 </div>
 <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Insight del Arquitecto: El DW como Centro de Decisiones</h4>
+<h4>Insight del Arquitecto: El DW como Centro de Decisiones</h4>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Bill Inmon, padre del Data Warehousing, define el Data Warehouse como "una coleccion de datos orientada a temas, integrada, no volatil y variante en el tiempo, disenada para soportar la toma de decisiones". A diferencia de una base de datos operacional (OLTP) que optimiza transacciones, el DW optimiza consultas analiticas. El 80% del esfuerzo en un proyecto DW esta en el proceso ETL, no en el modelado.</p>
 </section>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">1. Business Intelligence (BI)</h2>
+<h2>1. Business Intelligence (BI)</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Inteligencia de Negocios</span>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Conjunto de productos y servicios que permiten a los usuarios finales acceder y analizar de manera rapida y sencilla la informacion para la toma de decisiones de negocio a nivel operativo, tactico y estrategico.</p>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
@@ -146,50 +221,49 @@ graph TD
 <li><strong>Metadatos:</strong> Datos sobre los datos del warehouse.</li>
 </ul>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">2. Sistemas OLTP vs OLAP</h2>
+<h2>2. Sistemas OLTP vs OLAP</h2>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Caracteristica</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Sistemas Operacionales (OLTP)</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Sistemas Analiticos (OLAP)</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Proposito</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Ejecutar el negocio</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Administrar el negocio</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Proposito</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Ejecutar el negocio</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Administrar el negocio</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Usuarios</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Oficinistas, administrativos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Decision makers, analistas</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Usuarios</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Oficinistas, administrativos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Decision makers, analistas</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Actualizacion</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Al segundo</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Periodica (diaria, semanal)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Actualizacion</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Al segundo</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Periodica (diaria, semanal)</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Volumen</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Altos volumenes de transacciones simples</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Consultas complejas sobre grandes volumenes</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Volumen</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Altos volumenes de transacciones simples</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Consultas complejas sobre grandes volumenes</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Datos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Detallados, actuales</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Detallados, sumarizados e historicos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Datos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Detallados, actuales</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Detallados, sumarizados e historicos</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Integracion</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Por aplicacion</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Integrado y consistente</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Integracion</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Por aplicacion</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Integrado y consistente</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">3. Arquitectura del Data Warehouse</h2>
+<h2>3. Arquitectura del Data Warehouse</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La arquitectura de referencia incluye las siguientes capas:</p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li><strong>Fuentes de datos:</strong> Sistemas operacionales (ERP, CRM), archivos planos, fuentes externas.</li>
@@ -205,7 +279,7 @@ graph TD
 <li><strong>Bottom-Up (Kimball):</strong> Primero los Data Marts, luego se integran en el DW.</li>
 </ul>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">4. Modelo Estrella (Star Schema)</h2>
+<h2>4. Modelo Estrella (Star Schema)</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Fact Table + Dimension Tables</span>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El modelo estrella es el esquema más utilizado en Data Warehousing. Consta de una tabla central de hechos (fact table) rodeada de tablas de dimensión (dimension tables) relacionadas en relaciones 1:N directas (tipo estrella).</p>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
@@ -217,7 +291,7 @@ graph TD
 <li><strong>Tablas de Dimensión:</strong> Entidades que describen el contexto del negocio (tiempo, clientes, productos, ubicación).</li>
 </ul>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Jerarquías, Niveles y Miembros (Members)</h3>
+<h3>Jerarquías, Niveles y Miembros (Members)</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una dimensión contiene una o más jerarquías compuestas por niveles ordenados de agregación. Por ejemplo, en la dimensión <strong>Ubigeo</strong>:</p>
 <ul class="space-y-2 pl-5 list-decimal text-slate-700 dark:text-slate-300 mb-4">
 <li><strong>Niveles de Agregación:</strong> <code>País → Departamento → Provincia → Distrito</code>.</li>
@@ -324,7 +398,7 @@ CREATE TABLE sales_fact_1997 (
 );</code>
 </div>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">5. Modelo Copo de Nieve (Snowflake Schema)</h2>
+<h2>5. Modelo Copo de Nieve (Snowflake Schema)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En el modelo Snowflake, las dimensiones se normalizan en múltiples tablas, una por cada nivel jerárquico. Esto reduce la redundancia al mínimo pero aumenta significativamente la complejidad de las consultas (más JOINs) y ralentiza el procesamiento.</p>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p class="text-slate-800 dark:text-slate-200 font-bold mb-2">Ejemplo: Estructura Normalizada de Dimensión Producto (Copo de Nieve)</p>
@@ -361,53 +435,52 @@ CREATE TABLE PRESENTACION_DIM (
 );</code>
 </div>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Comparación: STAR vs SNOWFLAKE</h3>
+<h3>Comparación: STAR vs SNOWFLAKE</h3>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Caracteristica</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">STAR (Estrella)</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">SNOWFLAKE (Copo de Nieve)</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Entendimiento del modelo</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Sencillo</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Mayor dificultad</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Entendimiento del modelo</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Sencillo</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mayor dificultad</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Numero de tablas</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Menor</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Mayor</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numero de tablas</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Menor</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mayor</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Complejidad de consulta</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Baja</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Alta</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Complejidad de consulta</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Baja</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Alta</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Rendimiento</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Rapida</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Lenta</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Rendimiento</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Rapida</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Lenta</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Redundancia</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Alta (desnormalizado)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Baja (normalizado)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Redundancia</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Alta (desnormalizado)</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Baja (normalizado)</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Espacio de almacenamiento</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Mayor</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Menor</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Espacio de almacenamiento</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mayor</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Menor</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">6. Proceso ETL</h2>
+<h2>6. Proceso ETL</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Extraccion, Transformacion, Carga</span>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El proceso ETL consume aproximadamente el 80% del tiempo y recursos en un proyecto Data Warehouse (segun Bill Inmon).</p>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Fases del ETL</h3>
+<h3>Fases del ETL</h3>
 <ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li><strong>Extraccion:</strong> Obtener datos de fuentes heterogeneas (Bases de datos, archivos planos, sistemas legacy, fuentes externas).</li>
 <li><strong>Transformacion:</strong> Limpiar, filtrar, validar, calcular, agregar, convertir tipos, aplicar reglas de negocio.</li>
@@ -416,12 +489,11 @@ CREATE TABLE PRESENTACION_DIM (
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Herramientas ETL comunes:</strong> Warehouse Manager, SQL Server Integration Services (SSIS), Oracle Warehouse Builder, Pentaho, Talend, Informatica.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">7. Tipos de Cubos OLAP</h2>
+<h2>7. Tipos de Cubos OLAP</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">ROLAP vs MOLAP vs HOLAP</span>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Ventajas</th>
@@ -429,27 +501,27 @@ CREATE TABLE PRESENTACION_DIM (
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>ROLAP</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Almacena datos en tablas relacionales. Las agregaciones se calculan sobre la marcha.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Escalable, datos en tiempo real, usa SQL estandar.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Rendimiento mas lento en consultas complejas.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>ROLAP</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Almacena datos en tablas relacionales. Las agregaciones se calculan sobre la marcha.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Escalable, datos en tiempo real, usa SQL estandar.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Rendimiento mas lento en consultas complejas.</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>MOLAP</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Almacena datos en una estructura multidimensional propietaria (cubo precalculado).</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Rendimiento excelente, consultas rapidas, indices optimizados.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Menos escalable, datos no en tiempo real, espacio adicional.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>MOLAP</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Almacena datos en una estructura multidimensional propietaria (cubo precalculado).</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Rendimiento excelente, consultas rapidas, indices optimizados.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Menos escalable, datos no en tiempo real, espacio adicional.</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>HOLAP</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Combina ROLAP y MOLAP: datos detallados en BD relacional, agregaciones en cubo.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Balance entre rendimiento y escalabilidad.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Mayor complejidad de administracion.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>HOLAP</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Combina ROLAP y MOLAP: datos detallados en BD relacional, agregaciones en cubo.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Balance entre rendimiento y escalabilidad.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mayor complejidad de administracion.</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">8. Creacion de Dimensiones en Oracle</h2>
+<h2>8. Creacion de Dimensiones en Oracle</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">CREATE DIMENSION</span>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Oracle permite definir dimensiones y jerarquias directamente en el diccionario de datos.</p>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
@@ -498,7 +570,7 @@ CREATE DIMENSION DIM_EMP
     ATTRIBUTE job DETERMINES
         (DIM_EMPLEADO.job_title);
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">9. Fact Table: Ejemplo RRHH</h2>
+<h2>9. Fact Table: Ejemplo RRHH</h2>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Creacion de tablas dimension y hecho para un Data Warehouse de RRHH</strong></p>
 </div>
@@ -539,90 +611,88 @@ CREATE TABLE FACT_RRHH (
     TotalEmpleado NUMBER
 );
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">10. Índices en Data Warehouse</h2>
+<h2>10. Índices en Data Warehouse</h2>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li><strong>Índices Bitmap:</strong> Ideales para columnas con baja cardinalidad (ej. género, estado, región). Reducen sustancialmente el uso de espacio y su mantenimiento es sumamente eficiente en consultas y cargas DML paralelas.</li>
 <li><strong>Índices B-tree:</strong> Ordenan los datos como un árbol inverso, ideales para accesos a consultas típicas de alta cardinalidad.</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">11. Metodología de Calidad de Datos</h2>
+<h2>11. Metodología de Calidad de Datos</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Antes de cargar los datos en el Data Warehouse, es vital asegurar su calidad y consistencia mediante una metodología por niveles:</p>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Nivel</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo de Análisis</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripción</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Nivel 0</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Análisis de valores de dominio</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Verificar que los valores de los datos estén en los rangos esperados.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nivel 0</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Análisis de valores de dominio</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Verificar que los valores de los datos estén en los rangos esperados.</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Nivel 1</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Integridad &amp; Análisis de validez</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Comprobar datos faltantes, valores nulos y formatos de datos inválidos.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nivel 1</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Integridad &amp; Análisis de validez</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Comprobar datos faltantes, valores nulos y formatos de datos inválidos.</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Nivel 2</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Análisis de integridad estructural</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Garantizar que las relaciones de clave primaria/clave foránea e integridad referencial sean correctas.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nivel 2</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Análisis de integridad estructural</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Garantizar que las relaciones de clave primaria/clave foránea e integridad referencial sean correctas.</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Nivel 3</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Análisis de reglas de negocios</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Verificar el cumplimiento de restricciones complejas basadas en lógica de negocio empresarial.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nivel 3</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Análisis de reglas de negocios</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Verificar el cumplimiento de restricciones complejas basadas en lógica de negocio empresarial.</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Nivel 4</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Reglas de conversión de datos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Comprobar y unificar codificaciones heterogéneas (ej. unificar <code>género: F/M</code>, <code>1/0</code>, <code>femenino/masculino</code> en una sola norma).</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nivel 4</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Reglas de conversión de datos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Comprobar y unificar codificaciones heterogéneas (ej. unificar <code>género: F/M</code>, <code>1/0</code>, <code>femenino/masculino</code> en una sola norma).</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">12. Explotación de Datos y Minería de Datos (Data Mining)</h2>
+<h2>12. Explotación de Datos y Minería de Datos (Data Mining)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una vez estructurado el Data Warehouse, existen tres formas principales para explotar y analizar la información:</p>
 <ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300 mb-6">
 <li><strong>Consultas Ad-hoc (Query Ad-hoc):</strong> Proceso iterativo de preguntas y respuestas formuladas manualmente por expertos para encontrar información valiosa.</li>
 <li><strong>OLAP (Análisis Multidimensional):</strong> Preguntas y respuestas multidimensionales complejas para asistir a los tomadores de decisiones.</li>
 <li><strong>Data Mining (Minería de Datos):</strong> Proceso automático que busca tendencias y patrones en el contenido de la información, permitiendo al usuario descubrir la esencia y relaciones entre sus datos.</li>
 </ul>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Tipos de Minería de Datos</h3>
+<h3>Tipos de Minería de Datos</h3>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Minería de Descubrimiento</h4>
+<h4>Minería de Descubrimiento</h4>
 <p class="text-sm text-slate-700 dark:text-slate-300">Encuentra patrones en los datos sin una dirección preconcebida. Analiza todo el almacén de datos para descubrir relaciones valiosas de forma simple.</p>
 </div>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Minería Predictiva</h4>
+<h4>Minería Predictiva</h4>
 <p class="text-sm text-slate-700 dark:text-slate-300">Usa resultados históricos conocidos para construir modelos que permitan predecir comportamientos o valores futuros (requiere control exhaustivo del analista).</p>
 </div>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Técnicas de Data Mining</h3>
+<h3>Técnicas de Data Mining</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las herramientas modernas aplican diversas técnicas estadísticas y de inteligencia artificial:</p>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Enfoque Analítico</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Técnicas Algorítmicas</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Detección de Patrones y Agrupación</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Análisis de la Cesta de la Compra (Market Basket Analysis), Segmentación de Clientes, Análisis de Enlaces (Link Analysis), Agrupamiento (Clustering), Clasificación y Predicción.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Detección de Patrones y Agrupación</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Análisis de la Cesta de la Compra (Market Basket Analysis), Segmentación de Clientes, Análisis de Enlaces (Link Analysis), Agrupamiento (Clustering), Clasificación y Predicción.</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Modelos de IA y Modelado Numérico</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Árboles de Decisión (Decision Trees), Redes Neuronales (Neural Networks), Funciones de Base Radial (Radial Basis), Modelado de Ingresos, Series Temporales (Time Series) y Optimización de Búsqueda.</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Modelos de IA y Modelado Numérico</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Árboles de Decisión (Decision Trees), Redes Neuronales (Neural Networks), Funciones de Base Radial (Radial Basis), Modelado de Ingresos, Series Temporales (Time Series) y Optimización de Búsqueda.</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">13. Beneficios del Data Warehouse</h2>
+<h2>13. Beneficios del Data Warehouse</h2>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p><strong>Desde la perspectiva de TI:</strong></p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
@@ -641,7 +711,7 @@ CREATE TABLE FACT_RRHH (
 <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 <p><strong>Importante (Estudio de IDC):</strong> Las organizaciones que implementan soluciones analíticas logran retornos de inversión (ROI) que van del 17% al 2000%, con una media de <strong>112% (139% en el área financiera)</strong>. El 49% logra recuperar el costo en menos de un año, el costo de reportes se reduce un 60% y el tiempo total de generación baja de 10 a 1.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">14. Ejercicios Propuestos</h2>
+<h2>14. Ejercicios Propuestos</h2>
 <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
 <p><strong>Ejercicio 1:</strong> Disena un esquema estrella para un sistema de pedidos en linea. Identifica las tablas de hechos y dimensiones necesarias.</p>
 </div>
@@ -660,7 +730,7 @@ CREATE TABLE FACT_RRHH (
 </div>
 <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
 <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -682,7 +752,7 @@ CREATE TABLE FACT_RRHH (
 </div>
 </section>
 <section class="mt-10">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -696,7 +766,7 @@ CREATE TABLE FACT_RRHH (
                             ¿Cuál es la diferencia fundamental entre el esquema Estrella y el Copo de Nieve?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -710,7 +780,7 @@ CREATE TABLE FACT_RRHH (
                             ¿Qué tipo de datos se registra típicamente en una tabla de Hechos?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -724,7 +794,7 @@ CREATE TABLE FACT_RRHH (
                             ¿Por qué las bases de datos analíticas cloud (OLAP) suelen ser de almacenamiento columnar?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -742,19 +812,19 @@ CREATE TABLE FACT_RRHH (
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
         <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-850 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
             <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
             <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>BI</strong>Business Intelligence</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>DW</strong>Data Warehouse</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Data Mart</strong>Subconjunto departamental</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>ETL</strong>Extraccion, Transformacion, Carga</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>OLAP</strong>Analisis multidimensional</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>ROLAP / MOLAP / HOLAP</strong>Implementaciones de cubos</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Star Schema</strong>Modelo estrella</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Snowflake</strong>Modelo copo de nieve</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Calidad</strong>Metodología de Nivel 0 a Nivel 4</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Data Mining</strong>Explotación automática de patrones</li>
+                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>BI</strong>Business Intelligence</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>DW</strong>Data Warehouse</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Data Mart</strong>Subconjunto departamental</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>ETL</strong>Extraccion, Transformacion, Carga</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>OLAP</strong>Analisis multidimensional</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>ROLAP / MOLAP / HOLAP</strong>Implementaciones de cubos</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Star Schema</strong>Modelo estrella</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Snowflake</strong>Modelo copo de nieve</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Calidad</strong>Metodología de Nivel 0 a Nivel 4</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Data Mining</strong>Explotación automática de patrones</li>
 
             </ul>
         </div>
@@ -774,28 +844,28 @@ CREATE TABLE FACT_RRHH (
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
         <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
         </a>
         <a href="semana_13.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
         </a>
         <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
         </button>
         <a href="semana_15.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
             <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>

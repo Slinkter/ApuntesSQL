@@ -10,17 +10,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Tailwind v4 CDN -->
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+        <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
-            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --color-primary: #6750A4;
             --color-primary-dark: #D0BCFF;
             --color-surface-light: #FEF7FF;
-            --color-surface-dark: #141218;
-            --color-outline-light: #79747E;
-            --color-outline-dark: #938F99;
+            --color-surface-dark: #0A0A0C;
+            --color-slate-950: #050505;
+            --color-slate-900: #0D0D11;
+        
+            /* M3 custom color tokens */
+            --color-slate-350: #94a3b8;
+            --color-slate-650: #475569;
+            --color-m3-primary: #6750A4;
+            --color-m3-primary-dark: #D0BCFF;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.02em;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.625;
+            letter-spacing: -0.011em;
+        }
+        html.dark body {
+            color: #cbd5e1 !important;
+        }
+        html.dark .prose p, html.dark p {
+            color: #94a3b8 !important;
+        }
+        html.dark .prose strong, html.dark strong {
+            color: #f1f5f9 !important;
         }
     </style>
     <script>
@@ -49,15 +73,14 @@
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
-
 
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
@@ -73,8 +96,67 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
-            <article class="prose dark:prose-invert max-w-none">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+    <!-- M3 Step-by-Step Diagram -->
+    <div class="my-6">
+        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                📌 Proceso Paso a Paso: Ciclo Completo de Entrega en Ingeniería de Datos
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Fases consecutivas para culminar con éxito un proyecto de base de datos empresarial.
+            </p>
+            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                <svg viewBox="0 0 800 120" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="120" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+  <g transform="translate(10, 15)">
+    <!-- Paso 1 -->
+    <rect x="0" y="10" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="70" y="35" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. Creación Física</text>
+    <text x="70" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Ejecutar DDL completo</text>
+
+    <!-- Flecha -->
+    <path d="M 140 40 L 155 40" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="155,40 148,36 148,44" fill="#6366f1" />
+
+    <!-- Paso 2 -->
+    <rect x="160" y="10" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="230" y="35" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. Carga de Semilla</text>
+    <text x="230" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Poblar tablas maestras</text>
+
+    <!-- Flecha -->
+    <path d="M 300 40 L 315 40" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="315,40 308,36 308,44" fill="#6366f1" />
+
+    <!-- Paso 3 -->
+    <rect x="320" y="10" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="390" y="35" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Funciones &amp; Triggers</text>
+    <text x="390" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Desplegar lógica de negocio</text>
+
+    <!-- Flecha -->
+    <path d="M 460 40 L 475 40" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="475,40 468,36 468,44" fill="#6366f1" />
+
+    <!-- Paso 4 -->
+    <rect x="480" y="10" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="550" y="35" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">4. Optimización</text>
+    <text x="550" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Crear índices B-Tree e Hashing</text>
+
+    <!-- Flecha -->
+    <path d="M 620 40 L 635 40" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="635,40 628,36 628,44" fill="#6366f1" />
+
+    <!-- Paso 5 -->
+    <rect x="640" y="10" width="145" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+    <text x="712.5" y="35" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">5. Auditoría y Seguridad</text>
+    <text x="712.5" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Revisar roles y logs de control</text>
+  </g>
+</svg>
+            </div>
+        </div>
+    </div>
+
+            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
@@ -83,7 +165,7 @@
                     🗺️ Mapa Conceptual y Relación de Términos
                 </span>
                 <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </summary>
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
@@ -99,18 +181,18 @@ graph TD
     </div>
 
                 
-<article class="prose dark:prose-invert max-w-none">
-<article class="prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
 <!-- Enfoque Arquitecto: Consolidación del Curso -->
 <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">La Evaluación Final: Maestría Relacional</h3>
+<h3>La Evaluación Final: Maestría Relacional</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 El examen mock final abarca de manera integral la teoría relacional completa: desde el modelado conceptual puro, pasando por la optimización física de índices, y finalizando en la implementación robusta de lógica procedimental PL/pgSQL y resiliencia en la nube.
             </p>
 </section>
 <!-- Enfoque Cloud: Checklist del Senior DBA -->
 <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">La Perspectiva del DBA Cloud para el Examen Mock</h3>
+<h3>La Perspectiva del DBA Cloud para el Examen Mock</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
                 Para resolver con éxito los ejercicios de arquitectura y rendimiento del examen:
             </p>
@@ -121,12 +203,12 @@ graph TD
 </ul>
 </section>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Evaluacion Final: Arquitectura de Datos (Semanas 09-15)</h2>
+<h2>Evaluacion Final: Arquitectura de Datos (Semanas 09-15)</h2>
 <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 <p><strong>Instrucciones:</strong> Resuelve las cuatro secciones. El tiempo estimado es de 120 minutos. Puntaje total: 100 puntos. Teoria: 40 pts (4 c/u). PL/SQL: 20 pts. Consultas: 25 pts (5 c/u). Data Warehouse: 15 pts.</p>
 </div>
 <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Consejos del Arquitecto</h4>
+<h4>Consejos del Arquitecto</h4>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li>Lee todas las preguntas antes de empezar.</li>
 <li>En PL/SQL, verifica la sintaxis: cada bloque necesita BEGIN...END.</li>
@@ -135,7 +217,7 @@ graph TD
 </ul>
 </section>
 <!-- ==================== SECCION 1: TEORIA ==================== -->
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Seccion 1: Teoria Avanzada (40 puntos)</h2>
+<h2>Seccion 1: Teoria Avanzada (40 puntos)</h2>
 <div class="q-level">NIVEL BASICO (1-4)</div>
 <strong class="question">1. (4 pts) Cual es la diferencia fundamental entre BCNF y 3FN? Proporciona un ejemplo donde una tabla este en 3FN pero no en BCNF.</strong>
 <div class="answer"><em>Responde aqui:</em></div>
@@ -160,7 +242,7 @@ graph TD
 <strong class="question">10. (4 pts) Que es un indice Bitmap y por que es preferible en Data Warehousing sobre un indice B-tree tradicional?</strong>
 <div class="answer"><em>Responde aqui:</em></div>
 <!-- ==================== SECCION 2: PL/SQL ==================== -->
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Seccion 2: PL/SQL (20 puntos)</h2>
+<h2>Seccion 2: PL/SQL (20 puntos)</h2>
 <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
 <p><strong>Ejercicio 1: Procedimiento con IN/OUT (7 pts)</strong></p>
 <p>Escribe un procedimiento almacenado llamado <code>obtener_estadisticas_empleado</code> que reciba como parametro IN el ID de un departamento y retorne (OUT) el numero total de empleados, el salario promedio y el salario maximo de ese departamento.</p>
@@ -168,12 +250,6 @@ graph TD
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
 -- Escribe tu solucion aqui:
-
-
-
-
-
-
 
 </div>
 <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
@@ -184,12 +260,6 @@ graph TD
 
 -- Escribe tu solucion aqui:
 
-
-
-
-
-
-
 </div>
 <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
 <p><strong>Ejercicio 3: Trigger con :NEW / :OLD (6 pts)</strong></p>
@@ -199,15 +269,9 @@ graph TD
 
 -- Escribe tu solucion aqui:
 
-
-
-
-
-
-
 </div>
 <!-- ==================== SECCION 3: CONSULTAS ==================== -->
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Seccion 3: Consultas Complejas (25 puntos)</h2>
+<h2>Seccion 3: Consultas Complejas (25 puntos)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Usa el siguiente esquema:</p>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
@@ -227,7 +291,7 @@ detalle_pedido(id, pedido_id, producto_id, cantidad, precio_unitario)
 <strong class="question">5. (5 pts) Encuentra los productos que nunca han sido vendidos (usa NOT EXISTS o LEFT JOIN).</strong>
 <div class="answer"><em>Escribe aqui:</em></div>
 <!-- ==================== SECCION 4: DATA WAREHOUSE ==================== -->
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Seccion 4: Data Warehouse (15 puntos)</h2>
+<h2>Seccion 4: Data Warehouse (15 puntos)</h2>
 <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
 <p><strong>Ejercicio 1: Diseno de Star Schema (8 pts)</strong></p>
 <p>Una cadena de tiendas necesita analizar sus ventas. Requiere reportes por tienda, por producto, por fecha y por vendedor. Las metricas a analizar son: cantidad de unidades vendidas, monto total de venta, descuento aplicado y ganancia neta. Disena el esquema estrella identificando tablas de hechos y tablas de dimension, con sus columnas principales.</p>
@@ -236,18 +300,7 @@ detalle_pedido(id, pedido_id, producto_id, cantidad, precio_unitario)
 
 -- Tablas de Dimension:
 
-
-
-
-
-
-
 -- Tabla de Hechos:
-
-
-
-
-
 
 </div>
 <div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
@@ -264,17 +317,11 @@ detalle_pedido(id, pedido_id, producto_id, cantidad, precio_unitario)
 
 -- Responde aqui:
 
-
-
-
-
-
-
 </div>
 <hr/>
 <!-- ==================== SOLUCIONARIO ==================== -->
 <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Solucionario Completo</h3>
+<h3>Solucionario Completo</h3>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Clave de respuestas</span>
 <p><strong>Seccion 1: Teoria Avanzada</strong></p>
 <p><strong>1. BCNF vs 3FN:</strong> 3FN permite dependencias transitivas donde el determinante no es clave candidata. BCNF exige que TODO determinante sea clave candidata. Ejemplo: Tabla <code>Profesor(curso, profesor, oficina)</code> donde un profesor dicta un curso y cada profesor tiene una oficina. Esta en 3FN (atributo no clave depende de otro no clave), pero no en BCNF porque <code>curso -&gt; profesor</code> pero <code>profesor -&gt; oficina</code> y <code>profesor</code> no es clave candidata.</p>
@@ -490,7 +537,7 @@ CREATE TABLE FACT_VENTAS (
 </div>
 <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
 <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -512,7 +559,7 @@ CREATE TABLE FACT_VENTAS (
 </div>
 </section>
 <section class="mt-10">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -526,7 +573,7 @@ CREATE TABLE FACT_VENTAS (
                             Cómo se previene el problema del table bloating en PostgreSQL en producción?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -540,7 +587,7 @@ CREATE TABLE FACT_VENTAS (
                             Qué nivel de aislamiento de transacciones de SQL evita las lecturas no repetibles pero permite anomalías de serialización?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -554,7 +601,7 @@ CREATE TABLE FACT_VENTAS (
                             Cuál es el beneficio de separar el almacenamiento analítico (OLAP) del transaccional (OLTP)?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -587,28 +634,28 @@ CREATE TABLE FACT_VENTAS (
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
         <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
         </a>
         <a href="semana_15.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
         </a>
         <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
         </button>
         <a href="index.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
             <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
@@ -654,7 +701,6 @@ CREATE TABLE FACT_VENTAS (
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
-
 
 </body>
 </html>

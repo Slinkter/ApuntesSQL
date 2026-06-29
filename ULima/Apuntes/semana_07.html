@@ -11,17 +11,41 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+        <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
-            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --color-primary: #6750A4;
             --color-primary-dark: #D0BCFF;
             --color-surface-light: #FEF7FF;
-            --color-surface-dark: #141218;
-            --color-outline-light: #79747E;
-            --color-outline-dark: #938F99;
+            --color-surface-dark: #0A0A0C;
+            --color-slate-950: #050505;
+            --color-slate-900: #0D0D11;
+        
+            /* M3 custom color tokens */
+            --color-slate-350: #94a3b8;
+            --color-slate-650: #475569;
+            --color-m3-primary: #6750A4;
+            --color-m3-primary-dark: #D0BCFF;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.02em;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.625;
+            letter-spacing: -0.011em;
+        }
+        html.dark body {
+            color: #cbd5e1 !important;
+        }
+        html.dark .prose p, html.dark p {
+            color: #94a3b8 !important;
+        }
+        html.dark .prose strong, html.dark strong {
+            color: #f1f5f9 !important;
         }
     </style>
     <script>
@@ -50,15 +74,14 @@
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
-
 
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
@@ -78,8 +101,58 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
-            <article class="prose dark:prose-invert max-w-none">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+    <!-- M3 Step-by-Step Diagram -->
+    <div class="my-6">
+        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                📌 Proceso Paso a Paso: Pipeline de Normalización Relacional
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Pasos consecutivos para descomponer tablas y evitar redundancia y anomalías.
+            </p>
+            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+  <g transform="translate(10, 15)">
+    <!-- 0FN -->
+    <rect x="0" y="20" width="165" height="60" rx="10" class="fill-slate-200 dark:fill-slate-800 stroke-slate-400" stroke-width="2" />
+    <text x="82.5" y="45" text-anchor="middle" class="fill-slate-700 dark:fill-slate-350 font-bold text-xs">0FN (No Normalizado)</text>
+    <text x="82.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-450 text-[9px]">Atributos multivalor y grupos</text>
+
+    <!-- Flecha -->
+    <path d="M 165 50 L 195 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="195,50 188,46 188,54" fill="#6366f1" />
+
+    <!-- 1FN -->
+    <rect x="200" y="20" width="170" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="285" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1FN (Primera Forma)</text>
+    <text x="285" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Valores atómicos y Llave PK</text>
+
+    <!-- Flecha -->
+    <path d="M 370 50 L 400 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="400,50 393,46 393,54" fill="#6366f1" />
+
+    <!-- 2FN -->
+    <rect x="405" y="20" width="175" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="492.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2FN (Segunda Forma)</text>
+    <text x="492.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Sin dep. parciales (de PK compuesta)</text>
+
+    <!-- Flecha -->
+    <path d="M 580 50 L 610 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="610,50 603,46 603,54" fill="#6366f1" />
+
+    <!-- 3FN -->
+    <rect x="615" y="20" width="165" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+    <text x="697.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">3FN (Tercera Forma)</text>
+    <text x="697.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Sin dependencias transitivas</text>
+  </g>
+</svg>
+            </div>
+        </div>
+    </div>
+
+            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
@@ -88,7 +161,7 @@
                     🗺️ Mapa Conceptual y Relación de Términos
                 </span>
                 <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </summary>
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
@@ -108,11 +181,11 @@ graph TD
     </div>
 
                 
-<article class="prose dark:prose-invert max-w-none">
-<article class="prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
 <!-- Enfoque Arquitecto: Normalización y Armstrong -->
 <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">La Teoría de Normalización de Codd</h3>
+<h3>La Teoría de Normalización de Codd</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 La normalización es el proceso formal de descomposición de relaciones para eliminar la redundancia y prevenir anomalías transaccionales. Se apoya en el estudio de las <strong>Dependencias Funcionales (DF)</strong> y se rige por reglas matemáticas como los Axiomas de Armstrong (Reflexividad, Aumento y Transitividad).
             </p>
@@ -124,7 +197,7 @@ graph TD
 </section>
 <!-- Enfoque Cloud: Normalización y Latencia I/O -->
 <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Impacto de la Normalización en la Latencia Cloud</h3>
+<h3>Impacto de la Normalización en la Latencia Cloud</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
                 Un diseño altamente normalizado (3FN o superior) ahorra espacio físico en disco y mantiene la consistencia relacional. Sin embargo, en bases de datos cloud, consultas complejas que requieren múltiples JOINs para reconstruir una entidad de negocio pueden degradar la latencia de respuesta debido al I/O de red necesario para combinar datos dispersos en disco.
             </p>
@@ -133,7 +206,7 @@ graph TD
             </p>
 </section>
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Objetivos de Aprendizaje</h4>
+<h4><svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Objetivos de Aprendizaje</h4>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li>Entender el proposito de la normalizacion</li>
 <li>Identificar anomalias de insercion, eliminacion y modificacion</li>
@@ -145,12 +218,12 @@ graph TD
 <div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 <p><strong>Insight del Arquitecto:</strong> La normalizacion evita la duplicacion innecesaria de datos y las inconsistencias. Sin embargo, en sistemas OLAP/Data Warehouse la desnormalizacion es comun para mejorar rendimiento de consultas. La clave: entender la teoria para saber cuando romper las reglas.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">1. Que es la Normalizacion?</h2>
+<h2>1. Que es la Normalizacion?</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Es el proceso de descomposicion de relaciones con anomalias para producir relaciones bien estructuradas y mas pequenas. Valida y mejora el diseno logico satisfaciendo restricciones que evitan la duplicacion innecesaria de datos.</p>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p><strong>Relacion bien estructurada:</strong> Contiene minima redundancia y permite anadir, eliminar y actualizar registros sin causar inconsistencias.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">2. El Problema: Anomalias</h2>
+<h2>2. El Problema: Anomalias</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Considere la siguiente tabla NO normalizada de docentes y cursos:</p>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
 <div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
@@ -202,13 +275,13 @@ graph TD
 <div class="p-4 text-slate-600 dark:text-slate-400">2,700</div>
 </div>
 </div></div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">Tipos de Anomalias</h2>
+<h2>Tipos de Anomalias</h2>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li><strong>Insercion:</strong> No se puede registrar un docente que aun no ha tomado ningun curso.</li>
 <li><strong>Eliminacion:</strong> Si se elimina el registro del codigo 43000, se pierde toda la informacion del docente.</li>
 <li><strong>Modificacion:</strong> Si el docente 42000 recibe un aumento, debe actualizarse en multiples filas.</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">3. Dependencia Funcional y Claves</h2>
+<h2>3. Dependencia Funcional y Claves</h2>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p><strong>Dependencia Funcional:</strong> El valor de un atributo A (determinante) determina el valor de otro atributo B. Se denota A rarr B.</p>
 </div>
@@ -216,7 +289,7 @@ graph TD
 <li><strong>Clave Candidata:</strong> Identificador unico. Una o varias claves que podrian convertirse en la clave primaria (ej. codigo de empleado y DNI).</li>
 <li>Cada campo no clave es funcionalmente dependiente de cada clave candidata.</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">4. Primera Forma Normal (1FN)</h2>
+<h2>4. Primera Forma Normal (1FN)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Elimina grupos repetitivos y garantiza que cada atributo tenga valores atomicos (no multivaluados).</p>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Ejemplo - Tabla factura antes de 1FN:</strong> La tabla original combinaba datos de factura y productos en una sola fila con grupos repetitivos.</p>
@@ -275,7 +348,7 @@ Linea_Factura (nro_factura, cod_articulo,
 <div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
 <p><strong>Insight del Arquitecto:</strong> En la vida real, la mayoria de tablas ya estan en 1FN porque los disenadores evitan grupos repetitivos. Sin embargo, los sistemas legacy (como archivos de mainframe) suelen violar 1FN con campos multivaluados separados por comas.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">5. Segunda Forma Normal (2FN)</h2>
+<h2>5. Segunda Forma Normal (2FN)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una tabla esta en 2FN si: (1) esta en 1FN y (2) cada atributo no clave depende funcionalmente de TODA la clave primaria (dependencia funcional total), no de parte de ella.</p>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Dependencias Parciales en Linea_Factura:</strong></p>
@@ -294,7 +367,7 @@ Linea_Factura (nro_factura, cod_articulo,
 -- Articulo (cod_articulo, desc_articulo, prec_unitario)
 </div>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">6. Tercera Forma Normal (3FN)</h2>
+<h2>6. Tercera Forma Normal (3FN)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una tabla esta en 3FN si: (1) esta en 2FN y (2) no existen dependencias transitivas (un atributo no clave determina funcionalmente a otro u otros atributos no clave).</p>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p><strong>Dependencia Transitiva en Factura:</strong></p>
@@ -373,7 +446,7 @@ Linea_Factura (nro_factura, cod_articulo,
 </div>
 <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
 <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -395,7 +468,7 @@ Linea_Factura (nro_factura, cod_articulo,
 </div>
 </section>
 <section class="mt-10">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -409,7 +482,7 @@ Linea_Factura (nro_factura, cod_articulo,
                             ¿Qué es una anomalía de modificación en una tabla desnormalizada?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -423,7 +496,7 @@ Linea_Factura (nro_factura, cod_articulo,
                             ¿Cuándo se aplica la Segunda Forma Normal (2FN)?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -437,7 +510,7 @@ Linea_Factura (nro_factura, cod_articulo,
                             ¿Cuál es la regla de oro de la Tercera Forma Normal (3FN)?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -455,15 +528,15 @@ Linea_Factura (nro_factura, cod_articulo,
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
         <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-850 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
             <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
             <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Normalizacion</strong> Proceso de descomposicion para eliminar redundancia</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>1FN</strong> Valores atomicos, sin grupos repetitivos</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>2FN</strong> Dependencia funcional completa de la PK</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>3FN</strong> Sin dependencias transitivas entre atributos no clave</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Anomalia</strong> Problemas de insercion, eliminacion, actualizacion</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Dependencia Funcional</strong> A determina B: A rarr B</li>
+                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Normalizacion</strong> Proceso de descomposicion para eliminar redundancia</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>1FN</strong> Valores atomicos, sin grupos repetitivos</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>2FN</strong> Dependencia funcional completa de la PK</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>3FN</strong> Sin dependencias transitivas entre atributos no clave</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Anomalia</strong> Problemas de insercion, eliminacion, actualizacion</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Dependencia Funcional</strong> A determina B: A rarr B</li>
 
             </ul>
         </div>
@@ -483,28 +556,28 @@ Linea_Factura (nro_factura, cod_articulo,
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
         <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
         </a>
         <a href="semana_06.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
         </a>
         <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
         </button>
         <a href="semana_08.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
             <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>

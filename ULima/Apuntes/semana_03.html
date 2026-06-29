@@ -11,17 +11,41 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+        <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
-            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --color-primary: #6750A4;
             --color-primary-dark: #D0BCFF;
             --color-surface-light: #FEF7FF;
-            --color-surface-dark: #141218;
-            --color-outline-light: #79747E;
-            --color-outline-dark: #938F99;
+            --color-surface-dark: #0A0A0C;
+            --color-slate-950: #050505;
+            --color-slate-900: #0D0D11;
+        
+            /* M3 custom color tokens */
+            --color-slate-350: #94a3b8;
+            --color-slate-650: #475569;
+            --color-m3-primary: #6750A4;
+            --color-m3-primary-dark: #D0BCFF;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.02em;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.625;
+            letter-spacing: -0.011em;
+        }
+        html.dark body {
+            color: #cbd5e1 !important;
+        }
+        html.dark .prose p, html.dark p {
+            color: #94a3b8 !important;
+        }
+        html.dark .prose strong, html.dark strong {
+            color: #f1f5f9 !important;
         }
     </style>
     <script>
@@ -50,15 +74,14 @@
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
-
 
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
@@ -74,8 +97,66 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
-            <article class="prose dark:prose-invert max-w-none">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+    <!-- M3 Step-by-Step Diagram -->
+    <div class="my-6">
+        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                📌 Proceso Paso a Paso: Verificación de Integridad Referencial en Operaciones DML
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Proceso paso a paso para validar restricciones de llaves foráneas en inserción.
+            </p>
+            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+  <g transform="translate(10, 15)">
+    <!-- Paso 1 -->
+    <rect x="0" y="20" width="165" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="82.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. INSERT a Pedido</text>
+    <text x="82.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Cliente provee FK cliente_id</text>
+    
+    <!-- Flecha -->
+    <path d="M 165 50 L 195 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="195,50 188,46 188,54" fill="#6366f1" />
+
+    <!-- Paso 2 -->
+    <rect x="200" y="20" width="180" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="290" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. DBMS Consulta Clientes</text>
+    <text x="290" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Busca coincidencia en PK</text>
+
+    <!-- Flecha -->
+    <path d="M 380 50 L 410 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="410,50 403,46 403,54" fill="#6366f1" />
+
+    <!-- Paso 3 (Decision) -->
+    <polygon points="485,20 545,50 485,80 425,50" class="fill-amber-50 dark:fill-slate-850 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
+    <text x="485" y="53" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-[10px]">¿Existe PK?</text>
+
+    <!-- Flecha Si -->
+    <path d="M 545 50 L 600 30" stroke="#10b981" stroke-width="2" fill="none" />
+    <polygon points="600,30 592,28 595,36" fill="#10b981" />
+    <text x="575" y="32" class="fill-emerald-600 font-bold text-[10px]">Sí</text>
+
+    <!-- Flecha No -->
+    <path d="M 545 50 L 600 70" stroke="#ef4444" stroke-width="2" fill="none" />
+    <polygon points="600,70 595,64 592,72" fill="#ef4444" />
+    <text x="575" y="72" class="fill-rose-600 font-bold text-[10px]">No</text>
+
+    <!-- Exito -->
+    <rect x="605" y="5" width="165" height="40" rx="8" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+    <text x="687.5" y="27" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">Inserción Exitosa</text>
+
+    <!-- Error -->
+    <rect x="605" y="55" width="165" height="40" rx="8" class="fill-rose-50 dark:fill-slate-800 stroke-rose-500 dark:stroke-rose-400" stroke-width="2" />
+    <text x="687.5" y="77" text-anchor="middle" class="fill-rose-700 dark:fill-rose-400 font-bold text-xs">Foreign Key Violation</text>
+  </g>
+</svg>
+            </div>
+        </div>
+    </div>
+
+            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
@@ -84,7 +165,7 @@
                     🗺️ Mapa Conceptual y Relación de Términos
                 </span>
                 <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </summary>
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
@@ -106,11 +187,11 @@ graph TD
     </div>
 
                 
-<article class="prose dark:prose-invert max-w-none">
-<article class="prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
 <!-- Enfoque Arquitecto: Integridad según Codd -->
 <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">La Pureza Relacional y Reglas de Codd</h3>
+<h3>La Pureza Relacional y Reglas de Codd</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 El modelo relacional propuesto por Codd se sustenta en tres tipos principales de integridad:
             </p>
@@ -122,7 +203,7 @@ graph TD
 </section>
 <!-- Enfoque Cloud: Claves en Bases de Datos Distribuidas -->
 <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Integridad Referencial en Arquitecturas Cloud Distribuidas</h3>
+<h3>Integridad Referencial en Arquitecturas Cloud Distribuidas</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
                 En bases de datos distribuidas horizontalmente a gran escala (como Spanner, Cassandra o Aurora Multi-Master) y sistemas NoSQL, la validación de claves externas (FK) físicas suele deshabilitarse o evitarse debido al alto costo de red requerido para validar la existencia del registro en múltiples nodos remotos de forma síncrona.
             </p>
@@ -131,8 +212,8 @@ graph TD
             </p>
 </section>
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<h4>
+<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 Objetivos de Aprendizaje
             </h4>
 <ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
@@ -144,16 +225,16 @@ graph TD
 </ul>
 </div>
 <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Insight del Arquitecto: El Fundamento Relacional</h4>
+<h4>Insight del Arquitecto: El Fundamento Relacional</h4>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>El modelo relacional de Codd (1970):</strong> La genialidad de Codd fue eliminar los punteros fisicos. En los modelos jerarquico y de red, los datos se navegaban mediante punteros. El modelo relacional usa SOLO valores de atributos para establecer relaciones, lo que le da una elegancia matematica basada en teoria de conjuntos y logica de predicados.</p>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Implicancia practica:</strong> Puedes cambiar completamente la estructura fisica de almacenamiento (de HDD a SSD, de fila a columnar) sin cambiar las consultas SQL. Eso es independencia de datos en accion.</p>
 </section>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">1. Base de Datos Relacional (BDR)</h2>
+<h2>1. Base de Datos Relacional (BDR)</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Definicion</span>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Base de Datos Relacional:</strong> Es una coleccion de relaciones o tablas de dos dimensiones para almacenar informacion. Puede ser accedida y modificada por sentencias del Lenguaje Estructurado de Consultas (SQL). Contiene una coleccion de tablas sin punteros fisicos y utiliza un conjunto de operadores relacionales.</p>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">2. Propiedades de las BDR</h2>
+<h2>2. Propiedades de las BDR</h2>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li>Acceso y modificacion mediante SQL (Structure Query Language).</li>
 <li>Coleccion de tablas sin punteros fisicos — las relaciones se establecen por valores de atributos.</li>
@@ -161,66 +242,63 @@ graph TD
 <li>Cada tabla tiene filas (tuplas) y columnas (atributos).</li>
 <li>Se puede manipular datos de las filas usando comandos SQL.</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">3. Objetos de la Base de Datos Relacional</h2>
+<h2>3. Objetos de la Base de Datos Relacional</h2>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Objeto</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>Tabla</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Unidad basica de almacenamiento; compuesta de filas y columnas</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Tabla</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Unidad basica de almacenamiento; compuesta de filas y columnas</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>Vista</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Representacion logica de los datos de una o mas tablas</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Vista</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Representacion logica de los datos de una o mas tablas</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>Secuencia</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Genera valores de clave primaria secuenciales</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Secuencia</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Genera valores de clave primaria secuenciales</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>Indice</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Mejora el performance de algunas consultas</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Indice</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mejora el performance de algunas consultas</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>Sinonimo</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Asigna nombres alternativos a los objetos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Sinonimo</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Asigna nombres alternativos a los objetos</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">4. Terminologia Relacional</h2>
+<h2>4. Terminologia Relacional</h2>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo: Tabla CLIENTE</strong></p>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">ID_Cliente (PK)</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Nombre</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">ZIP</th>
 </tr>
 <tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">001</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">PEDRO</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">A</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">L33</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">007</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">JUAN</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">A</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">L45</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">012</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">ANA</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">C</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">L33</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">IVAN</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">B</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">L41</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">015</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">INES</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">A</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">L33</td></tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">001</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">PEDRO</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">A</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">L33</td></tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">007</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">JUAN</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">A</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">L45</td></tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">012</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">ANA</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">C</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">L33</td></tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">IVAN</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">B</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">L41</td></tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">015</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">INES</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">A</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">L33</td></tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
 </div>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo: Tabla ORDEN_PEDIDO</strong></p>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Nro_Orden (PK)</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Fecha_Orden</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Fecha_Atencion</th>
@@ -228,11 +306,11 @@ graph TD
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">ID_Cliente (FK)</th>
 </tr>
 <tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">150045</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">01/10/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">10/10/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">3</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">015</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">140235</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">02/02/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">07/07/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">2</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">003</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">230978</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">23/08/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">15/09/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">4</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">001</td></tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">150045</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">01/10/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">10/10/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">3</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">015</td></tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">140235</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">02/02/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">07/07/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">2</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">003</td></tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">230978</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">23/08/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">15/09/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">4</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">001</td></tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
 </div>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
@@ -242,7 +320,7 @@ graph TD
 <li><strong>Primary Key (PK):</strong> Columna o combinacion que identifica de manera unica cada tupla. Subrayada en el diagrama.</li>
 <li><strong>Foreign Key (FK):</strong> Columna que referencia la PK de otra tabla. Implementa la asociacion entre tablas.</li>
 </ul>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">5. Reglas de Nomenclatura de Objetos</h2>
+<h2>5. Reglas de Nomenclatura de Objetos</h2>
 <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Reglas estandar ANSI para nombrar objetos en una BD:</strong></p>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
@@ -253,58 +331,57 @@ graph TD
 <li>No debe ser una palabra reservada del DBMS.</li>
 </ul>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">6. Tipos de Datos del Modelo Relacional</h2>
+<h2>6. Tipos de Datos del Modelo Relacional</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La especificacion original del material usa sintaxis Oracle. A continuacion se presentan los equivalentes:</p>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo (Oracle)</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Equivalente PostgreSQL</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>VARCHAR2(size)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Cadena de longitud variable hasta 4000 caracteres</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>VARCHAR(n)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>VARCHAR2(size)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cadena de longitud variable hasta 4000 caracteres</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>VARCHAR(n)</code></td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>CHAR(size)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Cadena de longitud fija</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>CHAR(n)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>CHAR(size)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cadena de longitud fija</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>CHAR(n)</code></td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>NUMBER</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Numerico de punto flotante</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>INTEGER / NUMERIC</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>NUMBER</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numerico de punto flotante</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>INTEGER / NUMERIC</code></td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>NUMBER(p,s)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Numerico de punto fijo hasta 16 digitos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>NUMERIC(p,s)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>NUMBER(p,s)</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numerico de punto fijo hasta 16 digitos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>NUMERIC(p,s)</code></td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>DATE</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Fecha y tiempo +/- 4712</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>DATE / TIMESTAMP</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>DATE</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Fecha y tiempo +/- 4712</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>DATE / TIMESTAMP</code></td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>LONG</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Cadena variable hasta 2 GB</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>TEXT</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>LONG</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cadena variable hasta 2 GB</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>TEXT</code></td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>BLOB</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Datos binarios hasta 4 GB</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>BYTEA</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>BLOB</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Datos binarios hasta 4 GB</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>BYTEA</code></td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">7. Restricciones de la Base de Datos</h2>
+<h2>7. Restricciones de la Base de Datos</h2>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Integridad y Validacion</span>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">7.1 Restricciones de Integridad</h3>
+<h3>7.1 Restricciones de Integridad</h3>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li><strong>Integridad de Entidad (PRIMARY KEY):</strong> El Primary Key no puede ser NULL y su valor debe ser unico. Solo se permite una PK por tabla. Garantiza que no hayan filas duplicadas. Automaticamente crea un indice UNIQUE.</li>
 <li><strong>Integridad Referencial (FOREIGN KEY):</strong> Los valores de las Foreign Key deben relacionarse con una llave primaria (PK). Establece una relacion entre la PK en la misma tabla o con otras tablas. Debe existir un valor en la tabla Padre a donde hace referencia la FK.</li>
@@ -317,32 +394,31 @@ graph TD
 <li><code>ON DELETE CASCADE</code> — Elimina automaticamente filas hijo si se elimina la fila padre.</li>
 </ul>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">7.2 Restricciones de Columna (Dominio)</h3>
+<h3>7.2 Restricciones de Columna (Dominio)</h3>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Restriccion</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>NULL / NOT NULL</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Especifica si el atributo puede tener valores nulos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>NULL / NOT NULL</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Especifica si el atributo puede tener valores nulos</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>UNIQUE</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Todos los valores en la columna deben ser distintos</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>UNIQUE</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Todos los valores en la columna deben ser distintos</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><strong>CHECK</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Condicion booleana que debe cumplir cada valor ingresado</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>CHECK</strong></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Condicion booleana que debe cumplir cada valor ingresado</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Los valores que ingresan a una columna deben ser del mismo tipo que la definicion del dato (restriccion de dominio por tipo de dato).</p>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">7.3 Restricciones Definidas por el Usuario</h3>
+<h3>7.3 Restricciones Definidas por el Usuario</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Los valores de las columnas deben tener validaciones de acuerdo con las reglas de negocio. Por ejemplo: "el salario no puede ser menor al minimo legal", "la fecha de atencion debe ser posterior a la fecha de orden".</p>
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Resumen de restricciones:</strong> Las restricciones de integridad mantienen la correccion de los datos (PK no nula, FK valida). Las restricciones de columna controlan los valores permitidos (NULL, UNIQUE, CHECK). Las restricciones definidas por el usuario implementan reglas de negocio especificas.</p>
@@ -363,7 +439,7 @@ graph TD
 </div>
 <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
 <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -385,7 +461,7 @@ graph TD
 </div>
 </section>
 <section class="mt-10">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -399,7 +475,7 @@ graph TD
                             ¿Por qué un atributo de la clave primaria (PK) no puede aceptar valores NULL?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -413,7 +489,7 @@ graph TD
                             ¿Qué ocurre si intentamos borrar un registro referenciado en una FK configurada con ON DELETE RESTRICT?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -427,7 +503,7 @@ graph TD
                             ¿Cómo se maneja la integridad referencial en microservicios con bases de datos aisladas?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -445,34 +521,34 @@ graph TD
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
         <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-850 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
             <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
             <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400">
+                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
 <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ BDR</strong>
 <span class="text-slate-600 dark:text-slate-400">Base de Datos Relacional: tablas 2D, sin punteros fisicos</span>
 </li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400">
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
 <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Relacion</strong>
 <span class="text-slate-600 dark:text-slate-400">Tabla con filas (tuplas) y columnas (atributos)</span>
 </li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400">
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
 <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Primary Key</strong>
 <span class="text-slate-600 dark:text-slate-400">Identificador unico, no nulo, inmutable</span>
 </li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400">
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
 <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Foreign Key</strong>
 <span class="text-slate-600 dark:text-slate-400">Referencia a PK de otra tabla</span>
 </li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400">
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
 <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Restricciones</strong>
 <span class="text-slate-600 dark:text-slate-400">Integridad, columna, dominio, definidas por usuario</span>
 </li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400">
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
 <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Tipo de dato</strong>
 <span class="text-slate-600 dark:text-slate-400">VARCHAR, NUMBER, DATE, BLOB</span>
 </li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400">
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
 <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ SQL</strong>
 <span class="text-slate-600 dark:text-slate-400">Lenguaje estructurado de consultas</span>
 </li>
@@ -495,28 +571,28 @@ graph TD
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
         <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
         </a>
         <a href="semana_02.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
         </a>
         <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
         </button>
         <a href="semana_04.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
             <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>

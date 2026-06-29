@@ -11,17 +11,41 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+        <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
-            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --color-primary: #6750A4;
             --color-primary-dark: #D0BCFF;
             --color-surface-light: #FEF7FF;
-            --color-surface-dark: #141218;
-            --color-outline-light: #79747E;
-            --color-outline-dark: #938F99;
+            --color-surface-dark: #0A0A0C;
+            --color-slate-950: #050505;
+            --color-slate-900: #0D0D11;
+        
+            /* M3 custom color tokens */
+            --color-slate-350: #94a3b8;
+            --color-slate-650: #475569;
+            --color-m3-primary: #6750A4;
+            --color-m3-primary-dark: #D0BCFF;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.02em;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.625;
+            letter-spacing: -0.011em;
+        }
+        html.dark body {
+            color: #cbd5e1 !important;
+        }
+        html.dark .prose p, html.dark p {
+            color: #94a3b8 !important;
+        }
+        html.dark .prose strong, html.dark strong {
+            color: #f1f5f9 !important;
         }
     </style>
     <script>
@@ -50,15 +74,14 @@
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
-
 
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
@@ -74,8 +97,54 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
-            <article class="prose dark:prose-invert max-w-none">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+    <!-- M3 Step-by-Step Diagram -->
+    <div class="my-6">
+        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                📌 Proceso Paso a Paso: Evaluación Lógica de Operadores de JOIN
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Flujo de control para evaluar cómo coinciden las filas de dos tablas físicas A y B.
+            </p>
+            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+  <g transform="translate(40, 15)">
+    <!-- A -->
+    <rect x="0" y="20" width="120" height="60" rx="12" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="60" y="50" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-sm">Tabla A (Left)</text>
+
+    <!-- Join Operation -->
+    <circle cx="280" cy="50" r="35" class="fill-blue-100 dark:fill-slate-855 stroke-blue-500 dark:stroke-blue-400" stroke-width="2" />
+    <text x="280" y="47" text-anchor="middle" class="fill-blue-700 dark:fill-blue-450 font-bold text-xs">Evaluación</text>
+    <text x="280" y="59" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px] font-mono">ON A.id = B.id</text>
+
+    <path d="M 120 50 L 245 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="245,50 238,46 238,54" fill="#6366f1" />
+
+    <!-- B -->
+    <rect x="440" y="20" width="120" height="60" rx="12" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="500" y="50" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-sm">Tabla B (Right)</text>
+
+    <path d="M 440 50 L 315 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="315,50 322,54 322,46" fill="#6366f1" />
+
+    <!-- Flecha al resultado -->
+    <path d="M 280 85 L 280 100 L 610 100 L 610 80" stroke="#10b981" stroke-width="2" fill="none" stroke-dasharray="2,2" />
+    <polygon points="610,80 606,87 614,87" fill="#10b981" />
+
+    <!-- Resultados -->
+    <rect x="620" y="20" width="120" height="60" rx="12" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+    <text x="680" y="42" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">Conjunto Resultante</text>
+    <text x="680" y="55" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Inner/Left/Right/Full</text>
+  </g>
+</svg>
+            </div>
+        </div>
+    </div>
+
+            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
@@ -84,7 +153,7 @@
                     🗺️ Mapa Conceptual y Relación de Términos
                 </span>
                 <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </summary>
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
@@ -103,11 +172,11 @@ graph TD
     </div>
 
                 
-<article class="prose dark:prose-invert max-w-none">
-<article class="prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
 <!-- Enfoque Arquitecto: Álgebra Relacional de Joins -->
 <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Teoría Algebraica de los JOINS</h3>
+<h3>Teoría Algebraica de los JOINS</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 La operación de combinación o JOIN es la implementación física del producto cartesiano seguido de una restricción (theta-join). De acuerdo con la teoría relacional:
             </p>
@@ -119,7 +188,7 @@ graph TD
 </section>
 <!-- Enfoque Cloud: Algoritmos de Join en Postgres -->
 <section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Algoritmos de Combinación en PostgreSQL</h3>
+<h3>Algoritmos de Combinación en PostgreSQL</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
                 PostgreSQL implementa tres algoritmos físicos principales para resolver un JOIN:
             </p>
@@ -130,8 +199,8 @@ graph TD
 </ul>
 </section>
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<h4>
+<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 Objetivos de Aprendizaje
             </h4>
 <ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
@@ -142,12 +211,12 @@ graph TD
 </ul>
 </div>
 <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Insight del Arquitecto</h4>
+<h4>Insight del Arquitecto</h4>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Los JOINs son el corazon del modelo relacional. Conocer cuando usar cada tipo (y como el optimizador los ejecuta) marca la diferencia entre consultas que responden en milisegundos y las que colapsan el servidor. Las subconsultas son elegantes pero no siempre eficientes; en PostgreSQL moderno, muchas subconsultas pueden reescribirse como JOINs o con <code>LATERAL</code> para mejor rendimiento.</p>
 </section>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">1. Concepto de JOIN</h2>
+<h2>1. Concepto de JOIN</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un JOIN se emplea para consultar datos que se encuentran en más de una tabla. Las filas son enlazadas empleando valores comunes, típicamente entre la clave primaria (PK) y la clave foránea (FK). Sin una condición de JOIN válida, se genera un <strong>producto cartesiano</strong> (todas las combinaciones posibles).</p>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Tablas de Referencia (Ejemplo)</h3>
+<h3>Tablas de Referencia (Ejemplo)</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Para ilustrar las uniones, utilizaremos las siguientes tablas basadas en la estructura del negocio:</p>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>-- Tabla: EMP (Empleados)
@@ -199,15 +268,15 @@ FROM   emp CROSS JOIN dept;
 ... (etcétera)</code>
 </div>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">2. Variables Tupla (Alias)</h2>
+<h2>2. Variables Tupla (Alias)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Simplifican las consultas mediante alias en los nombres de tablas. Son obligatorias cuando hay nombres de columna identicos entre tablas.</p>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>SELECT C.nombre, OP.numero_orden, OP.numero_embarques
 FROM   orden_pedido OP JOIN cliente C
   ON   OP.id_cliente = C.id_cliente;</code>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">3. Tipos de JOIN</h2>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Equijoin</h3>
+<h2>3. Tipos de JOIN</h2>
+<h3>Equijoin</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Resulta cuando el valor de una columna corresponde explicitamente al valor de alguna columna de otra tabla, usando el operador <code>=</code>.</p>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>SELECT table1.column, table2.column
@@ -222,7 +291,7 @@ FROM   orden_pedido OP JOIN cliente C
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Cada nombre de columna debe ser precedido por el nombre de la tabla (o su alias). Si las columnas tienen el mismo nombre en ambas tablas, el alias es obligatorio.</p>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Non-Equijoin</h3>
+<h3>Non-Equijoin</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Resulta cuando la condicion de JOIN utiliza un operador diferente a la igualdad: <code>BETWEEN</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&lt;&gt;</code>.</p>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>SELECT L.nombre_linea
@@ -230,7 +299,7 @@ FROM   producto P JOIN linea_producto L
   ON   P.precio BETWEEN L.meta_venta_min AND L.meta_venta_max
   AND  P.idprod = L.idprod;</code>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Self Join</h3>
+<h3>Self Join</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Utilizado para unir filas de una misma tabla con relacion recursiva. Se simulan dos tablas en el FROM creando 2 alias diferentes para la misma tabla.</p>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>SELECT E.nombre || 'trabaja para ' || J.nombre
@@ -243,7 +312,7 @@ FROM   empleado E JOIN empleado J
 <div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Precaucion:</strong> En Self Join siempre use alias obligatorios. Sin alias, el SQL no puede distinguir entre las dos instancias de la misma tabla.</p>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Outer Join</h3>
+<h3>Outer Join</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Se utiliza para ver filas que normalmente no se presentan mediante una condicion INNER JOIN. El operador puede ser <code>LEFT</code> o <code>RIGHT</code>, segun el lado del JOIN que no tenga un valor coincidente.</p>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis basica</strong></p>
@@ -268,37 +337,36 @@ FROM   orden_pedido RIGHT OUTER JOIN cliente
 </div>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo de JOIN</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Filas sin match</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">INNER JOIN</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Solo filas que coinciden en ambas tablas</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Excluidas</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">INNER JOIN</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Solo filas que coinciden en ambas tablas</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Excluidas</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">LEFT OUTER JOIN</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Todas las filas de la tabla izquierda</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Tabla derecha = NULL</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">LEFT OUTER JOIN</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Todas las filas de la tabla izquierda</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Tabla derecha = NULL</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">RIGHT OUTER JOIN</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Todas las filas de la tabla derecha</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Tabla izquierda = NULL</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">RIGHT OUTER JOIN</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Todas las filas de la tabla derecha</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Tabla izquierda = NULL</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">FULL OUTER JOIN</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Todas las filas de ambas tablas</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Lado sin match = NULL</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">FULL OUTER JOIN</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Todas las filas de ambas tablas</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Lado sin match = NULL</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">4. Subconsultas</h2>
+<h2>4. Subconsultas</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una subconsulta es una consulta anidada dentro de otra consulta (principal o externa). Se ejecutan primero y su resultado es usado por la consulta principal a traves de las clausulas <code>WHERE</code> o <code>HAVING</code>.</p>
 <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis general</strong></p>
@@ -311,7 +379,7 @@ WHERE  expr operator (
   FROM   table
 );</code>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Reglas para Subconsultas</h3>
+<h3>Reglas para Subconsultas</h3>
 <ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
 <li>Se usan cuando una consulta esta basada en valores desconocidos.</li>
 <li>Deben estar encerradas entre parentesis <code>()</code>.</li>
@@ -320,7 +388,7 @@ WHERE  expr operator (
 <li>No pueden contener una clausula <code>ORDER BY</code> (a menos que usen <code>OFFSET/FETCH</code> en versiones modernas).</li>
 <li>Las subconsultas son procesadas primero; luego la consulta principal usa el resultado.</li>
 </ul>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Procesamiento de Subconsultas Anidadas</h3>
+<h3>Procesamiento de Subconsultas Anidadas</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Ejemplo paso a paso:</p>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>SELECT numero_embarques
@@ -336,7 +404,7 @@ WHERE  id_cliente = (
 -- 2. El resultado (990) se pasa a la consulta principal:
 --    SELECT numero_embarques FROM orden_pedido WHERE id_cliente = 990</code>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Subconsultas de Fila Simple</h3>
+<h3>Subconsultas de Fila Simple</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La subconsulta retorna una sola fila. Solo usa operadores de fila simple: <code>= &gt; &gt;= &lt; &lt;= &lt;&gt;</code>.</p>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>-- Cliente que ha generado el maximo numero de embarques
@@ -350,26 +418,25 @@ WHERE  numero_embarques = (
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Si la subconsulta retorna mas de una fila y se usa un operador de fila simple, el motor lanza un error: <code>ORA-01427: single-row subquery returns more than one row</code>. En PostgreSQL: <code>ERROR: more than one row returned by a subquery used as an expression</code>.</p>
 </div>
-<h3 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3" class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white mt-6 mb-3">Subconsultas de Fila Multiple</h3>
+<h3>Subconsultas de Fila Multiple</h3>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La subconsulta retorna varias filas de resultado. Se usan operadores de conjunto:</p>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
 <table class="w-full text-left border-collapse my-6">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
+<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Operador</th>
 <th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Significado</th>
 </tr>
 <tbody>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>IN</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">Igual a cualquier miembro de la lista</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>IN</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Igual a cualquier miembro de la lista</td>
 </tr>
 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm"><code>NOT IN</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-650 dark:text-slate-400 text-sm">No igual a ningun miembro de la lista</td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>NOT IN</code></td>
+<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">No igual a ningun miembro de la lista</td>
 </tr>
 </tbody>
-</th></table>
+</thead></table>
 </div>
 <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 <code>-- Clientes NACIONALES o INTERNACIONALES con ordenes de pedido
@@ -383,7 +450,7 @@ WHERE  id_cliente IN (
 </div>
 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Subconsultas</span>
 <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4 class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2" class="text-lg font-medium text-slate-800 dark:text-slate-200 mt-4 mb-2">Insight del Arquitecto</h4>
+<h4>Insight del Arquitecto</h4>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En PostgreSQL, las subconsultas en <code>WHERE</code> se ejecutan una vez (subconsultas no correlacionadas) y se cachean. Para subconsultas correlacionadas, considera reescribirlas como JOINs con <code>LATERAL</code> o usar funciones ventana (<code>ROW_NUMBER()</code>) para mejor rendimiento en conjuntos grandes. Siempre verifica el plan con <code>EXPLAIN ANALYZE</code>.</p>
 </section>
 <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
@@ -392,7 +459,7 @@ WHERE  id_cliente IN (
 </div>
 <!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
 <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -414,7 +481,7 @@ WHERE  id_cliente IN (
 </div>
 </section>
 <section class="mt-10">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+<h2>
 <span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
@@ -428,7 +495,7 @@ WHERE  id_cliente IN (
                             ¿Cuál es la diferencia de rendimiento entre Hash Join y Nested Loop Join?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -442,7 +509,7 @@ WHERE  id_cliente IN (
                             ¿Qué ocurre si la memoria física configurada en work_mem es insuficiente para resolver un JOIN?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -456,7 +523,7 @@ WHERE  id_cliente IN (
                             ¿Qué tipo de JOIN se utiliza para representar estructuras jerárquicas organizacionales?
                         </span>
 <span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </span>
 </summary>
 <div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
@@ -474,15 +541,15 @@ WHERE  id_cliente IN (
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
         <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-850 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
             <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
             <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ JOIN</strong>Union de dos o mas tablas mediante valores relacionados.</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ Equijoin</strong>JOIN con operador de igualdad (=).</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ Non-Equijoin</strong>JOIN con operador de rango (BETWEEN, &gt;, &lt;).</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ Self Join</strong>JOIN de una tabla consigo misma (relacion recursiva).</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ Outer Join</strong>Incluye filas sin correspondencia (LEFT / RIGHT).</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>§ Subconsulta</strong>Consulta anidada dentro de otra consulta.</li>
+                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ JOIN</strong>Union de dos o mas tablas mediante valores relacionados.</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ Equijoin</strong>JOIN con operador de igualdad (=).</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ Non-Equijoin</strong>JOIN con operador de rango (BETWEEN, &gt;, &lt;).</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ Self Join</strong>JOIN de una tabla consigo misma (relacion recursiva).</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ Outer Join</strong>Incluye filas sin correspondencia (LEFT / RIGHT).</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ Subconsulta</strong>Consulta anidada dentro de otra consulta.</li>
 
             </ul>
         </div>
@@ -502,28 +569,28 @@ WHERE  id_cliente IN (
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
         <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
         </a>
         <a href="semana_09.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
         </a>
         <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
         </button>
         <a href="semana_11.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
             <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>

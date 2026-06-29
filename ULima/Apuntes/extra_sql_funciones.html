@@ -10,17 +10,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Tailwind v4 CDN -->
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
+        <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
-            --font-sans: 'Outfit', 'Inter', sans-serif;
+            --font-sans: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --color-primary: #6750A4;
             --color-primary-dark: #D0BCFF;
             --color-surface-light: #FEF7FF;
-            --color-surface-dark: #141218;
-            --color-outline-light: #79747E;
-            --color-outline-dark: #938F99;
+            --color-surface-dark: #0A0A0C;
+            --color-slate-950: #050505;
+            --color-slate-900: #0D0D11;
+        
+            /* M3 custom color tokens */
+            --color-slate-350: #94a3b8;
+            --color-slate-650: #475569;
+            --color-m3-primary: #6750A4;
+            --color-m3-primary-dark: #D0BCFF;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.02em;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.625;
+            letter-spacing: -0.011em;
+        }
+        html.dark body {
+            color: #cbd5e1 !important;
+        }
+        html.dark .prose p, html.dark p {
+            color: #94a3b8 !important;
+        }
+        html.dark .prose strong, html.dark strong {
+            color: #f1f5f9 !important;
         }
     </style>
     <script>
@@ -35,15 +59,14 @@
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
-
 
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
@@ -59,28 +82,79 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
-            <article class="prose dark:prose-invert max-w-none">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+    <!-- M3 Step-by-Step Diagram -->
+    <div class="my-6">
+        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                📌 Proceso Paso a Paso: Flujo de Evaluación de Funciones de Ventana
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                La secuencia en la que se particiona, ordena y calcula el valor de una ventana analítica.
+            </p>
+            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+  <g transform="translate(10, 15)">
+    <!-- 1. PARTITION BY -->
+    <rect x="0" y="20" width="145" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="72.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. PARTITION BY</text>
+    <text x="72.5" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Agrupar en subventanas</text>
+
+    <!-- Flecha -->
+    <path d="M 145 50 L 180 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="180,50 173,46 173,54" fill="#6366f1" />
+
+    <!-- 2. ORDER BY -->
+    <rect x="185" y="20" width="145" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="257.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. ORDER BY (Ventana)</text>
+    <text x="257.5" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Ordenar filas en cada grupo</text>
+
+    <!-- Flecha -->
+    <path d="M 330 50 L 365 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="365,50 358,46 358,54" fill="#6366f1" />
+
+    <!-- 3. FRAME -->
+    <rect x="370" y="20" width="155" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+    <text x="447.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Window Frame</text>
+    <text x="447.5" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">ROWS/RANGE BETWEEN</text>
+
+    <!-- Flecha -->
+    <path d="M 525 50 L 560 50" stroke="#6366f1" stroke-width="2" fill="none" />
+    <polygon points="560,50 553,46 553,54" fill="#6366f1" />
+
+    <!-- 4. EVALUATION -->
+    <rect x="565" y="20" width="205" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+    <text x="667.5" y="40" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">4. Evaluar Función</text>
+    <text x="667.5" y="52" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px] font-mono">ROW_NUMBER / LAG / LEAD / SUM</text>
+    <text x="667.5" y="64" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Se conserva la cardinalidad original</text>
+  </g>
+</svg>
+            </div>
+        </div>
+    </div>
+
+            <article class="space-y-8 prose dark:prose-invert max-w-none">
                 
-<article class="prose dark:prose-invert max-w-none">
-<article class="prose dark:prose-invert max-w-none">
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">1. Manejo de Nulos (COALESCE)</h2>
+<article class="space-y-8 prose dark:prose-invert max-w-none">
+<article class="space-y-8 prose dark:prose-invert max-w-none">
+<h2>1. Manejo de Nulos (COALESCE)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La función <code>COALESCE</code> retorna el primer valor no nulo de una lista.</p>
 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<div class="relative my-6"><div class="relative my-6"><div class="relative my-6"><pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-slate-350"><code class="block font-mono text-slate-300"><code class="block font-mono text-slate-300">-- Si el teléfono es NULL, muestra 'No disponible'
+<div class="relative my-6"><div class="relative my-6"><div class="relative my-6"><pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-slate-400"><code class="block font-mono text-slate-300"><code class="block font-mono text-slate-300">-- Si el teléfono es NULL, muestra 'No disponible'
 SELECT nombre, COALESCE(telefono, 'No disponible') AS contacto
 FROM clientes;</code></code></code></pre></div></div></div>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">2. Conversión de Datos (CAST)</h2>
+<h2>2. Conversión de Datos (CAST)</h2>
 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En PostgreSQL, podemos usar el operador <code>::</code> o la función <code>CAST()</code>.</p>
 <div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<div class="relative my-6"><div class="relative my-6"><div class="relative my-6"><pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-slate-350"><code class="block font-mono text-slate-300"><code class="block font-mono text-slate-300">-- Convertir un texto a entero
+<div class="relative my-6"><div class="relative my-6"><div class="relative my-6"><pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-slate-400"><code class="block font-mono text-slate-300"><code class="block font-mono text-slate-300">-- Convertir un texto a entero
 SELECT '123'::INTEGER + 7;
 
 -- Usando sintaxis ANSI
 SELECT CAST('2023-05-13' AS DATE);</code></code></code></pre></div></div></div>
 </div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">3. Funciones de Fecha y Hora</h2>
+<h2>3. Funciones de Fecha y Hora</h2>
 <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
 <div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Función</div>
 <div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripción</div>
@@ -97,8 +171,8 @@ SELECT CAST('2023-05-13' AS DATE);</code></code></code></pre></div></div></div>
 <div class="p-4 text-slate-600 dark:text-slate-400">Obtiene año, mes o día de una fecha.</div>
 </div>
 </div></div>
-<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800" class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-8 mb-4 pb-2 border-b border-slate-200 dark:border-slate-800">4. Operadores de Comparación Avanzados</h2>
-<div class="relative my-6"><div class="relative my-6"><div class="relative my-6"><pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-slate-350"><code class="block font-mono text-slate-300"><code class="block font-mono text-slate-300">-- Operador IS DISTINCT FROM (maneja nulos como valores comparables)
+<h2>4. Operadores de Comparación Avanzados</h2>
+<div class="relative my-6"><div class="relative my-6"><div class="relative my-6"><pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-slate-400"><code class="block font-mono text-slate-300"><code class="block font-mono text-slate-300">-- Operador IS DISTINCT FROM (maneja nulos como valores comparables)
 SELECT * FROM tabla WHERE col1 IS DISTINCT FROM col2;</code></code></code></pre></div></div></div>
 <div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
 <a class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow" href="extra_sql_consultas_basicas.html">← Lab Anterior</a>
@@ -113,13 +187,13 @@ SELECT * FROM tabla WHERE col1 IS DISTINCT FROM col2;</code></code></code></pre>
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
         <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-850 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
             <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
             <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>COALESCE</strong> Manejo de valores nulos.</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>NULLIF</strong> Comparación y nulidad.</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>CAST</strong> Conversión de tipos.</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-650 dark:text-slate-400"><strong>Fecha/Hora</strong> Operaciones temporales.</li>
+                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>COALESCE</strong> Manejo de valores nulos.</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>NULLIF</strong> Comparación y nulidad.</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>CAST</strong> Conversión de tipos.</li>
+<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Fecha/Hora</strong> Operaciones temporales.</li>
 
             </ul>
         </div>
@@ -139,28 +213,28 @@ SELECT * FROM tabla WHERE col1 IS DISTINCT FROM col2;</code></code></code></pre>
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
         <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
         </a>
         <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
         </a>
         <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
         </button>
         <a href="index.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
             <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
@@ -206,7 +280,6 @@ SELECT * FROM tabla WHERE col1 IS DISTINCT FROM col2;</code></code></code></pre>
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
-
 
 </body>
 </html>
