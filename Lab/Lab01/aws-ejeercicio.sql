@@ -1,33 +1,18 @@
+SELECT version () AS "Server Info";
 
-SELECT version() AS "Server Info";
+-- PostgreSQL 16.14  (Alpine 15.2.0)
 
---
--- PostgreSQL 16.14 on x86_64-pc-linux-musl,
---                     compiled by gcc (Alpine 15.2.0) 15.2.0,
---                                                         64-bit
-
-SELECT current_database() AS "Base_de_Datos_Activa";
+SELECT current_database ();
 
 -- northwind
 
-SELECT current_user AS "Usuario_Conectado";
+SELECT current_user;
 
--- rpta:
 -- slinkter
 
-SELECT inet_server_addr() AS "IP_del_Servidor_Remoto";
+SELECT inet_server_addr () AS "IP_del_Servidor_Remoto";
 
--- rpta : 172.18.0.2
-
-SELECT category_id,
-       category_name,
-       description,
-       picture
-FROM public.categories
-LIMIT 1000;
-
-SHOW tables;
-
+-- 172.18.0.2
 
 SELECT table_name
 FROM information_schema.tables
@@ -35,8 +20,6 @@ WHERE table_schema = 'public'
 ORDER BY table_name;
 
 -- categories
--- customer_customer_demo
--- customer_demographics
 -- customers
 -- employee_territories
 -- employees
@@ -48,6 +31,22 @@ ORDER BY table_name;
 -- suppliers
 -- territories
 -- us_states
+
+SELECT *
+FROM categories;
+
+
+SELECT *
+FROM customers;
+
+
+SELECT *
+FROM employee_territories;
+
+
+SELECT *
+FROM employees;
+
 
 SELECT count(*)
 FROM categories;
@@ -77,33 +76,34 @@ FROM orders;
 
 
 SELECT *
-FROM PRODUCTS ;
-
-
-SELECT product_name,
-       unit_price
-FROM PRODUCTS ;
+FROM PRODUCTS;
 
 
 SELECT product_name,
        unit_price
 FROM PRODUCTS
-where unit_price >30
-ORDER BY unit_price ASC ;
+order by unit_price DESC;
+
+
+SELECT product_name,
+       unit_price
+FROM PRODUCTS
+where unit_price > 30
+ORDER BY unit_price ASC;
 
 
 SELECT product_name,
        CAST(unit_price AS DECIMAL(10, 2))
 FROM PRODUCTS
-where unit_price >30
-ORDER BY unit_price DESC ;
+where unit_price > 30
+ORDER BY unit_price DESC;
 
 
 SELECT order_id,
        customer_id,
        order_date
 FROM orders
-ORDER by order_date DESC ;
+ORDER by order_date DESC;
 
 
 select order_id,
@@ -140,9 +140,9 @@ SELECT customer_id,
        company_name,
        country
 from customers
-WHERE country IN('Germany',
-                 'UK',
-                 'USA')
+WHERE country IN ('Germany',
+                  'UK',
+                  'USA')
 ORDER BY country,
          company_name;
 
@@ -171,12 +171,12 @@ SELECT employee_id as "ID",
        title as "TITLE",
        hire_date as "HIRE DATE"
 FROM EMPLOYEES
-WHERE hire_date>='1993-01-01'
+WHERE hire_date >= '1993-01-01'
 ORDER BY hire_date asc
 LIMIT 10;
 
 -- 11.
- -- %Sales%
+-- %Sales%
 -- name_empresa,contact_name , sale
 
 select customer_id,
@@ -185,4 +185,4 @@ select customer_id,
        contact_title
 from customers
 where contact_title like '%Sales%'
-ORDER BY company_name ;
+ORDER BY company_name;
