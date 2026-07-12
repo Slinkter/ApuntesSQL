@@ -3,6 +3,11 @@ services:
     image: mysql:8.0
     container_name: mysql_local
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "3306:3306"
     environment:

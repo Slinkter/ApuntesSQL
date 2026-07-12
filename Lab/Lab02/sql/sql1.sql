@@ -1,4 +1,9 @@
+-- ARCHIVO DE PRACTICA - No ejecutar sin revisar
 -- mysql -h 127.0.0.1 -P 3306 -u root  --ssl-mode=DISABLED
+
+-- =============================================
+-- CONSULTAS BASICAS
+-- =============================================
 
 show databases;
 
@@ -48,14 +53,22 @@ select
 from
     users;
 
+-- =============================================
+-- INSERCION DE DATOS
+-- =============================================
+
 insert into
     products (name, description, price, stock)
 VALUES
     ('Laptop', 'msi.', 1200.00, 50),
     ('Smartphone', 'iphone.', 800.00, 100),
     ('Headphones', 'skullcandy', 150.00, 200),
-    ('Smartwatch', 'xioami', 250.00, 75),
-    ('Tablet', 'samsun', 300.00, 80);
+    ('Smartwatch', 'Xiaomi', 250.00, 75),
+    ('Tablet', 'Samsung', 300.00, 80);
+
+-- =============================================
+-- FILTROS Y CONDICIONES
+-- =============================================
 
 select
     *
@@ -145,9 +158,17 @@ ORDER BY
 
 -- no se podia poner null en products.name
 -- cambiar modificar el campo para null
+-- =============================================
+-- MODIFICACION DE ESTRUCTURA
+-- =============================================
+
 ALTER TABLE products MODIFY name VARCHAR(100) NULL;
 
 
+
+-- =============================================
+-- ACTUALIZACION Y ELIMINACION
+-- =============================================
 
 DESCRIBE users;
 DESCRIBE products;
@@ -175,6 +196,7 @@ WHERE
     users.id = 1
 
 
+-- ⚠️ PELIGRO: Este UPDATE modifica TODOS los usuarios sin WHERE clause
 UPDATE users
 SET
     users.password = '*************'
@@ -196,6 +218,10 @@ WHERE
     products.id = 4;
 
 
+
+-- =============================================
+-- CONSULTAS AVANZADAS
+-- =============================================
 
 SHOW
 CREATE TABLE
@@ -255,10 +281,11 @@ SELECT u.name, (select sum(total) FROM orders where user_id = u.id) as TOTAL_GAS
 
 
 
+-- ⚠️ SUBQUERY INCOMPLETA - Falta definir la consulta interna
 SELECT usuario,total_gastado 
 FROM (
 
-    
+    -- TODO: Completar subquery aqui
 )
 
 /*  */
