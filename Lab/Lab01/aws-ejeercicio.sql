@@ -61,7 +61,7 @@ FROM
 WHERE
     title ILIKE '%sales%';
 
-/*  */
+/* 14 */
 select
     customer_id,
     company_name,
@@ -73,3 +73,33 @@ from
     customers
 WHERE
     region is not null
+    /* 15 */
+SELECT
+    product_id,
+    product_name,
+    units_in_stock
+FROM
+    products
+WHERE
+    units_in_stock is not null
+ORDER BY
+    units_in_stock DESC
+    /* 16. */
+SELECT
+    customer_id,
+    company_name,
+    country
+FROM
+    customers
+WHERE
+    country IN ('USA', 'Canada');
+
+/* 17. */
+SELECT
+    product_id,
+    product_name,
+    discontinued
+FROM
+    products
+Where
+    discontinued <> 1
