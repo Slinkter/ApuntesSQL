@@ -1,34 +1,8 @@
-SELECT
-    products.product_name,
-    products.unit_price,
-    products.units_in_stock,
-    unit_price * units_in_stock
-FROM
-    products;
-
-SELECT
-    SUM(unit_price * units_in_stock) as Total
-FROM
-    products;
-
-/*  */
-SELECT
-    *
-from
-    categories
-LIMIT
-    5;
-
-/*  */
-SELECT
-    *
-from
-    products
-LIMIT
-    5;
-
-SELECT
-    *
-FROM
-    products AS p
-    INNER JOIN categories AS c ON p.category_id = c.category_id;
+SELECT p.product_id,
+       p.product_name,
+       length(p.product_name) AS longitud_nombre,
+       UPPER(p.product_name) AS mayuscula_nombre,
+       s.contact_name AS Contacto
+from products p
+INNER JOIN suppliers s ON p.supplier_id = s.supplier_id
+ORDER BY p.product_name /*  */
