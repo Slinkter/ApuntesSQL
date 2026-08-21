@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
-    <title>Semana 04 - Lenguaje de Definicion de Datos (DDL)</title>
+    <title>Semana 04 - Lenguaje de Manipulacion de Datos (DML) y Consultas Basicas</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -69,15 +69,12 @@
             });
         });
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <!-- Sun icon -->
         <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <!-- Moon icon -->
         <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
@@ -87,8 +84,12 @@
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
-                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Lenguaje de Definicion de Datos (DDL)</h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 04 • Ingenieria de Datos  • ULima 2013-2</p>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+                    Semana 04: Lenguaje de Manipulación de Datos (DML) y Consultas Básicas
+                </h1>
+                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                    Álgebra Relacional vs SQL • Inserción, Modificación y Borrado Seguro • 3VL y NULL • Universidad de Lima
+                </p>
             </div>
             <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
@@ -97,55 +98,69 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+
     <!-- M3 Step-by-Step Diagram -->
     <div class="my-6">
         <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
             <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                📌 Proceso Paso a Paso: Ciclo de Vida de los Objetos de Esquema (DDL)
+                📌 Proceso Paso a Paso: Orden Lógico de Evaluación de una Consulta SQL
             </h3>
             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Cómo interactúan los comandos DDL principales en la metadata y el almacenamiento físico.
+                El flujo interno del optimizador: cómo se ejecutan conceptualmente las cláusulas SQL frente al orden sintáctico escrito.
             </p>
             <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
                 <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(50, 15)">
-    <!-- CREATE -->
-    <rect x="0" y="20" width="160" height="60" rx="12" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="80" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-sm">CREATE</text>
-    <text x="80" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Creación física y lógica</text>
+                  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+                  <g transform="translate(10, 15)">
+                    <!-- Paso 1 -->
+                    <rect x="0" y="20" width="135" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="67.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. FROM & JOIN</text>
+                    <text x="67.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Identifica el conjunto base</text>
+                    
+                    <path d="M 135 50 L 160 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                    <polygon points="160,50 153,46 153,54" fill="#6366f1" />
 
-    <!-- Flecha -->
-    <path d="M 160 50 L 260 50" stroke="#10b981" stroke-width="2" fill="none" />
-    <polygon points="260,50 253,46 253,54" fill="#10b981" />
+                    <!-- Paso 2 -->
+                    <rect x="165" y="20" width="135" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="232.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. WHERE</text>
+                    <text x="232.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Filtra filas (3VL)</text>
 
-    <!-- ALTER -->
-    <rect x="270" y="20" width="160" height="60" rx="12" class="fill-amber-50 dark:fill-slate-800 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
-    <text x="350" y="45" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-sm">ALTER</text>
-    <text x="350" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Mutar definición / columnas</text>
+                    <path d="M 300 50 L 325 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                    <polygon points="325,50 318,46 318,54" fill="#6366f1" />
 
-    <!-- Flecha -->
-    <path d="M 430 50 L 530 50" stroke="#f59e0b" stroke-width="2" fill="none" />
-    <polygon points="530,50 523,46 523,54" fill="#f59e0b" />
+                    <!-- Paso 3 -->
+                    <rect x="330" y="20" width="135" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="397.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. SELECT</text>
+                    <text x="397.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Proyecta columnas / Alias</text>
 
-    <!-- DROP -->
-    <rect x="540" y="20" width="160" height="60" rx="12" class="fill-rose-50 dark:fill-slate-800 stroke-rose-500 dark:stroke-rose-400" stroke-width="2" />
-    <text x="620" y="45" text-anchor="middle" class="fill-rose-700 dark:fill-rose-400 font-bold text-sm">DROP</text>
-    <text x="620" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Liberar almacenamiento</text>
-  </g>
-</svg>
+                    <path d="M 465 50 L 490 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                    <polygon points="490,50 483,46 483,54" fill="#6366f1" />
+
+                    <!-- Paso 4 -->
+                    <rect x="495" y="20" width="135" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="562.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">4. DISTINCT</text>
+                    <text x="562.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Elimina tuplas duplicadas</text>
+
+                    <path d="M 630 50 L 655 50" stroke="#10b981" stroke-width="2" fill="none" />
+                    <polygon points="655,50 648,46 648,54" fill="#10b981" />
+
+                    <!-- Paso 5 -->
+                    <rect x="660" y="20" width="130" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+                    <text x="725" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">5. ORDER BY</text>
+                    <text x="725" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Ordena el resultado final</text>
+                  </g>
+                </svg>
             </div>
         </div>
     </div>
 
-            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
             <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
                 <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Relación de Términos
+                    🗺️ Mapa Conceptual: El Lenguaje DML y Consultas Declarativas
                 </span>
                 <span class="transition group-open:rotate-180">
                     <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -154,449 +169,415 @@
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
                 <pre class="mermaid bg-transparent">
 graph TD
-    S04[Lenguaje DDL] --> Comms[Comandos Estructurales]
-    Comms --> CREATE[CREATE: Definir Tablas, Índices y Vistas]
-    Comms --> ALTER[ALTER: Modificar estructura física]
-    Comms --> DROP[DROP: Eliminar objetos]
-    S04 --> Objects[Objetos de Esquema]
-    Objects --> Cons[Restricciones: CHECK, UNIQUE, NOT NULL, DEFAULT]
-    Objects --> Ind[Índices B-Tree: Optimización de búsquedas]
-    Objects --> View[Vistas: Consultas pregrabadas / Seguridad]
+    DML[Lenguaje DML & DQL] --> INS[INSERT: Posicional, Multi-Row, Subquery, ON CONFLICT UPSERT]
+    DML --> UPD[UPDATE: Aritmética, WHERE Seguro, Subqueries, UPDATE FROM]
+    DML --> DEL[DELETE vs TRUNCATE: DML con WAL vs DDL Rápido]
+    DML --> SEL[SELECT: Proyección, Filtros WHERE, DISTINCT, Expresiones]
+    
+    SEL --> LOGIC[Lógica Trivalente 3VL: TRUE, FALSE, UNKNOWN con NULL]
+    SEL --> OP[Operadores: BETWEEN, IN, LIKE/ILIKE, IS NULL, CASE]
+    
+    TCL[Control Transaccional] --> BEGIN[BEGIN / START TRANSACTION]
+    TCL --> COMM[COMMIT & Durabilidad]
+    TCL --> ROLL[ROLLBACK & SAVEPOINT]
                 </pre>
             </div>
         </details>
     </div>
 
-                
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<!-- Enfoque Arquitecto: DDL y Constraints Avanzados -->
-<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3>DDL Relacional Puro: Restricciones y Secuencias</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                El Lenguaje de Definición de Datos (DDL) es la formalización del esquema conceptual. Permite estructurar la base de datos mediante:
+    <article class="space-y-10 prose dark:prose-invert max-w-none">
+        <!-- Banner de Objetivos -->
+        <div class="bg-indigo-50/60 dark:bg-indigo-950/20 rounded-3xl p-6 border border-indigo-100 dark:border-indigo-900/40 shadow-sm">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="p-2 bg-indigo-600 text-white rounded-xl">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Objetivos Pedagógicos y Competencias de Manipulación de Datos</h3>
+            </div>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-slate-700 dark:text-slate-300 list-disc list-inside m-0">
+                <li>Comprender la correspondencia entre operadores del Álgebra Relacional ($sigma, pi, 	imes, owtie$) y SQL declarativo.</li>
+                <li>Escribir sentencias <code class="font-mono text-xs">INSERT</code> avanzadas: multi-fila, subconsultas y patrones UPSERT con <code class="font-mono text-xs">ON CONFLICT</code>.</li>
+                <li>Ejecutar sentencias <code class="font-mono text-xs">UPDATE</code> seguras bajo protocolos transaccionales para prevenir pérdidas de datos.</li>
+                <li>Comparar en profundidad <code class="font-mono text-xs">DELETE</code> vs <code class="font-mono text-xs">TRUNCATE</code> (WAL logging, bloqueos, triggers y reseteo de secuencias).</li>
+                <li>Dominar la Lógica Trivalente (3VL) y el tratamiento de valores <code class="font-mono text-xs">NULL</code> en comparaciones y tablas de verdad.</li>
+                <li>Construir consultas <code class="font-mono text-xs">SELECT</code> complejas con filtros <code class="font-mono text-xs">BETWEEN</code>, <code class="font-mono text-xs">IN</code>, <code class="font-mono text-xs">LIKE/ILIKE</code> y <code class="font-mono text-xs">CASE WHEN</code>.</li>
+            </ul>
+        </div>
+
+        <!-- SECCIÓN 1: Álgebra Relacional vs SQL Declarativo -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">01.</span> Fundamentos: Álgebra Relacional vs SQL Declarativo
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                El lenguaje SQL es <strong>declarativo</strong>: el desarrollador especifica <em>qué</em> resultados desea obtener, delegando al optimizador de consultas (Query Optimizer) la decisión procedimental de <em>cómo</em> acceder físicamente a los datos en disco o memoria.
             </p>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>CHECK:</strong> Valida que los valores insertados sigan reglas relacionales matemáticas (ej. <code>precio &gt; 0</code>).</li>
-<li><strong>DEFAULT:</strong> Garantiza valores por defecto si no son provistos en el DML.</li>
-<li><strong>Secuencias e Identidades:</strong> El uso de <code>GENERATED BY DEFAULT AS IDENTITY</code> (estándar SQL:2003) se prefiere sobre <code>SERIAL</code> porque es compatible con el estándar ANSI y evita problemas de permisos de secuencia ocultos.</li>
-</ul>
-</section>
-<!-- Enfoque Cloud: Migraciones Zero-Downtime y RDS -->
-<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3>Migraciones DDL Zero-Downtime en la Nube</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
-                En bases de datos RDS/Aurora de producción con millones de registros, ejecutar ciertos DDLs (como <code>ALTER TABLE ADD COLUMN</code> con valores por defecto no nulos o <code>CREATE INDEX</code>) puede bloquear las operaciones de lectura/escritura de la tabla por largos períodos de tiempo.
+
+            <!-- Tabla de Álgebra Relacional vs SQL -->
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm my-6">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Operación Formal</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Símbolo Matemático</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Sintaxis Equivalente SQL</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Semántica Operativa</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold text-indigo-600">Selección</td>
+                            <td class="p-3 font-mono font-bold text-sm">&sigma;<sub>condición</sub>(R)</td>
+                            <td class="p-3 font-mono text-indigo-600 dark:text-indigo-400">SELECT * FROM R WHERE condición;</td>
+                            <td class="p-3">Filtro horizontal: extrae las tuplas que satisfacen el predicado booleano.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold text-blue-600">Proyección</td>
+                            <td class="p-3 font-mono font-bold text-sm">&pi;<sub>A1, A2</sub>(R)</td>
+                            <td class="p-3 font-mono text-blue-600 dark:text-blue-400">SELECT DISTINCT A1, A2 FROM R;</td>
+                            <td class="p-3">Filtro vertical: extrae únicamente las columnas solicitadas y elimina duplicados.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold text-amber-600">Producto Cartesiano</td>
+                            <td class="p-3 font-mono font-bold text-sm">R &times; S</td>
+                            <td class="p-3 font-mono text-amber-600 dark:text-amber-400">SELECT * FROM R CROSS JOIN S;</td>
+                            <td class="p-3">Combina cada tupla de $R$ con todas las tuplas de $S$ ($|R| 	imes |S|$ tuplas).</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold text-emerald-600">Reunión / Join</td>
+                            <td class="p-3 font-mono font-bold text-sm">R &#8904;<sub>cond</sub> S</td>
+                            <td class="p-3 font-mono text-emerald-600 dark:text-emerald-400">SELECT * FROM R INNER JOIN S ON cond;</td>
+                            <td class="p-3">Producto cartesiano seguido inmediatamente de una selección por coincidencia de claves.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: Manipulación de Datos: Inserción Exhaustiva -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">02.</span> Inserción Exhaustiva de Datos (<code class="font-mono">INSERT</code>)
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                La sentencia <code class="font-mono">INSERT</code> añade nuevas tuplas a una tabla. En entornos de producción, la inserción debe realizarse siempre especificando la lista explícita de columnas destino para garantizar la resiliencia del software ante futuros cambios de esquema.
             </p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">
-<strong>Solución Cloud:</strong> Use <code>CREATE INDEX CONCURRENTLY</code> en PostgreSQL para crear índices sin bloquear escrituras, o herramientas de migración en línea como <code>pg_repack</code> y <code>gh-ost</code> para reconstruir esquemas de forma segura.
+
+            <div class="relative my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Patrones Profesionales de Inserción SQL en PostgreSQL 17</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed"><code class="language-sql">-- 1. INSERCIÓN SIMPLE CON LISTA EXPLÍCITA DE COLUMNAS
+INSERT INTO cliente (nombre, direccion, tipo, zip)
+VALUES ('PEDRO CASTILLO', 'Av. Javier Prado Este 4600', 'A', 'L33');
+
+-- 2. INSERCIÓN MULTI-FILA MASIVA (Batch Insert de Alto Rendimiento)
+INSERT INTO linea_producto (nombre_linea, meta_venta) VALUES
+('ESCRITORIOS', 150000.00),
+('SILLAS ERGONOMICAS', 85000.00),
+('ESTANTES MODULARES', 120000.00);
+
+-- 3. INSERCIÓN BASADA EN CONSULTA (INSERT INTO ... SELECT)
+INSERT INTO auditoria_clientes (id_cliente, nombre, fecha_registro)
+SELECT id_cliente, nombre, CURRENT_TIMESTAMP
+FROM cliente
+WHERE tipo = 'A';
+
+-- 4. PATRÓN MODERNO UPSERT: ON CONFLICT DO UPDATE (PostgreSQL 16/17)
+INSERT INTO producto (id_producto, nombre_linea, descripcion, stock, precio, costo)
+VALUES (101, 'ESCRITORIOS', 'Escritorio Roble Ejecutivo', 15, 850.00, 420.00)
+ON CONFLICT (id_producto) 
+DO UPDATE SET 
+    stock = producto.stock + EXCLUDED.stock,
+    precio = EXCLUDED.precio;
+
+-- 5. INSERCIÓN CON CLÁUSULA RETURNING (Retorna el ID generado sin un SELECT adicional)
+INSERT INTO orden_pedido (id_cliente, fecha_colocacion, numero_embarques)
+VALUES (1, CURRENT_DATE, 2)
+RETURNING numero_orden, fecha_colocacion;</code></pre>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: Actualización Precisa de Datos -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">03.</span> Actualización de Datos (<code class="font-mono">UPDATE</code>) y Protocolos de Seguridad
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                La sentencia <code class="font-mono">UPDATE</code> modifica los valores de los atributos en tuplas existentes.
             </p>
-</section>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
-<h4>
-<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                Objetivos de Aprendizaje
-            </h4>
-<ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
-<li>Crear tablas con tipos de datos apropiados y restricciones</li>
-<li>Definir PRIMARY KEY y FOREIGN KEY en la creacion de tablas</li>
-<li>Modificar tablas existentes con ALTER TABLE</li>
-<li>Eliminar tablas correctamente usando DROP TABLE</li>
-<li>Comprender el modelo de datos de la muebleria como caso de estudio</li>
-</ul>
-</div>
-<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4>Insight del Arquitecto: DDL Transaccional en PostgreSQL</h4>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Una diferencia crucial:</strong> En Oracle, los comandos DDL hacen COMMIT implicito. En PostgreSQL, los comandos DDL son transaccionales — puedes hacer ROLLBACK de un CREATE TABLE, ALTER TABLE o incluso DROP TABLE si esta dentro de una transaccion. Esto cambia dramaticamente la estrategia de migraciones.</p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Consejo practico:</strong> Siempre envuelve cambios estructurales en transacciones explicitas (<code>BEGIN; ... COMMIT;</code>) y prueba con <code>ROLLBACK</code> en desarrollo antes de ejecutar en produccion.</p>
-</section>
-<h2>1. Creacion de Tablas (CREATE TABLE)</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">DDL basico</span>
-<h3>Sintaxis General</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 
-CREATE TABLE nombre_tabla
-    (columna1 tipo_dato [restriccion_columna],
-     columna2 tipo_dato [restriccion_columna],
-     ...
-     [restricciones_de_tabla]);
-</div>
-<h3>Ejemplo 1: Restriccion a nivel de columna</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+            <div class="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl p-5 space-y-2 mb-4">
+                <h4 class="text-sm font-bold text-rose-700 dark:text-rose-400 m-0 flex items-center gap-2">
+                    ⚠️ La Regla de Oro del UPDATE en Producción
+                </h4>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Si se ejecuta un <code class="font-mono font-bold text-rose-600">UPDATE</code> sin la cláusula <code class="font-mono font-bold text-rose-600">WHERE</code>, el motor actualizará <strong>todas las filas de la tabla</strong> de forma indiscriminada. En consolas de producción, siempre abra una transacción explícita con <code class="font-mono">BEGIN;</code>, verifique el número de filas afectadas y use <code class="font-mono">ROLLBACK;</code> si no coincide con lo esperado.
+                </p>
+            </div>
 
-CREATE TABLE orden_pedido
-    (numero_orden NUMBER(7) PRIMARY KEY,
-     fecha_colocacion DATE,
-     fecha_llenado DATE,
-     numero_embarques NUMBER(5),
-     id_cliente NUMBER(7) REFERENCES cliente );
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En este ejemplo, <code>PRIMARY KEY</code> y <code>REFERENCES</code> se definen directamente sobre la columna. Es una sintaxis compacta pero menos flexible para claves compuestas.</p>
-<h3>Ejemplo 2: Restricciones a nivel de tabla</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+            <div class="relative my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Ejemplos de Sentencias UPDATE Avanzadas</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed"><code class="language-sql">-- 1. ACTUALIZACIÓN CONDICIONAL SIMPLE
+UPDATE orden_pedido
+SET numero_embarques = 3,
+    fecha_llenado = '2026-08-30'
+WHERE numero_orden = 555;
 
-CREATE TABLE orden_pedido
-    (numero_orden NUMBER(7),
-     fecha_colocacion DATE,
-     fecha_llenado DATE,
-     numero_embarques NUMBER(5),
-     id_cliente NUMBER(7),
-     PRIMARY KEY (numero_orden),
-     FOREIGN KEY (id_cliente) REFERENCES cliente);
-</div>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Diferencia clave:</strong> La sintaxis a nivel de tabla permite definir claves compuestas (PK con multiples columnas) y nombrar las restricciones. Es la forma recomendada para esquemas complejos.</p>
-</div>
-<h2>2. Modelo de Datos de una Muebleria</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Caso de estudio</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El siguiente es el modelo relacional para un sistema de muebleria que usaremos como caso de estudio en DDL:</p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+-- 2. ACTUALIZACIÓN CON EXPRESIONES ARITMÉTICAS
+-- Incrementar el precio en 8% para todos los productos de la línea 'ESCRITORIOS'
+UPDATE producto
+SET precio = ROUND(precio * 1.08, 2)
+WHERE nombre_linea = 'ESCRITORIOS';
 
--- Entidades principales del modelo
-cliente:      id_cliente, nombre, direccion, tipo, zip
-orden_pedido: numero_orden (PK), id_cliente (FK),
-              fecha_colocacion, fecha_llenado,
-              numero_embarques
-producto:     id_producto (PK), nombre_linea (FK),
-              meta_venta, stock, precio, costo
-linea_producto: nombre_linea (PK)
-producto_ordenado: numero_orden (FK), id_producto (FK),
-                   cantidad_ordenada
-</div>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Nota:</strong> Este modelo usa nomenclatura Oracle (NUMBER, DATE, VARCHAR2). En los ejemplos siguientes se presenta la sintaxis original del material academico y luego su equivalente en PostgreSQL.</p>
-</div>
-<h2>3. Creacion del Esquema Muebleria</h2>
-<h3>Sintaxis Oracle (original del curso)</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+-- 3. ACTUALIZACIÓN BASADA EN JOIN (UPDATE ... FROM)
+-- Actualizar el sueldo de los empleados del centro de trabajo 'CENTRO_SUR'
+UPDATE empleado e
+SET sueldo = sueldo * 1.12
+FROM centro_trabajo ct
+WHERE e.cod_ct = ct.cod_ct
+  AND ct.ubicacion = 'LIMA SUR';</code></pre>
+            </div>
+        </section>
 
-CREATE TABLE cliente (
-    id_cliente NUMBER(7) PRIMARY KEY,
-    nombre VARCHAR2(50) NOT NULL,
-    direccion VARCHAR2(100),
-    tipo CHAR(1) CHECK (tipo IN ('A','B','C')),
-    zip VARCHAR2(5)
-);
+        <!-- SECCIÓN 4: Eliminación de Datos: DELETE vs TRUNCATE -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">04.</span> Análisis Comparativo Crítico: <code class="font-mono">DELETE</code> vs <code class="font-mono">TRUNCATE</code>
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Aunque ambas operaciones vacían o eliminan datos de una tabla, su comportamiento interno en el motor DBMS es fundamentalmente distinto.
+            </p>
 
-CREATE TABLE linea_producto (
-    nombre_linea VARCHAR2(30) PRIMARY KEY
-);
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm my-6">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Criterio Técnico</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold text-indigo-600 dark:text-indigo-400">DELETE FROM tabla</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold text-emerald-600 dark:text-emerald-400">TRUNCATE TABLE tabla</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold">Categoría SQL</td>
+                            <td class="p-3 font-mono font-bold">DML (Data Manipulation)</td>
+                            <td class="p-3 font-mono font-bold">DDL (Data Definition)</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold">Granularidad y Filtro</td>
+                            <td class="p-3">Admite cláusula <code class="font-mono font-bold">WHERE</code> para borrar filas específicas.</td>
+                            <td class="p-3">No admite <code class="font-mono font-bold">WHERE</code>; vacía <strong>toda la tabla</strong>.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold">Mecanismo Interno</td>
+                            <td class="p-3">Recorre y marca tuplas como muertas fila por fila (MVCC).</td>
+                            <td class="p-3">Desasigna páginas de disco a nivel de filesystem de forma instantánea.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold">Generación de WAL / Logs</td>
+                            <td class="p-3">Registra cada fila eliminada (alto volumen de WAL).</td>
+                            <td class="p-3">Mínimo log WAL (solo el evento de desasignación de bloque).</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold">Triggers</td>
+                            <td class="p-3">Dispara triggers <code class="font-mono">BEFORE / AFTER DELETE FOR EACH ROW</code>.</td>
+                            <td class="p-3">No dispara triggers por fila (solo triggers a nivel de sentencia).</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold">Secuencias Auto-Increment</td>
+                            <td class="p-3">Preserva el contador de la secuencia.</td>
+                            <td class="p-3">Permite reiniciar secuencias con <code class="font-mono">RESTART IDENTITY</code>.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold">Rendimiento (10M tuplas)</td>
+                            <td class="p-3 text-rose-600 font-bold">Lento (minutos u horas; genera hinchazón / bloat).</td>
+                            <td class="p-3 text-emerald-600 font-bold">Instantáneo (milisegundos).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-CREATE TABLE producto (
-    id_producto NUMBER(7) PRIMARY KEY,
-    nombre_linea VARCHAR2(30) REFERENCES linea_producto,
-    meta_venta NUMBER(10,2),
-    stock NUMBER(5) DEFAULT 0,
-    precio NUMBER(10,2) CHECK (precio &gt; 0),
-    costo NUMBER(10,2)
-);
+        <!-- SECCIÓN 5: Consultas Fundamentales y Lógica Trivalente -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">05.</span> Consultas SELECT y la Lógica Trivalente (3VL) con Valores NULL
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                El valor <code class="font-mono">NULL</code> representa ausencia de valor, dato desconocido o no aplicable. No equivale a cero ni a una cadena vacía. Por esta razón, el estándar SQL implementa la <strong>Lógica Trivalente (Three-Valued Logic - 3VL)</strong> con tres estados booleanos: <code class="font-mono font-bold">TRUE</code>, <code class="font-mono font-bold">FALSE</code> y <code class="font-mono font-bold">UNKNOWN</code>.
+            </p>
 
-CREATE TABLE orden_pedido (
-    numero_orden NUMBER(7) PRIMARY KEY,
-    fecha_colocacion DATE DEFAULT SYSDATE,
-    fecha_llenado DATE,
-    numero_embarques NUMBER(5),
-    id_cliente NUMBER(7) NOT NULL REFERENCES cliente
-);
+            <!-- Matriz de Verdad 3VL -->
+            <div class="my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Tablas de Verdad de la Lógica Trivalente (3VL) en SQL</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
+┌──────────────┬──────────────┬──────────────┐  ┌──────────────┬──────────────┬──────────────┐
+│  A   AND   B │    RESULT    │  A   OR    B │  │  A   AND   B │    RESULT    │  A   OR    B │
+├──────────────┼──────────────┼──────────────┤  ├──────────────┼──────────────┼──────────────┤
+│ TRUE  AND TRUE     -> TRUE  │ TRUE  OR TRUE│  │ UNKNOWN AND TRUE   -> UNKNOWN│ UNKNOWN OR TR│ -> TRUE
+│ TRUE  AND FALSE    -> FALSE │ TRUE  OR FALS│  │ UNKNOWN AND FALSE  -> FALSE  │ UNKNOWN OR FA│ -> UNKNOWN
+│ TRUE  AND UNKNOWN  -> UNKNOWN│ TRUE  OR UNK │  │ UNKNOWN AND UNKNOWN-> UNKNOWN│ UNKNOWN OR UN│ -> UNKNOWN
+└──────────────┴──────────────┴──────────────┘  └──────────────┴──────────────┴──────────────┘
+                                ┌─────────────────────────────┐
+                                │     NOT ( UNKNOWN ) -> UNKNOWN
+                                └─────────────────────────────┘
+  * REGLA CARDINAL DEL WHERE: Una fila SOLO se incluye si el predicado evalúa a TRUE.
+    Si el resultado es FALSE o UNKNOWN, la fila se descarta.</pre>
+            </div>
 
-CREATE TABLE producto_ordenado (
-    numero_orden NUMBER(7),
-    id_producto NUMBER(7),
-    cantidad_ordenada NUMBER(5) CHECK (cantidad_ordenada &gt; 0),
-    PRIMARY KEY (numero_orden, id_producto),
-    FOREIGN KEY (numero_orden) REFERENCES orden_pedido
-        ON DELETE CASCADE,
-    FOREIGN KEY (id_producto) REFERENCES producto
-);
-</div>
-<h3>Equivalente en PostgreSQL</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+            <!-- Ejemplos SELECT -->
+            <div class="relative my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Consultas SELECT con Operadores Avanzados</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed"><code class="language-sql">-- 1. CONSULTA CON PROYECCIÓN Y ELIMINACIÓN DE DUPLICADOS
+SELECT DISTINCT tipo, zip
+FROM cliente;
 
-CREATE TABLE cliente (
-    id_cliente SERIAL PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    direccion VARCHAR(100),
-    tipo CHAR(1) CHECK (tipo IN ('A','B','C')),
-    zip VARCHAR(5)
-);
+-- 2. TRATAMIENTO OBLIGATORIO DE VALORES NULL
+-- Antipatrón: WHERE fecha_llenado = NULL;  (NUNCA retornará filas porque NULL = NULL es UNKNOWN)
+-- Patrón Correcto:
+SELECT numero_orden, id_cliente, fecha_colocacion
+FROM orden_pedido
+WHERE fecha_llenado IS NULL;
 
-CREATE TABLE linea_producto (
-    nombre_linea VARCHAR(30) PRIMARY KEY
-);
+-- 3. FILTRADO CON RANGO (BETWEEN) Y CONJUNTOS (IN)
+SELECT id_producto, descripcion, precio, stock
+FROM producto
+WHERE precio BETWEEN 100.00 AND 500.00
+  AND nombre_linea IN ('ESCRITORIOS', 'SILLAS ERGONOMICAS');
 
-CREATE TABLE producto (
-    id_producto SERIAL PRIMARY KEY,
-    nombre_linea VARCHAR(30) REFERENCES linea_producto,
-    meta_venta NUMERIC(10,2),
-    stock INTEGER DEFAULT 0,
-    precio NUMERIC(10,2) CHECK (precio &gt; 0),
-    costo NUMERIC(10,2)
-);
+-- 4. COINCIDENCIA DE PATRONES DE TEXTO (LIKE vs ILIKE)
+-- ILIKE es insensible a mayúsculas/minúsculas en PostgreSQL
+SELECT nombre, direccion, zip
+FROM cliente
+WHERE nombre ILIKE 'J%'            -- Comienza con J
+  AND direccion LIKE '%Prado%';    -- Contiene 'Prado'
 
-CREATE TABLE orden_pedido (
-    numero_orden SERIAL PRIMARY KEY,
-    fecha_colocacion DATE DEFAULT CURRENT_DATE,
-    fecha_llenado DATE,
-    numero_embarques INTEGER,
-    id_cliente INTEGER NOT NULL REFERENCES cliente
-);
+-- 5. EXPRESIONES CONDICIONALES CASE Y COALESCE
+SELECT 
+    numero_orden,
+    fecha_colocacion,
+    COALESCE(TO_CHAR(fecha_llenado, 'YYYY-MM-DD'), 'NO ATENDIDO') AS estado_entrega,
+    CASE 
+        WHEN numero_embarques > 3 THEN 'EMBARQUE MULTIPLE COMPLEJO'
+        WHEN numero_embarques = 1 THEN 'EMBARQUE DIRECTO'
+        ELSE 'EMBARQUE ESTANDAR'
+    END AS categoria_embarque
+FROM orden_pedido;</code></pre>
+            </div>
+        </section>
 
-CREATE TABLE producto_ordenado (
-    numero_orden INTEGER,
-    id_producto INTEGER,
-    cantidad_ordenada INTEGER CHECK (cantidad_ordenada &gt; 0),
-    PRIMARY KEY (numero_orden, id_producto),
-    FOREIGN KEY (numero_orden) REFERENCES orden_pedido
-        ON DELETE CASCADE,
-    FOREIGN KEY (id_producto) REFERENCES producto
-);
-</div>
-<h2>4. Alteracion de Tablas (ALTER TABLE)</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Modificacion de estructura</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">ALTER TABLE permite modificar la estructura de una tabla existente sin perder los datos:</p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Operacion</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Sintaxis</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Agregar columna</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>ALTER TABLE tabla ADD (columna tipo [DEFAULT expr] [restriccion]);</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Modificar columna</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>ALTER TABLE tabla MODIFY (columna NUEVO_tipo [DEFAULT expr] [restriccion]);</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Eliminar columna</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>ALTER TABLE tabla DROP COLUMN columna;</code></td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h3>Ejemplos</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-
--- Agregar una columna
-ALTER TABLE orden_pedido
-    ADD nombre_vendedor VARCHAR2(15);
-
--- Modificar el tipo de dato de una columna existente
-ALTER TABLE orden_pedido
-    MODIFY numero_embarques NUMBER(6);
-
--- Eliminar una columna
-ALTER TABLE orden_pedido
-    DROP COLUMN numero_embarques;
-</div>
-<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Advertencia:</strong> En Oracle, MODIFY puede fallar si la tabla tiene datos que no cumplen con el nuevo tipo. En PostgreSQL, ALTER COLUMN ... TYPE requiere una clausula USING para convertir datos existentes.</p>
-</div>
-<h2>5. Eliminacion de Tablas (DROP TABLE)</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Eliminacion de objetos</span>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis:</strong> <code>DROP TABLE tabla [CASCADE CONSTRAINT];</code></p>
-</div>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Elimina la definicion de la tabla y todos sus datos.</li>
-<li>La opcion <code>CASCADE CONSTRAINT</code> elimina todas las restricciones de integridad referencial que dependen de la tabla (FK de otras tablas que la referencian).</li>
-<li>Si otras tablas tienen FK que referencian a esta tabla y no se usa CASCADE, el DROP fallara.</li>
-</ul>
-<h3>Ejemplo</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-
--- Eliminar la tabla (falla si hay dependencias)
-DROP TABLE orden_pedido;
-
--- Eliminar la tabla con todas sus dependencias
-DROP TABLE orden_pedido CASCADE CONSTRAINTS;
-
--- En PostgreSQL equivalente:
-DROP TABLE orden_pedido CASCADE;
-</div>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Diferencia importante:</strong> En Oracle se usa <code>CASCADE CONSTRAINTS</code> (plural). En PostgreSQL es simplemente <code>CASCADE</code>. Ademas, PostgreSQL soporta <code>DROP TABLE IF EXISTS</code> para evitar errores si la tabla no existe.</p>
-</div>
-<h2>6. Resumen de DDL en PostgreSQL vs Oracle</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Comando Oracle</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Comando PostgreSQL</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>VARCHAR2(n)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>VARCHAR(n)</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>NUMBER(7)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>INTEGER</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>NUMBER(10,2)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>NUMERIC(10,2)</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>SYSDATE</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>CURRENT_DATE</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>DROP ... CASCADE CONSTRAINTS</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>DROP ... CASCADE</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">DDL hace COMMIT implicito</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">DDL es transaccional (ROLLBACK posible)</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Laboratorio: DDL en PostgreSQL</strong></p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Crea el siguiente esquema para una tienda en linea directamente en PostgreSQL:</p>
-<ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Tabla <code>categoria</code>: id (SERIAL PK), nombre (VARCHAR(50) NOT NULL UNIQUE), descripcion (TEXT).</li>
-<li>Tabla <code>producto</code>: id (SERIAL PK), nombre (VARCHAR(100) NOT NULL), precio (NUMERIC(10,2) CHECK precio &gt; 0), stock (INTEGER DEFAULT 0), id_categoria (INTEGER FK REFERENCES categoria).</li>
-<li>Tabla <code>cliente</code>: id (SERIAL PK), nombre (VARCHAR(100) NOT NULL), email (VARCHAR(150) UNIQUE NOT NULL), fecha_registro (DATE DEFAULT CURRENT_DATE).</li>
-<li>Agrega una columna <code>telefono VARCHAR(20)</code> a la tabla cliente.</li>
-<li>Elimina la tabla producto si existiera y recreala con las restricciones actualizadas.</li>
-</ol>
-</div>
-<div class="canvas-container">
-<canvas height="360" id="canvas_04" width="800"></canvas>
-<div class="canvas-controls" id="controls_04"></div>
-</div>
-<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2>
-<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                💡 Tips del Profesor
+        <!-- SECCIÓN 6: Tips del Profesor y Laboratorio -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8 space-y-4">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                </span>
+                💡 Tips del Profesor y Preguntas Clave de Examen
             </h2>
-<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Use IDENTITY en lugar de SERIAL:</strong> En PostgreSQL 10+, use siempre <code>GENERATED ALWAYS AS IDENTITY</code> para evitar la manipulación desordenada de secuencias y garantizar compatibilidad con estándares.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Cuidado con los bloqueos de ALTER TABLE:</strong> Modificar tipos de columnas puede provocar una reescritura total de la tabla en disco, deteniendo la operación del negocio. Planifique DDLs disruptivos en horas de bajo tráfico.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Defina nombres explícitos para los constraints:</strong> No permita que el DBMS genere nombres automáticos (ej. <code>table_column_key</code>). Nombrar sus constraints manualmente facilita el mantenimiento y la lectura de logs de error.</p>
-</div>
-</div>
-</section>
-<section class="mt-10">
-<h2>
-<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-<div class="space-y-4">
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            ¿Cuál es la diferencia entre GENERATED ALWAYS y GENERATED BY DEFAULT para columnas de identidad?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><code>GENERATED ALWAYS</code> impide que el usuario proporcione un valor manualmente en un INSERT (bloquea la inserción explícita de IDs), mientras que <code>GENERATED BY DEFAULT</code> genera el valor automáticamente pero permite sobrescribirlo si es necesario.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            ¿Por qué es riesgoso agregar una columna NOT NULL con DEFAULT en una tabla muy grande?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">En versiones antiguas de PostgreSQL u otros motores tradicionales, esto requiere que el DBMS actualice físicamente cada fila del disco con el valor por defecto, lo que bloquea la tabla para escritura durante toda la operación.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            ¿Qué comando de PostgreSQL permite crear un índice de forma asíncrona sin bloquear la tabla?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">El comando es <code>CREATE INDEX CONCURRENTLY nombre_indice ON tabla(columna);</code>.</p>
-</div>
-</details>
-</div>
-</section>
-</article>
-</article>
 
-            </article>
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                <div class="flex gap-3">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold text-base">•</span>
+                    <div>
+                        <strong class="text-slate-900 dark:text-white">La Trampa Clásica de WHERE con NULL:</strong> Pregunta fija de examen: <em>"¿Qué filas devuelve la consulta: SELECT * FROM empleado WHERE sueldo &lt; 3000 OR sueldo &gt;= 3000?"</em> Respuesta trampa: <strong>No devuelve todas las filas de la tabla</strong>. Si algún empleado tiene <code class="font-mono">sueldo IS NULL</code>, ambas comparaciones evalúan a <code class="font-mono">UNKNOWN</code> y <code class="font-mono">UNKNOWN OR UNKNOWN</code> es <code class="font-mono">UNKNOWN</code>, por lo que la fila queda excluida.
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold text-base">•</span>
+                    <div>
+                        <strong class="text-slate-900 dark:text-white">Orden de Ejecución vs Sintaxis:</strong> Recuerde que la cláusula <code class="font-mono">WHERE</code> se evalúa <em>antes</em> que el <code class="font-mono">SELECT</code>. Por ello, es un error de sintaxis intentar filtrar por un alias definido en el SELECT (e.g. <code class="font-mono">SELECT precio * 1.18 AS precio_igv ... WHERE precio_igv &gt; 100</code> fallará).
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laboratorio -->
+            <div class="bg-fuchsia-50/50 dark:bg-fuchsia-950/10 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/30 space-y-3">
+                <h4 class="text-base font-bold text-fuchsia-900 dark:text-fuchsia-300 flex items-center gap-2">
+                    🧪 Laboratorio DML: Manipulación y Consultas en la Mueblería
+                </h4>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Escribe las sentencias SQL para responder a los siguientes casos de negocio:
+                </p>
+                <ol class="list-decimal list-inside space-y-2 text-xs text-slate-700 dark:text-slate-300 font-medium">
+                    <li>Inserta un nuevo cliente con tipo 'B' y genera una orden de pedido asociada dentro de un bloque transaccional seguro con <code class="font-mono">BEGIN ... COMMIT;</code>.</li>
+                    <li>Actualiza el stock de todos los productos de la línea 'ESCRITORIOS' reduciéndolo en la cantidad total ordenada en el pedido # 150045.</li>
+                    <li>Construye una consulta <code class="font-mono">SELECT</code> que muestre todas las órdenes que no han sido atendidas (<code class="font-mono">fecha_llenado IS NULL</code>) colocadas entre '2026-01-01' y '2026-06-30'.</li>
+                </ol>
+            </div>
+
+            <!-- Canvas Interactivo -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col items-center">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Simulación Visual Interactiva: Pipeline de Ejecución SQL</div>
+                <canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_04" width="800"></canvas>
+                <div class="mt-4 flex gap-2" id="controls_04"></div>
+            </div>
+        </section>
+    </article>
+
         </main>
 
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ DDL</strong>
-<span class="text-slate-600 dark:text-slate-400">Data Definition Language: CREATE, ALTER, DROP</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ CREATE TABLE</strong>
-<span class="text-slate-600 dark:text-slate-400">Crear tablas con columnas y restricciones</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ ALTER TABLE</strong>
-<span class="text-slate-600 dark:text-slate-400">Modificar estructura de tablas existentes</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ DROP TABLE</strong>
-<span class="text-slate-600 dark:text-slate-400">Eliminar tablas y sus datos</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ PRIMARY KEY</strong>
-<span class="text-slate-600 dark:text-slate-400">Clave primaria: no nula, unica, indice automatico</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ FOREIGN KEY</strong>
-<span class="text-slate-600 dark:text-slate-400">Clave foranea con REFERENCES y ON DELETE CASCADE</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ CASCADE CONSTRAINT</strong>
-<span class="text-slate-600 dark:text-slate-400">Eliminar restricciones dependientes al dropear</span>
-</li>
-
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="semana_03.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 03</a></li>
-                <li><a href="semana_05.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 05 →</a></li>
-            </ul>
-        </div>
-
+            <!-- Keywords (M3 Outlined Card) -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
+                <ul class="space-y-2">
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; DML & DQL</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Data Manipulation Language: INSERT, UPDATE, DELETE y consultas SELECT</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Álgebra Relacional</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Operaciones formales: Selección (σ), Proyección (π), Producto Cartesiano y Join</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Lógica Trivalente (3VL)</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Evaluación con NULL: TRUE, FALSE y UNKNOWN en predicados lógicos</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; UPSERT (ON CONFLICT)</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Inserción moderna que actualiza si existe conflicto de clave primaria</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; DELETE vs TRUNCATE</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Borrado DML fila por fila con WAL vs desasignación DDL instantánea de bloques</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Orden Lógico SQL</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Secuencia de evaluación: FROM ➔ WHERE ➔ SELECT ➔ DISTINCT ➔ ORDER BY</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Control Transaccional (TCL)</strong>
+                        <span class="text-slate-600 dark:text-slate-400">BEGIN, COMMIT, ROLLBACK y SAVEPOINT para garantizar Atomicidad</span>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- Navigation Resources -->
+            <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+                <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación del Curso</h3>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice General</a></li>
+                    <li><a href="semana_03.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">&larr; Semana 03</a></li>
+                    <li><a href="semana_05.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 05 &rarr;</a></li>
+                </ul>
+            </div>
         </aside>
     </div>
 
@@ -671,23 +652,23 @@ DROP TABLE orden_pedido CASCADE;
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
 
-<script>
+    <script>
 var step04 = 0;
-var tables04 = [
-    { title: 'Paso 1: CREATE TABLE con columnas', cols: ['Columna', 'Tipo', 'Constraint'], rows: [['id', 'INTEGER', 'PK'], ['nombre', 'VARCHAR(50)', 'NOT NULL'], ['email', 'VARCHAR(100)', 'UNIQUE']], highlight: undefined, extra: 'CREATE TABLE cliente ( id INTEGER PRIMARY KEY, nombre VARCHAR(50) NOT NULL, email VARCHAR(100) UNIQUE );' },
-    { title: 'Paso 2: Agregar FK', cols: ['Columna', 'Tipo', 'Constraint'], rows: [['id', 'INTEGER', 'PK'], ['nombre', 'VARCHAR(50)', 'NOT NULL'], ['cliente_id', 'INTEGER', 'FK -> Cliente']], highlight: 2, extra: 'FOREIGN KEY (cliente_id) REFERENCES cliente(id)' },
-    { title: 'Paso 3: ALTER TABLE', cols: ['Operacion', 'Sintaxis'], rows: [['ADD', 'ALTER TABLE t ADD col type'], ['MODIFY', 'ALTER TABLE t MODIFY col'], ['DROP', 'ALTER TABLE t DROP COLUMN col']], highlight: undefined, extra: 'ALTER TABLE permite evolucionar el esquema sin perder datos' }
-];
-function draw04(ctx, W, H) {
-    CanvasUI.drawTabAnimation(ctx, W, H, tables04, step04);
+function draw04(ctx, W, H, frame) {
+    CanvasUI.fillBg(ctx, W, H);
+    step04 = Math.floor(frame / 45) % 5;
+    CanvasUI.drawPipeline(ctx, W, H, ['1. FROM / JOIN', '2. WHERE (3VL)', '3. SELECT / Alias', '4. DISTINCT', '5. ORDER BY'], step04);
 }
-document.addEventListener('DOMContentLoaded', function() {
-    var ctx = CanvasUI.getContext('canvas_04');
-    if (ctx) CanvasUI.drawTabAnimation(ctx.ctx, ctx.W, ctx.H, tables04, 0);
-});
+var anim04 = null;
+function start04() {
+    if (anim04) return;
+    anim04 = CanvasUI.startAnimation('canvas_04', draw04, 30);
+}
+CanvasUI.observeAndRun('canvas_04', start04);
 CanvasUI.addControls('controls_04', {
-    step: function() { step04 = (step04 + 1) % tables04.length; var ctx = CanvasUI.getContext('canvas_04'); if (ctx) CanvasUI.drawTabAnimation(ctx.ctx, ctx.W, ctx.H, tables04, step04); },
-    reset: function() { step04 = 0; var ctx = CanvasUI.getContext('canvas_04'); if (ctx) CanvasUI.drawTabAnimation(ctx.ctx, ctx.W, ctx.H, tables04, 0); }
+    play: function() { if (!anim04) anim04 = CanvasUI.startAnimation('canvas_04', draw04, 30); },
+    pause: function() { if (anim04) { anim04.stop(); anim04 = null; } },
+    reset: function() { step04 = 0; if (anim04) { anim04.stop(); anim04 = null; } CanvasUI.clear('canvas_04'); setTimeout(start04, 100); }
 });
 </script>
 </body>

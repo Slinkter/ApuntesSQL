@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
-    <title>Semana 08 - Examen Parcial</title>
+    <title>Semana 08 - GUÍA MAESTRA PARA SACAR 20 EN EL EXAMEN PARCIAL | Ingeniería de Datos</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Tailwind v4 CDN -->
+    <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -68,15 +69,12 @@
             });
         });
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <!-- Sun icon -->
         <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <!-- Moon icon -->
         <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
@@ -86,12 +84,16 @@
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
-                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
-            Examen Parcial
-        </h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
-            Semana 08 • Cobertura: Semanas 01-07  • Ingenieria de Datos
-        </p>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white">🏆 GUÍA DE ESTUDIO NOTA 20</span>
+                    <span class="text-xs font-semibold text-rose-600 dark:text-rose-400">Examen Parcial Oficial</span>
+                </div>
+                <h1 class="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+                    Semana 08 - GUÍA MAESTRA PARA SACAR 20 EN EL EXAMEN PARCIAL
+                </h1>
+                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
+                    Cobertura Semanas 01 a 07 • Resumen Estratégico, Trampas Neutralizadas, 4 Ejercicios Maestros Resueltos y Rúbrica Vigente • Ingeniería de Datos
+                </p>
             </div>
             <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
@@ -100,641 +102,388 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
-    <!-- M3 Step-by-Step Diagram -->
-    <div class="my-6">
-        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                📌 Proceso Paso a Paso: Estrategia para Resolver Exámenes de Ingeniería de Datos
-            </h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Fases clave de análisis y modelado requeridas para superar el Examen Parcial.
-            </p>
-            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                <svg viewBox="0 0 800 120" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="120" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(10, 15)">
-    <!-- Paso 1 -->
-    <rect x="0" y="10" width="170" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="85" y="35" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. Análisis de Reglas</text>
-    <text x="85" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Extraer entidades y cardinalidad</text>
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
 
-    <!-- Flecha -->
-    <path d="M 170 40 L 200 40" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="200,40 193,36 193,44" fill="#6366f1" />
+            <!-- Banner Hero Dashboard -->
+            <div class="bg-gradient-to-br from-rose-600 via-indigo-700 to-slate-900 rounded-3xl p-6 md:p-8 text-white shadow-xl mb-8 relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold uppercase tracking-wider mb-4 border border-white/20">
+                        🎯 Objetivo Académico: 20 / 20 en la Escala Vigesimal
+                    </div>
+                    <h2 class="text-2xl md:text-4xl font-extrabold tracking-tight mb-3 text-white">
+                        Estrategia Definitiva para el Examen Parcial
+                    </h2>
+                    <p class="text-slate-200 text-xs md:text-sm max-w-2xl leading-relaxed mb-6">
+                        Este documento consolida la totalidad del conocimiento teórico, formal y práctico de las <strong>Semanas 01 a 07</strong>. Cada sección ha sido calibrada con las trampas semánticas y matemáticas más frecuentes utilizadas por los profesores de Ingeniería de Datos de la Universidad de Lima.
+                    </p>
 
-    <!-- Paso 2 -->
-    <rect x="205" y="10" width="170" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="290" y="35" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. Diagrama DER</text>
-    <text x="290" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Dibujar entidades y asociaciones</text>
-
-    <!-- Flecha -->
-    <path d="M 375 40 L 405 40" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="405,40 398,36 398,44" fill="#6366f1" />
-
-    <!-- Paso 3 -->
-    <rect x="410" y="10" width="170" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="495" y="35" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Normalizar a 3FN</text>
-    <text x="495" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Descomponer tablas y validar llaves</text>
-
-    <!-- Flecha -->
-    <path d="M 580 40 L 610 40" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="610,40 603,36 603,44" fill="#6366f1" />
-
-    <!-- Paso 4 -->
-    <rect x="615" y="10" width="165" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="697.5" y="35" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">4. Implementación SQL</text>
-    <text x="697.5" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Escribir DDL, constraints y DML</text>
-  </g>
-</svg>
+                    <!-- Métricas de Examen -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10">
+                            <span class="block text-2xl font-black text-amber-300">90 min</span>
+                            <span class="text-[10px] text-slate-300 uppercase font-semibold">Duración Total</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10">
+                            <span class="block text-2xl font-black text-emerald-300">4 Bloques</span>
+                            <span class="text-[10px] text-slate-300 uppercase font-semibold">5 Puntos c/u</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10">
+                            <span class="block text-2xl font-black text-sky-300">1FN - BCNF</span>
+                            <span class="text-[10px] text-slate-300 uppercase font-semibold">Normalización</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10">
+                            <span class="block text-2xl font-black text-rose-300">PostgreSQL 16</span>
+                            <span class="text-[10px] text-slate-300 uppercase font-semibold">Motor SQL</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+
+            <!-- M3 Step-by-Step Diagram -->
+            <div class="my-6">
+                <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                        📌 Proceso Paso a Paso: Algoritmo de Resolución para Sacar 20 en 90 Minutos
+                    </h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                        Distribución táctica del tiempo para maximizar puntaje y minimizar errores de sintaxis o cálculo.
+                    </p>
+                    <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                        <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+                            <g transform="translate(10, 15)">
+                                <!-- Bloque 1 -->
+                                <rect x="0" y="20" width="165" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="82.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">Bloque 1 (15 min)</text>
+                                <text x="82.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Teoría & Trampas (5 pts)</text>
+
+                                <!-- Flecha -->
+                                <path d="M 165 50 L 195 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="195,50 188,46 188,54" fill="#6366f1" />
+
+                                <!-- Bloque 2 -->
+                                <rect x="200" y="20" width="170" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="285" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">Bloque 2 (25 min)</text>
+                                <text x="285" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Normalización Matemática (5 pts)</text>
+
+                                <!-- Flecha -->
+                                <path d="M 370 50 L 400 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="400,50 393,46 393,54" fill="#6366f1" />
+
+                                <!-- Bloque 3 -->
+                                <rect x="405" y="20" width="175" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="492.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">Bloque 3 (30 min)</text>
+                                <text x="492.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Modelado DER & Mapeo (5 pts)</text>
+
+                                <!-- Flecha -->
+                                <path d="M 580 50 L 610 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="610,50 603,46 603,54" fill="#6366f1" />
+
+                                <!-- Bloque 4 -->
+                                <rect x="615" y="20" width="165" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+                                <text x="697.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">Bloque 4 (20 min)</text>
+                                <text x="697.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">SQL DDL / DML / TCL (5 pts)</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
 
             <article class="space-y-8 prose dark:prose-invert max-w-none">
-    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
-    <div class="my-6">
-        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
-            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
-                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Relación de Términos
-                </span>
-                <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </span>
-            </summary>
-            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                <pre class="mermaid bg-transparent">
-graph TD
-    S08[Repaso Parcial] --> Theory[Teoría y Arquitectura]
-    Theory --> ANSI[Modelos y 3 Niveles ANSI/SPARC]
-    S08 --> Design[Diseño Lógico]
-    Design --> ER[Modelado E-R y Diagrama DER]
-    Design --> Norm[Normalización de Tablas 1FN-3FN]
-    S08 --> Practice[Práctica DDL/DML]
-    Practice --> Code[Sentencias SQL y Constraints]
-                </pre>
-            </div>
-        </details>
-    </div>
 
-                
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<!-- Enfoque Arquitecto: Validación del Parcial -->
-<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3>La Evaluación Parcial como Hito de Arquitectura</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                El examen parcial valida el dominio del modelado Entidad-Relación y el diseño lógico en el modelo relacional. Diseñar un esquema limpio y normalizado en esta etapa previene fallas catastróficas de rendimiento e inconsistencia en las fases avanzadas del proyecto de software.
-            </p>
-</section>
-<!-- Enfoque Cloud: Escalabilidad en la Persistencia -->
-<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3>Persistencia Cloud e Integridad Transaccional</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
-                Los sistemas empresariales modernos delegan la alta disponibilidad a la nube, pero la consistencia de los datos depende enteramente del diseño del esquema lógico. Una base de datos mal diseñada fallará bajo presión transaccional masiva (Deadlocks), sin importar qué tan grande sea la instancia de AWS asignada.
-            </p>
-</section>
-<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-<p><strong>Instrucciones:</strong> El examen parcial cubre las semanas 01-07. Consta de 4 secciones con un total de 100 puntos. Dispone de 90 minutos para completarlo. No se permite material de consulta. Escriba clara y legiblemente. Puntaje minimo aprobatorio: 60.</p>
-</div>
-<div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<p><strong>Tips para el Examen:</strong> (1) Lea la pregunta completa antes de responder. (2) En modelamiento E-R, identifique primero las entidades y luego las relaciones. (3) En normalizacion, marque las dependencias funcionales paso a paso. (4) En SQL, escriba las consultas con indentacion clara.</p>
-</div>
-<!-- ============================================================= -->
-<!-- SECCION 1: TEORIA -->
-<!-- ============================================================= -->
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
-<h2>Seccion 1: Teoria (30 puntos)</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Instrucciones: Seleccione la respuesta correcta. Cada pregunta vale 3 puntos.</p>
-<div class="q-level">Pregunta 1 - Fundamentos BD</div>
-<strong class="question">Cual es la principal diferencia entre dato e informacion?</strong>
-<div class="answer">
-            a) El dato es cuantitativo y la informacion es cualitativa<br/>
-            b) El dato es un hecho bruto sin contexto; la informacion es el dato procesado con significado util<br/>
-            c) El dato se almacena en tablas; la informacion en reportes<br/>
-            d) No hay diferencia significativa
-        </div>
-<div class="q-level">Pregunta 2 - SDLC</div>
-<strong class="question">En el ciclo de vida de un sistema (SDLC), en que fase se construye el modelo entidad-relacion conceptual?</strong>
-<div class="answer">
-            a) identificacion y seleccion del proyecto<br/>
-            b) Analisis<br/>
-            c) Diseno logico<br/>
-            d) Implementacion
-        </div>
-<div class="q-level">Pregunta 3 - ACID</div>
-<strong class="question">Cual propiedad ACID garantiza que una transaccion se ejecute completamente o no se ejecute en absoluto?</strong>
-<div class="answer">
-            a) Atomicidad<br/>
-            b) Consistencia<br/>
-            c) Aislamiento<br/>
-            d) Durabilidad
-        </div>
-<div class="q-level">Pregunta 4 - Arquitectura 3 Niveles</div>
-<strong class="question">En la arquitectura de 3 niveles ANSI/SPARC, el nivel que describe como se almacenan fisicamente los datos en el disco es:</strong>
-<div class="answer">
-            a) Nivel Externo<br/>
-            b) Nivel Conceptual<br/>
-            c) Nivel Interno<br/>
-            d) Nivel Logico
-        </div>
-<div class="q-level">Pregunta 5 - Claves</div>
-<strong class="question">Una clave foranea (FK) es:</strong>
-<div class="answer">
-            a) Un atributo que identifica de forma unica una fila en la misma tabla<br/>
-            b) Un atributo en una tabla que es clave primaria en otra tabla, utilizada para establecer relaciones<br/>
-            c) Una clave que puede tener valores NULL<br/>
-            d) Una clave compuesta por mas de un atributo
-        </div>
-<div class="q-level">Pregunta 6 - Tipos de BD</div>
-<strong class="question">Cual de los siguientes NO es un tipo de base de datos segun su modelo?</strong>
-<div class="answer">
-            a) Base de datos relacional<br/>
-            b) Base de datos orientada a objetos<br/>
-            c) Base de datos de archivos planos<br/>
-            d) Base de datos deductiva
-        </div>
-<div class="q-level">Pregunta 7 - DBMS</div>
-<strong class="question">Cual de las siguientes es una funcion principal de un DBMS?</strong>
-<div class="answer">
-            a) Compilar codigo fuente<br/>
-            b) Gestionar el almacenamiento, recuperacion y seguridad de los datos<br/>
-            c) Disenar interfaces de usuario<br/>
-            d) Conectar dispositivos de red
-        </div>
-<div class="q-level">Pregunta 8 - Independencia de Datos</div>
-<strong class="question">La independencia logica de datos significa que:</strong>
-<div class="answer">
-            a) Los cambios en el esquema fisico no afectan al esquema conceptual<br/>
-            b) Los cambios en el esquema conceptual no afectan a las vistas del usuario (esquema externo)<br/>
-            c) Los datos son independientes del hardware<br/>
-            d) Las aplicaciones pueden acceder a los datos sin necesidad de SQL
-        </div>
-<div class="q-level">Pregunta 9 - Modelo Relacional</div>
-<strong class="question">En el modelo relacional, una "tupla" corresponde a:</strong>
-<div class="answer">
-            a) Una columna de una tabla<br/>
-            b) Una fila o registro de una tabla<br/>
-            c) Una relacion entre tablas<br/>
-            d) Una restriccion de integridad
-        </div>
-<div class="q-level">Pregunta 10 - DDL vs DML</div>
-<strong class="question">Cual de los siguientes comandos pertenece al Lenguaje de Definicion de Datos (DDL)?</strong>
-<div class="answer">
-            a) INSERT<br/>
-            b) UPDATE<br/>
-            c) ALTER<br/>
-            d) SELECT
-        </div>
-<!-- ============================================================= -->
-<!-- SECCION 2: MODELAMIENTO E-R -->
-<!-- ============================================================= -->
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
-<h2>Seccion 2: Modelamiento E-R (25 puntos)</h2>
-<div class="q-level">Ejercicio 1 (12 puntos)</div>
-<strong class="question">Construya el Diagrama Entidad-Relacion (DER) basado en las siguientes reglas de negocio. Identifique entidades, relaciones, cardinalidad (minima y maxima) y atributos clave.</strong>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p><strong>Reglas de Negocio - Sistema de Pedidos:</strong></p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Un cliente puede realizar uno o varios pedidos.</li>
-<li>Cada pedido pertenece a un unico cliente y debe tener al menos un cliente asociado.</li>
-<li>Un pedido contiene uno o varios productos y un producto puede aparecer en cero o varios pedidos.</li>
-<li>Cada linea de pedido registra la cantidad y el precio unitario del producto en ese pedido.</li>
-<li>Un producto pertenece a una categoria.</li>
-<li>Cada categoria puede tener cero o muchos productos.</li>
-</ul>
-</div>
-<div class="q-level">Ejercicio 2 (13 puntos)</div>
-<strong class="question">Dado el siguiente enunciado, disene el DER indicando claramente si existen supertipos/subtipos:</strong>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p><strong>Reglas de Negocio - Sistema de Recursos Humanos:</strong></p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>La empresa tiene empleados que pueden ser de tipo "Administrativo" o "Tecnico".</li>
-<li>Todos los empleados tienen un codigo, nombre, direccion y fecha de ingreso.</li>
-<li>Los empleados administrativos tienen un cargo y un sueldo fijo.</li>
-<li>Los empleados tecnicos tienen una especialidad y una tarifa por hora.</li>
-<li>Un empleado tecnico puede trabajar en uno o varios proyectos.</li>
-<li>Cada proyecto tiene un codigo, nombre y fecha de inicio.</li>
-<li>Un proyecto puede tener asignados varios tecnicos y debe tener al menos uno.</li>
-<li>Se registra la cantidad de horas que cada tecnico trabaja en cada proyecto.</li>
-</ul>
-</div>
-<!-- ============================================================= -->
-<!-- SECCION 3: NORMALIZACION -->
-<!-- ============================================================= -->
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
-<h2>Seccion 3: Normalizacion (25 puntos)</h2>
-<div class="q-level">Ejercicio 1 (12 puntos)</div>
-<strong class="question">Dada la siguiente tabla NO normalizada, identifique las dependencias funcionales y normalice hasta 3FN. Muestre todas las tablas resultantes con sus claves primarias y foraneas.</strong>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">cod_matricula</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">cod_alumno</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">nom_alumno</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">cod_curso</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">nom_curso</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">creditos</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">ciclo</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">nota</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">M001</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">A001</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Maria Lopez</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">C101</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">BD Relacionales</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">4</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">2024-I</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">18</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">M001</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">A001</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Maria Lopez</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">C102</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Analisis de Datos</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">3</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">2024-I</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">16</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">M002</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">A002</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Carlos Ruiz</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">C101</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">BD Relacionales</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">4</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">2024-I</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">15</div>
-</div>
-</div></div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Sugerencia: Primero identifique la clave primaria, luego las dependencias parciales y transitivas.</p>
-<div class="q-level">Ejercicio 2 (13 puntos)</div>
-<strong class="question">Analice la siguiente tabla "Libros_Prestamos" y normalice hasta 3FN:</strong>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">prestamo_id</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">fecha_prestamo</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">socio_id</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">socio_nombre</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">socio_telefono</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">libro_id</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">libro_titulo</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">libro_autor</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">fecha_devolucion</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">P001</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">10/01/2025</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">S001</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Ana Torres</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">999-8881</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">L101</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Cien Anos de Soledad</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">G. Garcia Marquez</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">25/01/2025</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">P001</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">10/01/2025</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">S001</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Ana Torres</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">999-8881</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">L102</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Don Quijote</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">M. de Cervantes</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">25/01/2025</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">P002</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">12/01/2025</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">S002</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Luis Gomez</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">999-8882</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">L101</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Cien Anos de Soledad</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">G. Garcia Marquez</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">30/01/2025</div>
-</div>
-</div></div>
-<!-- ============================================================= -->
-<!-- SECCION 4: SQL -->
-<!-- ============================================================= -->
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
-<h2>Seccion 4: SQL (20 puntos)</h2>
-<div class="q-level">Ejercicio 1 - DDL (5 puntos)</div>
-<strong class="question">Escriba las sentencias CREATE TABLE para el siguiente esquema (incluyendo PK, FK, NOT NULL, CHECK):</strong>
-<div class="answer">
-<p>Tabla: DEPARTAMENTO (cod_depto CHAR(3) PK, nombre VARCHAR(50) NOT NULL, presupuesto DECIMAL(10,2) CHECK presupuesto &gt; 0)</p>
-<p>Tabla: EMPLEADO (cod_emp INT PK, nombre VARCHAR(100) NOT NULL, salario DECIMAL(8,2), cod_depto CHAR(3) FK rarr DEPARTAMENTO, con ON DELETE CASCADE)</p>
-</div>
-<div class="q-level">Ejercicio 2 - INSERT (3 puntos)</div>
-<strong class="question">Inserte 2 departamentos y 3 empleados usando una sola transaccion. Muestre la sintaxis correcta de INSERT.</strong>
-<div class="q-level">Ejercicio 3 - UPDATE (3 puntos)</div>
-<strong class="question">Actualice el salario de todos los empleados del departamento 'TI' incrementandolo en un 15%.</strong>
-<div class="q-level">Ejercicio 4 - DELETE (3 puntos)</div>
-<strong class="question">Elimine todos los empleados cuyo salario sea menor a 1500 y que pertenezcan al departamento 'VENTAS'.</strong>
-<div class="q-level">Ejercicio 5 - SELECT con JOIN (6 puntos)</div>
-<strong class="question">Dado el esquema anterior y la tabla PROYECTO(cod_proy INT PK, nombre VARCHAR(100), cod_depto CHAR(3) FK), escriba una consulta SELECT que liste el nombre del empleado, su departamento, y el nombre del proyecto en el que trabaja para aquellos empleados cuyo salario supere el promedio de la empresa. Ordene por salario descendente.</strong>
-<!-- ============================================================= -->
-<!-- SOLUCIONARIO -->
-<!-- ============================================================= -->
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">EXAMEN</span>
-<h2 style="color: var(--danger);">Solucionario</h2>
-<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-<p><strong>Importante:</strong> Este solucionario es para el docente. No distribuya a los estudiantes antes del examen.</p>
-</div>
-<h2>Seccion 1: Teoria - Respuestas</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Pregunta</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Respuesta</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Explicacion</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">1</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">b</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">El dato es un hecho bruto; la informacion es dato procesado con contexto y significado. (Sem 01)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">2</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">c</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">En la fase de diseno logico se construye el modelo conceptual (DER) independiente del DBMS. (Sem 01)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">3</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">a</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Atomicidad: la transaccion se ejecuta en su totalidad o se revierte completamente (todo o nada). (Sem 02)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">4</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">c</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Nivel Interno: describe la estructura fisica de almacenamiento (archivos, indices, bloques). (Sem 02)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">5</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">b</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">FK es un atributo que referencia la PK de otra tabla para establecer relaciones. (Sem 02)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">6</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">c</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">"Archivos planos" no es un modelo de BD, es un enfoque tradicional de almacenamiento. Modelos: relacional, orientado a objetos, deductivo, etc. (Sem 01)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">7</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">b</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">El DBMS gestiona almacenamiento, recuperacion, seguridad, concurrencia, etc. (Sem 01)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">8</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">b</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Independencia logica: cambios en el esquema conceptual no afectan las vistas externas. (Sem 02)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">9</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">b</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Tupla = fila/registro en una tabla relacional. (Sem 02)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">10</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">c</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">ALTER pertenece a DDL (Data Definition Language). INSERT, UPDATE, SELECT son DML. (Sem 03)</div>
-</div>
-</div></div>
-<h2>Seccion 2: Modelamiento E-R - Soluciones</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 1: Sistema de Pedidos</strong></p>
-<div class="diagram-ascii">Entidades: CLIENTE, PEDIDO, LINEA_PEDIDO, PRODUCTO, CATEGORIA
+                <!-- MÓDULO 1: Resumen Estratégico de Alto Rendimiento -->
+                <h2>Módulo 1: Resumen Estratégico de Alto Rendimiento (Semanas 01 a 07)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 text-xs text-slate-700 dark:text-slate-300">
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-indigo-600 dark:text-indigo-400 font-bold mb-1">S01-S02: Arquitectura ANSI-SPARC & ACID</h4>
+                        <p>3 Niveles: Externo (Vistas de usuario), Conceptual (Lógico/Tablas independiente del DBMS), Interno (Físico/B-Trees/Almacenamiento). ACID garantiza transacciones confiables.</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-indigo-600 dark:text-indigo-400 font-bold mb-1">S03: Integridad Relacional</h4>
+                        <p>1. Dominio (tipos válidos), 2. Entidad (PK NOT NULL y UNIQUE), 3. Referencial (FK debe apuntar a PK existente o ser NULL).</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-indigo-600 dark:text-indigo-400 font-bold mb-1">S04-S05: DDL, DML & MVCC</h4>
+                        <p>DDL: CREATE/ALTER/DROP. DML: INSERT/UPDATE/DELETE. Postgres usa MVCC (xmin, xmax, dead tuples). WHERE evalúa a 3VL (TRUE, FALSE, UNKNOWN).</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-indigo-600 dark:text-indigo-400 font-bold mb-1">S06-S07: DER & Normalización</h4>
+                        <p>Entidades Débiles (PK padre + discriminador), Jerarquías (Disjunta/Solapada x Total/Parcial). 1FN (Atomicidad), 2FN (Cero dep. parciales), 3FN (Cero dep. transitivas), BCNF (Determinante es superclave).</p>
+                    </div>
+                </div>
 
-Relaciones:
-CLIENTE --- 1:N --- PEDIDO (min=1,max=N)
-PEDIDO --- 1:N --- LINEA_PEDIDO (min=1,max=N)
-PRODUCTO --- 1:N --- LINEA_PEDIDO (min=0,max=N)
-CATEGORIA --- 1:N --- PRODUCTO (min=0,max=N)
+                <!-- MÓDULO 2: Top 10 Trampas de Examen -->
+                <h2>Módulo 2: Top 10 Trampas Clásicas de Examen y Cómo Neutralizarlas</h2>
+                <div class="space-y-3 my-6">
+                    <div class="bg-rose-50/60 dark:bg-rose-950/20 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/40 text-xs text-slate-800 dark:text-slate-200">
+                        <span class="font-bold text-rose-700 dark:text-rose-400 block mb-1">❌ Trampa 1: WHERE columna = NULL</span>
+                        <strong>Neutralización:</strong> En SQL, <code>NULL = NULL</code> da <code>UNKNOWN</code> y nunca retorna filas. Utilice siempre <code>IS NULL</code> o <code>IS NOT NULL</code>.
+                    </div>
+                    <div class="bg-rose-50/60 dark:bg-rose-950/20 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/40 text-xs text-slate-800 dark:text-slate-200">
+                        <span class="font-bold text-rose-700 dark:text-rose-400 block mb-1">❌ Trampa 2: Asumir que una clave simple garantiza 3FN</span>
+                        <strong>Neutralización:</strong> Una clave simple garantiza automáticamente <strong>2FN</strong> (porque no pueden existir dependencias parciales), pero <strong>NO 3FN</strong> (puede haber dependencias transitivas entre atributos no primos $A \to B$).
+                    </div>
+                    <div class="bg-rose-50/60 dark:bg-rose-950/20 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/40 text-xs text-slate-800 dark:text-slate-200">
+                        <span class="font-bold text-rose-700 dark:text-rose-400 block mb-1">❌ Trampa 3: COUNT(*) vs COUNT(columna)</span>
+                        <strong>Neutralización:</strong> <code>COUNT(*)</code> cuenta todas las filas incluyendo las que tienen valores nulos. <code>COUNT(columna)</code> <strong>ignora</strong> las filas donde dicha columna es <code>NULL</code>.
+                    </div>
+                    <div class="bg-rose-50/60 dark:bg-rose-950/20 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/40 text-xs text-slate-800 dark:text-slate-200">
+                        <span class="font-bold text-rose-700 dark:text-rose-400 block mb-1">❌ Trampa 4: Confundir DELETE con TRUNCATE en el examen</span>
+                        <strong>Neutralización:</strong> <code>DELETE</code> es DML, borra fila a fila, permite WHERE y dispara triggers. <code>TRUNCATE</code> es DDL, desasigna páginas de almacenamiento y no admite WHERE.
+                    </div>
+                    <div class="bg-rose-50/60 dark:bg-rose-950/20 p-4 rounded-2xl border border-rose-200 dark:border-rose-900/40 text-xs text-slate-800 dark:text-slate-200">
+                        <span class="font-bold text-rose-700 dark:text-rose-400 block mb-1">❌ Trampa 5: Mapear atributos multivaluados como columnas repetidas (tel1, tel2)</span>
+                        <strong>Neutralización:</strong> Violaría 1FN. Un atributo multivaluado <strong>siempre</strong> se mapea a una tabla independiente con la PK del padre como FK.
+                    </div>
+                </div>
 
-PKs:
-CLIENTE(cliente_id)
-PEDIDO(pedido_id)
-LINEA_PEDIDO(pedido_id, producto_id) -- PK compuesta
-PRODUCTO(producto_id)
-CATEGORIA(categoria_id)
+                <!-- MÓDULO 3: Banco de Preguntas Teórico-Conceptuales -->
+                <h2>Módulo 3: Banco de 5 Preguntas Teóricas Tipo Examen</h2>
+                <div class="space-y-4 my-6">
+                    <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                        <summary class="cursor-pointer font-bold text-slate-900 dark:text-white flex justify-between items-center">
+                            <span>❓ P1: ¿Por qué una relación en 3FN podría no estar en BCNF?</span>
+                            <span class="text-xs px-2.5 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">Ver Solución</span>
+                        </summary>
+                        <div class="mt-4 text-xs text-slate-700 dark:text-slate-300 space-y-2">
+                            <p><strong>Respuesta Maestra (20/20):</strong> Porque la definición de 3FN permite que en una dependencia $X \to Y$, $X$ no sea superclave <strong>siempre y cuando $Y$ sea un atributo primo</strong> (pertenezca a alguna clave candidata). Si una relación tiene múltiples claves candidatas compuestas que se superponen, puede satisfacer 3FN pero violar BCNF.</p>
+                        </div>
+                    </details>
 
-FKs:
-PEDIDO.cliente_id rarr CLIENTE.cliente_id
-LINEA_PEDIDO.pedido_id rarr PEDIDO.pedido_id
-LINEA_PEDIDO.producto_id rarr PRODUCTO.producto_id
-PRODUCTO.categoria_id rarr CATEGORIA.categoria_id</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 2: Recursos Humanos con Supertipo/Subtipo</strong></p>
-<div class="diagram-ascii">SUPERTIPO: EMPLEADO (cod_emp PK, nombre, direccion, fecha_ingreso)
-  |--- ISA (discriminador: tipo)
-  |--- SUBTIPO: ADMINISTRATIVO (cargo, sueldo_fijo)
-  |--- SUBTIPO: TECNICO (especialidad, tarifa_hora)
+                    <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                        <summary class="cursor-pointer font-bold text-slate-900 dark:text-white flex justify-between items-center">
+                            <span>❓ P2: ¿Cuál es la diferencia formal entre Independencia Lógica y Física de Datos?</span>
+                            <span class="text-xs px-2.5 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">Ver Solución</span>
+                        </summary>
+                        <div class="mt-4 text-xs text-slate-700 dark:text-slate-300 space-y-2">
+                            <p><strong>Respuesta Maestra:</strong> La <strong>Independencia Física</strong> permite modificar las estructuras de almacenamiento físico (ej. crear un índice B-Tree o particionar una tabla) sin alterar el esquema conceptual ni las consultas de las aplicaciones. La <strong>Independencia Lógica</strong> permite mutar el esquema conceptual (añadir atributos o entidades) sin alterar las vistas externas ni romper los programas de usuario existentes.</p>
+                        </div>
+                    </details>
+                </div>
 
-Relacion adicional:
-TECNICO --- N:N --- PROYECTO
-  Se resuelve con entidad asociativa:
-  ASIGNACION (cod_tecnico FK, cod_proy FK, horas)
+                <!-- MÓDULO 4: Los 4 Grandes Ejercicios Prácticos Resueltos -->
+                <h2>Módulo 4: Los 4 Grandes Ejercicios Prácticos Resueltos Paso a Paso</h2>
 
-PROYECTO(cod_proy PK, nombre, fecha_inicio)</div>
-<h2>Seccion 3: Normalizacion - Soluciones</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 1: Matriculas</strong></p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PK original: <code>(cod_matricula, cod_curso)</code> - cada fila representa un curso dentro de una matricula.</p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Dependencias funcionales:</strong></p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>cod_matricula rarr cod_alumno, nom_alumno, ciclo (dependencia parcial respecto a PK compuesta)</li>
-<li>cod_alumno rarr nom_alumno (dependencia transitiva desde cod_matricula)</li>
-<li>cod_curso rarr nom_curso, creditos (dependencia parcial respecto a PK compuesta)</li>
-</ul>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Despues de 2FN y 3FN:</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-MATRICULA (cod_matricula PK, cod_alumno FK, ciclo)
-ALUMNO (cod_alumno PK, nom_alumno)
-CURSO (cod_curso PK, nom_curso, creditos)
-DETALLE_MATRICULA (cod_matricula FK, cod_curso FK, nota)
-  -- PK compuesta: (cod_matricula, cod_curso)
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 2: Libros_Prestamos</strong></p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">PK: <code>(prestamo_id, libro_id)</code></p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Dependencias identificadas:</strong></p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>prestamo_id rarr socio_id, socio_nombre, socio_telefono, fecha_prestamo (parcial)</li>
-<li>socio_id rarr socio_nombre, socio_telefono (transitiva)</li>
-<li>libro_id rarr libro_titulo, libro_autor (parcial)</li>
-</ul>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Despues de 3FN (5 tablas):</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-PRESTAMO (prestamo_id PK, socio_id FK, fecha_prestamo, fecha_devolucion)
-SOCIO (socio_id PK, socio_nombre, socio_telefono)
-LIBRO (libro_id PK, libro_titulo, libro_autor)
-DETALLE_PRESTAMO (prestamo_id FK, libro_id FK) -- PK compuesta
--- Nota: fecha_devolucion depende de prestamo_id, no del libro individual
-</div>
-<h2>Seccion 4: SQL - Soluciones</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 1 - DDL:</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-CREATE TABLE departamento (
-    cod_depto CHAR(3) PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    presupuesto DECIMAL(10,2) CHECK (presupuesto &gt; 0)
+                <!-- Ejercicio 1 -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm my-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Ejercicio 1 (5 Ptos): Modelamiento E-R y Mapeo Relacional Completo</h3>
+                        <span class="px-3 py-1 bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 font-bold text-xs rounded-full">Caso Empresarial</span>
+                    </div>
+                    <p class="text-xs text-slate-700 dark:text-slate-300 mb-4 leading-relaxed">
+                        <strong>Caso:</strong> Una cadena logística necesita gestionar Flotas de Transporte, Conductores, Rutas y Paquetes. Un Conductor puede ser <em>Propio</em> (con sueldo fijo) o <em>Tercerizado</em> (con tarifa por km). Cada Paquete tiene un historial de <em>Estados de Envío</em> (Entidad Débil).
+                    </p>
+
+                    <div class="bg-slate-100 dark:bg-slate-950 p-4 rounded-xl font-mono text-[11px] overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                          DIAGRAMA DER ASCII (NOTACIÓN CHEN / EER)
+========================================================================================
+             [CONDUCTOR]  (Supertipo)
+                  |
+                 (d,=)  (Disjunta Total: Todo conductor es Propio O Tercerizado)
+                /     \
+    [COND_PROPIO]     [COND_TERCERIZADO]
+    - sueldo_fijo     - tarifa_km
+
+  [CONDUCTOR] ----- (1,N) ----- <ASIGNADO> ----- (1,1) ----- [VEHICULO]
+                                                                |
+                                                              (1,N)
+                                                                |
+                                                             <LLEVA>
+                                                                |
+                                                              (1,1)
+                                                            [PAQUETE] ====== <REGISTRA> ====== [[ESTADO_ENVIO]]
+                                                                              (Identificadora)    (Débil)
+========================================================================================
+                    </div>
+
+                    <p class="text-xs font-bold text-slate-900 dark:text-white mb-2">Esquema Relacional PostgreSQL 16 DDL Generado:</p>
+                    <div class="bg-slate-900 p-4 rounded-xl font-mono text-xs overflow-x-auto text-slate-200 mb-2">
+-- Supertipo
+CREATE TABLE conductor (
+    id_conductor INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    dni VARCHAR(8) NOT NULL UNIQUE,
+    nombres VARCHAR(100) NOT NULL,
+    tipo_conductor CHAR(1) NOT NULL CHECK (tipo_conductor IN ('P', 'T'))
 );
 
-CREATE TABLE empleado (
-    cod_emp INT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    salario DECIMAL(8,2),
-    cod_depto CHAR(3),
-    FOREIGN KEY (cod_depto) REFERENCES departamento(cod_depto)
-    ON DELETE CASCADE
+-- Subtipos (Class Table Inheritance)
+CREATE TABLE cond_propio (
+    id_conductor INTEGER PRIMARY KEY REFERENCES conductor(id_conductor) ON DELETE CASCADE,
+    sueldo_fijo NUMERIC(10,2) NOT NULL CHECK (sueldo_fijo > 0)
 );
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 2 - INSERT:</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+
+CREATE TABLE cond_tercerizado (
+    id_conductor INTEGER PRIMARY KEY REFERENCES conductor(id_conductor) ON DELETE CASCADE,
+    tarifa_km NUMERIC(6,2) NOT NULL CHECK (tarifa_km > 0)
+);
+
+-- Entidad Fuerte y Débil
+CREATE TABLE paquete (
+    id_paquete INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    codigo_tracking VARCHAR(30) NOT NULL UNIQUE,
+    peso_kg NUMERIC(6,2) NOT NULL CHECK (peso_kg > 0)
+);
+
+CREATE TABLE estado_envio (
+    id_paquete INTEGER NOT NULL REFERENCES paquete(id_paquete) ON DELETE CASCADE,
+    num_secuencia SMALLINT NOT NULL,
+    ubicacion VARCHAR(100) NOT NULL,
+    fecha_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_paquete, num_secuencia)
+);
+                    </div>
+                </div>
+
+                <!-- Ejercicio 2 -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm my-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Ejercicio 2 (5 Ptos): Normalización Matemática Rigurosa (0FN a 3FN/BCNF)</h3>
+                        <span class="px-3 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 font-bold text-xs rounded-full">Demostración Formal</span>
+                    </div>
+                    <div class="bg-slate-100 dark:bg-slate-950 p-4 rounded-xl font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+Sea R(A, B, C, D, E, G) con el conjunto de DFs F:
+  DF1: A, B -> C, D, E
+  DF2: B -> D
+  DF3: D -> E
+  DF4: C -> G
+
+1. Cierre de Atributos y Clave Primaria:
+   (A, B)+ = {A, B, C, D, E, G} = R. Clave Candidata Universal: (A, B).
+   Atributos Primos: {A, B}. Atributos No Primos: {C, D, E, G}.
+
+2. Paso a 2FN (Eliminar dependencia parcial DF2: B -> D):
+   - R1(<u>B</u>, D)                     [DF2: B -> D]
+   - R2(<u>A</u>, <u>B</u>, C, E, G)            [DF1 restante, DF3, DF4]
+
+3. Paso a 3FN (Eliminar dependencias transitivas DF3: D -> E y DF4: C -> G):
+   - De R1 con D -> E:
+     * TABLA_B(<u>B</u>, D*)                (D es FK a TABLA_D)
+     * TABLA_D(<u>D</u>, E)
+   - De R2 con C -> G:
+     * TABLA_C(<u>C</u>, G)
+     * TABLA_AB(<u>A</u>, <u>B</u>, C*)            (C es FK a TABLA_C)
+
+Resultado Final en 3FN y BCNF:
+   TABLA_D(<u>D</u>, E)
+   TABLA_B(<u>B</u>, D)
+   TABLA_C(<u>C</u>, G)
+   TABLA_AB(<u>A</u>, <u>B</u>, C)
+                    </div>
+                </div>
+
+                <!-- Ejercicio 3 & 4 -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm my-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Ejercicio 3 & 4 (10 Ptos): SQL Avanzado, Filtros WHERE, Lógica 3VL y TCL</h3>
+                        <span class="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-bold text-xs rounded-full">SQL & TCL</span>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded-xl font-mono text-xs overflow-x-auto text-slate-200 mb-2">
+-- Consulta con Filtros Complejos, Distinct On y Lógica Trivaluada
+SELECT DISTINCT ON (c.id_cliente)
+    c.id_cliente,
+    c.nombres,
+    o.numero_orden,
+    o.fecha_colocacion,
+    COALESCE(o.numero_embarques, 0) AS total_embarques
+FROM cliente c
+JOIN orden_pedido o ON c.id_cliente = o.id_cliente
+WHERE (o.fecha_llenado IS NOT NULL OR o.numero_embarques >= 2)
+  AND c.tipo IN ('A', 'B')
+ORDER BY c.id_cliente, o.fecha_colocacion DESC NULLS LAST;
+
+-- Flujo Transaccional Seguro con SAVEPOINT
 BEGIN;
-
-INSERT INTO departamento VALUES
-    ('TI', 'Tecnologia Informatica', 50000.00),
-    ('VEN', 'Ventas Corporativas', 35000.00);
-
-INSERT INTO empleado (cod_emp, nombre, salario, cod_depto) VALUES
-    (1, 'Ana Torres', 4500.00, 'TI'),
-    (2, 'Luis Gomez', 3200.00, 'TI'),
-    (3, 'Pedro Diaz', 1800.00, 'VEN');
-
+  INSERT INTO cliente (dni, nombres, tipo_conductor) VALUES ('72819201', 'Luis Torres', 'P');
+  SAVEPOINT sp1;
+  UPDATE producto SET stock = stock - 10 WHERE id_producto = 101 AND stock >= 10;
+  -- Si falla la verificación de saldo:
+  -- ROLLBACK TO SAVEPOINT sp1;
 COMMIT;
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 3 - UPDATE:</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-UPDATE empleado
-SET salario = salario * 1.15
-WHERE cod_depto = (SELECT cod_depto FROM departamento WHERE nombre = 'TI');
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 4 - DELETE:</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-DELETE FROM empleado
-WHERE salario &lt; 1500
-  AND cod_depto = (SELECT cod_depto FROM departamento WHERE nombre = 'VENTAS');
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejercicio 5 - SELECT con JOIN:</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-SELECT e.nombre AS empleado,
-       d.nombre AS departamento,
-       p.nombre AS proyecto
-FROM empleado e
-JOIN departamento d ON e.cod_depto = d.cod_depto
-LEFT JOIN proyecto p ON d.cod_depto = p.cod_depto
-WHERE e.salario &gt; (SELECT AVG(salario) FROM empleado)
-ORDER BY e.salario DESC;
-</div>
-<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-<p><strong>Fin del solucionario.</strong> Puntaje total: 100. Puntaje minimo aprobatorio: 60. Revise que cada respuesta este correctamente justificada.</p>
-</div>
-<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2>
-<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                💡 Tips del Profesor
-            </h2>
-<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Administre el tiempo en evaluaciones:</strong> Al diseñar bases de datos bajo presión, resuelva primero las restricciones de integridad y luego las consultas de lectura.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Valide sintaxis SQL de forma estricta:</strong> Un solo error de coma o paréntesis en DDL invalida la creación de tablas completas.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Pruebe siempre con datos mock representativos:</strong> Nunca dé por aprobado un diseño de base de datos sin antes poblarlo con miles de registros aleatorios para verificar el comportamiento de los índices.</p>
-</div>
-</div>
-</section>
-<section class="mt-10">
-<h2>
-<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-<div class="space-y-4">
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            ¿Cómo se valida que un esquema cumple con la 3FN durante un examen?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Verificando que no existan grupos repetitivos (1FN), que no haya dependencias parciales si hay claves compuestas (2FN) y que no existan dependencias transitivas entre columnas no clave (3FN).</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            ¿Qué importancia tiene el control de concurrencia en la evaluación?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Asegura que las operaciones DML planteadas en las preguntas no generen condiciones de carrera ni lecturas sucias en transacciones simultáneas.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            ¿Cómo influye el tipo de datos elegido en la optimización de almacenamiento en AWS?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Elegir tipos precisos (ej. <code>SMALLINT</code> para rangos cortos en lugar de <code>INTEGER</code> o <code>VARCHAR</code>) reduce la huella física en memoria y disco, mejorando el rendimiento de los índices.</p>
-</div>
-</details>
-</div>
-</section>
-</article>
-</article>
+                    </div>
+                </div>
+
+                <!-- MÓDULO 5: Rúbrica Oficial de Evaluación -->
+                <h2>Módulo 5: Rúbrica Oficial de Evaluación (Nota 20)</h2>
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                        <thead class="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white uppercase">
+                            <tr>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Criterio / Competencia</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Excelente (5 Pts)</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Regular (2.5 Pts)</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Deficiente (0 Pts)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                            <tr>
+                                <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">1. Fundamentos & Teoría</td>
+                                <td class="p-3">Justifica formalmente con axiomas, niveles ANSI-SPARC y evita todas las trampas de NULLs.</td>
+                                <td class="p-3">Responde conceptualmente pero omite justificación matemática.</td>
+                                <td class="p-3">Confunde sublenguajes o comete errores de lógica trivaluada.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">2. Normalización Matemática</td>
+                                <td class="p-3">Calcula cierres X+, identifica atributos primos y descompone sin pérdida hasta 3FN/BCNF.</td>
+                                <td class="p-3">Descompone a 3FN pero comete errores en dependencias parciales.</td>
+                                <td class="p-3">No demuestra el cálculo del cierre de atributos.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">3. Modelamiento E-R</td>
+                                <td class="p-3">Identifica entidades débiles, asociativas y mapea supertipos a Class Table con PK/FK 1:1.</td>
+                                <td class="p-3">Modela cardinalidades pero confunde participación obligatoria/opcional.</td>
+                                <td class="p-3">Omite entidades débiles y comete errores en relaciones M:N.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">4. SQL DDL / DML / TCL</td>
+                                <td class="p-3">Escribe SQL PostgreSQL 16 sin errores, con constraints CHECK, RETURNING y SAVEPOINTs.</td>
+                                <td class="p-3">Sintaxis SQL funcional pero con errores menores de tipos de datos.</td>
+                                <td class="p-3">Sentencias DDL inválidas o que violan integridad referencial.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </article>
         </main>
 
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Fundamentos BD</strong> Semana 01</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Modelo Relacional</strong> Semana 02</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>DDL</strong> Semana 03</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>DML</strong> Semana 04-05</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Modelamiento E-R</strong> Semana 06</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Normalizacion</strong> Semana 07</li>
+            <!-- Score Card (M3 Elevated) -->
+            <div class="bg-gradient-to-br from-rose-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950/40 rounded-3xl border border-rose-200 dark:border-rose-900/40 p-6 shadow-sm">
+                <span class="text-[10px] font-black uppercase tracking-wider text-rose-600 dark:text-rose-400 block mb-1">Rúbrica Vigesimal</span>
+                <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2">Meta: Nota 20</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                    Sigue rigurosamente las justificaciones formales y la descomposición algorítmica demostrada en esta guía.
+                </p>
+                <div class="space-y-2 text-xs font-semibold">
+                    <div class="flex justify-between text-slate-700 dark:text-slate-300">
+                        <span>Bloque 1: Teoría & Trampas</span>
+                        <span class="text-rose-600 dark:text-rose-400 font-bold">5.0 pts</span>
+                    </div>
+                    <div class="flex justify-between text-slate-700 dark:text-slate-300">
+                        <span>Bloque 2: Normalización</span>
+                        <span class="text-rose-600 dark:text-rose-400 font-bold">5.0 pts</span>
+                    </div>
+                    <div class="flex justify-between text-slate-700 dark:text-slate-300">
+                        <span>Bloque 3: Modelado DER</span>
+                        <span class="text-rose-600 dark:text-rose-400 font-bold">5.0 pts</span>
+                    </div>
+                    <div class="flex justify-between text-slate-700 dark:text-slate-300">
+                        <span>Bloque 4: SQL DDL/DML</span>
+                        <span class="text-rose-600 dark:text-rose-400 font-bold">5.0 pts</span>
+                    </div>
+                </div>
+            </div>
 
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="semana_07.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 07</a></li>
-                <li><a href="semana_09.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 09 →</a></li>
-            </ul>
-        </div>
-
+            <!-- Navigation Resources -->
+            <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+                <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
+                    <li><a href="semana_07.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 07</a></li>
+                    <li><a href="semana_09.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 09 →</a></li>
+                </ul>
+            </div>
         </aside>
     </div>
 
@@ -808,6 +557,5 @@ ORDER BY e.salario DESC;
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
-
 </body>
 </html>

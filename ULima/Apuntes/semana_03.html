@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
-    <title>Semana 03 - Bases de Datos Relacionales (BDR)</title>
+    <title>Semana 03 - Bases de Datos Relacionales: Modelo Formal y Lenguaje DDL</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -69,15 +69,12 @@
             });
         });
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <!-- Sun icon -->
         <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <!-- Moon icon -->
         <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
@@ -87,8 +84,12 @@
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
-                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Bases de Datos Relacionales: Conceptos y Objetos</h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 03 • Ingenieria de Datos  • ULima 2013-2</p>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+                    Semana 03: Bases de Datos Relacionales: Modelo Formal y Lenguaje DDL
+                </h1>
+                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                    Fundamentos de Codd • Integridad Declarativa • PostgreSQL 17 • Caso Mueblería • Universidad de Lima
+                </p>
             </div>
             <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
@@ -97,72 +98,61 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+
     <!-- M3 Step-by-Step Diagram -->
     <div class="my-6">
         <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
             <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                📌 Proceso Paso a Paso: Verificación de Integridad Referencial en Operaciones DML
+                📌 Proceso Paso a Paso: Verificación de Integridad Referencial y Restricciones DDL
             </h3>
             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Proceso paso a paso para validar restricciones de llaves foráneas en inserción.
+                Cómo valida el motor relacional las restricciones de claves primarias, foráneas y checks durante operaciones DDL/DML.
             </p>
             <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
                 <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(10, 15)">
-    <!-- Paso 1 -->
-    <rect x="0" y="20" width="165" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="82.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. INSERT a Pedido</text>
-    <text x="82.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Cliente provee FK cliente_id</text>
-    
-    <!-- Flecha -->
-    <path d="M 165 50 L 195 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="195,50 188,46 188,54" fill="#6366f1" />
+                  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+                  <g transform="translate(10, 15)">
+                    <!-- Paso 1 -->
+                    <rect x="0" y="20" width="165" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="82.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. Inserción en Hijo</text>
+                    <text x="82.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Provee FK id_cliente = 405</text>
+                    
+                    <path d="M 165 50 L 195 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                    <polygon points="195,50 188,46 188,54" fill="#6366f1" />
 
-    <!-- Paso 2 -->
-    <rect x="200" y="20" width="180" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="290" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. DBMS Consulta Clientes</text>
-    <text x="290" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Busca coincidencia en PK</text>
+                    <!-- Paso 2 -->
+                    <rect x="200" y="20" width="175" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="287.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. Búsqueda en Padre</text>
+                    <text x="287.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Index Scan en PK de Cliente</text>
 
-    <!-- Flecha -->
-    <path d="M 380 50 L 410 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="410,50 403,46 403,54" fill="#6366f1" />
+                    <path d="M 375 50 L 405 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                    <polygon points="405,50 398,46 398,54" fill="#6366f1" />
 
-    <!-- Paso 3 (Decision) -->
-    <polygon points="485,20 545,50 485,80 425,50" class="fill-amber-50 dark:fill-slate-850 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
-    <text x="485" y="53" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-[10px]">¿Existe PK?</text>
+                    <!-- Paso 3 -->
+                    <rect x="410" y="20" width="175" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="497.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Evaluación de Dominio</text>
+                    <text x="497.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Validación CHECK y NOT NULL</text>
 
-    <!-- Flecha Si -->
-    <path d="M 545 50 L 600 30" stroke="#10b981" stroke-width="2" fill="none" />
-    <polygon points="600,30 592,28 595,36" fill="#10b981" />
-    <text x="575" y="32" class="fill-emerald-600 font-bold text-[10px]">Sí</text>
+                    <path d="M 585 50 L 615 50" stroke="#10b981" stroke-width="2" fill="none" />
+                    <polygon points="615,50 608,46 608,54" fill="#10b981" />
 
-    <!-- Flecha No -->
-    <path d="M 545 50 L 600 70" stroke="#ef4444" stroke-width="2" fill="none" />
-    <polygon points="600,70 595,64 592,72" fill="#ef4444" />
-    <text x="575" y="72" class="fill-rose-600 font-bold text-[10px]">No</text>
-
-    <!-- Exito -->
-    <rect x="605" y="5" width="165" height="40" rx="8" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="687.5" y="27" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">Inserción Exitosa</text>
-
-    <!-- Error -->
-    <rect x="605" y="55" width="165" height="40" rx="8" class="fill-rose-50 dark:fill-slate-800 stroke-rose-500 dark:stroke-rose-400" stroke-width="2" />
-    <text x="687.5" y="77" text-anchor="middle" class="fill-rose-700 dark:fill-rose-400 font-bold text-xs">Foreign Key Violation</text>
-  </g>
-</svg>
+                    <!-- Paso 4 -->
+                    <rect x="620" y="20" width="165" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+                    <text x="702.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">4. Inserción Persistida</text>
+                    <text x="702.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Escritura en Bloque + WAL</text>
+                  </g>
+                </svg>
             </div>
         </div>
     </div>
 
-            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
             <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
                 <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Relación de Términos
+                    🗺️ Mapa Conceptual: El Modelo Relacional y DDL
                 </span>
                 <span class="transition group-open:rotate-180">
                     <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -171,400 +161,641 @@
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
                 <pre class="mermaid bg-transparent">
 graph TD
-    S03[Modelo Relacional] --> Struct[Estructura Relacional]
-    Struct --> Rel[Relaciones: Tablas]
-    Struct --> Att[Atributos: Columnas]
-    Struct --> Tup[Tuplas: Filas / Registros]
-    S03 --> Keys[Claves de Relación]
-    Keys --> PK[Primary Key: Identificador Único]
-    Keys --> FK[Foreign Key: Puntero Lógico a otra Tabla]
-    S03 --> Integ[Reglas de Integridad]
-    Integ --> EntI[Integridad de Entidad: PK no nula]
-    Integ --> RefI[Integridad Referencial: FK debe coincidir con PK existente]
+    CODD[Modelo Relacional Formal de Codd] --> REL[Relación = Tabla de 2D]
+    CODD --> TUP[Tupla = Fila / Registro]
+    CODD --> ATR[Atributo = Columna / Campo]
+    
+    REL --> RESTR[Restricciones de Integridad]
+    RESTR --> PK[Integridad de Entidad: Primary Key NOT NULL & UNIQUE]
+    RESTR --> FK[Integridad Referencial: Foreign Key]
+    RESTR --> DOM[Integridad de Dominio: CHECK, NOT NULL, DEFAULT]
+    
+    FK --> ACT[Acciones Referenciales: CASCADE, RESTRICT, SET NULL, NO ACTION]
+    
+    DDL[Lenguaje DDL] --> CREATE[CREATE TABLE / VIEW / INDEX / SCHEMA]
+    DDL --> ALTER[ALTER TABLE: ADD, DROP, ALTER COLUMN, ADD CONSTRAINT]
+    DDL --> DROP[DROP TABLE CASCADE / RESTRICT]
                 </pre>
             </div>
         </details>
     </div>
 
-                
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<!-- Enfoque Arquitecto: Integridad según Codd -->
-<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3>La Pureza Relacional y Reglas de Codd</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                El modelo relacional propuesto por Codd se sustenta en tres tipos principales de integridad:
-            </p>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Integridad de Entidad:</strong> Toda tabla debe poseer una Clave Primaria (PK) y ningún atributo de esta clave puede ser NULL. Garantiza la identificación unívoca.</li>
-<li><strong>Integridad Referencial:</strong> Una Clave Externa (FK) debe coincidir con un valor existente de la clave primaria que referencia o ser NULL. Controla la validez de las asociaciones.</li>
-<li><strong>Integridad de Dominio:</strong> Restringe los valores válidos para un atributo a través de tipos de datos, rangos y CHECK constraints.</li>
-</ul>
-</section>
-<!-- Enfoque Cloud: Claves en Bases de Datos Distribuidas -->
-<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3>Integridad Referencial en Arquitecturas Cloud Distribuidas</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
-                En bases de datos distribuidas horizontalmente a gran escala (como Spanner, Cassandra o Aurora Multi-Master) y sistemas NoSQL, la validación de claves externas (FK) físicas suele deshabilitarse o evitarse debido al alto costo de red requerido para validar la existencia del registro en múltiples nodos remotos de forma síncrona.
-            </p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">
-<strong>Estrategia de Mitigación:</strong> La integridad referencial se delega al software de aplicación mediante patrones como validaciones en la capa de servicios o transacciones distribuidas basadas en eventos (Saga Pattern).
-            </p>
-</section>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
-<h4>
-<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                Objetivos de Aprendizaje
-            </h4>
-<ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
-<li>Comprender el modelo relacional y sus propiedades fundamentales</li>
-<li>Identificar los objetos de una base de datos relacional</li>
-<li>Aplicar las reglas de nomenclatura para nombrar objetos</li>
-<li>Conocer los tipos de datos y restricciones del modelo</li>
-<li>Diferenciar restricciones de integridad, columna y definidas por usuario</li>
-</ul>
-</div>
-<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4>Insight del Arquitecto: El Fundamento Relacional</h4>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>El modelo relacional de Codd (1970):</strong> La genialidad de Codd fue eliminar los punteros fisicos. En los modelos jerarquico y de red, los datos se navegaban mediante punteros. El modelo relacional usa SOLO valores de atributos para establecer relaciones, lo que le da una elegancia matematica basada en teoria de conjuntos y logica de predicados.</p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Implicancia practica:</strong> Puedes cambiar completamente la estructura fisica de almacenamiento (de HDD a SSD, de fila a columnar) sin cambiar las consultas SQL. Eso es independencia de datos en accion.</p>
-</section>
-<h2>1. Base de Datos Relacional (BDR)</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Definicion</span>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Base de Datos Relacional:</strong> Es una coleccion de relaciones o tablas de dos dimensiones para almacenar informacion. Puede ser accedida y modificada por sentencias del Lenguaje Estructurado de Consultas (SQL). Contiene una coleccion de tablas sin punteros fisicos y utiliza un conjunto de operadores relacionales.</p>
-</div>
-<h2>2. Propiedades de las BDR</h2>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Acceso y modificacion mediante SQL (Structure Query Language).</li>
-<li>Coleccion de tablas sin punteros fisicos — las relaciones se establecen por valores de atributos.</li>
-<li>Utiliza un conjunto de operadores relacionales (seleccion, proyeccion, union, join, etc.).</li>
-<li>Cada tabla tiene filas (tuplas) y columnas (atributos).</li>
-<li>Se puede manipular datos de las filas usando comandos SQL.</li>
-</ul>
-<h2>3. Objetos de la Base de Datos Relacional</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Objeto</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Tabla</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Unidad basica de almacenamiento; compuesta de filas y columnas</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Vista</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Representacion logica de los datos de una o mas tablas</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Secuencia</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Genera valores de clave primaria secuenciales</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Indice</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mejora el performance de algunas consultas</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Sinonimo</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Asigna nombres alternativos a los objetos</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>4. Terminologia Relacional</h2>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo: Tabla CLIENTE</strong></p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">ID_Cliente (PK)</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Nombre</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">ZIP</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">001</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">PEDRO</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">A</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">L33</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">007</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">JUAN</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">A</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">L45</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">012</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">ANA</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">C</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">L33</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">IVAN</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">B</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">L41</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">015</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">INES</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">A</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">L33</td></tr>
-</tbody>
-</thead></table>
-</div>
-</div>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo: Tabla ORDEN_PEDIDO</strong></p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Nro_Orden (PK)</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Fecha_Orden</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Fecha_Atencion</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">CantEmb</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">ID_Cliente (FK)</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">150045</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">01/10/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">10/10/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">3</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">015</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">140235</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">02/02/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">07/07/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">2</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">003</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">230978</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">23/08/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">15/09/2003</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">4</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">001</td></tr>
-</tbody>
-</thead></table>
-</div>
-</div>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Relacion (Tabla):</strong> Estructura bidimensional que almacena datos de una entidad.</li>
-<li><strong>Tupla (Fila):</strong> Cada registro individual. Ej: la fila de PEDRO.</li>
-<li><strong>Atributo (Columna):</strong> Caracteristica de la entidad. Ej: Nombre, Tipo, ZIP.</li>
-<li><strong>Primary Key (PK):</strong> Columna o combinacion que identifica de manera unica cada tupla. Subrayada en el diagrama.</li>
-<li><strong>Foreign Key (FK):</strong> Columna que referencia la PK de otra tabla. Implementa la asociacion entre tablas.</li>
-</ul>
-<h2>5. Reglas de Nomenclatura de Objetos</h2>
-<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Reglas estandar ANSI para nombrar objetos en una BD:</strong></p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Debe comenzar con una letra.</li>
-<li>Puede tener una longitud de 1 a 30 caracteres.</li>
-<li>Debe contener solamente los caracteres A-Z, a-z, 0-9, _, $ y #.</li>
-<li>No debe ser igual al nombre de otro objeto dentro del mismo usuario del DBMS.</li>
-<li>No debe ser una palabra reservada del DBMS.</li>
-</ul>
-</div>
-<h2>6. Tipos de Datos del Modelo Relacional</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La especificacion original del material usa sintaxis Oracle. A continuacion se presentan los equivalentes:</p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo (Oracle)</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Equivalente PostgreSQL</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>VARCHAR2(size)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cadena de longitud variable hasta 4000 caracteres</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>VARCHAR(n)</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>CHAR(size)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cadena de longitud fija</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>CHAR(n)</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>NUMBER</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numerico de punto flotante</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>INTEGER / NUMERIC</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>NUMBER(p,s)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numerico de punto fijo hasta 16 digitos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>NUMERIC(p,s)</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>DATE</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Fecha y tiempo +/- 4712</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>DATE / TIMESTAMP</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>LONG</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cadena variable hasta 2 GB</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>TEXT</code></td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>BLOB</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Datos binarios hasta 4 GB</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>BYTEA</code></td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>7. Restricciones de la Base de Datos</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Integridad y Validacion</span>
-<h3>7.1 Restricciones de Integridad</h3>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Integridad de Entidad (PRIMARY KEY):</strong> El Primary Key no puede ser NULL y su valor debe ser unico. Solo se permite una PK por tabla. Garantiza que no hayan filas duplicadas. Automaticamente crea un indice UNIQUE.</li>
-<li><strong>Integridad Referencial (FOREIGN KEY):</strong> Los valores de las Foreign Key deben relacionarse con una llave primaria (PK). Establece una relacion entre la PK en la misma tabla o con otras tablas. Debe existir un valor en la tabla Padre a donde hace referencia la FK.</li>
-</ul>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Palabras clave de FOREIGN KEY:</strong></p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><code>FOREIGN KEY</code> — En la tabla hijo se define que columna tiene la restriccion.</li>
-<li><code>REFERENCES</code> — Identifica a la tabla padre y la columna PK.</li>
-<li><code>ON DELETE CASCADE</code> — Elimina automaticamente filas hijo si se elimina la fila padre.</li>
-</ul>
-</div>
-<h3>7.2 Restricciones de Columna (Dominio)</h3>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Restriccion</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>NULL / NOT NULL</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Especifica si el atributo puede tener valores nulos</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>UNIQUE</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Todos los valores en la columna deben ser distintos</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>CHECK</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Condicion booleana que debe cumplir cada valor ingresado</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Los valores que ingresan a una columna deben ser del mismo tipo que la definicion del dato (restriccion de dominio por tipo de dato).</p>
-<h3>7.3 Restricciones Definidas por el Usuario</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Los valores de las columnas deben tener validaciones de acuerdo con las reglas de negocio. Por ejemplo: "el salario no puede ser menor al minimo legal", "la fecha de atencion debe ser posterior a la fecha de orden".</p>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Resumen de restricciones:</strong> Las restricciones de integridad mantienen la correccion de los datos (PK no nula, FK valida). Las restricciones de columna controlan los valores permitidos (NULL, UNIQUE, CHECK). Las restricciones definidas por el usuario implementan reglas de negocio especificas.</p>
-</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Laboratorio: Identificacion de Restricciones</strong></p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Dado el siguiente esquema de base de datos para una muebleria con las tablas: <code>cliente</code>, <code>orden_pedido</code>, <code>producto</code>, <code>producto_ordenado</code>:</p>
-<ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Identifica todas las Primary Keys.</li>
-<li>Identifica todas las Foreign Keys.</li>
-<li>Propone 2 restricciones CHECK basadas en reglas de negocio.</li>
-<li>Indica que columnas deberian ser NOT NULL.</li>
-</ol>
-</div>
-<div class="canvas-container">
-<canvas height="360" id="canvas_03" width="800"></canvas>
-<div class="canvas-controls" id="controls_03"></div>
-</div>
-<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2>
-<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                💡 Tips del Profesor
-            </h2>
-<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Indexe siempre las FKs:</strong> PostgreSQL no indexa automáticamente las columnas foreign key. Si no crea el índice manualmente, cada DELETE o UPDATE en la tabla padre requerirá un Sequential Scan en la tabla hija para verificar la integridad.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite claves compuestas complejas:</strong> Para facilitar la indexación y optimizar joins, prefiera claves surrogadas numéricas (`BIGSERIAL` o `INT`) o `UUID v7` y asigne restricciones UNIQUE a las claves naturales.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Cuidado con ON DELETE CASCADE:</strong> Puede desencadenar borrados masivos involuntarios bloqueando tablas enteras en producción. Use CASCADE con extrema precaución.</p>
-</div>
-</div>
-</section>
-<section class="mt-10">
-<h2>
-<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-<div class="space-y-4">
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            ¿Por qué un atributo de la clave primaria (PK) no puede aceptar valores NULL?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Por la regla de Integridad de Entidad. Si un valor fuera NULL, significaría que la entidad no tiene identidad definida y no podría distinguirse unívocamente en la relación.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            ¿Qué ocurre si intentamos borrar un registro referenciado en una FK configurada con ON DELETE RESTRICT?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">El motor de base de datos bloqueará el borrado del registro padre lanzando un error de integridad referencial mientras existan registros hijos apuntando a él.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            ¿Cómo se maneja la integridad referencial en microservicios con bases de datos aisladas?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">No se pueden declarar FKs físicas entre bases de datos distintas. Se maneja por lógica de aplicación, APIs síncronas o consistencia eventual enviando eventos de integración.</p>
-</div>
-</details>
-</div>
-</section>
-</article>
-</article>
+    <article class="space-y-10 prose dark:prose-invert max-w-none">
+        <!-- Banner de Objetivos -->
+        <div class="bg-indigo-50/60 dark:bg-indigo-950/20 rounded-3xl p-6 border border-indigo-100 dark:border-indigo-900/40 shadow-sm">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="p-2 bg-indigo-600 text-white rounded-xl">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Objetivos Pedagógicos y Competencias de Definición de Datos</h3>
+            </div>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-slate-700 dark:text-slate-300 list-disc list-inside m-0">
+                <li>Formalizar matemáticamente los constructos del modelo relacional: Producto Cartesiano, Relación, Grado y Cardinalidad.</li>
+                <li>Dominar la teoría de claves: Superclaves, Candidatas, Primarias (PK) y Foráneas (FK).</li>
+                <li>Configurar acciones de integridad referencial: <code class="font-mono text-xs">CASCADE</code>, <code class="font-mono text-xs">RESTRICT</code>, <code class="font-mono text-xs">NO ACTION</code>, <code class="font-mono text-xs">SET NULL</code>.</li>
+                <li>Conocer el sistema exhaustivo de tipos de datos SQL ANSI y PostgreSQL 16/17 (incluyendo JSONB, UUID y pgvector).</li>
+                <li>Escribir sentencias DDL industriales (<code class="font-mono text-xs">CREATE</code>, <code class="font-mono text-xs">ALTER</code>, <code class="font-mono text-xs">DROP</code>) con restricciones nombradas explícitamente.</li>
+                <li>Implementar el caso de estudio empresarial de la Mueblería Industrial mediante un esquema relacional normalizado.</li>
+            </ul>
+        </div>
 
-            </article>
+        <!-- SECCIÓN 1: Fundamentación Matemática del Modelo Relacional -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">01.</span> Fundamentos Matemáticos del Modelo Relacional (E. F. Codd)
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Publicado en junio de 1970 por <strong>Edgar Frank Codd</strong> en su célebre artículo <em>"A Relational Model of Data for Large Shared Data Banks"</em>, el modelo relacional se fundamenta rigurosamente en la <strong>teoría matemática de conjuntos</strong> y la <strong>lógica de predicados de primer orden</strong>.
+            </p>
+
+            <div class="bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl p-6 space-y-3">
+                <h4 class="text-base font-bold text-slate-900 dark:text-white m-0">Definición Formal de Relación Matemática</h4>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Dados $n$ dominios $D_1, D_2, dots, D_n$ (conjuntos de valores atómicos), una <strong>relación</strong> $R$ definida sobre dichos dominios es un subconjunto del producto cartesiano:
+                </p>
+                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-indigo-100 dark:border-indigo-900/40 text-center font-mono text-sm text-indigo-600 dark:text-indigo-400 font-bold">
+                    R &sube; D<sub>1</sub> &times; D<sub>2</sub> &times; &hellip; &times; D<sub>n</sub>
+                </div>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Cada elemento $t in R$ es una <strong>tupla</strong> (una $n$-upla ordenada $(v_1, v_2, dots, v_n)$ donde cada $v_i in D_i$).
+                </p>
+            </div>
+
+            <!-- Tabla de Mapeo Formal vs SQL -->
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm my-6">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Término Teórico Formal (Codd)</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Término Estándar SQL</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Término Coloquial de Archivos</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Definición Operativa</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-mono font-bold text-indigo-600 dark:text-indigo-400">Relación (Relation)</td>
+                            <td class="p-3 font-semibold">Tabla (Table)</td>
+                            <td class="p-3">Archivo (File)</td>
+                            <td class="p-3">Estructura bidimensional compuesta por tuplas y atributos definidos.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-mono font-bold text-indigo-600 dark:text-indigo-400">Tupla (Tuple)</td>
+                            <td class="p-3 font-semibold">Fila (Row)</td>
+                            <td class="p-3">Registro (Record)</td>
+                            <td class="p-3">Instancia individual de datos que representa una entidad concreta.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-mono font-bold text-indigo-600 dark:text-indigo-400">Atributo (Attribute)</td>
+                            <td class="p-3 font-semibold">Columna (Column)</td>
+                            <td class="p-3">Campo (Field)</td>
+                            <td class="p-3">Propiedad con nombre y dominio tipado que describe la relación.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-mono font-bold text-indigo-600 dark:text-indigo-400">Grado (Arity / Degree)</td>
+                            <td class="p-3 font-semibold">Número de Columnas</td>
+                            <td class="p-3">Ancho de Registro</td>
+                            <td class="p-3">Cantidad total de atributos en el esquema de la relación.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-mono font-bold text-indigo-600 dark:text-indigo-400">Cardinalidad</td>
+                            <td class="p-3 font-semibold">Número de Filas</td>
+                            <td class="p-3">Total de Registros</td>
+                            <td class="p-3">Cantidad actual de tuplas persistidas en la relación.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Propiedades Fundamentales -->
+            <div class="space-y-3">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Las 4 Propiedades Axiomáticas de las Relaciones</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+                        <div class="font-bold text-slate-900 dark:text-white text-sm mb-1">1. No existen tuplas duplicadas</div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            Por definición de conjunto matemático, ningún elemento se repite. Toda relación debe tener una <strong>clave primaria (PK)</strong> única.
+                        </p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+                        <div class="font-bold text-slate-900 dark:text-white text-sm mb-1">2. El orden de las filas es irrelevante</div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            Las tuplas no tienen un ordenamiento intrínseco. Si se requiere ordenación visual, debe solicitarse explícitamente mediante <code class="font-mono">ORDER BY</code>.
+                        </p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+                        <div class="font-bold text-slate-900 dark:text-white text-sm mb-1">3. El orden de las columnas es irrelevante</div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            Los atributos se identifican estrictamente por su nombre simbólico y no por su posición física ordinal (eliminando offsets fijos).
+                        </p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+                        <div class="font-bold text-slate-900 dark:text-white text-sm mb-1">4. Atomicidad de los Valores (1NF)</div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            Cada intersección de fila y columna contiene exactamente un único valor indivisible del dominio (prohibidos arreglos anidados sin tipo formal).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: Teoría de Claves y Restricciones de Integridad -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">02.</span> Teoría de Claves y Restricciones de Integridad
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                El motor relacional preserva la exactitud y veracidad de la información mediante la ejecución estricta de <strong>restricciones declarativas</strong>.
+            </p>
+
+            <!-- Jerarquía de Claves -->
+            <div class="my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Jerarquía Conceptual de Claves Relacionales</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ SUPERCLAVE (Superkey):                                                      │
+│ Cualquier subconjunto de atributos {A1, A2, ...} que identifica unívocamente │
+│ a cada tupla en la relación. (Ej: {DNI, Email, Nombre, Teléfono})           │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ CLAVE CANDIDATA (Candidate Key):                                    │   │
+│   │ Una superclave MINIMAL (sin atributos redundantes).                 │   │
+│   │ (Ej: {DNI} es candidata; {Email} es candidata)                      │   │
+│   │                                                                     │   │
+│   │   ┌───────────────────────────────┐ ┌───────────────────────────┐   │   │
+│   │   │ CLAVE PRIMARIA (Primary Key)  │ │ CLAVE ALTERNATIVA         │   │   │
+│   │   │ Elegida formalmente por el    │ │ Las demás claves          │   │   │
+│   │   │ arquitecto como identificador.│ │ candidatas no elegidas.   │   │   │
+│   │   │ (Restricción: NOT NULL UNIQUE)│ │ (Restricción: UNIQUE)     │   │   │
+│   │   └───────────────────────────────┘ └───────────────────────────┘   │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘</pre>
+            </div>
+
+            <!-- Acciones Referenciales -->
+            <div class="bg-slate-100 dark:bg-slate-900/60 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-4">
+                <h4 class="text-base font-bold text-slate-900 dark:text-white m-0">
+                    🔗 Acciones de Mantenimiento de Integridad Referencial (ON DELETE / ON UPDATE)
+                </h4>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Cuando una tupla en la tabla <em>Padre</em> es eliminada o actualizada, el motor aplica la regla referencial configurada sobre las tablas <em>Hijas</em>:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div class="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div class="font-mono font-bold text-rose-600 dark:text-rose-400 mb-1">ON DELETE RESTRICT</div>
+                        <p class="text-slate-600 dark:text-slate-400">Rechaza inmediatamente la eliminación del padre si existe al menos una tupla hija asociada, lanzando un error de integridad.</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div class="font-mono font-bold text-amber-600 dark:text-amber-400 mb-1">ON DELETE NO ACTION (Default)</div>
+                        <p class="text-slate-600 dark:text-slate-400">Comportamiento estándar SQL; valida las restricciones al final de la sentencia o transacción (permite restricciones diferidas <code class="font-mono">DEFERRABLE</code>).</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div class="font-mono font-bold text-indigo-600 dark:text-indigo-400 mb-1">ON DELETE CASCADE</div>
+                        <p class="text-slate-600 dark:text-slate-400">Elimina automáticamente todas las tuplas hijas dependientes cuando el registro padre es eliminado.</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div class="font-mono font-bold text-emerald-600 dark:text-emerald-400 mb-1">ON DELETE SET NULL</div>
+                        <p class="text-slate-600 dark:text-slate-400">Asigna automáticamente el valor <code class="font-mono">NULL</code> a la columna FK en las tuplas hijas (requiere que la columna sea anulable).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: Tipos de Datos ANSI y PostgreSQL 16/17 -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">03.</span> Sistema de Tipos de Datos ANSI SQL y PostgreSQL 16/17
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Seleccionar el tipo de dato óptimo es crítico para minimizar el espacio en disco, maximizar la eficiencia del Buffer Pool y garantizar la exactitud de los cálculos aritméticos.
+            </p>
+
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm my-6">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Familia</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Tipo PostgreSQL 16/17</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Bytes / Espacio</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Rango / Especificación</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Recomendación de Arquitectura</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold text-indigo-600">Enteros</td>
+                            <td class="p-3 font-mono font-bold">INTEGER / BIGINT</td>
+                            <td class="p-3">4 B / 8 B</td>
+                            <td class="p-3">-2.14B a +2.14B / &plusmn;9.22&times;10<sup>18</sup></td>
+                            <td class="p-3">Usar <code class="font-mono">BIGINT</code> para llaves primarias con alto volumen transaccional.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold text-emerald-600">Punto Fijo</td>
+                            <td class="p-3 font-mono font-bold">NUMERIC(p,s)</td>
+                            <td class="p-3">Variable</td>
+                            <td class="p-3">Hasta 131,072 dígitos antes y después del punto</td>
+                            <td class="p-3"><strong>Obligatorio para dinero y contabilidad.</strong> Evita los errores de redondeo IEEE 754 de FLOAT.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold text-blue-600">Texto</td>
+                            <td class="p-3 font-mono font-bold">VARCHAR(n) / TEXT</td>
+                            <td class="p-3">1B + longitud</td>
+                            <td class="p-3">Hasta 1 GB (almacenamiento TOAST)</td>
+                            <td class="p-3">En PostgreSQL, <code class="font-mono">TEXT</code> y <code class="font-mono">VARCHAR</code> tienen idéntico rendimiento interno.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold text-amber-600">Temporal</td>
+                            <td class="p-3 font-mono font-bold">TIMESTAMPTZ</td>
+                            <td class="p-3">8 Bytes</td>
+                            <td class="p-3">Fecha y hora con Zona Horaria (UTC)</td>
+                            <td class="p-3">Estándar corporativo obligatorio para auditorías globales y logs distribuidos.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-semibold text-purple-600">Identificador</td>
+                            <td class="p-3 font-mono font-bold">UUID</td>
+                            <td class="p-3">16 Bytes</td>
+                            <td class="p-3">128-bit universales (<code class="font-mono">gen_random_uuid()</code>)</td>
+                            <td class="p-3">Ideal para microservicios y sistemas distribuidos offline-first.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40 bg-emerald-50/30 dark:bg-emerald-950/20">
+                            <td class="p-3 font-semibold text-emerald-700">Semiestructurado / IA</td>
+                            <td class="p-3 font-mono font-bold text-emerald-700">JSONB / VECTOR(dim)</td>
+                            <td class="p-3">Variable</td>
+                            <td class="p-3">Binario indexable GIN / Embeddings HNSW</td>
+                            <td class="p-3">Documentos polimórficos y búsqueda de similitud semántica con <strong>pgvector</strong> (2026).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: DDL Completo y Sintaxis Exhaustiva -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">04.</span> Sintaxis Exhaustiva del Lenguaje DDL (Data Definition Language)
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                El lenguaje DDL permite definir, modificar y destruir esquemas y objetos de la base de datos.
+            </p>
+
+            <div class="relative my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Ejemplo Integral de DDL Profesional con Constraints Nombrados</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed"><code class="language-sql">-- 1. CREACIÓN DE EXTENSIÓN Y SCHEMA
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE SCHEMA IF NOT EXISTS ventas;
+
+-- 2. CREACIÓN DE TABLA PADRE: CLIENTE
+CREATE TABLE ventas.cliente (
+    id_cliente          INTEGER GENERATED ALWAYS AS IDENTITY,
+    codigo_uuid         UUID DEFAULT gen_random_uuid() NOT NULL,
+    nombre              VARCHAR(50) NOT NULL,
+    apellido            VARCHAR(50) NOT NULL,
+    tipo_cliente        CHAR(1) DEFAULT 'R' NOT NULL,
+    telefono            VARCHAR(15),
+    email               VARCHAR(100) NOT NULL,
+    credito_limite      NUMERIC(12,2) DEFAULT 0.00 NOT NULL,
+    created_at          TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    
+    -- Restricciones de Tabla Nombradas
+    CONSTRAINT pk_cliente PRIMARY KEY (id_cliente),
+    CONSTRAINT uq_cliente_email UNIQUE (email),
+    CONSTRAINT uq_cliente_uuid UNIQUE (codigo_uuid),
+    CONSTRAINT chk_cliente_tipo CHECK (tipo_cliente IN ('R', 'VIP', 'CORP')),
+    CONSTRAINT chk_cliente_credito CHECK (credito_limite >= 0.00)
+);
+
+-- 3. CREACIÓN DE TABLA HIJA: ORDEN_PEDIDO
+CREATE TABLE ventas.orden_pedido (
+    numero_orden        BIGINT GENERATED ALWAYS AS IDENTITY,
+    id_cliente          INTEGER NOT NULL,
+    fecha_colocacion    DATE DEFAULT CURRENT_DATE NOT NULL,
+    fecha_entrega_est   DATE,
+    numero_embarques    SMALLINT DEFAULT 1 NOT NULL,
+    estado              VARCHAR(20) DEFAULT 'PENDIENTE' NOT NULL,
+    monto_total         NUMERIC(12,2) DEFAULT 0.00 NOT NULL,
+    
+    -- Restricciones
+    CONSTRAINT pk_orden_pedido PRIMARY KEY (numero_orden),
+    CONSTRAINT fk_orden_cliente FOREIGN KEY (id_cliente)
+        REFERENCES ventas.cliente (id_cliente)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+    CONSTRAINT chk_orden_embarques CHECK (numero_embarques > 0),
+    CONSTRAINT chk_orden_fechas CHECK (fecha_entrega_est >= fecha_colocacion)
+);
+
+-- 4. MODIFICACIONES DE ESQUEMA MEDIANTE ALTER TABLE
+-- Añadir columna de auditoría
+ALTER TABLE ventas.orden_pedido ADD COLUMN observacion TEXT;
+
+-- Modificar tipo de dato de una columna
+ALTER TABLE ventas.cliente ALTER COLUMN telefono TYPE VARCHAR(25);
+
+-- Añadir restricción CHECK posterior
+ALTER TABLE ventas.orden_pedido ADD CONSTRAINT chk_orden_monto CHECK (monto_total >= 0.00);
+
+-- Eliminar columna no requerida de forma segura
+ALTER TABLE ventas.orden_pedido DROP COLUMN observacion;
+
+-- 5. CREACIÓN DE ÍNDICES PROFESIONALES
+CREATE INDEX idx_orden_cliente ON ventas.orden_pedido (id_cliente);
+CREATE INDEX idx_cliente_email_lower ON ventas.cliente (LOWER(email));</code></pre>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: Caso de Estudio Industrial Completo: Mueblería Industrial -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">05.</span> Caso de Estudio: Modelo Relacional Completo de Mueblería Industrial
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                A continuación se presenta el esquema relacional normalizado para una empresa de manufactura y comercialización de muebles, integrando producción, inventarios, compras y ventas.
+            </p>
+
+            <!-- Diagrama ASCII del Modelo -->
+            <div class="my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Diagrama Entidad-Relación Relacional (DER) de la Mueblería</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
+┌────────────────────┐          ┌───────────────────────┐          ┌────────────────────┐
+│   LINEA_PRODUCTO   │ 1      N │        PRODUCTO       │ N      M │    MATERIA_PRIMA   │
+│────────────────────│──────────│───────────────────────│──────────│────────────────────│
+│ * nombre_linea(PK) │          │ * id_producto (PK)    │          │ * cod_mat_prima(PK)│
+│   meta_venta       │          │   nombre_linea (FK)   │          │   nombre_mat_prima │
+└────────────────────┘          │   stock, precio, costo│          │   cantidad, ubicac │
+                                └───────────┬───────────┘          └─────────┬──────────┘
+                                            │ 1                              │ 1
+                                            │ N                              │ N
+                                ┌───────────▼───────────┐          ┌─────────▼──────────┐
+                                │   PRODUCTO_ORDENADO   │          │ LINEA_ORDEN_TRABAJO│
+                                │───────────────────────│          │────────────────────│
+                                │ * numero_orden (PK,FK)│          │ * id_producto(PK,FK│
+                                │ * id_producto (PK,FK) │          │ * numero_ot (PK,FK)│
+                                │   cantidad_ordenada   │          │ * cod_mat_prima(FK)│
+                                └───────────▲───────────┘          └─────────▲──────────┘
+                                            │ N                              │ N
+                                            │ 1                              │ 1
+┌────────────────────┐ 1      N ┌───────────┴───────────┐ 1      N ┌─────────┴──────────┐
+│      CLIENTE       │──────────│     ORDEN_PEDIDO      │──────────│    ORDEN_TRABAJO   │
+│────────────────────│          │───────────────────────│          │────────────────────│
+│ * id_cliente (PK)  │          │ * numero_orden (PK)   │          │ * numero_ot (PK)   │
+│   nombre, dir, zip │          │   id_cliente (FK)     │          │   numero_orden (FK)│
+└────────────────────┘          │   fecha_colocacion    │          └─────────┬──────────┘
+                                └───────────┬───────────┘                    │ N
+                                            │ 1                              │ M
+                                            │ 1                    ┌─────────▼──────────┐
+                                ┌───────────▼───────────┐          │ ASIGNACION_TRABAJO │
+                                │        FACTURA        │          │────────────────────│
+                                │───────────────────────│          │ * numero_ot (PK,FK)│
+                                │ * numero_factura (PK) │          │ * cod_ct (PK,FK)   │
+                                │   numero_orden (FK)   │          └─────────┬──────────┘
+                                │   fecha_factura       │                    │ N
+                                └───────────┬───────────┘                    │ 1
+                                            │ 1                    ┌─────────▼──────────┐
+                                            │ N                    │   CENTRO_TRABAJO   │
+                                ┌───────────▼───────────┐          │────────────────────│
+                                │         PAGO          │          │ * cod_ct (PK)      │
+                                │───────────────────────│          │   nombre, ubicacion│
+                                │ * id_pago (PK)        │          └────────────────────┘
+                                │   numero_factura (FK) │
+                                │   fecha_pago, monto   │
+                                └───────────────────────┘</pre>
+            </div>
+
+            <!-- DDL Completo del Caso -->
+            <div class="relative my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Script DDL PostgreSQL 16/17 Completo y Ejecutable</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed"><code class="language-sql">-- Tabla 1: Línea de Producto
+CREATE TABLE linea_producto (
+    nombre_linea    VARCHAR(30) PRIMARY KEY,
+    meta_venta      NUMERIC(12,2) NOT NULL CHECK (meta_venta >= 0.00)
+);
+
+-- Tabla 2: Producto
+CREATE TABLE producto (
+    id_producto     INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nombre_linea    VARCHAR(30) NOT NULL REFERENCES linea_producto (nombre_linea) ON UPDATE CASCADE,
+    descripcion     VARCHAR(100) NOT NULL,
+    stock           INTEGER DEFAULT 0 NOT NULL CHECK (stock >= 0),
+    precio          NUMERIC(10,2) NOT NULL CHECK (precio > 0.00),
+    costo           NUMERIC(10,2) NOT NULL CHECK (costo >= 0.00)
+);
+
+-- Tabla 3: Cliente
+CREATE TABLE cliente (
+    id_cliente      INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nombre          VARCHAR(60) NOT NULL,
+    direccion       VARCHAR(120) NOT NULL,
+    tipo            CHAR(1) DEFAULT 'A' NOT NULL CHECK (tipo IN ('A', 'B', 'C')),
+    zip             VARCHAR(10) NOT NULL
+);
+
+-- Tabla 4: Orden de Pedido
+CREATE TABLE orden_pedido (
+    numero_orden        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_cliente          INTEGER NOT NULL REFERENCES cliente (id_cliente) ON UPDATE CASCADE ON DELETE RESTRICT,
+    fecha_colocacion    DATE DEFAULT CURRENT_DATE NOT NULL,
+    fecha_llenado       DATE,
+    numero_embarques    SMALLINT DEFAULT 1 NOT NULL CHECK (numero_embarques > 0)
+);
+
+-- Tabla 5: Producto Ordenado (Detalle de Pedido - PK Compuesta)
+CREATE TABLE producto_ordenado (
+    numero_orden        BIGINT NOT NULL REFERENCES orden_pedido (numero_orden) ON DELETE CASCADE,
+    id_producto         INTEGER NOT NULL REFERENCES producto (id_producto) ON DELETE RESTRICT,
+    cantidad_ordenada   INTEGER NOT NULL CHECK (cantidad_ordenada > 0),
+    precio_unitario     NUMERIC(10,2) NOT NULL CHECK (precio_unitario > 0.00),
+    PRIMARY KEY (numero_orden, id_producto)
+);
+
+-- Tabla 6: Factura (Relación 1:1 con Orden)
+CREATE TABLE factura (
+    numero_factura      BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    numero_orden        BIGINT NOT NULL UNIQUE REFERENCES orden_pedido (numero_orden) ON DELETE RESTRICT,
+    fecha               DATE DEFAULT CURRENT_DATE NOT NULL,
+    total               NUMERIC(12,2) NOT NULL CHECK (total >= 0.00)
+);
+
+-- Tabla 7: Pago
+CREATE TABLE pago (
+    id_pago             BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    numero_factura      BIGINT NOT NULL REFERENCES factura (numero_factura) ON DELETE CASCADE,
+    fecha_pago          DATE DEFAULT CURRENT_DATE NOT NULL,
+    monto               NUMERIC(12,2) NOT NULL CHECK (monto > 0.00)
+);
+
+-- Tabla 8: Centro de Trabajo
+CREATE TABLE centro_trabajo (
+    cod_ct          VARCHAR(10) PRIMARY KEY,
+    nombre          VARCHAR(50) NOT NULL,
+    ubicacion       VARCHAR(100) NOT NULL
+);
+
+-- Tabla 9: Empleado
+CREATE TABLE empleado (
+    cod_emp         INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    cod_ct          VARCHAR(10) NOT NULL REFERENCES centro_trabajo (cod_ct) ON UPDATE CASCADE,
+    nombre          VARCHAR(80) NOT NULL,
+    especialidad    VARCHAR(50) NOT NULL,
+    direccion       VARCHAR(120),
+    sueldo          NUMERIC(10,2) NOT NULL CHECK (sueldo > 0.00)
+);
+
+-- Tabla 10: Maquinaria
+CREATE TABLE maquinaria (
+    cod_maquina     VARCHAR(15) PRIMARY KEY,
+    cod_ct          VARCHAR(10) NOT NULL REFERENCES centro_trabajo (cod_ct) ON UPDATE CASCADE,
+    nombre_maq      VARCHAR(50) NOT NULL,
+    ubicacion_maq   VARCHAR(80),
+    tipo            VARCHAR(30) NOT NULL
+);
+
+-- Tabla 11: Orden de Trabajo (OT)
+CREATE TABLE orden_trabajo (
+    numero_ot       BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    numero_orden    BIGINT NOT NULL REFERENCES orden_pedido (numero_orden) ON DELETE CASCADE,
+    fecha_inicio    DATE DEFAULT CURRENT_DATE NOT NULL,
+    fecha_fin       DATE
+);
+
+-- Tabla 12: Asignación de Trabajo
+CREATE TABLE asignacion_trabajo (
+    numero_ot       BIGINT NOT NULL REFERENCES orden_trabajo (numero_ot) ON DELETE CASCADE,
+    cod_ct          VARCHAR(10) NOT NULL REFERENCES centro_trabajo (cod_ct) ON DELETE RESTRICT,
+    PRIMARY KEY (numero_ot, cod_ct)
+);
+
+-- Tabla 13: Materia Prima
+CREATE TABLE materia_prima (
+    cod_materia_prima   VARCHAR(15) PRIMARY KEY,
+    nombre_mat_prima    VARCHAR(60) NOT NULL,
+    cantidad            NUMERIC(10,2) DEFAULT 0.00 NOT NULL CHECK (cantidad >= 0.00),
+    ubicacion           VARCHAR(80) NOT NULL
+);
+
+-- Tabla 14: Línea de Orden de Trabajo (Consumo de Insumos)
+CREATE TABLE linea_orden_trabajo (
+    id_producto         INTEGER NOT NULL REFERENCES producto (id_producto) ON DELETE RESTRICT,
+    numero_ot           BIGINT NOT NULL REFERENCES orden_trabajo (numero_ot) ON DELETE CASCADE,
+    cod_materia_prima   VARCHAR(15) NOT NULL REFERENCES materia_prima (cod_materia_prima) ON DELETE RESTRICT,
+    cantidad_usada      NUMERIC(10,2) NOT NULL CHECK (cantidad_usada > 0.00),
+    PRIMARY KEY (id_producto, numero_ot, cod_materia_prima)
+);</code></pre>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: Tips del Profesor y Laboratorio -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8 space-y-4">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                </span>
+                💡 Tips del Profesor y Preguntas Clave de Examen
+            </h2>
+
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                <div class="flex gap-3">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold text-base">•</span>
+                    <div>
+                        <strong class="text-slate-900 dark:text-white">Nombre Explícito a cada Constraint:</strong> Nunca use constraints anónimos en producción. Si omite el nombre, el motor generará nombres autogenerados como <code class="font-mono">cliente_tipo_check1</code>, haciendo imposible alterar o depurar la restricción en migraciones automatizadas.
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold text-base">•</span>
+                    <div>
+                        <strong class="text-slate-900 dark:text-white">El Peligro de ON DELETE CASCADE Descontrolado:</strong> Si define <code class="font-mono">ON DELETE CASCADE</code> en la relación entre Clientes y Facturas, borrar accidentalmente un cliente eliminará todas sus facturas históricas, destruyendo los registros de auditoría contable y violando normas tributarias. En entidades financieras y de facturación, use siempre <code class="font-mono">RESTRICT</code>.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laboratorio -->
+            <div class="bg-fuchsia-50/50 dark:bg-fuchsia-950/10 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/30 space-y-3">
+                <h4 class="text-base font-bold text-fuchsia-900 dark:text-fuchsia-300 flex items-center gap-2">
+                    🧪 Laboratorio DDL: Modificación de Esquema en Vivo
+                </h4>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Utilizando el esquema de la mueblería, escribe los comandos DDL necesarios para resolver los siguientes requerimientos de negocio:
+                </p>
+                <ol class="list-decimal list-inside space-y-2 text-xs text-slate-700 dark:text-slate-300 font-medium">
+                    <li>Añade una columna <code class="font-mono">email_contacto VARCHAR(100)</code> a la tabla <code class="font-mono">cliente</code> con una restricción de unicidad nombrada.</li>
+                    <li>Modifica la tabla <code class="font-mono">producto</code> para incluir una columna <code class="font-mono">dimensiones JSONB</code> que guarde el alto, ancho y profundidad.</li>
+                    <li>Crea un índice de búsqueda por texto sobre la descripción del producto: <code class="font-mono">CREATE INDEX idx_producto_desc ON producto (LOWER(descripcion));</code></li>
+                </ol>
+            </div>
+
+            <!-- Canvas Interactivo -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col items-center">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Simulación Visual Interactiva: Validación de Integridad Referencial</div>
+                <canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_03" width="800"></canvas>
+                <div class="mt-4 flex gap-2" id="controls_03"></div>
+            </div>
+        </section>
+    </article>
+
         </main>
 
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ BDR</strong>
-<span class="text-slate-600 dark:text-slate-400">Base de Datos Relacional: tablas 2D, sin punteros fisicos</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Relacion</strong>
-<span class="text-slate-600 dark:text-slate-400">Tabla con filas (tuplas) y columnas (atributos)</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Primary Key</strong>
-<span class="text-slate-600 dark:text-slate-400">Identificador unico, no nulo, inmutable</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Foreign Key</strong>
-<span class="text-slate-600 dark:text-slate-400">Referencia a PK de otra tabla</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Restricciones</strong>
-<span class="text-slate-600 dark:text-slate-400">Integridad, columna, dominio, definidas por usuario</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Tipo de dato</strong>
-<span class="text-slate-600 dark:text-slate-400">VARCHAR, NUMBER, DATE, BLOB</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ SQL</strong>
-<span class="text-slate-600 dark:text-slate-400">Lenguaje estructurado de consultas</span>
-</li>
-
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="semana_02.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 02</a></li>
-                <li><a href="semana_04.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 04 →</a></li>
-            </ul>
-        </div>
-
+            <!-- Keywords (M3 Outlined Card) -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
+                <ul class="space-y-2">
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Modelo Relacional</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Basado en conjuntos matemáticos, tuplas, atributos y relaciones (E.F. Codd 1970)</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Primary Key (PK)</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Identificador único minimal de cada tupla; no admite valores NULL</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Foreign Key (FK)</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Atributo que referencia la PK de otra tabla garantizando integridad referencial</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Acciones Referenciales</strong>
+                        <span class="text-slate-600 dark:text-slate-400">CASCADE, RESTRICT, NO ACTION y SET NULL al borrar o actualizar padres</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; DDL</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Data Definition Language: CREATE, ALTER y DROP de tablas, esquemas e índices</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Tipos PostgreSQL 17</strong>
+                        <span class="text-slate-600 dark:text-slate-400">NUMERIC para dinero, TIMESTAMPTZ para auditoría, JSONB y UUID</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Integridad de Dominio</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Restricciones CHECK, NOT NULL, DEFAULT y tipos de datos válidos</span>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- Navigation Resources -->
+            <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+                <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación del Curso</h3>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice General</a></li>
+                    <li><a href="semana_02.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">&larr; Semana 02</a></li>
+                    <li><a href="semana_04.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 04 &rarr;</a></li>
+                </ul>
+            </div>
         </aside>
     </div>
 
@@ -639,46 +870,23 @@ graph TD
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
 
-<script>
-var highlight03 = -1;
-function draw03(ctx, W, H) {
+    <script>
+var step03 = 0;
+function draw03(ctx, W, H, frame) {
     CanvasUI.fillBg(ctx, W, H);
-    ctx.fillStyle = CanvasUI.COLORS.textMuted;
-    ctx.font = '13px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Haz clic en una tabla para ver sus relaciones', W / 2, 22);
-    var tables = [
-        { cols: ['ID_Cliente', 'Nombre', 'Tipo'], rows: [['001', 'Juan', 'A'], ['007', 'Ana', 'B']], x: 30, y: 45 },
-        { cols: ['Nro_Orden', 'Fecha', 'ID_Cliente'], rows: [['1001', '01/03', '001'], ['1002', '05/03', '007']], x: 330, y: 45 },
-        { cols: ['ID_Producto', 'Nombre', 'Precio'], rows: [['P01', 'Laptop', '2500'], ['P02', 'Mouse', '50']], x: 170, y: 200 }
-    ];
-    for (var i = 0; i < tables.length; i++) {
-        var t = tables[i];
-        CanvasUI.drawTable(ctx, t.x, t.y, t.cols, t.rows, highlight03 === i ? 0 : undefined);
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '10px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(['Clientes', 'Ordenes', 'Productos'][i], t.x + t.cols.length * 45, t.y - 8);
-    }
-    CanvasUI.drawArrow(ctx, 250, 90, 240, 130, '#3b82f6');
-    CanvasUI.drawArrow(ctx, 350, 90, 340, 195, '#3b82f6');
+    step03 = Math.floor(frame / 50) % 4;
+    CanvasUI.drawPipeline(ctx, W, H, ['1. Inserción FK', '2. Búsqueda PK Padre', '3. Validación CHECK', '4. Escritura en Disco'], step03);
 }
-(function() {
-    var c = document.getElementById('canvas_03');
-    if (!c) return;
-    c.addEventListener('click', function(e) {
-        var rect = c.getBoundingClientRect();
-        var mx = e.clientX - rect.left;
-        highlight03 = (highlight03 + 1) % 4;
-        var ctx2 = c.getContext('2d');
-        c.width = c.width;
-        draw03(ctx2, c.width, c.height);
-    });
-    var ctx0 = c.getContext('2d');
-    draw03(ctx0, c.width, c.height);
-})();
+var anim03 = null;
+function start03() {
+    if (anim03) return;
+    anim03 = CanvasUI.startAnimation('canvas_03', draw03, 30);
+}
+CanvasUI.observeAndRun('canvas_03', start03);
 CanvasUI.addControls('controls_03', {
-    reset: function() { highlight03 = -1; var ctx = document.getElementById('canvas_03').getContext('2d'); document.getElementById('canvas_03').width = document.getElementById('canvas_03').width; draw03(ctx, document.getElementById('canvas_03').width, document.getElementById('canvas_03').height); }
+    play: function() { if (!anim03) anim03 = CanvasUI.startAnimation('canvas_03', draw03, 30); },
+    pause: function() { if (anim03) { anim03.stop(); anim03 = null; } },
+    reset: function() { step03 = 0; if (anim03) { anim03.stop(); anim03 = null; } CanvasUI.clear('canvas_03'); setTimeout(start03, 100); }
 });
 </script>
 </body>

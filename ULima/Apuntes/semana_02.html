@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
-    <title>Semana 02 - Introduccion a las BD y su Ciclo de Vida</title>
+    <title>Semana 02 - Arquitectura de DBMS, Independencia de Datos y Transacciones ACID</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -69,15 +69,12 @@
             });
         });
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <!-- Sun icon -->
         <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <!-- Moon icon -->
         <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
@@ -87,8 +84,12 @@
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
-                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Introduccion a las Bases de Datos y su Ciclo de Vida</h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 02 • Ingenieria de Datos  • ULima 2013-2</p>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+                    Semana 02: Arquitectura de DBMS, Independencia de Datos y Transacciones ACID
+                </h1>
+                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                    ANSI/SPARC • Motores Internos • Protocolo ACID • Rol del DBA 2026 • Universidad de Lima
+                </p>
             </div>
             <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
@@ -97,7 +98,8 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+
     <!-- M3 Step-by-Step Diagram -->
     <div class="my-6">
         <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
@@ -105,49 +107,48 @@
                 📌 Proceso Paso a Paso: Flujo de Independencia de Datos (ANSI/SPARC)
             </h3>
             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Cómo las solicitudes de usuario se traducen y abstraen en cada nivel de almacenamiento.
+                Cómo las solicitudes de usuario se traducen y abstraen en cada nivel de almacenamiento sin acoplamiento.
             </p>
             <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
                 <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(40, 15)">
-    <!-- Externo -->
-    <rect x="0" y="20" width="180" height="60" rx="12" class="fill-blue-50 dark:fill-slate-800 stroke-blue-500 dark:stroke-blue-400" stroke-width="2" />
-    <text x="90" y="45" text-anchor="middle" class="fill-blue-700 dark:fill-blue-400 font-bold text-sm">Nivel Externo</text>
-    <text x="90" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Vistas de Usuario / APIs</text>
-    
-    <!-- Mapeo 1 -->
-    <path d="M 180 50 L 260 50" stroke="#3b82f6" stroke-width="2" fill="none" stroke-dasharray="4,4" />
-    <polygon points="265,50 258,46 258,54" fill="#3b82f6" />
-    <text x="222.5" y="40" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px] font-mono">Mapeo E-C</text>
+                  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+                  <g transform="translate(40, 15)">
+                    <!-- Externo -->
+                    <rect x="0" y="20" width="180" height="60" rx="12" class="fill-blue-50 dark:fill-slate-800 stroke-blue-500 dark:stroke-blue-400" stroke-width="2" />
+                    <text x="90" y="45" text-anchor="middle" class="fill-blue-700 dark:fill-blue-400 font-bold text-sm">Nivel Externo</text>
+                    <text x="90" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Vistas de Usuario / APIs / Roles</text>
+                    
+                    <!-- Mapeo 1 -->
+                    <path d="M 180 50 L 260 50" stroke="#3b82f6" stroke-width="2" fill="none" stroke-dasharray="4,4" />
+                    <polygon points="265,50 258,46 258,54" fill="#3b82f6" />
+                    <text x="222.5" y="40" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px] font-mono">Mapeo E-C</text>
 
-    <!-- Conceptual -->
-    <rect x="270" y="20" width="180" height="60" rx="12" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="360" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-sm">Nivel Conceptual</text>
-    <text x="360" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Tablas y Esquema Lógico</text>
+                    <!-- Conceptual -->
+                    <rect x="270" y="20" width="180" height="60" rx="12" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="360" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-sm">Nivel Conceptual</text>
+                    <text x="360" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Esquema Lógico Global & Reglas</text>
 
-    <!-- Mapeo 2 -->
-    <path d="M 450 50 L 530 50" stroke="#6366f1" stroke-width="2" fill="none" stroke-dasharray="4,4" />
-    <polygon points="535,50 528,46 528,54" fill="#6366f1" />
-    <text x="492.5" y="40" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px] font-mono">Mapeo C-I</text>
+                    <!-- Mapeo 2 -->
+                    <path d="M 450 50 L 530 50" stroke="#6366f1" stroke-width="2" fill="none" stroke-dasharray="4,4" />
+                    <polygon points="535,50 528,46 528,54" fill="#6366f1" />
+                    <text x="492.5" y="40" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px] font-mono">Mapeo C-I</text>
 
-    <!-- Interno -->
-    <rect x="540" y="20" width="180" height="60" rx="12" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="630" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-sm">Nivel Interno</text>
-    <text x="630" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Archivos Físicos e Índices</text>
-  </g>
-</svg>
+                    <!-- Interno -->
+                    <rect x="540" y="20" width="180" height="60" rx="12" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+                    <text x="630" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-sm">Nivel Interno</text>
+                    <text x="630" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Páginas de Disco, B-Trees, WAL</text>
+                  </g>
+                </svg>
             </div>
         </div>
     </div>
 
-            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
             <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
                 <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Relación de Términos
+                    🗺️ Mapa Conceptual y Arquitectura del Motor DBMS
                 </span>
                 <span class="transition group-open:rotate-180">
                     <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -156,447 +157,517 @@
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
                 <pre class="mermaid bg-transparent">
 graph TD
-    S02[Semana 02: DBMS] --> Arch[Arquitectura ANSI/SPARC 3 Niveles]
-    Arch --> Ext[Nivel Externo: Vistas de Usuario]
-    Arch --> Con[Nivel Conceptual: Esquema Lógico]
-    Arch --> Int[Nivel Interno: Almacenamiento Físico]
-    S02 --> ACID[Propiedades ACID]
-    ACID --> A[Atomicidad: Todo o nada]
-    ACID --> C[Consistencia: Transición a estado válido]
-    ACID --> I[Aislamiento: Transacciones concurrentes seguras]
-    ACID --> D[Durabilidad: Persistencia tras falla]
+    ANSI[Arquitectura ANSI/SPARC 3 Niveles] --> EXT[Nivel Externo: Vistas de Usuario]
+    ANSI --> CONC[Nivel Conceptual: Esquema Lógico Global]
+    ANSI --> INT[Nivel Interno: Archivos Físicos e Índices]
+    
+    EXT -->|Independencia Lógica| CONC
+    CONC -->|Independencia Física| INT
+    
+    ENGINE[Motor DBMS Interno] --> QP[Query Parser & Analyzer]
+    ENGINE --> QO[Query Optimizer CBO]
+    ENGINE --> BP[Buffer Pool / Shared Buffers]
+    ENGINE --> TM[Transaction & Lock Manager: 2PL / MVCC]
+    ENGINE --> WAL[WAL & Recovery Manager: ARIES]
+    
+    TM --> ACID[Propiedades ACID: Atomicidad, Consistencia, Aislamiento, Durabilidad]
+    DBA[Rol DBA / DBRE 2026] --> OBS[Observabilidad & Query Tuning]
+    DBA --> RES[RPO / RTO & Backup Recovery PITR]
                 </pre>
             </div>
         </details>
     </div>
 
-                
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<!-- Enfoque Arquitecto: Independencia lógica y física -->
-<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3>La Arquitectura de Tres Niveles ANSI/SPARC</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                El estándar ANSI/X3/SPARC define tres niveles de abstracción para lograr la independencia de datos:
-            </p>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Nivel Externo (Vistas):</strong> Cómo los diferentes usuarios ven los datos. Permite múltiples representaciones personalizadas.</li>
-<li><strong>Nivel Conceptual:</strong> El modelo lógico global y completo de toda la base de datos (entidades, atributos, relaciones y restricciones). Es inalterado por la representación física.</li>
-<li><strong>Nivel Interno (Físico):</strong> Cómo se almacenan físicamente los datos en disco (organización de archivos, índices, tipos de almacenamiento).</li>
-</ul>
-</section>
-<!-- Enfoque Cloud: Mapeo de Capas a la Nube -->
-<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3>Mapeo de la Arquitectura ANSI/SPARC a Servicios Cloud</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
-                En plataformas en la nube como AWS, este modelo de capas se traduce directamente:
-            </p>
-<ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Externo:</strong> APIs (AppSync/GraphQL), Vistas materializadas y políticas Row-Level Security (RLS) que segmentan el acceso según el usuario.</li>
-<li><strong>Conceptual:</strong> El motor lógico en AWS RDS PostgreSQL o Aurora Serverless v2, donde se definen esquemas, llaves y constraints.</li>
-<li><strong>Interno:</strong> Volúmenes elásticos de alto rendimiento (EBS GP3 o IO2) y el almacenamiento desagregado y distribuido en Aurora con replicación a través de 3 zonas de disponibilidad (AZ).</li>
-</ul>
-</section>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
-<h4>
-<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                Objetivos de Aprendizaje
-            </h4>
-<ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
-<li>Comprender la arquitectura de tres niveles de una base de datos</li>
-<li>Identificar los diferentes tipos de bases de datos y sus usos</li>
-<li>Explicar las funciones del DBMS y sus componentes internos</li>
-<li>Entender las propiedades ACID de las transacciones</li>
-<li>Aplicar las fases de diseno de bases de datos</li>
-</ul>
-</div>
-<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4>Insight del Arquitecto: La Abstraccion en Tres Niveles</h4>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Arquitectura ANSI/SPARC:</strong> Propuesta en 1975, establece que un sistema de BD debe separar la vision del usuario (externo), la vision logica global (conceptual) y la realidad fisica (interno). Esta separacion es la base de la independencia de datos.</p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Por que importa:</strong> Permite cambiar el almacenamiento fisico sin reescribir aplicaciones. En PostgreSQL, esto se traduce en la capacidad de agregar indices o cambiar tablespaces sin modificar una sola linea de codigo de aplicacion.</p>
-</section>
-<h2>1. Datos, Informacion y Base de Datos</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Repaso conceptual</span>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Dato vs Informacion:</strong> Los datos son las unidades basicas de la informacion no procesada, que por si solos no ofrecen significado. Requieren de un analisis de su contexto para interpretar su significado. La informacion es el resultado del procesamiento de los datos, que nos entrega un resultado significativo para tomar decisiones.</p>
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Que es una Base de Datos?</strong></p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Conjunto de datos persistentes utilizado por los sistemas de aplicaciones de una empresa.</li>
-<li>Coleccion de datos interrelacionados creados con un DBMS.</li>
-<li>Conjunto auto descriptivo de datos integrados.</li>
-<li>Sirve para almacenar datos que luego pueden ser recuperados al hacer una consulta y convertirse en informacion.</li>
-</ul>
-<h2>2. Caracteristicas de una Base de Datos</h2>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>CRUD:</strong> Create, Read, Update, Delete.</li>
-<li><strong>Consistencia:</strong> Los datos deberian ser los mismos en el transcurso del tiempo si no ha tenido modificaciones.</li>
-<li><strong>Validez:</strong> Datos validados.</li>
-<li><strong>Correccion facil de errores.</strong></li>
-<li><strong>Velocidad</strong> en las operaciones.</li>
-<li><strong>ACID:</strong> Atomicidad, Consistencia, Aislamiento, Durabilidad.</li>
-<li><strong>Persistencia y Copias de Seguridad.</strong></li>
-<li><strong>Portabilidad:</strong> Descargar datos relevantes de forma sencilla.</li>
-<li><strong>Seguridad.</strong></li>
-</ul>
-<h2>3. Arquitectura de Tres Niveles</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">ANSI/SPARC</span>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Nivel</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Pregunta clave</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Interno (Fisico)</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Describe la estructura fisica de almacenamiento: estrategia de almacenamiento, caminos de acceso, indices.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Como se guardan los datos en disco?</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Conceptual</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Describe la estructura de toda la base de datos para una comunidad de usuarios: vision global de los datos, interrelaciones, restricciones de integridad y seguridad.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Que datos existen y como se relacionan?</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Externo (Vistas)</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Incluye varios esquemas externos o vistas de usuario. Cada usuario ve solo los datos que necesita.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Que ve cada usuario?</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>4. Independencia de Datos</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Capacidad para modificar el esquema en un nivel del sistema de base de datos sin tener que modificar el esquema del nivel inmediato superior.</p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Independencia Logica</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Anadir, borrar o cambiar campos, registros o relaciones sin afectar aplicaciones existentes.</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Independencia Fisica</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cambiar caracteristicas fisicas, ubicacion de registros, esquemas de encriptacion sin afectar el nivel conceptual.</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>5. Tipos de Bases de Datos</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Caracteristicas</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Ejemplos</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Archivos Planos</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Archivos de texto sin ayuda para busqueda ni calculos. Utiles para informacion sencilla que raramente cambia.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">CSV, TXT</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Jerarquicas</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Estructura de arbol. Funcionan bien si los datos tienen naturaleza jerarquica.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">IMS, XML, Registro de Windows</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Relacionales</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Tablas con filas y columnas. Relaciones entre atributos comunes. Lenguaje SQL.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Oracle, MSSQL, DB2, MySQL, PostgreSQL</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Redes</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nodos conectados mediante enlaces. Utiles para rutas mas cortas y flujos de red.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Neo4J, CODASYL</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Objetos (OODBMS)</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Abstracciones llamadas objetos. Bueno si la arquitectura de programacion usa objetos.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">O2, GemStone</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Objeto-Relacional (ORDBMS)</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">hibrido entre Relacional y Objetos.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">PostgreSQL, Oracle</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Orientada a Documentos</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Documentos como registros no rigidos. Util para e-commerce.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">MongoDB</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Dimensionales</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"> dimensiones en lugar de tablas. Busqueda de patrones en datos.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Data Warehouses (OLAP)</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>6. Funciones del DBMS</h2>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Definicion de Datos (DDL):</strong> Crear, organizar y manipular la estructura de la base de datos.</li>
-<li><strong>Manipulacion de Datos (DML):</strong> Consultas, inserciones, actualizaciones y eliminaciones.</li>
-<li><strong>Administracion de Usuarios:</strong> Permisos, privilegios y recursos.</li>
-<li><strong>Administracion de Performance:</strong> Throughput, instancia, almacenamiento, memoria, bloqueos.</li>
-<li><strong>Control de Concurrencia:</strong> Gestion de bloqueos, commit y rollback.</li>
-<li><strong>Encriptacion de datos.</strong></li>
-<li><strong>Administracion de Backup y Recovery:</strong> Backup, restore, recovery, archivos Log.</li>
-<li><strong>Optimizacion del desempeno.</strong></li>
-<li><strong>Administrar el diccionario de datos.</strong></li>
-</ul>
-<h2>7. Terminologia del Modelo Relacional</h2>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo de tabla PERSONA (Relacion):</strong></p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">ID (PK)</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">NAME</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">PHONE</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">DEPT_ID (FK)</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">201</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Unisports</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">55-2066101</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">12</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">202</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Simms Athletics</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">81-20101</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">14</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">203</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Delhi Sports</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">91-10351</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">14</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">204</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Womansport</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">1-206-104-0103</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">11</td></tr>
-</tbody>
-</thead></table>
-</div>
-</div>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Relacion (Tabla):</strong> Unidad basica de almacenamiento compuesta de filas y columnas.</li>
-<li><strong>Tupla (Fila):</strong> Un registro especifico que representa una entidad.</li>
-<li><strong>Atributo (Columna):</strong> Una propiedad de la entidad (nombre, telefono, etc.).</li>
-<li><strong>Dominio:</strong> Conjunto de valores permitidos para un atributo.</li>
-<li><strong>Primary Key (PK):</strong> Atributo o combinacion que identifica de manera unica un registro. No nula, inmutable, unica.</li>
-<li><strong>Foreign Key (FK):</strong> Atributo que referencia la PK de otra entidad para implementar asociaciones entre tablas.</li>
-</ul>
-<h2>8. Restricciones de Dominio</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Restriccion</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>NULL</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Permite valores nulos</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>NOT NULL</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">No permite valores nulos</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>CHECK</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Condicion booleana personalizada</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>UNIQUE</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Valores deben ser distintos entre si</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>DEFAULT</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Valor por defecto si no se especifica</td></tr>
-</tbody>
-</thead></table>
-</div>
-<h2>9. Transacciones y ACID</h2>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Transaccion:</strong> Cualquier operacion de lectura o escritura realizada en la base de datos. Pasa por estados: activa, parcialmente comprometida, fallida, terminada, comprometida (COMMIT) o deshecha (ROLLBACK).</p>
-</div>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>A</strong>tomicidad: Todo o nada. Si una parte falla, toda la transaccion se deshace.</li>
-<li><strong>C</strong>onsistencia: La BD pasa de un estado valido a otro estado valido.</li>
-<li><strong>I</strong>ndependencia/Aislamiento: Las transacciones concurrentes no se afectan entre si.</li>
-<li><strong>D</strong>urabilidad: Una vez committeada, los cambios persisten incluso si hay falla.</li>
-</ul>
-<h2>10. Fases del Diseno de Base de Datos</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Fase</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Actividades</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Diseno Conceptual</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Recoleccion: identificacion de requerimientos, entidades y atributos. Refinamiento: cardinalidad, frecuencia de consultas, relaciones simples. Normalizacion.</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Diseno Logico</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Determinar relaciones entre entidades. Asegurar que los requerimientos puedan ser soportados. Depende del tipo de DBMS.</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Diseno Fisico</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Representacion fisica de entidades y atributos (tablas) a ser implementados en un DBMS especifico.</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>11. Metodologia Pratt-Adamski</h2>
-<ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Representar las vistas de usuarios como un conjunto de relaciones.</li>
-<li>Normalizar las relaciones.</li>
-<li>Representar todas las claves (PK, FK).</li>
-<li>Determinar cualquier restriccion especial.</li>
-<li>Combinar el resultado de los pasos previos dentro del diseno final.</li>
-</ol>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Supuestos:</strong> Los requerimientos son conocidos y se documentara durante el proceso de diseno.</p>
-</div>
-<h2>12. Objetos de la Base de Datos</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Objeto</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Tabla</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Unidad basica de almacenamiento; compuesta de filas y columnas</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Vista</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Representacion logica de los datos de una o mas tablas</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Secuencia</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Genera valores de clave primaria secuenciales</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Indice</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mejora la performance de consultas (B+Tree, Hash)</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Sinonimo</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nombres alternativos para objetos</td></tr>
-</tbody>
-</thead></table>
-</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Laboratorio: Diseno Conceptual</strong></p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Para un sistema de biblioteca:</p>
-<ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Identifica las entidades principales (Libro, Usuario, Prestamo).</li>
-<li>Define los atributos de cada entidad.</li>
-<li>Identifica las claves primarias.</li>
-<li>Identifica las relaciones entre entidades.</li>
-</ol>
-</div>
-<div class="canvas-container">
-<canvas height="360" id="canvas_02" width="800"></canvas>
-<div class="canvas-controls" id="controls_02"></div>
-</div>
-<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2>
-<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                💡 Tips del Profesor
-            </h2>
-<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Configuración de work_mem:</strong> Ajuste este parámetro en RDS/Aurora para optimizar operaciones de ordenamiento y joins directamente en memoria RAM antes de paginar a disco físico.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite persistencia en Docker local en producción:</strong> Utilice volúmenes mapeados de manera persistente al host (`volumes:`) y nunca use el almacenamiento efímero del contenedor para almacenar datos reales.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Monitoree IOPS:</strong> En AWS, el rendimiento físico de su base de datos suele estar limitado por las IOPS asignadas a su volumen EBS. Asegúrese de elegir GP3 para cargas transaccionales.</p>
-</div>
-</div>
-</section>
-<section class="mt-10">
-<h2>
-<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-<div class="space-y-4">
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            ¿Qué es la independencia lógica de los datos?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Es la capacidad de modificar el esquema conceptual (ej. añadir una columna o tabla) sin necesidad de modificar los esquemas externos o los programas de aplicación existentes.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            ¿Cómo se aplica el concept de nivel físico a una base de datos distribuida en AWS?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">El nivel físico se encarga de la distribución de los bloques de almacenamiento (8KB en Postgres) entre múltiples discos físicos, réplicas de lectura y volúmenes EBS compartidos en la red local de la nube.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            ¿Qué función cumple el esquema externo en la seguridad de la información?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Permite restringir el acceso a los datos de la base de datos completa exponiendo únicamente vistas controladas u ocultando columnas confidenciales (ej. contraseñas o salarios) a usuarios no autorizados.</p>
-</div>
-</details>
-</div>
-</section>
-</article>
-</article>
+    <article class="space-y-10 prose dark:prose-invert max-w-none">
+        <!-- Banner de Objetivos -->
+        <div class="bg-indigo-50/60 dark:bg-indigo-950/20 rounded-3xl p-6 border border-indigo-100 dark:border-indigo-900/40 shadow-sm">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="p-2 bg-indigo-600 text-white rounded-xl">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Objetivos Pedagógicos y Competencias de Arquitectura</h3>
+            </div>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-slate-700 dark:text-slate-300 list-disc list-inside m-0">
+                <li>Dominar la arquitectura estándar ANSI/SPARC de 3 niveles y sus mapeos.</li>
+                <li>Diferenciar y aplicar los conceptos de Independencia Lógica e Independencia Física de Datos.</li>
+                <li>Desglosar los subsistemas internos del DBMS: Parser, Optimizer, Buffer Pool, Lock Manager y WAL.</li>
+                <li>Comprender rigurosamente las propiedades transaccionales ACID y el autómata de estados.</li>
+                <li>Aplicar la metodología de diseño de bases de datos de Pratt-Adamski y planificación PERT/Gantt.</li>
+                <li>Definir el rol moderno del DBA / DBRE: Observabilidad, Seguridad RBAC/RLS, RPO/RTO y PITR en 2026.</li>
+            </ul>
+        </div>
 
-            </article>
+        <!-- SECCIÓN 1: Arquitectura ANSI/SPARC de Tres Niveles -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">01.</span> La Arquitectura ANSI/SPARC de Tres Niveles
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Propuesta en 1975 por el comité ANSI/X3/SPARC, esta arquitectura formalizó la separación entre las aplicaciones de usuario y los mecanismos físicos de almacenamiento en disco, estableciendo el marco teórico que gobierna a todos los DBMS modernos.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                <!-- Nivel Externo -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-2">
+                    <div class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Capa 1: Presentación y Vistas</div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white m-0">Nivel Externo (Vistas)</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Es la visión individualizada de los datos para un usuario o grupo de aplicaciones específico. Cada grupo accede a un <em>esquema externo</em> (subesquema o vista) que expone únicamente los datos relevantes y oculta el resto por motivos de simplicidad y confidencialidad.
+                    </p>
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-[11px] text-blue-600 dark:text-blue-400">
+                        CREATE VIEW v_clientes_resumen AS SELECT id, nombre, email FROM clientes;
+                    </div>
+                </div>
+
+                <!-- Nivel Conceptual -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-2">
+                    <div class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Capa 2: Lógica Comunitaria</div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white m-0">Nivel Conceptual</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Es la representación estructural global y lógica de <strong>toda la base de datos</strong>. Modela todas las entidades, sus atributos, interrelaciones, restricciones de integridad referencial y reglas de negocio, completamente independiente de la tecnología física de disco.
+                    </p>
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-[11px] text-indigo-600 dark:text-indigo-400">
+                        Tabla Clientes (id PK, nombre, email, password_hash, created_at)
+                    </div>
+                </div>
+
+                <!-- Nivel Interno -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-2">
+                    <div class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Capa 3: Almacenamiento Físico</div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white m-0">Nivel Interno (Físico)</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Describe la estructura física de persistencia: organización de archivos de datos en bloques de 8KB, factores de relleno (fillfactor), árboles B-Tree, clustering, compresión columnar y ubicación en tablespaces en discos NVMe/SSD.
+                    </p>
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-[11px] text-emerald-600 dark:text-emerald-400">
+                        Block 0x4F8A: Tuple [Offset 32, Len 120, ItemPointer (0, 1)]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diagrama ASCII: Los Mapeos ANSI/SPARC -->
+            <div class="my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Mecanismo de Mapeos y Transformación de Consultas</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
+[USUARIO / APLICACIÓN] ── (Consulta sobre Vista Externa: v_ventas_mes)
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. NIVEL EXTERNO: Subesquema de Ventas                                      │
+│    Esquema Externo A: { id_factura, nombre_cliente, total_soles }           │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │  ◄── [MAPEO EXTERNO-CONCEPTUAL (E-C)]
+                                       │      Traduce nombres y proyecciones
+                                       ▼      de vistas a tablas reales.
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 2. NIVEL CONCEPTUAL: Esquema Lógico Global                                  │
+│    Tabla Factura(id_factura PK, id_cliente FK, monto, igv, estado)          │
+│    Tabla Cliente(id_cliente PK, nombres, apellidos, ruc, direccion)         │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │  ◄── [MAPEO CONCEPTUAL-INTERNO (C-I)]
+                                       │      Traduce tablas lógicas a offsets
+                                       ▼      de bloques, índices y archivos.
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 3. NIVEL INTERNO: Esquema Físico                                            │
+│    Tablespace 'fast_nvme' -> Archivo 'base/16384/24580', Páginas de 8KB     │
+│    Índice B-Tree 'idx_factura_cliente_id' -> Root Block 3, Leaf Block 45    │
+└─────────────────────────────────────────────────────────────────────────────┘</pre>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: Independencia de Datos -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">02.</span> Independencia de Datos: Lógica y Física
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                La <strong>independencia de datos</strong> es la propiedad cardinal que distingue a un DBMS de un simple manejador de archivos. Se define como la capacidad de modificar el esquema en un nivel determinado del sistema sin necesidad de alterar los esquemas de los niveles inmediatamente superiores.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
+                <!-- Independencia Lógica -->
+                <div class="bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl p-5 space-y-3">
+                    <h4 class="text-base font-bold text-indigo-700 dark:text-indigo-300 m-0">
+                        🛡️ 1. Independencia Lógica de Datos
+                    </h4>
+                    <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                        Es la inmunidad de las aplicaciones de usuario y esquemas externos frente a cambios en el <strong>esquema conceptual</strong>.
+                    </p>
+                    <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-indigo-100 dark:border-indigo-900/40 text-xs space-y-1.5">
+                        <div class="font-bold text-slate-900 dark:text-slate-100">Casos Prácticos de Cambio Conceptual:</div>
+                        <ul class="list-disc list-inside text-slate-600 dark:text-slate-400 space-y-1">
+                            <li>Añadir una nueva columna (<code class="font-mono text-indigo-600">telefono_movil_2</code>) a la tabla Clientes.</li>
+                            <li>Crear una nueva tabla de auditoría o entidad de relación.</li>
+                            <li>Dividir una tabla en dos mediante normalización sin romper la vista original (recreando la vista mediante un <code class="font-mono">JOIN</code>).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Independencia Física -->
+                <div class="bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-5 space-y-3">
+                    <h4 class="text-base font-bold text-emerald-700 dark:text-emerald-300 m-0">
+                        ⚙️ 2. Independencia Física de Datos
+                    </h4>
+                    <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                        Es la inmunidad del <strong>esquema conceptual</strong> y las consultas SQL lógicas frente a modificaciones en las <strong>estructuras físicas de almacenamiento</strong>.
+                    </p>
+                    <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/40 text-xs space-y-1.5">
+                        <div class="font-bold text-slate-900 dark:text-slate-100">Casos Prácticos de Cambio Físico:</div>
+                        <ul class="list-disc list-inside text-slate-600 dark:text-slate-400 space-y-1">
+                            <li>Crear o eliminar un índice <code class="font-mono text-emerald-600">B-Tree</code> o <code class="font-mono text-emerald-600">GIN</code> para acelerar una consulta.</li>
+                            <li>Cambiar la ruta del tablespace de almacenamiento magnético HDD a NVMe.</li>
+                            <li>Modificar el algoritmo de compresión física o el particionamiento de rango en disco.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: Arquitecturas Físicas de Sistemas de Base de Datos -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">03.</span> Arquitecturas de Sistemas de Base de Datos: De 2 Capas a Cloud 2026
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                La topología física que conecta a los clientes con el motor DBMS ha evolucionado para soportar millones de usuarios concurrentes con latencias de milisegundos.
+            </p>
+
+            <div class="space-y-4 my-6">
+                <div class="bg-slate-100 dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-800">
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-2">1. Arquitectura de 2 Capas (Cliente / Servidor Clásico)</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                        El <em>Cliente Pesado</em> (Fat Client) ejecuta la interfaz gráfica y la lógica de negocio completa en la computadora del usuario, conectándose directamente mediante sockets TCP/IP al servidor DBMS. Limitaciones: Grave riesgo de seguridad si se vulnera el ejecutable, alto acoplamiento y congestión de conexiones concurrentes en el motor.
+                    </p>
+                </div>
+
+                <div class="bg-slate-100 dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-800">
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-2">2. Arquitectura de 3 Capas (N-Tier Enterprise)</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                        El usuario interactúa con un <em>Cliente Ligero</em> (Browser/Mobile App). Las peticiones van hacia una capa intermedia de <strong>Servidores de Aplicación / Microservicios</strong> (API REST, gRPC) donde reside la lógica de negocio. Esta capa intermedia gestiona un <em>Connection Pool</em> (e.g., PgBouncer, HikariCP) hacia el clúster DBMS, optimizando recursos y blindando la base de datos de accesos directos desde internet.
+                    </p>
+                </div>
+
+                <div class="bg-emerald-50/50 dark:bg-emerald-950/20 rounded-2xl p-5 border border-emerald-200 dark:border-emerald-900/40">
+                    <h4 class="text-sm font-bold text-emerald-800 dark:text-emerald-300 mb-2">3. Arquitectura Cloud Nativa y Serverless (2026)</h4>
+                    <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                        En plataformas contemporáneas (Amazon Aurora Serverless v2, Neon PostgreSQL Serverless, Snowflake), se produce el <strong>desacoplamiento total de Cómputo y Almacenamiento</strong>. Los nodos de cómputo (motores SQL sin estado) escalan instantáneamente de 0 a $N$ instancias según el tráfico, mientras que el almacenamiento se distribuye en una capa compartida de alta durabilidad (multi-AZ) con replicación por quórum y paginación en S3/NVMe.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: Componentes Internos del Motor DBMS -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">04.</span> Anatomía Interna del Motor DBMS (Query Pipeline & Storage)
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Cuando una aplicación emite una sentencia SQL, el motor ejecuta una secuencia de pasos altamente optimizados a través de sus subsistemas internos.
+            </p>
+
+            <div class="my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Ciclo de Vida de Ejecución de una Consulta en el Motor DBMS</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
+                               ┌───────────────────────────┐
+                               │     CONSULTA SQL TEXT     │
+                               └─────────────┬─────────────┘
+                                             │
+                                             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│ 1. QUERY PARSER & LEXER: Valida sintaxis gramatical y construye el Abstract Syntax Tree │
+└────────────────────────────────────────────┬────────────────────────────────────────────┘
+                                             │
+                                             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│ 2. QUERY REWRITER & CATALOG: Valida permisos de usuario y expande vistas del catálogo   │
+└────────────────────────────────────────────┬────────────────────────────────────────────┘
+                                             │
+                                             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│ 3. QUERY OPTIMIZER (CBO): Evalúa planes alternativos (Hash Join vs Nested Loop, Index   │
+│    Scan vs Seq Scan) usando histogramas estadísticos (pg_statistic) y costos de E/S.   │
+└────────────────────────────────────────────┬────────────────────────────────────────────┘
+                                             │  ◄── Genera el "Execution Plan" óptimo
+                                             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│ 4. EXECUTION ENGINE: Ejecuta el plan iterando operadores volcán (Open/Next/Close)        │
+└───────────────────────┬─────────────────────────────────┬───────────────────────────────┘
+                        │                                 │
+                        ▼                                 ▼
+┌──────────────────────────────────────────┐    ┌─────────────────────────────────────────┐
+│ 5. LOCK & CONCURRENCY MANAGER            │    │ 6. BUFFER POOL MANAGER (Shared Buffers) │
+│    - Locks de tabla / fila               │    │    - Busca páginas de 8KB en RAM        │
+│    - MVCC (xmin, xmax para aislamiento)  │    │    - Si hay "Buffer Miss", lee de disco │
+└───────────────────────┬──────────────────┘    └─────────────────┬───────────────────────┘
+                        │                                         │
+                        ▼                                         ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│ 7. WAL & DISK ENGINE: Escribe en Log previo (Write-Ahead Log) y persiste a Disco (fsync)│
+└─────────────────────────────────────────────────────────────────────────────────────────┘</pre>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: Teoría de Transacciones y Propiedades ACID -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">05.</span> Transacciones y Propiedades ACID en Profundidad
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Una <strong>transacción</strong> es una unidad lógica de ejecución (LUW - Logical Unit of Work) que comprende una o más operaciones de lectura (<code class="font-mono">SELECT</code>) y escritura (<code class="font-mono">INSERT, UPDATE, DELETE</code>). Para garantizar la integridad absoluta de los datos, el motor DBMS debe satisfacer el protocolo <strong>ACID</strong>.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <!-- A -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <h4 class="text-base font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+                        🅰️ Atomicidad (Atomicity) &ndash; "Todo o Nada"
+                    </h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        La transacción se ejecuta como una unidad indivisible. Si ocurre un fallo del sistema, error de red o interrupción a la mitad, el motor realiza un <strong>ROLLBACK</strong> completo, revirtiendo todas las modificaciones mediante el log WAL para dejar la BD en su estado original.
+                    </p>
+                </div>
+
+                <!-- C -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <h4 class="text-base font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+                        🅲 Preservación de Consistencia (Consistency)
+                    </h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Una transacción transforma la base de datos de un estado válido a otro estado igualmente válido, respetando estrictamente todas las restricciones de integridad (claves primarias, foráneas, checks y triggers).
+                    </p>
+                </div>
+
+                <!-- I -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <h4 class="text-base font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+                        🅸 Aislamiento (Isolation)
+                    </h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Los efectos intermedios de una transacción concurrente no deben ser visibles para otras transacciones hasta que ocurra el <code class="font-mono text-indigo-600">COMMIT</code>. Niveles ANSI SQL: <em>Read Uncommitted</em>, <em>Read Committed</em>, <em>Repeatable Read</em> y <em>Serializable</em>.
+                    </p>
+                </div>
+
+                <!-- D -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <h4 class="text-base font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+                        🅳 Durabilidad / Permanencia (Durability)
+                    </h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Una vez que la transacción recibe la confirmación de <code class="font-mono text-indigo-600">COMMIT</code>, sus efectos persisten irrevocablemente en el almacenamiento no volátil, incluso ante una falla total de energía o caída catastrófica del servidor.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Autómata de Estados de una Transacción -->
+            <div class="my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Autómata de Estados de una Transacción en el DBMS</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
+                  ┌──────────────────────┐
+                  │    ESTADO ACTIVO     │  ◄── Inicio de transacción (BEGIN / START TRANSACTION)
+                  └──────────┬───────────┘
+                             │
+            ┌────────────────┴────────────────┐
+            │                                 │ (Error, Deadlock, Abort)
+            ▼                                 ▼
+┌──────────────────────┐            ┌──────────────────────┐
+│PARCIALMENTE COMPROM. │            │    ESTADO FALLIDO    │
+│(Tras última sentencia│            │ (Operación inválida) │
+└──────────┬───────────┘            └──────────┬───────────┘
+           │                                   │
+           │ (fsync en WAL exitoso)            │ (Rollback ejecutado)
+           ▼                                   ▼
+┌──────────────────────┐            ┌──────────────────────┐
+│  ESTADO COMPROMETIDO │            │   ESTADO ABORTADO    │
+│   (COMMIT Exitoso)   │            │(Rollback completado) │
+└──────────┬───────────┘            └──────────┬───────────┘
+           │                                   │
+           └─────────────────┬─────────────────┘
+                             ▼
+                  ┌──────────────────────┐
+                  │   ESTADO TERMINADO   │
+                  └──────────────────────┘</pre>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: Metodología de Diseño de Pratt-Adamski -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">06.</span> Metodología de Diseño de Pratt-Adamski y Planificación
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                La metodología de Philip Pratt y Joseph Adamski es uno de los marcos formales más consolidados para estructurar el diseño de bases de datos empresariales en 5 etapas secuenciales e iterativas:
+            </p>
+
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs">
+                    <div class="bg-indigo-50/50 dark:bg-indigo-950/20 p-3.5 rounded-xl border border-indigo-100 dark:border-indigo-900/30">
+                        <div class="font-bold text-indigo-700 dark:text-indigo-400 mb-1">Paso 1: Vistas</div>
+                        <p class="text-slate-600 dark:text-slate-400">Representar los requerimientos de cada usuario como un conjunto de relaciones preliminares.</p>
+                    </div>
+                    <div class="bg-indigo-50/50 dark:bg-indigo-950/20 p-3.5 rounded-xl border border-indigo-100 dark:border-indigo-900/30">
+                        <div class="font-bold text-indigo-700 dark:text-indigo-400 mb-1">Paso 2: Normalizar</div>
+                        <p class="text-slate-600 dark:text-slate-400">Aplicar reglas de normalización (1NF, 2NF, 3NF) a cada relación aislada.</p>
+                    </div>
+                    <div class="bg-indigo-50/50 dark:bg-indigo-950/20 p-3.5 rounded-xl border border-indigo-100 dark:border-indigo-900/30">
+                        <div class="font-bold text-indigo-700 dark:text-indigo-400 mb-1">Paso 3: Claves</div>
+                        <p class="text-slate-600 dark:text-slate-400">Determinar todas las Primary Keys, Foreign Keys y claves alternativas.</p>
+                    </div>
+                    <div class="bg-indigo-50/50 dark:bg-indigo-950/20 p-3.5 rounded-xl border border-indigo-100 dark:border-indigo-900/30">
+                        <div class="font-bold text-indigo-700 dark:text-indigo-400 mb-1">Paso 4: Restricciones</div>
+                        <p class="text-slate-600 dark:text-slate-400">Definir reglas de negocio, integridad referencial y restricciones CHECK.</p>
+                    </div>
+                    <div class="bg-indigo-50/50 dark:bg-indigo-950/20 p-3.5 rounded-xl border border-indigo-100 dark:border-indigo-900/30">
+                        <div class="font-bold text-indigo-700 dark:text-indigo-400 mb-1">Paso 5: Integración</div>
+                        <p class="text-slate-600 dark:text-slate-400">Fusionar los esquemas individuales en un único modelo conceptual global cohesivo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 7: El Rol Estratégico del DBA y Observabilidad 2026 -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">07.</span> El Rol del Administrador de Base de Datos (DBA) en 2026
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                El rol del DBA ha evolucionado radicalmente hacia el de <strong>Database Reliability Engineer (DBRE)</strong> y Arquitecto de Plataformas de Datos, enfocado en automatización, resiliencia y observabilidad avanzada.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-2">
+                    <h4 class="text-sm font-bold text-indigo-600 dark:text-indigo-400 m-0">🎯 Métricas RPO y RTO en Recuperación</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        <strong>RPO (Recovery Point Objective):</strong> La cantidad máxima de tiempo de datos transaccionales que la empresa puede tolerar perder ante un desastre (e.g., RPO &lt; 1 segundo con replicación síncrona).<br>
+                        <strong>RTO (Recovery Time Objective):</strong> El tiempo máximo admisible para restaurar la base de datos a un estado 100% operativo tras una caída.
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-2">
+                    <h4 class="text-sm font-bold text-indigo-600 dark:text-indigo-400 m-0">📊 Observabilidad y Query Tuning</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Diagnóstico proactivo utilizando vistas estadísticas en tiempo real (<code class="font-mono text-indigo-600">pg_stat_statements</code>, <code class="font-mono text-indigo-600">pg_stat_activity</code>), análisis de contención de locks, detección de deadlocks y trazabilidad distribuida con OpenTelemetry.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 8: Tips del Profesor y Laboratorio -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8 space-y-4">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                </span>
+                💡 Tips del Profesor y Preguntas Clave de Examen
+            </h2>
+
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                <div class="flex gap-3">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold text-base">•</span>
+                    <div>
+                        <strong class="text-slate-900 dark:text-white">Independencia Lógica vs Física:</strong> Pregunta típica de examen: <em>"¿Qué tipo de independencia se demuestra cuando creamos un índice B-Tree sin modificar las sentencias SELECT de la app?"</em> Respuesta: <strong>Independencia Física</strong>. Si añadimos una columna a una tabla y recreamos la vista sin romper la interfaz, es <strong>Independencia Lógica</strong>.
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold text-base">•</span>
+                    <div>
+                        <strong class="text-slate-900 dark:text-white">Transacciones y Estados:</strong> Recuerde que una transacción entra al estado <em>Parcialmente Comprometida</em> tras ejecutar la última instrucción SQL, pero solo pasa a <em>Comprometida (Committed)</em> cuando sus registros WAL se han vaciado exitosamente a disco no volátil.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laboratorio -->
+            <div class="bg-fuchsia-50/50 dark:bg-fuchsia-950/10 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/30 space-y-3">
+                <h4 class="text-base font-bold text-fuchsia-900 dark:text-fuchsia-300 flex items-center gap-2">
+                    🧪 Laboratorio Práctico: Análisis de Concurrencia y Aislamiento
+                </h4>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Abre dos sesiones interactivas de PostgreSQL 16/17 en paralelo y simula el escenario clásico de <em>Lost Update</em>:
+                </p>
+                <ol class="list-decimal list-inside space-y-2 text-xs text-slate-700 dark:text-slate-300 font-medium">
+                    <li>En la Sesión 1: <code class="font-mono bg-white dark:bg-slate-900 px-1 py-0.5 rounded">BEGIN; SELECT saldo FROM cuenta WHERE id = 1;</code> (lee S/. 1000).</li>
+                    <li>En la Sesión 2: <code class="font-mono bg-white dark:bg-slate-900 px-1 py-0.5 rounded">BEGIN; UPDATE cuenta SET saldo = saldo - 200 WHERE id = 1; COMMIT;</code> (actualiza a S/. 800).</li>
+                    <li>En la Sesión 1: <code class="font-mono bg-white dark:bg-slate-900 px-1 py-0.5 rounded">UPDATE cuenta SET saldo = 1000 + 500 WHERE id = 1; COMMIT;</code></li>
+                    <li>Explica cómo el motor previene o experimenta la inconsistencia según el nivel de aislamiento configurado (<code class="font-mono">READ COMMITTED</code> vs <code class="font-mono">REPEATABLE READ</code>).</li>
+                </ol>
+            </div>
+
+            <!-- Canvas Interactivo -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col items-center">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Simulación Visual Interactiva: Mapeos ANSI/SPARC</div>
+                <canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_02" width="800"></canvas>
+                <div class="mt-4 flex gap-2" id="controls_02"></div>
+            </div>
+        </section>
+    </article>
+
         </main>
 
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ DBMS / SGDB</strong>
-<span class="text-slate-600 dark:text-slate-400">Software que gestiona, define y manipula la BD</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Arquitectura 3 niveles</strong>
-<span class="text-slate-600 dark:text-slate-400">Interno, Conceptual, Externo (ANSI/SPARC)</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Independencia de datos</strong>
-<span class="text-slate-600 dark:text-slate-400">Logica y Fisica</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ PK / FK</strong>
-<span class="text-slate-600 dark:text-slate-400">Primary Key, Foreign Key</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ ACID</strong>
-<span class="text-slate-600 dark:text-slate-400">Atomicidad, Consistencia, Aislamiento, Durabilidad</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Tipos de BD</strong>
-<span class="text-slate-600 dark:text-slate-400">Jerarquicas, Red, Relacionales, Objetos, Documentos, Dimensionales</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Metodologia Pratt-Adamski</strong>
-<span class="text-slate-600 dark:text-slate-400">5 pasos para diseno relacional</span>
-</li>
-
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="semana_01.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 01</a></li>
-                <li><a href="semana_03.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 03 →</a></li>
-            </ul>
-        </div>
-
+            <!-- Keywords (M3 Outlined Card) -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
+                <ul class="space-y-2">
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Arquitectura ANSI/SPARC</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Estándar de 3 niveles: Externo (Vistas), Conceptual (Lógico) e Interno (Físico)</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Independencia Lógica</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Modificar el esquema conceptual sin alterar las vistas ni el código de usuario</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Independencia Física</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Modificar estructuras en disco e índices sin tocar el modelo lógico</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; CBO (Query Optimizer)</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Optimizador basado en costos estadísticos de CPU y lecturas de E/S</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Buffer Pool & WAL</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Gestión de páginas en RAM y escritura previa en log para recuperación ante fallos</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; ACID</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Atomicidad, Consistencia, Aislamiento (Isolation) y Durabilidad</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; DBA / DBRE en 2026</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Gobernanza de datos, observabilidad, RPO/RTO y Point-in-Time Recovery (PITR)</span>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- Navigation Resources -->
+            <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+                <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación del Curso</h3>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice General</a></li>
+                    <li><a href="semana_01.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">&larr; Semana 01</a></li>
+                    <li><a href="semana_03.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 03 &rarr;</a></li>
+                </ul>
+            </div>
         </aside>
     </div>
 
@@ -671,33 +742,12 @@ graph TD
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
 
-<script>
+    <script>
 var step02 = 0;
 function draw02(ctx, W, H, frame) {
     CanvasUI.fillBg(ctx, W, H);
-    step02 = Math.floor(frame / 80) % 4;
-    var layers = [
-        { label: 'Nivel Externo - Vistas de Usuario', y: 40 },
-        { label: 'Nivel Conceptual - Esquema Logico', y: 120 },
-        { label: 'Nivel Interno - Almacenamiento Fisico', y: 200 }
-    ];
-    ctx.fillStyle = CanvasUI.COLORS.textMuted;
-    ctx.font = '13px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Arquitectura de 3 Niveles (ANSI/SPARC)', W / 2, 20);
-    for (var i = 0; i < layers.length; i++) {
-        var active = i < step02;
-        CanvasUI.drawNode(ctx, W / 2 - 150, layers[i].y, 300, 55, layers[i].label, active ? CanvasUI.COLORS.accent : CanvasUI.COLORS.surface);
-        if (i < layers.length - 1) {
-            CanvasUI.drawArrow(ctx, W / 2, layers[i].y + 55, W / 2, layers[i + 1].y, active ? CanvasUI.COLORS.line : CanvasUI.COLORS.surface);
-        }
-    }
-    if (step02 >= 3) {
-        ctx.fillStyle = CanvasUI.COLORS.warn;
-        ctx.font = '12px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('Independencia de Datos: cambios fisicos no afectan el nivel logico', W / 2, 280);
-    }
+    step02 = Math.floor(frame / 50) % 3;
+    CanvasUI.drawPipeline(ctx, W, H, ['1. Nivel Externo (Vistas)', '2. Nivel Conceptual (Tablas)', '3. Nivel Interno (Disco/WAL)'], step02);
 }
 var anim02 = null;
 function start02() {
@@ -708,7 +758,7 @@ CanvasUI.observeAndRun('canvas_02', start02);
 CanvasUI.addControls('controls_02', {
     play: function() { if (!anim02) anim02 = CanvasUI.startAnimation('canvas_02', draw02, 30); },
     pause: function() { if (anim02) { anim02.stop(); anim02 = null; } },
-    reset: function() { step02 = 0; if (anim02) { anim02.stop(); anim02 = null; } setTimeout(start02, 100); }
+    reset: function() { step02 = 0; if (anim02) { anim02.stop(); anim02 = null; } CanvasUI.clear('canvas_02'); setTimeout(start02, 100); }
 });
 </script>
 </body>

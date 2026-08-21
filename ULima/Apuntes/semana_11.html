@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
-    <title>Semana 11 - GROUP BY, HAVING y Funciones de Grupo</title>
+    <title>Semana 11 - SQL Analítico Avanzado: Funciones de Ventana, Agrupamiento Multidimensional y CTEs Recursivas</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -47,6 +47,10 @@
         html.dark .prose strong, html.dark strong {
             color: #f1f5f9 !important;
         }
+        pre code {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.84rem;
+        }
     </style>
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -69,26 +73,23 @@
             });
         });
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <!-- Sun icon -->
         <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <!-- Moon icon -->
         <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
-    <!-- Header (M3 Tonal App Bar) -->
+    <!-- Header -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
-                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Funciones de Grupo y Agrupamiento</h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 11 • Ingenieria de Datos  • ULima 2013-2</p>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">SQL Analítico Avanzado: Window Functions, ROLLUP/CUBE y CTEs Recursivas</h1>
+                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 11 • Ingeniería de Datos • ULima 2026</p>
             </div>
             <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
@@ -97,430 +98,423 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
-    <!-- M3 Step-by-Step Diagram -->
-    <div class="my-6">
-        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                📌 Proceso Paso a Paso: Pipeline de Agrupamiento y Agregación
-            </h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Cómo se procesan, agrupan y filtran las filas usando GROUP BY y HAVING.
-            </p>
-            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(30, 15)">
-    <!-- 1. Source -->
-    <rect x="0" y="20" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="70" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. Filas Filtradas (WHERE)</text>
-    <text x="70" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Registros individuales</text>
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+            
+            <!-- Step-by-step Window Frame Process Banner -->
+            <div class="my-4">
+                <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                        📌 Mecánica de Evaluación de una Función de Ventana Analítica
+                    </h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                        A diferencia de GROUP BY (que colapsa filas), la Función de Ventana calcula métricas sobre un subconjunto de filas conservando la granularidad individual de cada registro.
+                    </p>
+                    <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                        <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+                            <g transform="translate(10, 15)">
+                                <!-- Step 1 -->
+                                <rect x="0" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="57.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. WHERE / JOIN</text>
+                                <text x="57.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Conjunto base de tuplas</text>
+                                <path d="M 115 47 L 130 47" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="130,47 123,43 123,51" fill="#6366f1" />
 
-    <!-- Flecha -->
-    <path d="M 140 50 L 190 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="190,50 183,46 183,54" fill="#6366f1" />
+                                <!-- Step 2 -->
+                                <rect x="132" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="189.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. PARTITION BY</text>
+                                <text x="189.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Segmentación en grupos</text>
+                                <path d="M 247 47 L 262 47" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="262,47 255,43 255,51" fill="#6366f1" />
 
-    <!-- 2. Group -->
-    <rect x="195" y="20" width="150" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="270" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. Agrupamiento</text>
-    <text x="270" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Agrupar por GROUP BY</text>
+                                <!-- Step 3 -->
+                                <rect x="264" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="321.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. ORDER BY</text>
+                                <text x="321.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Ordenación intra-partición</text>
+                                <path d="M 379 47 L 394 47" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="394,47 387,43 387,51" fill="#6366f1" />
 
-    <!-- Flecha -->
-    <path d="M 345 50 L 395 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="395,50 388,46 388,54" fill="#6366f1" />
+                                <!-- Step 4 -->
+                                <rect x="396" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="453.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">4. FRAME CLAUSE</text>
+                                <text x="453.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">ROWS / RANGE delimitado</text>
+                                <path d="M 511 47 L 526 47" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="526,47 519,43 519,51" fill="#6366f1" />
 
-    <!-- 3. Aggregate -->
-    <rect x="400" y="20" width="150" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="475" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Funciones Agregadas</text>
-    <text x="475" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">SUM(), AVG(), COUNT(), etc.</text>
+                                <!-- Step 5 -->
+                                <rect x="528" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="585.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">5. Agregación/Rank</text>
+                                <text x="585.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Cálculo por tupla actual</text>
+                                <path d="M 643 47 L 658 47" stroke="#10b981" stroke-width="2" fill="none" />
+                                <polygon points="658,47 651,43 651,51" fill="#10b981" />
 
-    <!-- Flecha -->
-    <path d="M 550 50 L 600 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="600,50 593,46 593,54" fill="#6366f1" />
-
-    <!-- 4. Having -->
-    <rect x="605" y="20" width="135" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="672.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">4. Filtrar Grupos</text>
-    <text x="672.5" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Evaluar HAVING</text>
-  </g>
-</svg>
+                                <!-- Step 6 -->
+                                <rect x="660" y="20" width="115" height="55" rx="8" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+                                <text x="717.5" y="40" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">6. Proyección Final</text>
+                                <text x="717.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Filas intactas + Métricas</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
             <article class="space-y-8 prose dark:prose-invert max-w-none">
-    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
-    <div class="my-6">
-        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
-            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
-                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Relación de Términos
-                </span>
-                <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </span>
-            </summary>
-            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                <pre class="mermaid bg-transparent">
-graph TD
-    S11[Agrupación y Agregación] --> Agg[Funciones de Grupo]
-    Agg --> Fns[COUNT, SUM, AVG, MIN, MAX]
-    S11 --> Clauses[Cláusulas de Control]
-    Clauses --> GroupBy[GROUP BY: Segmentar filas en subgrupos]
-    Clauses --> Having[HAVING: Filtrar grupos basados en funciones de agregación]
-                </pre>
-            </div>
-        </details>
-    </div>
-
                 
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<!-- Enfoque Arquitecto: GROUP BY y Agregaciones -->
-<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3>La Lógica Algebraica de las Agregaciones</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                La agrupación en SQL particiona el conjunto de tuplas original según la equivalencia de los valores en las columnas del <code>GROUP BY</code>. Las funciones agregadas (<code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>) reducen cada partición a una única tupla de salida.
-            </p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">
-<strong>Regla Fundamental:</strong> Cualquier columna presente en el <code>SELECT</code> que no participe en una función agregada DEBE estar declarada explícitamente en la cláusula <code>GROUP BY</code>.
-            </p>
-</section>
-<!-- Enfoque Cloud: HashAggregate vs GroupAggregate -->
-<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3>Agrupaciones en Memoria: HashAggregate y GroupAggregate</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
-                PostgreSQL utiliza dos planes físicos para resolver agrupaciones:
-            </p>
-<ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>HashAggregate:</strong> Crea una tabla en memoria estructurando grupos mediante hashes de las claves de agrupación. Ultra rápido pero demanda RAM.</li>
-<li><strong>GroupAggregate:</strong> Ordena primero los registros por las claves y luego acumula los resultados de forma secuencial. Se activa si los datos ya están ordenados por índice o si la RAM es insuficiente.</li>
-</ul>
-</section>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
-<h4>
-<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                Objetivos de Aprendizaje
-            </h4>
-<ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
-<li>Conocer y aplicar las 5 funciones de grupo: MIN, MAX, AVG, SUM, COUNT.</li>
-<li>Usar GROUP BY para dividir datos en subconjuntos logicos.</li>
-<li>Filtrar grupos con HAVING (vs filtrar filas con WHERE).</li>
-<li>Combinar HAVING con subconsultas para analitica avanzada.</li>
-</ul>
-</div>
-<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4>Insight del Arquitecto</h4>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las funciones de grupo son la base de la inteligencia de negocios en SQL. En PostgreSQL, combinadas con <code>GROUPING SETS</code>, <code>ROLLUP</code> y <code>CUBE</code>, permiten generar cubos OLAP directamente desde el motor. Domina esto y podras reemplazar hojas de calculo enteras con una sola consulta.</p>
-</section>
-<h2>1. Funciones de Agrupamiento</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las funciones de grupo (o funciones agregadas) permiten obtener resultados a partir del procesamiento de conjuntos de filas. Ignoran valores NULL (excepto <code>COUNT(*)</code>).</p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Funcion</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo de dato</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>MIN(n)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Valor minimo</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numerico, fecha, caracter</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>MAX(n)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Valor maximo</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numerico, fecha, caracter</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>AVG(n)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Promedio (media aritmetica)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numerico</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>SUM(n)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Suma total</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numerico</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>COUNT(x)</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numero de filas (con <code>*</code>) o valores no nulos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Cualquiera</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo completo:</strong> Estadisticas de ordenes de pedido del mes 07.</p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-<code>SELECT MIN(numero_embarques) AS minimo,
-       MAX(numero_embarques) AS maximo,
-       AVG(numero_embarques) AS promedio,
-       SUM(numero_embarques) AS total
-FROM   orden_pedido
-WHERE  fecha_llenado LIKE '%07';
+                <!-- Mermaid Minimap -->
+                <div class="my-4">
+                    <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
+                        <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
+                            <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
+                                🗺️ Ecosistema de SQL Analítico Moderno
+                            </span>
+                            <span class="transition group-open:rotate-180">
+                                <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
+                            <pre class="mermaid bg-transparent">
+graph TD
+    ANA[SQL Analítico Moderno] --> GRP[Agrupamiento Avanzado]
+    GRP --> ROLLUP[ROLLUP: Jerarquías Acumulativas]
+    GRP --> CUBE[CUBE: Todas las Combinaciones 2^N]
+    GRP --> GSETS[GROUPING SETS: Subconjuntos Arbitrarios]
+    GRP --> FILT[FILTER Clause: Agregación Condicional]
 
--- Conteo de clientes
-SELECT COUNT(*) AS total_clientes
-FROM   cliente;</code>
-</div>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Comportamiento con NULL:</strong> <code>AVG</code>, <code>SUM</code>, <code>MIN</code>, <code>MAX</code> ignoran NULL. <code>COUNT(*)</code> cuenta todas las filas; <code>COUNT(columna)</code> solo cuenta los valores no nulos.</p>
-</div>
-<h2>2. La Clausula GROUP BY</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Divide las filas en subconjuntos, aplicando las funciones de grupo a cada subconjunto de forma independiente. Toda columna en el SELECT que no sea funcion de grupo debe aparecer en el GROUP BY.</p>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis general</strong></p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-<code>SELECT columna, grupo_funcion
-FROM   tabla
-[WHERE condicion]
-[GROUP BY expresion]
-[ORDER BY columna];</code>
-</div>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo:</strong> Contar clientes por tipo, solo aquellos cuyo apellido comienza con 'A', ordenados descendentemente.</p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-<code>SELECT tipo, COUNT(*) AS cantidad
-FROM   cliente
-WHERE  apellido LIKE 'A%'
-GROUP BY tipo
-ORDER BY tipo DESC;</code>
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Este query:</p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Filtra clientes con apellido que empieza con 'A' (<code>WHERE</code>).</li>
-<li>Agrupa por <code>tipo</code> de cliente.</li>
-<li>Cuenta cuantos hay en cada grupo.</li>
-<li>Ordena de Z a A por tipo.</li>
-</ul>
-<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Error comun:</strong> Incluir una columna en SELECT que no esta en GROUP BY ni es funcion de grupo. PostgreSQL exige que <strong>toda columna no agregada en SELECT</strong> aparezca en GROUP BY (a menos que sea funcionalmente dependiente de la clave de agrupacion, caso que PostgreSQL maneja desde v9.1+).</p>
-</div>
-<h2>3. La Clausula HAVING</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">HAVING permite especificar que grupos seran mostrados en el resultado, funcionando como un <code>WHERE</code> pero para grupos. Se aplica <strong>despues</strong> de la agregacion, a diferencia de WHERE que filtra filas <strong>antes</strong> de agrupar.</p>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Sintaxis general</strong></p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-<code>SELECT columna, grupo_funcion
-FROM   tabla
-[WHERE condicion]
-[GROUP BY expresion]
-[HAVING condicion_grupo]
-[ORDER BY columna];</code>
-</div>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo:</strong> Clientes que han generado mas de 5 ordenes de pedido.</p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-<code>SELECT id_cliente, COUNT(*) AS total_ordenes
-FROM   orden_pedido
-GROUP BY id_cliente
-HAVING COUNT(*) &gt; 5;</code>
-</div>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Clausula</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Filtra</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Momento de ejecucion</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>WHERE</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Filas individuales</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Antes de GROUP BY</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><code>HAVING</code></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Grupos completos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Despues de GROUP BY</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Regla practica:</strong> Usa <code>WHERE</code> para filtrar filas individuales (reduce el conjunto antes de agrupar, mejora rendimiento). Usa <code>HAVING</code> solo para condiciones sobre funciones de grupo (<code>COUNT(*) &gt; 5</code>, <code>AVG(salario) &gt; 5000</code>).</p>
-</div>
-<h2>4. HAVING con Subconsultas</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Se pueden usar subconsultas dentro de la clausula HAVING para condiciones de grupo mas sofisticadas.</p>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4"><strong>Ejemplo:</strong> Clientes cuyo numero de ordenes supera el promedio de ordenes de todos los clientes.</p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-<code>SELECT id_cliente, COUNT(*) AS total_ordenes
-FROM   orden_pedido
-GROUP BY id_cliente
-HAVING COUNT(*) &gt; (
-  SELECT AVG(COUNT(*))
-  FROM   orden_pedido
-  GROUP BY id_cliente
-);
+    ANA --> WF[Funciones de Ventana]
+    WF --> RNK[Ranking: ROW_NUMBER, RANK, DENSE_RANK, NTILE]
+    WF --> OFF[Offset: LAG, LEAD, FIRST_VALUE, LAST_VALUE]
+    WF --> RUN[Running Totals & Moving Averages]
 
--- La subconsulta calcula el promedio de ordenes por cliente
--- Luego HAVING filtra solo los que estan por encima de ese promedio</code>
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Orden de ejecucion completo:</p>
-<ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Se ejecuta la subconsulta interna (<code>SELECT AVG(COUNT(*)) ...</code>).</li>
-<li>La consulta principal agrupa por <code>id_cliente</code>.</li>
-<li>Se aplica HAVING comparando cada grupo con el valor de la subconsulta.</li>
-<li>Se retornan solo los grupos que cumplen la condicion.</li>
-</ol>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Agregaciones</span>
-<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4>Insight del Arquitecto</h4>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En PostgreSQL, GROUP BY tambien acepta numero de columna (<code>GROUP BY 1, 2</code>) y expresiones complejas (<code>GROUP BY DATE_TRUNC('month', fecha)</code>). Para analitica avanzada, combina GROUP BY con <code>FILTER (WHERE condicion)</code> para agregaciones condicionales sin subconsultas. Siempre revisa el plan de ejecucion: un <code>HashAggregate</code> eficiente es senal de que PostgreSQL esta optimizando bien tus grupos.</p>
-</section>
-<div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
-<canvas height="360" id="canvas_11" width="800"></canvas>
-<div class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800" id="controls_11"></div>
-</div>
-<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2>
-<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                💡 Tips del Profesor
-            </h2>
-<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Filtre antes de agrupar usando WHERE:</strong> Nunca use <code>HAVING</code> para condiciones que puedan validarse en el <code>WHERE</code>. <code>WHERE</code> reduce el conjunto de datos antes de agrupar, reduciendo la memoria del <code>GROUP BY</code>, mientras que <code>HAVING</code> filtra los resultados después de realizar toda la agregación.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Cuidado con COUNT(columna) vs COUNT(*):</strong> <code>COUNT(columna)</code> ignora los valores nulos en esa columna y requiere leer el valor, mientras que <code>COUNT(*)</code> cuenta todas las filas de la tabla de forma óptima.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Ajuste work_mem para HashAggregate:</strong> Incrementar la memoria de trabajo ayuda a evitar ordenamientos en disco al agrupar grandes volúmenes de datos.</p>
-</div>
-</div>
-</section>
-<section class="mt-10">
-<h2>
-<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-<div class="space-y-4">
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            ¿Cuál es la diferencia fundamental entre WHERE y HAVING?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><code>WHERE</code> filtra filas individuales antes de que se realice la operación de agrupamiento. <code>HAVING</code> filtra los grupos resultantes creados por la cláusula <code>GROUP BY</code> basándose en resultados de funciones de agregación.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            ¿Cómo calcula el motor de PostgreSQL una agregación HashAggregate?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">El motor construye una tabla hash en la memoria RAM de la sesión utilizando las columnas del <code>GROUP BY</code> como clave, permitiendo acumular valores agregados en un solo paso secuencial sin necesidad de ordenar las filas previamente.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            ¿Qué valor retorna la función COUNT(*) si la tabla está completamente vacía?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Retorna el valor numérico <code>0</code>, a diferencia de otras funciones de agregación como <code>SUM</code> o <code>AVG</code> que retornan <code>NULL</code> cuando no hay registros para procesar.</p>
-</div>
-</details>
-</div>
-</section>
-</article>
-</article>
+    ANA --> CTE[Common Table Expressions]
+    CTE --> MOD_CTE[CTEs de Modificación de Datos]
+    CTE --> MAT_CTE[MATERIALIZED vs NOT MATERIALIZED]
+    CTE --> REC_CTE[CTEs Recursivas: Árboles, Grafos, BOM]
+                            </pre>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Learning Objectives -->
+                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
+                    <h4 class="text-blue-900 dark:text-blue-200 font-bold flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        Objetivos de Aprendizaje Técnico
+                    </h4>
+                    <ul class="list-disc list-inside space-y-1.5 text-sm text-blue-950/80 dark:text-blue-200/90">
+                        <li>Dominar el uso de <strong>ROLLUP</strong>, <strong>CUBE</strong> y <strong>GROUPING SETS</strong> para generar reportes multidimensionales OLAP en una sola pasada de datos.</li>
+                        <li>Comprender la sintaxis y semántica de las <strong>Funciones de Ventana (Window Functions)</strong>, incluyendo la definición precisa de Marcos de Ventana (<em>Window Frames</em>: `ROWS` vs `RANGE`).</li>
+                        <li>Implementar cálculos analíticos de misión crítica: <strong>Medias Móviles</strong>, <strong>Running Totals</strong>, variaciones <strong>MoM/YoY</strong> con `LAG`/`LEAD`, y resolución de problemas de <strong>Islas y Lagunas (Gaps & Islands)</strong>.</li>
+                        <li>Diseñar <strong>CTEs Recursivas</strong> para resolver grafos jerárquicos, organigramas corporativos y listas de materiales (<em>Bill of Materials - BOM</em>) con prevención de ciclos infinitos mediante `CYCLE`.</li>
+                        <li>Aplicar el control de materialización en PostgreSQL 16/17 (`AS MATERIALIZED` vs `AS NOT MATERIALIZED`) para optimizar el plan de ejecución.</li>
+                    </ul>
+                </div>
+
+                <!-- 1. Agrupamiento Multidimensional -->
+                <section>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-2">
+                        1. Agrupamiento Multidimensional: ROLLUP, CUBE y GROUPING SETS
+                    </h2>
+                    <p class="text-slate-750 dark:text-slate-300 leading-relaxed my-4">
+                        En SQL estándar y en motores analíticos modernos, calcular totales y subtotales en múltiples niveles solía requerir múltiples consultas unidas con `UNION ALL`. Las extensiones de agrupamiento multidimensional resuelven esto en un solo escaneo eficiente de tabla.
+                    </p>
+
+                    <!-- Comparison Table -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                        <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <h4 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm mb-2">GROUPING SETS</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
+                                Permite especificar explícitamente qué combinaciones de agrupamiento deben calcularse, omitiendo agrupaciones innecesarias.
+                            </p>
+                            <pre class="bg-slate-950 text-slate-200 p-3 rounded-xl font-mono text-[11px]"><code>GROUP BY GROUPING SETS (
+  (pais, anio),
+  (pais),
+  ()
+)</code></pre>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <h4 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm mb-2">ROLLUP (Jerárquico)</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
+                                Genera subtotales acumulativos progresivos de derecha a izquierda. Ideal para dimensiones jerárquicas (Año > Mes > Día).
+                            </p>
+                            <pre class="bg-slate-950 text-slate-200 p-3 rounded-xl font-mono text-[11px]"><code>GROUP BY ROLLUP (
+  anio, mes, dia
+)
+-- N+1 agrupaciones</code></pre>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <h4 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm mb-2">CUBE (Combinatorio)</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
+                                Calcula todas las combinaciones posibles ($2^N$ agrupaciones). Ideal para análisis exploratorio multidimensional cruzado.
+                            </p>
+                            <pre class="bg-slate-950 text-slate-200 p-3 rounded-xl font-mono text-[11px]"><code>GROUP BY CUBE (
+  pais, producto
+)
+-- 2^2 = 4 agrupaciones</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- SQL Code Example with GROUPING() -->
+                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-xs overflow-x-auto border border-slate-800 shadow-md my-4">
+                        <div class="text-indigo-400 font-semibold mb-2">-- Consulta ROLLUP con Identificación de Subtotales mediante GROUPING()</div>
+<pre><code class="language-sql">SELECT 
+    COALESCE(pais, '** TOTAL GLOBAL **') AS pais,
+    CASE WHEN GROUPING(categoria) = 1 THEN '** Subtotal País **' ELSE categoria END AS categoria,
+    SUM(monto_venta) AS total_ventas,
+    COUNT(orden_id) AS cantidad_transacciones
+FROM ventas
+GROUP BY ROLLUP(pais, categoria)
+ORDER BY pais, GROUPING(categoria), categoria;
+</code></pre>
+                    </div>
+                </section>
+
+                <!-- 2. Funciones de Ventana Analíticas -->
+                <section class="mt-12">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-2">
+                        2. Funciones de Ventana Analíticas (Window Functions)
+                    </h2>
+                    <p class="text-slate-750 dark:text-slate-300 leading-relaxed my-4">
+                        Las funciones de ventana realizan cálculos sobre un conjunto de tuplas relacionadas con la tupla actual (llamado <em>marco de ventana</em> o <em>frame</em>). A diferencia de `GROUP BY`, las filas individuales no se comprimen en una sola fila.
+                    </p>
+
+                    <!-- ASCII Anatomy of OVER Clause -->
+                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-xs overflow-x-auto shadow-inner my-4">
+                        <div class="text-emerald-400 font-bold mb-2">/* ANATOMÍA DE LA CLÁUSULA OVER EN SQL:2026 */</div>
+<pre>
+FUNCTION_NAME(expr) OVER (
+    [PARTITION BY col1, col2, ...]      <-- Divide el dataset en islas independientes
+    [ORDER BY sort_col [ASC|DESC], ...] <-- Define la secuencia temporal/lógica
+    [ROWS|RANGE BETWEEN frame_start AND frame_end] <-- Delimita el horizonte de tuplas
+)
+
+FRAME SPECIFICATIONS:
+  - UNBOUNDED PRECEDING : Desde la primera tupla de la partición.
+  - n PRECEDING         : n tuplas anteriores a la fila actual.
+  - CURRENT ROW         : La fila actual que se está evaluando.
+  - n FOLLOWING         : n tuplas posteriores a la fila actual.
+  - UNBOUNDED FOLLOWING : Hasta la última tupla de la partición.
+</pre>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-6 mb-3">Diferencia Crítica de Ranking: ROW_NUMBER vs RANK vs DENSE_RANK</h3>
+                    
+                    <!-- Table showing Ranking Differences -->
+                    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+                        <table class="w-full text-xs text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">
+                                    <th class="p-3 font-semibold">Atleta</th>
+                                    <th class="p-3 font-semibold">Puntaje</th>
+                                    <th class="p-3 font-semibold text-indigo-600 dark:text-indigo-400">ROW_NUMBER()</th>
+                                    <th class="p-3 font-semibold text-emerald-600 dark:text-emerald-400">RANK()</th>
+                                    <th class="p-3 font-semibold text-purple-600 dark:text-purple-400">DENSE_RANK()</th>
+                                    <th class="p-3 font-semibold">Explicación del Comportamiento</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 font-mono text-slate-700 dark:text-slate-300">
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                    <td class="p-3 font-bold font-sans">Valeria</td><td>100</td><td>1</td><td>1</td><td>1</td>
+                                    <td class="font-sans text-[11px]">Primer lugar solitario.</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40 bg-amber-50/50 dark:bg-amber-950/20">
+                                    <td class="p-3 font-bold font-sans">Mateo</td><td>90</td><td>2</td><td>2</td><td>2</td>
+                                    <td class="font-sans text-[11px]" rowspan="2">Empate en 90 puntos. ROW_NUMBER desempata arbitrariamente; RANK y DENSE_RANK asignan el mismo valor.</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40 bg-amber-50/50 dark:bg-amber-950/20">
+                                    <td class="p-3 font-bold font-sans">Lucía</td><td>90</td><td>3</td><td>2</td><td>2</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                    <td class="p-3 font-bold font-sans">Santiago</td><td>80</td><td>4</td><td class="text-rose-600 dark:text-rose-400 font-bold">4 (Salta el 3)</td><td class="text-emerald-600 dark:text-emerald-400 font-bold">3 (Sin saltos)</td>
+                                    <td class="font-sans text-[11px]">RANK salta posiciones por el empate previo; DENSE_RANK continúa consecutivamente.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-6 mb-3">Patrones Analíticos de Producción: Running Totals y Medias Móviles</h3>
+                    
+                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-xs overflow-x-auto border border-slate-800 shadow-md my-4">
+                        <div class="text-indigo-400 font-semibold mb-2">-- Media Móvil de 3 Días y Total Acumulado en PostgreSQL 16/17</div>
+<pre><code class="language-sql">SELECT 
+    fecha_transaccion,
+    monto,
+    -- Total Acumulado por Cliente (Running Total)
+    SUM(monto) OVER (
+        PARTITION BY cliente_id 
+        ORDER BY fecha_transaccion
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS total_acumulado,
+    -- Media Móvil Centrada de 3 Días (Día anterior + Actual + Día siguiente)
+    AVG(monto) OVER (
+        PARTITION BY cliente_id 
+        ORDER BY fecha_transaccion
+        ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+    ) AS media_movil_3d,
+    -- Crecimiento Porcentual respecto al periodo anterior (MoM)
+    ROUND(
+        ((monto - LAG(monto, 1) OVER (PARTITION BY cliente_id ORDER BY fecha_transaccion)) 
+         / NULLIF(LAG(monto, 1) OVER (PARTITION BY cliente_id ORDER BY fecha_transaccion), 0)) * 100, 
+        2
+    ) AS crecimiento_pct_mom
+FROM transacciones;
+</code></pre>
+                    </div>
+                </section>
+
+                <!-- 3. CTEs y CTEs Recursivas -->
+                <section class="mt-12">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-2">
+                        3. Common Table Expressions (CTEs) y Algoritmo de Recursión
+                    </h2>
+                    <p class="text-slate-750 dark:text-slate-300 leading-relaxed my-4">
+                        Una <strong>CTE (Common Table Expression)</strong> define un conjunto de resultados temporal accesible dentro del alcance de ejecución de una sola sentencia `SELECT`, `INSERT`, `UPDATE` o `DELETE`.
+                    </p>
+
+                    <!-- ASCII Recursive CTE Flow -->
+                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-xs overflow-x-auto shadow-inner my-4">
+                        <div class="text-indigo-400 font-bold mb-2">/* DIAGRAMA ASCII: Algoritmo de Evaluación de WITH RECURSIVE */</div>
+<pre>
+PASO 1: Evaluar Anchor Member (Miembro Ancla)
+        └── Cargar tuplas base en la Tabla de Trabajo (Working Table) e Insertar en el Resultado Final.
+
+PASO 2: Bucle de Recursión (Mientras Working Table no esté vacía):
+        ├── Evaluar Recursive Member usando las tuplas de Working Table.
+        ├── Cargar nuevas tuplas hijas en Intermediate Table.
+        ├── Reemplazar Working Table con Intermediate Table.
+        └── Agregar nuevas tuplas al Resultado Final (UNION ALL).
+
+PASO 3: Retornar el Resultado Final acumulado.
+</pre>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-6 mb-3">Caso de Estudio: Explosión de Jerarquías Corporativas (Organigrama)</h3>
+
+                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-xs overflow-x-auto border border-slate-800 shadow-md my-4">
+                        <div class="text-indigo-400 font-semibold mb-2">-- CTE Recursiva con Cálculo de Nivel, Ruta Completa y Detección de Ciclos en PG 16/17</div>
+<pre><code class="language-sql">WITH RECURSIVE organigrama AS (
+    -- 1. ANCHOR MEMBER: El CEO / Nodo Raíz (jefe_id IS NULL)
+    SELECT 
+        emp_id,
+        nombre,
+        jefe_id,
+        1 AS nivel,
+        ARRAY[emp_id] AS ruta_jerarquica,
+        nombre::TEXT AS ruta_nombres
+    FROM empleados
+    WHERE jefe_id IS NULL
+
+    UNION ALL
+
+    -- 2. RECURSIVE MEMBER: Empleados que reportan a la tanda anterior
+    SELECT 
+        e.emp_id,
+        e.nombre,
+        e.jefe_id,
+        o.nivel + 1,
+        o.ruta_jerarquica || e.emp_id,
+        o.ruta_nombres || ' -> ' || e.nombre
+    FROM empleados e
+    JOIN organigrama o ON e.jefe_id = o.emp_id
+    -- Salvaguarda: Evitar bucles infinitos en grafos con ciclos
+    WHERE NOT (e.emp_id = ANY(o.ruta_jerarquica))
+)
+SELECT 
+    REPEAT('  └── ', nivel - 1) || nombre AS jerarquia_visual,
+    nivel,
+    ruta_nombres
+FROM organigrama
+ORDER BY ruta_jerarquica;
+</code></pre>
+                    </div>
+
+                    <!-- Canvas Animation Container -->
+                    <div class="my-8 bg-slate-100 dark:bg-slate-900/50 p-6 rounded-3xl border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-2 flex items-center justify-between">
+                            <span>🧪 Simulador Interactivo: Ventanas Analíticas y Marcos de Partición</span>
+                            <span class="text-xs text-indigo-600 dark:text-indigo-400 font-mono font-normal">Canvas UI</span>
+                        </h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mb-4">
+                            Explore visualmente el cálculo de ROW_NUMBER, Totales Acumulados y la propagación de una CTE Recursiva en árbol.
+                        </p>
+                        <div class="flex flex-col items-center gap-4">
+                            <canvas id="canvas_11" width="700" height="240" class="w-full max-w-full bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"></canvas>
+                            <div id="controls_11" class="flex gap-2"></div>
+                        </div>
+                    </div>
+                </section>
 
             </article>
         </main>
 
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ Funcion de Grupo</strong>Opera sobre un conjunto de filas para producir un unico resultado.</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ MIN / MAX</strong>Valor minimo y maximo de un conjunto.</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ AVG / SUM</strong>Promedio y suma de valores numericos.</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ COUNT</strong>Cantidad de filas o valores no nulos.</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ GROUP BY</strong>Divide filas en subconjuntos para aplicar funciones de grupo.</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ HAVING</strong>Filtra grupos despues de la agregacion (como WHERE pero para grupos).</li>
+            <!-- Keywords -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
+                <ul class="space-y-2">
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ ROLLUP & CUBE</strong>
+                        <span>Extensiones de agregación multidimensional jerárquica y combinatoria.</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Cláusula OVER</strong>
+                        <span>Delimita la partición y el orden sin colapsar el número de filas.</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ DENSE_RANK</strong>
+                        <span>Ranking sin saltos ordinales ante empates en puntuación.</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ LAG & LEAD</strong>
+                        <span>Acceso posicional a filas anteriores o posteriores sin self-joins.</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ CTE Recursiva</strong>
+                        <span>Estructura iterativa (Anchor + Recursive) para procesar grafos y árboles.</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ MATERIALIZED</strong>
+                        <span>Control explícito sobre la optimización y caching de CTEs en PG 16/17.</span>
+                    </li>
+                </ul>
+            </div>
 
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="semana_10.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 10</a></li>
-                <li><a href="semana_12.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 12 →</a></li>
-            </ul>
-        </div>
-
+            <!-- Navigation Resources -->
+            <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+                <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación del Curso</h3>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice Principal</a></li>
+                    <li><a href="semana_10.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 10: JOINs y Subconsultas</a></li>
+                    <li><a href="semana_12.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 12: Programación PL/pgSQL →</a></li>
+                </ul>
+            </div>
         </aside>
     </div>
 
-    <!-- M3 Bottom Navigation Bar (Mobile only) -->
+    <!-- Mobile Navigation -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
         <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-            </svg>
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
         </a>
         <a href="semana_10.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
-            </svg>
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
         </a>
         <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
-            </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-            </svg>
+            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path></svg>
+            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
             <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
         </button>
         <a href="semana_12.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-            </svg>
+            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
             <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
         </a>
     </nav>
 
+    <!-- Scripts -->
     <script>
         const themeToggleBtn = document.getElementById('theme-toggle');
         const themeToggleM3Btn = document.getElementById('theme-toggle-m3');
@@ -539,7 +533,7 @@ HAVING COUNT(*) &gt; (
             } else {
                 if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
                 if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
-                if (m3ThemeIconLight) m3ThemeIconLight.classList.add('hidden');
+                if (m3ThemeIconLight) m3ThemeIconLight.classList.remove('hidden');
                 if (m3ThemeIconDark) m3ThemeIconDark.classList.remove('hidden');
             }
         }
@@ -561,21 +555,33 @@ HAVING COUNT(*) &gt; (
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
 
-<script>
-var step11 = 0;
-var groupData = [
-    { title: 'Datos originales — Ventas por empleado', cols: ['Empleado', 'Region', 'Venta'], rows: [['Ana','Norte','100'],['Luis','Sur','150'],['Ana','Norte','200'],['Luis','Sur','50'],['Eva','Norte','300']], highlight: undefined, extra: '5 registros de ventas individuales' },
-    { title: 'GROUP BY Region — SUM(Venta)', cols: ['Region', 'Total Ventas'], rows: [['Norte','600'],['Sur','200']], highlight: undefined, extra: 'Los datos se agrupan por Region y se suman' },
-    { title: 'GROUP BY + HAVING > 250', cols: ['Region', 'Total Ventas'], rows: [['Norte','600']], highlight: 0, extra: 'HAVING filtra grupos: solo Region con ventas > 250' }
-];
-function draw11(ctx, W, H) {
-    CanvasUI.drawTabAnimation(ctx, W, H, groupData, step11);
-}
-document.addEventListener('DOMContentLoaded', function() { var c = CanvasUI.getContext('canvas_11'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, groupData, 0); });
-CanvasUI.addControls('controls_11', {
-    step: function() { step11 = (step11 + 1) % groupData.length; var c = CanvasUI.getContext('canvas_11'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, groupData, step11); },
-    reset: function() { step11 = 0; var c = CanvasUI.getContext('canvas_11'); if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, groupData, 0); }
-});
-</script>
+    <script>
+        var tables11 = [
+            { title: '1. Window Function: ROW_NUMBER vs DENSE_RANK', cols: ['Atleta', 'Puntaje', 'ROW_NUM', 'DENSE_RANK'], rows: [['Valeria','100','1','1'],['Mateo','90','2','2'],['Lucia','90','3','2'],['Santiago','80','4','3']], highlight: 2, extra: 'DENSE_RANK mantiene consecutivos tras empate.' },
+            { title: '2. Running Total: Suma Acumulada por Cliente', cols: ['Fecha', 'Monto', 'Running_Total'], rows: [['2026-03-01','$150','$150'],['2026-03-05','$200','$350'],['2026-03-12','$120','$470']], highlight: 2, extra: 'ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW' },
+            { title: '3. LAG() Function: Variación Mes contra Mes', cols: ['Mes', 'Ventas', 'Mes_Anterior', 'Delta ($)'], rows: [['Enero','$10,000','NULL','NULL'],['Febrero','$14,000','$10,000','+$4,000'],['Marzo','$12,500','$14,000','-$1,500']], highlight: 1, extra: 'LAG(ventas, 1) recupera el registro temporal previo.' },
+            { title: '4. CTE Recursiva: Organigrama Jerárquico', cols: ['Empleado', 'Jefe', 'Nivel', 'Jerarquía Visual'], rows: [['Elena (CEO)','NULL','1','Elena'],['Carlos (VP)','Elena','2','  └── Carlos'],['Ana (Senior)','Carlos','3','      └── Ana']], highlight: 2, extra: 'Expansión de grafo con control de nivel y ciclo.' }
+        ];
+        var step11 = 0;
+        function draw11(ctx, W, H) {
+            CanvasUI.drawTabAnimation(ctx, W, H, tables11, step11);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var c = CanvasUI.getContext('canvas_11');
+            if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, tables11, 0);
+        });
+        CanvasUI.addControls('controls_11', {
+            step: function() {
+                step11 = (step11 + 1) % tables11.length;
+                var c = CanvasUI.getContext('canvas_11');
+                if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, tables11, step11);
+            },
+            reset: function() {
+                step11 = 0;
+                var c = CanvasUI.getContext('canvas_11');
+                if (c) CanvasUI.drawTabAnimation(c.ctx, c.W, c.H, tables11, 0);
+            }
+        });
+    </script>
 </body>
 </html>

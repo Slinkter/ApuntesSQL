@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
-    <title>Semana 05 - DML y Consultas Simples</title>
+    <title>Semana 05 - DML y Consultas Simples | Ingeniería de Datos</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -69,15 +69,12 @@
             });
         });
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <!-- Sun icon -->
         <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <!-- Moon icon -->
         <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
@@ -88,11 +85,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
-            DML y Consultas Simples
-        </h1>
+                    DML y Consultas Simples (Manipulación y Recuperación de Datos)
+                </h1>
                 <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
-            Semana 05 • Lenguaje de Manipulacion de Datos  • Ingenieria de Datos
-        </p>
+                    Semana 05 • Manipulación DML, Álgebra de Filtrado, Lógica Trivaluada y MVCC • Ingeniería de Datos
+                </p>
             </div>
             <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
@@ -101,392 +98,505 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
-    <!-- M3 Step-by-Step Diagram -->
-    <div class="my-6">
-        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                📌 Proceso Paso a Paso: Ciclo Transaccional DML con Control ACID
-            </h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Flujo lógico de persistencia y reversión en sentencias de manipulación de datos.
-            </p>
-            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(10, 15)">
-    <!-- 1. BEGIN -->
-    <rect x="0" y="20" width="130" height="60" rx="10" class="fill-blue-50 dark:fill-slate-800 stroke-blue-500 dark:stroke-blue-400" stroke-width="2" />
-    <text x="65" y="45" text-anchor="middle" class="fill-blue-700 dark:fill-blue-400 font-bold text-xs">BEGIN TRANSACTION</text>
-    <text x="65" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Abre contexto transaccional</text>
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
 
-    <!-- Flecha -->
-    <path d="M 130 50 L 160 50" stroke="#3b82f6" stroke-width="2" fill="none" />
-    <polygon points="160,50 153,46 153,54" fill="#3b82f6" />
+            <!-- M3 Step-by-Step Diagram -->
+            <div class="my-6">
+                <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                        📌 Proceso Paso a Paso: Ciclo Transaccional DML con Control ACID y Aislamiento
+                    </h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                        Flujo de ejecución de modificaciones de datos desde el buffer de memoria hasta la persistencia física en WAL y almacenamiento.
+                    </p>
+                    <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                        <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+                            <g transform="translate(10, 15)">
+                                <!-- 1. BEGIN -->
+                                <rect x="0" y="20" width="130" height="60" rx="10" class="fill-blue-50 dark:fill-slate-800 stroke-blue-500 dark:stroke-blue-400" stroke-width="2" />
+                                <text x="65" y="45" text-anchor="middle" class="fill-blue-700 dark:fill-blue-400 font-bold text-xs">BEGIN TRANSACTION</text>
+                                <text x="65" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Abre contexto transaccional</text>
 
-    <!-- 2. EXECUTE DML -->
-    <rect x="170" y="20" width="160" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="250" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">INSERT / UPDATE / DELETE</text>
-    <text x="250" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Cambios en buffer + WAL</text>
+                                <!-- Flecha -->
+                                <path d="M 130 50 L 160 50" stroke="#3b82f6" stroke-width="2" fill="none" />
+                                <polygon points="160,50 153,46 153,54" fill="#3b82f6" />
 
-    <!-- Flecha -->
-    <path d="M 330 50 L 360 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="360,50 353,46 353,54" fill="#6366f1" />
+                                <!-- 2. EXECUTE DML -->
+                                <rect x="170" y="20" width="160" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="250" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">INSERT / UPDATE / DELETE</text>
+                                <text x="250" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Cambios en buffer + WAL</text>
 
-    <!-- 3. DECISION -->
-    <polygon points="420,20 470,50 420,80 370,50" class="fill-amber-50 dark:fill-slate-850 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
-    <text x="420" y="53" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-[9px]">¿Todo OK?</text>
+                                <!-- Flecha -->
+                                <path d="M 330 50 L 360 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="360,50 353,46 353,54" fill="#6366f1" />
 
-    <!-- Flecha Si -->
-    <path d="M 470 50 L 525 30" stroke="#10b981" stroke-width="2" fill="none" />
-    <polygon points="525,30 517,28 520,36" fill="#10b981" />
-    <text x="500" y="32" class="fill-emerald-600 font-bold text-[10px]">Sí</text>
+                                <!-- 3. DECISION -->
+                                <polygon points="420,20 470,50 420,80 370,50" class="fill-amber-50 dark:fill-slate-850 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
+                                <text x="420" y="53" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-[9px]">¿Todo OK?</text>
 
-    <!-- Flecha No -->
-    <path d="M 470 50 L 525 70" stroke="#ef4444" stroke-width="2" fill="none" />
-    <polygon points="525,70 520,64 517,72" fill="#ef4444" />
-    <text x="500" y="72" class="fill-rose-600 font-bold text-[10px]">No</text>
+                                <!-- Flecha Si -->
+                                <path d="M 470 50 L 525 30" stroke="#10b981" stroke-width="2" fill="none" />
+                                <polygon points="525,30 517,28 520,36" fill="#10b981" />
+                                <text x="500" y="32" class="fill-emerald-600 font-bold text-[10px]">Sí</text>
 
-    <!-- COMMIT -->
-    <rect x="535" y="5" width="220" height="40" rx="8" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="645" y="22" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">COMMIT: Persistencia Permanente</text>
-    <text x="645" y="34" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Durabilidad garantizada en disco</text>
+                                <!-- Flecha No -->
+                                <path d="M 470 50 L 525 70" stroke="#ef4444" stroke-width="2" fill="none" />
+                                <polygon points="525,70 520,64 517,72" fill="#ef4444" />
+                                <text x="500" y="72" class="fill-rose-600 font-bold text-[10px]">No</text>
 
-    <!-- ROLLBACK -->
-    <rect x="535" y="55" width="220" height="40" rx="8" class="fill-rose-50 dark:fill-slate-800 stroke-rose-500 dark:stroke-rose-400" stroke-width="2" />
-    <text x="645" y="72" text-anchor="middle" class="fill-rose-700 dark:fill-rose-400 font-bold text-xs">ROLLBACK: Revertir Cambios</text>
-    <text x="645" y="84" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Atomicidad: Regresa al estado inicial</text>
-  </g>
-</svg>
+                                <!-- COMMIT -->
+                                <rect x="535" y="5" width="220" height="40" rx="8" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+                                <text x="645" y="22" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">COMMIT: Persistencia Permanente</text>
+                                <text x="645" y="34" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Durabilidad garantizada en disco</text>
+
+                                <!-- ROLLBACK -->
+                                <rect x="535" y="55" width="220" height="40" rx="8" class="fill-rose-50 dark:fill-slate-800 stroke-rose-500 dark:stroke-rose-400" stroke-width="2" />
+                                <text x="645" y="72" text-anchor="middle" class="fill-rose-700 dark:fill-rose-400 font-bold text-xs">ROLLBACK: Revertir Cambios</text>
+                                <text x="645" y="84" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Atomicidad: Regresa al estado inicial</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
             <article class="space-y-8 prose dark:prose-invert max-w-none">
-    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
-    <div class="my-6">
-        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
-            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
-                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Relación de Términos
-                </span>
-                <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </span>
-            </summary>
-            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                <pre class="mermaid bg-transparent">
+                <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
+                <div class="my-6">
+                    <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
+                        <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
+                            <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
+                                🗺️ Mapa Conceptual y Relación de Términos (DML y Recuperación)
+                            </span>
+                            <span class="transition group-open:rotate-180">
+                                <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
+                            <pre class="mermaid bg-transparent">
 graph TD
-    S05[Lenguaje DML] --> Queries[Consultas y Modificaciones]
-    Queries --> SELECT[SELECT: Proyección y Selección de Datos]
-    Queries --> INSERT[INSERT: Adición de Tuplas]
-    Queries --> UPDATE[UPDATE: Modificación de Campos]
-    Queries --> DELETE[DELETE: Eliminación de Registros]
-    SELECT --> Filters[Filtros WHERE]
-    Filters --> Ops[Operadores: AND, OR, LIKE, BETWEEN, IN]
-                </pre>
-            </div>
-        </details>
-    </div>
+    DML[Lenguaje DML & SQL] --> Modif[Operaciones de Modificación]
+    DML --> Query[Operaciones de Consulta]
+    DML --> TCL[Control Transaccional ACID]
 
+    Modif --> INS[INSERT: Inserción, Bulk & RETURNING]
+    Modif --> UPD[UPDATE: Modificación puntual o uniones]
+    Modif --> DEL[DELETE: Borrado lógico/físico con WHERE]
+    Modif --> UPS[UPSERT: ON CONFLICT DO UPDATE]
+
+    Query --> SEL[SELECT: Proyección de columnas]
+    SEL --> WHR[WHERE: Predicados & Lógica Trivaluada]
+    WHR --> OPS[Operadores: LIKE, BETWEEN, IN, IS NULL]
+    SEL --> ORD[ORDER BY: ASC, DESC, NULLS FIRST/LAST]
+    SEL --> DIS[DISTINCT / DISTINCT ON]
+    SEL --> LIM[LIMIT / OFFSET / FETCH FIRST]
+
+    TCL --> ACID[Atomicidad, Consistencia, Aislamiento, Durabilidad]
+    TCL --> COM[COMMIT / ROLLBACK / SAVEPOINT]
+    TCL --> MVCC[MVCC: Multi-Version Concurrency Control]
+                            </pre>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Enfoque Arquitecto: DML e Internals de MVCC -->
+                <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+                    <h3 class="text-indigo-900 dark:text-indigo-300 font-bold text-lg mb-2">⚡ Arquitectura Interna: MVCC, Tuplas Muertas y Table Bloat en PostgreSQL 16/17</h3>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                        A diferencia de otros motores que usan cerrojos pesados o segmentos de rollback separados para deshacer cambios, PostgreSQL implementa el modelo <strong>MVCC (Multi-Version Concurrency Control)</strong> mediante encabezados de tupla que contienen los identificadores de transacción <code>xmin</code> (creador) y <code>xmax</code> (eliminador o actualizador).
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono text-slate-800 dark:text-slate-200">
+                        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-emerald-600 dark:text-emerald-400 block mb-1">INSERT</span>
+                            Crea una nueva tupla con <code>xmin = TX_ACTUAL</code> y <code>xmax = 0</code>. La tupla es visible de inmediato para las lecturas posteriores dentro del mismo snapshot.
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-amber-600 dark:text-amber-400 block mb-1">UPDATE</span>
+                            No sobreescribe la fila en disco. Ejecuta un <code>DELETE</code> lógico marcando la tupla actual con <code>xmax = TX_ACTUAL</code> e inserta una nueva tupla con <code>xmin = TX_ACTUAL</code>.
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-rose-600 dark:text-rose-400 block mb-1">DELETE</span>
+                            No borra los bytes físicamente al instante; establece el <code>xmax</code> de la tupla con el ID de la transacción que la eliminó. Pasa a ser una <em>dead tuple</em> recuperable por <code>VACUUM</code>.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Objetivos de Aprendizaje -->
+                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+                    <h4 class="text-blue-950 dark:text-blue-200 font-bold flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 shrink-0 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        Objetivos y Competencias de la Semana
+                    </h4>
+                    <ul class="space-y-2 list-disc list-inside text-sm text-slate-700 dark:text-slate-300">
+                        <li>Dominar la sintaxis rigurosa y variantes de <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> y <code>MERGE / UPSERT</code>.</li>
+                        <li>Comprender la diferencia crítica entre <code>DELETE</code> (operación DML transaccional) y <code>TRUNCATE</code> (operación DDL destructiva y de reinicio de almacenamiento).</li>
+                        <li>Construir consultas de recuperación complejas mediante <code>SELECT</code>, proyecciones, alias, operadores aritméticos y cadenas.</li>
+                        <li>Aplicar el álgebra de filtrado <code>WHERE</code> con lógica trivaluada booleana (<code>TRUE</code>, <code>FALSE</code>, <code>UNKNOWN</code> con <code>NULL</code>).</li>
+                        <li>Controlar el ordenamiento determinista de resultados mediante <code>ORDER BY</code> y la cláusula <code>NULLS FIRST / LAST</code>.</li>
+                        <li>Gestionar transacciones concurrentes con <code>BEGIN</code>, <code>COMMIT</code>, <code>ROLLBACK</code> y <code>SAVEPOINT</code> en escenarios de producción.</li>
+                    </ul>
+                </div>
+
+                <!-- 1. Los Sublenguajes SQL -->
+                <h2>1. Clasificación Formal de los Sublenguajes SQL</h2>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    El estándar ANSI/ISO SQL estructura las operaciones de bases de datos en cuatro categorías funcionales fundamentales:
+                </p>
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                        <thead class="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white uppercase">
+                            <tr>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Sublenguaje</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Propósito</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Comandos Principales</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Comportamiento Transaccional</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">DML (Data Manipulation)</td>
+                                <td class="p-3">Inserción, modificación, eliminación y consulta de tuplas de datos.</td>
+                                <td class="p-3 font-mono">INSERT, UPDATE, DELETE, SELECT, MERGE</td>
+                                <td class="p-3">Totalmente transaccional. Requiere COMMIT para persistir.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3 font-bold text-blue-600 dark:text-blue-400">DDL (Data Definition)</td>
+                                <td class="p-3">Definición y alteración de esquemas, tablas, tipos e índices.</td>
+                                <td class="p-3 font-mono">CREATE, ALTER, DROP, TRUNCATE, RENAME</td>
+                                <td class="p-3">En Oracle hace autocommit; en PostgreSQL es transaccional.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3 font-bold text-emerald-600 dark:text-emerald-400">DCL (Data Control)</td>
+                                <td class="p-3">Gestión de privilegios, roles y permisos de seguridad.</td>
+                                <td class="p-3 font-mono">GRANT, REVOKE</td>
+                                <td class="p-3">Afecta inmediatamente el catálogo del sistema.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3 font-bold text-amber-600 dark:text-amber-400">TCL (Transaction Control)</td>
+                                <td class="p-3">Control de fronteras y atomicidad de las transacciones.</td>
+                                <td class="p-3 font-mono">COMMIT, ROLLBACK, SAVEPOINT, SET TRANSACTION</td>
+                                <td class="p-3">Determina el destino final de las mutaciones DML.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 2. Operaciones DML de Modificación -->
+                <h2>2. Inserción, Modificación y Eliminación de Datos (DML)</h2>
                 
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<!-- Enfoque Arquitecto: DML e Internals de MVCC -->
-<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3>PostgreSQL Internals: DML y MVCC</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                PostgreSQL implementa control de concurrencia mediante <strong>MVCC (Multi-Version Concurrency Control)</strong>. Cuando ejecuta un <code>UPDATE</code> o <code>DELETE</code>, el motor no sobrescribe ni borra físicamente la fila en el disco de inmediato:
-            </p>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>DELETE:</strong> Marca la tupla existente como "muerta" (inactiva) al registrar el ID de transacción de eliminación.</li>
-<li><strong>UPDATE:</strong> Funciona como un <code>DELETE</code> de la tupla antigua y un <code>INSERT</code> de la nueva tupla con los datos actualizados.</li>
-<li><strong>Bloating:</strong> El espacio ocupado por tuplas muertas no se libera automáticamente al sistema operativo. Se requiere el proceso de <code>VACUUM</code> para limpiar estas tuplas y hacer reutilizable el espacio en las páginas de datos de 8KB.</li>
-</ul>
-</section>
-<!-- Enfoque Cloud: EXPLAIN ANALYZE y Buffers -->
-<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3>Lectura del Plan de Ejecución con EXPLAIN</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
-                Para auditar el rendimiento de una consulta DML (como un <code>SELECT</code> de filtrado), ejecute <code>EXPLAIN (ANALYZE, BUFFERS)</code>. Esto forzará la ejecución de la consulta de forma segura y retornará métricas reales de:
-            </p>
-<ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Sec Scan (Sequential Scan):</strong> Lectura de todas las páginas de la tabla. Costoso para tablas grandes.</li>
-<li><strong>Shared Read (I/O de disco):</strong> Páginas leídas directamente desde el sistema de almacenamiento cloud.</li>
-<li><strong>Shared Hit (Buffer Cache):</strong> Páginas recuperadas instantáneamente desde la memoria RAM del servidor de BD.</li>
-</ul>
-</section>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<h4><svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Objetivos de Aprendizaje</h4>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Comprender los lenguajes de la Base de Datos Relacional (DDL, DML, DCL)</li>
-<li>Insertar nuevas filas con INSERT</li>
-<li>Modificar datos existentes con UPDATE</li>
-<li>Eliminar filas con DELETE</li>
-<li>Consultar datos con SELECT basico y filtrado WHERE</li>
-</ul>
-</div>
-<div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<p><strong>Insight del Arquitecto:</strong> Las sentencias DML son las mas usadas en cualquier aplicacion. En PostgreSQL, recursos como <code>RETURNING</code> e <code>INSERT ... ON CONFLICT</code> (upsert) ahorran viajes de ida y vuelta al servidor. Siempre prefiera <code>TRUNCATE</code> sobre <code>DELETE</code> sin WHERE para vaciar tablas grandes.</p>
-</div>
-<h2>1. Lenguajes de la Base de Datos Relacional</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una base de datos relacional se maneja a traves de distintos sublenguajes SQL:</p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>DML</strong> (Data Manipulation Language) - INSERT, UPDATE, DELETE, SELECT</li>
-<li><strong>DDL</strong> (Data Definition Language) - CREATE, ALTER, DROP, RENAME</li>
-<li><strong>DCL</strong> (Data Control Language) - GRANT, REVOKE</li>
-<li><strong>TCL</strong> (Transaction Control) - COMMIT, ROLLBACK, SAVEPOINT</li>
-</ul>
-<h2>2. INSERT - Insercion de Datos</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Aniade una nueva fila a una tabla existente. Todos los campos con restriccion NOT NULL deben recibir un valor.</p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-INSERT INTO table [column, column...]
-VALUES (valor1, valor2, ...);
-</div>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Ejemplo:</strong> Tabla <code>cliente</code> y <code>orden_pedido</code>.</p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-CREATE TABLE cliente (
-    codigo_cliente NUMBER(5) PRIMARY KEY,
-    nombre VARCHAR2(25) NOT NULL,
-    apellido VARCHAR2(50) NOT NULL,
-    telefono VARCHAR2(10) NOT NULL
-);
+                <h3>2.1 INSERT INTO: Inserción Básica, Múltiple y con Cláusula RETURNING</h3>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    La sentencia <code>INSERT</code> añade una o más filas a una tabla. Si no se especifican las columnas, se deben proporcionar valores para todos los atributos en el orden exacto de definición de la tabla.
+                </p>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+-- 1. Inserción posicional completa
+INSERT INTO cliente 
+VALUES (101, 'Corporación Andina S.A.C.', 'Av. Javier Prado 4500', 'A', '15023');
 
-CREATE TABLE orden_pedido (
-    numero_orden NUMBER(7) PRIMARY KEY,
-    fecha_colocacion DATE,
-    fecha_llenado DATE,
-    numero_embarques NUMBER(5),
-    id_cliente NUMBER(7) REFERENCES cliente
-);
+-- 2. Inserción con lista explícita de columnas (Mejor práctica recomendada)
+INSERT INTO producto (id_producto, nombre_linea, stock, precio, costo)
+VALUES (5001, 'Muebles Oficina', 25, 450.00, 280.00);
 
-INSERT INTO cliente
-VALUES (1, 'JOSE', 'PARDO', '01-4414896');
+-- 3. Inserción múltiple (Bulk Insert atómico estándar ANSI)
+INSERT INTO linea_producto (nombre_linea)
+VALUES 
+    ('Muebles Oficina'),
+    ('Hogar y Comedor'),
+    ('Dormitorio Moderno');
 
-INSERT INTO orden_pedido
-VALUES (555, '25-OCT-07', '05-OCT-07', 5, 1);
-</div>
-</div>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p><strong>Nota:</strong> Se puede especificar la lista de columnas. El valor NULL es valido para campos sin restriccion NOT NULL.</p>
-</div>
-<h2>3. UPDATE - Modificacion de Datos</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Modifica el valor de uno o varios campos en filas existentes. Puede elegir las filas mediante la clausula WHERE.</p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-UPDATE table
-SET column = nuevo_valor | expresion
-[WHERE condicion {AND|OR} condicion...];
-</div>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Ejemplo:</strong> Cambiar numero de embarques de la orden 555 y telefono del cliente 1.</p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-UPDATE orden_pedido
-SET numero_embarques = 3
-WHERE numero_orden = 555;
+-- 4. PostgreSQL Feature: Cláusula RETURNING para evitar consultas adicionales
+INSERT INTO orden_pedido (fecha_colocacion, numero_embarques, id_cliente)
+VALUES (CURRENT_DATE, 1, 101)
+RETURNING numero_orden, fecha_colocacion, id_cliente;
 
+-- 5. Manejo de Conflictos: UPSERT (INSERT ... ON CONFLICT DO UPDATE)
+INSERT INTO producto (id_producto, nombre_linea, stock, precio, costo)
+VALUES (5001, 'Muebles Oficina', 30, 470.00, 290.00)
+ON CONFLICT (id_producto) 
+DO UPDATE SET 
+    stock = EXCLUDED.stock,
+    precio = EXCLUDED.precio,
+    costo = EXCLUDED.costo;
+                </div>
+
+                <h3>2.2 UPDATE: Modificación Condicional y Actualización con Joins</h3>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    <code>UPDATE</code> modifica los valores de las columnas existentes. <strong>Regla de oro:</strong> Toda sentencia UPDATE en entornos operacionales debe llevar una cláusula <code>WHERE</code> explícita, a menos que intencionalmente se desee actualizar la totalidad de la tabla.
+                </p>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+-- 1. Actualización simple con condición matemática
+UPDATE producto
+SET precio = precio * 1.08,
+    costo = costo * 1.05
+WHERE nombre_linea = 'Muebles Oficina' 
+  AND stock > 10;
+
+-- 2. Actualización basada en subconsulta
 UPDATE cliente
-SET telefono = '01-4367788'
-WHERE codigo_cliente = 1;
-</div>
-</div>
-<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-<p><strong>Precaucion:</strong> Si omite la clausula WHERE, se actualizan TODAS las filas de la tabla. Siempre verifique primero con un SELECT.</p>
-</div>
-<h2>4. DELETE - Eliminacion de Datos</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Elimina una o mas filas de una tabla. La clausula WHERE determina cuales filas se eliminan.</p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-DELETE FROM table
-[WHERE condicion {AND|OR} condicion...];
-</div>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Ejemplo:</strong> Eliminar la orden de pedido numero 555.</p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-DELETE FROM orden_pedido
-WHERE numero_orden = 555;
-</div>
-</div>
-<h2>5. SELECT - Consulta de Datos</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Permite consultar la informacion contenida en una o varias tablas. Es la instruccion DML mas utilizada.</p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-SELECT ALL|*|DISTINCT|(column, column...)
-FROM table
-[WHERE condicion {AND|OR} condicion...];
-</div>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><code>ALL</code> o <code>*</code> muestra todas las columnas y todas las filas</li>
-<li><code>DISTINCT</code> elimina duplicados en los resultados</li>
-<li><code>WHERE</code> filtra las filas segun una condicion logica</li>
-</ul>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Ejemplos de SELECT:</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-SELECT ALL FROM orden_pedido;
-SELECT * FROM cliente;
-SELECT * FROM cliente WHERE codigo_cliente = 1;
-SELECT DISTINCT nombre FROM cliente;
-SELECT nombre, apellido FROM cliente
-WHERE codigo_cliente = 1;
-</div>
-</div>
-<h2>Operadores en la clausula WHERE</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Operador</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">=</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Igual a</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">&lt;&gt; o !=</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Diferente de</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">&gt; &lt;</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Mayor / Menor que</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">BETWEEN</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Rango (inclusivo)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">LIKE</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Coincidencia de patron</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">IN</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Pertenece a un conjunto</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">IS NULL</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Verificar valor nulo</div>
-</div>
-</div></div>
-<div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<p><strong>Insight del Arquitecto:</strong> En PostgreSQL, la paginacion se logra con <code>LIMIT ... OFFSET ...</code> a diferencia de Oracle que usa <code>ROWNUM</code> o SQL Server con <code>TOP</code>. La clausula <code>RETURNING</code> es exclusiva de PostgreSQL y permite devolver los valores generados (como SERIAL) tras una insercion.</p>
-</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p><strong>Laboratorio:</strong> Dada la tabla <code>empleado (id, nombre, departamento, salario, fecha_ingreso)</code>, escriba:</p>
-<ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300" style="list-style: decimal;">
-<li>Un INSERT para anadir 3 empleados</li>
-<li>Un UPDATE que aumente 10% el salario del departamento 'TI'</li>
-<li>Un DELETE del empleado con id = 5</li>
-<li>Un SELECT con todos los empleados ordenados por salario descendente</li>
-<li>Un SELECT con DISTINCT de los departamentos</li>
-</ol>
-</div>
-<div class="canvas-container">
-<canvas height="360" id="canvas_05" width="800"></canvas>
-<div class="canvas-controls" id="controls_05"></div>
-</div>
-<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2>
-<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                💡 Tips del Profesor
-            </h2>
-<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite SELECT * en producción:</strong> Recuperar columnas innecesarias incrementa el tráfico de red, sobrecarga la memoria RAM y bloquea la capacidad del planificador de usar Index-Only Scans.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Autovacuum Tuning:</strong> Asegúrese de configurar correctamente los parámetros de autovacuum en su instancia de RDS para evitar el temido 'Table Bloating' en tablas con alto volumen de modificaciones.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Cuidado con DELETE sin WHERE:</strong> Borrar millones de registros uno a uno genera millones de registros en el WAL (Write-Ahead Log) y genera millones de tuplas muertas. Si desea vaciar una tabla completa, prefiera <code>TRUNCATE TABLE</code>.</p>
-</div>
-</div>
-</section>
-<section class="mt-10">
-<h2>
-<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-<div class="space-y-4">
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            ¿Qué ocurre internamente en PostgreSQL cuando se ejecuta un UPDATE de una fila?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Se marca la tupla actual como inactiva (muerta) y se inserta una nueva tupla (versión física) en una página de la base de datos con los nuevos valores y el ID de transacción de inserción.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            ¿Por qué es importante utilizar EXPLAIN (ANALYZE, BUFFERS) en lugar de un simple EXPLAIN?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Porque <code>EXPLAIN</code> solo calcula una estimación teórica del planificador, mientras que <code>ANALYZE</code> y <code>BUFFERS</code> ejecuta la consulta real mostrando tiempos exactos e impacto de I/O en caché y disco.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            ¿Qué ventaja tiene TRUNCATE sobre un DELETE sin cláusula WHERE?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><code>TRUNCATE</code> es una instrucción DDL que libera instantáneamente el espacio en disco eliminando los archivos de datos subyacentes y requiere muy pocos recursos de WAL, a diferencia de <code>DELETE</code> que procesa fila por fila.</p>
-</div>
-</details>
-</div>
-</section>
-</article>
-</article>
+SET tipo = 'A'
+WHERE id_cliente IN (
+    SELECT id_cliente 
+    FROM orden_pedido 
+    GROUP BY id_cliente 
+    HAVING COUNT(numero_orden) >= 5
+);
+
+-- 3. UPDATE con JOIN utilizando la cláusula FROM (PostgreSQL Syntax)
+UPDATE producto p
+SET meta_venta = p.meta_venta * 1.15
+FROM linea_producto lp
+WHERE p.nombre_linea = lp.nombre_linea
+  AND lp.nombre_linea = 'Dormitorio Moderno'
+RETURNING p.id_producto, p.nombre_linea, p.meta_venta;
+                </div>
+
+                <h3>2.3 DELETE vs TRUNCATE: Comparación Arquitectónica Exhaustiva</h3>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    Una de las preguntas más comunes en exámenes y entrevistas de ingeniería de datos radica en la distinción operativa y física entre <code>DELETE</code> y <code>TRUNCATE</code>:
+                </p>
+                <div class="bg-slate-100 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto mb-6 text-slate-800 dark:text-slate-200">
++----------------------+---------------------------------+---------------------------------+
+| Característica       | DELETE (DML)                    | TRUNCATE (DDL)                  |
++----------------------+---------------------------------+---------------------------------+
+| Categoría SQL        | DML (Data Manipulation)         | DDL (Data Definition)           |
+| Filtrado con WHERE   | SÍ (Permite borrar filas esp.)  | NO (Elimina TODAS las filas)    |
+| Mecanismo de borrado | Fila por fila (Genera Dead Tuples)| Desasigna páginas de disco      |
+| Logging / WAL        | Alto (Registra cada tupla)      | Mínimo (Registra desasignación) |
+| Velocidad            | Lenta en tablas grandes         | Ultrarrápida (O(1) complejidad) |
+| Bloqueo (Locks)      | Row-level locks (Modo exclusivo)| AccessExclusiveLock (Tabla com.)|
+| Triggers             | Dispara triggers ON DELETE      | Dispara solo triggers TRUNCATE  |
+| Reinicio de PK       | NO reinicia secuencias/identidad| SÍ reinicia con RESTART IDENTITY|
+| Rollback en Postgres | SÍ (Totalmente transaccional)   | SÍ (Transaccional en Postgres)  |
++----------------------+---------------------------------+---------------------------------+
+                </div>
+
+                <!-- 3. Consultas Básicas con SELECT -->
+                <h2>3. Recuperación de Datos con SELECT</h2>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    La sentencia <code>SELECT</code> implementa los operadores fundamentales del álgebra relacional: la <strong>Proyección ($\pi$)</strong> para seleccionar columnas y la <strong>Selección ($\sigma$)</strong> para filtrar tuplas que cumplan un predicado lógico.
+                </p>
+
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+-- Proyección con alias, cálculos aritméticos y funciones escalares
+SELECT 
+    id_producto,
+    nombre_linea,
+    precio,
+    costo,
+    (precio - costo) AS margen_bruto,
+    ROUND(((precio - costo) / precio) * 100, 2) AS porcentaje_margen,
+    UPPER(nombre_linea) AS linea_mayuscula,
+    COALESCE(stock, 0) AS stock_disponible
+FROM producto;
+                </div>
+
+                <!-- 4. Álgebra de Filtrado y Lógica Trivaluada -->
+                <h2>4. Filtrado WHERE y la Lógica Trivaluada (Three-Valued Logic)</h2>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    En SQL, el valor especial <code>NULL</code> representa la ausencia de dato o un valor desconocido. Por tanto, SQL no opera con lógica booleana binaria (Verdadero/Falso), sino con una <strong>Lógica Trivaluada (3VL)</strong> compuesta por <code>TRUE</code>, <code>FALSE</code> y <code>UNKNOWN</code>.
+                </p>
+
+                <div class="bg-slate-100 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto mb-6 text-slate-800 dark:text-slate-200">
+                  TABLA DE VERDAD LÓGICA TRIVALUADA (3VL EN SQL)
+====================================================================
+P        | Q        | P AND Q   | P OR Q    | NOT P
+---------+----------+-----------+-----------+-----------
+TRUE     | TRUE     | TRUE      | TRUE      | FALSE
+TRUE     | FALSE    | FALSE     | TRUE      | FALSE
+TRUE     | UNKNOWN  | UNKNOWN   | TRUE      | FALSE
+FALSE    | FALSE    | FALSE     | FALSE     | TRUE
+FALSE    | UNKNOWN  | FALSE     | UNKNOWN   | TRUE
+UNKNOWN  | UNKNOWN  | UNKNOWN   | UNKNOWN   | UNKNOWN
+====================================================================
+* REGLA DE ORO DE WHERE: La cláusula WHERE solo retorna filas cuyo predicado 
+  evalúe estrictamente a TRUE. Si evalúa a FALSE o UNKNOWN, la fila se DESCARTA.
+                </div>
+
+                <div class="bg-amber-50 dark:bg-amber-950/20 p-5 rounded-2xl border border-amber-200 dark:border-amber-900/40 mb-6">
+                    <h4 class="text-amber-900 dark:text-amber-300 font-bold mb-2">⚠️ Trampa Clásica de Examen: Comparaciones con NULL</h4>
+                    <p class="text-xs text-slate-700 dark:text-slate-300 mb-2">
+                        La expresión <code>WHERE fecha_llenado = NULL</code> <strong>nunca retornará ninguna fila</strong> porque <code>NULL = NULL</code> evalúa a <code>UNKNOWN</code>, no a <code>TRUE</code>.
+                    </p>
+                    <p class="text-xs font-mono text-slate-800 dark:text-slate-200">
+                        -- INCORRECTO (Retorna 0 filas siempre):<br>
+                        SELECT * FROM orden_pedido WHERE fecha_llenado = NULL;<br><br>
+                        -- CORRECTO (Sintaxis estándar ANSI):<br>
+                        SELECT * FROM orden_pedido WHERE fecha_llenado IS NULL;<br>
+                        SELECT * FROM orden_pedido WHERE fecha_llenado IS NOT NULL;
+                    </p>
+                </div>
+
+                <h3>4.1 Operadores Especiales de Predicado</h3>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+-- 1. Operador BETWEEN ... AND (Inclusivo en ambos límites)
+SELECT numero_orden, fecha_colocacion, id_cliente
+FROM orden_pedido
+WHERE fecha_colocacion BETWEEN '2026-01-01' AND '2026-06-30';
+
+-- 2. Operador IN (Lista explícita o subconsulta)
+SELECT id_cliente, nombre, tipo, zip
+FROM cliente
+WHERE tipo IN ('A', 'B') AND zip IN ('15023', '15024', '15036');
+
+-- 3. Operadores de Coincidencia de Patrones: LIKE e ILIKE
+-- %: Coincide con 0 o más caracteres
+-- _: Coincide con exactamente un carácter
+SELECT id_cliente, nombre, direccion
+FROM cliente
+WHERE nombre LIKE 'Corp%'       -- Case-sensitive
+  AND direccion ILIKE '%av.%';   -- PostgreSQL Case-insensitive
+                </div>
+
+                <!-- 5. Ordenamiento y Paginación -->
+                <h2>5. Ordenamiento (ORDER BY) y Paginación Determinista</h2>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    Por definición matemática del modelo relacional, las tuplas en una tabla no tienen un orden inherente. La única forma de garantizar un orden de presentación consiste en utilizar <code>ORDER BY</code>.
+                </p>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+-- 1. Ordenamiento múltiple con control explícito de nulos
+SELECT numero_orden, fecha_colocacion, fecha_llenado, id_cliente
+FROM orden_pedido
+ORDER BY 
+    fecha_colocacion DESC, 
+    fecha_llenado ASC NULLS LAST;
+
+-- 2. Eliminación de Duplicados: DISTINCT vs DISTINCT ON (PostgreSQL)
+SELECT DISTINCT nombre_linea FROM producto;
+
+-- DISTINCT ON: Retorna la primera fila para cada grupo según el ORDER BY
+SELECT DISTINCT ON (id_cliente) 
+    id_cliente, 
+    numero_orden, 
+    fecha_colocacion
+FROM orden_pedido
+ORDER BY id_cliente, fecha_colocacion DESC;
+
+-- 3. Paginación Determinista en APIs y Microservicios (LIMIT & OFFSET)
+SELECT id_producto, nombre_linea, precio
+FROM producto
+ORDER BY id_producto ASC
+LIMIT 10 OFFSET 20; -- Retorna la página 3 (filas 21 a 30)
+                </div>
+
+                <!-- 6. Control Transaccional ACID y SAVEPOINTS -->
+                <h2>6. Control de Transacciones DML (ACID y SAVEPOINTS)</h2>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    Una transacción es una unidad lógica de trabajo indivisible. En aplicaciones bancarias o de comercio electrónico, los <code>SAVEPOINTS</code> permiten establecer puntos de restauración intermedios para revertir errores parciales sin cancelar la totalidad del flujo transaccional.
+                </p>
+
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-6">
+-- Inicio explícito de la transacción
+BEGIN;
+
+-- Paso 1: Insertar la cabecera de la orden
+INSERT INTO orden_pedido (numero_orden, fecha_colocacion, numero_embarques, id_cliente)
+VALUES (99001, CURRENT_DATE, 1, 101);
+
+-- Paso 2: Crear un punto de restauración intermedio
+SAVEPOINT punto_lineas_pedido;
+
+-- Paso 3: Descontar stock del producto ordenado
+UPDATE producto 
+SET stock = stock - 5 
+WHERE id_producto = 5001 AND stock >= 5;
+
+-- Paso 4: Supongamos que ocurre un error al intentar insertar un producto inexistente
+-- En lugar de abortar toda la compra, revertimos al SAVEPOINT:
+ROLLBACK TO SAVEPOINT punto_lineas_pedido;
+
+-- Paso 5: Proceder con un producto alternativo válido
+UPDATE producto 
+SET stock = stock - 2 
+WHERE id_producto = 5002 AND stock >= 2;
+
+-- Confirmar permanentemente todos los cambios válidos
+COMMIT;
+                </div>
+
+                <!-- 7. Ejercicios Prácticos Resueltos -->
+                <h2>7. Ejercicios Prácticos de Laboratorio Resueltos</h2>
+
+                <div class="space-y-4 my-6">
+                    <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                        <summary class="cursor-pointer font-bold text-slate-900 dark:text-white flex justify-between items-center">
+                            <span>📝 Ejercicio 1: Actualización Masiva con Cláusula CASE y RETURNING</span>
+                            <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300">Resuelto</span>
+                        </summary>
+                        <div class="mt-4 text-xs text-slate-700 dark:text-slate-300 space-y-2">
+                            <p><strong>Enunciado:</strong> Incremente el precio de los productos de la línea 'Muebles Oficina' en un 12% si su stock es menor a 15 unidades, y en un 5% en caso contrario. La consulta debe devolver el ID, nuevo precio y monto del incremento.</p>
+                            <pre class="bg-slate-100 dark:bg-slate-950 p-4 rounded-xl font-mono text-slate-800 dark:text-slate-200 overflow-x-auto">
+UPDATE producto
+SET precio = CASE 
+    WHEN stock < 15 THEN ROUND(precio * 1.12, 2)
+    ELSE ROUND(precio * 1.05, 2)
+END
+WHERE nombre_linea = 'Muebles Oficina'
+RETURNING id_producto, precio AS nuevo_precio, stock;
+                            </pre>
+                        </div>
+                    </details>
+
+                    <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                        <summary class="cursor-pointer font-bold text-slate-900 dark:text-white flex justify-between items-center">
+                            <span>📝 Ejercicio 2: Búsqueda con Lógica Trivaluada y Filtros Combinados</span>
+                            <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300">Resuelto</span>
+                        </summary>
+                        <div class="mt-4 text-xs text-slate-700 dark:text-slate-300 space-y-2">
+                            <p><strong>Enunciado:</strong> Liste todas las órdenes de pedido cuyo número de embarques sea mayor a 1 o nulo, pero que pertenezcan a clientes de tipo 'A' o 'C' y cuya fecha de colocación sea posterior al 1 de enero de 2026.</p>
+                            <pre class="bg-slate-100 dark:bg-slate-950 p-4 rounded-xl font-mono text-slate-800 dark:text-slate-200 overflow-x-auto">
+SELECT o.numero_orden, o.fecha_colocacion, o.numero_embarques, o.id_cliente
+FROM orden_pedido o
+JOIN cliente c ON o.id_cliente = c.id_cliente
+WHERE (o.numero_embarques > 1 OR o.numero_embarques IS NULL)
+  AND c.tipo IN ('A', 'C')
+  AND o.fecha_colocacion > '2026-01-01'
+ORDER BY o.fecha_colocacion DESC, o.numero_orden ASC;
+                            </pre>
+                        </div>
+                    </details>
+                </div>
 
             </article>
         </main>
 
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>INSERT</strong> Agregar filas a una tabla</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>UPDATE</strong> Modificar valores existentes</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>DELETE</strong> Eliminar filas de una tabla</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>SELECT</strong> Consultar datos almacenados</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>WHERE</strong> Clausula de filtrado condicional</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>DISTINCT</strong> Valores unicos sin duplicados</li>
+            <!-- Keywords (M3 Outlined Card) -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave S05</h3>
+                <ul class="space-y-2">
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ DML</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Data Manipulation Language: INSERT, UPDATE, DELETE, SELECT</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ MVCC</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Multi-Version Concurrency: xmin, xmax y dead tuples</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ DELETE vs TRUNCATE</strong>
+                        <span class="text-slate-600 dark:text-slate-400">DML fila a fila vs DDL desasignación de páginas</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Lógica Trivaluada</strong>
+                        <span class="text-slate-600 dark:text-slate-400">3VL: TRUE, FALSE y UNKNOWN con NULLs</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ SAVEPOINT</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Puntos de guardado intermedios en transacciones</span>
+                    </li>
+                </ul>
+            </div>
 
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="semana_04.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 04</a></li>
-                <li><a href="semana_06.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 06 →</a></li>
-            </ul>
-        </div>
-
+            <!-- Navigation Resources -->
+            <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+                <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
+                    <li><a href="semana_04.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 04</a></li>
+                    <li><a href="semana_06.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 06 →</a></li>
+                </ul>
+            </div>
         </aside>
     </div>
 
@@ -560,45 +670,5 @@ WHERE codigo_cliente = 1;
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
-
-<script>
-var dmlData = {
-    cols: ['ID', 'Nombre', 'Precio', 'Stock'],
-    rows: [['P01', 'Laptop', '2500', '10'], ['P02', 'Mouse', '50', '50'], ['P03', 'Teclado', '120', '30']]
-};
-var dmlHighlight = -1;
-var dmlMsg = '';
-function draw05(ctx, W, H) {
-    CanvasUI.fillBg(ctx, W, H);
-    ctx.fillStyle = CanvasUI.COLORS.textMuted;
-    ctx.font = '13px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Tabla: Productos — Ejecuta operaciones DML con los botones', W / 2, 22);
-    CanvasUI.drawTable(ctx, 20, 40, dmlData.cols, dmlData.rows, dmlHighlight);
-    if (dmlMsg) {
-        ctx.fillStyle = CanvasUI.COLORS.accent;
-        ctx.font = '12px JetBrains Mono, monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText(dmlMsg, W / 2, H - 20);
-    }
-}
-function redraw05() {
-    var c = document.getElementById('canvas_05');
-    if (!c) return;
-    var ctx = c.getContext('2d');
-    c.width = c.width;
-    draw05(ctx, c.width, c.height);
-}
-document.addEventListener('DOMContentLoaded', function() { setTimeout(redraw05, 50); });
-CanvasUI.addControls('controls_05', {
-    play: function() { dmlMsg = 'INSERT INTO producto VALUES (\"P04\",\"Monitor\",800,15)'; dmlData.rows.push(['P04','Monitor','800','15']); dmlHighlight = dmlData.rows.length - 1; redraw05(); },
-    step: function() { dmlMsg = 'UPDATE producto SET stock = stock + 5'; for (var i = 0; i < dmlData.rows.length; i++) { dmlData.rows[i][3] = String(parseInt(dmlData.rows[i][3]) + 5); } dmlHighlight = -1; redraw05(); },
-    reset: function() { dmlData.rows = [['P01','Laptop','2500','10'],['P02','Mouse','50','50'],['P03','Teclado','120','30']]; dmlMsg = ''; dmlHighlight = -1; redraw05(); }
-});
-document.addEventListener('DOMContentLoaded', function() {
-    var btns = document.querySelectorAll('#controls_05 .btn-canvas');
-    if (btns.length >= 3) { btns[2].textContent = 'Reset'; }
-});
-</script>
 </body>
 </html>

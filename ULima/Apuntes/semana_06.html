@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
-    <title>Semana 06 - Modelamiento de Datos (ERD)</title>
+    <title>Semana 06 - Modelamiento Conceptual Entidad-Relación (DER / EER) | Ingeniería de Datos</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -69,15 +69,12 @@
             });
         });
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <!-- Sun icon -->
         <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <!-- Moon icon -->
         <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
@@ -88,11 +85,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
-            Modelamiento de Datos (Entidad-Relacion)
-        </h1>
+                    Modelamiento Conceptual Entidad-Relación (DER / EER)
+                </h1>
                 <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
-            Semana 06 • DER  • Ingenieria de Datos
-        </p>
+                    Semana 06 • Entidades Débiles, Jerarquías de Generalización/Especialización y Mapeo Lógico • Ingeniería de Datos
+                </p>
             </div>
             <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
@@ -101,379 +98,361 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
-    <!-- M3 Step-by-Step Diagram -->
-    <div class="my-6">
-        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                📌 Proceso Paso a Paso: Fases de Diseño Metodológico de Bases de Datos
-            </h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Desde los requisitos informales de negocio hasta la implementación y optimización final.
-            </p>
-            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(10, 15)">
-    <!-- 1 -->
-    <rect x="0" y="20" width="165" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="82.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. Req. de Usuario</text>
-    <text x="82.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Historias de Usuario y Glosario</text>
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
 
-    <!-- Flecha -->
-    <path d="M 165 50 L 195 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="195,50 188,46 188,54" fill="#6366f1" />
+            <!-- M3 Step-by-Step Diagram -->
+            <div class="my-6">
+                <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                        📌 Proceso Paso a Paso: Del Análisis de Negocio al Mapeo Físico
+                    </h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                        Etapas rigurosas de transformación formal desde las reglas empresariales hasta el esquema relacional normalizado.
+                    </p>
+                    <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                        <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+                            <g transform="translate(10, 15)">
+                                <!-- 1 -->
+                                <rect x="0" y="20" width="165" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="82.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. Req. de Negocio</text>
+                                <text x="82.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Glosario y Reglas Semánticas</text>
 
-    <!-- 2 -->
-    <rect x="200" y="20" width="170" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="285" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. Diseño Conceptual</text>
-    <text x="285" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Modelo E-R independiente del DBMS</text>
+                                <!-- Flecha -->
+                                <path d="M 165 50 L 195 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="195,50 188,46 188,54" fill="#6366f1" />
 
-    <!-- Flecha -->
-    <path d="M 370 50 L 400 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="400,50 393,46 393,54" fill="#6366f1" />
+                                <!-- 2 -->
+                                <rect x="200" y="20" width="170" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="285" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. Modelo Conceptual</text>
+                                <text x="285" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">DER Chen / Crow's Foot</text>
 
-    <!-- 3 -->
-    <rect x="405" y="20" width="175" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="492.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Diseño Lógico</text>
-    <text x="492.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Normalización y Esquema Relacional</text>
+                                <!-- Flecha -->
+                                <path d="M 370 50 L 400 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="400,50 393,46 393,54" fill="#6366f1" />
 
-    <!-- Flecha -->
-    <path d="M 580 50 L 610 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="610,50 603,46 603,54" fill="#6366f1" />
+                                <!-- 3 -->
+                                <rect x="405" y="20" width="175" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                                <text x="492.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Esquema Lógico</text>
+                                <text x="492.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Mapeo Relacional & Normalización</text>
 
-    <!-- 4 -->
-    <rect x="615" y="20" width="165" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="697.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">4. Diseño Físico</text>
-    <text x="697.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">PostgreSQL DDL, Índices y Partición</text>
-  </g>
-</svg>
+                                <!-- Flecha -->
+                                <path d="M 580 50 L 610 50" stroke="#6366f1" stroke-width="2" fill="none" />
+                                <polygon points="610,50 603,46 603,54" fill="#6366f1" />
+
+                                <!-- 4 -->
+                                <rect x="615" y="20" width="165" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+                                <text x="697.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">4. Esquema Físico</text>
+                                <text x="697.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">PostgreSQL DDL, PK/FK & Índices</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
             <article class="space-y-8 prose dark:prose-invert max-w-none">
-    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
-    <div class="my-6">
-        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
-            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
-                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Relación de Términos
-                </span>
-                <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </span>
-            </summary>
-            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                <pre class="mermaid bg-transparent">
+                <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
+                <div class="my-6">
+                    <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
+                        <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
+                            <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
+                                🗺️ Mapa Conceptual y Relación de Términos (Modelo E-R / EER)
+                            </span>
+                            <span class="transition group-open:rotate-180">
+                                <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
+                            <pre class="mermaid bg-transparent">
 graph TD
-    S06[Modelamiento E-R] --> Comp[Componentes del DER]
-    Comp --> Ent[Entidades: Fuertes vs Débiles]
-    Comp --> Att[Atributos: PK, Compuestos, Multivaluados, Derivados]
-    Comp --> Rel[Relaciones: Asociación entre entidades]
+    ER[Modelo Entidad-Relación] --> Ent[Entidades]
+    ER --> Att[Atributos]
+    ER --> Rel[Relaciones]
+    ER --> EER[Jerarquías EER]
+
+    Ent --> Strong[Fuertes: Clave propia independiente]
+    Ent --> Weak[Débiles: Dependencia ID + Existencia]
+    Ent --> Assoc[Asociativas: M:N con atributos propios]
+
+    Att --> Simple[Simples vs Compuestos]
+    Att --> Multi[Multivaluados vs Monovaluados]
+    Att --> Deriv[Derivados: Calculados en tiempo de ejecución]
+    Att --> PK[Claves Primarias / Parciales]
+
     Rel --> Card[Cardinalidad: 1:1, 1:N, N:M]
-    S06 --> Sub[Supertipos y Subtipos: Especialización / Generalización]
-                </pre>
-            </div>
-        </details>
-    </div>
+    Rel --> Part[Participación: Total / Parcial]
+    Rel --> Grad[Grado: Unaria, Binaria, Ternaria]
 
-                
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<!-- Enfoque Arquitecto: Conceptos Avanzados de DER -->
-<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3>Modelamiento Conceptual Relacional Puro</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                El diseño relacional formal se basa en modelar fielmente las reglas de negocio en el Diagrama Entidad-Relación (DER/ERD) antes de estructurar tablas físicas. Esto incluye conceptos como:
-            </p>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Estructuras de Herencia:</strong> Supertipos y subtipos (como una entidad <code>Empleado</code> especializada en <code>Contratado</code> y <code>Freelance</code>).</li>
-<li><strong>Relaciones N-arias:</strong> Relaciones que vinculan a tres o más entidades de forma simultánea. Deben deconstruirse en tablas de intersección para su correcta implementación física.</li>
-<li><strong>Cardinalidades Complejas:</strong> Definición estricta de límites mínimos y máximos de participación para evitar inconsistencias relacionales.</li>
-</ul>
-</section>
-<!-- Enfoque Cloud: Herencia en Base de Datos Física -->
-<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3>Estrategias de Herencia de Tablas en PostgreSQL</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
-                Al mapear la herencia del DER al esquema físico en PostgreSQL, existen tres aproximaciones clásicas:
-            </p>
-<ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Tabla Única (Single Table Inheritance):</strong> Almacena todas las entidades en una sola tabla con una columna discriminadora y muchas columnas nulas. Búsqueda rápida, pero desperdicio de espacio.</li>
-<li><strong>Tabla por Clase (Table per Class):</strong> Tablas separadas para cada subtipo. Evita nulos, pero requiere pesados <code>UNION</code> en consultas globales de supertipo.</li>
-<li><strong>Herencia Nativa de PostgreSQL (INHERITS):</strong> Uso de la sentencia nativa <code>CREATE TABLE ... INHERITS</code>. El planificador resuelve automáticamente las consultas sobre el supertipo leyendo las tablas hijas de forma integrada.</li>
-</ul>
-</section>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<h4><svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>Objetivos de Aprendizaje</h4>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Comprender el modelamiento de datos como fase critica del desarrollo</li>
-<li>Identificar entidades, relaciones, atributos y cardinalidades</li>
-<li>Distinguir entidades fuertes, debiles y asociativas</li>
-<li>Construir un Diagrama Entidad-Relacion (DER)</li>
-<li>Aplicar supertipos y subtipos en el modelo E-R extendido</li>
-</ul>
-</div>
-<div class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<p><strong>Insight del Arquitecto:</strong> El modelamiento de datos es la parte mas importante del desarrollo de un sistema de informacion. Los datos tienden a ser mas estables que los procesos del negocio; un sistema orientado a datos tiene mayor vida util. Invertir tiempo en el DER reduce costos de mantenimiento futuro.</p>
-</div>
-<h2>1. Que es el Modelamiento de Datos?</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Es una abstraccion del mundo real que representa como organizamos la informacion y expresa las reglas de negocio de una organizacion.</p>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p><strong>Regla de Negocio:</strong> Enunciado que define o limita un aspecto del negocio. Debe ser declarativa (describe el QUE, no el COMO), precisa, atomica, consistente y expresada en lenguaje natural estructurado.</p>
-</div>
-<h2>2. Entidad</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Coleccion de objetos del mundo real (personas, lugares, eventos, conceptos) que se distinguen de otros.</p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Tipo Entidad:</strong> La clase general (ej. Empleado, Automovil, Curso). Corresponde a una tabla.</li>
-<li><strong>Instancia:</strong> Un ejemplar concreto (ej. Pedro Picapiedra, Renault). Corresponde a una fila.</li>
-<li>Se nombran con un sustantivo en singular: Cliente (no clientes).</li>
-</ul>
-<h2>Clasificacion de Entidades</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Ejemplo</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">Fuerte</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Existe independientemente de otra entidad</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Factura</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">Debil</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Su existencia depende de otra entidad</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Linea de Factura</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">Asociativa</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Nace de la asociacion de dos entidades y contiene atributos propios</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Asignacion (Empleado-Proyecto)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">Recursiva</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Tiene una relacion consigo misma</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Empleado (jefe-subordinado)</div>
-</div>
-</div></div>
-<h2>3. Relacion</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Es una asociacion entre una o mas entidades que es de interes para la organizacion. Ejemplo: un alumno puede llevar uno o mas cursos (vinculo funcional) y un curso puede ser llevado por uno, ninguno o mas alumnos.</p>
-<h2>Cardinalidad de Relaciones</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Cardinalidad</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Significado</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">1:1</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Cada entidad tiene exactamente una entidad relacionada</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">1:N</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Una entidad en un lado se asocia con muchas entidades en el otro</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">N:N</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Muchas entidades en cada lado pueden estar asociadas</div>
-</div>
-</div></div>
-<h2>Cardinalidad Minima y Maxima</h2>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Cardinalidad Minima:</strong> Si es 0, la relacion es opcional; si es 1 o mas, es mandatoria.</li>
-<li><strong>Cardinalidad Maxima:</strong> El numero maximo de instancias que pueden asociarse.</li>
-</ul>
-<h2>Grados de Relacion</h2>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Unaria:</strong> Relacion sobre una misma entidad (ej. Empleado supervisa a Empleado). Cardinalidad 1:1 o 1:N.</li>
-<li><strong>Binaria:</strong> Relacion entre dos entidades. Es la mas comun. Puede ser 1:1, 1:N o N:N.</li>
-<li><strong>Ternaria:</strong> Relacion entre tres entidades (ej. Proveedor-Almacen-Articulo).</li>
-</ul>
-<h2>4. Claves y Restricciones de Integridad</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las claves garantizan la identificacion unica y la integridad referencial entre entidades.</p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6"><div class="w-full text-left border-collapse">
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Tipo de Clave</div>
-<div class="p-4 border-b border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-slate-100">Descripcion</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">Primary Key (PK)</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Atributo o combinacion de atributos que identifica de forma unica un registro. No cambia, no es nula, es unica.</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">PK Compuesta</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Compuesta por mas de un atributo (ej. Nro Factura + Codigo Articulo)</div>
-</div>
-<div class="bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-<div class="p-4 text-slate-600 dark:text-slate-400">Foreign Key (FK)</div>
-<div class="p-4 text-slate-600 dark:text-slate-400">Atributo en una entidad que es PK de otra entidad. Implementa la asociacion entre tablas.</div>
-</div>
-</div></div>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p><strong>Restricciones de Integridad:</strong> (1) Restricciones de dominio - todos los valores deben estar en el mismo dominio. (2) Restricciones de integridad - PK no nulas, FK debe coincidir con PK de otra entidad.</p>
-</div>
-<h2>5. Diagrama Entidad-Relacion (DER)</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El modelo entidad/relacion es el modelo conceptual mas utilizado para el diseno conceptual de bases de datos. Fue introducido por Peter Chen en 1976.</p>
-<h2>Construccion del DER (Notacion Ingenieria de Informacion)</h2>
-<div class="diagram-ascii">A --- asociada a Uno y Solo Un B --- A  +-------+  B
-                                             |   1   |
-                                             +-------+
-A --- asociada a Cero o Un B        A  +-------0-1-+  B
+    EER --> Disj[Disyunción: Disjunta vs Solapada]
+    EER --> Comp[Completitud: Total vs Parcial]
+    EER --> Map[Mapeo: Single Table, Class Table, Concrete Table]
+                            </pre>
+                        </div>
+                    </details>
+                </div>
 
-A --- asociado a Un o Varios B      A  +----1-N---+  B
+                <!-- Enfoque Arquitecto: Modelado Conceptual vs Físico -->
+                <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
+                    <h3 class="text-indigo-900 dark:text-indigo-300 font-bold text-lg mb-2">🏛️ Principios de Arquitectura: La Frontera Conceptual vs Lógica</h3>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                        El Diagrama Entidad-Relación (DER) es un modelo semántico puro <strong>independiente de la tecnología</strong>. En el DER no existen "Foreign Keys", ni tipos de datos físicos (como <code>VARCHAR(50)</code> o <code>INT4</code>), ni índices B-Tree. Las relaciones se expresan como vínculos abstractos con cardinalidades de negocio.
+                    </p>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                        El <strong>Diseño Lógico</strong> es el puente matemático donde el DER se mapea formalmente a relaciones (tablas), transformando las relaciones 1:N en claves foráneas y las relaciones M:N en tablas intermedias de unión.
+                    </p>
+                </section>
 
-A --- asociado a Cero o Varios B    A  +---0-N----+  B
+                <!-- Objetivos de Aprendizaje -->
+                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+                    <h4 class="text-blue-950 dark:text-blue-200 font-bold flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 shrink-0 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        Objetivos y Competencias de la Semana
+                    </h4>
+                    <ul class="space-y-2 list-disc list-inside text-sm text-slate-700 dark:text-slate-300">
+                        <li>Identificar y clasificar entidades fuertes, entidades débiles y entidades asociativas.</li>
+                        <li>Modelar atributos simples, compuestos, multivaluados, derivados y claves identificadoras.</li>
+                        <li>Definir cardinalidades estructurales (1:1, 1:N, M:N) y restricciones de participación (Total vs Parcial).</li>
+                        <li>Construir jerarquías de generalización y especialización (Supertipos y Subtipos) analizando restricciones de disyunción y completitud.</li>
+                        <li>Aplicar el algoritmo de mapeo estándar para convertir un DER/EER a un esquema relacional PostgreSQL 16 sin pérdida semántica.</li>
+                    </ul>
+                </div>
 
-A --- asociado a Varios B           A  +----N-----+  B</div>
-<h2>Pasos para construir el DER</h2>
-<ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300" style="list-style: decimal;">
-<li>Graficar las entidades fuertes</li>
-<li>Graficar las entidades debiles</li>
-<li>Graficar las relaciones binarias</li>
-<li>Graficar las entidades asociativas</li>
-<li>Graficar las relaciones unarias (recursivas)</li>
-</ol>
-<h2>6. Supertipos y Subtipos (Modelo E-R Extendido)</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Mecanismo para representar jerarquias donde una entidad general se subdivide en subtipos especializados.</p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Supertipo:</strong> Entidad que puede subdividirse en 2 o mas subtipos. Sus instancias pertenecen tanto al supertipo como al subtipo.</li>
-<li><strong>Subtipo:</strong> Guarda atributos diferenciadores pero hereda atributos comunes del supertipo.</li>
-<li>Las categorias se diferencian a traves de atributos que difieren entre si.</li>
-</ul>
-<div class="diagram-ascii">        +-------------------+
-        |    EMPLEADO       |  (Supertipo)
-        | cod_emp (PK)      |
-        | nombre            |
-        | direccion         |
-        +--------+----------+
-                 |
-        +--------+----------+
-        |       ISA         |  (discriminador: tipo)
-        +--------+----------+
-                 |
-      +----------+----------+
-      |                     |
-+-----+------+       +------+-----+
-| EMP_TIJO   |       | EMP_HORA  |  (Subtipos)
-| sueldo     |       | tarifa_h  |
-| bono       |       | max_horas |
-+------------+       +------------+</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p><strong>Laboratorio:</strong> Dado el siguiente enunciado, construya el DER:</p>
-<p>"Una biblioteca tiene socios que pueden prestar libros. Cada prestamo registra la fecha de inicio y la fecha de devolucion. Un libro pertenece a una categoria. Un socio tiene un unico carnet."</p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Identifique: entidades (fuertes y debiles), relaciones, cardinalidad (minima y maxima) y atributos clave.</p>
-</div>
-<div class="canvas-container">
-<canvas height="360" id="canvas_06" width="800"></canvas>
-<div class="canvas-controls" id="controls_06"></div>
-</div>
-<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2>
-<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                💡 Tips del Profesor
-            </h2>
-<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Cuidado con la herencia nativa y las PKs:</strong> Las restricciones de clave primaria y unicidad en tablas padre de PostgreSQL NO se heredan ni se validan automáticamente a través de las tablas hijas. Planifique con cuidado.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Modelado para DW vs OLTP:</strong> En OLTP, priorice la normalización del DER para garantizar transacciones ultra rápidas sin anomalías. En Data Warehouses, prefiera esquemas desnormalizados (estrella/copo de nieve).</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Use diagramas ER vivos:</strong> Almacene la definición del DER en código de texto plano (como Mermaid.js) dentro de su repositorio Git para mantener la documentación sincronizada.</p>
-</div>
-</div>
-</section>
-<section class="mt-10">
-<h2>
-<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-<div class="space-y-4">
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            ¿Qué es una relación débil en el Diagrama Entidad-Relación?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Es una entidad cuya existencia depende de otra entidad fuerte (padre). Su clave primaria está compuesta total o parcialmente por la clave primaria de la entidad fuerte.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            ¿Qué limitación tiene la estrategia de Tabla Única al mapear herencia?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Provoca que la tabla contenga muchas columnas que aceptan valores nulos, violando el control estricto del dominio de datos y aumentando innecesariamente el ancho de fila en disco.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            ¿Cómo resuelve PostgreSQL una consulta SELECT sobre una tabla padre con INHERITS?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">El motor realiza una consulta interna recorriendo la tabla padre y todas las tablas hijas asociadas, a menos que se especifique la cláusula <code>ONLY</code> (ej. <code>SELECT * FROM ONLY padre;</code>).</p>
-</div>
-</details>
-</div>
-</section>
-</article>
-</article>
+                <!-- 1. Componentes del Modelo Entidad-Relación -->
+                <h2>1. Componentes Nucleares del Modelo E-R</h2>
+
+                <h3>1.1 Entidades Fuertes vs Entidades Débiles</h3>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    Una <strong>Entidad</strong> es cualquier objeto, persona, concepto o evento del mundo real distinguible de los demás sobre el cual el negocio necesita registrar datos.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h4 class="text-indigo-600 dark:text-indigo-400 font-bold text-base mb-2">🔵 Entidad Fuerte (Regular)</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed">
+                            Existe de forma autónoma en el dominio del negocio. Posee una clave primaria propia (atributo o conjunto de atributos) que identifica unívocamente a cada una de sus instancias sin depender de ninguna otra entidad.
+                        </p>
+                        <div class="bg-slate-100 dark:bg-slate-800/60 p-3 rounded-xl font-mono text-[11px] text-slate-800 dark:text-slate-200">
+                            Representación Chen: Rectángulo simple<br>
+                            Ejemplo: <code>CLIENTE(<u>id_cliente</u>, nombre, ruc)</code>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h4 class="text-rose-600 dark:text-rose-400 font-bold text-base mb-2">🔴 Entidad Débil</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mb-3 leading-relaxed">
+                            No puede existir sin la entidad fuerte de la cual depende (<strong>dependencia de existencia</strong>) y carece de clave primaria propia. Solo se identifica combinando la clave de la entidad fuerte con su <em>discriminador</em> o <em>clave parcial</em> (<strong>dependencia de identificación</strong>).
+                        </p>
+                        <div class="bg-slate-100 dark:bg-slate-800/60 p-3 rounded-xl font-mono text-[11px] text-slate-800 dark:text-slate-200">
+                            Representación Chen: Rectángulo doble & Relación identificadora en rombo doble<br>
+                            Discriminador: Subrayado punteado (- - -)<br>
+                            Ejemplo: <code>DEPENDIENTE(<u>id_empleado</u>, <u>num_hijo</u>, nombre)</code>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>1.2 Clasificación Taxonómica de Atributos</h3>
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full text-xs text-left border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                        <thead class="bg-slate-100 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white uppercase">
+                            <tr>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Tipo de Atributo</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Definición Formal</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Símbolo Chen</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800">Regla de Mapeo Relacional</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">Simple (Atómico)</td>
+                                <td class="p-3">No divisible en componentes menores (ej. <code>precio</code>, <code>dni</code>).</td>
+                                <td class="p-3 font-mono">Elipse simple</td>
+                                <td class="p-3">Se convierte directamente en una columna de la tabla.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3 font-bold text-blue-600 dark:text-blue-400">Compuesto</td>
+                                <td class="p-3">Jerarquía de subatributos (ej. <code>direccion</code> &rarr; <code>calle</code>, <code>numero</code>, <code>distrito</code>).</td>
+                                <td class="p-3 font-mono">Elipse con ramas</td>
+                                <td class="p-3">Se aplana incluyendo <strong>únicamente</strong> sus hojas atómicas como columnas.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3 font-bold text-amber-600 dark:text-amber-400">Multivaluado</td>
+                                <td class="p-3">Puede contener múltiples valores para una misma instancia (ej. <code>telefonos</code>).</td>
+                                <td class="p-3 font-mono">Elipse doble</td>
+                                <td class="p-3"><strong>Requiere tabla independiente</strong> con la PK del padre + el valor multivaluado.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3 font-bold text-emerald-600 dark:text-emerald-400">Derivado</td>
+                                <td class="p-3">Calculable a partir de otros datos (ej. <code>edad = CURRENT_DATE - fecha_nac</code>).</td>
+                                <td class="p-3 font-mono">Elipse punteada</td>
+                                <td class="p-3">No se almacena físicamente (o se calcula en Vistas / Generated Columns).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 2. Relaciones y Cardinalidades -->
+                <h2>2. Relaciones, Cardinalidad y Participación</h2>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    Una relación representa una asociación semántica entre dos o más entidades. Se caracteriza por su <strong>Razón de Cardinalidad</strong> (máximo número de instancias asociadas) y su <strong>Restricción de Participación</strong> (mínimo número de instancias asociadas).
+                </p>
+
+                <div class="bg-slate-100 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto mb-6 text-slate-800 dark:text-slate-200">
+                    DIAGRAMA DE NOTACIONES DE CARDINALIDAD
+========================================================================================
+Notación Chen:
+  [EMPLEADO] ---- (1,1) -------- <DIRIGE> -------- (0,1) ---- [DEPARTAMENTO]
+  (Mínimo, Máximo): Un empleado puede dirigir de 0 a 1 depto; un depto es dirigido por exactamente 1 empleado.
+
+Notación Crow's Foot (Pata de Gallo):
+  +------------------+                    +------------------+
+  |     CLIENTE      |                    |   ORDEN_PEDIDO   |
+  +------------------+                    +------------------+
+  | PK  id_cliente   |------||--------o<| | PK  numero_orden |
+  |     nombre       |                    | FK  id_cliente   |
+  +------------------+                    +------------------+
+    (Exactamente Uno)                       (Cero, Uno o Varios)
+========================================================================================
+Simbología Crow's Foot:
+  ||  : Exactamente Uno (Obligatorio 1:1)
+  |<  : Uno o Muchos (Obligatorio 1:N)
+  o|  : Cero o Uno (Opcional 0:1)
+  o<  : Cero o Muchos (Opcional 0:N)
+                </div>
+
+                <!-- 3. Jerarquías EER: Supertipos y Subtipos -->
+                <h2>3. Jerarquías de Especialización y Generalización (EER)</h2>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                    El Modelo Entidad-Relación Extendido (EER) introduce el modelado de herencia. Un <strong>Supertipo</strong> contiene los atributos comunes, mientras que los <strong>Subtipos</strong> heredan dichos atributos y añaden características exclusivas.
+                </p>
+
+                <div class="bg-slate-100 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto mb-6 text-slate-800 dark:text-slate-200">
+             MATRIZ DE RESTRICCIONES EN JERARQUÍAS EER
+=============================================================================
+                      | Disjunta (Disjoint 'd')    | Solapada (Overlapping 'o')
+----------------------+----------------------------+-------------------------
+Total (Doble Línea =) | Una instancia DEBE ser     | Una instancia DEBE ser
+                      | EXACTAMENTE UNO de los     | AL MENOS UNO o VARIOS
+                      | subtipos. (Sin otros tipos)| subtipos simultáneamente.
+----------------------+----------------------------+-------------------------
+Parcial (Línea Simple)| Una instancia PUEDE no ser | Una instancia PUEDE no
+                      | ningún subtipo (permanece  | ser ningún subtipo o ser
+                      | solo en el supertipo).     | VARIOS a la vez.
+=============================================================================
+Ejemplo Disjunta Total: PERSONA -> [CLIENTE, EMPLEADO] (Toda persona en BD debe ser Cliente O Empleado, no ambos).
+Ejemplo Solapada Parcial: EMPLEADO -> [INGENIERO, ADMINISTRATIVO] (Un empleado puede ser solo Empleado, o ser Ingeniero Y Administrativo).
+                </div>
+
+                <!-- 4. Estrategias de Mapeo Relacional de Supertipos -->
+                <h2>4. Estrategias de Mapeo Relacional de Supertipos/Subtipos</h2>
+                <div class="space-y-4 my-6">
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h4 class="text-indigo-600 dark:text-indigo-400 font-bold mb-1">Estrategia 1: Single Table Inheritance (Tabla Única)</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mb-2">Una sola tabla con todos los atributos del supertipo y subtipos, más una columna <code>tipo_discriminador</code>. Columnas de subtipos deben ser <code>NULL</code>.</p>
+                        <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">Ventaja: Cero JOINs en consultas. Desventaja: Desperdicio de espacio por NULLs y pérdida de constraints NOT NULL.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h4 class="text-indigo-600 dark:text-indigo-400 font-bold mb-1">Estrategia 2: Class Table Inheritance (Tabla por Clase / Normalizado) ⭐</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mb-2">Una tabla para el supertipo y una tabla separada por cada subtipo. La PK de cada subtipo es a la vez FK que referencia a la PK del supertipo (1:1).</p>
+                        <p class="text-[11px] text-indigo-600 dark:text-indigo-400 font-semibold">Ventaja: 100% normalizado (3FN), permite constraints NOT NULL estrictas. Desventaja: Requiere JOINs para obtener todos los datos.</p>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h4 class="text-indigo-600 dark:text-indigo-400 font-bold mb-1">Estrategia 3: Concrete Table Inheritance (Tabla por Subtipo Concreto)</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mb-2">No se crea tabla para el supertipo. Se crea una tabla para cada subtipo repitiendo todas las columnas comunes del supertipo.</p>
+                        <p class="text-[11px] text-rose-600 dark:text-rose-400 font-semibold">Ventaja: Consultas sin JOINs para subtipos específicos. Desventaja: Imposible garantizar unicidad global de claves y duplicación de DDL.</p>
+                    </div>
+                </div>
+
+                <!-- 5. Caso de Estudio Completo con Mapeo SQL -->
+                <h2>5. Caso de Estudio Completo: Sistema de Gestión Hospitalaria</h2>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-6">
+-- 1. Supertipo: PERSONA
+CREATE TABLE persona (
+    id_persona INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    dni VARCHAR(8) NOT NULL UNIQUE,
+    nombres VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    telefono VARCHAR(15)
+);
+
+-- 2. Subtipo 1: PACIENTE (Class Table Inheritance)
+CREATE TABLE paciente (
+    id_persona INTEGER PRIMARY KEY REFERENCES persona(id_persona) ON DELETE CASCADE,
+    numero_seguro VARCHAR(20) NOT NULL UNIQUE,
+    grupo_sanguineo VARCHAR(5) NOT NULL CHECK (grupo_sanguineo IN ('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'))
+);
+
+-- 3. Subtipo 2: MEDICO (Class Table Inheritance)
+CREATE TABLE medico (
+    id_persona INTEGER PRIMARY KEY REFERENCES persona(id_persona) ON DELETE CASCADE,
+    numero_colegiatura VARCHAR(10) NOT NULL UNIQUE,
+    especialidad VARCHAR(50) NOT NULL
+);
+
+-- 4. Entidad Fuerte: CONSULTA_MEDICA
+CREATE TABLE consulta_medica (
+    id_consulta INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_paciente INTEGER NOT NULL REFERENCES paciente(id_persona),
+    id_medico INTEGER NOT NULL REFERENCES medico(id_persona),
+    fecha_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    diagnostico TEXT,
+    costo NUMERIC(10,2) NOT NULL CHECK (costo >= 0)
+);
+
+-- 5. Entidad Débil: RECETA_ITEM (Dependiente de CONSULTA_MEDICA)
+CREATE TABLE receta_item (
+    id_consulta INTEGER NOT NULL REFERENCES consulta_medica(id_consulta) ON DELETE CASCADE,
+    item_nro SMALLINT NOT NULL,
+    medicamento VARCHAR(100) NOT NULL,
+    dosis VARCHAR(50) NOT NULL,
+    frecuencia VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id_consulta, item_nro)
+);
+                </div>
 
             </article>
         </main>
 
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Entidad</strong> Objeto del mundo real sobre el que se almacenan datos</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Relacion</strong> Asociacion entre dos o mas entidades</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Cardinalidad</strong> 1:1, 1:N, N:N</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>PK</strong> Clave primaria, identifica de forma unica</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>FK</strong> Clave foranea, vincula entidades</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Supertipo/Subtipo</strong> Jerarquia de herencia</li>
+            <!-- Keywords (M3 Outlined Card) -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave S06</h3>
+                <ul class="space-y-2">
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Entidad Débil</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Dependiente de ID y existencia con clave parcial</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Entidad Asociativa</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Relación M:N promovida a entidad con atributos propios</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Crow's Foot</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Notación industrial de pata de gallo con min/max</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Disjunta vs Solapada</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Subtipos mutuamente excluyentes vs simultáneos</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Class Table Inheritance</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Mapeo 3FN con PK como FK al supertipo</span>
+                    </li>
+                </ul>
+            </div>
 
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="semana_05.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 05</a></li>
-                <li><a href="semana_07.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 07 →</a></li>
-            </ul>
-        </div>
-
+            <!-- Navigation Resources -->
+            <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+                <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
+                    <li><a href="semana_05.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 05</a></li>
+                    <li><a href="semana_07.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 07 →</a></li>
+                </ul>
+            </div>
         </aside>
     </div>
 
@@ -547,44 +526,5 @@ A --- asociado a Varios B           A  +----N-----+  B</div>
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
-
-<script>
-var erEntities = [
-    { label: 'Cliente', x: 80, y: 100, w: 120, h: 50 },
-    { label: 'Orden', x: 300, y: 100, w: 120, h: 50 },
-    { label: 'Producto', x: 190, y: 220, w: 120, h: 50 }
-];
-var erCard = 0;
-var cardLabels = ['1 : N', 'N : N', '1 : 1'];
-function draw06(ctx, W, H) {
-    CanvasUI.fillBg(ctx, W, H);
-    ctx.fillStyle = CanvasUI.COLORS.textMuted;
-    ctx.font = '13px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Diagrama Entidad-Relacion — Cardinalidad: ' + cardLabels[erCard], W / 2, 22);
-    for (var i = 0; i < erEntities.length; i++) {
-        var e = erEntities[i];
-        var color = i === 0 ? CanvasUI.COLORS.accent : (i === 1 ? CanvasUI.COLORS.line : CanvasUI.COLORS.warn);
-        CanvasUI.drawNode(ctx, e.x, e.y, e.w, e.h, e.label, color);
-    }
-    CanvasUI.drawArrow(ctx, 200, 125, 300, 125, CanvasUI.COLORS.line);
-    ctx.fillStyle = CanvasUI.COLORS.text;
-    ctx.font = 'bold 14px JetBrains Mono, monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText(cardLabels[erCard], 250, 115);
-    CanvasUI.drawArrow(ctx, 250, 150, 250, 220, CanvasUI.COLORS.line);
-    ctx.fillStyle = CanvasUI.COLORS.textMuted;
-    ctx.font = '11px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
-    ctx.fillText('Un Cliente tiene N Ordenes', 250, 265);
-    ctx.fillText('Una Orden tiene N Productos', 250, 280);
-}
-document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { var c = CanvasUI.getContext('canvas_06'); if (c) draw06(c.ctx, c.W, c.H); }, 50); });
-CanvasUI.addControls('controls_06', {
-    step: function() { erCard = (erCard + 1) % 3; var c = CanvasUI.getContext('canvas_06'); if (c) draw06(c.ctx, c.W, c.H); },
-    reset: function() { erCard = 0; var c = CanvasUI.getContext('canvas_06'); if (c) draw06(c.ctx, c.W, c.H); }
-});
-</script>
 </body>
 </html>

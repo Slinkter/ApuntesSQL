@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
-    <title>Semana 14 - Data Warehouse</title>
+    <title>Semana 14 - Data Warehouse, Modelado Dimensional Kimball y Cubos OLAP</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -69,7 +69,6 @@
             });
         });
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
@@ -87,8 +86,12 @@
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
-                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Data Warehouse y Business Intelligence</h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 14 • Arquitectura de Datos  • ULima 2013-2</p>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+                    Data Warehouse: Metodología Kimball, Modelado Dimensional y Cubos OLAP
+                </h1>
+                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                    Semana 14 • Inteligencia de Negocios y Arquitectura de Datos • Nivel Avanzado 2026
+                </p>
             </div>
             <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
@@ -97,807 +100,316 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
-    <!-- M3 Step-by-Step Diagram -->
-    <div class="my-6">
-        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                📌 Proceso Paso a Paso: Arquitectura y Flujo del Proceso ETL
-            </h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                El pipeline clásico de carga de un Data Warehouse desde orígenes transaccionales.
-            </p>
-            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(10, 15)">
-    <!-- Fuentes -->
-    <rect x="0" y="20" width="150" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="75" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">Orígenes (OLTP / Logs)</text>
-    <text x="75" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Sistemas transaccionales</text>
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
 
-    <!-- Arrow (Extract) -->
-    <path d="M 150 50 L 220 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="220,50 213,46 213,54" fill="#6366f1" />
-    <text x="185" y="40" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px] font-bold">EXTRACT</text>
-
-    <!-- Staging / Transform -->
-    <rect x="230" y="20" width="160" height="60" rx="10" class="fill-amber-50 dark:fill-slate-800 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
-    <text x="310" y="45" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-xs">Staging (Transformación)</text>
-    <text x="310" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Limpieza, calidad y tipos</text>
-
-    <!-- Arrow (Load) -->
-    <path d="M 390 50 L 460 50" stroke="#f59e0b" stroke-width="2" fill="none" />
-    <polygon points="460,50 453,46 453,54" fill="#f59e0b" />
-    <text x="425" y="40" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px] font-bold">LOAD</text>
-
-    <!-- Warehouse -->
-    <rect x="470" y="20" width="150" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="545" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">Data Warehouse (OLAP)</text>
-    <text x="545" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Modelo de Estrella (Hechos)</text>
-
-    <!-- Arrow -->
-    <path d="M 620 50 L 650 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="650,50 643,46 643,54" fill="#6366f1" />
-
-    <!-- BI / Analysis -->
-    <rect x="660" y="20" width="110" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="715" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">Visualización</text>
-    <text x="715" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">BI, Reportes y IA</text>
-  </g>
-</svg>
+            <!-- Banner Hero -->
+            <div class="mb-8 p-6 md:p-8 rounded-3xl bg-gradient-to-br from-blue-950 via-slate-900 to-indigo-950 text-white shadow-xl border border-blue-500/20 relative overflow-hidden">
+                <div class="relative z-10">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-400/30 mb-3">
+                        📊 Arquitectura Analítica & OLAP
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-3">
+                        Del Modelo Relacional 3FN al Modelado Dimensional
+                    </h2>
+                    <p class="text-slate-300 text-sm md:text-base max-w-3xl leading-relaxed">
+                        Aprende a transformar esquemas transaccionales altamente normalizados en esquemas dimensionales optimizados para analítica masiva: los 4 pasos de Ralph Kimball, Star Schema, Snowflake, manejo de Slowly Changing Dimensions (SCD 1 al 6), tipos de tablas de hechos, operaciones de cubos multidimensionales y consultas SQL avanzadas (<code class="text-blue-300">GROUPING SETS, CUBE, ROLLUP</code>).
+                    </p>
+                </div>
             </div>
-        </div>
-    </div>
 
-            <article class="space-y-8 prose dark:prose-invert max-w-none">
-    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
-    <div class="my-6">
-        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
-            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
-                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Relación de Términos
-                </span>
-                <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </span>
-            </summary>
-            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                <pre class="mermaid bg-transparent">
-graph TD
-    S14[Data Warehouse y BI] --> Arch[Modelos Dimensionales]
-    Arch --> Star[Modelo Estrella: Hechos en el centro, dimensiones directas]
-    Arch --> Snowflake[Modelo Copo de Nieve: Dimensiones normalizadas]
-    S14 --> Processes[Flujos de Datos]
-    Processes --> ETL[ETL: Extracción, Transformación y Carga]
-    Processes --> OLAP[OLAP: Procesamiento Analítico y Cubos de Datos]
-                </pre>
+            <!-- Canvas Interactivo Star Schema -->
+            <div class="mb-8 p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            ⭐ Simulación Dinámica: Flujo de Consulta en Star Schema
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Observa cómo la Fact Table central se une con dimensiones conformadas sin joins en cascada.</p>
+                    </div>
+                    <div id="controls_14" class="flex gap-2"></div>
+                </div>
+                <div class="w-full flex justify-center overflow-hidden rounded-2xl bg-slate-950/5 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                    <canvas id="canvas_14" width="680" height="360" class="max-w-full h-auto"></canvas>
+                </div>
             </div>
-        </details>
-    </div>
 
-                
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<!-- Enfoque Arquitecto: Modelado Multidimensional -->
-<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3>Modelado de Datos Dimensional: Kimball vs. Inmon</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                El almacenamiento analítico para Business Intelligence (Data Warehouses) requiere una estructura optimizada para consultas agregadas y reportes rápidos:
-            </p>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Modelo Estrella (Star Schema):</strong> Una tabla central de Hechos (Facts, con métricas cuantitativas) rodeada de tablas de Dimensiones (Dimensions, con atributos descriptivos) vinculadas mediante claves PK/FK directas. Sin redundancia analítica pero desnormalizado.</li>
-<li><strong>Modelo Copo de Nieve (Snowflake Schema):</strong> Variante del modelo estrella donde algunas dimensiones se normalizan en subtablas. Ahorra espacio pero incrementa JOINs de lectura.</li>
-<li><strong>Tabla de Hechos vs. Dimensión:</strong> Hechos registra eventos temporales de transacciones; Dimensiones registra los contextos de negocio (Quién, Dónde, Cuándo, Qué).</li>
-</ul>
-</section>
-<!-- Enfoque Cloud: Data Warehouses Modernos y ETL -->
-<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3>Arquitectura DW en la Nube y Procesos ETL</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
-                En entornos cloud empresariales, el Data Warehouse migra hacia motores columnares dedicados (como <strong>AWS Redshift</strong> o <strong>Google BigQuery</strong>), los cuales almacenan los datos por columnas en lugar de filas para acelerar las agregaciones masivas.
-            </p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">
-<strong>Proceso ETL/ELT:</strong> Los datos operativos se extraen de bases OLTP, se transforman y se cargan al DW. En nubes modernas, el patrón <strong>ELT (Extract, Load, Transform)</strong> se prefiere aprovechando la enorme capacidad de cómputo del Data Warehouse de destino para transformar los datos usando SQL.
-            </p>
-</section>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p><strong>Objetivos:</strong> Comprender los fundamentos de Data Warehousing y Business Intelligence. Diferenciar sistemas OLTP de OLAP. Disenar esquemas estrella y copo de nieve. Conocer el proceso ETL y los tipos de implementacion de cubos OLAP.</p>
-</div>
-<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4>Insight del Arquitecto: El DW como Centro de Decisiones</h4>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Bill Inmon, padre del Data Warehousing, define el Data Warehouse como "una coleccion de datos orientada a temas, integrada, no volatil y variante en el tiempo, disenada para soportar la toma de decisiones". A diferencia de una base de datos operacional (OLTP) que optimiza transacciones, el DW optimiza consultas analiticas. El 80% del esfuerzo en un proyecto DW esta en el proceso ETL, no en el modelado.</p>
-</section>
-<h2>1. Business Intelligence (BI)</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Inteligencia de Negocios</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Conjunto de productos y servicios que permiten a los usuarios finales acceder y analizar de manera rapida y sencilla la informacion para la toma de decisiones de negocio a nivel operativo, tactico y estrategico.</p>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p><strong>Componentes clave del BI:</strong></p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Data Warehouse:</strong> Repositorio centralizado de datos.</li>
-<li><strong>Data Mart:</strong> Subconjunto departamental (ventas, finanzas, RRHH).</li>
-<li><strong>Cubos OLAP:</strong> Estructura multidimensional para consultas rapidas.</li>
-<li><strong>ETL:</strong> Proceso de extraccion, transformacion y carga.</li>
-<li><strong>Metadatos:</strong> Datos sobre los datos del warehouse.</li>
-</ul>
-</div>
-<h2>2. Sistemas OLTP vs OLAP</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Caracteristica</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Sistemas Operacionales (OLTP)</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Sistemas Analiticos (OLAP)</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Proposito</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Ejecutar el negocio</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Administrar el negocio</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Usuarios</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Oficinistas, administrativos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Decision makers, analistas</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Actualizacion</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Al segundo</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Periodica (diaria, semanal)</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Volumen</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Altos volumenes de transacciones simples</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Consultas complejas sobre grandes volumenes</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Datos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Detallados, actuales</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Detallados, sumarizados e historicos</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Integracion</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Por aplicacion</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Integrado y consistente</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>3. Arquitectura del Data Warehouse</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">La arquitectura de referencia incluye las siguientes capas:</p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Fuentes de datos:</strong> Sistemas operacionales (ERP, CRM), archivos planos, fuentes externas.</li>
-<li><strong>Extraccion e Integracion:</strong> Proceso ETL: extraer, limpiar, transformar, integrar.</li>
-<li><strong>Almacenamiento:</strong> Data Warehouse corporativo + Data Marts departamentales.</li>
-<li><strong>Aplicaciones:</strong> OLAP, reporting, Data Mining, EIS.</li>
-<li><strong>Metadatos:</strong> Repositorio central de definiciones y linaje de datos.</li>
-</ul>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p><strong>Nota:</strong> Existen dos enfoques de implementacion:</p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Top-Down (Inmon):</strong> Primero el DW corporativo, luego los Data Marts.</li>
-<li><strong>Bottom-Up (Kimball):</strong> Primero los Data Marts, luego se integran en el DW.</li>
-</ul>
-</div>
-<h2>4. Modelo Estrella (Star Schema)</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Fact Table + Dimension Tables</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El modelo estrella es el esquema más utilizado en Data Warehousing. Consta de una tabla central de hechos (fact table) rodeada de tablas de dimensión (dimension tables) relacionadas en relaciones 1:N directas (tipo estrella).</p>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p class="text-slate-800 dark:text-slate-200 font-bold mb-2">Conceptos Clave de Diseño:</p>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Tabla de Hechos (Fact Table):</strong> Almacena eventos de negocio (ventas, transacciones). Contiene las métricas operativas y las claves foráneas (FK) a las dimensiones.</li>
-<li><strong>Hecho (Fact):</strong> Cada fila de la tabla de hechos, que representa un evento específico.</li>
-<li><strong>Medidas (Measures):</strong> Valores cuantitativos (numéricos) acumulables que miden el negocio (ej: ventas total, cantidad vendida).</li>
-<li><strong>Tablas de Dimensión:</strong> Entidades que describen el contexto del negocio (tiempo, clientes, productos, ubicación).</li>
-</ul>
-</div>
-<h3>Jerarquías, Niveles y Miembros (Members)</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una dimensión contiene una o más jerarquías compuestas por niveles ordenados de agregación. Por ejemplo, en la dimensión <strong>Ubigeo</strong>:</p>
-<ul class="space-y-2 pl-5 list-decimal text-slate-700 dark:text-slate-300 mb-4">
-<li><strong>Niveles de Agregación:</strong> <code>País → Departamento → Provincia → Distrito</code>.</li>
-<li><strong>Miembros (Members):</strong> Las ocurrencias reales de cada nivel. Por ejemplo, <code>"Lima"</code> es un miembro del nivel Departamento.</li>
-</ul>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p class="text-slate-800 dark:text-slate-200 font-bold mb-2">Ejemplo: Estructura del Star Schema clásico (FoodMart)</p>
-<p class="text-slate-700 dark:text-slate-300 mb-4">El esquema de FoodMart representa la estructura real de ventas de una cadena minorista en 1997:</p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-<code>-- Dimensión: store
-CREATE TABLE store (
-    store_id INTEGER PRIMARY KEY,
-    store_type VARCHAR(30),
-    region_id INTEGER,
-    store_name VARCHAR(40),
-    store_number INTEGER,
-    store_street_address VARCHAR(50),
-    store_city VARCHAR(30),
-    store_state VARCHAR(30),
-    store_postal_code VARCHAR(15),
-    store_country VARCHAR(30),
-    store_manager VARCHAR(40),
-    store_phone VARCHAR(20),
-    store_fax VARCHAR(20),
-    first_opened_date DATE,
-    last_remodel_date DATE,
-    store_sqft INTEGER,
-    grocery_sqft INTEGER,
-    frozen_sqft INTEGER
-);
+            <!-- SECCIÓN 1: OLTP VS OLAP Y METODOLOGÍA KIMBALL -->
+            <section id="oltp-vs-olap" class="mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-9 h-9 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg">1</div>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Fundamentos: OLTP vs. OLAP y Enfoques de Diseño</h2>
+                </div>
 
--- Dimensión: promotion
-CREATE TABLE promotion (
-    promotion_id INTEGER PRIMARY KEY,
-    promotion_district_id INTEGER,
-    promotion_name VARCHAR(50),
-    media_type VARCHAR(30),
-    cost NUMERIC(10,2),
-    start_date DATE
-);
+                <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                    <p>
+                        Los sistemas <strong>OLTP (Online Transaction Processing)</strong> están optimizados para transacciones atómicas de alta concurrencia, minimizando redundancia mediante <strong>Tercera Forma Normal (3FN)</strong>. Por el contrario, los sistemas <strong>OLAP (Online Analytical Processing)</strong> están diseñados para escaneos masivos, agregaciones temporales y análisis multidimensional, empleando <strong>Modelado Dimensional Desnormalizado</strong>.
+                    </p>
+                </div>
 
--- Dimensión: time_by_day
-CREATE TABLE time_by_day (
-    time_id INTEGER PRIMARY KEY,
-    the_date DATE,
-    the_day VARCHAR(15),
-    the_month VARCHAR(15),
-    the_year INTEGER,
-    day_of_month INTEGER,
-    week_of_year INTEGER,
-    month_of_year INTEGER,
-    quarter VARCHAR(10),
-    fiscal_period VARCHAR(10)
-);
+                <!-- Tabla Comparativa OLTP vs OLAP -->
+                <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+                    <table class="w-full text-xs md:text-sm text-left">
+                        <thead class="bg-slate-100 dark:bg-slate-800/70 text-slate-900 dark:text-white font-semibold uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3.5">Dimensión</th>
+                                <th class="p-3.5 text-blue-600 dark:text-blue-400">OLTP (Transaccional)</th>
+                                <th class="p-3.5 text-indigo-600 dark:text-indigo-400">OLAP (Data Warehouse)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-slate-200">Objetivo Principal</td>
+                                <td class="p-3.5">Operación diaria del negocio en tiempo real (CRUD, POS, Web).</td>
+                                <td class="p-3.5">Soporte para toma de decisiones estratégicas, BI y reporting.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-slate-200">Modelo de Datos</td>
+                                <td class="p-3.5">ER altamente normalizado (3FN / BCNF). Cero redundancia.</td>
+                                <td class="p-3.5">Dimensional (Star Schema / Snowflake). Tablas desnormalizadas.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-slate-200">Patrón de Acceso</td>
+                                <td class="p-3.5">Muchas escrituras y lecturas de pocos registros por llaves primarias.</td>
+                                <td class="p-3.5">Cargas batch masivas (Append) y consultas complejas de agregación (<code class="text-xs font-mono">SUM, AVG</code>).</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-slate-200">Horizonte Temporal</td>
+                                <td class="p-3.5">Datos actuales (semanas/meses). Purgas periódicas.</td>
+                                <td class="p-3.5">Histórico completo (5 a 10+ años de snapshot inmutable).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
--- Dimensión: product
-CREATE TABLE product (
-    product_id INTEGER PRIMARY KEY,
-    product_class_id INTEGER,
-    brand_name VARCHAR(50),
-    product_name VARCHAR(100),
-    SKU VARCHAR(20),
-    SRP NUMERIC(10,2),
-    gross_weight NUMERIC(10,2),
-    net_weight NUMERIC(10,2),
-    recyclable_package BOOLEAN,
-    low_fat BOOLEAN,
-    units_per_case INTEGER,
-    cases_per_pallet INTEGER,
-    shelf_width NUMERIC(5,2),
-    shelf_height NUMERIC(5,2),
-    shelf_depth NUMERIC(5,2)
-);
+                <!-- Los 4 Pasos de Kimball -->
+                <div class="mb-6 p-5 rounded-2xl bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40">
+                    <h3 class="text-base font-bold text-indigo-900 dark:text-indigo-300 mb-3 flex items-center gap-2">
+                        📐 El Proceso de 4 Pasos de Ralph Kimball para el Diseño Dimensional
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+                        <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-indigo-200/60 dark:border-indigo-800/60">
+                            <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs mb-2">1</div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">Seleccionar el Proceso</strong>
+                            <p class="text-slate-600 dark:text-slate-400">Elegir la actividad operativa del negocio (ej. Ventas, Facturación, Envíos, Reclamos).</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-indigo-200/60 dark:border-indigo-800/60">
+                            <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs mb-2">2</div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">Declarar la Granularidad</strong>
+                            <p class="text-slate-600 dark:text-slate-400">Definir qué representa exactamente UNA fila en la tabla de hechos (ej. "Un ítem individual de una orden").</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-indigo-200/60 dark:border-indigo-800/60">
+                            <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs mb-2">3</div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">Identificar Dimensiones</strong>
+                            <p class="text-slate-600 dark:text-slate-400">Determinar el contexto "quién, cuándo, dónde y qué" (Tiempo, Cliente, Producto, Tienda).</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-indigo-200/60 dark:border-indigo-800/60">
+                            <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs mb-2">4</div>
+                            <strong class="text-slate-900 dark:text-white block mb-1">Identificar Hechos</strong>
+                            <p class="text-slate-600 dark:text-slate-400">Definir las métricas cuantitativas aditivas (Cantidad vendida, Monto de venta, Descuento aplicado).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
--- Dimensión: customer
-CREATE TABLE customer (
-    customer_id INTEGER PRIMARY KEY,
-    account_num VARCHAR(30),
-    lname VARCHAR(50),
-    fname VARCHAR(50),
-    mi CHAR(1),
-    address1 VARCHAR(100),
-    address2 VARCHAR(100),
-    address3 VARCHAR(100),
-    address4 VARCHAR(100),
-    city VARCHAR(30),
-    state_province VARCHAR(30),
-    postal_code VARCHAR(15),
-    country VARCHAR(30),
-    customer_region_id INTEGER,
-    phone1 VARCHAR(20)
-);
+            <!-- SECCIÓN 2: TIPOLOGÍA DE DIMENSIONES Y HECHOS -->
+            <section id="dimensiones-hechos" class="mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-9 h-9 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg">2</div>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Tipología Avanzada de Dimensiones y Tablas de Hechos</h2>
+                </div>
 
--- Tabla de Hechos: sales_fact_1997
-CREATE TABLE sales_fact_1997 (
-    product_id INTEGER REFERENCES product(product_id),
-    time_id INTEGER REFERENCES time_by_day(time_id),
-    customer_id INTEGER REFERENCES customer(customer_id),
-    promotion_id INTEGER REFERENCES promotion(promotion_id),
-    store_id INTEGER REFERENCES store(store_id),
-    store_sales NUMERIC(10,2),
-    store_cost NUMERIC(10,2),
-    unit_sales INTEGER
-);</code>
-</div>
-</div>
-<h2>5. Modelo Copo de Nieve (Snowflake Schema)</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">En el modelo Snowflake, las dimensiones se normalizan en múltiples tablas, una por cada nivel jerárquico. Esto reduce la redundancia al mínimo pero aumenta significativamente la complejidad de las consultas (más JOINs) y ralentiza el procesamiento.</p>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p class="text-slate-800 dark:text-slate-200 font-bold mb-2">Ejemplo: Estructura Normalizada de Dimensión Producto (Copo de Nieve)</p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-<code>-- Tabla: FAMILIA_DIM
-CREATE TABLE FAMILIA_DIM (
-    Familia_Key INTEGER PRIMARY KEY,
-    IdFamilia INTEGER,
-    Familia VARCHAR(50)
-);
+                <!-- Tipos de Dimensiones Especiales -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-sm font-bold text-indigo-600 dark:text-indigo-400 mb-2">🌐 Dimensiones Conformadas (Conformed Dimensions)</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Dimensiones idénticas o subconjuntos consistentes compartidos entre múltiples Data Marts (ej. <code class="font-mono text-[11px]">Dim_Cliente</code> o <code class="font-mono text-[11px]">Dim_Tiempo</code> compartida por Ventas, Envíos e Inventario). Permite el análisis cross-funcional (Kimball Enterprise Bus Matrix).
+                        </p>
+                    </div>
 
--- Tabla: SUBFAMILIA_DIM
-CREATE TABLE SUBFAMILIA_DIM (
-    SubFamilia_Key INTEGER PRIMARY KEY,
-    Familia_Key INTEGER REFERENCES FAMILIA_DIM(Familia_Key),
-    IdSubFamilia INTEGER,
-    SubFamilia VARCHAR(50)
-);
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-sm font-bold text-purple-600 dark:text-purple-400 mb-2">🎭 Role-Playing Dimensions</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Una misma tabla física de dimensión que asume múltiples roles conceptuales en la misma Fact Table mediante alias en vistas o SQL (ej. <code class="font-mono text-[11px]">Dim_Tiempo</code> se vincula como <code class="font-mono text-[11px]">fecha_pedido_key</code>, <code class="font-mono text-[11px]">fecha_envio_key</code> y <code class="font-mono text-[11px]">fecha_entrega_key</code>).
+                        </p>
+                    </div>
 
--- Tabla: MARCA_DIM
-CREATE TABLE MARCA_DIM (
-    Marca_Key INTEGER PRIMARY KEY,
-    SubFamilia_Key INTEGER REFERENCES SUBFAMILIA_DIM(SubFamilia_Key),
-    IdMarca INTEGER,
-    Marca VARCHAR(50)
-);
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-sm font-bold text-amber-600 dark:text-amber-400 mb-2">🗑️ Junk Dimensions (Dimensión Basura)</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Agrupación de múltiples indicadores, flags booleanos y códigos de estado dispersos (ej. <code class="font-mono text-[11px]">es_promocion, tipo_pago, metodo_entrega</code>) en una única dimensión combinatoria para evitar tener decenas de columnas de flags en la Fact Table.
+                        </p>
+                    </div>
 
--- Tabla: PRESENTACION_DIM (Esta es la tabla que se relaciona con la Fact Table)
-CREATE TABLE PRESENTACION_DIM (
-    Presentacion_Key INTEGER PRIMARY KEY,
-    Marca_Key INTEGER REFERENCES MARCA_DIM(Marca_Key),
-    IdPresentacion INTEGER,
-    Presentacion VARCHAR(50)
-);</code>
-</div>
-</div>
-<h3>Comparación: STAR vs SNOWFLAKE</h3>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Caracteristica</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">STAR (Estrella)</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">SNOWFLAKE (Copo de Nieve)</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Entendimiento del modelo</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Sencillo</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mayor dificultad</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numero de tablas</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Menor</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mayor</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Complejidad de consulta</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Baja</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Alta</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Rendimiento</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Rapida</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Lenta</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Redundancia</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Alta (desnormalizado)</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Baja (normalizado)</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Espacio de almacenamiento</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mayor</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Menor</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>6. Proceso ETL</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Extraccion, Transformacion, Carga</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">El proceso ETL consume aproximadamente el 80% del tiempo y recursos en un proyecto Data Warehouse (segun Bill Inmon).</p>
-<h3>Fases del ETL</h3>
-<ol class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Extraccion:</strong> Obtener datos de fuentes heterogeneas (Bases de datos, archivos planos, sistemas legacy, fuentes externas).</li>
-<li><strong>Transformacion:</strong> Limpiar, filtrar, validar, calcular, agregar, convertir tipos, aplicar reglas de negocio.</li>
-<li><strong>Carga:</strong> Insertar los datos transformados en el Data Warehouse (full refresh, carga incremental, historico).</li>
-</ol>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Herramientas ETL comunes:</strong> Warehouse Manager, SQL Server Integration Services (SSIS), Oracle Warehouse Builder, Pentaho, Talend, Informatica.</p>
-</div>
-<h2>7. Tipos de Cubos OLAP</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">ROLAP vs MOLAP vs HOLAP</span>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Ventajas</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Desventajas</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>ROLAP</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Almacena datos en tablas relacionales. Las agregaciones se calculan sobre la marcha.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Escalable, datos en tiempo real, usa SQL estandar.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Rendimiento mas lento en consultas complejas.</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>MOLAP</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Almacena datos en una estructura multidimensional propietaria (cubo precalculado).</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Rendimiento excelente, consultas rapidas, indices optimizados.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Menos escalable, datos no en tiempo real, espacio adicional.</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>HOLAP</strong></td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Combina ROLAP y MOLAP: datos detallados en BD relacional, agregaciones en cubo.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Balance entre rendimiento y escalabilidad.</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mayor complejidad de administracion.</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>8. Creacion de Dimensiones en Oracle</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">CREATE DIMENSION</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Oracle permite definir dimensiones y jerarquias directamente en el diccionario de datos.</p>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Ejemplo: Dimension Tiempo con Jerarquias</strong></p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                        <h4 class="text-sm font-bold text-rose-600 dark:text-rose-400 mb-2">📉 Degenerate Dimensions (Dimensiones Degeneradas)</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Identificadores operacionales (como el <code class="font-mono text-[11px]">numero_factura</code> o <code class="font-mono text-[11px]">ticket_id</code>) que se almacenan directamente en la Fact Table sin tener una tabla de dimensión satélite asociada, porque todos sus atributos descriptivos ya pertenecen a otras dimensiones.
+                        </p>
+                    </div>
+                </div>
 
-CREATE DIMENSION time_dim
-    LEVEL time_key IS time.time_key
-    LEVEL month IS time.month
-    LEVEL quarter IS time.quarter
-    LEVEL year IS time.year
-    LEVEL week IS time.week
-    LEVEL fiscal_qtr IS time.fiscal_qtr
+                <!-- SLOWLY CHANGING DIMENSIONS (SCD 1, 2, 3, 6) -->
+                <div class="mb-6 p-5 rounded-2xl bg-slate-900 text-slate-200 border border-slate-800 font-mono text-xs">
+                    <h3 class="text-indigo-400 font-bold mb-3">/* GUÍA MAESTRA DE SLOWLY CHANGING DIMENSIONS (SCD) */</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                            <span class="text-yellow-400 font-bold">SCD Tipo 1: Sobrescritura</span>
+                            <p class="text-[11px] text-slate-400 mt-1">Sobrescribe el valor anterior en el mismo registro. No guarda historial. Sencillo, pero destruye la trazabilidad histórica de reportes pasados.</p>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-xl border border-indigo-500/50">
+                            <span class="text-emerald-400 font-bold">SCD Tipo 2: Histórico con Filas</span>
+                            <p class="text-[11px] text-slate-400 mt-1">Crea una nueva fila con nueva <code class="text-indigo-300">Surrogate Key</code>, marcando <code class="text-indigo-300">fecha_inicio</code>, <code class="text-indigo-300">fecha_fin</code> y flag <code class="text-indigo-300">es_actual</code>. Estándar de oro en la industria.</p>
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
+                            <span class="text-purple-400 font-bold">SCD Tipo 3: Histórico en Columna</span>
+                            <p class="text-[11px] text-slate-400 mt-1">Agrega una columna adicional (ej. <code class="text-purple-300">ciudad_anterior</code> y <code class="text-purple-300">ciudad_actual</code>). Solo guarda el estado inmediatamente previo.</p>
+                        </div>
+                    </div>
+                </div>
 
-    HIERARCHY calendar_rollup (
-        time_key CHILD OF
-        month CHILD OF
-        quarter CHILD OF year
-    )
+                <!-- DIAGRAMA ASCII: ESQUEMA ESTRELLA (STAR SCHEMA) -->
+                <div class="mb-6 bg-slate-950 text-slate-200 p-4 md:p-5 rounded-2xl font-mono text-xs overflow-x-auto shadow-md border border-slate-800">
+                    <div class="text-blue-400 font-bold mb-2">/* DIAGRAMA: STAR SCHEMA (VENTAS RETAIL CON SCD 2) */</div>
+<pre class="leading-relaxed">
+  ┌────────────────────────┐                    ┌────────────────────────┐
+  │      DIM_CLIENTE       │                    │      DIM_PRODUCTO      │
+  ├────────────────────────┤                    ├────────────────────────┤
+  │ cliente_sk (PK, Surr)  │◄──┐            ┌──►│ producto_sk (PK)       │
+  │ cliente_id (NK Oper)   │   │            │   │ codigo_sku             │
+  │ nombre_completo        │   │            │   │ nombre_producto        │
+  │ categoria_cliente      │   │            │   │ categoria              │
+  │ fecha_inicio_scd2      │   │            │   │ precio_unitario        │
+  │ fecha_fin_scd2         │   │            │   └────────────────────────┘
+  │ es_actual (True/False) │   │            │
+  └────────────────────────┘   │            │
+                               │            │
+                ┌──────────────┴────────────┴─────────────┐
+                │             FACT_VENTAS                 │
+                ├─────────────────────────────────────────┤
+                │ fecha_sk (FK) ─────────────────────────┐│
+                │ cliente_sk (FK)                        ││
+                │ producto_sk (FK)                       ││
+                │ tienda_sk (FK) ───────────┐            ││
+                │ numero_ticket (Degenerate)│            ││
+                │ ───────────────────────── │            ││
+                │ cantidad_unidades         │            ││
+                │ monto_bruto               │            ││
+                │ monto_descuento           │            ││
+                │ monto_neto_total          │            ││
+                └───────────────────────────┼────────────┼┘
+                                            │            │
+                                            ▼            ▼
+                             ┌───────────────────┐  ┌────────────────────┐
+                             │    DIM_TIENDA     │  │     DIM_TIEMPO     │
+                             ├───────────────────┤  ├────────────────────┤
+                             │ tienda_sk (PK)    │  │ fecha_sk (PK)      │
+                             │ nombre_tienda     │  │ fecha_completa     │
+                             │ ciudad            │  │ anio               │
+                             │ region            │  │ trimestre          │
+                             │ canal (Web/Fisica)│  │ mes / dia_semana   │
+                             └───────────────────┘  └────────────────────┘
+</pre>
+                </div>
+            </section>
 
-    HIERARCHY fiscal_rollup (
-        time_key CHILD OF week
-    )
+            <!-- SECCIÓN 3: CUBOS OLAP Y CONSULTAS SQL AVANZADAS -->
+            <section id="cubos-olap-sql" class="mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-9 h-9 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg">3</div>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Cubos Multidimensionales y SQL Analítico (CUBE, ROLLUP)</h2>
+                </div>
 
-    ATTRIBUTE time_key DETERMINES
-        (day_number_in_month, day_number_in_year)
-    ATTRIBUTE week DETERMINES week_number_of_year
-    ATTRIBUTE month DETERMINES full_month_name;
-</div>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Ejemplo: Dimension Empleado (desde script de ejemplo)</strong></p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                    <p>
+                        Las operaciones canónicas sobre un <strong>Cubo OLAP</strong> permiten a los analistas de negocio explorar métricas desde distintas perspectivas jerárquicas:
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Slice (Rebanar):</strong> Filtrar el cubo fijando una única dimensión (ej. ventas solo del año 2026).</li>
+                        <li><strong>Dice (Trocear):</strong> Subcubo definido por filtros en múltiples dimensiones (ej. ventas de 2026 en la Región Lima para la categoría Laptops).</li>
+                        <li><strong>Drill-down:</strong> Desglosar una métrica de un nivel jerárquico superior a uno más detallado (Año &rarr; Trimestre &rarr; Mes &rarr; Día).</li>
+                        <li><strong>Roll-up:</strong> Agregar datos subiendo en la jerarquía (Día &rarr; Mes &rarr; Año).</li>
+                        <li><strong>Pivot:</strong> Rotar los ejes dimensionales para visualización tabular cruzada.</li>
+                    </ul>
+                </div>
 
-CREATE DIMENSION DIM_EMP
-    LEVEL employee IS (DIM_EMPLEADO.employee_id)
-    LEVEL job IS (DIM_EMPLEADO.job_id)
+                <!-- SQL Avanzado: GROUPING SETS, ROLLUP y CUBE -->
+                <div class="bg-slate-900 text-slate-200 p-5 rounded-2xl border border-slate-800 font-mono text-xs mb-6">
+                    <div class="flex justify-between items-center pb-2 mb-3 border-b border-slate-800">
+                        <span class="text-blue-400 font-bold">SQL Analytics de Élite: Agregaciones Jerárquicas</span>
+                        <span class="text-[10px] text-slate-400">PostgreSQL 16/17 / Snowflake</span>
+                    </div>
+<pre class="overflow-x-auto text-[11px] leading-relaxed">
+<span class="text-slate-400">-- 1. ROLLUP: Subtotales jerárquicos (Año -> Mes -> Región)</span>
+<span class="text-purple-400">SELECT</span> 
+    t.anio,
+    t.mes,
+    d.region,
+    <span class="text-yellow-400">SUM</span>(f.monto_neto_total) <span class="text-purple-400">AS</span> venta_total,
+    <span class="text-yellow-400">GROUPING</span>(t.anio, t.mes, d.region) <span class="text-purple-400">AS</span> nivel_agregacion
+<span class="text-purple-400">FROM</span> fact_ventas f
+<span class="text-purple-400">JOIN</span> dim_tiempo t <span class="text-purple-400">ON</span> f.fecha_sk = t.fecha_sk
+<span class="text-purple-400">JOIN</span> dim_tienda d <span class="text-purple-400">ON</span> f.tienda_sk = d.tienda_sk
+<span class="text-purple-400">GROUP BY ROLLUP</span> (t.anio, t.mes, d.region)
+<span class="text-purple-400">ORDER BY</span> t.anio <span class="text-purple-400">NULLS FIRST</span>, t.mes <span class="text-purple-400">NULLS FIRST</span>;
 
-    HIERARCHY job_id (
-        employee CHILD OF job
-    )
+<span class="text-slate-400">-- 2. CUBE: Todas las 2^N combinaciones multidimensionales posibles</span>
+<span class="text-purple-400">SELECT</span> 
+    p.categoria,
+    d.canal,
+    <span class="text-yellow-400">SUM</span>(f.monto_neto_total) <span class="text-purple-400">AS</span> venta_total
+<span class="text-purple-400">FROM</span> fact_ventas f
+<span class="text-purple-400">JOIN</span> dim_producto p <span class="text-purple-400">ON</span> f.producto_sk = p.producto_sk
+<span class="text-purple-400">JOIN</span> dim_tienda d <span class="text-purple-400">ON</span> f.tienda_sk = d.tienda_sk
+<span class="text-purple-400">GROUP BY CUBE</span> (p.categoria, d.canal);
+</pre>
+                </div>
+            </section>
 
-    ATTRIBUTE employee DETERMINES
-        (DIM_EMPLEADO.nombreCompleto, DIM_EMPLEADO.salary)
-    ATTRIBUTE job DETERMINES
-        (DIM_EMPLEADO.job_title);
-</div>
-<h2>9. Fact Table: Ejemplo RRHH</h2>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Creacion de tablas dimension y hecho para un Data Warehouse de RRHH</strong></p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
-
--- Dimension Empleado
-CREATE TABLE DIM_EMPLEADO (
-    employee_id NUMBER(6) PRIMARY KEY,
-    nombreCompleto VARCHAR(50),
-    salary NUMBER(8,2),
-    job_id VARCHAR(10),
-    job_title VARCHAR(35)
-);
-
--- Dimension Departamento
-CREATE TABLE DIM_DEPARTAMENTO (
-    department_id NUMBER(4) PRIMARY KEY,
-    department_name VARCHAR(30),
-    city_id NUMBER(4),
-    city VARCHAR(30),
-    country_id CHAR(2),
-    country_name VARCHAR(40)
-);
-
--- Dimension Tiempo
-CREATE TABLE DIM_TIEMPO (
-    tiempo_id NUMBER PRIMARY KEY,
-    numMes NUMBER,
-    numAnio NUMBER
-);
-
--- Tabla de Hechos RRHH
-CREATE TABLE FACT_RRHH (
-    employee_id NUMBER(6) REFERENCES DIM_EMPLEADO(employee_id),
-    department_id NUMBER(4) REFERENCES DIM_DEPARTAMENTO(department_id),
-    tiempo_id NUMBER REFERENCES DIM_TIEMPO(tiempo_id),
-    CostoTotal NUMBER,
-    TotalEmpleado NUMBER
-);
-</div>
-<h2>10. Índices en Data Warehouse</h2>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Índices Bitmap:</strong> Ideales para columnas con baja cardinalidad (ej. género, estado, región). Reducen sustancialmente el uso de espacio y su mantenimiento es sumamente eficiente en consultas y cargas DML paralelas.</li>
-<li><strong>Índices B-tree:</strong> Ordenan los datos como un árbol inverso, ideales para accesos a consultas típicas de alta cardinalidad.</li>
-</ul>
-<h2>11. Metodología de Calidad de Datos</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Antes de cargar los datos en el Data Warehouse, es vital asegurar su calidad y consistencia mediante una metodología por niveles:</p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Nivel</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo de Análisis</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripción</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nivel 0</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Análisis de valores de dominio</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Verificar que los valores de los datos estén en los rangos esperados.</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nivel 1</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Integridad &amp; Análisis de validez</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Comprobar datos faltantes, valores nulos y formatos de datos inválidos.</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nivel 2</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Análisis de integridad estructural</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Garantizar que las relaciones de clave primaria/clave foránea e integridad referencial sean correctas.</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nivel 3</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Análisis de reglas de negocios</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Verificar el cumplimiento de restricciones complejas basadas en lógica de negocio empresarial.</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Nivel 4</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Reglas de conversión de datos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Comprobar y unificar codificaciones heterogéneas (ej. unificar <code>género: F/M</code>, <code>1/0</code>, <code>femenino/masculino</code> en una sola norma).</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>12. Explotación de Datos y Minería de Datos (Data Mining)</h2>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una vez estructurado el Data Warehouse, existen tres formas principales para explotar y analizar la información:</p>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300 mb-6">
-<li><strong>Consultas Ad-hoc (Query Ad-hoc):</strong> Proceso iterativo de preguntas y respuestas formuladas manualmente por expertos para encontrar información valiosa.</li>
-<li><strong>OLAP (Análisis Multidimensional):</strong> Preguntas y respuestas multidimensionales complejas para asistir a los tomadores de decisiones.</li>
-<li><strong>Data Mining (Minería de Datos):</strong> Proceso automático que busca tendencias y patrones en el contenido de la información, permitiendo al usuario descubrir la esencia y relaciones entre sus datos.</li>
-</ul>
-<h3>Tipos de Minería de Datos</h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50">
-<h4>Minería de Descubrimiento</h4>
-<p class="text-sm text-slate-700 dark:text-slate-300">Encuentra patrones en los datos sin una dirección preconcebida. Analiza todo el almacén de datos para descubrir relaciones valiosas de forma simple.</p>
-</div>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50">
-<h4>Minería Predictiva</h4>
-<p class="text-sm text-slate-700 dark:text-slate-300">Usa resultados históricos conocidos para construir modelos que permitan predecir comportamientos o valores futuros (requiere control exhaustivo del analista).</p>
-</div>
-</div>
-<h3>Técnicas de Data Mining</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Las herramientas modernas aplican diversas técnicas estadísticas y de inteligencia artificial:</p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Enfoque Analítico</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Técnicas Algorítmicas</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Detección de Patrones y Agrupación</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Análisis de la Cesta de la Compra (Market Basket Analysis), Segmentación de Clientes, Análisis de Enlaces (Link Analysis), Agrupamiento (Clustering), Clasificación y Predicción.</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Modelos de IA y Modelado Numérico</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Árboles de Decisión (Decision Trees), Redes Neuronales (Neural Networks), Funciones de Base Radial (Radial Basis), Modelado de Ingresos, Series Temporales (Time Series) y Optimización de Búsqueda.</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>13. Beneficios del Data Warehouse</h2>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p><strong>Desde la perspectiva de TI:</strong></p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Arquitectura flexible de data warehousing que permite cambiar ante nuevas necesidades.</li>
-<li>Procesos automáticos que actualizan y limpian la data.</li>
-<li>Menor desgaste del área de IT ante requerimientos ad-hoc de los usuarios.</li>
-</ul>
-<p><strong>Desde la perspectiva de usuarios finales:</strong></p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Tener una vista global de los datos de la organización, independientemente de la fuente.</li>
-<li>Contar con herramientas intuitivas y fáciles de usar.</li>
-<li>Capacidad de generar reportes analíticos de manera independiente (Self-service BI).</li>
-<li>Acceso flexible vía intranet o internet.</li>
-</ul>
-</div>
-<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-<p><strong>Importante (Estudio de IDC):</strong> Las organizaciones que implementan soluciones analíticas logran retornos de inversión (ROI) que van del 17% al 2000%, con una media de <strong>112% (139% en el área financiera)</strong>. El 49% logra recuperar el costo en menos de un año, el costo de reportes se reduce un 60% y el tiempo total de generación baja de 10 a 1.</p>
-</div>
-<h2>14. Ejercicios Propuestos</h2>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p><strong>Ejercicio 1:</strong> Disena un esquema estrella para un sistema de pedidos en linea. Identifica las tablas de hechos y dimensiones necesarias.</p>
-</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p><strong>Ejercicio 2:</strong> Explica las diferencias entre los enfoques Top-Down (Inmon) y Bottom-Up (Kimball) para la implementacion de un Data Warehouse.</p>
-</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p><strong>Ejercicio 3:</strong> Dado el siguiente requerimiento: "Analizar ventas por producto, por region y por mes", disena las tablas DIM y FACT correspondientes.</p>
-</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p><strong>Ejercicio 4:</strong> Investiga y explica cual es la diferencia entre un Data Warehouse y un Data Lake. Menciona casos de uso para cada uno.</p>
-</div>
-<div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
-<canvas height="360" id="canvas_14" width="800"></canvas>
-<div class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800" id="controls_14"></div>
-</div>
-<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2>
-<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                💡 Tips del Profesor
-            </h2>
-<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Prefiera el esquema Estrella para consultas directas:</strong> La desnormalización controlada del modelo Estrella simplifica enormemente la estructura de las consultas para las herramientas de BI (como Tableau o PowerBI) y acelera drásticamente la latencia.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite actualizaciones frecuentes en el DW:</strong> Las bases de datos analíticas están optimizadas para cargas masivas por lotes (batch) y lecturas rápidas. Actualizaciones fila por fila degradan el sistema.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Use claves sustitutas (Surrogate Keys):</strong> En lugar de usar claves de negocio naturales en el DW, use identificadores secuenciales enteros internos para aislar el almacén de cambios en los sistemas transaccionales de origen.</p>
-</div>
-</div>
-</section>
-<section class="mt-10">
-<h2>
-<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-<div class="space-y-4">
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            ¿Cuál es la diferencia fundamental entre el esquema Estrella y el Copo de Nieve?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">El esquema Estrella mantiene las tablas de dimensiones completamente desnormalizadas en un solo nivel de JOIN con la tabla de hechos. El Copo de Nieve normaliza las dimensiones en múltiples subtablas, reduciendo la redundancia de datos pero agregando JOINs.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            ¿Qué tipo de datos se registra típicamente en una tabla de Hechos?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Se registran medidas numéricas, cuantitativas e históricas del negocio (ej. monto total vendido, cantidad de productos, tiempo transcurrido) junto con claves externas que apuntan a las dimensiones correspondientes.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            ¿Por qué las bases de datos analíticas cloud (OLAP) suelen ser de almacenamiento columnar?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Porque las consultas analíticas típicamente necesitan calcular agregados (ej. promedios o sumatorias) sobre un grupo reducido de columnas a lo largo de millones de filas. El formato columnar permite leer del disco solo las columnas necesarias.</p>
-</div>
-</details>
-</div>
-</section>
-</article>
-</article>
-
-            </article>
         </main>
 
-        <!-- Sidebar -->
-        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>BI</strong>Business Intelligence</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>DW</strong>Data Warehouse</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Data Mart</strong>Subconjunto departamental</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>ETL</strong>Extraccion, Transformacion, Carga</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>OLAP</strong>Analisis multidimensional</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>ROLAP / MOLAP / HOLAP</strong>Implementaciones de cubos</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Star Schema</strong>Modelo estrella</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Snowflake</strong>Modelo copo de nieve</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Calidad</strong>Metodología de Nivel 0 a Nivel 4</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Data Mining</strong>Explotación automática de patrones</li>
+        <!-- Sidebar / Navigation -->
+        <aside class="w-full lg:w-1/4 order-2 lg:order-1">
+            <div class="sticky top-24 space-y-6">
+                <!-- Nav Card -->
+                <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">En esta sesión</h3>
+                    <nav class="space-y-2 text-xs font-medium">
+                        <a href="#oltp-vs-olap" class="block px-3 py-2 rounded-xl text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30 font-semibold transition-all">1. OLTP vs OLAP & Kimball</a>
+                        <a href="#dimensiones-hechos" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">2. Dimensiones y Fact Tables</a>
+                        <a href="#cubos-olap-sql" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">3. Cubos OLAP & SQL</a>
+                    </nav>
+                </div>
 
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="semana_13.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 13</a></li>
-                <li><a href="semana_15.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 15 →</a></li>
-            </ul>
-        </div>
-
+                <!-- Info Card -->
+                <div class="p-5 rounded-3xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40">
+                    <h4 class="text-xs font-bold text-blue-900 dark:text-blue-300 mb-1">Principio de Kimball</h4>
+                    <p class="text-[11px] text-blue-700/80 dark:text-blue-400 leading-relaxed">
+                        Nunca unas tablas de hechos entre sí directamente (<code class="font-mono text-[10px]">Fact to Fact JOIN</code>). Realiza consultas a través de dimensiones conformadas o utiliza <code class="font-mono text-[10px]">UNION ALL</code> / Data Marts consolidados.
+                    </p>
+                </div>
+            </div>
         </aside>
     </div>
 
-    <!-- M3 Bottom Navigation Bar (Mobile only) -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-            </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
-        </a>
-        <a href="semana_13.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
-            </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
-        </a>
-        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
-            </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-            </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
-        </button>
-        <a href="semana_15.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-            </svg>
-            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
-        </a>
-    </nav>
-
+    <!-- Theme Toggle Script -->
     <script>
         const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeToggleM3Btn = document.getElementById('theme-toggle-m3');
         const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
         const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-        const m3ThemeIconLight = document.getElementById('m3-theme-icon-light');
-        const m3ThemeIconDark = document.getElementById('m3-theme-icon-dark');
 
-        function updateToggleText() {
-            const isDark = document.documentElement.classList.contains('dark');
-            if (isDark) {
-                if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
-                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
-                if (m3ThemeIconLight) m3ThemeIconLight.classList.remove('hidden');
-                if (m3ThemeIconDark) m3ThemeIconDark.classList.add('hidden');
+        function updateIcons() {
+            if (document.documentElement.classList.contains('dark')) {
+                themeToggleLightIcon.classList.remove('hidden');
+                themeToggleDarkIcon.classList.add('hidden');
             } else {
-                if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
-                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
-                if (m3ThemeIconLight) m3ThemeIconLight.classList.add('hidden');
-                if (m3ThemeIconDark) m3ThemeIconDark.classList.remove('hidden');
+                themeToggleLightIcon.classList.add('hidden');
+                themeToggleDarkIcon.classList.remove('hidden');
             }
         }
+        updateIcons();
 
-        updateToggleText();
-
-        const toggleTheme = () => {
+        themeToggleBtn.addEventListener('click', () => {
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
                 localStorage.setItem('color-theme', 'light');
@@ -905,43 +417,60 @@ CREATE TABLE FACT_RRHH (
                 document.documentElement.classList.add('dark');
                 localStorage.setItem('color-theme', 'dark');
             }
-            updateToggleText();
-        };
-
-        if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
-        if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
+            updateIcons();
+        });
     </script>
 
-<script>
-var dimHighlight14 = 0;
-function draw14(ctx, W, H) {
-    CanvasUI.fillBg(ctx, W, H);
-    ctx.fillStyle = CanvasUI.COLORS.textMuted;
-    ctx.font = '13px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Cubo OLAP — Haz clic para cambiar dimension destacada', W / 2, 22);
-    CanvasUI.drawCube(ctx, W, H, ['Hechos\n(Ventas)', 'Tiempo', 'Producto'], dimHighlight14);
-    ctx.fillStyle = CanvasUI.COLORS.accent;
-    ctx.font = '11px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    var dims = ['Fact Table: Ventas (medidas)', 'Dimension: Tiempo', 'Dimension: Producto'];
-    ctx.fillText(dims[dimHighlight14], W / 2, H - 20);
-}
-(function() {
-    var c = document.getElementById('canvas_14');
-    if (!c) return;
-    c.addEventListener('click', function() {
-        dimHighlight14 = (dimHighlight14 + 1) % 3;
-        var ctx = c.getContext('2d');
-        c.width = c.width;
-        draw14(ctx, c.width, c.height);
+    <!-- Canvas Animation Script -->
+    <script>
+    var step14 = 0;
+    function draw14(ctx, W, H, frame) {
+        CanvasUI.fillBg(ctx, W, H);
+        step14 = Math.floor(frame / 60) % 4;
+        
+        // Centro: FACT TABLE
+        var cx = W / 2;
+        var cy = H / 2;
+        
+        var dims = [
+            { label: 'DIM_CLIENTE (SCD 2)', x: cx - 220, y: cy - 100, color: '#38bdf8' },
+            { label: 'DIM_PRODUCTO', x: cx + 70, y: cy - 100, color: '#818cf8' },
+            { label: 'DIM_TIEMPO', x: cx - 220, y: cy + 70, color: '#34d399' },
+            { label: 'DIM_TIENDA', x: cx + 70, y: cy + 70, color: '#fbbf24' }
+        ];
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = 'bold 12px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('ESQUEMA ESTRELLA (STAR SCHEMA) EN EJECUCIÓN OLAP', cx, 22);
+
+        // Dibujar FACT TABLE en el centro
+        CanvasUI.drawNode(ctx, cx - 75, cy - 35, 150, 70, 'FACT_VENTAS\n(Hechos Aditivos)', '#6366f1');
+
+        for (var i = 0; i < dims.length; i++) {
+            var d = dims[i];
+            var active = (i === step14);
+            CanvasUI.drawNode(ctx, d.x, d.y, 150, 45, d.label, active ? d.color : '#334155');
+            // Lineas de conexión hacia el centro
+            ctx.beginPath();
+            ctx.strokeStyle = active ? d.color : '#475569';
+            ctx.lineWidth = active ? 3 : 1;
+            ctx.moveTo(d.x + 75, d.y + 22);
+            ctx.lineTo(cx, cy);
+            ctx.stroke();
+        }
+    }
+    var anim14 = null;
+    function start14() {
+        if (anim14) return;
+        anim14 = CanvasUI.startAnimation('canvas_14', draw14, 30);
+    }
+    CanvasUI.observeAndRun('canvas_14', start14);
+    CanvasUI.addControls('controls_14', {
+        play: function() { if (!anim14) anim14 = CanvasUI.startAnimation('canvas_14', draw14, 30); },
+        pause: function() { if (anim14) { anim14.stop(); anim14 = null; } },
+        reset: function() { step14 = 0; if (anim14) { anim14.stop(); anim14 = null; } setTimeout(start14, 100); }
     });
-    var ctx0 = c.getContext('2d');
-    draw14(ctx0, c.width, c.height);
-})();
-CanvasUI.addControls('controls_14', {
-    reset: function() { dimHighlight14 = 0; var ctx = document.getElementById('canvas_14').getContext('2d'); document.getElementById('canvas_14').width = document.getElementById('canvas_14').width; draw14(ctx, document.getElementById('canvas_14').width, document.getElementById('canvas_14').height); }
-});
-</script>
+    </script>
 </body>
 </html>

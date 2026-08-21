@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
-    <title>Semana 13 - Procedimientos, Funciones, Triggers, Paquetes</title>
+    <title>Semana 13 - Procedimientos, Funciones, Triggers y Módulos Empresariales</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -69,7 +69,6 @@
             });
         });
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
@@ -87,8 +86,12 @@
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
-                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Procedimientos, Funciones, Triggers y Paquetes</h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 13 • Programacion PL/SQL Avanzada  • ULima 2013-2</p>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
+                    Programación en Servidor: Procedimientos, Funciones, Triggers y Módulos
+                </h1>
+                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                    Semana 13 • Arquitectura de Base de Datos • Nivel Avanzado 2026
+                </p>
             </div>
             <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
@@ -97,605 +100,460 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
-    <!-- M3 Step-by-Step Diagram -->
-    <div class="my-6">
-        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                📌 Proceso Paso a Paso: Orden de Ejecución de Triggers en Eventos DML
-            </h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                La jerarquía exacta de llamadas internas que realiza el motor al invocar disparadores.
-            </p>
-            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(10, 15)">
-    <!-- 1 -->
-    <rect x="0" y="20" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="70" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. BEFORE Statement</text>
-    <text x="70" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Ejecuta una vez por comando</text>
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
 
-    <!-- Flecha -->
-    <path d="M 140 50 L 155 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="155,50 148,46 148,54" fill="#6366f1" />
-
-    <!-- 2 -->
-    <rect x="160" y="20" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="230" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. BEFORE Row</text>
-    <text x="230" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Por cada fila (puede mutar :NEW)</text>
-
-    <!-- Flecha -->
-    <path d="M 300 50 L 315 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="315,50 308,46 308,54" fill="#6366f1" />
-
-    <!-- 3. Operation -->
-    <rect x="320" y="20" width="140" height="60" rx="10" class="fill-amber-50 dark:fill-slate-850 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
-    <text x="390" y="45" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-xs">3. Ejecutar Operación</text>
-    <text x="390" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Cambio físico en la tabla</text>
-
-    <!-- Flecha -->
-    <path d="M 460 50 L 475 50" stroke="#f59e0b" stroke-width="2" fill="none" />
-    <polygon points="475,50 468,46 468,54" fill="#f59e0b" />
-
-    <!-- 4 -->
-    <rect x="480" y="20" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="550" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">4. AFTER Row</text>
-    <text x="550" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Por cada fila (:NEW/:OLD readonly)</text>
-
-    <!-- Flecha -->
-    <path d="M 620 50 L 635 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="635,50 628,46 628,54" fill="#6366f1" />
-
-    <!-- 5 -->
-    <rect x="640" y="20" width="145" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="712.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">5. AFTER Statement</text>
-    <text x="712.5" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Una vez completado todo</text>
-  </g>
-</svg>
+            <!-- Banner Hero -->
+            <div class="mb-8 p-6 md:p-8 rounded-3xl bg-gradient-to-br from-indigo-900 via-slate-900 to-purple-950 text-white shadow-xl border border-indigo-500/20 relative overflow-hidden">
+                <div class="relative z-10">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 mb-3">
+                        ⚡ Lógica en el Motor de Base de Datos
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-3">
+                        Procedimientos Almacenados, Triggers y Reglas de Negocio
+                    </h2>
+                    <p class="text-slate-300 text-sm md:text-base max-w-3xl leading-relaxed">
+                        Domina la ejecución de código en el servidor: diferencias cruciales entre Procedimientos y Funciones, control autónomo de transacciones (<code class="text-indigo-200">COMMIT/ROLLBACK</code>), ciclo de vida milimétrico de Triggers, resolución del <em>Mutating Table Problem</em>, auditoría JSONB inmutable y la disyuntiva moderna: Triggers internos vs. Change Data Capture (CDC/Kafka) en 2026.
+                    </p>
+                </div>
             </div>
-        </div>
-    </div>
 
-            <article class="space-y-8 prose dark:prose-invert max-w-none">
-    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
-    <div class="my-6">
-        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
-            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
-                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Relación de Términos
-                </span>
-                <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </span>
-            </summary>
-            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                <pre class="mermaid bg-transparent">
-graph TD
-    S13[PL/pgSQL Avanzado] --> Subprogs[Subprogramas Almacenados]
-    Subprogs --> Procs[Procedimientos: Ejecutan lógica secuencial sin retorno]
-    Subprogs --> Funcs[Funciones: Retornan datos o conjuntos TABLE]
-    S13 --> Triggers[Disparadores Automáticos]
-    Triggers --> Events[BEFORE / AFTER en INSERT, UPDATE, DELETE]
-    Triggers --> State[Fila :NEW / :OLD vs Nivel de Sentencia]
-                </pre>
+            <!-- Canvas Interactivo Ciclo de Vida -->
+            <div class="mb-8 p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            🔄 Simulación Interactiva: Ciclo de Vida de un Trigger
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Observa el orden exacto de validación y mutación en memoria antes de persistir a disco.</p>
+                    </div>
+                    <div id="controls_13" class="flex gap-2"></div>
+                </div>
+                <div class="w-full flex justify-center overflow-hidden rounded-2xl bg-slate-950/5 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                    <canvas id="canvas_13" width="680" height="360" class="max-w-full h-auto"></canvas>
+                </div>
             </div>
-        </details>
-    </div>
 
-                
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<!-- Enfoque Arquitecto: Procedimientos y Triggers -->
-<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3>Arquitectura Avanzada: Procedimientos y Triggers</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                En PostgreSQL, la lógica del lado del servidor se clasifica en:
-            </p>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Funciones:</strong> Ejecutan cálculos lógicos y retornan valores. Pueden configurarse como <code>IMMUTABLE</code> (mismo output ante mismo input), <code>STABLE</code> o <code>VOLATILE</code>.</li>
-<li><strong>Procedimientos Almacenados (STORED PROCEDURES):</strong> Soportados a partir de PostgreSQL 11, permiten iniciar y finalizar transacciones físicas (<code>COMMIT</code> y <code>ROLLBACK</code>) dentro del bloque de código.</li>
-<li><strong>Triggers (Disparadores):</strong> Lógica automática asociada a eventos DML. Pueden configurarse a nivel de fila (<code>FOR EACH ROW</code>, usando las variables <code>NEW</code> y <code>OLD</code>) o de sentencia (<code>FOR EACH STATEMENT</code>).</li>
-</ul>
-</section>
-<!-- Enfoque Cloud: Peligro de los Triggers y Bloqueos -->
-<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3>Impacto en Latencia y Bloqueos de Fila (Locks)</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
-                Los triggers de tipo <code>AFTER ROW</code> ejecutan lógica adicional dentro de la misma transacción física que originó el evento DML. En sistemas de alto tráfico en la nube (OLTP), un trigger mal programado que realice consultas complejas incrementará dramáticamente el tiempo de vida de la transacción.
-            </p>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed font-semibold">
-                Riesgo Crítico: Las filas implicadas se mantendrán bloqueadas (Exclusive Locks) por más tiempo del necesario, provocando el encolamiento de otras solicitudes, timeouts y eventuales caídas del servicio por Deadlocks.
-            </p>
-</section>
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p><strong>Objetivos:</strong> Comprender y crear procedimientos almacenados, funciones, triggers y paquetes en PL/SQL. Dominar el uso de cursores, parametros y variables de sustitucion.</p>
-</div>
-<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4>Insight del Arquitecto: PL/SQL como Herramienta de Poder</h4>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Los subprogramas almacenados (procedimientos, funciones, paquetes) son el corazon de la logica de negocio en la base de datos. Mientras que el SQL puro es declarativo, PL/SQL permite programacion imperativa: condiciones, loops, manejo de excepciones. Un buen arquitecto sabe cuando usar cada uno. Los triggers, por otro lado, deben usarse con cuidado -- un trigger mal disenado puede destruir el rendimiento de una base de datos completa.</p>
-</section>
-<h2>1. Cursores en PL/SQL</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Recorrido de filas</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un cursor permite recuperar filas de una consulta SELECT una por una y procesarlas individualmente.</p>
-<h3>Cursor Manual con FETCH</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+            <!-- SECCIÓN 1: PROCEDIMIENTOS VS FUNCIONES -->
+            <section id="proc-vs-func" class="mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-9 h-9 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-lg">1</div>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Procedimientos Almacenados vs. Funciones UDF</h2>
+                </div>
 
-DECLARE
-    CURSOR ejecursor IS
-        SELECT nombre, salario FROM empleado
-        WHERE salario &lt; 5000;
-    v_nombre empleado.nombre%TYPE;
-    v_salario empleado.salario%TYPE;
-BEGIN
-    OPEN ejecursor;
-    LOOP
-        FETCH ejecursor INTO v_nombre, v_salario;
-        EXIT WHEN ejecursor%NOTFOUND;
-        INSERT INTO TEMP VALUES (v_nombre, v_salario);
-    END LOOP;
-    CLOSE ejecursor;
-END;
-</div>
-<h3>Cursor con FOR LOOP (Automatico)</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                    <p>
+                        En la ingeniería de bases de datos relacionales moderna (PostgreSQL 16/17, Oracle 23ai, SQL Server 2022), la distinción entre un <strong>Procedimiento Almacenado</strong> (<code class="text-indigo-600 dark:text-indigo-300">PROCEDURE</code>) y una <strong>Función Definida por el Usuario</strong> (<code class="text-indigo-600 dark:text-indigo-300">FUNCTION</code>) no es meramente semántica; radica en el <strong>control del contexto transaccional</strong> y la capacidad de invocación dentro del motor de consultas.
+                    </p>
+                </div>
 
-DECLARE
-    CURSOR ejecursor IS
-        SELECT nombre, salario FROM empleado
-        WHERE salario &lt; 5000;
-BEGIN
-    FOR ejecursor_rec IN ejecursor LOOP
-        INSERT INTO TEMP
-        VALUES (ejecursor_rec.nombre, ejecursor_rec.salario);
-    END LOOP;
-END;
-</div>
-<h3>Atributos del Cursor</h3>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Atributo</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripcion</th>
-</tr>
-<tbody>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">%ISOPEN</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Booleano</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">TRUE si el cursor esta abierto</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">%FOUND</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Booleano</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">TRUE mientras el ultimo FETCH trae una fila</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">%NOTFOUND</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Booleano</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">TRUE cuando el ultimo FETCH no trae filas</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">%ROWCOUNT</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Numerico</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Total de filas recuperadas hasta el momento</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-<h2>2. Procedimientos Almacenados</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">CREATE OR REPLACE PROCEDURE</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un procedimiento ejecuta una accion. Puede tener parametros de entrada (IN), salida (OUT) o ambos (IN OUT).</p>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p><strong>Sintaxis general:</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <!-- Tabla Comparativa Exhaustiva -->
+                <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+                    <table class="w-full text-xs md:text-sm text-left">
+                        <thead class="bg-slate-100 dark:bg-slate-800/70 text-slate-900 dark:text-white font-semibold uppercase tracking-wider">
+                            <tr>
+                                <th class="p-3.5">Característica</th>
+                                <th class="p-3.5 text-indigo-600 dark:text-indigo-400">Stored Procedure (PROCEDURE)</th>
+                                <th class="p-3.5 text-purple-600 dark:text-purple-400">User Defined Function (FUNCTION)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-slate-200">Propósito Primario</td>
+                                <td class="p-3.5">Ejecutar procesos de negocio, orquestación de múltiples tablas y transformaciones complejas.</td>
+                                <td class="p-3.5">Calcular y retornar un valor escalar o conjunto tabular a partir de entradas.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-slate-200">Control Transaccional (<code class="text-xs">COMMIT/ROLLBACK</code>)</td>
+                                <td class="p-3.5 font-semibold text-emerald-600 dark:text-emerald-400">SÍ PERMITIDO. Puede iniciar, comitear y revertir transacciones internas de forma autónoma.</td>
+                                <td class="p-3.5 font-semibold text-rose-600 dark:text-rose-400">ESTRICTAMENTE PROHIBIDO dentro de la función (ejecuta dentro de la transacción del llamador).</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-slate-200">Invocación en sentencias SQL</td>
+                                <td class="p-3.5">Se invoca con <code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">CALL sp_nombre(...)</code>. No se puede embeber en <code class="text-xs font-mono">SELECT</code>, <code class="text-xs font-mono">WHERE</code> o <code class="text-xs font-mono">JOIN</code>.</td>
+                                <td class="p-3.5">Se puede llamar en cualquier expresión SQL: <code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">SELECT fn_calcular(x), * FROM t WHERE fn_filtro(y)</code>.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-slate-200">Valores de Retorno</td>
+                                <td class="p-3.5">No tiene cláusula <code class="text-xs font-mono">RETURNS</code>. Devuelve valores mediante parámetros <code class="text-xs font-mono">INOUT</code> o <code class="text-xs font-mono">OUT</code>.</td>
+                                <td class="p-3.5">Obligatorio <code class="text-xs font-mono">RETURNS tipo_dato</code> o <code class="text-xs font-mono">RETURNS TABLE(...)</code> o <code class="text-xs font-mono">RETURNS SETOF</code>.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-slate-200">Optimización del Optimizador</td>
+                                <td class="p-3.5">Caja negra operacional para el planificador.</td>
+                                <td class="p-3.5">Clasificable como <code class="text-xs font-mono">IMMUTABLE</code>, <code class="text-xs font-mono">STABLE</code> o <code class="text-xs font-mono">VOLATILE</code> para optimización y memoización de costos.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-CREATE OR REPLACE PROCEDURE &lt;nombre&gt;
-    [(parametro, ...)]
-IS
-    -- declaraciones
-BEGIN
-    -- logica
-    [EXCEPTION]
-END;
-</div>
-</div>
-<h3>Ejemplo 1: Actualizar Salario</h3>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Procedimiento con parametro IN:</strong> Actualiza el salario de un empleado por su ID.</p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <!-- Diagrama ASCII: Ejecución Transaccional -->
+                <div class="mb-6 bg-slate-950 text-slate-200 p-4 md:p-5 rounded-2xl font-mono text-xs overflow-x-auto shadow-md border border-slate-800">
+                    <div class="text-indigo-400 font-bold mb-2">/* DIAGRAMA: CONTROL DE TRANSACCIONES EN STORED PROCEDURES (POSTGRESQL 16/17) */</div>
+<pre class="leading-relaxed">
+CLIENTE APP                MOTOR POSTGRESQL                 TABLAS DISCO / WAL
+    |                              |                                |
+    |--- CALL sp_procesar_lote() ->|                                |
+    |                              |-- BEGIN TRANSACTION (Autónomo) |
+    |                              |-- INSERT INTO pagos_stage... ->| (Lock en bloque)
+    |                              |-- COMMIT --------------------->| (WAL Flush / Durabilidad)
+    |                              |                                |
+    |                              |-- BEGIN TRANSACTION (Nuevo)    |
+    |                              |-- UPDATE saldos_cuenta... ---->| (Lock en fila)
+    |                              |-- EXCEPTION: Saldo Insuficiente|
+    |                              |-- ROLLBACK ------------------->| (Deshace solo lote 2)
+    |<-- Retorna Código Error -----|                                |
+</pre>
+                </div>
 
-CREATE OR REPLACE PROCEDURE cambio_salario
-    (v_id_emp IN NUMBER,
-     v_nuevo_salario IN NUMBER)
-IS
-BEGIN
-    UPDATE empleado
-    SET salario = v_nuevo_salario
-    WHERE cod_empleado = v_id_emp;
-    COMMIT;
-END cambio_salario;
+                <!-- Código Comparativo: Procedure vs Function -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-slate-900 text-slate-200 p-4 rounded-2xl border border-slate-800 font-mono text-xs">
+                        <div class="flex justify-between items-center pb-2 mb-2 border-b border-slate-800">
+                            <span class="text-indigo-400 font-bold">1. Stored Procedure con Transacción</span>
+                            <span class="text-[10px] text-slate-400">PostgreSQL / PL/pgSQL</span>
+                        </div>
+<pre class="overflow-x-auto text-[11px] leading-relaxed">
+<span class="text-purple-400">CREATE OR REPLACE PROCEDURE</span> sp_transferir_fondos(
+    p_origen_id <span class="text-yellow-400">INT</span>,
+    p_destino_id <span class="text-yellow-400">INT</span>,
+    p_monto <span class="text-yellow-400">NUMERIC</span>(12,2)
+)
+<span class="text-purple-400">LANGUAGE</span> plpgsql
+<span class="text-purple-400">AS</span> $$
+<span class="text-purple-400">DECLARE</span>
+    v_saldo_actual <span class="text-yellow-400">NUMERIC</span>(12,2);
+<span class="text-purple-400">BEGIN</span>
+    <span class="text-slate-400">-- Bloqueo pesimista para evitar race conditions</span>
+    <span class="text-purple-400">SELECT</span> saldo <span class="text-purple-400">INTO</span> v_saldo_actual
+    <span class="text-purple-400">FROM</span> cuentas
+    <span class="text-purple-400">WHERE</span> cuenta_id = p_origen_id
+    <span class="text-purple-400">FOR UPDATE</span>;
 
--- Ejecucion:
-EXECUTE cambio_salario(7839, 12000);
-</div>
-<h3>Ejemplo 2: Con Manejo de Excepciones</h3>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Procedimiento con validacion:</strong> Incrementa el salario si existe, lanza excepcion si es nulo.</p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+    <span class="text-purple-400">IF</span> v_saldo_actual < p_monto <span class="text-purple-400">THEN</span>
+        <span class="text-purple-400">RAISE EXCEPTION</span> <span class="text-emerald-300">'Saldo insuficiente: %'</span>, v_saldo_actual;
+    <span class="text-purple-400">END IF</span>;
 
-CREATE OR REPLACE PROCEDURE actualiza_salario
-    (v_id_emp NUMBER, incremento NUMBER)
-IS
-    salario_actual NUMBER;
-    salario_olvidado EXCEPTION;
-BEGIN
-    SELECT salary INTO salario_actual
-    FROM employees
-    WHERE employee_id = v_id_emp;
+    <span class="text-purple-400">UPDATE</span> cuentas <span class="text-purple-400">SET</span> saldo = saldo - p_monto <span class="text-purple-400">WHERE</span> cuenta_id = p_origen_id;
+    <span class="text-purple-400">UPDATE</span> cuentas <span class="text-purple-400">SET</span> saldo = saldo + p_monto <span class="text-purple-400">WHERE</span> cuenta_id = p_destino_id;
 
-    IF salario_actual IS NULL THEN
-        RAISE salario_olvidado;
-    ELSE
-        UPDATE employees
-        SET salary = salary + incremento
-        WHERE employee_id = v_id_emp;
-    END IF;
+    <span class="text-slate-400">-- Procedimiento puede ejecutar COMMIT explícito</span>
+    <span class="text-purple-400">COMMIT</span>;
+<span class="text-purple-400">END</span>;
+$$;
+</pre>
+                    </div>
 
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        INSERT INTO emp_audit
-        VALUES (v_id_emp, 'Empleado no existe');
-    WHEN salario_olvidado THEN
-        INSERT INTO emp_audit
-        VALUES (v_id_emp, 'Salario es nulo');
-END actualiza_salario;
-</div>
-<h2>3. Funciones</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">RETURN valor</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Una funcion es similar a un procedimiento, pero obligatoriamente retorna un valor al entorno llamante mediante la clausula RETURN.</p>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p><strong>Sintaxis general:</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                    <div class="bg-slate-900 text-slate-200 p-4 rounded-2xl border border-slate-800 font-mono text-xs">
+                        <div class="flex justify-between items-center pb-2 mb-2 border-b border-slate-800">
+                            <span class="text-purple-400 font-bold">2. Table-Valued Function (UDF)</span>
+                            <span class="text-[10px] text-slate-400">PostgreSQL / PL/pgSQL</span>
+                        </div>
+<pre class="overflow-x-auto text-[11px] leading-relaxed">
+<span class="text-purple-400">CREATE OR REPLACE FUNCTION</span> fn_resumen_cliente(
+    p_cliente_id <span class="text-yellow-400">INT</span>
+)
+<span class="text-purple-400">RETURNS TABLE</span>(
+    total_pedidos <span class="text-yellow-400">BIGINT</span>,
+    monto_total <span class="text-yellow-400">NUMERIC</span>(14,2),
+    ticket_promedio <span class="text-yellow-400">NUMERIC</span>(10,2)
+)
+<span class="text-purple-400">LANGUAGE</span> plpgsql
+<span class="text-purple-400">STABLE</span>
+<span class="text-purple-400">AS</span> $$
+<span class="text-purple-400">BEGIN</span>
+    <span class="text-purple-400">RETURN QUERY</span>
+    <span class="text-purple-400">SELECT</span> 
+        <span class="text-yellow-400">COUNT</span>(pedido_id),
+        <span class="text-yellow-400">COALESCE</span>(<span class="text-yellow-400">SUM</span>(total), 0.00),
+        <span class="text-yellow-400">COALESCE</span>(<span class="text-yellow-400">AVG</span>(total), 0.00)
+    <span class="text-purple-400">FROM</span> pedidos
+    <span class="text-purple-400">WHERE</span> cliente_id = p_cliente_id;
+<span class="text-purple-400">END</span>;
+$$;
 
-CREATE OR REPLACE FUNCTION &lt;nombre&gt;
-    [(parametro, ...)]
-RETURN tipo_dato
-IS
-    -- declaraciones
-BEGIN
-    -- logica
-    RETURN valor;
-    [EXCEPTION]
-END;
-</div>
-</div>
-<h3>Ejemplo 1: Calculo de Impuesto</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<span class="text-slate-400">-- Invocable directamente en una consulta SELECT</span>
+<span class="text-purple-400">SELECT</span> c.nombre, f.* 
+<span class="text-purple-400">FROM</span> clientes c
+<span class="text-purple-400">CROSS JOIN LATERAL</span> fn_resumen_cliente(c.cliente_id) f;
+</pre>
+                    </div>
+                </div>
+            </section>
 
-CREATE OR REPLACE FUNCTION impuesto
-    (v_valor IN NUMBER)
-RETURN NUMBER
-IS
-BEGIN
-    RETURN (v_valor * 0.30);
-END impuesto;
+            <!-- SECCIÓN 2: TRIGGERS A FONDO Y CICLO DE VIDA -->
+            <section id="triggers-profundo" class="mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-9 h-9 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-lg">2</div>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Triggers: Ciclo de Vida, Disparadores y Mutaciones</h2>
+                </div>
 
--- Uso en consulta:
-SELECT salary, impuesto(salary) AS IMPUESTO
-FROM employees
-WHERE employee_id = 100;
-</div>
-<h3>Ejemplo 2: Validacion de Salario</h3>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                    <p>
+                        Un <strong>Trigger</strong> (disparador) es un bloque de código procedimental compilado en el motor de base de datos que se ejecuta automáticamente como reacción ante un evento específico de manipulación de datos (DML: <code class="text-indigo-600 dark:text-indigo-300">INSERT</code>, <code class="text-indigo-600 dark:text-indigo-300">UPDATE</code>, <code class="text-indigo-600 dark:text-indigo-300">DELETE</code>) o definición (DDL: <code class="text-indigo-600 dark:text-indigo-300">CREATE</code>, <code class="text-indigo-600 dark:text-indigo-300">DROP</code>, <code class="text-indigo-600 dark:text-indigo-300">ALTER</code>).
+                    </p>
+                </div>
 
-CREATE OR REPLACE FUNCTION salario_ok
-    (v_salario NUMBER, v_jobid NUMBER)
-RETURN NUMBER
-IS
-    min_sal NUMBER;
-    max_sal NUMBER;
-BEGIN
-    SELECT min_salary, max_salary
-    INTO min_sal, max_sal
-    FROM jobs
-    WHERE job_id = v_jobid;
+                <!-- Taxonomía de Triggers -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="flex items-center gap-2 mb-2 text-indigo-600 dark:text-indigo-400 font-bold text-sm">
+                            <span>🛡️</span> BEFORE (Antes)
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Se ejecuta <strong>antes</strong> de que el registro se inserte o modifique en la tabla y antes de validar constraints referenciales. Ideal para <strong>validación, sanitización y mutación directa</strong> de campos (<code class="font-mono text-[11px]">:NEW.columna := UPPER(:NEW.columna)</code>). Retorna el registro a persistir.
+                        </p>
+                    </div>
 
-    IF (v_salario &gt;= min_sal) AND (v_salario &lt;= max_sal) THEN
-        RETURN 1;
-    ELSE
-        RETURN 0;
-    END IF;
-END salario_ok;
-</div>
-<h2>4. Triggers (Disparadores)</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">BEFORE / AFTER · FOR EACH ROW</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un trigger es un bloque PL/SQL que se ejecuta automaticamente cuando ocurre un evento DML (INSERT, UPDATE, DELETE) sobre una tabla.</p>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p><strong>Sintaxis general:</strong></p>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="flex items-center gap-2 mb-2 text-purple-600 dark:text-purple-400 font-bold text-sm">
+                            <span>📜</span> AFTER (Después)
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Se ejecuta <strong>después</strong> de que los datos fueron escritos en los buffers y las llaves foráneas fueron satisfechas. Ideal para <strong>auditoría inmutable, replicación de eventos, recálculo de agregados</strong> en tablas satélite y notificaciones asíncronas (<code class="font-mono text-[11px]">pg_notify</code>).
+                        </p>
+                    </div>
 
-CREATE OR REPLACE TRIGGER &lt;nombre&gt;
-    BEFORE|AFTER INSERT|UPDATE|DELETE [OF columna] ON tabla
-    FOR EACH ROW
-    [WHEN condicion]
-DECLARE
-    -- variables
-BEGIN
-    -- logica
-    -- :NEW.columna  -- valor nuevo
-    -- :OLD.columna  -- valor anterior
-END;
-</div>
-</div>
-<h3>Ejemplo: Validacion de Rango Salarial</h3>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>Trigger BEFORE:</strong> Verifica que el salario nuevo este dentro del rango del cargo y que el incremento no exceda el 10%.</p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="flex items-center gap-2 mb-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+                            <span>🪟</span> INSTEAD OF (En Lugar De)
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Se asocia exclusivamente a <strong>Vistas Complejas (Views)</strong> que contienen <code class="font-mono text-[11px]">JOIN</code> o agregaciones y que son inherentemente no actualizables. El trigger intercepta el DML y ejecuta las inserciones/actualizaciones en las tablas subyacentes.
+                        </p>
+                    </div>
+                </div>
 
-CREATE OR REPLACE TRIGGER chequea_salario
-    BEFORE INSERT OR UPDATE OF salary, job_id ON employees
-    FOR EACH ROW
-    WHEN (new.job_id != 'AD_PRES')
-DECLARE
-    minsal NUMBER;
-    maxsal NUMBER;
-BEGIN
-    SELECT min_salary, max_salary
-    INTO minsal, maxsal
-    FROM jobs
-    WHERE job_id = :new.job_id;
+                <!-- Matriz de Disponibilidad de Variables Contextuales OLD y NEW -->
+                <div class="mb-6 p-4 rounded-2xl bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+                        Matriz de Registros Contextuales: <code class="text-indigo-600 dark:text-indigo-400">OLD</code> vs <code class="text-indigo-600 dark:text-indigo-400">NEW</code>
+                    </h4>
+                    <div class="grid grid-cols-3 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                            <span class="font-bold text-emerald-600 dark:text-emerald-400">INSERT</span>
+                            <ul class="mt-1 text-slate-600 dark:text-slate-400 space-y-1">
+                                <li><code class="text-[11px] font-mono">OLD</code> = <span class="text-rose-500 font-semibold">NULL</span> (No existía previo)</li>
+                                <li><code class="text-[11px] font-mono">NEW</code> = Registro a insertar</li>
+                            </ul>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                            <span class="font-bold text-amber-600 dark:text-amber-400">UPDATE</span>
+                            <ul class="mt-1 text-slate-600 dark:text-slate-400 space-y-1">
+                                <li><code class="text-[11px] font-mono">OLD</code> = Estado previo en disco</li>
+                                <li><code class="text-[11px] font-mono">NEW</code> = Estado modificado propuesto</li>
+                            </ul>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                            <span class="font-bold text-rose-600 dark:text-rose-400">DELETE</span>
+                            <ul class="mt-1 text-slate-600 dark:text-slate-400 space-y-1">
+                                <li><code class="text-[11px] font-mono">OLD</code> = Registro eliminado</li>
+                                <li><code class="text-[11px] font-mono">NEW</code> = <span class="text-rose-500 font-semibold">NULL</span> (No existe futuro)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-    IF (:new.salary &lt; minsal OR :new.salary &gt; maxsal) THEN
-        raise_application_error(-20225, 'Salario fuera de rango');
-    ELSIF (:new.salary &lt; :old.salary) THEN
-        raise_application_error(-20320, 'Incremento negativo');
-    ELSIF (:new.salary &gt; 1.1 * :old.salary) THEN
-        raise_application_error(-20325, 'Incremento excede el 10%');
-    END IF;
-END chequea_salario;
-</div>
-<h2>5. Paquetes (Packages)</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">Agrupacion de subprogramas</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">Un paquete agrupa logicamente procedimientos y funciones relacionados. Tiene dos partes: la especificacion (interfaz publica) y el cuerpo (implementacion).</p>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p><strong>Estructura:</strong></p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <!-- DIAGRAMA ASCII: ORDEN EXACTO DE EJECUCIÓN DML -->
+                <div class="mb-6 bg-slate-950 text-slate-200 p-4 md:p-5 rounded-2xl font-mono text-xs overflow-x-auto shadow-md border border-slate-800">
+                    <div class="text-indigo-400 font-bold mb-2">/* DIAGRAMA DE FLUJO: PIPELINE COMPLETO DE EJECUCIÓN DE TRIGGER (NIVEL NÚCLEO) */</div>
+<pre class="leading-relaxed">
+[Sentencia DML Recibida (ej: UPDATE productos SET precio = 120 WHERE cat = 1;)]
+                             │
+                             ▼
+               ┌───────────────────────────┐
+               │  BEFORE STATEMENT TRIGGER │ (Se ejecuta 1 sola vez)
+               └─────────────┬─────────────┘
+                             ▼
+         ┌──► Por cada fila afectada (FOR EACH ROW) ◄────────────────┐
+         │                   │                                       │
+         │                   ▼                                       │
+         │     ┌───────────────────────────┐                         │
+         │     │    BEFORE ROW TRIGGER     │ ──► Modifica NEW.precio │
+         │     └─────────────┬─────────────┘                         │
+         │                   ▼                                       │
+         │     ┌───────────────────────────┐                         │
+         │     │ Validación de Constraints │ (CHECK, NOT NULL, FK)   │
+         │     └─────────────┬─────────────┘                         │
+         │                   ▼                                       │
+         │     ┌───────────────────────────┐                         │
+         │     │  Escritura en Buffer/WAL  │ (Registro Físico)       │
+         │     └─────────────┬─────────────┘                         │
+         │                   ▼                                       │
+         │     ┌───────────────────────────┐                         │
+         │     │    AFTER ROW TRIGGER      │ ──► Inserta en Auditoría│
+         │     └─────────────┬─────────────┘                         │
+         │                   │                                       │
+         └───────────────────┴─────────────────► ¿Hay más filas? ───┘
+                             │ (NO)
+                             ▼
+               ┌───────────────────────────┐
+               │   AFTER STATEMENT TRIGGER │ (Se ejecuta 1 sola vez al final)
+               └─────────────┬─────────────┘
+                             ▼
+                 [Transacción Exitosa / Commit]
+</pre>
+                </div>
 
--- Especificacion (interfaz publica)
-CREATE PACKAGE emp_acciones AS
-    PROCEDURE contrata_empleado(
-        ename VARCHAR2, job VARCHAR2, mgr NUMBER,
-        catpago NUMBER, sal NUMBER, deptno NUMBER);
-    PROCEDURE despide_empleado(emp_id NUMBER);
-END emp_acciones;
+                <!-- TEMA CRÍTICO: EL PROBLEMA DE LA TABLA MUTANTE -->
+                <div class="mb-6 p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-slate-850 dark:text-slate-200">
+                    <h3 class="text-sm md:text-base font-bold text-amber-700 dark:text-amber-400 flex items-center gap-2 mb-2">
+                        ⚠️ Concepto Clave de Examen: The Mutating Table Problem (Tabla Mutante)
+                    </h3>
+                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+                        El error de <strong>Tabla Mutante</strong> (clásico en Oracle como <code class="font-mono text-xs text-rose-500">ORA-04091: table is mutating, trigger/function may not see it</code>) ocurre cuando un trigger de fila (<code class="font-mono text-xs">FOR EACH ROW</code>) intenta consultar o modificar (<code class="font-mono text-xs">SELECT / UPDATE</code>) la misma tabla que actualmente está siendo afectada por la sentencia DML que disparó dicho trigger.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-900/50">
+                            <span class="font-bold text-rose-600 dark:text-rose-400">¿Por qué falla el motor?</span>
+                            <p class="mt-1 text-slate-600 dark:text-slate-400">Porque la tabla se encuentra en un estado inconsistente y transitorio en memoria; el motor no puede garantizar aislamiento de lectura ni consistencia de lectura determinista fila por fila.</p>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-900/50">
+                            <span class="font-bold text-emerald-600 dark:text-emerald-400">Solución de Arquitectura</span>
+                            <p class="mt-1 text-slate-600 dark:text-slate-400">1. Usar <strong>Compound Triggers</strong> (Oracle) o <strong>Transition Tables</strong> con <code class="font-mono text-[11px]">REFERENCING NEW TABLE AS new_tbl</code> (PostgreSQL 10+ / Statement Level) para evaluar el conjunto completo consolidado.</p>
+                        </div>
+                    </div>
+                </div>
 
--- Cuerpo (implementacion)
-CREATE PACKAGE BODY emp_acciones AS
-    PROCEDURE contrata_empleado(
-        ename VARCHAR2, job VARCHAR2, mgr NUMBER,
-        catpago NUMBER, sal NUMBER, deptno NUMBER) IS
-    BEGIN
-        INSERT INTO empleado
-        VALUES (empno_seq.NEXTVAL, ename, job, mgr,
-                SYSDATE, catpago, sal, deptno);
-    END contrata_empleado;
+                <!-- Caso Práctico 1: Trigger de Auditoría Completa en JSONB -->
+                <div class="mb-6 bg-slate-900 text-slate-200 p-5 rounded-2xl border border-slate-800 font-mono text-xs">
+                    <div class="flex justify-between items-center pb-2 mb-3 border-b border-slate-800">
+                        <span class="text-indigo-400 font-bold">Implementación de Élite: Auditoría Inmutable con Delta JSONB</span>
+                        <span class="text-[10px] text-slate-400">PostgreSQL 16/17</span>
+                    </div>
+<pre class="overflow-x-auto text-[11px] leading-relaxed">
+<span class="text-slate-400">-- 1. Tabla de Auditoría Inmutable (Append-Only)</span>
+<span class="text-purple-400">CREATE TABLE</span> log_auditoria (
+    log_id <span class="text-yellow-400">BIGSERIAL PRIMARY KEY</span>,
+    nombre_tabla <span class="text-yellow-400">VARCHAR</span>(64) <span class="text-yellow-400">NOT NULL</span>,
+    operacion <span class="text-yellow-400">VARCHAR</span>(10) <span class="text-yellow-400">NOT NULL</span>,
+    usuario_db <span class="text-yellow-400">VARCHAR</span>(64) <span class="text-yellow-400">DEFAULT CURRENT_USER</span>,
+    ip_cliente <span class="text-yellow-400">INET DEFAULT</span> inet_client_addr(),
+    fecha_registro <span class="text-yellow-400">TIMESTAMPTZ DEFAULT CLOCK_TIMESTAMP</span>(),
+    registro_previo <span class="text-yellow-400">JSONB</span>,
+    registro_nuevo <span class="text-yellow-400">JSONB</span>,
+    delta_cambios <span class="text-yellow-400">JSONB</span>
+);
 
-    PROCEDURE despide_empleado(emp_id NUMBER) IS
-    BEGIN
-        DELETE FROM empleado
-        WHERE cod_empleado = emp_id;
-    END despide_empleado;
-END emp_acciones;
-</div>
-<h2>6. Variables de Sustitucion</h2>
-<span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 mb-4">&amp; y &amp;&amp; en SQL*Plus</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">SQL*Plus permite usar variables de sustitucion para ingresar valores en tiempo de ejecucion.</p>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>&amp; (un solo uso):</strong> Pide el valor cada vez que aparece.</p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+<span class="text-slate-400">-- 2. Función Trigger Genérica Reutilizable</span>
+<span class="text-purple-400">CREATE OR REPLACE FUNCTION</span> fn_trigger_auditoria_delta()
+<span class="text-purple-400">RETURNS TRIGGER</span>
+<span class="text-purple-400">LANGUAGE</span> plpgsql
+<span class="text-purple-400">AS</span> $$
+<span class="text-purple-400">DECLARE</span>
+    v_old_json <span class="text-yellow-400">JSONB</span> := <span class="text-purple-400">NULL</span>;
+    v_new_json <span class="text-yellow-400">JSONB</span> := <span class="text-purple-400">NULL</span>;
+    v_delta <span class="text-yellow-400">JSONB</span> := <span class="text-purple-400">NULL</span>;
+<span class="text-purple-400">BEGIN</span>
+    <span class="text-purple-400">IF</span> (TG_OP = <span class="text-emerald-300">'DELETE'</span>) <span class="text-purple-400">THEN</span>
+        v_old_json := to_jsonb(OLD);
+    <span class="text-purple-400">ELSIF</span> (TG_OP = <span class="text-emerald-300">'INSERT'</span>) <span class="text-purple-400">THEN</span>
+        v_new_json := to_jsonb(NEW);
+    <span class="text-purple-400">ELSIF</span> (TG_OP = <span class="text-emerald-300">'UPDATE'</span>) <span class="text-purple-400">THEN</span>
+        v_old_json := to_jsonb(OLD);
+        v_new_json := to_jsonb(NEW);
+        <span class="text-slate-400">-- Extrae únicamente los campos que sufrieron modificación</span>
+        <span class="text-purple-400">SELECT</span> jsonb_object_agg(n.key, n.value) <span class="text-purple-400">INTO</span> v_delta
+        <span class="text-purple-400">FROM</span> jsonb_each(v_new_json) n
+        <span class="text-purple-400">WHERE</span> n.value <span class="text-purple-400">IS DISTINCT FROM</span> (v_old_json -> n.key);
+    <span class="text-purple-400">END IF</span>;
 
-SELECT nombre
-FROM empleado
-WHERE cod_empleado = &amp;cod_empleado;
-</div>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p><strong>&amp;&amp; (reutilizable):</strong> Pide el valor solo la primera vez y lo reutiliza.</p>
-</div>
-<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+    <span class="text-purple-400">INSERT INTO</span> log_auditoria (nombre_tabla, operacion, registro_previo, registro_nuevo, delta_cambios)
+    <span class="text-purple-400">VALUES</span> (TG_TABLE_NAME, TG_OP, v_old_json, v_new_json, v_delta);
 
-SELECT nombre, &amp;&amp;nombre_columna
-FROM empleado
-ORDER BY &amp;nombre_columna;
-</div>
-<h2>7. Ejercicios de Repaso</h2>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p><strong>Ejercicio 1:</strong> Crea una funcion que reciba un codigo de empleado y retorne su nombre completo concatenado.</p>
-</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p><strong>Ejercicio 2:</strong> Crea un procedimiento que transfiera un empleado de un departamento a otro, registrando el cambio en una tabla de auditoria.</p>
-</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p><strong>Ejercicio 3:</strong> Crea un trigger AFTER UPDATE que registre en una tabla de log los cambios de salario con el valor anterior y nuevo.</p>
-</div>
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mb-6">
-<p><strong>Ejercicio 4:</strong> Crea un paquete GESTION_EMPLEADOS que contenga un procedimiento para contratar y otro para despedir empleados.</p>
-</div>
-<div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden my-8 shadow-lg">
-<canvas height="360" id="canvas_13" width="800"></canvas>
-<div class="flex flex-wrap items-center gap-2 px-5 py-3 bg-slate-950 border-t border-slate-800" id="controls_13"></div>
-</div>
-<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2>
-<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                💡 Tips del Profesor
-            </h2>
-<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Evite Triggers para lógica de negocio pesada:</strong> Utilice triggers exclusivamente para tareas ligeras de auditoría e integridad. La lógica de negocio compleja debe residir en la capa de servicios de su backend.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Optimice la volatilidad de funciones:</strong> Declare sus funciones como <code>IMMUTABLE</code> si no consultan la base de datos y solo dependen de sus parámetros de entrada. Esto permite al planificador precalcular resultados (Function Inlining) acelerando consultas.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Cuidado con los bucles infinitos en Triggers:</strong> Un trigger de tipo <code>UPDATE</code> que ejecute internamente un <code>UPDATE</code> sobre la misma tabla provocará recursión infinita a menos que valide adecuadamente la condición de parada.</p>
-</div>
-</div>
-</section>
-<section class="mt-10">
-<h2>
-<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-<div class="space-y-4">
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            ¿Cuál es la diferencia fundamental entre una función (FUNCTION) y un procedimiento (PROCEDURE) en PostgreSQL?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">La diferencia principal es que un <code>PROCEDURE</code> permite controlar transacciones internamente (ejecutar <code>COMMIT</code> o <code>ROLLBACK</code>), mientras que una <code>FUNCTION</code> se ejecuta obligatoriamente dentro del contexto de una transacción activa existente.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            ¿Qué representan las variables especiales NEW y OLD dentro de un Trigger de fila?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><code>NEW</code> contiene la estructura y datos de la fila que está siendo insertada o actualizada (DML INSERT/UPDATE). <code>OLD</code> contiene la fila en su estado previo a la actualización o eliminación (UPDATE/DELETE).</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            ¿Qué significa que una función sea declarada como IMMUTABLE?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Significa que la función siempre retornará el mismo valor ante los mismos argumentos de entrada y no realiza consultas externas ni lecturas de tablas. Esto permite al optimizador de PostgreSQL cachear el resultado.</p>
-</div>
-</details>
-</div>
-</section>
-</article>
-</article>
+    <span class="text-purple-400">RETURN COALESCE</span>(NEW, OLD);
+<span class="text-purple-400">END</span>;
+$$;
 
-            </article>
+<span class="text-slate-400">-- 3. Vinculación del Trigger AFTER en la tabla crítica</span>
+<span class="text-purple-400">CREATE OR REPLACE TRIGGER</span> tr_auditar_empleados
+<span class="text-purple-400">AFTER INSERT OR UPDATE OR DELETE ON</span> empleados
+<span class="text-purple-400">FOR EACH ROW EXECUTE FUNCTION</span> fn_trigger_auditoria_delta();
+</pre>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 3: ARQUITECTURA MODERNA: TRIGGERS VS CDC -->
+            <section id="cdc-vs-triggers" class="mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-9 h-9 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-lg">3</div>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Triggers en BD vs. Change Data Capture (CDC / Kafka) en 2026</h2>
+                </div>
+
+                <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                    <p>
+                        En la arquitectura de microservicios y sistemas de streaming de 2026, los <strong>Triggers tradicionales dentro de la base de datos</strong> están siendo complementados o reemplazados para eventos externos por <strong>Change Data Capture (CDC)</strong> mediante herramientas como <em>Debezium, Kafka Connect y Redpanda</em>. Comprender los trade-offs es vital para el diseño de sistemas distribuidos.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="text-sm font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+                            <span>🏛️</span> In-Database Triggers (Síncronos)
+                        </div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-2">
+                            <li><strong class="text-slate-800 dark:text-slate-200">Consistencia:</strong> 100% ACID garantizada en la misma transacción atómica.</li>
+                            <li><strong class="text-slate-800 dark:text-slate-200">Latencia:</strong> Cero latencia externa; ocurre dentro del ciclo del DML.</li>
+                            <li><strong class="text-slate-800 dark:text-slate-200">Desventaja Crítica:</strong> Genera contención de bloqueos (Lock Contention), degrada el TPS en escrituras masivas y puede causar cuellos de botella no escalables horizontalmente.</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-2 flex items-center gap-2">
+                            <span>⚡</span> CDC Asíncrono (Debezium / Kafka WAL Reading)
+                        </div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-2">
+                            <li><strong class="text-slate-800 dark:text-slate-200">Impacto en BD:</strong> Casi nulo (lee el Write-Ahead Log o Binary Log sin interferir con locks de tablas).</li>
+                            <li><strong class="text-slate-800 dark:text-slate-200">Escalabilidad:</strong> Desacopla consumidores (microservicios, Search Index, Lakehouse, Webhooks).</li>
+                            <li><strong class="text-slate-800 dark:text-slate-200">Desventaja:</strong> Consistencia eventual (latencia de propagación de milisegundos).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
         </main>
 
-        <!-- Sidebar -->
-        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Procedimientos</strong>Bloques con IN/OUT/IN OUT</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Funciones</strong>Retornan un valor</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Triggers</strong>:NEW / :OLD y eventos DML</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Paquetes</strong>Agrupacion logica de subprogramas</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Cursores</strong>FETCH, FOR LOOP, atributos</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>Variables</strong>Sustitucion con &amp; y &amp;&amp;</li>
+        <!-- Sidebar / Navigation -->
+        <aside class="w-full lg:w-1/4 order-2 lg:order-1">
+            <div class="sticky top-24 space-y-6">
+                <!-- Nav Card -->
+                <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">En esta sesión</h3>
+                    <nav class="space-y-2 text-xs font-medium">
+                        <a href="#proc-vs-func" class="block px-3 py-2 rounded-xl text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30 font-semibold transition-all">1. Procedimientos vs Funciones</a>
+                        <a href="#triggers-profundo" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">2. Triggers y Ciclo de Vida</a>
+                        <a href="#cdc-vs-triggers" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">3. Triggers vs CDC 2026</a>
+                    </nav>
+                </div>
 
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="semana_12.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 12</a></li>
-                <li><a href="semana_14.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 14 →</a></li>
-            </ul>
-        </div>
-
+                <!-- Info Card -->
+                <div class="p-5 rounded-3xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40">
+                    <h4 class="text-xs font-bold text-indigo-900 dark:text-indigo-300 mb-1">Regla de Oro en Producción</h4>
+                    <p class="text-[11px] text-indigo-700/80 dark:text-indigo-400 leading-relaxed">
+                        Usa <strong>BEFORE triggers</strong> para modificar los datos de la misma fila sin overhead. Usa <strong>AFTER triggers</strong> solo para sincronizar otras tablas o auditoría. Nunca invoques servicios web HTTP síncronos dentro de un trigger.
+                    </p>
+                </div>
+            </div>
         </aside>
     </div>
 
-    <!-- M3 Bottom Navigation Bar (Mobile only) -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-            </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
-        </a>
-        <a href="semana_12.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
-            </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
-        </a>
-        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
-            </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-            </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
-        </button>
-        <a href="semana_14.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-            </svg>
-            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
-        </a>
-    </nav>
-
+    <!-- Theme Toggle Script -->
     <script>
         const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeToggleM3Btn = document.getElementById('theme-toggle-m3');
         const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
         const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-        const m3ThemeIconLight = document.getElementById('m3-theme-icon-light');
-        const m3ThemeIconDark = document.getElementById('m3-theme-icon-dark');
 
-        function updateToggleText() {
-            const isDark = document.documentElement.classList.contains('dark');
-            if (isDark) {
-                if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
-                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
-                if (m3ThemeIconLight) m3ThemeIconLight.classList.remove('hidden');
-                if (m3ThemeIconDark) m3ThemeIconDark.classList.add('hidden');
+        function updateIcons() {
+            if (document.documentElement.classList.contains('dark')) {
+                themeToggleLightIcon.classList.remove('hidden');
+                themeToggleDarkIcon.classList.add('hidden');
             } else {
-                if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
-                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
-                if (m3ThemeIconLight) m3ThemeIconLight.classList.add('hidden');
-                if (m3ThemeIconDark) m3ThemeIconDark.classList.remove('hidden');
+                themeToggleLightIcon.classList.add('hidden');
+                themeToggleDarkIcon.classList.remove('hidden');
             }
         }
+        updateIcons();
 
-        updateToggleText();
-
-        const toggleTheme = () => {
+        themeToggleBtn.addEventListener('click', () => {
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
                 localStorage.setItem('color-theme', 'light');
@@ -703,54 +561,54 @@ ORDER BY &amp;nombre_columna;
                 document.documentElement.classList.add('dark');
                 localStorage.setItem('color-theme', 'dark');
             }
-            updateToggleText();
-        };
-
-        if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
-        if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
+            updateIcons();
+        });
     </script>
 
-<script>
-var step13 = 0;
-function draw13(ctx, W, H, frame) {
-    CanvasUI.fillBg(ctx, W, H);
-    step13 = Math.floor(frame / 90) % 5;
-    var events = [
-        { label: 'INSERT en empleados', y: 40, color: CanvasUI.COLORS.line },
-        { label: 'BEFORE INSERT TRIGGER', y: 100, color: CanvasUI.COLORS.warn },
-        { label: 'Validar :NEW.salario', y: 160, color: CanvasUI.COLORS.warn },
-        { label: 'Ejecutar INSERT', y: 220, color: CanvasUI.COLORS.accent },
-        { label: 'AFTER INSERT TRIGGER', y: 280, color: CanvasUI.COLORS.accent }
-    ];
-    ctx.fillStyle = CanvasUI.COLORS.textMuted;
-    ctx.font = '13px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Ciclo de vida de un Trigger en accion', W / 2, 18);
-    for (var i = 0; i < events.length; i++) {
-        var active = i <= step13;
-        CanvasUI.drawNode(ctx, W / 2 - 160, events[i].y, 320, 42, events[i].label, active ? events[i].color : CanvasUI.COLORS.surface);
-        if (i < events.length - 1) {
-            CanvasUI.drawArrow(ctx, W / 2, events[i].y + 42, W / 2, events[i + 1].y, active ? CanvasUI.COLORS.line : CanvasUI.COLORS.surface);
+    <!-- Canvas Animation Script -->
+    <script>
+    var step13 = 0;
+    function draw13(ctx, W, H, frame) {
+        CanvasUI.fillBg(ctx, W, H);
+        step13 = Math.floor(frame / 70) % 5;
+        var events = [
+            { label: '1. Sentencia DML (INSERT / UPDATE)', y: 35, color: '#6366f1' },
+            { label: '2. BEFORE ROW TRIGGER (Validar & Mutar :NEW)', y: 95, color: '#f59e0b' },
+            { label: '3. Validación de Constraints (PK/FK/CHECK)', y: 155, color: '#8b5cf6' },
+            { label: '4. Escritura en Buffer / WAL (Persistencia)', y: 215, color: '#10b981' },
+            { label: '5. AFTER ROW TRIGGER (Auditoría JSONB / CDC)', y: 275, color: '#06b6d4' }
+        ];
+        ctx.fillStyle = '#64748b';
+        ctx.font = 'bold 12px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('PIPELINE DE EJECUCIÓN ATÓMICA DE UN TRIGGER', W / 2, 18);
+        
+        for (var i = 0; i < events.length; i++) {
+            var active = i <= step13;
+            var isCurrent = i === step13;
+            CanvasUI.drawNode(ctx, W / 2 - 190, events[i].y, 380, 38, events[i].label, active ? events[i].color : '#334155');
+            if (i < events.length - 1) {
+                CanvasUI.drawArrow(ctx, W / 2, events[i].y + 38, W / 2, events[i + 1].y, active ? events[i].color : '#475569');
+            }
+        }
+        if (step13 >= 4) {
+            ctx.fillStyle = '#10b981';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('✓ Transacción validada, persistida y auditada exitosamente', W / 2, 335);
         }
     }
-    if (step13 >= 4) {
-        ctx.fillStyle = CanvasUI.COLORS.accent;
-        ctx.font = '12px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('Trigger ejecutado correctamente. Datos insertados con validacion.', W / 2, 330);
+    var anim13 = null;
+    function start13() {
+        if (anim13) return;
+        anim13 = CanvasUI.startAnimation('canvas_13', draw13, 30);
     }
-}
-var anim13 = null;
-function start13() {
-    if (anim13) return;
-    anim13 = CanvasUI.startAnimation('canvas_13', draw13, 30);
-}
-CanvasUI.observeAndRun('canvas_13', start13);
-CanvasUI.addControls('controls_13', {
-    play: function() { if (!anim13) anim13 = CanvasUI.startAnimation('canvas_13', draw13, 30); },
-    pause: function() { if (anim13) { anim13.stop(); anim13 = null; } },
-    reset: function() { step13 = 0; if (anim13) { anim13.stop(); anim13 = null; } setTimeout(start13, 100); }
-});
-</script>
+    CanvasUI.observeAndRun('canvas_13', start13);
+    CanvasUI.addControls('controls_13', {
+        play: function() { if (!anim13) anim13 = CanvasUI.startAnimation('canvas_13', draw13, 30); },
+        pause: function() { if (anim13) { anim13.stop(); anim13 = null; } },
+        reset: function() { step13 = 0; if (anim13) { anim13.stop(); anim13 = null; } setTimeout(start13, 100); }
+    });
+    </script>
 </body>
 </html>

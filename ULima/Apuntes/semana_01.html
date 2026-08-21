@@ -11,7 +11,7 @@
     <!-- Tailwind v4 CDN -->
     <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -69,15 +69,12 @@
             });
         });
     </script>
-
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
     <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <!-- Sun icon -->
         <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <!-- Moon icon -->
         <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
@@ -88,11 +85,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
-            Fundamentos de Administración de Información
-        </h1>
+                    Semana 01: Fundamentos de Administración de Información
+                </h1>
                 <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
-            Semana 01 • Ingeniería de Datos • ULima 2013-2
-        </p>
+                    De Datos a Conocimiento • De Archivos a DBMS • Evolución y SDLC • Universidad de Lima 2026
+                </p>
             </div>
             <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
         </div>
@@ -101,72 +98,77 @@
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+
     <!-- M3 Step-by-Step Diagram -->
     <div class="my-6">
         <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
             <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                📌 Proceso Paso a Paso: Ciclo de Vida del Desarrollo de Sistemas de Información (SDLC)
+                📌 Proceso de Transformación: Del Dato a la Decisión Organizacional (DIKW)
             </h3>
             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Fases consecutivas para el diseño y construcción exitosa de bases de datos.
+                Flujo epistemológico y tecnológico para convertir registros crudos en ventaja competitiva sostenible.
             </p>
             <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
                 <svg viewBox="0 0 800 120" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="120" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(10, 20)">
-    <!-- Phase 1 -->
-    <rect x="0" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="55" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">1. Planificación</text>
-    <text x="55" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Estudio de viabilidad</text>
-    <!-- Arrow -->
-    <path d="M 115 40 L 130 40" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="130,40 123,36 123,44" fill="#6366f1" />
-    <!-- Phase 2 -->
-    <rect x="135" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="190" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">2. Análisis</text>
-    <text x="190" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Requerimientos</text>
-    <!-- Arrow -->
-    <path d="M 250 40 L 265 40" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="265,40 258,36 258,44" fill="#6366f1" />
-    <!-- Phase 3 -->
-    <rect x="270" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="325" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">3. Diseño Lógico</text>
-    <text x="325" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">DER y Normalización</text>
-    <!-- Arrow -->
-    <path d="M 385 40 L 400 40" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="400,40 393,36 393,44" fill="#6366f1" />
-    <!-- Phase 4 -->
-    <rect x="405" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="460" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">4. Diseño Físico</text>
-    <text x="460" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Esquemas DDL e Índices</text>
-    <!-- Arrow -->
-    <path d="M 520 40 L 535 40" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="535,40 528,36 528,44" fill="#6366f1" />
-    <!-- Phase 5 -->
-    <rect x="540" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="595" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">5. Implementación</text>
-    <text x="595" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Carga de Datos y Código</text>
-    <!-- Arrow -->
-    <path d="M 650 40 L 665 40" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="665,40 658,36 658,44" fill="#6366f1" />
-    <!-- Phase 6 -->
-    <rect x="670" y="10" width="110" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="725" y="32" text-anchor="middle" class="fill-emerald-600 dark:fill-emerald-400 font-bold text-xs">6. Mantenimiento</text>
-    <text x="725" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Monitoreo y Tuning</text>
-  </g>
-</svg>
+                  <rect width="800" height="120" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
+                  <g transform="translate(10, 20)">
+                    <!-- Paso 1 -->
+                    <rect x="0" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="55" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">1. Dato</text>
+                    <text x="55" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Hecho bruto objetivo</text>
+                    
+                    <path d="M 115 40 L 130 40" stroke="#6366f1" stroke-width="2" fill="none" />
+                    <polygon points="130,40 123,36 123,44" fill="#6366f1" />
+                    
+                    <!-- Paso 2 -->
+                    <rect x="135" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="190" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">2. Estructura</text>
+                    <text x="190" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Tablas y Esquemas</text>
+                    
+                    <path d="M 250 40 L 265 40" stroke="#6366f1" stroke-width="2" fill="none" />
+                    <polygon points="265,40 258,36 258,44" fill="#6366f1" />
+                    
+                    <!-- Paso 3 -->
+                    <rect x="270" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="325" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">3. Información</text>
+                    <text x="325" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Contexto y Utilidad</text>
+                    
+                    <path d="M 385 40 L 400 40" stroke="#6366f1" stroke-width="2" fill="none" />
+                    <polygon points="400,40 393,36 393,44" fill="#6366f1" />
+                    
+                    <!-- Paso 4 -->
+                    <rect x="405" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="460" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">4. Conocimiento</text>
+                    <text x="460" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Patrones e Insights</text>
+                    
+                    <path d="M 520 40 L 535 40" stroke="#6366f1" stroke-width="2" fill="none" />
+                    <polygon points="535,40 528,36 528,44" fill="#6366f1" />
+                    
+                    <!-- Paso 5 -->
+                    <rect x="540" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
+                    <text x="595" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">5. Decisión</text>
+                    <text x="595" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Acción de Negocio</text>
+                    
+                    <path d="M 650 40 L 665 40" stroke="#10b981" stroke-width="2" fill="none" />
+                    <polygon points="665,40 658,36 658,44" fill="#10b981" />
+                    
+                    <!-- Paso 6 -->
+                    <rect x="670" y="10" width="110" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
+                    <text x="725" y="32" text-anchor="middle" class="fill-emerald-600 dark:fill-emerald-400 font-bold text-xs">6. Valor</text>
+                    <text x="725" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Impacto y Retorno</text>
+                  </g>
+                </svg>
             </div>
         </div>
     </div>
 
-            <article class="space-y-8 prose dark:prose-invert max-w-none">
     <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
     <div class="my-6">
         <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
             <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
                 <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Relación de Términos
+                    🗺️ Mapa Conceptual y Ecosistema de la Información
                 </span>
                 <span class="transition group-open:rotate-180">
                     <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -175,382 +177,606 @@
             <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
                 <pre class="mermaid bg-transparent">
 graph TD
-    Dato[Datos: Hechos brutos sin procesar] --> Info[Información: Datos con contexto y significado]
-    Info --> DBMS[DBMS: Independencia de datos y control de redundancia]
-    DBMS --> SDLC[SDLC: Ciclo de Vida del Desarrollo de Sistemas]
-    DBMS --> Eval[Evolución: Jerárquico -> Red CODASYL -> Relacional -> Lakehouse]
+    D[Dato: Hecho Objetivo Bruto] -->|Estructuración & Metadatos| I[Información: Contexto y Propósito]
+    I -->|Síntesis Cognitiva & Análisis| K[Conocimiento: Patrones y Causalidad]
+    K -->|Estrategia & Juicio Experto| W[Decisión / Sabiduría: Acción de Negocio]
+    
+    ST[Sistemas Tradicionales de Archivos] -->|Patologías: Redundancia, Inconsistencia, Acoplamiento| CRISIS[Crisis de Mantenimiento de Software]
+    CRISIS -->|Solución Revolucionaria| DBMS[DBMS: Separación Lógica-Física & ACID]
+    
+    DBMS --> HIST[Evolución: Jerárquico ➔ Red ➔ Relacional ➔ Objeto-Relacional ➔ Lakehouse / Vector 2026]
+    DBMS --> SDLC[SDLC: Planificación ➔ Análisis ➔ Diseño Lógico ➔ Físico ➔ Implementación ➔ Mantenimiento]
                 </pre>
             </div>
         </details>
     </div>
 
-                
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<!-- Enfoque Arquitecto: Evolución e Historia Relacional -->
-<section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
-<h3>Evolución de los Modelos de Datos</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                Antes del modelo relacional propuesto por Edgar F. Codd en 1970 y defendido por C.J. Date, los sistemas de bases de datos se basaban en estructuras jerárquicas (como <strong>IMS</strong> de IBM) y de red (como <strong>CODASYL</strong>). Estos modelos acoplaban la lógica de la aplicación con la estructura física del almacenamiento, requiriendo que los desarrolladores conocieran los "punteros" físicos en el disco para navegar por los datos. El modelo relacional separó de forma definitiva la representación lógica de la física a través del álgebra relacional.
-            </p>
-<div class="relative my-6">
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-slate-400">CODASYL (Red):  [Registro Cliente] ---> (Puntero Físico) ---> [Registro Pedido]
-Relacional:     SELECT * FROM Pedido WHERE ID_Cliente = 'C01'; -- Independencia de Ruta</code></pre>
+    <article class="space-y-10 prose dark:prose-invert max-w-none">
+        <!-- Banner de Objetivos -->
+        <div class="bg-indigo-50/60 dark:bg-indigo-950/20 rounded-3xl p-6 border border-indigo-100 dark:border-indigo-900/40 shadow-sm">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="p-2 bg-indigo-600 text-white rounded-xl">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Objetivos Pedagógicos y Competencias del Ingeniero</h3>
             </div>
-</section>
-<!-- Enfoque Cloud: Object Stores vs. Serverless DBs -->
-<section class="bg-emerald-50/50 dark:bg-emerald-950/10 p-6 rounded-2xl border border-emerald-100/50 dark:border-emerald-900/30 mb-8">
-<h3>Nube y Persistencia: Estructuras vs. Object Stores</h3>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
-                En arquitecturas cloud modernas, el almacenamiento se bifurca:
-            </p>
-<ul class="space-y-2 mb-4 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Bases de Datos Relacionales (RDS, Aurora):</strong> Datos altamente estructurados con soporte ACID estricto.</li>
-<li><strong>Almacenamiento de Objetos (AWS S3, Google Cloud Storage):</strong> Escalabilidad infinita para datos no estructurados a bajo costo, pero sin consistencia transaccional inmediata en escrituras distribuidas.</li>
-<li><strong>Bases de Datos Serverless (Aurora Serverless v2, DynamoDB):</strong> Escalado automático de capacidad en función de la demanda, reduciendo costos cuando no hay tráfico.</li>
-</ul>
-</section>
-<!-- Objective Box -->
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
-<h4>
-<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                Objetivos de Aprendizaje
-            </h4>
-<ul class="list-disc list-inside space-y-1.5 text-blue-900/80 dark:text-blue-200/80">
-<li>Diferenciar dato, información y conocimiento</li>
-<li>Identificar problemas de sistemas tradicionales de archivos</li>
-<li>Explicar las ventajas del enfoque de bases de datos</li>
-<li>Describir los componentes del entorno de una BD</li>
-<li>Comprender el ciclo de vida SDLC aplicado a BD</li>
-</ul>
-</div>
-<!-- Insight -->
-<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600">
-<h4>Insight del Arquitecto: El Valor del Dato</h4>
-<p class="text-slate-700 dark:text-slate-400 mb-3 leading-relaxed">
-<strong class="text-slate-900 dark:text-slate-200">Los datos son un activo estratégico:</strong> En 2013 las empresas comenzaban a entender que los datos son un recurso competitivo. C.J. Date nos recuerda que una base de datos no es solo un lugar donde guardar cosas — es la representación formal de la realidad del negocio.
-            </p>
-<p class="text-slate-700 dark:text-slate-400 leading-relaxed">
-<strong class="text-slate-900 dark:text-slate-200">La clave:</strong> Datos → Información → Conocimiento → Decisión. Sin el primer paso, no hay nada.
-            </p>
-</section>
-<!-- Section 1 -->
-<section>
-<div class="flex items-center gap-3 mb-4">
-<h2>1. Del Dato al Conocimiento</h2>
-<span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">Conceptos Fundamentales</span>
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                Los negocios generan datos permanentemente. El dato es un recurso organizacional para competir. Existe necesidad de información en todos los niveles de la organización.
-            </p>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong class="text-slate-900 dark:text-slate-100">Dato:</strong> Representación simbólica de un hecho. <em class="text-slate-500 dark:text-slate-400">Objetivo, sin contexto.</em> Ej: <code class="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-sm font-mono text-pink-600 dark:text-pink-400">3.50</code></li>
-<li><strong class="text-slate-900 dark:text-slate-100">Información:</strong> Dato procesado con contexto. <em class="text-slate-500 dark:text-slate-400">Reduce incertidumbre.</em> Ej: "El precio del producto es 3.50"</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Conocimiento:</strong> Información analizada para tomar decisiones. Ej: "El precio subió 75% en 3 años, debemos ajustar estrategia"</li>
-</ul>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50">
-<p class="text-indigo-900 dark:text-indigo-200"><strong class="font-semibold">Concepto clave:</strong> Los datos son el insumo básico. La información surge al procesarlos. El conocimiento emerge al analizar la información para la toma de decisiones.</p>
-</div>
-</section>
-<!-- Section 2 -->
-<section>
-<div class="flex items-center gap-3 mb-4">
-<h2>2. El Problema: Sistema Tradicional de Archivos</h2>
-<span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">Antes del enfoque de BD</span>
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                Cada aplicación tenía sus propios archivos, generando los siguientes problemas:
-            </p>
-<div class="bg-rose-50 dark:bg-rose-900/20 rounded-xl p-5 border border-rose-100 dark:border-rose-800/50 mb-6">
-<p class="text-rose-900 dark:text-rose-200">
-<strong class="font-semibold">Dependencia programa/datos:</strong> Cada sistema debe actualizarse con sus propios datos, incluir código para la metadata de cada archivo y tener sus propias rutinas de CRUD. Esto produce débil coordinación y control centralizado.
-                </p>
-</div>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong class="text-slate-900 dark:text-slate-100">Redundancia de datos:</strong> Duplicación de la misma información en múltiples archivos. Espacio desperdiciado y mantenimiento costoso.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Inconsistencia:</strong> Cuando los datos cambian en un archivo pero no en otro, se compromete la integridad de los datos.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Limitaciones para compartir datos:</strong> No hay forma estándar de acceso entre distintas aplicaciones.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Mayor tiempo de desarrollo:</strong> Cada sistema reinventa las rutinas de acceso a datos.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Sin estándares:</strong> No hay coordinación ni control centralizado sobre los datos.</li>
-</ul>
-</section>
-<!-- Section 3 -->
-<section>
-<h2>3. La Solución: Enfoque de Base de Datos</h2>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-4">
-<p class="text-indigo-900 dark:text-indigo-200"><strong class="font-semibold">Base de Datos:</strong> Colección de datos almacenados en un formato estándar, diseñado para que pueda ser compartido por múltiples usuarios.</p>
-</div>
-<div class="bg-slate-100 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
-<p class="text-slate-700 dark:text-slate-300"><strong class="font-semibold text-slate-900 dark:text-slate-100">Analogía:</strong> El DBMS actúa como un bibliotecario experto que conoce la ubicación exacta de cada libro (dato) y puede recuperarlo rápidamente sin que el usuario necesite saber dónde está físicamente almacenado.</p>
-</div>
-<p class="text-slate-900 dark:text-slate-100 font-bold mb-3">Ventajas del enfoque de Base de Datos:</p>
-<ul class="space-y-2 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong class="text-slate-900 dark:text-slate-100">Independencia programa/datos:</strong> Los metadatos se almacenan en el DBMS. Las aplicaciones no necesitan preocuparse por formatos de datos.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Redundancia mínima:</strong> Se reduce la duplicación, mejorando consistencia e integridad.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Mejor compartición de datos:</strong> Diferentes usuarios obtienen diferentes vistas de los datos.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Reforzamiento de estándares:</strong> Todos los accesos a datos se realizan de la misma manera.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Mejor calidad de datos:</strong> Restricciones, reglas de validación.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Accesibilidad:</strong> Uso de un lenguaje estándar de consultas (SQL).</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Seguridad, Backup/Recovery, Concurrencia:</strong> La recuperación ante desastres es más sencilla.</li>
-</ul>
-</section>
-<!-- Tables Section -->
-<section>
-<h2>4. Costos y Riesgos</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Ejemplos</th>
-</tr>
-<tbody class="divide-y divide-slate-200 dark:divide-slate-700">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Costos iniciales</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Software, hardware, comunicaciones, conversión de datos, estudios, diseño, capacitación</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Costos permanentes</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Personal especializado (DBA), upgrades de software, mantenimiento, soporte</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Riesgos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Complejidad de instalación, conflictos organizacionales, determinación de procesos de backup</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-</section>
-<!-- Components Table -->
-<section>
-<h2>5. Componentes del Entorno de BD</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Componente</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Función</th>
-</tr>
-<tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Herramientas CASE</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Usadas para diseñar BD y aplicaciones</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Aplicación</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Programa usado para crear, modificar y leer en la BD</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Repositorio</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Base de conocimientos donde se guardan definiciones de datos, relaciones y formatos</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Base de Datos</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Colección organizada de datos lógicamente relacionados</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">DBMS</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Software empleado para crear, mantener y proveer información con acceso controlado</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-</section>
-<!-- SDLC -->
-<section>
-<div class="flex items-center gap-3 mb-4">
-<h2>6. Ciclo de Vida SDLC y Desarrollo de BD</h2>
-<span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">System Development Life Cycle</span>
-</div>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
-                El desarrollo de bases de datos sigue las fases del SDLC, mapeando cada etapa a actividades específicas de BD:
-            </p>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
-<table class="w-full text-left border-collapse my-6">
-<thead><tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Fase SDLC</th>
-<th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Actividad de BD</th>
-</tr>
-<tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Identificación y Planeamiento</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Modelamiento de la empresa, identificación del negocio</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Análisis</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Modelamiento conceptual de datos (DER)</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Diseño Lógico</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Diseño lógico de la base de datos (modelo relacional)</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Diseño Físico</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Diseño y definición física de la base de datos</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Implementación</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Implementación de la base de datos (DDL, carga de datos)</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors">
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mantenimiento</td>
-<td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mantenimiento de la base de datos</td>
-</tr>
-</tbody>
-</thead></table>
-</div>
-</section>
-<!-- Terms -->
-<section>
-<h2>8. Terminología Clave</h2>
-<ul class="space-y-3 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong class="text-slate-900 dark:text-slate-100">Transacción:</strong> Operación completa de lectura o escritura sobre la base de datos.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Database Administrator (DBA):</strong> Administrador responsable de la gestión centralizada.</li>
-<li><strong class="text-slate-900 dark:text-slate-100">Metadata:</strong> Describe las propiedades y características de los datos y de su contexto.</li>
-</ul>
-</section>
-<!-- Exercise -->
-<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/50 mt-4">
-<h4>Laboratorio: Reflexión sobre Datos</h4>
-<p class="text-fuchsia-900/80 dark:text-fuchsia-200/80 mb-3">Considera una empresa que maneja sus datos en hojas de cálculo Excel. Identifica:</p>
-<ol class="list-decimal list-inside space-y-1.5 text-fuchsia-900/80 dark:text-fuchsia-200/80 font-medium">
-<li>3 problemas que enfrenta cuando varios empleados editan el mismo archivo.</li>
-<li>2 situaciones donde la redundancia de datos causa inconsistencias.</li>
-<li>1 ejemplo de cómo un DBMS resolvería esos problemas.</li>
-</ol>
-</div>
-<!-- Canvas -->
-<div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col items-center">
-<canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_01" width="800"></canvas>
-<div class="mt-4 flex gap-2" id="controls_01"></div>
-</div>
-<!-- Navigation Footer -->
-<!-- Secciones de Cierre - Inyectadas por el Equipo Docente -->
-<section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8">
-<h2>
-<span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded text-amber-600 dark:text-amber-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                💡 Tips del Profesor
-            </h2>
-<div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4">
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Dato != Información:</strong> En producción, almacenar datos sin contexto operativo o temporal limita el análisis de BI. Registre siempre timestamps y metadatos de auditoría.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Redundancia es Inconsistencia:</strong> En entornos distribuidos, la redundancia no controlada destruye la veracidad de la información y requiere complejas estrategias de reconciliación.</p>
-</div>
-<div class="flex gap-3">
-<span class="text-amber-500 font-bold">•</span>
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed"><strong>Diseño vs. Vistas:</strong> Diseñe el esquema relacional pensando en la pureza del modelo lógico, no en cómo se mostrará la interfaz de usuario.</p>
-</div>
-</div>
-</section>
-<section class="mt-10">
-<h2>
-<span class="p-1.5 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded text-fuchsia-600 dark:text-fuchsia-400">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-                ✍️ Autoevaluación y Ejercicios Prácticos
-            </h2>
-<div class="space-y-4">
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">1</span>
-                            ¿Cuál es la principal diferencia entre dato e información?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">El dato es un hecho bruto, objetivo y sin procesar (ej. 3.50). La información es el dato procesado con un contexto y propósito que reduce la incertidumbre (ej. El precio de la manzana es 3.50).</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">2</span>
-                            ¿Qué limitación tenían los sistemas de archivos tradicionales frente a un DBMS?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Tenían dependencia absoluta entre programas y datos, alta redundancia, inconsistencia por falta de sincronización y dificultad extrema para compartir datos de manera segura y concurrente.</p>
-</div>
-</details>
-<details class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 [&amp;_summary::-webkit-details-marker]:hidden transition-all duration-300 hover:shadow-md">
-<summary class="flex justify-between items-center cursor-pointer font-semibold text-slate-900 dark:text-slate-100 list-none">
-<span class="flex items-center gap-3">
-<span class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm">3</span>
-                            ¿Qué significa que un DBMS proporcione independencia física de los datos?
-                        </span>
-<span class="transition group-open:rotate-180">
-<svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</span>
-</summary>
-<div class="mt-4 pl-11 border-t border-slate-100 dark:border-slate-800/50 pt-4">
-<p class="text-slate-700 dark:text-slate-300 leading-relaxed">Significa que la forma en que los datos se almacenan en el hardware (disco, orden de bytes, compresión) puede modificarse sin necesidad de alterar los programas de aplicación que consultan el esquema lógico.</p>
-</div>
-</details>
-</div>
-</section>
-</article>
-</article>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-slate-700 dark:text-slate-300 list-disc list-inside m-0">
+                <li>Formalizar la pirámide epistemológica: Datos, Información, Conocimiento y Metadatos.</li>
+                <li>Desglosar las 6 fallas críticas de los Sistemas Tradicionales de Procesamiento de Archivos.</li>
+                <li>Comprender la arquitectura del entorno DBMS y la independencia lógica/física.</li>
+                <li>Trazar la evolución histórica desde los modelos jerárquicos hasta el Modern Data Stack y Vector DBs (2026).</li>
+                <li>Integrar el ciclo de vida SDLC con las fases formales del modelamiento de bases de datos.</li>
+                <li>Evaluar la viabilidad económica (CapEx vs OpEx) y gestión de riesgos en proyectos de datos.</li>
+            </ul>
+        </div>
 
-            </article>
+        <!-- SECCIÓN 1: De los Datos al Conocimiento -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">01.</span> La Jerarquía de la Información: Del Dato a la Decisión
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                En el núcleo de cualquier organización contemporánea, los datos constituyen el activo intangible más determinante para sostener una ventaja competitiva. Sin embargo, un dato en su estado puro carece de valor operativo si no es procesado, contextualizado y transformado sistemáticamente.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                <!-- Tarjeta Dato -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <div class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-2">Entidad Primaria</div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Dato (Data)</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
+                        Representación simbólica (numérica, alfanumérica, espacial) de un hecho aislado del minimundo real. Es estrictamente objetivo y carece de semántica contextual propia.
+                    </p>
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-xs text-pink-600 dark:text-pink-400">
+                        Ej: 3.50 | '001' | '2026-08-21'
+                    </div>
+                </div>
+
+                <!-- Tarjeta Información -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <div class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-2">Entidad Procesada</div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Información</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
+                        Conjunto de datos estructurados, categorizados y procesados con un propósito específico. Su función matemática primordial es <strong>reducir la incertidumbre</strong> en el receptor.
+                    </p>
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400">
+                        "El precio de 'Cola Manzana' en 2026 es S/. 3.50"
+                    </div>
+                </div>
+
+                <!-- Tarjeta Conocimiento -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <div class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-2">Síntesis Cognitiva</div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Conocimiento</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
+                        Comprensión abstracta derivada de correlacionar múltiples fuentes de información, reconociendo patrones temporales, leyes de causalidad y reglas de negocio para accionar.
+                    </p>
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-xs text-emerald-600 dark:text-emerald-400">
+                        "La demanda cayó 15% al subir a 3.50; ajustar pricing"
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diagrama ASCII DIKW -->
+            <div class="my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Estructura Jerárquica DIKW y Transformación Organizacional</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
++-------------------------------------------------------------------------------+
+|                             PIRÁMIDE DIKW Y ACCIÓN                            |
++-------------------------------------------------------------------------------+
+|         /\                                                                    |
+|        /  \    [SABIDURÍA / DECISIÓN] -> ¿Qué camino estratégico seguir?        |
+|       /----\                             Impacto: ROI y Liderazgo de Mercado  |
+|      /      \   [CONOCIMIENTO]        -> ¿Por qué sucede? (Causalidad/Patrón) |
+|     /--------\                            Síntesis analítica de BI y ML       |
+|    /          \  [INFORMACIÓN]         -> ¿Qué, quién, cuándo y dónde?       |
+|   /------------\                           Datos estructurados + Contexto     |
+|  /              \ [DATOS]              -> Hechos brutos objetivos sin procesar|
+| +----------------+                         Puntos de captura transaccional    |
++-------------------------------------------------------------------------------+
+| Ejemplo:                                                                      |
+|   1. Dato:         [Cod: 104, Valor: 3.50, Fecha: 2026-08-21, Stock: 0]       |
+|   2. Información:  "El producto 104 está agotado con precio unitario 3.50"   |
+|   3. Conocimiento: "La tasa de rotación es 3x más veloz los viernes por la tarde"
+|   4. Decisión:     "Automatizar orden de reabastecimiento los viernes a las 11:00"
++-------------------------------------------------------------------------------+</pre>
+            </div>
+
+            <!-- Metadatos -->
+            <div class="bg-slate-100 dark:bg-slate-900/60 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 space-y-3">
+                <h4 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    🏷️ Metadatos: Los Datos sobre los Datos
+                </h4>
+                <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Un sistema de base de datos no puede operar como una caja negra. Para que el motor interprete los bytes binarios persistidos en disco, requiere de una capa formal de <strong>metadatos</strong> (definiciones, tipos, dominios, reglas de validación y linaje). Sin metadatos, los datos son únicamente ruido ininteligible.
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs my-2">
+                        <thead>
+                            <tr class="bg-slate-200/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+                                <th class="p-2.5 rounded-l-lg">Atributo</th>
+                                <th class="p-2.5">Tipo Físico</th>
+                                <th class="p-2.5">Longitud/Precisión</th>
+                                <th class="p-2.5">Rango / Dominio</th>
+                                <th class="p-2.5">Nulabilidad</th>
+                                <th class="p-2.5 rounded-r-lg">Descripción Semántica</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                            <tr>
+                                <td class="p-2 font-mono font-bold text-indigo-600 dark:text-indigo-400">id_estudiante</td>
+                                <td class="p-2 font-mono">INTEGER</td>
+                                <td class="p-2">4 bytes (32-bit)</td>
+                                <td class="p-2">10000000 a 99999999</td>
+                                <td class="p-2 font-semibold text-rose-600">NOT NULL (PK)</td>
+                                <td class="p-2">Código de matrícula oficial universitario</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-mono font-bold text-indigo-600 dark:text-indigo-400">nombre_completo</td>
+                                <td class="p-2 font-mono">VARCHAR</td>
+                                <td class="p-2">Hasta 100 caracteres</td>
+                                <td class="p-2">Texto UTF-8</td>
+                                <td class="p-2 font-semibold text-rose-600">NOT NULL</td>
+                                <td class="p-2">Apellidos y nombres según DNI</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-mono font-bold text-indigo-600 dark:text-indigo-400">promedio_ponderado</td>
+                                <td class="p-2 font-mono">NUMERIC(4,2)</td>
+                                <td class="p-2">4 dígitos, 2 decimales</td>
+                                <td class="p-2">0.00 a 20.00</td>
+                                <td class="p-2 text-slate-500">NULL (nuevo ingreso)</td>
+                                <td class="p-2">Calificación acumulada histórica</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: Sistema Tradicional de Archivos vs DBMS -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">02.</span> El Colapso de los Sistemas Tradicionales de Archivos
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Antes de la adopción de los DBMS, los sistemas de información corporativos dependían de archivos planos descentralizados (ISAM, VSAM, archivos secuenciales COBOL). Cada departamento construía sus propios programas y gestionaba sus propios ficheros independientes.
+            </p>
+
+            <!-- Diagrama ASCII: Silos vs DBMS -->
+            <div class="my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Arquitectura de Silos de Archivos vs Arquitectura Integrada DBMS</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
+[SISTEMA TRADICIONAL DE ARCHIVOS: CAOS Y SILOS]
++----------------------+     +----------------------+     +----------------------+
+| Depto. Facturación   |     | Depto. Almacén       |     | Depto. Cobranzas     |
+| [Programa Factura]   |     | [Programa Stock]     |     | [Programa Mora]      |
++----------+-----------+     +----------+-----------+     +----------+-----------+
+           |                             |                             |
+           v                             v                             v
++----------------------+     +----------------------+     +----------------------+
+| Archivo Clientes A   |     | Archivo Clientes B   |     | Archivo Clientes C   |
+| (Nombre, RUC, Dir)   |     | (Nombre, Direcc, Tel)|     | (Nombre, RUC, Saldo) |
++----------------------+     +----------------------+     +----------------------+
+   * Inconsistencia: Si un cliente cambia de dirección, solo se actualiza en Archivo A.
+   * Redundancia: 3 copias del mismo nombre ocupando disco y generando discrepancias.
+
+-----------------------------------------------------------------------------------
+
+[ENFOQUE MODERNO ORIENTADO A BASE DE DATOS]
++----------------------+     +----------------------+     +----------------------+
+| Depto. Facturación   |     | Depto. Almacén       |     | Depto. Cobranzas     |
+| [App Facturación]    |     | [App Inventario]     |     | [App Finanzas]       |
++----------+-----------+     +----------+-----------+     +----------+-----------+
+           \                             |                             /
+            \                            |                            /
+             +----------------------------v---------------------------+
+             |      SISTEMA DE GESTIÓN DE BASE DE DATOS (DBMS)        |
+             |   - Control de Concurrencia (MVCC / Locks)            |
+             |   - Integridad Declarativa (PK, FK, CHECK, UNIQUE)    |
+             |   - Vistas Personalizadas por Rol y Seguridad RBAC     |
+             |   - Catálogo Centralizado de Metadatos                 |
+             +----------------------------+---------------------------+
+                                          |
+                                          v
+             +--------------------------------------------------------+
+             |             BASE DE DATOS CORPORATIVA ÚNICA            |
+             |      [Tabla Clientes] • [Tabla Pedidos] • [Inventario]  |
+             +--------------------------------------------------------+</pre>
+            </div>
+
+            <!-- Las 6 Patologías de los Sistemas de Archivos -->
+            <div class="space-y-3">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Las 6 Patologías Críticas del Sistema de Archivos</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl p-4">
+                        <div class="font-bold text-rose-700 dark:text-rose-400 text-sm mb-1">1. Dependencia Estricta Programa-Datos</div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            La estructura física de los registros (offsets de bytes, tipos de datos) estaba codificada directamente en las rutinas del código fuente. Modificar el tamaño de un campo de 10 a 12 caracteres obligaba a recompilar y modificar decenas de programas.
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl p-4">
+                        <div class="font-bold text-rose-700 dark:text-rose-400 text-sm mb-1">2. Redundancia Incontrolada y Desperdicio</div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            La misma entidad (e.g., Cliente o Proveedor) se duplicaba en múltiples archivos departamentales, multiplicando los costos de almacenamiento y generando esfuerzos humanos redundantes de digitación.
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl p-4">
+                        <div class="font-bold text-rose-700 dark:text-rose-400 text-sm mb-1">3. Inconsistencia y Anomalías de Modificación</div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            Al actualizar los datos en un archivo pero no en los demás, surgían reportes contradictorios para la gerencia general (¿cuál es la dirección real del cliente? ¿cuánto debe realmente?).
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl p-4">
+                        <div class="font-bold text-rose-700 dark:text-rose-400 text-sm mb-1">4. Dificultad para Consultas Ad-Hoc</div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            No existía un lenguaje declarativo (como SQL). Generar un reporte imprevisto requería que un programador escribiera cientos de líneas de código en COBOL o C para abrir ficheros, iterar punteros y filtrar registros.
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl p-4">
+                        <div class="font-bold text-rose-700 dark:text-rose-400 text-sm mb-1">5. Anomalías de Concurrencia (Lost Updates)</div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            Si dos usuarios abrían y guardaban el mismo archivo simultáneamente en el sistema operativo, el último en guardar sobrescribía por completo las modificaciones del primero sin previo aviso.
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl p-4">
+                        <div class="font-bold text-rose-700 dark:text-rose-400 text-sm mb-1">6. Carencia de Estándares y Seguridad Centralizada</div>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            Era imposible aplicar políticas granulares de control de acceso por columna o fila. La seguridad dependía de los permisos primitivos del sistema operativo a nivel de archivo completo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: Evolución Histórica de los Modelos de Datos -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">03.</span> Evolución Cronológica de los Modelos de Datos (1950 &ndash; 2026)
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                La ingeniería de datos ha transitado por diversas eras paradigmáticas, cada una resolviendo las limitaciones de escalabilidad, flexibilidad e independencia de su predecesora.
+            </p>
+
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm my-6">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800">Década / Era</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800">Modelo Dominante</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800">Sistemas Representativos</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800">Estructura Interna</th>
+                            <th class="p-3 border-b border-slate-200 dark:border-slate-800">Ventajas y Desventajas Críticas</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-bold font-mono">1950s</td>
+                            <td class="p-3 font-semibold">Archivos Planos / Cintas</td>
+                            <td class="p-3">Sistemas de procesamiento por lotes en cinta</td>
+                            <td class="p-3 font-mono">Secuencial plano</td>
+                            <td class="p-3">Procesamiento masivo batch; sin acceso directo aleatorio.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-bold font-mono">1960s</td>
+                            <td class="p-3 font-semibold text-blue-600 dark:text-blue-400">Modelo Jerárquico</td>
+                            <td class="p-3">IBM IMS, Sistema SABRE (aerolíneas)</td>
+                            <td class="p-3 font-mono">Árboles (1:N) con punteros físicos de disco</td>
+                            <td class="p-3">Excelente rendimiento en consultas 1:N predefinidas; incapaz de modelar relaciones N:M naturales sin duplicación masiva.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-bold font-mono">1970s</td>
+                            <td class="p-3 font-semibold text-amber-600 dark:text-amber-400">Modelo en Red</td>
+                            <td class="p-3">CODASYL DBTG, IDMS, IDS</td>
+                            <td class="p-3 font-mono">Grafos dirigidos de registros y punteros de conjuntos</td>
+                            <td class="p-3">Soporta N:M; código de navegación sumamente complejo ("navegación por punteros manual").</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-bold font-mono">1980s</td>
+                            <td class="p-3 font-semibold text-indigo-600 dark:text-indigo-400">Modelo Relacional (RDBMS)</td>
+                            <td class="p-3">System R, Oracle, IBM DB2, Ingres, Sybase</td>
+                            <td class="p-3 font-mono">Tablas de 2 dimensiones, Tuplas, Álgebra Relacional</td>
+                            <td class="p-3">Independencia total de datos, lenguaje estándar declarativo SQL, base matemática rigurosa (E.F. Codd).</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-bold font-mono">1990s</td>
+                            <td class="p-3 font-semibold text-purple-600 dark:text-purple-400">Objeto-Relacional (ORDBMS)</td>
+                            <td class="p-3">PostgreSQL, Oracle 8i, Informix Universal Server</td>
+                            <td class="p-3 font-mono">Tablas con tipos complejos, herencia y métodos</td>
+                            <td class="p-3">Fusión del modelo relacional con tipos definidos por usuario (UDTs) y polimorfismo.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
+                            <td class="p-3 font-bold font-mono">2000s-2010s</td>
+                            <td class="p-3 font-semibold text-rose-600 dark:text-rose-400">Movimiento NoSQL & Big Data</td>
+                            <td class="p-3">MongoDB, Cassandra, Redis, Neo4j, DynamoDB</td>
+                            <td class="p-3 font-mono">Documentos JSON, Columnas anchas, Key-Value, Grafos</td>
+                            <td class="p-3">Escalabilidad horizontal masiva, esquemas flexibles; sacrificio de transaccionalidad ACID (modelo BASE / CAP).</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40 bg-emerald-50/40 dark:bg-emerald-950/20">
+                            <td class="p-3 font-bold font-mono text-emerald-700 dark:text-emerald-400">2020s-2026</td>
+                            <td class="p-3 font-semibold text-emerald-700 dark:text-emerald-400">Modern Data Stack, Lakehouses & Vector DBs</td>
+                            <td class="p-3 font-mono text-[11px]">PostgreSQL 16/17 + pgvector, Apache Iceberg, Snowflake, DuckDB, Neon Serverless</td>
+                            <td class="p-3 font-mono">Almacenamiento columnar desacoplado (Parquet/Iceberg), Índices HNSW para Embeddings, Cómputo serverless</td>
+                            <td class="p-3">Convergencia OLTP/OLAP (HTAP), ACID en Data Lakes, procesamiento vectorizado nativo e IA semántica integrada.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: Componentes del Entorno de Base de Datos -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">04.</span> Componentes del Entorno de Base de Datos
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Un entorno empresarial de base de datos no es únicamente el software DBMS, sino un ecosistema coordinado compuesto por 5 componentes fundamentales que interactúan entre sí.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <h4 class="text-base font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+                        🛠️ 1. Herramientas CASE (Computer-Aided Software Engineering)
+                    </h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Software especializado empleado por arquitectos de datos para diseñar esquemas conceptuales y lógicos mediante diagramas Entidad-Relación (DER) e ingeniería inversa/directa de código DDL (e.g., ERwin, pgAdmin, DataGrip, DbSchema, dbdocs).
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <h4 class="text-base font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+                        📚 2. Repositorio / Diccionario de Datos
+                    </h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Base de conocimiento centralizada que almacena las definiciones de metadatos, relaciones, restricciones de integridad, autorizaciones de usuarios y linaje. Puede ser <em>activo</em> (consultado en tiempo real por el DBMS) o <em>pasivo</em> (documentación externa).
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <h4 class="text-base font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+                        ⚙️ 3. Sistema Gestor de Base de Datos (DBMS)
+                    </h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Capa de software de sistema que provee acceso seguro, optimizado y concurrente a los datos almacenados, gestionando el compilador SQL, el optimizador de consultas, el gestor de memoria (buffer pool) y el motor de transacciones.
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                    <h4 class="text-base font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+                        💻 4. Programas de Aplicación e Interfaces
+                    </h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Sistemas web, móviles, microservicios y pipelines de datos que interactúan con la BD mediante conexiones TCP/IP seguras utilizando protocolos nativos, drivers JDBC/ODBC o librerías ORM/Query Builders.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Base de Datos Física -->
+            <div class="bg-slate-100 dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-800">
+                <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    💾 5. Base de Datos Física (Estructuras de Almacenamiento en Disco)
+                </h4>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Colección integrada de archivos binarios organizados en páginas o bloques de disco (típicamente 8KB en PostgreSQL), que contienen los datos de las tablas (Heap files), índices (B-Tree, GIN, Hash), logs de transacciones previas a escritura (WAL - Write-Ahead Logging) y espacios de tablas (Tablespaces).
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: Ciclo de Vida SDLC y Desarrollo de BD -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">05.</span> El Ciclo de Vida SDLC y el Desarrollo de Bases de Datos
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                El desarrollo de una base de datos no es una actividad aislada; se encuentra intrínsecamente articulado con el <strong>System Development Life Cycle (SDLC)</strong> de la organización.
+            </p>
+
+            <div class="my-6">
+                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Mapeo Formal: Fases del SDLC vs Actividades de Ingeniería de Datos</div>
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
++-----------------------------------------------------------------------------------------+
+|                  INTEGRACIÓN FORMAL SDLC Y MODELAMIENTO DE BASES DE DATOS               |
++------------------------------------+----------------------------------------------------+
+| FASE DEL SDLC (SISTEMAS)           | ACTIVIDAD CRÍTICA DE BASE DE DATOS (DATA ENG)      |
++------------------------------------+----------------------------------------------------+
+| 1. Identificación y Planificación  | • Modelamiento del Dominio Empresarial             |
+|    - Estudio de viabilidad técnica | • Identificación de unidades de negocio y límites  |
+|    - Estimación de presupuesto     | • Definición preliminar de entidades clave         |
++------------------------------------+----------------------------------------------------+
+| 2. Análisis de Requerimientos      | • Modelamiento Conceptual de Datos                 |
+|    - Entrevistas a stakeholders    | • Diagrama Entidad-Relación (DER Chen / Crow's Foot)
+|    - Levantamiento de reglas       | • Identificación de cardinalidades (1:1, 1:N, N:M) |
++------------------------------------+----------------------------------------------------+
+| 3. Diseño Lógico                   | • Transformación al Modelo Relacional (Tablas)     |
+|    - Arquitectura de software      | • Proceso de Normalización (1NF, 2NF, 3NF, BCNF)   |
+|    - Casos de uso e interfaces     | • Definición de Llaves Primarias y Foráneas        |
++------------------------------------+----------------------------------------------------+
+| 4. Diseño Físico                   | • Definición de Tipos de Datos nativos del DBMS    |
+|    - Selección de hardware/cloud   | • Estrategia de Indexación (B-Tree, GIN, Hash)     |
+|    - Arquitectura de red           | • Particionamiento de tablas y Tablespaces en disco|
++------------------------------------+----------------------------------------------------+
+| 5. Implementación                  | • Ejecución de scripts DDL (CREATE TABLE, INDEX)   |
+|    - Programación de código app    | • Pipelines de migración y carga inicial (ETL/ELT) |
+|    - Pruebas de integración        | • Pruebas de estrés y validación de constraints    |
++------------------------------------+----------------------------------------------------+
+| 6. Operación y Mantenimiento       | • Monitoreo de consultas lentas (Query Tuning)     |
+|    - Despliegue en producción      | • Estrategias de Backup periódico y Disaster Recov.|
+|    - Soporte continuo              | • Mantenimiento de estadísticas (ANALYZE / VACUUM) |
++------------------------------------+----------------------------------------------------+</pre>
+            </div>
+
+            <!-- Comparativa: Cascada vs RAD vs DataOps 2026 -->
+            <div class="bg-indigo-50/40 dark:bg-indigo-950/20 rounded-2xl p-6 border border-indigo-100 dark:border-indigo-900/30">
+                <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">
+                    ⚡ Evolución Metodológica: Del SDLC Cascada al DataOps Continuo (2026)
+                </h4>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed mb-3">
+                    Históricamente, el SDLC clásico en cascada exigía meses de análisis previo antes de escribir la primera línea de DDL. Con el advenimiento del Prototipado Rápido (RAD) y las prácticas modernas de <strong>DataOps / CI-CD para Bases de Datos</strong> (usando herramientas como Liquibase, Flyway o Prisma Migrations), el esquema evoluciona incrementalmente mediante migraciones versionadas en Git, asegurando que la base de datos se adapte ágilmente a los cambios del negocio sin perder consistencia ni requerir tiempos de inactividad (Zero-Downtime Migrations).
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: Viabilidad, Costos y Gestión de Riesgos -->
+        <section class="space-y-4">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-mono">06.</span> Viabilidad Económica, Costos y Gestión de Riesgos
+                </h2>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                La decisión de implementar y migrar a un entorno de base de datos empresarial requiere un balance riguroso entre los costos tangibles/intangibles y los beneficios estratégicos proyectados.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
+                <!-- Costos -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3">
+                    <h4 class="text-sm font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wide flex items-center gap-2">
+                        📉 Estructura de Costos (CapEx & OpEx)
+                    </h4>
+                    <div class="space-y-2 text-xs text-slate-600 dark:text-slate-400">
+                        <p><strong>Costos Iniciales (CapEx):</strong> Adquisición de licencias DBMS comerciales o suscripciones Enterprise, servidores de alta disponibilidad o reservas de instancias Cloud, consultoría especializada para modelamiento, migración de datos legados y capacitación intensiva del personal.</p>
+                        <p><strong>Costos Operativos Recurrentes (OpEx):</strong> Salarios de administradores de bases de datos (DBAs/DBREs), consumo de almacenamiento y cómputo elástico en la nube, upgrades periódicos de versiones de motor, mantenimiento de réplicas de contingencia y almacenamiento de backups en bóvedas frías (S3 Glacier / Tape).</p>
+                    </div>
+                </div>
+
+                <!-- Beneficios -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-3">
+                    <h4 class="text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide flex items-center gap-2">
+                        📈 Beneficios y Retorno de Inversión (ROI)
+                    </h4>
+                    <div class="space-y-2 text-xs text-slate-600 dark:text-slate-400">
+                        <p><strong>Ahorro Operativo Directo:</strong> Reducción drástica del tiempo de desarrollo de nuevos sistemas al eliminar la necesidad de crear rutinas de archivos manuales; menor tasa de errores humanos y reprocesamiento de reportes.</p>
+                        <p><strong>Ventaja Competitiva Estratégica:</strong> Capacidad para ejecutar analítica en tiempo real (Business Intelligence), habilitar comercio electrónico 24/7 con alta concurrencia, cumplir con auditorías regulatorias y alimentar modelos de Inteligencia Artificial con datos limpios y unificados.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 7: Tips del Profesor y Claves de Examen -->
+        <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8 space-y-4">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                </span>
+                💡 Tips del Profesor y Preguntas Clave de Examen
+            </h2>
+
+            <div class="bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl p-6 border border-amber-100/50 dark:border-amber-800/30 space-y-4 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                <div class="flex gap-3">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold text-base">•</span>
+                    <div>
+                        <strong class="text-slate-900 dark:text-white">Dato &ne; Información en Preguntas Teóricas:</strong> En los exámenes se evalúa la distinción entre un hecho no estructurado ("1500") y su semántica ("1500 dólares de saldo vencido del cliente 401"). Recuerde: La información siempre reduce incertidumbre y tiene propósito.
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold text-base">•</span>
+                    <div>
+                        <strong class="text-slate-900 dark:text-white">El Gran Problema de los Archivos Tradicionales:</strong> La causa raíz de las anomalías en sistemas de archivos es el <em>acoplamiento físico</em> (dependencia programa-datos) y la <em>redundancia descontrolada</em>. El DBMS resuelve esto centralizando la metadata en el catálogo del sistema.
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <span class="text-amber-600 dark:text-amber-400 font-bold text-base">•</span>
+                    <div>
+                        <strong class="text-slate-900 dark:text-white">Mapeo del SDLC:</strong> Tenga muy clara la correspondencia entre la fase de <em>Análisis</em> (Modelo Conceptual / DER) y la fase de <em>Diseño Lógico</em> (Esquema Relacional / Normalización). Confundir estas dos fases es uno de los errores más penalizados en evaluaciones.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 8: Laboratorio Práctico y Autoevaluación -->
+        <section class="space-y-4">
+            <div class="bg-fuchsia-50/50 dark:bg-fuchsia-950/10 rounded-2xl p-6 border border-fuchsia-100 dark:border-fuchsia-800/30 space-y-3">
+                <h4 class="text-base font-bold text-fuchsia-900 dark:text-fuchsia-300 flex items-center gap-2">
+                    🧪 Laboratorio Práctico: Auditoría de Silos en una Empresa Real
+                </h4>
+                <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    Imagina una cadena retail que gestiona clientes en hojas de Excel compartidas en Google Drive y archivos CSV en un servidor FTP. Desarrolla las siguientes actividades de arquitectura:
+                </p>
+                <ol class="list-decimal list-inside space-y-2 text-xs text-slate-700 dark:text-slate-300 font-medium">
+                    <li>Identifica y documenta 3 escenarios específicos donde se produce una <strong>pérdida de integridad</strong> por actualizaciones concurrentes no bloqueadas.</li>
+                    <li>Diseña una tabla de metadatos formal para el catálogo de la entidad <code class="font-mono bg-white dark:bg-slate-900 px-1 py-0.5 rounded border border-slate-200 dark:border-slate-800">Orden_Compra</code> con al menos 6 atributos, especificando dominio, tipo, longitud y restricciones.</li>
+                    <li>Elabora un breve business case justificando el retorno de inversión (ROI) al migrar hacia una base de datos relacional PostgreSQL 17.</li>
+                </ol>
+            </div>
+
+            <!-- Canvas Interactivo de la Pipeline DIKW -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col items-center">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Simulación Visual Interactiva: Flujo de Datos a Conocimiento</div>
+                <canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_01" width="800"></canvas>
+                <div class="mt-4 flex gap-2" id="controls_01"></div>
+            </div>
+        </section>
+    </article>
+
         </main>
 
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Dato vs Información</strong>
-<span class="text-slate-600 dark:text-slate-400">Hecho bruto vs dato con contexto</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Sistema Tradicional</strong>
-<span class="text-slate-600 dark:text-slate-400">Archivos, redundancia, inconsistencia</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ DBMS</strong>
-<span class="text-slate-600 dark:text-slate-400">Software gestor de BD</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Metadatos</strong>
-<span class="text-slate-600 dark:text-slate-400">Datos sobre datos</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ ACID</strong>
-<span class="text-slate-600 dark:text-slate-400">Atomicidad, Consistencia, Aislamiento, Durabilidad</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ SDLC</strong>
-<span class="text-slate-600 dark:text-slate-400">Ciclo de vida del desarrollo de sistemas</span>
-</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-<strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ DBA</strong>
-<span class="text-slate-600 dark:text-slate-400">Administrador de Base de Datos</span>
-</li>
-
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Índice Principal</a></li>
-                <li><a href="semana_02.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 02 →</a></li>
-            </ul>
-        </div>
-
+            <!-- Keywords (M3 Outlined Card) -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
+                <ul class="space-y-2">
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Dato vs Información</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Hecho bruto objetivo vs dato con contexto que reduce incertidumbre</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Metadatos</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Datos sobre los datos; definen estructura, tipos, rangos y semántica</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Sistema de Archivos</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Enfoque tradicional con alta redundancia, silos e inconsistencias</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; DBMS / RDBMS</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Software gestor que independiza programas de la estructura física</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Independencia de Datos</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Capacidad de cambiar esquemas sin romper aplicaciones</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; SDLC en BD</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Ciclo de vida: Planificación, Análisis, Diseño Lógico, Físico e Implementación</span>
+                    </li>
+                    
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Lakehouse & Vector 2026</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Convergencia de almacenamiento ACID en Data Lakes e IA con pgvector</span>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- Navigation Resources -->
+            <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+                <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación del Curso</h3>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice General</a></li>
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">&larr; Índice Principal</a></li>
+                    <li><a href="semana_02.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 02 &rarr;</a></li>
+                </ul>
+            </div>
         </aside>
     </div>
 
@@ -625,12 +851,12 @@ Relacional:     SELECT * FROM Pedido WHERE ID_Cliente = 'C01'; -- Independencia 
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
 
-<script>
+    <script>
 var step01 = 0;
 function draw01(ctx, W, H, frame) {
     CanvasUI.fillBg(ctx, W, H);
-    step01 = Math.floor(frame / 60) % 5;
-    CanvasUI.drawPipeline(ctx, W, H, ['Dato', 'Info', 'Conocimiento', 'Decision'], step01);
+    step01 = Math.floor(frame / 50) % 5;
+    CanvasUI.drawPipeline(ctx, W, H, ['1. Dato Crudo', '2. Estructura', '3. Información', '4. Conocimiento', '5. Decisión'], step01);
 }
 var anim01 = null;
 function start01() {
