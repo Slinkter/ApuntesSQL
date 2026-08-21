@@ -1,8 +1,12 @@
-SELECT p.product_id,
-       p.product_name,
-       length(p.product_name) AS longitud_nombre,
-       UPPER(p.product_name) AS mayuscula_nombre,
-       s.contact_name AS Contacto
-from products p
-INNER JOIN suppliers s ON p.supplier_id = s.supplier_id
-ORDER BY p.product_name /*  */
+SELECT
+    first_name || ' ' || last_name AS empleado,
+    hire_date,
+    AGE(CURRENT_DATE, hire_date) AS antiguedad_intervalo,
+    EXTRACT(YEAR FROM AGE(hire_date)) AS anos_en_empresa,
+    CASE
+        WHEN EXTRACT(YEAR FROM AGE(hire_date)) >= 10 THEN 'Veterano'
+        WHEN EXTRACT(YEAR FROM AGE(hire_date)) >= 5 THEN 'Experimentado'
+        ELSE 'Nuevo'
+    END AS categoria
+FROM employees
+ORDER BY hire_date;
