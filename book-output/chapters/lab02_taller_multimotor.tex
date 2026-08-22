@@ -1,0 +1,47 @@
+\chapter{Taller Multi-Motor y Casos de Negocio (PostgreSQL / MySQL)}
+\label{chap:lab02_taller_multimotor}
+
+\section{Desarrollo Pr\'actico Multi-Motor y Compatibilidad}
+
+A lo largo del dise\~no de bases de datos, los ingenieros deben dominar las particularidades sint\'acticas entre los dos motores de c\'odigo abierto m\'as utilizados del mundo: **PostgreSQL** y **MySQL**.
+
+\subsection{Comparativa de Sintaxis y Dialectos}
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{lXX}
+\toprule
+\textbf{Caracter\'istica} & \textbf{PostgreSQL 16+} & \textbf{MySQL 8.0+} \\
+\midrule
+Autoincrementables & \texttt{SERIAL} / \texttt{IDENTITY} & \texttt{AUTO\_INCREMENT} \\
+Manejo de Conflictos & \texttt{ON CONFLICT ... DO UPDATE} & \texttt{ON DUPLICATE KEY UPDATE} \\
+Retorno de inserciones & Cl\'ausula \texttt{RETURNING} & No soportado nativamente \\
+Tipado Booleano & Nativo (\texttt{BOOLEAN}) & Alias de \texttt{TINYINT(1)} \\
+JSON Avanzado & \texttt{JSONB} con \'indices GIN & \texttt{JSON} binario \\
+\bottomrule
+\end{tabularx}
+\caption{Diferencias clave de sintaxis entre PostgreSQL y MySQL}
+\end{table}
+
+---
+
+\section{Casos de Negocio Reales}
+
+\subsection{Caso 1: Cineplex (Gesti\'on de Salas y Boletos)}
+\begin{lstlisting}[style=sqlstyle, caption={Consulta de recaudaci\'on por sala de cine}]
+SELECT
+    c.cinema_name,
+    ms.movie_title,
+    COUNT(b.booking_id) AS tickets_sold,
+    SUM(ms.ticket_price) AS gross_revenue
+FROM cinemas AS c
+INNER JOIN movie_showtimes AS ms
+    ON c.cinema_id = ms.cinema_id
+LEFT JOIN bookings AS b
+    ON ms.showtime_id = b.showtime_id
+GROUP BY
+    c.cinema_name,
+    ms.movie_title
+ORDER BY
+    gross_revenue DESC NULLS LAST;
+\end{lstlisting}

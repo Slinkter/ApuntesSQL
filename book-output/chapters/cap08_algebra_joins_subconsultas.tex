@@ -1,0 +1,58 @@
+\chapter{\'algebra Relacional de JOINs, Subconsultas y CTEs}
+\label{cap:algebra_joins_subconsultas}
+
+\section{Marco Conceptual y Te\'orico (Curr\'iculo Universitario)}
+
+El \'algebra Relacional provee la base matem\'atica de las operaciones de combinaci\'on de relaciones.
+
+\subsection{Familias de Operadores JOIN}
+\begin{itemize}
+    \item \textbf{Inner Join ($R \bowtie S$):} Intersecci\'on de tuplas que satisfacen la condici\'on de correspondencia.
+    \item \textbf{Left Outer Join ($R \bowtie_{L} S$):} Preserva todas las tuplas de la relaci\'on izquierda $R$, rellenando con \texttt{NULL} cuando no hay coincidencia en $S$.
+    \item \textbf{Right Outer Join ($R \bowtie_{R} S$):} Preserva todas las tuplas de la relaci\'on derecha $S$.
+    \item \textbf{Full Outer Join ($R \bowtie_{F} S$):} Preserva todas las tuplas de ambas relaciones.
+    \item \textbf{Cross Join ($R \times S$):} Producto cartesiano exhaustivo de todas las tuplas.
+\end{itemize}
+
+---
+
+\section{Taller de Consolidaci\'on del Cap\'itulo}
+
+\begin{businessproblem}
+El Director de Ventas necesita un reporte que consolide el total facturado por cliente durante el a\~no 1997, incluyendo el nombre de la compa\~n\'ia, pa\'is y el n\'umero total de \'ordenes realizadas, ordenado de mayor a menor facturaci\'on y asegurando que clientes sin compras aparezcan con monto cero.
+\end{businessproblem}
+
+\subsection{Soluci\'on T\'ecnica en PostgreSQL con CTEs y LEFT JOIN}
+
+\begin{lstlisting}[style=sqlstyle, caption={Consulta modular con CTE y agregaci\'on sobre Northwind}]
+WITH customer_order_totals AS (
+    SELECT
+        o.customer_id,
+        COUNT(DISTINCT o.order_id) AS total_orders,
+        SUM(od.unit_price * od.quantity * (1 - od.discount)) AS total_spent
+    FROM orders AS o
+    INNER JOIN order_details AS od
+        ON o.order_id = od.order_id
+    WHERE EXTRACT(YEAR FROM o.order_date) = 1997
+    GROUP BY
+        o.customer_id
+)
+SELECT
+    c.customer_id,
+    c.company_name,
+    c.country,
+    COALESCE(cot.total_orders, 0) AS total_orders_1997,
+    COALESCE(cot.total_spent, 0.00)::NUMERIC(12, 2) AS total_revenue_1997
+FROM customers AS c
+LEFT JOIN customer_order_totals AS cot
+    ON c.customer_id = cot.customer_id
+ORDER BY
+    total_revenue_1997 DESC,
+    c.company_name ASC;
+\end{lstlisting}
+
+\begin{engtip}
+\begin{itemize}
+    \item \textbf{Estructura con CTE (\texttt{WITH}):} Desacopla la l\'ogica de agregaci\'on del detalle de la uni\'on con la tabla de clientes, mejorando la legibilidad y permitiendo al optimizador ejecutar agregaciones tempranas antes del join final.
+\end{itemize}
+\end{engtip}

@@ -1,0 +1,81 @@
+\chapter{Infraestructura Cloud, Despliegue en AWS EC2 y Benchmark Northwind}
+\label{chap:lab01_postgre_northwind_aws}
+
+\section{Aprovisionamiento de Infraestructura en AWS EC2}
+
+Para crear un entorno reproducible de grado empresarial, se orquesta un contenedor con PostgreSQL 16 sobre una instancia EC2 (Amazon Linux 2023 / Ubuntu).
+
+\subsection{Manifiesto de Orquestaci\'on Docker Compose}
+
+\begin{lstlisting}[style=bashstyle, caption={Manifiesto docker-compose.yml de producci\'on}]
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: postgres-production
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: northwind
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres_secure_2026}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db_northwind.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d northwind"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+    driver: local
+\end{lstlisting}
+
+---
+
+\section{Bater\'ia de Ejercicios Graduales y Solucionario T\'ecnico}
+
+\begin{businessproblem}
+\textbf{Reto de Entrevista Senior Data Engineer:} Obtener los 3 mejores clientes de cada pa\'is seg\'un el total gastado hist\'oricamente, considerando \'unicamente pedidos entregados (\texttt{shipped\_date IS NOT NULL}).
+\end{businessproblem}
+
+\subsection{Soluci\'on T\'ecnica en PostgreSQL}
+
+\begin{lstlisting}[style=sqlstyle, caption={Soluci\'on con CTE y partici\'on anal\'itica por pa\'is}]
+WITH customer_country_spending AS (
+    SELECT
+        c.country,
+        c.customer_id,
+        c.company_name,
+        SUM(od.unit_price * od.quantity * (1 - od.discount)) AS total_spent,
+        DENSE_RANK() OVER (
+            PARTITION BY c.country
+            ORDER BY SUM(od.unit_price * od.quantity * (1 - od.discount)) DESC
+        ) AS country_rank
+    FROM customers AS c
+    INNER JOIN orders AS o
+        ON c.customer_id = o.customer_id
+    INNER JOIN order_details AS od
+        ON o.order_id = od.order_id
+    WHERE o.shipped_date IS NOT NULL
+    GROUP BY
+        c.country,
+        c.customer_id,
+        c.company_name
+)
+SELECT
+    country,
+    country_rank,
+    customer_id,
+    company_name,
+    total_spent::NUMERIC(12, 2) AS total_spent
+FROM customer_country_spending
+WHERE country_rank <= 3
+ORDER BY
+    country ASC,
+    country_rank ASC;
+\end{lstlisting}

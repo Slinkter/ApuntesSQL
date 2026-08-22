@@ -1,0 +1,83 @@
+\chapter{Fundamentos de Administraci\'on de Informaci\'on y Ciclo de Vida del Dato}
+\label{cap:fundamentos_informacion}
+
+\section{Marco Conceptual y Te\'orico (Curr\'iculo Universitario)}
+
+En el desarrollo de software y la ingenier\'ia de sistemas moderna, el manejo riguroso de la informaci\'on constituye la base de la toma de decisiones empresariales.
+
+\subsection{Dato, Informaci\'on y Conocimiento (Pir\'amide DIKW)}
+\begin{itemize}
+    \item \textbf{Dato:} Hecho aislado, representaci\'on simb\'olica no estructurada o valor bruto (ej. \texttt{42}, \texttt{"2026-08-22"}).
+    \item \textbf{Informaci\'on:} Conjunto de datos contextualizados, estructurados y con significado sem\'antico para un receptor.
+    \item \textbf{Conocimiento:} Asimilaci\'on de la informaci\'on combinada con reglas de negocio, patrones emp\'iricos y experiencia.
+    \item \textbf{Sabidur\'ia:} Aplicaci\'on estrat\'egica del conocimiento para optimizar procesos organizacionales.
+\end{itemize}
+
+\subsection{Evoluci\'on: De Sistemas Tradicionales de Archivos a DBMS}
+Hist\'oricamente, los sistemas dependientes del sistema de archivos del sistema operativo sufr\'ian de:
+\begin{enumerate}
+    \item \textbf{Redundancia e Inconsistencia de Datos:} Duplicaci\'on innecesaria de atributos en diferentes ficheros.
+    \item \textbf{Dificultad de Acceso y Aislamiento de Datos:} Necesidad de compilar un nuevo programa ejecutable para cada consulta ad-hoc.
+    \item \textbf{Anomal\'ias de Acceso Concurrente:} Riesgo de escrituras superpuestas y corrupci\'on de estado.
+    \item \textbf{Problemas de Seguridad e Integridad:} Carencia de mecanismos declarativos para forzar restricciones l\'ogicas.
+\end{enumerate}
+
+Un \textbf{Sistema de Gesti\'on de Bases de Datos (DBMS)} resuelve estas limitaciones centralizando el acceso, garantizando la consistencia y abstrayendo la representaci\'on f\'isica.
+
+---
+
+\section{Casos de Estudio y Pr\'actica Aplicada}
+
+Para ilustrar la transici\'on de datos no estructurados a esquemas relacionales gobernados, consideremos la gesti\'on de personal y \'ordenes comerciales.
+
+\subsection{Definici\'on de Entornos y Metadatos}
+En entornos empresariales, cada entidad debe tener un tipo de dato estricto y restricciones no nulas:
+
+\begin{lstlisting}[style=sqlstyle, caption={Definici\'on inicial de estructura de auditor\'ia}]
+-- Esquema base de registro de metadatos de auditor\'ia
+CREATE TABLE audit_log (
+    log_id BIGSERIAL PRIMARY KEY,
+    entity_name VARCHAR(50) NOT NULL,
+    record_id BIGINT NOT NULL,
+    action_type VARCHAR(10) NOT NULL CHECK (action_type IN ('INSERT', 'UPDATE', 'DELETE')),
+    changed_by VARCHAR(100) DEFAULT CURRENT_USER,
+    changed_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    payload JSONB
+);
+\end{lstlisting}
+
+---
+
+\section{Taller de Consolidaci\'on del Cap\'itulo}
+
+\begin{businessproblem}
+Una empresa internacional de comercio minorista necesita calcular la antigüedad exacta de todos sus colaboradores y clasificar autom\'aticamente a su personal seg\'un su rango de permanencia en la organizaci\'on para la asignaci\'on de bonificaciones corporativas, evitando inconsistencias temporales producidas por zonas horarias.
+\end{businessproblem}
+
+\subsection{Soluci\'on T\'ecnica en PostgreSQL 16}
+
+\begin{lstlisting}[style=sqlstyle, caption={Consulta optimizada de c\'alculo temporal de personal}]
+-- Soluci\'on en PostgreSQL con tipado estricto y formato O'Reilly
+SELECT
+    employee_id,
+    first_name || ' ' || last_name AS full_name,
+    hire_date,
+    EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date))::INTEGER AS years_of_service,
+    CASE
+        WHEN EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date)) >= 10 THEN 'Senior Veteran'
+        WHEN EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date)) >= 5  THEN 'Mid-Level'
+        ELSE 'Junior / Nuevo Ingreso'
+    END AS career_tier
+FROM employees
+WHERE hire_date IS NOT NULL
+ORDER BY
+    years_of_service DESC,
+    last_name ASC;
+\end{lstlisting}
+
+\begin{engtip}
+\begin{itemize}
+    \item \textbf{Uso de \texttt{AGE(CURRENT\_DATE, hire\_date)}:} En PostgreSQL, la funci\'on nativa \texttt{AGE()} computa la diferencia exacta en a\~nos, meses y d\'ias considerando a\~nos bisiestos y longitudes variables de meses, superando las restas aritm\'eticas simples de $365$ d\'ias.
+    \item \textbf{Proyecci\'on Expl\'icita:} Se omiti\'o \texttt{SELECT *} para permitir al optimizador usar \'indices de solo escaneo (\textit{Index-Only Scan}) en caso de que existan \'indices en \texttt{(hire\_date, last\_name)}.
+\end{itemize}
+\end{engtip}

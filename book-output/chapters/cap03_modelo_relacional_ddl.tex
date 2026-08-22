@@ -1,0 +1,88 @@
+\chapter{Bases de Datos Relacionales, Integridad Formal y Lenguaje DDL}
+\label{cap:modelo_relacional_ddl}
+
+\section{Marco Conceptual y Te\'orico (Curr\'iculo Universitario)}
+
+\subsection{Fundamentos del Modelo Relacional}
+Propuesto por Edgar F. Codd (1970), el modelo se sustenta en la teor\'ia matem\'atica de conjuntos y la l\'ogica de predicados de primer orden:
+\begin{itemize}
+    \item \textbf{Relaci\'on:} Una tabla bidimensional de datos donde el orden de filas y columnas es irrelevante.
+    \item \textbf{Tupla:} Una fila individual en la relaci\'on que representa una instancia \'unica de la entidad.
+    \item \textbf{Atributo:} Columna con nombre y tipo de dato formal.
+    \item \textbf{Dominio:} Conjunto finito o infinito de valores at\'omicos permitidos para un atributo.
+\end{itemize}
+
+\subsection{Restricciones de Integridad Formales}
+\begin{enumerate}
+    \item \textbf{Integridad de Entidad:} Toda tabla debe poseer una Clave Primaria (\textit{Primary Key}) \'unica y no nula (\texttt{NOT NULL}).
+    \item \textbf{Integridad Referencial:} Toda Clave For\'anea (\textit{Foreign Key}) debe coincidir con un valor existente de clave primaria en la tabla referenciada o ser nula.
+    \item \textbf{Integridad de Dominio:} Los valores deben adherirse a las restricciones de tipo y chequeos (\texttt{CHECK}).
+\end{enumerate}
+
+---
+
+\section{Casos de Estudio y Pr\'actica Aplicada}
+
+\begin{lstlisting}[style=sqlstyle, caption={Definici\'on DDL con restricciones de integridad completas}]
+-- Creaci\'on de esquema robusto para salas de cine y funciones
+CREATE TABLE cinemas (
+    cinema_id SERIAL PRIMARY KEY,
+    cinema_name VARCHAR(100) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    total_screens SMALLINT DEFAULT 1 CHECK (total_screens > 0),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE movie_showtimes (
+    showtime_id BIGSERIAL PRIMARY KEY,
+    cinema_id INTEGER NOT NULL,
+    movie_title VARCHAR(150) NOT NULL,
+    start_time TIMESTAMPTZ NOT NULL,
+    ticket_price NUMERIC(8, 2) NOT NULL CHECK (ticket_price >= 0.00),
+    CONSTRAINT fk_showtimes_cinema
+        FOREIGN KEY (cinema_id)
+        REFERENCES cinemas (cinema_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+-- \'indice para optimizaci\'on de b\'usqueda por horario y cine
+CREATE INDEX idx_showtimes_cinema_time ON movie_showtimes (cinema_id, start_time);
+\end{lstlisting}
+
+---
+
+\section{Taller de Consolidaci\'on del Cap\'itulo}
+
+\begin{businessproblem}
+Implementar un m\'odulo DDL para una tienda de videojuegos en l\'inea, asegurando que los descuentos no superen el 100\% del valor unitario del producto y que las categor\'ias mantengan nombres \'unicos en min\'usculas.
+\end{businessproblem}
+
+\subsection{Soluci\'on T\'ecnica en PostgreSQL / MySQL}
+
+\begin{lstlisting}[style=sqlstyle, caption={Script DDL con constraints y tipos personalizados}]
+CREATE TABLE game_categories (
+    category_id SERIAL PRIMARY KEY,
+    category_slug VARCHAR(50) NOT NULL UNIQUE,
+    display_name VARCHAR(80) NOT NULL,
+    CONSTRAINT chk_category_slug_lowercase CHECK (category_slug = LOWER(category_slug))
+);
+
+CREATE TABLE video_games (
+    game_id BIGSERIAL PRIMARY KEY,
+    category_id INTEGER NOT NULL REFERENCES game_categories(category_id),
+    title VARCHAR(120) NOT NULL,
+    base_price NUMERIC(10, 2) NOT NULL CHECK (base_price >= 0),
+    discount_percentage NUMERIC(5, 2) DEFAULT 0.00 CHECK (discount_percentage BETWEEN 0.00 AND 100.00),
+    release_date DATE NOT NULL,
+    is_available BOOLEAN DEFAULT TRUE
+);
+\end{lstlisting}
+
+\begin{engtip}
+\begin{itemize}
+    \item \textbf{Restricciones de Dominio con \texttt{CHECK}:} Garantizan que datos corruptos o valores negativos jam\'as ingresen al motor de almacenamiento, independientemente del lenguaje o framework utilizado en el backend.
+    \item \textbf{\texttt{ON DELETE CASCADE}:} Debe usarse con precauci\'on extrema en entornos de producci\'on financiera; en esquemas transaccionales se prefiere \texttt{ON DELETE RESTRICT} o borrado l\'ogico mediante banderas (\textit{soft delete}).
+\end{itemize}
+\end{engtip}
