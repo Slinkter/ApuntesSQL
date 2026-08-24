@@ -51,14 +51,20 @@ Orchestrate the comprehensive audit, technical refinement, execution engine anal
 ## Team Roster
 | Agent | Type | Work Item | Status | Conv ID |
 |-------|------|-----------|--------|---------|
-| explorer_infra_1 | teamwork_preview_explorer | Survey & Audit Infrastructure (1.Guia) | in-progress | 97114af3-7278-478f-92c9-3a19b78d4fe4 |
-| explorer_sql_1 | teamwork_preview_explorer | Survey & Audit SQL Exercises (2.Ejercicios) | in-progress | cad6d992-5147-423e-a827-fa4592e703e0 |
-| explorer_pedagogy_1 | teamwork_preview_explorer | Survey & Audit Pedagogy & Engine Order | in-progress | 3d0d8543-1ee7-4af7-b156-81a2ba7518d2 |
+| explorer_infra_1 | teamwork_preview_explorer | Survey & Audit Infrastructure (1.Guia) | completed | 97114af3-7278-478f-92c9-3a19b78d4fe4 |
+| explorer_sql_1 | teamwork_preview_explorer | Survey & Audit SQL Exercises (2.Ejercicios) | completed | cad6d992-5147-423e-a827-fa4592e703e0 |
+| explorer_pedagogy_1 | teamwork_preview_explorer | Survey & Audit Pedagogy & Engine Order | completed | 3d0d8543-1ee7-4af7-b156-81a2ba7518d2 |
+| worker_infra_1 | teamwork_preview_worker | Milestone 1: Infrastructure & Deployment | completed | 59850841-3545-49f0-987d-20ddf81e7275 |
+| worker_prereq_1 | teamwork_preview_worker | Milestone 2: Prerequisites & Engine Foundations | completed | 6d5534e0-1317-4a74-9d2a-add524f25b90 |
+| worker_basico_1 | teamwork_preview_worker | Milestone 3/4: 1.basico.md & aws_ejercicio.sql | completed | 33b885bb-4bd1-47d8-b293-0a36dbdcceb4 |
+| worker_intermedio_1 | teamwork_preview_worker | Milestone 3/4: 2.intermedio.md | in-progress | 3f152fcb-5a6e-4a1b-8922-8d5cbd652981 |
+| worker_avanzado_1 | teamwork_preview_worker | Milestone 3/4: 3.avanzado.md | completed | 38dbc084-147f-4e96-859c-cfb7db24ae21 |
+| worker_examen_1 | teamwork_preview_worker | Milestone 3/4: 4.examen_entrevista.md | completed | 31c1be8a-7b1a-41f6-9938-151918b927f4 |
 
 ## Succession Status
 - Succession required: no
-- Spawn count: 3 / 16
-- Pending subagents: 97114af3-7278-478f-92c9-3a19b78d4fe4, cad6d992-5147-423e-a827-fa4592e703e0, 3d0d8543-1ee7-4af7-b156-81a2ba7518d2
+- Spawn count: 9 / 16
+- Pending subagents: 3f152fcb-5a6e-4a1b-8922-8d5cbd652981
 - Predecessor: none
 - Successor: not yet spawned
 

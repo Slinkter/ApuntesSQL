@@ -1,3 +1,5 @@
+agy --conversation=361101c5-447f-4260-ae88-8fa46c598a9b
+
 Actúa como un equipo de orquestación multi-agente especializado en ingeniería de infraestructura Cloud y diseño instruccional avanzado. Necesito que despliegues 4 agentes con los siguientes roles estrictos para procesar y perfeccionar mi laboratorio de PostgreSQL:
 
 1. **Agente 1 (Infraestructura & Guía de Prerrequisitos AWS/Docker/PostgreSQL):**

@@ -1,0 +1,177 @@
+{
+  "21": {
+    "enunciado": "El departamento comercial y de pricing necesita categorizar el catálogo de artículos según su rango de precio. Se solicita listar el nombre del producto, su precio unitario y una etiqueta denominada 'rango_precio' que clasifique cada producto en: 'Económico' si cuesta menos de $20, 'Intermedio' si cuesta entre $20 y $50, y 'Premium' si cuesta más de $50, ordenados ascendentemente por precio unitario.",
+    "analogia": "Es como poner etiquetas de colores en una tienda de ropa: etiqueta verde para productos económicos (<$20), azul para gama media ($20-$50) y dorada para artículos de lujo (> $50).",
+    "concepto": "La estructura condicional `CASE WHEN ... THEN ... ELSE ... END` permite implementar bifurcaciones lógicas dentro de las consultas SQL. Es una expresión escalar que se evalúa tupla por tupla durante la fase de proyección (`SELECT`).",
+    "tip": "El orden de las cláusulas `WHEN` importa: PostgreSQL evalúa las condiciones secuencialmente y cortocircuita en la primera coincidencia verdadera. Si ninguna se cumple, retorna la rama `ELSE` (o `NULL` si se omitió el `ELSE`).",
+    "kpi": "Estratificación de catálogo por bandas de precio para análisis de elasticidad y margen comercial.",
+    "fuentes": "Tabla `products` (77 filas, columnas `product_name`, `unit_price`). Granularidad: 1 fila por producto.",
+    "relaciones": "Mono-tabla sobre `products`.",
+    "filtros": "Ninguno.",
+    "proyeccion": "`product_name`, `unit_price`, `CASE WHEN unit_price < 20 THEN 'Económico' WHEN unit_price BETWEEN 20 AND 50 THEN 'Intermedio' ELSE 'Premium' END AS rango_precio`.",
+    "validacion": "Los 77 productos del catálogo quedan etiquetados en una de las tres bandas de precio sin ningún valor nulo.",
+    "engine": [
+      "**1. FROM products:** Escaneo de las 77 filas de `products`.",
+      "**2. WHERE:** No hay filtros.",
+      "**3. SELECT:** Para cada tupla, se evalúa la expresión `CASE` sobre `unit_price` asignando la etiqueta correspondiente.",
+      "**4. ORDER BY unit_price ASC:** Se ordenan los productos de menor a mayor precio."
+    ]
+  },
+  "22": {
+    "enunciado": "El departamento de distribución y logística internacional necesita segmentar a todos los clientes de la cartera en zonas operativas. Se solicita listar el nombre de la empresa, su país y una columna 'zona_logistica' que clasifique al cliente en: 'Norteamérica' (si su país es USA, Canada o Mexico), 'Europa' (si su país es UK, Germany, France, Spain o Italy), o 'Resto del Mundo' para cualquier otro país, ordenados alfabéticamente por país.",
+    "analogia": "Es como pintar con 3 colores un mapa de clientes: color azul para los envíos a Norteamérica, verde para los destinos europeos principales y naranja para el resto de rutas internacionales.",
+    "concepto": "El `CASE Searched` evalúa condiciones booleanas arbitrarias (como `country IN (...)`). A diferencia del `CASE Simple` (que compara igualdad contra una sola variable), el `CASE Searched` brinda máxima flexibilidad lógica.",
+    "tip": "Asegúrate de incluir siempre una cláusula `ELSE` en tus expresiones `CASE` para atrapar casos no contemplados y evitar que retornen `NULL` inadvertidamente.",
+    "kpi": "Segmentación de clientes por macro-zonas logísticas para optimización de tarifas de transporte y acuerdos con couriers.",
+    "fuentes": "Tabla `customers` (91 filas, columnas `company_name`, `country`). Granularidad: Exactamente 91 filas.",
+    "relaciones": "Mono-tabla sobre `customers`.",
+    "filtros": "Ninguno.",
+    "proyeccion": "`company_name`, `country`, `CASE WHEN country IN ('USA', 'Canada', 'Mexico') THEN 'Norteamérica' WHEN country IN ('UK', 'Germany', 'France', 'Spain', 'Italy') THEN 'Europa' ELSE 'Resto del Mundo' END AS zona_logistica`.",
+    "validacion": "En el dataset canónico de Northwind hay 91 clientes distribuidos en 21 países (sin datos mock de Chile ni Perú).",
+    "engine": [
+      "**1. FROM customers:** Escaneo secuencial de los 91 clientes.",
+      "**2. SELECT:** Se evalúa la pertenencia a las listas de países en cada rama `WHEN` del `CASE Searched`.",
+      "**3. ORDER BY country:** Se ordenan los 91 clientes alfabéticamente por país."
+    ]
+  },
+  "23": {
+    "enunciado": "La gerencia ejecutiva solicita un resumen global de distribución de clientes en una sola fila. Se requiere contar en columnas separadas cuántos clientes residen en Norteamérica (USA, Canada, Mexico), cuántos en Europa (UK, Germany, France, Spain, Italy) y cuántos en el Resto del Mundo, utilizando la cláusula FILTER.",
+    "analogia": "Es como tener 3 contadores mecánicos en una mesa y pasar las 91 fichas de clientes: si la ficha es de Norteamérica aumentas el contador 1, si es de Europa el contador 2, y si es de otro lugar el contador 3.",
+    "concepto": "La cláusula `FILTER (WHERE ...)` es una potente extensión del estándar SQL soportada de forma nativa y ultra-optimizada en PostgreSQL. Permite aplicar un predicado de filtrado exclusivo para una función agregada específica sin afectar a las demás agregaciones del mismo nivel.",
+    "tip": "`COUNT(*) FILTER (WHERE condicion)` es mucho más limpio, legible y eficiente en PostgreSQL que la alternativa tradicional `COUNT(CASE WHEN condicion THEN 1 END)`.",
+    "kpi": "Distribución macro-geográfica de la cartera de clientes consolidada en un solo registro de KPI.",
+    "fuentes": "Tabla `customers` (91 filas). Granularidad: 1 fila consolidada.",
+    "relaciones": "Mono-tabla sobre `customers`.",
+    "filtros": "Condiciones de agregación independiente mediante `FILTER`.",
+    "proyeccion": "`clientes_norteamerica`, `clientes_europa`, `clientes_otros`.",
+    "validacion": "La suma de las 3 columnas (21 en Norteamérica + 41 en Europa + 29 en otros) da exactamente los 91 clientes totales de Northwind.",
+    "engine": [
+      "**1. FROM customers:** Escaneo de los 91 clientes.",
+      "**2. Agregación con FILTER:** En un solo recorrido de la tabla, el motor acumula simultáneamente los 3 contadores independientes.",
+      "**3. SELECT:** Se proyecta la fila única con las 3 métricas agregadas."
+    ]
+  },
+  "24": {
+    "enunciado": "El área de control de gestión financiera necesita un reporte de ventas cruzado (Pivote) por categoría a lo largo del tiempo. Se solicita listar el nombre de la categoría y calcular en tres columnas independientes la facturación neta total generada en los años 1996, 1997 y 1998, utilizando agregación condicional con CASE y SUM.",
+    "analogia": "Es como tomar una matriz contable y, en lugar de poner los años en filas hacia abajo, colocarlos como columnas hacia la derecha (1996, 1997, 1998), sumando el dinero de cada categoría en la columna que corresponda a su año de venta.",
+    "concepto": "El patrón de pivote clásico en SQL (`SUM(CASE WHEN anio = X THEN monto ELSE 0 END)`) transforma filas en columnas de reporte. Al agrupar por categoría, cada fila representa una dimensión y cada columna una métrica temporal.",
+    "tip": "Usa siempre `ELSE 0` dentro del `SUM(CASE ...)` para que las categorías sin ventas en un año determinado sumen cero en lugar de generar `NULL`s.",
+    "kpi": "Matriz comparativa de facturación histórica anualizada por categoría de producto.",
+    "fuentes": "Tablas `categories`, `products`, `order_details`, `orders`. Granularidad: 8 filas (1 por categoría).",
+    "relaciones": "Joins entre `categories`, `products`, `order_details` y `orders`.",
+    "filtros": "Pivote condicional por año `EXTRACT(YEAR FROM o.order_date)`.",
+    "proyeccion": "`c.category_name`, `ventas_1996`, `ventas_1997`, `ventas_1998`.",
+    "validacion": "Verificar que las 8 categorías tengan sus métricas de ventas calculadas para los 3 años históricos.",
+    "engine": [
+      "**1. FROM & JOIN:** Hash Joins uniendo `categories`, `products`, `order_details` y `orders` (2,155 tuplas resultantes).",
+      "**2. GROUP BY c.category_name:** Se crean 8 cubetas de categorías.",
+      "**3. Agregación condicional:** Para cada tupla se evalúa el año y se acumula en el acumulador correspondiente (1996, 1997 o 1998).",
+      "**4. SELECT & ORDER BY c.category_name:** Salida alfabética de las 8 categorías."
+    ]
+  },
+  "25": {
+    "enunciado": "El departamento de Recursos Humanos necesita clasificar al personal según su tiempo de servicio en la empresa. Se solicita listar el nombre completo del empleado, su fecha de contratación y una columna 'nivel_antiguedad' que etiquete como 'Veterano' a los contratados antes de 1993, 'Intermedio' a los contratados durante 1993, y 'Nuevo' a los contratados en 1994 o posterior, ordenados por fecha de contratación.",
+    "analogia": "Es como asignar medallas de antigüedad en una ceremonia de empresa: medalla de oro para los fundadores (<1993), de plata para los que entraron en 1993 y de bronce para los recién incorporados (>=1994).",
+    "concepto": "Usa `CASE WHEN hire_date < '1993-01-01' THEN ...` para comparar campos de tipo `date` con literales de fecha ISO-8601 estándar (`YYYY-MM-DD`).",
+    "tip": "En PostgreSQL, las fechas se comparan directamente como tipos temporales ordenados sin necesidad de conversiones complejas.",
+    "kpi": "Estratificación de la plantilla por antigüedad para planes de retención de talento y cálculo de beneficios laborales.",
+    "fuentes": "Tabla `employees` (9 filas, columnas `first_name`, `last_name`, `hire_date`). Granularidad: 9 filas.",
+    "relaciones": "Mono-tabla sobre `employees`.",
+    "filtros": "Ninguno.",
+    "proyeccion": "`first_name || ' ' || last_name AS empleado`, `hire_date`, `nivel_antiguedad`.",
+    "validacion": "En Northwind, de los 9 empleados: 3 son Veteranos (1992), 3 son Intermedios (1993) y 3 son Nuevos (1994).",
+    "engine": [
+      "**1. FROM employees:** Escaneo de los 9 empleados.",
+      "**2. SELECT:** Concatenación de nombre completo y evaluación del `CASE` sobre `hire_date`.",
+      "**3. ORDER BY hire_date:** Orden cronológico ascendente de incorporación."
+    ]
+  },
+  "26": {
+    "enunciado": "El equipo de operaciones comerciales necesita generar un listado de clientes donde los mercados prioritarios aparezcan siempre en los primeros lugares del reporte. Se solicita listar el identificador de cliente, nombre de la empresa y país, forzando un ordenamiento personalizado mediante CASE en ORDER BY para que aparezcan primero los clientes de USA, luego los de Germany, luego los de UK, y finalmente el resto de países alfabéticamente.",
+    "analogia": "Es como un sistema de atención en un aeropuerto internacional donde hay filas prioritarias: primero pasan los pasajeros del vuelo A, luego los del vuelo B, luego los del vuelo C y finalmente la fila general por orden de llegada.",
+    "concepto": "Al colocar una expresión `CASE` dentro de la cláusula `ORDER BY`, asignamos pesos numéricos virtuales (1, 2, 3, 4) a cada fila para definir una jerarquía de ordenamiento de negocio no alfabética ni puramente numérica.",
+    "tip": "Puedes combinar múltiples criterios de ordenamiento: primero el peso asignado por el `CASE`, y como segundo criterio de desempate la columna `country` o `company_name`.",
+    "kpi": "Ordenamiento jerárquico adaptado a la prioridad estratégica de mercados clave (USA -> Germany -> UK -> Resto).",
+    "fuentes": "Tabla `customers` (91 filas, columnas `customer_id`, `company_name`, `country`). Granularidad: Exactamente 91 filas.",
+    "relaciones": "Mono-tabla sobre `customers`.",
+    "filtros": "Ninguno.",
+    "proyeccion": "`customer_id`, `company_name`, `country`.",
+    "validacion": "Verificar que las primeras 13 filas sean de USA, las siguientes 11 de Germany, las siguientes 7 de UK y las restantes 60 de los otros países ordenados alfabéticamente.",
+    "engine": [
+      "**1. FROM customers:** Lectura de los 91 clientes.",
+      "**2. SELECT:** Proyección de las 3 columnas.",
+      "**3. ORDER BY (CASE Priority, country):** El motor evalúa el peso numérico de cada país y ordena las 91 tuplas en memoria `work_mem`."
+    ]
+  },
+  "27": {
+    "enunciado": "La gerencia de planeamiento comercial necesita auditar la estacionalidad de pedidos por trimestre. Se solicita listar el año de los pedidos y calcular en 4 columnas separadas (q1, q2, q3, q4) el número de pedidos registrados en cada uno de los cuatro trimestres del año, utilizando la cláusula FILTER con EXTRACT.",
+    "analogia": "Es como tener 4 cajones (Enero-Marzo, Abril-Junio, Julio-Septiembre, Octubre-Diciembre) para cada año y clasificar cada factura en el cajón de su trimestre correspondiente.",
+    "concepto": "Combina `EXTRACT(YEAR FROM order_date)` en el `GROUP BY` con `COUNT(*) FILTER (WHERE EXTRACT(QUARTER FROM order_date) = X)` para construir una matriz trimestral limpia en una sola consulta agregada.",
+    "tip": "`EXTRACT(QUARTER FROM fecha)` devuelve un entero del 1 al 4, facilitando enormemente los reportes financieros trimestrales (Q1-Q4).",
+    "kpi": "Análisis de estacionalidad trimestral de pedidos (Quarter-over-Quarter / QoQ).",
+    "fuentes": "Tabla `orders` (830 filas). Granularidad: 3 filas (1 por año).",
+    "relaciones": "Mono-tabla sobre `orders`.",
+    "filtros": "Filtros independientes por trimestre con `FILTER`.",
+    "proyeccion": "`anio`, `q1`, `q2`, `q3`, `q4`.",
+    "validacion": "En 1996 la actividad inició en Q3 (sin pedidos en Q1 ni Q2); en 1998 Northwind operó hasta Q2.",
+    "engine": [
+      "**1. FROM orders:** Escaneo de las 830 órdenes.",
+      "**2. GROUP BY EXTRACT(YEAR FROM order_date):** Agrupamiento en 3 años.",
+      "**3. Evaluación FILTER:** Para cada año se calculan en paralelo los 4 contadores de trimestre.",
+      "**4. SELECT & ORDER BY anio:** Proyección ordenada cronológicamente."
+    ]
+  },
+  "28": {
+    "enunciado": "El comité de abastecimiento y gestión de líneas de producto necesita auditar las categorías que manejan artículos de alto valor. Se solicita listar el nombre de la categoría, la cantidad total de productos que contiene y la cantidad de productos caros (precio > $40), mostrando únicamente aquellas categorías que posean al menos un producto caro, utilizando la cláusula FILTER en HAVING.",
+    "analogia": "Es como revisar cada pasillo de una tienda y contar cuántos productos hay en total y cuántos son de lujo (> $40), descartando por completo los pasillos que no tengan ningún producto de lujo.",
+    "concepto": "PostgreSQL permite utilizar expresiones agregadas con `FILTER` dentro de la cláusula `HAVING` (`HAVING COUNT(p.product_id) FILTER (WHERE p.unit_price > 40) > 0`), logrando una precisión de filtrado de grupo inigualable.",
+    "tip": "Esta combinación de `FILTER` dentro de `HAVING` evita tener que recurrir a subconsultas o CTEs intermedias para filtrar grupos basados en subconjuntos condicionales.",
+    "kpi": "Identificar categorías con oferta de productos premium (artículos con precio > $40).",
+    "fuentes": "Tablas `categories` (8 filas) y `products` (77 filas). Granularidad: 1 fila por categoría que cumpla la condición.",
+    "relaciones": "`categories.category_id = products.category_id`.",
+    "filtros": "`HAVING COUNT(p.product_id) FILTER (WHERE p.unit_price > 40) > 0`.",
+    "proyeccion": "`c.category_name`, `total_productos`, `productos_caros`.",
+    "validacion": "En Northwind, exactamente 3 categorías (Beverages, Meat/Poultry, Dairy Products) cuentan con productos de precio superior a $40.",
+    "engine": [
+      "**1. FROM & JOIN:** Hash Join entre `categories` y `products` (77 tuplas).",
+      "**2. GROUP BY c.category_name:** Agrupamiento en 8 categorías.",
+      "**3. HAVING con FILTER:** Se evalúa si el conteo de productos caros es > 0; pasan 3 categorías.",
+      "**4. SELECT & ORDER BY productos_caros DESC:** Proyección ordenada."
+    ]
+  },
+  "29": {
+    "enunciado": "El área de control comercial y auditoría de promociones necesita clasificar todas las líneas de detalle de ventas según la agresividad del descuento aplicado. Se solicita listar el identificador de orden, identificador de producto, el porcentaje de descuento y una columna 'tipo_descuento' que clasifique cada registro en: 'Sin descuento' (0%), 'Bajo descuento' (hasta 5%), 'Descuento medio' (hasta 15%) o 'Alta promoción' (> 15%), ordenados de mayor a menor descuento.",
+    "analogia": "Es como clasificar los recibos de una tienda según la oferta aplicada: ticket sin descuento, descuento leve de fidelidad, descuento de temporada o liquidación total con alta promoción.",
+    "concepto": "El `CASE` anidado o multi-condicional evalúa rangos escalonados sobre la columna continua `discount`, categorizando las 2,155 transacciones de detalle en 4 niveles de promoción comercial.",
+    "tip": "En `order_details.discount`, el valor 0 indica precio de lista sin rebaja. Valores como 0.05, 0.15 y 0.25 representan 5%, 15% y 25% de descuento respectivamente.",
+    "kpi": "Auditoría de políticas de precios y distribución de transacciones por banda de descuento promocional.",
+    "fuentes": "Tabla `order_details` (2,155 filas, columnas `order_id`, `product_id`, `discount`). Granularidad: 2,155 filas.",
+    "relaciones": "Mono-tabla sobre `order_details`.",
+    "filtros": "Ninguno.",
+    "proyeccion": "`order_id`, `product_id`, `discount`, `tipo_descuento`.",
+    "validacion": "Las 2,155 filas de detalle quedan asignadas a una de las 4 categorías de descuento.",
+    "engine": [
+      "**1. FROM order_details:** Escaneo de las 2,155 tuplas.",
+      "**2. SELECT:** Se evalúa la regla `CASE` sobre el valor de `discount` para cada fila.",
+      "**3. ORDER BY discount DESC:** Ordenamiento descendente por magnitud del descuento."
+    ]
+  },
+  "30": {
+    "enunciado": "La dirección ejecutiva necesita un análisis comparativo de facturación neta por región geográfica de ventas en los años 1997 y 1998. Se solicita listar la descripción de la región y calcular en dos columnas independientes las ventas netas totales de 1997 y 1998, cruzando las 5 tablas del modelo operativo (region, territories, employee_territories, employees, orders, order_details).",
+    "analogia": "Es como consolidar los balances contables de las divisiones geográficas (Norte, Sur, Este, Oeste) y comparar lado a lado cuánto dinero ingresó en 1997 vs 1998 en cada división.",
+    "concepto": "Ejemplo cumbre de pivote multi-tabla: atraviesa la jerarquía territorial completa desde `region` hasta `order_details`, aplicando `SUM(CASE WHEN anio = X THEN ...)` por cada región comercial.",
+    "tip": "Al cruzar tablas con relaciones N:M (como empleados y territorios), asegúrate de que la granularidad de las ventas no se duplique si un pedido se atribuye únicamente al empleado y no al territorio individual.",
+    "kpi": "Desempeño financiero interanual por territorio/región comercial (1997 vs 1998).",
+    "fuentes": "Tablas `region`, `territories`, `employee_territories`, `employees`, `orders`, `order_details`.",
+    "relaciones": "Cadena relacional completa de 6 tablas.",
+    "filtros": "Pivote condicional por año.",
+    "proyeccion": "`r.region_description`, `ventas_1997`, `ventas_1998`.",
+    "validacion": "Las 4 regiones de Northwind (Eastern, Western, Northern, Southern) reflejan la facturación consolidada de ambos períodos.",
+    "engine": [
+      "**1. FROM & JOINs:** Cadena de Hash Joins entre las 6 tablas involucradas.",
+      "**2. GROUP BY r.region_description:** Se agrupa en las 4 regiones comerciales.",
+      "**3. Agregación condicional:** Acumulación simultánea de ventas para 1997 y 1998.",
+      "**4. SELECT & ORDER BY r.region_description:** Proyección ordenada."
+    ]
+  }
+}

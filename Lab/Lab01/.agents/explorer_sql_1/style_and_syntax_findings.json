@@ -1,0 +1,1689 @@
+{
+  "0.prerrequisitos.md": [
+    {
+      "header": "1.3 Modelo Relacional",
+      "lineStart": 172,
+      "lineEnd": 185,
+      "sql": "-- Consulta que demuestra las 3 tablas relacionadas\r\nSELECT\r\n    c.company_name,          -- de customers\r\n    o.order_date,            -- de orders\r\n    p.product_name,          -- de products\r\n    od.quantity,             -- de order_details\r\n    od.unit_price            -- de order_details\r\nFROM order_details od\r\nJOIN orders o     ON od.order_id = o.order_id\r\nJOIN customers c  ON o.customer_id = c.customer_id\r\nJOIN products p   ON od.product_id = p.product_id\r\nLIMIT 5;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details, order_details, order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "1.4 Índices",
+      "lineStart": 226,
+      "lineEnd": 241,
+      "sql": "-- Ejemplo práctico: crear un índice y verificar su uso\r\n-- Paso 1: Crear índice en la columna de búsqueda\r\nCREATE INDEX idx_orders_customer ON orders(customer_id);\r\n\r\n-- Paso 2: Verificar que PostgreSQL lo usa\r\nEXPLAIN SELECT * FROM orders WHERE customer_id = 'ALFKI';\r\n\r\n-- Output esperado:\r\n-- Index Scan using idx_orders_customer on orders\r\n--   Index Cond: (customer_id = 'ALFKI'::character(5))\r\n\r\n-- Paso 3: Comparar con y sin índice\r\n-- Sin índice: Seq Scan (lee las 830 filas)\r\n-- Con índice: Index Scan (salta directamente a las filas de ALFKI)",
+      "issues": [
+        {
+          "type": "MISSING_SEMICOLON",
+          "detail": "Query does not end with a semicolon (;)"
+        }
+      ]
+    },
+    {
+      "header": "3.3 Ejemplo de sesión extendido",
+      "lineStart": 435,
+      "lineEnd": 488,
+      "sql": "-- Conectarse\r\nnorthwind=# \\conninfo\r\nYou are connected to database \"northwind\" as user \"postgres\" via socket in \"/var/run/postgresql\" at port \"5432\".\r\n\r\n-- Ver tablas disponibles\r\nnorthwind=# \\dt\r\n             List of relations\r\n Schema |      Name      | Type  |  Owner\r\n--------+----------------+-------+---------\r\n public | categories     | table | postgres\r\n public | customers      | table | postgres\r\n public | employees      | table | postgres\r\n public | orders         | table | postgres\r\n public | order_details  | table | postgres\r\n public | products       | table | postgres\r\n public | suppliers      | table | postgres\r\n public | shippers       | table | postgres\r\n ...\r\n\r\n-- Ver estructura de una tabla\r\nnorthwind=# \\d customers\r\n                       Table \"public.customers\"\r\n    Column    |         Type          | Collation | Nullable | Default\r\n--------------+-----------------------+-----------+----------+---------\r\n customer_id  | character(5)          |           | not null |\r\n company_name | character varying(40) |           | not null |\r\n contact_name | character varying(30) |           |          |\r\n country      | character varying(15) |           |          |\r\nIndexes:\r\n    \"pk_customers\" PRIMARY KEY, btree (customer_id)\r\n\r\n-- Habilitar medición de tiempo\r\nnorthwind=# \\timing on\r\nTiming is on.\r\n\r\n-- Ejecutar una query y ver el tiempo\r\nnorthwind=# SELECT COUNT(*) FROM orders;\r\n count\r\n-------\r\n   830\r\nTime: 0.482 ms\r\n\r\n-- Cambiar a formato expandido para registros anchos\r\nnorthwind=# \\x\r\nExpanded display is on.\r\n\r\nnorthwind=# SELECT * FROM customers WHERE customer_id = 'ALFKI';\r\n-[ RECORD 1 ]+------------------------------------\r\ncustomer_id  | ALFKI\r\ncompany_name | Alfreds Futterkiste\r\ncontact_name | Maria Anders\r\ncountry      | Germany",
+      "issues": [
+        {
+          "type": "MISSING_SEMICOLON",
+          "detail": "Query does not end with a semicolon (;)"
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FROM\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "4.2 Patrones de Relación en Northwind",
+      "lineStart": 638,
+      "lineEnd": 647,
+      "sql": "-- Ejemplo: ver cuántos productos tiene cada categoría\r\nSELECT\r\n    c.category_name,\r\n    COUNT(p.product_id) AS total_productos\r\nFROM categories c\r\nLEFT JOIN products p ON c.category_id = p.category_id\r\nGROUP BY c.category_name\r\nORDER BY total_productos DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(p.product_id) AS\""
+        }
+      ]
+    },
+    {
+      "header": "4.2 Patrones de Relación en Northwind",
+      "lineStart": 659,
+      "lineEnd": 670,
+      "sql": "-- Ejemplo: ver el detalle de un pedido específico\r\nSELECT\r\n    p.product_name,\r\n    od.quantity,\r\n    od.unit_price,\r\n    od.discount,\r\n    (od.quantity * od.unit_price * (1 - od.discount)) AS total_linea\r\nFROM order_details od\r\nJOIN products p ON od.product_id = p.product_id\r\nWHERE od.order_id = 10248;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "5.2 Ejemplo completo",
+      "lineStart": 769,
+      "lineEnd": 776,
+      "sql": "EXPLAIN (ANALYZE, BUFFERS)\r\nSELECT c.company_name, COUNT(o.order_id) AS pedidos\r\nFROM customers c\r\nLEFT JOIN orders o ON c.customer_id = o.customer_id\r\nWHERE c.country = 'Mexico'\r\nGROUP BY c.company_name;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(o.order_id) AS\""
+        }
+      ]
+    },
+    {
+      "header": "5.5 Ejemplo práctico: antes/después de crear un índice",
+      "lineStart": 829,
+      "lineEnd": 845,
+      "sql": "-- ANTES del índice: Seq Scan en 830 filas\r\nEXPLAIN ANALYZE SELECT * FROM orders WHERE customer_id = 'ALFKI';\r\n-- Seq Scan on orders  (cost=0.00..22.30 rows=1 width=...)\r\n--   Filter: (customer_id = 'ALFKI'::character(5))\r\n--   Rows Removed by Filter: 829\r\n-- Execution Time: 0.15 ms  (pero lee TODA la tabla)\r\n\r\n-- Crear el índice\r\nCREATE INDEX idx_orders_customer ON orders(customer_id);\r\n\r\n-- DESPUÉS del índice: Index Scan directo\r\nEXPLAIN ANALYZE SELECT * FROM orders WHERE customer_id = 'ALFKI';\r\n-- Index Scan using idx_orders_customer on orders\r\n--   Index Cond: (customer_id = 'ALFKI'::character(5))\r\n-- Execution Time: 0.05 ms  (salta directamente a la fila)",
+      "issues": [
+        {
+          "type": "MISSING_SEMICOLON",
+          "detail": "Query does not end with a semicolon (;)"
+        }
+      ]
+    },
+    {
+      "header": "6.1 Observabilidad y Detección de Cuellos de Botella con `pg_stat_statements`",
+      "lineStart": 885,
+      "lineEnd": 897,
+      "sql": "-- Identificar el TOP 10 de consultas más lentas y su tasa de acierto en memoria caché\r\nSELECT \r\n    query, \r\n    calls, \r\n    round(total_exec_time::numeric, 2) AS total_time_ms, \r\n    round(mean_exec_time::numeric, 2) AS mean_time_ms, \r\n    rows,\r\n    round((100.0 * shared_blks_hit / nullif(shared_blks_hit + shared_blks_read, 0))::numeric, 2) AS hit_percent\r\nFROM pg_stat_statements \r\nORDER BY total_exec_time DESC \r\nLIMIT 10;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"round(total_exec_time::numeric, 2) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"round(mean_exec_time::numeric, 2) AS\""
+        }
+      ]
+    },
+    {
+      "header": "6.2 Rollback (deshacer)",
+      "lineStart": 928,
+      "lineEnd": 933,
+      "sql": "BEGIN;\r\nDELETE FROM orders WHERE order_id = 99999;\r\n-- Ups, no quería borrar ese pedido\r\nROLLBACK;  -- todo vuelve al estado anterior, como si el DELETE nunca hubiera existido",
+      "issues": [
+        {
+          "type": "MISSING_SEMICOLON",
+          "detail": "Query does not end with a semicolon (;)"
+        }
+      ]
+    },
+    {
+      "header": "6.4 Niveles de Aislamiento",
+      "lineStart": 958,
+      "lineEnd": 966,
+      "sql": "-- Ejemplo: cambiar nivel de aislamiento\r\nBEGIN;\r\nSET TRANSACTION ISOLATION LEVEL REPEATABLE READ;\r\nSELECT COUNT(*) FROM orders WHERE customer_id = 'ALFKI';  -- ve 5 pedidos\r\n-- otro usuario inserta un pedido de ALFKI mientras tanto\r\nSELECT COUNT(*) FROM orders WHERE customer_id = 'ALFKI';  -- AÚN ve 5 pedidos (mismo snapshot)\r\nCOMMIT;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FROM\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FROM\""
+        }
+      ]
+    },
+    {
+      "header": "6.6 Buenas Prácticas",
+      "lineStart": 996,
+      "lineEnd": 1003,
+      "sql": "-- Patrón seguro para DML destructivo en producción\r\nBEGIN;\r\nEXPLAIN ANALYZE\r\nDELETE FROM orders WHERE order_date < '1990-01-01';\r\n-- Veo que borraría 0 filas (la fecha más antigua es 1996)\r\nROLLBACK;  -- no ejecuto el DELETE, solo quería ver el impacto",
+      "issues": [
+        {
+          "type": "MISSING_SEMICOLON",
+          "detail": "Query does not end with a semicolon (;)"
+        }
+      ]
+    },
+    {
+      "header": "7.3 ILIKE (case-insensitive LIKE)",
+      "lineStart": 1074,
+      "lineEnd": 1082,
+      "sql": "-- PostgreSQL: case-insensitive\r\nSELECT * FROM customers WHERE company_name ILIKE '%food%';\r\n-- Encuentra \"Food\", \"FOOD\", \"food\", \"FoOd\", etc.\r\n\r\n-- Si no tienes ILIKE (ej: en MySQL), necesitas:\r\nSELECT * FROM customers WHERE LOWER(company_name) LIKE '%food%';\r\n-- Más verboso, y puede no usar índices eficientemente",
+      "issues": [
+        {
+          "type": "MISSING_SEMICOLON",
+          "detail": "Query does not end with a semicolon (;)"
+        }
+      ]
+    },
+    {
+      "header": "7.4 FILTER (agregación condicional)",
+      "lineStart": 1093,
+      "lineEnd": 1109,
+      "sql": "-- PostgreSQL: elegante con FILTER\r\nSELECT\r\n  COUNT(*) AS total_pedidos,\r\n  COUNT(*) FILTER (WHERE ship_country = 'USA') AS usa,\r\n  COUNT(*) FILTER (WHERE ship_country = 'Germany') AS germany,\r\n  COUNT(*) FILTER (WHERE ship_country = 'Brazil') AS brazil\r\nFROM orders;\r\n\r\n-- MySQL: necesitas CASE WHEN\r\nSELECT\r\n  COUNT(*) AS total_pedidos,\r\n  SUM(CASE WHEN ship_country = 'USA' THEN 1 ELSE 0 END) AS usa,\r\n  SUM(CASE WHEN ship_country = 'Germany' THEN 1 ELSE 0 END) AS germany,\r\n  SUM(CASE WHEN ship_country = 'Brazil' THEN 1 ELSE 0 END) AS brazil\r\nFROM orders;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(CASE WHEN ship_country = 'USA' THEN 1 ELSE 0 END) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(CASE WHEN ship_country = 'Germany' THEN 1 ELSE 0 END) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(CASE WHEN ship_country = 'Brazil' THEN 1 ELSE 0 END) AS\""
+        }
+      ]
+    },
+    {
+      "header": "7.6 Orden de Ejecución Lógico de SQL",
+      "lineStart": 1167,
+      "lineEnd": 1183,
+      "sql": "-- Ejemplo: ¿por qué no puedes usar alias de SELECT en WHERE?\r\nSELECT\r\n  product_name,\r\n  unit_price * quantity AS total\r\nFROM order_details\r\nWHERE total > 100;  -- ❌ ERROR: \"total\" no existe aún en el orden de ejecución\r\n\r\n-- Solución correcta: repetir la expresión o usar subquery\r\nSELECT * FROM (\r\n  SELECT\r\n    product_name,\r\n    unit_price * quantity AS total\r\n  FROM order_details\r\n) sub\r\nWHERE total > 100;  -- ✅ Funciona porque el alias está en el FROM",
+      "issues": [
+        {
+          "type": "MISSING_SEMICOLON",
+          "detail": "Query does not end with a semicolon (;)"
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details, order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "7.7 DML Destructivo con EXPLAIN",
+      "lineStart": 1189,
+      "lineEnd": 1207,
+      "sql": "-- Patrón seguro: ver qué harías SIN ejecutar\r\nBEGIN;\r\nEXPLAIN (ANALYZE, BUFFERS)\r\nDELETE FROM orders WHERE order_date < '1990-01-01';\r\n-- Output: \"Seq Scan on orders ... Rows Removed by Filter: 830\"\r\n-- PostgreSQL estima 0 filas (la fecha más antigua es 1996)\r\nROLLBACK;  -- no ejecuto nada, solo quería ver el impacto\r\n\r\n-- Si el EXPLAIN muestra muchas filas que SÍ quieres borrar:\r\nBEGIN;\r\nDELETE FROM orders WHERE order_date < '1997-01-01';\r\n-- Verificar cuántas filas se borraron\r\nSELECT COUNT(*) FROM orders WHERE order_date < '1997-01-01';\r\n-- Si es correcto:\r\nCOMMIT;\r\n-- Si no es correcto:\r\nROLLBACK;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FROM\""
+        }
+      ]
+    },
+    {
+      "header": "7.8 CTEs con MATERIALIZED Hint",
+      "lineStart": 1218,
+      "lineEnd": 1242,
+      "sql": "-- MATERIALIZED: ejecuta la CTE una vez y reutiliza el resultado\r\nWITH ventas_por_producto AS MATERIALIZED (\r\n  SELECT\r\n    product_id,\r\n    SUM(quantity * unit_price) AS total_ventas\r\n  FROM order_details\r\n  GROUP BY product_id\r\n)\r\nSELECT\r\n  p.product_name,\r\n  v.total_ventas\r\nFROM ventas_por_producto v\r\nJOIN products p ON v.product_id = p.product_id\r\nWHERE v.total_ventas > 1000;\r\n\r\n-- NOT MATERIALIZED: el optimizador puede reescribir la CTE como subquery\r\nWITH productos_activos AS NOT MATERIALIZED (\r\n  SELECT product_id, product_name\r\n  FROM products\r\n  WHERE discontinued = 0\r\n)\r\nSELECT * FROM productos_activos WHERE product_id < 20;\r\n-- PostgreSQL puede \"colapsar\" la CTE y optimizarla junto con el WHERE",
+      "issues": [
+        {
+          "type": "MISSING_SEMICOLON",
+          "detail": "Query does not end with a semicolon (;)"
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(quantity * unit_price) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "7.9 generate_series",
+      "lineStart": 1248,
+      "lineEnd": 1264,
+      "sql": "-- Generar números del 1 al 10\r\nSELECT generate_series(1, 10) AS numero;\r\n\r\n-- Generar fechas diarias\r\nSELECT generate_series('2024-01-01'::date, '2024-01-10'::date, '1 day'::interval) AS fecha;\r\n\r\n-- Caso de uso real: reporte diario sin datos faltantes\r\n-- (cuando quieres ver 0 ventas en días sin actividad)\r\nSELECT\r\n  d::date AS dia,\r\n  COUNT(o.order_id) AS pedidos\r\nFROM generate_series('2024-01-01'::date, '2024-01-31'::date, '1 day'::interval) d\r\nLEFT JOIN orders o ON o.order_date = d::date\r\nGROUP BY d::date\r\nORDER BY d::date;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(o.order_id) AS\""
+        }
+      ]
+    }
+  ],
+  "1.basico.md": [
+    {
+      "header": "Código de Solución",
+      "lineStart": 1425,
+      "lineEnd": 1432,
+      "sql": "SELECT\r\n    country,\r\n    COUNT(*) AS total_clientes\r\nFROM customers\r\nGROUP BY country\r\nORDER BY total_clientes DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1501,
+      "lineEnd": 1505,
+      "sql": "SELECT\r\n    SUM(unit_price * units_in_stock) AS valorizacion_total\r\nFROM products;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(unit_price * units_in_stock) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1597,
+      "lineEnd": 1603,
+      "sql": "SELECT\r\n    MIN(unit_price) AS precio_minimo,\r\n    MAX(unit_price) AS precio_maximo,\r\n    ROUND((MAX(unit_price) - MIN(unit_price))::numeric, 2) AS rango\r\nFROM products;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MIN(unit_price) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MAX(unit_price) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1646,
+      "lineEnd": 1653,
+      "sql": "SELECT\r\n    product_id,\r\n    SUM(quantity * unit_price * (1 - discount)) AS ingreso_total\r\nFROM order_details\r\nGROUP BY product_id\r\nORDER BY ingreso_total DESC;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1721,
+      "lineEnd": 1726,
+      "sql": "SELECT\r\n    COUNT(*) AS total_pedidos,\r\n    COUNT(*) FILTER (WHERE freight > 200) AS pedidos_flete_elevado\r\nFROM orders;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1769,
+      "lineEnd": 1775,
+      "sql": "SELECT\r\n    ROUND(AVG(freight) FILTER (WHERE EXTRACT(YEAR FROM order_date) = 1996)::numeric, 2) AS flete_promedio_1996,\r\n    ROUND(AVG(freight) FILTER (WHERE EXTRACT(YEAR FROM order_date) = 1997)::numeric, 2) AS flete_promedio_1997,\r\n    ROUND(AVG(freight) FILTER (WHERE EXTRACT(YEAR FROM order_date) = 1998)::numeric, 2) AS flete_promedio_1998\r\nFROM orders;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(AVG(freight) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(AVG(freight) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(AVG(freight) FILTER\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1820,
+      "lineEnd": 1828,
+      "sql": "SELECT\r\n    employee_id,\r\n    COUNT(*) AS total_territorios,\r\n    COUNT(*) FILTER (WHERE territory_id LIKE '0%') AS territorios_costa_este\r\nFROM employee_territories\r\nGROUP BY employee_id\r\nORDER BY total_territorios DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1878,
+      "lineEnd": 1888,
+      "sql": "SELECT\r\n    category_id,\r\n    COUNT(*) AS total_productos,\r\n    COUNT(*) FILTER (WHERE unit_price > 50) AS productos_premium,\r\n    ROUND(AVG(unit_price)::numeric, 2) AS precio_promedio,\r\n    ROUND(AVG(unit_price) FILTER (WHERE units_in_stock > 0)::numeric, 2) AS precio_promedio_stock_disponible\r\nFROM products\r\nGROUP BY category_id\r\nORDER BY category_id;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(AVG(unit_price) FILTER\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1936,
+      "lineEnd": 1945,
+      "sql": "SELECT\r\n    country,\r\n    city,\r\n    COUNT(DISTINCT customer_id) AS total_clientes\r\nFROM customers\r\nGROUP BY country, city\r\nHAVING COUNT(DISTINCT customer_id) > 1\r\nORDER BY total_clientes DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT customer_id) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 2392,
+      "lineEnd": 2399,
+      "sql": "SELECT\r\n    first_name || ' ' || last_name AS nombre_completo,\r\n    title || ' - ' || city AS cargo_ubicacion,\r\n    COALESCE(region || ', ', ') || country AS ubicacion_completa\r\nFROM employees\r\nORDER BY last_name;",
+      "issues": [
+        {
+          "type": "UNTERMINATED_QUOTE_BUG",
+          "detail": "Potential syntax error in string quote: \"') ||\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 2508,
+      "lineEnd": 2516,
+      "sql": "SELECT\r\n    DATE_TRUNC('month', order_date) AS mes_truncado,\r\n    COUNT(*) AS total_pedidos,\r\n    ROUND(SUM(freight)::numeric, 2) AS total_flete\r\nFROM orders\r\nGROUP BY DATE_TRUNC('month', order_date)\r\nORDER BY mes_truncado;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 2832,
+      "lineEnd": 2843,
+      "sql": "SELECT\r\n    category_id,\r\n    COUNT(*) AS total_productos,\r\n    SUM(CASE WHEN unit_price < 20 THEN 1 ELSE 0 END) AS economicos,\r\n    SUM(CASE WHEN unit_price >= 20 AND unit_price < 50 THEN 1 ELSE 0 END) AS intermedios,\r\n    SUM(CASE WHEN unit_price >= 50 THEN 1 ELSE 0 END) AS premium\r\nFROM products\r\nWHERE discontinued = 0\r\nGROUP BY category_id\r\nORDER BY category_id;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(CASE WHEN unit_price < 20 THEN 1 ELSE 0 END) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(CASE WHEN unit_price >= 20 AND unit_price < 50 THEN 1 ELSE 0 END) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(CASE WHEN unit_price >= 50 THEN 1 ELSE 0 END) AS\""
+        }
+      ]
+    }
+  ],
+  "2.intermedio.md": [
+    {
+      "header": "Código de Solución",
+      "lineStart": 70,
+      "lineEnd": 78,
+      "sql": "SELECT\r\n    country,\r\n    COUNT(*) AS total_clientes\r\nFROM customers\r\nGROUP BY country\r\nHAVING COUNT(*) > 5\r\nORDER BY total_clientes DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 122,
+      "lineEnd": 130,
+      "sql": "SELECT\r\n    category_id,\r\n    COUNT(*) AS total_productos\r\nFROM products\r\nGROUP BY category_id\r\nHAVING COUNT(*) > 10\r\nORDER BY total_productos DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 174,
+      "lineEnd": 182,
+      "sql": "SELECT\r\n    employee_id,\r\n    COUNT(order_id) AS total_pedidos\r\nFROM orders\r\nGROUP BY employee_id\r\nHAVING COUNT(order_id) > 80\r\nORDER BY total_pedidos DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(order_id) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 228,
+      "lineEnd": 238,
+      "sql": "SELECT\r\n    s.supplier_id,\r\n    s.company_name,\r\n    COUNT(p.product_id) AS total_productos\r\nFROM suppliers s\r\nINNER JOIN products p ON s.supplier_id = p.supplier_id\r\nGROUP BY s.supplier_id, s.company_name\r\nHAVING COUNT(p.product_id) > 3\r\nORDER BY total_productos DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(p.product_id) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 282,
+      "lineEnd": 291,
+      "sql": "SELECT\r\n    o.customer_id,\r\n    ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS facturacion_total\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nGROUP BY o.customer_id\r\nHAVING SUM(od.quantity * od.unit_price * (1 - od.discount)) > 5000\r\nORDER BY facturacion_total DESC;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 386,
+      "lineEnd": 394,
+      "sql": "SELECT\r\n    product_id,\r\n    SUM(quantity) AS unidades_vendidas\r\nFROM order_details\r\nGROUP BY product_id\r\nHAVING SUM(quantity) > 200\r\nORDER BY unidades_vendidas DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(quantity) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 505,
+      "lineEnd": 513,
+      "sql": "SELECT\r\n    EXTRACT(YEAR FROM order_date)::int AS anio,\r\n    COUNT(*) AS total_pedidos\r\nFROM orders\r\nGROUP BY EXTRACT(YEAR FROM order_date)\r\nHAVING COUNT(*) > 100\r\nORDER BY anio;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 555,
+      "lineEnd": 564,
+      "sql": "SELECT\r\n    ship_country,\r\n    ROUND(AVG(freight)::numeric, 2) AS flete_promedio,\r\n    COUNT(*) AS total_pedidos\r\nFROM orders\r\nGROUP BY ship_country\r\nHAVING AVG(freight) > 50\r\nORDER BY flete_promedio DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 616,
+      "lineEnd": 624,
+      "sql": "SELECT\r\n    city,\r\n    COUNT(*) AS total_empleados\r\nFROM employees\r\nGROUP BY city\r\nHAVING COUNT(*) > 1\r\nORDER BY total_empleados DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 665,
+      "lineEnd": 674,
+      "sql": "SELECT\r\n    category_id,\r\n    ROUND(AVG(unit_price)::numeric, 2) AS precio_promedio,\r\n    COUNT(*) AS total_productos\r\nFROM products\r\nGROUP BY category_id\r\nHAVING AVG(unit_price) > 25\r\nORDER BY precio_promedio DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 727,
+      "lineEnd": 737,
+      "sql": "SELECT\r\n    product_id,\r\n    product_name,\r\n    unit_price\r\nFROM products\r\nWHERE unit_price = (\r\n    SELECT MAX(unit_price)\r\n    FROM products\r\n);",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MAX(unit_price)\r\n    FROM\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 836,
+      "lineEnd": 848,
+      "sql": "SELECT\r\n    product_name,\r\n    unit_price,\r\n    category_id\r\nFROM products p1\r\nWHERE unit_price > (\r\n    SELECT AVG(unit_price)\r\n    FROM products p2\r\n    WHERE p2.category_id = p1.category_id\r\n)\r\nORDER BY category_id, unit_price DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"AVG(unit_price)\r\n    FROM\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 914,
+      "lineEnd": 924,
+      "sql": "SELECT\r\n    ROUND(AVG(total_productos)::numeric, 2) AS promedio_items_por_pedido\r\nFROM (\r\n    SELECT\r\n        order_id,\r\n        COUNT(product_id) AS total_productos\r\n    FROM order_details\r\n    GROUP BY order_id\r\n) AS pedido_counts;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(product_id) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1105,
+      "lineEnd": 1116,
+      "sql": "SELECT\r\n    product_id,\r\n    product_name,\r\n    unit_price\r\nFROM products p\r\nWHERE NOT EXISTS (\r\n    SELECT 1\r\n    FROM order_details od\r\n    WHERE od.product_id = p.product_id\r\n);",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1335,
+      "lineEnd": 1346,
+      "sql": "SELECT\r\n    customer_id,\r\n    company_name,\r\n    (\r\n        SELECT MAX(order_date)\r\n        FROM orders o\r\n        WHERE o.customer_id = c.customer_id\r\n    ) AS ultima_compra\r\nFROM customers c\r\nORDER BY ultima_compra DESC NULLS LAST;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MAX(order_date)\r\n        FROM\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1479,
+      "lineEnd": 1495,
+      "sql": "SELECT\r\n    p.product_id,\r\n    p.product_name,\r\n    r.ingresos_totales\r\nFROM (\r\n    SELECT\r\n        product_id,\r\n        ROUND(SUM(quantity * unit_price * (1 - discount))::numeric, 2) AS ingresos_totales\r\n    FROM order_details\r\n    GROUP BY product_id\r\n    ORDER BY ingresos_totales DESC\r\n    LIMIT 5\r\n) r\r\nINNER JOIN products p ON r.product_id = p.product_id\r\nORDER BY r.ingresos_totales DESC;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1807,
+      "lineEnd": 1819,
+      "sql": "SELECT\r\n    COUNT(*) FILTER (\r\n        WHERE country IN ('USA', 'Canada', 'Mexico')\r\n    ) AS norteamerica,\r\n    COUNT(*) FILTER (\r\n        WHERE country IN ('UK', 'Germany', 'France', 'Spain', 'Italy')\r\n    ) AS europa,\r\n    COUNT(*) FILTER (\r\n        WHERE country NOT IN ('USA', 'Canada', 'Mexico', 'UK', 'Germany', 'France', 'Spain', 'Italy')\r\n    ) AS resto_del_mundo\r\nFROM customers;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1860,
+      "lineEnd": 1873,
+      "sql": "SELECT\r\n    o.customer_id,\r\n    ROUND(SUM(CASE WHEN EXTRACT(YEAR FROM o.order_date) = 1996\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS ventas_1996,\r\n    ROUND(SUM(CASE WHEN EXTRACT(YEAR FROM o.order_date) = 1997\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS ventas_1997,\r\n    ROUND(SUM(CASE WHEN EXTRACT(YEAR FROM o.order_date) = 1998\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS ventas_1998\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nGROUP BY o.customer_id\r\nORDER BY o.customer_id;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 2209,
+      "lineEnd": 2225,
+      "sql": "SELECT\r\n    o.employee_id,\r\n    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 1\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q1,\r\n    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 2\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q2,\r\n    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 3\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q3,\r\n    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 4\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q4,\r\n    COUNT(*) FILTER (WHERE od.discount > 0) AS pedidos_con_descuento\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nGROUP BY o.employee_id\r\nORDER BY o.employee_id;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 2273,
+      "lineEnd": 2286,
+      "sql": "SELECT\r\n    category_id,\r\n    COUNT(*) AS total_productos,\r\n    SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END) AS productos_caros,\r\n    ROUND(\r\n        SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END)::numeric\r\n        / COUNT(*)::numeric * 100, 2\r\n    ) AS porcentaje_caros\r\nFROM products\r\nGROUP BY category_id\r\nHAVING SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END) >= 3\r\nORDER BY porcentaje_caros DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 2328,
+      "lineEnd": 2344,
+      "sql": "SELECT\r\n    order_id,\r\n    product_id,\r\n    discount,\r\n    CASE\r\n        WHEN discount = 0 THEN 'Precio completo'\r\n        ELSE\r\n            CASE\r\n                WHEN discount <= 0.05 THEN 'Mínima promoción'\r\n                WHEN discount <= 0.15 THEN 'Promoción media'\r\n                ELSE 'Alta promoción'\r\n            END\r\n    END AS tipo_descuento\r\nFROM order_details\r\nORDER BY discount DESC;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 4539,
+      "lineEnd": 4554,
+      "sql": "SELECT\r\n    o.employee_id,\r\n    ROUND(SUM(CASE WHEN o.ship_country IN ('USA', 'Canada', 'Mexico')\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS norteamerica,\r\n    ROUND(SUM(CASE WHEN o.ship_country IN ('UK', 'Germany', 'France', 'Spain', 'Italy')\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS europa,\r\n    ROUND(SUM(CASE WHEN o.ship_country IN ('Argentina', 'Brazil', 'Venezuela')\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS latam,\r\n    ROUND(SUM(CASE WHEN o.ship_country NOT IN ('USA', 'Canada', 'Mexico', 'UK', 'Germany', 'France', 'Spain', 'Italy', 'Argentina', 'Brazil', 'Venezuela')\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS resto_mundo\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nGROUP BY o.employee_id\r\nORDER BY o.employee_id;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(SUM(CASE WHEN o.ship_country IN ('USA', 'Canada', 'Mexico')\r\n              THEN\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(SUM(CASE WHEN o.ship_country IN ('UK', 'Germany', 'France', 'Spain', 'Italy')\r\n              THEN\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(SUM(CASE WHEN o.ship_country IN ('Argentina', 'Brazil', 'Venezuela')\r\n              THEN\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(SUM(CASE WHEN o.ship_country NOT IN ('USA', 'Canada', 'Mexico', 'UK', 'Germany', 'France', 'Spain', 'Italy', 'Argentina', 'Brazil', 'Venezuela')\r\n              THEN\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 5706,
+      "lineEnd": 5721,
+      "sql": "SELECT\r\n    od.order_id,\r\n    p.product_name,\r\n    c.category_name,\r\n    s.company_name AS proveedor,\r\n    o.order_date,\r\n    od.quantity,\r\n    od.unit_price\r\nFROM order_details od\r\nINNER JOIN products p ON od.product_id = p.product_id\r\nINNER JOIN categories c ON p.category_id = c.category_id\r\nINNER JOIN suppliers s ON p.supplier_id = s.supplier_id\r\nINNER JOIN orders o ON od.order_id = o.order_id\r\nORDER BY od.order_id, p.product_name;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 8993,
+      "lineEnd": 9003,
+      "sql": "SELECT\r\n    o.order_id,\r\n    o.order_date,\r\n    od.product_id,\r\n    od.discount\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\n    AND od.discount > 0\r\nORDER BY od.discount DESC;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 12121,
+      "lineEnd": 12139,
+      "sql": "WITH monthly_revenue AS (\r\n    SELECT\r\n        TO_CHAR(o.order_date, 'YYYY-MM') AS periodo_mes,\r\n        ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS ingresos_mes\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY TO_CHAR(o.order_date, 'YYYY-MM')\r\n)\r\nSELECT\r\n    periodo_mes,\r\n    ingresos_mes,\r\n    ROUND(SUM(ingresos_mes) OVER (\r\n        ORDER BY periodo_mes\r\n        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\r\n    )::numeric, 2) AS ingresos_acumulados\r\nFROM monthly_revenue\r\nORDER BY periodo_mes;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(SUM(ingresos_mes) OVER\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 12201,
+      "lineEnd": 12210,
+      "sql": "SELECT\r\n    product_name,\r\n    category_id,\r\n    unit_price,\r\n    ROUND(AVG(unit_price) OVER (PARTITION BY category_id)::numeric, 2) AS promedio_categoria,\r\n    ROUND((unit_price - AVG(unit_price) OVER (PARTITION BY category_id))::numeric, 2) AS desviacion_promedio\r\nFROM products\r\nORDER BY category_id, unit_price;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(AVG(unit_price) OVER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND((unit_price - AVG(unit_price) OVER\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 12462,
+      "lineEnd": 12479,
+      "sql": "WITH customer_orders AS (\r\n    SELECT\r\n        c.customer_id,\r\n        c.company_name,\r\n        COUNT(o.order_id) AS total_pedidos\r\n    FROM customers c\r\n    LEFT JOIN orders o ON c.customer_id = o.customer_id\r\n    GROUP BY c.customer_id, c.company_name\r\n)\r\nSELECT\r\n    customer_id,\r\n    company_name,\r\n    total_pedidos,\r\n    NTILE(4) OVER (ORDER BY total_pedidos DESC) AS cuartil\r\nFROM customer_orders\r\nORDER BY cuartil, total_pedidos DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(o.order_id) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 12612,
+      "lineEnd": 12625,
+      "sql": "SELECT\r\n    order_id,\r\n    product_id,\r\n    quantity,\r\n    discount,\r\n    SUM(quantity) FILTER (WHERE discount > 0) OVER (\r\n        PARTITION BY product_id\r\n        ORDER BY order_id\r\n        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\r\n    ) AS unidades_con_descuento_acumuladas\r\nFROM order_details\r\nORDER BY product_id, order_id;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(quantity) FILTER\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    }
+  ],
+  "3.avanzado.md": [
+    {
+      "header": "Código de Solución",
+      "lineStart": 75,
+      "lineEnd": 94,
+      "sql": "WITH ventas_por_cliente AS (\r\n    SELECT\r\n        o.customer_id,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS total_gastado,\r\n        COUNT(DISTINCT o.order_id) AS num_pedidos\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY o.customer_id\r\n)\r\nSELECT\r\n    c.company_name,\r\n    ROUND(v.total_gastado::numeric, 2) AS total_gastado,\r\n    v.num_pedidos,\r\n    ROUND((v.total_gastado / NULLIF(v.num_pedidos, 0))::numeric, 2) AS ticket_promedio\r\nFROM ventas_por_cliente v\r\nINNER JOIN customers c ON v.customer_id = c.customer_id\r\nORDER BY v.total_gastado DESC\r\nLIMIT 10;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT o.order_id) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(v.total_gastado::numeric, 2) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 179,
+      "lineEnd": 204,
+      "sql": "WITH ingresos_mensuales AS (\r\n    SELECT\r\n        DATE_TRUNC('month', o.order_date)::date AS mes,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ingresos\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY DATE_TRUNC('month', o.order_date)\r\n),\r\nfletes_mensuales AS (\r\n    SELECT\r\n        DATE_TRUNC('month', order_date)::date AS mes,\r\n        SUM(freight) AS costo_flete\r\n    FROM orders\r\n    GROUP BY DATE_TRUNC('month', order_date)\r\n)\r\nSELECT\r\n    i.mes,\r\n    ROUND(i.ingresos::numeric, 2) AS ingresos,\r\n    ROUND(f.costo_flete::numeric, 2) AS flete,\r\n    ROUND((i.ingresos - COALESCE(f.costo_flete, 0))::numeric, 2) AS ingreso_neto,\r\n    ROUND((COALESCE(f.costo_flete, 0) / NULLIF(i.ingresos, 0) * 100)::numeric, 2) AS pct_flete\r\nFROM ingresos_mensuales i\r\nLEFT JOIN fletes_mensuales f ON i.mes = f.mes\r\nORDER BY i.mes;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(freight) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(i.ingresos::numeric, 2) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(f.costo_flete::numeric, 2) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 295,
+      "lineEnd": 312,
+      "sql": "WITH metricas_empleados AS MATERIALIZED (\r\n    SELECT\r\n        e.employee_id,\r\n        e.first_name || ' ' || e.last_name AS nombre,\r\n        e.hire_date,\r\n        COUNT(DISTINCT o.order_id) AS pedidos_gestionados,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ingresos_generados,\r\n        EXTRACT(YEAR FROM AGE(CURRENT_DATE, e.hire_date)) AS antiguedad_anios\r\n    FROM employees e\r\n    INNER JOIN orders o ON e.employee_id = o.employee_id\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY e.employee_id\r\n)\r\nSELECT nombre, pedidos_gestionados, ROUND(ingresos_generados::numeric, 2) AS ingresos, antiguedad_anios\r\nFROM metricas_empleados\r\nORDER BY ingresos_generados DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT o.order_id) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(ingresos_generados::numeric, 2) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 387,
+      "lineEnd": 409,
+      "sql": "WITH pedidos_ordenados AS NOT MATERIALIZED (\r\n    SELECT\r\n        o.customer_id,\r\n        o.order_id,\r\n        o.order_date,\r\n        o.freight,\r\n        ROW_NUMBER() OVER (\r\n            PARTITION BY o.customer_id\r\n            ORDER BY o.order_date DESC, o.order_id DESC\r\n        ) AS rn\r\n    FROM orders o\r\n)\r\nSELECT\r\n    c.company_name,\r\n    po.order_id,\r\n    po.order_date,\r\n    ROUND(po.freight::numeric, 2) AS freight\r\nFROM customers c\r\nINNER JOIN pedidos_ordenados po ON c.customer_id = po.customer_id\r\nWHERE po.rn <= 3\r\nORDER BY c.company_name, po.order_date DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(po.freight::numeric, 2) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 738,
+      "lineEnd": 760,
+      "sql": "WITH ventas_trimestrales AS (\r\n    SELECT\r\n        c.category_name,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount))\r\n            FILTER (WHERE EXTRACT(QUARTER FROM o.order_date) = 1) AS ingreso_q1,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount))\r\n            FILTER (WHERE EXTRACT(QUARTER FROM o.order_date) = 2) AS ingreso_q2,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount))\r\n            FILTER (WHERE EXTRACT(QUARTER FROM o.order_date) = 3) AS ingreso_q3,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount))\r\n            FILTER (WHERE EXTRACT(QUARTER FROM o.order_date) = 4) AS ingreso_q4,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS total_anual\r\n    FROM categories c\r\n    INNER JOIN products p ON c.category_id = p.category_id\r\n    INNER JOIN order_details od ON p.product_id = od.product_id\r\n    INNER JOIN orders o ON od.order_id = o.order_id\r\n    GROUP BY c.category_name\r\n)\r\nSELECT *\r\nFROM ventas_trimestrales\r\nORDER BY total_anual DESC;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 832,
+      "lineEnd": 851,
+      "sql": "WITH productos_activos AS (\r\n    SELECT DISTINCT od.product_id\r\n    FROM order_details od\r\n    INNER JOIN orders o ON od.order_id = o.order_id\r\n    WHERE o.order_date >= CURRENT_DATE - INTERVAL '90 days'\r\n)\r\nSELECT\r\n    p.product_id,\r\n    p.product_name,\r\n    p.units_in_stock,\r\n    p.discontinued\r\nFROM products p\r\nWHERE NOT EXISTS (\r\n    SELECT 1\r\n    FROM productos_activos pa\r\n    WHERE pa.product_id = p.product_id\r\n)\r\nORDER BY p.product_name;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 1275,
+      "lineEnd": 1291,
+      "sql": "WITH datos_nuevos (customer_id, company_name, contact_name, city, country) AS (\r\n    VALUES\r\n        ('NWE01', 'TechCorp Peru', 'Carlos Garcia', 'Lima', 'Peru'),\r\n        ('NWE02', 'DataLabs Chile', 'Ana Soto', 'Santiago', 'Chile'),\r\n        ('ALFKI', 'Alfreds Futterkiste - Actualizado', 'Maria Anders', 'Berlin', 'Germany')\r\n)\r\nINSERT INTO customers (customer_id, company_name, contact_name, city, country)\r\nSELECT customer_id, company_name, contact_name, city, country\r\nFROM datos_nuevos\r\nON CONFLICT (customer_id) DO UPDATE SET\r\n    company_name = EXCLUDED.company_name,\r\n    contact_name = EXCLUDED.contact_name,\r\n    city = EXCLUDED.city,\r\n    country = EXCLUDED.country\r\nRETURNING customer_id, company_name, (xmax = 0) AS fue_insertado;",
+      "issues": [
+        {
+          "type": "MOCK_DATA_DEPENDENCY",
+          "detail": "References mock customer IDs (NWE01, NWE02) not present in canonical Northwind schema"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 2011,
+      "lineEnd": 2041,
+      "sql": "WITH RECURSIVE equipo AS (\r\n    SELECT employee_id AS lider_id, employee_id AS miembro_id, 0 AS profundidad\r\n    FROM employees\r\n\r\n    UNION ALL\r\n\r\n    SELECT\r\n        e.lider_id,\r\n        emp.employee_id,\r\n        e.profundidad + 1\r\n    FROM equipo e\r\n    INNER JOIN employees emp ON emp.reports_to = e.miembro_id\r\n    WHERE e.profundidad < 10\r\n)\r\nSELECT\r\n    l.employee_id,\r\n    l.first_name || ' ' || l.last_name AS lider,\r\n    COUNT(DISTINCT e.miembro_id) AS total_equipo,\r\n    ROUND(SUM(COALESCE(od_sub.ingresos, 0))::numeric, 2) AS ingresos_del_equipo\r\nFROM employees l\r\nINNER JOIN equipo e ON l.employee_id = e.lider_id\r\nLEFT JOIN LATERAL (\r\n    SELECT SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ingresos\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    WHERE o.employee_id = e.miembro_id\r\n) od_sub ON TRUE\r\nGROUP BY l.employee_id, l.first_name, l.last_name\r\nORDER BY ingresos_del_equipo DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT e.miembro_id) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 2588,
+      "lineEnd": 2614,
+      "sql": "WITH RECURSIVE proyeccion_mensual AS (\r\n    SELECT\r\n        DATE_TRUNC('month', MAX(o.order_date))::date AS mes_base,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ventas_reales,\r\n        0 AS mes_proyectado\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    WHERE o.order_date >= '1998-01-01'\r\n      AND o.order_date < '1998-02-01'\r\n\r\n    UNION ALL\r\n\r\n    SELECT\r\n        (mes_base + INTERVAL '1 month' * (mes_proyectado + 1))::date,\r\n        ventas_reales * (1.02 ^ (mes_proyectado + 1)),\r\n        mes_proyectado + 1\r\n    FROM proyeccion_mensual\r\n    WHERE mes_proyectado < 11\r\n)\r\nSELECT\r\n    mes_base + INTERVAL '1 month' * mes_proyectado AS mes_proyectado,\r\n    ROUND(ventas_reales::numeric, 2) AS ventas_estimadas,\r\n    ROUND((ventas_reales / NULLIF(FIRST_VALUE(ventas_reales) OVER (ORDER BY mes_proyectado), 0) * 100 - 100)::numeric, 2) AS crecimiento_acumulado_pct\r\nFROM proyeccion_mensual\r\nORDER BY mes_proyectado;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(ventas_reales::numeric, 2) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND((ventas_reales / NULLIF(FIRST_VALUE(ventas_reales) OVER\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 2686,
+      "lineEnd": 2706,
+      "sql": "WITH ventas_mensuales_emp AS (\r\n    SELECT\r\n        o.employee_id,\r\n        DATE_TRUNC('month', o.order_date)::date AS mes,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ventas\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY o.employee_id, DATE_TRUNC('month', o.order_date)\r\n)\r\nSELECT\r\n    e.first_name || ' ' || e.last_name AS empleado,\r\n    v.mes,\r\n    ROUND(v.ventas::numeric, 2) AS ventas_mes,\r\n    ROUND(LAG(v.ventas) OVER (PARTITION BY v.employee_id ORDER BY v.mes)::numeric, 2) AS ventas_mes_anterior,\r\n    ROUND((v.ventas - LAG(v.ventas) OVER (PARTITION BY v.employee_id ORDER BY v.mes))::numeric, 2) AS diferencia,\r\n    ROUND(((v.ventas - LAG(v.ventas) OVER (PARTITION BY v.employee_id ORDER BY v.mes)) / NULLIF(LAG(v.ventas) OVER (PARTITION BY v.employee_id ORDER BY v.mes), 0) * 100)::numeric, 2) AS variacion_pct\r\nFROM ventas_mensuales_emp v\r\nINNER JOIN employees e ON v.employee_id = e.employee_id\r\nORDER BY empleado, v.mes;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(v.ventas::numeric, 2) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(LAG(v.ventas) OVER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND((v.ventas - LAG(v.ventas) OVER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(((v.ventas - LAG(v.ventas) OVER\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 2956,
+      "lineEnd": 2986,
+      "sql": "WITH frecuencia_cliente AS (\r\n    SELECT\r\n        o.customer_id,\r\n        DATE_TRUNC('month', o.order_date)::date AS mes,\r\n        COUNT(DISTINCT o.order_id) AS pedidos\r\n    FROM orders o\r\n    GROUP BY o.customer_id, DATE_TRUNC('month', o.order_date)\r\n),\r\ntendencia_cliente AS (\r\n    SELECT\r\n        customer_id,\r\n        mes,\r\n        pedidos,\r\n        LEAD(pedidos) OVER (PARTITION BY customer_id ORDER BY mes) AS pedidos_siguiente_mes,\r\n        LEAD(mes) OVER (PARTITION BY customer_id ORDER BY mes) AS mes_siguiente\r\n    FROM frecuencia_cliente\r\n)\r\nSELECT\r\n    c.company_name,\r\n    tc.mes,\r\n    tc.pedidos,\r\n    tc.pedidos_siguiente_mes,\r\n    tc.mes_siguiente,\r\n    ROUND((tc.pedidos_siguiente_mes::numeric / NULLIF(tc.pedidos, 0) * 100), 2) AS tasa_retencion_pct\r\nFROM tendencia_cliente tc\r\nINNER JOIN customers c ON tc.customer_id = c.customer_id\r\nWHERE tc.pedidos_siguiente_mes IS NOT NULL\r\n  AND (tc.pedidos_siguiente_mes::numeric / NULLIF(tc.pedidos, 0)) < 0.5\r\nORDER BY tasa_retencion_pct ASC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT o.order_id) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 3062,
+      "lineEnd": 3089,
+      "sql": "WITH ventas_diarias AS (\r\n    SELECT\r\n        o.order_date::date AS fecha,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS venta\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY o.order_date::date\r\n)\r\nSELECT\r\n    fecha,\r\n    ROUND(venta::numeric, 2) AS venta_diaria,\r\n    ROUND(AVG(venta) OVER (\r\n        ORDER BY fecha\r\n        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW\r\n    )::numeric, 2) AS promedio_movil_7dias,\r\n    ROUND((venta - AVG(venta) OVER (\r\n        ORDER BY fecha\r\n        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW\r\n    ))::numeric, 2) AS desviacion_diaria,\r\n    CASE\r\n        WHEN venta > AVG(venta) OVER (ORDER BY fecha ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) * 1.5 THEN 'PICO'\r\n        WHEN venta < AVG(venta) OVER (ORDER BY fecha ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) * 0.5 THEN 'CAIDA'\r\n        ELSE 'NORMAL'\r\n    END AS tendencia\r\nFROM ventas_diarias\r\nORDER BY fecha;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(venta::numeric, 2) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(AVG(venta) OVER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND((venta - AVG(venta) OVER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"AVG(venta) OVER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"AVG(venta) OVER\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 3628,
+      "lineEnd": 3658,
+      "sql": "WITH meses AS (\r\n    SELECT generate_series(\r\n        '1996-07-01'::date,\r\n        '1998-05-01'::date,\r\n        '1 month'::interval\r\n    )::date AS mes\r\n),\r\nventas_mensuales AS (\r\n    SELECT\r\n        DATE_TRUNC('month', o.order_date)::date AS mes,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ventas\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY DATE_TRUNC('month', o.order_date)\r\n)\r\nSELECT\r\n    m.mes,\r\n    COALESCE(ROUND(v.ventas::numeric, 2), 0) AS ventas_mes,\r\n    ROUND(SUM(COALESCE(v.ventas, 0)) OVER (\r\n        ORDER BY m.mes\r\n        RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\r\n    )::numeric, 2) AS ventas_acumuladas,\r\n    ROUND(AVG(COALESCE(v.ventas, 0)) OVER (\r\n        ORDER BY m.mes\r\n        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW\r\n    )::numeric, 2) AS promedio_movil_3meses\r\nFROM meses m\r\nLEFT JOIN ventas_mensuales v ON m.mes = v.mes\r\nORDER BY m.mes;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 3921,
+      "lineEnd": 3956,
+      "sql": "WITH ventas_producto AS (\r\n    SELECT\r\n        p.category_id,\r\n        c.category_name,\r\n        p.product_id,\r\n        p.product_name,\r\n        SUM(od.quantity) AS total_unidades_vendidas\r\n    FROM products p\r\n    INNER JOIN categories c ON p.category_id = c.category_id\r\n    INNER JOIN order_details od ON p.product_id = od.product_id\r\n    GROUP BY p.category_id, c.category_name, p.product_id, p.product_name\r\n),\r\nranking AS (\r\n    SELECT *,\r\n        NTH_VALUE(product_name, 3) OVER (\r\n            PARTITION BY category_id\r\n            ORDER BY total_unidades_vendidas DESC\r\n            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING\r\n        ) AS tercer_producto,\r\n        NTH_VALUE(total_unidades_vendidas, 3) OVER (\r\n            PARTITION BY category_id\r\n            ORDER BY total_unidades_vendidas DESC\r\n            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING\r\n        ) AS ventas_tercero,\r\n        ROW_NUMBER() OVER (\r\n            PARTITION BY category_id\r\n            ORDER BY total_unidades_vendidas DESC\r\n        ) AS rn\r\n    FROM ventas_producto\r\n)\r\nSELECT category_name, tercer_producto, ventas_tercero\r\nFROM ranking\r\nWHERE rn = 1\r\nORDER BY category_name;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(od.quantity) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 4022,
+      "lineEnd": 4046,
+      "sql": "WITH facturacion_clientes AS (\r\n    SELECT\r\n        o.customer_id,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS total_facturado\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY o.customer_id\r\n)\r\nSELECT\r\n    c.company_name,\r\n    ROUND(total_facturado::numeric, 2) AS facturacion,\r\n    ROW_NUMBER() OVER (ORDER BY total_facturado DESC) AS row_number,\r\n    RANK() OVER (ORDER BY total_facturado DESC) AS rank,\r\n    DENSE_RANK() OVER (ORDER BY total_facturado DESC) AS dense_rank,\r\n    CASE\r\n        WHEN ROW_NUMBER() OVER (ORDER BY total_facturado DESC) <= 5 THEN 'TOP 5'\r\n        WHEN DENSE_RANK() OVER (ORDER BY total_facturado DESC) <= 10 THEN 'TOP 10'\r\n        ELSE 'ESTANDAR'\r\n    END AS segmento\r\nFROM facturacion_clientes fc\r\nINNER JOIN customers c ON fc.customer_id = c.customer_id\r\nORDER BY facturacion DESC\r\nLIMIT 20;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(total_facturado::numeric, 2) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 4123,
+      "lineEnd": 4152,
+      "sql": "WITH rentabilidad_producto AS (\r\n    SELECT\r\n        p.product_id,\r\n        p.product_name,\r\n        c.category_name,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ingresos,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) / NULLIF(SUM(od.quantity), 0) AS rentabilidad_por_unidad\r\n    FROM products p\r\n    INNER JOIN categories c ON p.category_id = c.category_id\r\n    INNER JOIN order_details od ON p.product_id = od.product_id\r\n    GROUP BY p.product_id, p.product_name, c.category_name\r\n)\r\nSELECT\r\n    product_name,\r\n    category_name,\r\n    ROUND(ingresos::numeric, 2) AS ingresos_totales,\r\n    ROUND(rentabilidad_por_unidad::numeric, 4) AS margen_unitario,\r\n    NTILE(4) OVER (ORDER BY ingresos DESC) AS cuartil_ingresos,\r\n    NTILE(4) OVER (ORDER BY rentabilidad_por_unidad DESC) AS cuartil_margen,\r\n    CASE\r\n        WHEN NTILE(4) OVER (ORDER BY ingresos DESC) = 1 AND NTILE(4) OVER (ORDER BY rentabilidad_por_unidad DESC) = 1\r\n            THEN 'ESTRELLA'\r\n        WHEN NTILE(4) OVER (ORDER BY ingresos DESC) = 4 AND NTILE(4) OVER (ORDER BY rentabilidad_por_unidad DESC) = 4\r\n            THEN 'PERRO'\r\n        ELSE 'INTERMEDIO'\r\n    END AS clasificacion_matrix\r\nFROM rentabilidad_producto\r\nORDER BY ingresos DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(ingresos::numeric, 2) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(rentabilidad_por_unidad::numeric, 4) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 4285,
+      "lineEnd": 4311,
+      "sql": "WITH distribucion_precios AS (\r\n    SELECT\r\n        p.product_name,\r\n        c.category_name,\r\n        p.unit_price,\r\n        PERCENT_RANK() OVER (ORDER BY p.unit_price DESC) AS percent_rank_precio,\r\n        CUME_DIST() OVER (ORDER BY p.unit_price DESC) AS cume_dist_precio,\r\n        ROW_NUMBER() OVER (ORDER BY p.unit_price DESC) AS posicion\r\n    FROM products p\r\n    INNER JOIN categories c ON p.category_id = c.category_id\r\n)\r\nSELECT\r\n    product_name,\r\n    category_name,\r\n    unit_price,\r\n    ROUND(percent_rank_precio::numeric, 4) AS percent_rank,\r\n    ROUND(cume_dist_precio::numeric, 4) AS cume_dist,\r\n    CASE\r\n        WHEN percent_rank_precio <= 0.25 THEN 'CARO (top 25%)'\r\n        WHEN percent_rank_precio <= 0.50 THEN 'MEDIO-ALTO'\r\n        WHEN percent_rank_precio <= 0.75 THEN 'MEDIO-BAJO'\r\n        ELSE 'ECONOMICO'\r\n    END AS segmento_percentilar\r\nFROM distribucion_precios\r\nORDER BY unit_price DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(percent_rank_precio::numeric, 4) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(cume_dist_precio::numeric, 4) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 4541,
+      "lineEnd": 4557,
+      "sql": "SELECT\r\n    c.company_name,\r\n    c.country,\r\n    ultimos_pedidos.order_id,\r\n    ultimos_pedidos.order_date,\r\n    ROUND(ultimos_pedidos.freight::numeric, 2) AS freight\r\nFROM customers c\r\nCROSS JOIN LATERAL (\r\n    SELECT order_id, order_date, freight\r\n    FROM orders\r\n    WHERE customer_id = c.customer_id\r\n    ORDER BY order_date DESC, order_id DESC\r\n    LIMIT 5\r\n) ultimos_pedidos\r\nORDER BY c.company_name, ultimos_pedidos.order_date DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(ultimos_pedidos.freight::numeric, 2) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 5132,
+      "lineEnd": 5155,
+      "sql": "SELECT * FROM crosstab(\r\n    $$\r\n    SELECT\r\n        c.category_name::text,\r\n        EXTRACT(YEAR FROM o.order_date)::int AS anio,\r\n        ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS ventas\r\n    FROM categories c\r\n    INNER JOIN products p ON c.category_id = p.category_id\r\n    INNER JOIN order_details od ON p.product_id = od.product_id\r\n    INNER JOIN orders o ON od.order_id = o.order_id\r\n    WHERE o.order_date >= '1996-01-01' AND o.order_date < '1999-01-01'\r\n    GROUP BY c.category_name, EXTRACT(YEAR FROM o.order_date)\r\n    ORDER BY c.category_name, anio\r\n    $$,\r\n    $$ VALUES (1996), (1997), (1998) $$\r\n) AS (\r\n    category_name TEXT,\r\n    ventas_1996 NUMERIC,\r\n    ventas_1997 NUMERIC,\r\n    ventas_1998 NUMERIC\r\n)\r\nORDER BY category_name;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 5321,
+      "lineEnd": 5351,
+      "sql": "WITH cohorte AS (\r\n    SELECT\r\n        customer_id,\r\n        DATE_TRUNC('month', MIN(order_date))::date AS cohorte_mes\r\n    FROM orders\r\n    GROUP BY customer_id\r\n),\r\nactividad AS (\r\n    SELECT DISTINCT\r\n        o.customer_id,\r\n        DATE_TRUNC('month', o.order_date)::date AS mes_activo\r\n    FROM orders o\r\n)\r\nSELECT\r\n    c.cohorte_mes,\r\n    COUNT(DISTINCT c.customer_id) FILTER (WHERE calc.edad_cohorte = 0) AS mes_0,\r\n    COUNT(DISTINCT c.customer_id) FILTER (WHERE calc.edad_cohorte = 1) AS mes_1,\r\n    COUNT(DISTINCT c.customer_id) FILTER (WHERE calc.edad_cohorte = 2) AS mes_2,\r\n    COUNT(DISTINCT c.customer_id) FILTER (WHERE calc.edad_cohorte = 3) AS mes_3,\r\n    COUNT(DISTINCT c.customer_id) FILTER (WHERE calc.edad_cohorte = 4) AS mes_4,\r\n    COUNT(DISTINCT c.customer_id) FILTER (WHERE calc.edad_cohorte = 5) AS mes_5\r\nFROM cohorte c\r\nINNER JOIN actividad a ON c.customer_id = a.customer_id\r\nCROSS JOIN LATERAL (\r\n    SELECT EXTRACT(YEAR FROM AGE(a.mes_activo, c.cohorte_mes)) * 12 +\r\n           EXTRACT(MONTH FROM AGE(a.mes_activo, c.cohorte_mes)) AS edad_cohorte\r\n) calc\r\nGROUP BY c.cohorte_mes\r\nORDER BY c.cohorte_mes;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT c.customer_id) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT c.customer_id) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT c.customer_id) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT c.customer_id) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT c.customer_id) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT c.customer_id) FILTER\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 5427,
+      "lineEnd": 5462,
+      "sql": "WITH cohorte_cliente AS (\r\n    SELECT\r\n        o.customer_id,\r\n        c.country,\r\n        DATE_TRUNC('month', MIN(o.order_date))::date AS cohorte_mes\r\n    FROM orders o\r\n    INNER JOIN customers c ON o.customer_id = c.customer_id\r\n    GROUP BY o.customer_id, c.country\r\n),\r\nactividad_mensual AS (\r\n    SELECT DISTINCT\r\n        o.customer_id,\r\n        DATE_TRUNC('month', o.order_date)::date AS mes_activo\r\n    FROM orders o\r\n)\r\nSELECT\r\n    cc.country,\r\n    cc.cohorte_mes,\r\n    COUNT(DISTINCT cc.customer_id) FILTER (WHERE edad_cohorte = 0) AS mes0,\r\n    COUNT(DISTINCT cc.customer_id) FILTER (WHERE edad_cohorte = 1) AS mes1,\r\n    COUNT(DISTINCT cc.customer_id) FILTER (WHERE edad_cohorte = 2) AS mes2,\r\n    COUNT(DISTINCT cc.customer_id) FILTER (WHERE edad_cohorte = 3) AS mes3,\r\n    ROUND(\r\n        COUNT(DISTINCT cc.customer_id) FILTER (WHERE edad_cohorte = 3)::numeric /\r\n        NULLIF(COUNT(DISTINCT cc.customer_id) FILTER (WHERE edad_cohorte = 0), 0) * 100, 2\r\n    ) AS retencion_mes3_pct\r\nFROM cohorte_cliente cc\r\nINNER JOIN actividad_mensual am ON cc.customer_id = am.customer_id\r\nCROSS JOIN LATERAL (\r\n    SELECT EXTRACT(YEAR FROM AGE(am.mes_activo, cc.cohorte_mes)) * 12 +\r\n           EXTRACT(MONTH FROM AGE(am.mes_activo, cc.cohorte_mes)) AS edad_cohorte\r\n) calc\r\nGROUP BY cc.country, cc.cohorte_mes\r\nORDER BY cc.country, cc.cohorte_mes;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT cc.customer_id) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT cc.customer_id) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT cc.customer_id) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT cc.customer_id) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(\r\n        COUNT(DISTINCT cc.customer_id) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT cc.customer_id) FILTER\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 5593,
+      "lineEnd": 5627,
+      "sql": "WITH p1 AS (\r\n    SELECT DISTINCT customer_id\r\n    FROM orders\r\n    WHERE order_date >= '1997-01-01' AND order_date < '1998-01-01'\r\n),\r\np2 AS (\r\n    SELECT DISTINCT customer_id\r\n    FROM orders\r\n    WHERE order_date >= '1998-01-01' AND order_date < '1999-01-01'\r\n),\r\nsegmentos AS (\r\n    SELECT\r\n        COALESCE(p1.customer_id, p2.customer_id) AS customer_id,\r\n        CASE\r\n            WHEN p1.customer_id IS NOT NULL AND p2.customer_id IS NOT NULL THEN 'RECURRENTE'\r\n            WHEN p1.customer_id IS NOT NULL AND p2.customer_id IS NULL THEN 'PERDIDO'\r\n            WHEN p1.customer_id IS NULL AND p2.customer_id IS NOT NULL THEN 'NUEVO'\r\n        END AS segmento\r\n    FROM p1\r\n    FULL OUTER JOIN p2 ON p1.customer_id = p2.customer_id\r\n)\r\nSELECT\r\n    segmento,\r\n    COUNT(*) AS total_clientes,\r\n    ROUND(COUNT(*)::numeric / SUM(COUNT(*)) OVER () * 100, 2) AS porcentaje\r\nFROM segmentos\r\nGROUP BY segmento\r\nORDER BY\r\n    CASE segmento\r\n        WHEN 'RECURRENTE' THEN 1\r\n        WHEN 'NUEVO' THEN 2\r\n        WHEN 'PERDIDO' THEN 3\r\n    END;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 5686,
+      "lineEnd": 5714,
+      "sql": "SELECT\r\n    c.customer_id,\r\n    c.company_name,\r\n    c.country,\r\n    pedidos_1997.total_1997,\r\n    pedidos_1997.primer_pedido,\r\n    pedidos_1997.ultimo_pedido\r\nFROM customers c\r\nCROSS JOIN LATERAL (\r\n    SELECT\r\n        COUNT(*) AS total_1997,\r\n        MIN(order_date) AS primer_pedido,\r\n        MAX(order_date) AS ultimo_pedido\r\n    FROM orders o\r\n    WHERE o.customer_id = c.customer_id\r\n      AND o.order_date >= '1997-01-01'\r\n      AND o.order_date < '1998-01-01'\r\n) pedidos_1997\r\nWHERE pedidos_1997.total_1997 > 0\r\n  AND NOT EXISTS (\r\n      SELECT 1\r\n      FROM orders o\r\n      WHERE o.customer_id = c.customer_id\r\n        AND o.order_date >= '1998-01-01'\r\n        AND o.order_date < '1999-01-01'\r\n  )\r\nORDER BY pedidos_1997.total_1997 DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MIN(order_date) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MAX(order_date) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 5780,
+      "lineEnd": 5795,
+      "sql": "SELECT\r\n    c.category_name,\r\n    segundo.product_name,\r\n    segundo.unit_price,\r\n    ROUND((segundo.unit_price / MAX(segundo.unit_price) OVER () * 100)::numeric, 2) AS pct_del_max_global\r\nFROM categories c\r\nCROSS JOIN LATERAL (\r\n    SELECT product_name, unit_price\r\n    FROM products\r\n    WHERE category_id = c.category_id\r\n    ORDER BY unit_price DESC\r\n    LIMIT 1 OFFSET 1\r\n) segundo\r\nORDER BY segundo.unit_price DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND((segundo.unit_price / MAX(segundo.unit_price) OVER\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 5857,
+      "lineEnd": 5873,
+      "sql": "EXPLAIN (ANALYZE, BUFFERS, COSTS, VERBOSE)\r\nSELECT\r\n    c.company_name,\r\n    p.product_name,\r\n    SUM(od.quantity) AS total_unidades,\r\n    ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS total_ventas\r\nFROM customers c\r\nINNER JOIN orders o ON c.customer_id = o.customer_id\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nINNER JOIN products p ON od.product_id = p.product_id\r\nWHERE c.country = 'Germany'\r\n  AND o.order_date BETWEEN '1997-01-01' AND '1997-12-31'\r\nGROUP BY c.company_name, p.product_name\r\nORDER BY total_ventas DESC\r\nLIMIT 10;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(od.quantity) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 5989,
+      "lineEnd": 6007,
+      "sql": "-- ANTES: Sin índice\r\nEXPLAIN (ANALYZE, BUFFERS)\r\nSELECT COUNT(*)\r\nFROM customers\r\nWHERE country = 'Germany';\r\n\r\n-- Crear índice\r\nCREATE INDEX idx_customers_country ON customers(country);\r\n\r\n-- DESPUÉS: Con índice\r\nEXPLAIN (ANALYZE, BUFFERS)\r\nSELECT COUNT(*)\r\nFROM customers\r\nWHERE country = 'Germany';\r\n\r\n-- Limpieza (opcional)\r\nDROP INDEX IF EXISTS idx_customers_country;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*)\r\nFROM\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*)\r\nFROM\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 6289,
+      "lineEnd": 6318,
+      "sql": "-- Fuerza Hash Join (por defecto si work_mem suficiente)\r\nSET enable_nestloop = OFF;\r\nSET enable_mergejoin = OFF;\r\n\r\nEXPLAIN (ANALYZE, BUFFERS)\r\nSELECT o.order_id, SUM(od.quantity)\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nWHERE o.order_date >= '1998-01-01'\r\nGROUP BY o.order_id;\r\n\r\n-- Restaurar configuración\r\nRESET enable_nestloop;\r\nRESET enable_mergejoin;\r\n\r\n-- Comparar con Nested Loop forzado\r\nSET enable_hashjoin = OFF;\r\nSET enable_mergejoin = OFF;\r\n\r\nEXPLAIN (ANALYZE, BUFFERS)\r\nSELECT o.order_id, SUM(od.quantity)\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nWHERE o.order_date >= '1998-01-01'\r\nGROUP BY o.order_id;\r\n\r\nRESET enable_hashjoin;\r\nRESET enable_mergejoin;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(od.quantity)\r\nFROM\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(od.quantity)\r\nFROM\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details, order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 6617,
+      "lineEnd": 6630,
+      "sql": "EXPLAIN (ANALYZE, BUFFERS)\r\nWITH pedidos_1997 AS MATERIALIZED (\r\n    SELECT customer_id, order_id, order_date, freight\r\n    FROM orders\r\n    WHERE order_date >= '1997-01-01' AND order_date < '1998-01-01'\r\n)\r\nSELECT c.company_name, COUNT(p.order_id) AS total_pedidos, SUM(p.freight) AS total_flete\r\nFROM customers c\r\nINNER JOIN pedidos_1997 p ON c.customer_id = p.customer_id\r\nGROUP BY c.company_name\r\nORDER BY total_pedidos DESC\r\nLIMIT 10;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(p.order_id) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(p.freight) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 6713,
+      "lineEnd": 6753,
+      "sql": "WITH info_indices AS (\r\n    SELECT\r\n        c.relname AS tabla,\r\n        i.indexrelid::regclass AS nombre_indice,\r\n        pg_get_indexdef(i.indexrelid) AS definicion,\r\n        COALESCE(s.idx_scan, 0) AS idx_scan,\r\n        pg_size_pretty(pg_relation_size(i.indexrelid)) AS tamano\r\n    FROM pg_index i\r\n    INNER JOIN pg_class c ON i.indrelid = c.oid\r\n    LEFT JOIN pg_stat_user_indexes s ON i.indexrelid = s.indexrelid\r\n    WHERE c.relname IN ('customers', 'orders', 'products', 'order_details')\r\n),\r\nindices_agrupados AS (\r\n    SELECT\r\n        tabla,\r\n        nombre_indice,\r\n        definicion,\r\n        idx_scan,\r\n        tamano,\r\n        ROW_NUMBER() OVER (PARTITION BY definicion ORDER BY idx_scan DESC) AS rn\r\n    FROM info_indices\r\n)\r\nSELECT\r\n    CASE\r\n        WHEN rn > 1 THEN 'DUPLICADO'\r\n        WHEN idx_scan = 0 THEN 'NO USADO'\r\n        ELSE 'ACTIVO'\r\n    END AS estado,\r\n    tabla,\r\n    nombre_indice,\r\n    tamano,\r\n    idx_scan,\r\n    CASE\r\n        WHEN rn > 1 THEN 'DROP INDEX IF EXISTS ' || nombre_indice || ';'\r\n        WHEN idx_scan = 0 THEN 'CONSIDERAR DROP INDEX IF EXISTS ' || nombre_indice || ';'\r\n        ELSE '-- Conservar'\r\n    END AS accion_sugerida\r\nFROM indices_agrupados\r\nORDER BY tabla, estado, idx_scan;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Código de Solución",
+      "lineStart": 6826,
+      "lineEnd": 6874,
+      "sql": "-- PASO 1: Capturar consulta original\r\nEXPLAIN (ANALYZE, BUFFERS, SETTINGS)\r\nSELECT\r\n    c.country,\r\n    c.city,\r\n    COUNT(DISTINCT o.order_id) AS pedidos,\r\n    ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS ventas\r\nFROM customers c\r\nINNER JOIN orders o ON c.customer_id = o.customer_id\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nWHERE o.order_date >= '1997-01-01'\r\nGROUP BY c.country, c.city\r\nORDER BY ventas DESC;\r\n\r\n-- PASO 2: Verificar estadísticas\r\nSELECT schemaname, relname, last_analyze, last_autoanalyze, n_mod_since_analyze\r\nFROM pg_stat_user_tables\r\nWHERE relname IN ('customers', 'orders', 'order_details');\r\n\r\n-- PASO 3: Crear índices si es necesario\r\nCREATE INDEX IF NOT EXISTS idx_orders_date ON orders(order_date);\r\nCREATE INDEX IF NOT EXISTS idx_orders_customer_date ON orders(customer_id, order_date);\r\nCREATE INDEX IF NOT EXISTS idx_order_details_order ON order_details(order_id);\r\n\r\n-- PASO 4: Actualizar estadísticas\r\nANALYZE customers;\r\nANALYZE orders;\r\nANALYZE order_details;\r\n\r\n-- PASO 5: Re-ejecutar con los mismos parámetros\r\nEXPLAIN (ANALYZE, BUFFERS, SETTINGS)\r\nSELECT\r\n    c.country,\r\n    c.city,\r\n    COUNT(DISTINCT o.order_id) AS pedidos,\r\n    ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS ventas\r\nFROM customers c\r\nINNER JOIN orders o ON c.customer_id = o.customer_id\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nWHERE o.order_date >= '1997-01-01'\r\nGROUP BY c.country, c.city\r\nORDER BY ventas DESC;\r\n\r\n-- PASO 6: Comparar y documentar mejora\r\nSELECT 'Antes: Seq Scan en orders, Sort externo, 3000 buffers'\r\nUNION ALL\r\nSELECT 'Después: Index Scan en orders, Hash Join, 150 buffers';",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT o.order_id) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT o.order_id) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details, order_details, order_details, order_details, order_details (should be order_details)"
+        }
+      ]
+    }
+  ],
+  "4.examen_entrevista.md": [
+    {
+      "header": "Pregunta 5 - Nivel: Mid",
+      "lineStart": 364,
+      "lineEnd": 373,
+      "sql": "SELECT\r\n    p.category_id,\r\n    SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ingreso_total\r\nFROM order_details od\r\nINNER JOIN products p ON od.product_id = p.product_id\r\nGROUP BY p.category_id\r\nHAVING SUM(od.quantity * od.unit_price * (1 - od.discount)) > 10000\r\nORDER BY ingreso_total DESC;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 6 - Nivel: Mid",
+      "lineStart": 433,
+      "lineEnd": 443,
+      "sql": "SELECT\r\n    s.company_name AS transportista,\r\n    COUNT(o.order_id) AS total_pedidos,\r\n    ROUND(AVG(o.freight)::numeric, 2) AS flete_promedio\r\nFROM orders o\r\nINNER JOIN shippers s ON o.ship_via = s.shipper_id\r\nGROUP BY s.company_name\r\nHAVING AVG(o.freight) > 50\r\nORDER BY flete_promedio DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(o.order_id) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 7 - Nivel: Mid",
+      "lineStart": 497,
+      "lineEnd": 509,
+      "sql": "SELECT\r\n    c.category_name,\r\n    COUNT(p.product_id) AS total_productos,\r\n    COUNT(*) FILTER (WHERE p.units_in_stock < 20) AS stock_bajo,\r\n    ROUND(AVG(p.unit_price)::numeric, 2) AS precio_promedio,\r\n    MAX(p.unit_price) AS precio_maximo\r\nFROM products p\r\nINNER JOIN categories c ON p.category_id = c.category_id\r\nGROUP BY c.category_name\r\nHAVING COUNT(p.product_id) >= 3\r\nORDER BY total_productos DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(p.product_id) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) FILTER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MAX(p.unit_price) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 8 - Nivel: Mid",
+      "lineStart": 568,
+      "lineEnd": 584,
+      "sql": "WITH ingresos_trimestre AS (\r\n    SELECT\r\n        EXTRACT(QUARTER FROM o.order_date) AS trimestre,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ingreso\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    WHERE EXTRACT(YEAR FROM o.order_date) = 1997\r\n    GROUP BY EXTRACT(QUARTER FROM o.order_date)\r\n)\r\nSELECT\r\n    'Q' || trimestre::text AS trimestre,\r\n    ROUND(ingreso::numeric, 2) AS ingreso_total,\r\n    ROUND((ingreso / SUM(ingreso) OVER () * 100)::numeric, 2) AS porcentaje\r\nFROM ingresos_trimestre\r\nORDER BY trimestre;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(ingreso::numeric, 2) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND((ingreso / SUM(ingreso) OVER\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 11 - Nivel: Mid",
+      "lineStart": 779,
+      "lineEnd": 791,
+      "sql": "SELECT\r\n    s.company_name AS proveedor,\r\n    s.country,\r\n    COUNT(p.product_id) AS productos_sin_ventas\r\nFROM suppliers s\r\nINNER JOIN products p ON s.supplier_id = p.supplier_id\r\nLEFT JOIN order_details od ON p.product_id = od.product_id\r\nWHERE od.product_id IS NULL\r\nGROUP BY s.company_name, s.country\r\nHAVING COUNT(p.product_id) >= 1\r\nORDER BY productos_sin_ventas DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(p.product_id) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 13 - Nivel: Senior",
+      "lineStart": 902,
+      "lineEnd": 935,
+      "sql": "WITH metricas_cliente AS (\r\n    SELECT\r\n        o.customer_id,\r\n        COUNT(DISTINCT o.order_id) AS total_pedidos,\r\n        MIN(o.order_date) AS primer_pedido,\r\n        MAX(o.order_date) AS ultimo_pedido\r\n    FROM orders o\r\n    GROUP BY o.customer_id\r\n    HAVING COUNT(DISTINCT o.order_id) > 5\r\n),\r\nproducto_mas_caro AS (\r\n    SELECT DISTINCT ON (o.customer_id)\r\n        o.customer_id,\r\n        p.product_name,\r\n        od.unit_price\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    INNER JOIN products p ON od.product_id = p.product_id\r\n    ORDER BY o.customer_id, od.unit_price DESC\r\n)\r\nSELECT\r\n    c.company_name,\r\n    mc.total_pedidos,\r\n    mc.primer_pedido,\r\n    mc.ultimo_pedido,\r\n    pcm.product_name AS producto_mas_caro,\r\n    pcm.unit_price AS precio\r\nFROM metricas_cliente mc\r\nINNER JOIN customers c ON mc.customer_id = c.customer_id\r\nLEFT JOIN producto_mas_caro pcm ON mc.customer_id = pcm.customer_id\r\nORDER BY mc.total_pedidos DESC\r\nLIMIT 10;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT o.order_id) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MIN(o.order_date) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MAX(o.order_date) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 14 - Nivel: Mid",
+      "lineStart": 999,
+      "lineEnd": 1015,
+      "sql": "SELECT\r\n    p.product_name,\r\n    p.unit_price,\r\n    c.category_name,\r\n    sub.precio_promedio_categoria\r\nFROM products p\r\nINNER JOIN categories c ON p.category_id = c.category_id\r\nINNER JOIN (\r\n    SELECT category_id, AVG(unit_price) AS precio_promedio_categoria\r\n    FROM products\r\n    GROUP BY category_id\r\n) sub ON p.category_id = sub.category_id\r\nWHERE p.unit_price > sub.precio_promedio_categoria\r\nORDER BY c.category_name, p.unit_price DESC\r\nLIMIT 10;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"AVG(unit_price) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 15 - Nivel: Mid",
+      "lineStart": 1073,
+      "lineEnd": 1087,
+      "sql": "SELECT\r\n    o.customer_id,\r\n    c.company_name,\r\n    ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS total_beverages\r\nFROM orders o\r\nINNER JOIN customers c ON o.customer_id = c.customer_id\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nINNER JOIN products p ON od.product_id = p.product_id\r\nINNER JOIN categories cat ON p.category_id = cat.category_id\r\nWHERE cat.category_name = 'Beverages'\r\nGROUP BY o.customer_id, c.company_name\r\nORDER BY total_beverages DESC\r\nLIMIT 10;",
+      "issues": [
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 17 - Nivel: Mid",
+      "lineStart": 1205,
+      "lineEnd": 1220,
+      "sql": "SELECT\r\n    c.company_name,\r\n    o.order_id,\r\n    o.order_date,\r\n    o.freight\r\nFROM orders o\r\nINNER JOIN customers c ON o.customer_id = c.customer_id\r\nWHERE o.order_date = (\r\n    SELECT MAX(o2.order_date)\r\n    FROM orders o2\r\n    WHERE o2.customer_id = o.customer_id\r\n)\r\nORDER BY o.order_date DESC\r\nLIMIT 10;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MAX(o2.order_date)\r\n    FROM\""
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 18 - Nivel: Senior",
+      "lineStart": 1279,
+      "lineEnd": 1301,
+      "sql": "WITH ventas_producto AS (\r\n    SELECT\r\n        c.category_name,\r\n        p.product_name,\r\n        SUM(od.quantity) AS unidades_vendidas\r\n    FROM order_details od\r\n    INNER JOIN products p ON od.product_id = p.product_id\r\n    INNER JOIN categories c ON p.category_id = c.category_id\r\n    GROUP BY c.category_name, p.product_name\r\n)\r\nSELECT\r\n    category_name,\r\n    product_name,\r\n    unidades_vendidas,\r\n    ROW_NUMBER() OVER (\r\n        PARTITION BY category_name\r\n        ORDER BY unidades_vendidas DESC\r\n    ) AS ranking\r\nFROM ventas_producto\r\nORDER BY category_name, ranking\r\nLIMIT 15;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(od.quantity) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 19 - Nivel: Senior",
+      "lineStart": 1367,
+      "lineEnd": 1396,
+      "sql": "WITH ventas_mensuales AS (\r\n    SELECT\r\n        o.employee_id,\r\n        DATE_TRUNC('month', o.order_date)::date AS mes,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ventas\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY o.employee_id, DATE_TRUNC('month', o.order_date)\r\n),\r\ncon_lag AS (\r\n    SELECT\r\n        employee_id,\r\n        mes,\r\n        ventas,\r\n        LAG(ventas) OVER (PARTITION BY employee_id ORDER BY mes) AS ventas_anterior\r\n    FROM ventas_mensuales\r\n)\r\nSELECT\r\n    e.first_name || ' ' || e.last_name AS empleado,\r\n    cl.mes,\r\n    ROUND(cl.ventas::numeric, 2) AS ventas_mes,\r\n    ROUND(cl.ventas_anterior::numeric, 2) AS ventas_anterior,\r\n    ROUND(((cl.ventas - cl.ventas_anterior) / NULLIF(cl.ventas_anterior, 0) * 100)::numeric, 2) AS variacion_pct\r\nFROM con_lag cl\r\nINNER JOIN employees e ON cl.employee_id = e.employee_id\r\nWHERE cl.ventas_anterior IS NOT NULL\r\nORDER BY empleado, cl.mes\r\nLIMIT 10;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(cl.ventas::numeric, 2) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(cl.ventas_anterior::numeric, 2) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 20 - Nivel: Senior",
+      "lineStart": 1456,
+      "lineEnd": 1482,
+      "sql": "WITH ventas_mensuales AS (\r\n    SELECT\r\n        DATE_TRUNC('month', o.order_date)::date AS mes,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ventas\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY DATE_TRUNC('month', o.order_date)\r\n)\r\nSELECT\r\n    mes,\r\n    ROUND(ventas::numeric, 2) AS ventas_totales,\r\n    ROUND(AVG(ventas) OVER (\r\n        ORDER BY mes\r\n        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW\r\n    )::numeric, 2) AS promedio_movil_3m,\r\n    CASE\r\n        WHEN ventas > AVG(ventas) OVER (\r\n            ORDER BY mes\r\n            ROWS BETWEEN 2 PRECEDING AND CURRENT ROW\r\n        ) THEN 'Por encima'\r\n        ELSE 'Por debajo'\r\n    END AS tendencia\r\nFROM ventas_mensuales\r\nORDER BY mes\r\nLIMIT 12;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(ventas::numeric, 2) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(AVG(ventas) OVER\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"AVG(ventas) OVER\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 21 - Nivel: Senior",
+      "lineStart": 1547,
+      "lineEnd": 1570,
+      "sql": "WITH ventas_cliente_mes AS (\r\n    SELECT\r\n        o.customer_id,\r\n        DATE_TRUNC('month', o.order_date)::date AS mes,\r\n        SUM(od.quantity * od.unit_price * (1 - od.discount)) AS ventas\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY o.customer_id, DATE_TRUNC('month', o.order_date)\r\n)\r\nSELECT\r\n    c.company_name,\r\n    vcm.mes,\r\n    ROUND(vcm.ventas::numeric, 2) AS ventas_mes,\r\n    ROUND(SUM(vcm.ventas) OVER (\r\n        PARTITION BY vcm.customer_id\r\n        ORDER BY vcm.mes\r\n        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\r\n    )::numeric, 2) AS ventas_acumuladas\r\nFROM ventas_cliente_mes vcm\r\nINNER JOIN customers c ON vcm.customer_id = c.customer_id\r\nORDER BY c.company_name, vcm.mes\r\nLIMIT 12;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(vcm.ventas::numeric, 2) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"ROUND(SUM(vcm.ventas) OVER\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 22 - Nivel: Senior",
+      "lineStart": 1631,
+      "lineEnd": 1661,
+      "sql": "WITH metricas_generales AS (\r\n    SELECT\r\n        COUNT(DISTINCT o.customer_id) AS total_clientes,\r\n        COUNT(DISTINCT o.order_id) AS total_pedidos,\r\n        ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS ingreso_total,\r\n        ROUND((SUM(od.quantity * od.unit_price * (1 - od.discount)) / COUNT(DISTINCT o.order_id))::numeric, 2) AS ticket_promedio\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n),\r\ntop_cliente AS (\r\n    SELECT\r\n        o.customer_id,\r\n        c.company_name,\r\n        ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS facturacion\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    INNER JOIN customers c ON o.customer_id = c.customer_id\r\n    GROUP BY o.customer_id, c.company_name\r\n    ORDER BY facturacion DESC\r\n    LIMIT 1\r\n)\r\nSELECT\r\n    mg.total_clientes,\r\n    mg.total_pedidos,\r\n    mg.ingreso_total,\r\n    mg.ticket_promedio,\r\n    tc.company_name AS cliente_top,\r\n    tc.facturacion AS facturacion_top\r\nFROM metricas_generales mg, top_cliente tc;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT o.customer_id) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT o.order_id) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details, order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 25 - Nivel: Senior",
+      "lineStart": 1868,
+      "lineEnd": 1875,
+      "sql": "SELECT c.company_name, COUNT(o.order_id) AS total_pedidos\r\nFROM customers c\r\nLEFT JOIN orders o ON c.customer_id = o.customer_id\r\nWHERE c.country = 'Germany'\r\nGROUP BY c.company_name\r\nORDER BY total_pedidos DESC;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(o.order_id) AS\""
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 27 - Nivel: Senior",
+      "lineStart": 2044,
+      "lineEnd": 2085,
+      "sql": "WITH pedidos_trimestre AS (\r\n    SELECT o.order_id, o.customer_id, o.ship_country, o.order_date\r\n    FROM orders o\r\n    WHERE o.order_date >= (\r\n        SELECT MAX(order_date) - INTERVAL '3 months' FROM orders\r\n    )\r\n    AND o.order_date <= (SELECT MAX(order_date) FROM orders)\r\n),\r\ndetalle_ventas AS (\r\n    SELECT\r\n        pt.order_id,\r\n        pt.customer_id,\r\n        pt.ship_country,\r\n        od.product_id,\r\n        od.quantity * od.unit_price * (1 - od.discount) AS importe\r\n    FROM pedidos_trimestre pt\r\n    INNER JOIN order_details od ON pt.order_id = od.order_id\r\n),\r\nproducto_top AS (\r\n    SELECT product_id, SUM(quantity) AS total_unidades\r\n    FROM order_details\r\n    WHERE order_id IN (SELECT order_id FROM pedidos_trimestre)\r\n    GROUP BY product_id\r\n    ORDER BY total_unidades DESC\r\n    LIMIT 1\r\n),\r\npais_top AS (\r\n    SELECT ship_country, COUNT(*) AS total\r\n    FROM pedidos_trimestre\r\n    GROUP BY ship_country\r\n    ORDER BY total DESC\r\n    LIMIT 1\r\n)\r\nSELECT\r\n    (SELECT COUNT(DISTINCT order_id) FROM pedidos_trimestre) AS total_pedidos,\r\n    (SELECT COUNT(DISTINCT customer_id) FROM pedidos_trimestre) AS total_clientes,\r\n    (SELECT ROUND(SUM(importe)::numeric, 2) FROM detalle_ventas) AS ingreso_total,\r\n    (SELECT ROUND((SUM(importe) / COUNT(DISTINCT order_id))::numeric, 2) FROM detalle_ventas) AS ticket_promedio,\r\n    (SELECT product_name FROM products WHERE product_id = (SELECT product_id FROM producto_top)) AS producto_top,\r\n    (SELECT ship_country FROM pais_top) AS pais_top;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"MAX(order_date) FROM\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"SUM(quantity) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT order_id) FROM\""
+        },
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(DISTINCT customer_id) FROM\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details, order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 28 - Nivel: Senior",
+      "lineStart": 2136,
+      "lineEnd": 2186,
+      "sql": "-- 1. Crear la tabla de hechos\r\nDROP TABLE IF EXISTS fact_ventas;\r\nCREATE TABLE fact_ventas (\r\n    order_id INT NOT NULL,\r\n    product_id INT NOT NULL,\r\n    customer_id VARCHAR(5),\r\n    employee_id INT,\r\n    order_date DATE,\r\n    quantity INT,\r\n    unit_price NUMERIC,\r\n    discount NUMERIC,\r\n    ingreso_neto NUMERIC GENERATED ALWAYS AS (\r\n        ROUND((quantity * unit_price * (1 - discount))::numeric, 2)\r\n    ) STORED,\r\n    trimestre INT GENERATED ALWAYS AS (\r\n        EXTRACT(QUARTER FROM order_date)::int\r\n    ) STORED,\r\n    anio INT GENERATED ALWAYS AS (\r\n        EXTRACT(YEAR FROM order_date)::int\r\n    ) STORED,\r\n    PRIMARY KEY (order_id, product_id)\r\n);\r\n\r\n-- 2. Insertar datos\r\nINSERT INTO fact_ventas (\r\n    order_id, product_id, customer_id, employee_id,\r\n    order_date, quantity, unit_price, discount\r\n)\r\nSELECT\r\n    od.order_id,\r\n    od.product_id,\r\n    o.customer_id,\r\n    o.employee_id,\r\n    o.order_date,\r\n    od.quantity,\r\n    od.unit_price,\r\n    od.discount\r\nFROM order_details od\r\nINNER JOIN orders o ON od.order_id = o.order_id;\r\n\r\n-- 3. Verificar\r\nSELECT\r\n    anio,\r\n    trimestre,\r\n    COUNT(*) AS total_lineas,\r\n    ROUND(SUM(ingreso_neto)::numeric, 2) AS ingreso_total\r\nFROM fact_ventas\r\nGROUP BY anio, trimestre\r\nORDER BY anio, trimestre;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(*) AS\""
+        },
+        {
+          "type": "WRONG_TABLE_NAME",
+          "detail": "Wrong table name: order_details (should be order_details)"
+        }
+      ]
+    },
+    {
+      "header": "Pregunta 29 - Nivel: Mid",
+      "lineStart": 2248,
+      "lineEnd": 2255,
+      "sql": "EXPLAIN (ANALYZE, COSTS OFF)\r\nSELECT c.company_name, COUNT(o.order_id)\r\nFROM customers c\r\nLEFT JOIN orders o ON c.customer_id = o.customer_id\r\nWHERE c.country = 'Germany'\r\nGROUP BY c.company_name;",
+      "issues": [
+        {
+          "type": "MISSING_AS_ALIAS",
+          "detail": "Aggregation without explicit AS: \"COUNT(o.order_id)\r\nFROM\""
+        }
+      ]
+    }
+  ],
+  "aws_ejercicio.sql": []
+}

@@ -1,0 +1,1 @@
+SELECT product_id, product_name, units_in_stock FROM products WHERE product_id = 1;

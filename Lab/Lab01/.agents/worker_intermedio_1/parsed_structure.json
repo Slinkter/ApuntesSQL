@@ -1,0 +1,502 @@
+[
+  {
+    "num": 1,
+    "title": "Concentración de Clientes por País - Reporting Comercial",
+    "prof": "**Analogía:** Imagina que quieres saber cuántos clientes hay en cada país, pero solo te interesan los países con más de 5 clientes. Es como contar personas por zona y quedarte solo con las zonas concurridas.",
+    "opt": "La cláusula `GROUP BY country` fuerza a PostgreSQL a elegir entre dos algoritmos físicos de agregación: **HashAggregate** (construye una tabla hash en `work_mem` con clave `country`) o **GroupAggregate** (ordena primero por `country` y luego agrupa linealmente). Para una tabla de 91 filas con baja cardinalidad (≈21 países), HashAggregate es la estrategia óptima. El filtro posterior con `HAVING COUNT(*) > 5` descarta grupos enteros en la fase de post-agregación, reduciendo el conjunto antes de la proyección final.",
+    "diagram": "```text\r\n========================================================================================\r\nPASO 1: LECTURA DE FILAS EN BRUTO (FROM customers)\r\n========================================================================================\r\n  [Tabla: customers (91 tuplas)]\r\n  +-------------+---------------------+---------+\r\n  | customer_id | company_name        | country |\r\n  +-------------+---------------------+---------+\r\n  | ALFKI       | Alfreds Futterkiste | Germany |\r\n  | ANATR       | Ana Trujillo Emp.   | Mexico  |\r\n  | ANTON       | Antonio Moreno      | Mexico  |\r\n  | BERGS       | Berglunds snabbköp  | Sweden  |\r\n  | BLAUS       | Blauer See Delikat. | Germany |\r\n  +-------------+---------------------+---------+ ... (91 filas)\r\n\r\n========================================================================================\r\nPASO 2: CONSTRUCCIÓN DE LA TABLA HASH (GROUP BY country) -> HashAggregate en work_mem\r\n========================================================================================\r\n  Hash Bucket [Germany] -> Acumulador COUNT(*) = 11\r\n  Hash Bucket [USA]     -> Acumulador COUNT(*) = 13\r\n  Hash Bucket [Mexico]  -> Acumulador COUNT(*) = 5\r\n  Hash Bucket [Sweden]  -> Acumulador COUNT(*) = 2\r\n  Hash Bucket [France]  -> Acumulador COUNT(*) = 11\r\n  ... (21 buckets de países formados)\r\n\r\n========================================================================================\r\nPASO 3: EVALUACIÓN DEL FILTRO DE GRUPO (HAVING COUNT(*) > 5)\r\n========================================================================================\r\n  Bucket [USA]     (13 > 5) --> [ACEPTADO]  ✅\r\n  Bucket [Germany] (11 > 5) --> [ACEPTADO]  ✅\r\n  Bucket [France]  (11 > 5) --> [ACEPTADO]  ✅\r\n  Bucket [Mexico]  ( 5 > 5) --> [DESCARTADO] ❌ (5 no es estrictamente mayor que 5)\r\n  Bucket [Sweden]  ( 2 > 5) --> [DESCARTADO] ❌\r\n\r\n========================================================================================\r\nPASO 4: ORDENAMIENTO Y PROYECCIÓN FINAL (ORDER BY total_clientes DESC)\r\n========================================================================================\r\n  +---------+----------------+\r\n  | country | total_clientes |\r\n  +---------+----------------+\r\n  | USA     | 13             |\r\n  | Germany | 11             |\r\n  | France  | 11             |\r\n  | Brazil  | 9              |\r\n  | UK      | 7              |\r\n  +---------+----------------+\r\n========================================================================================\r\n```",
+    "sql": "SELECT\r\n    country,\r\n    COUNT(*) AS total_clientes\r\nFROM customers\r\nGROUP BY country\r\nHAVING COUNT(*) > 5\r\nORDER BY total_clientes DESC;",
+    "nota": "En PostgreSQL 15+, `HAVING` puede referenciar alias de `SELECT` (`HAVING total_clientes > 5`), pero no es portable a otros SGBD. MySQL permite `HAVING` sin `GROUP BY` (comportamiento no estándar). PostgreSQL es estricto. Recuerda: `WHERE` filtra filas, `HAVING` filtra grupos.",
+    "crit": "El entrevistador evalúa si el candidato diferencia el momento de ejecución de `WHERE` (pre-agregación) vs `HAVING` (post-agregación). Error grave: usar `WHERE COUNT(*) > 5`, que lanza `ERROR: aggregate function calls cannot be used in WHERE`."
+  },
+  {
+    "num": 2,
+    "title": "Densidad de Productos por Categoría - Gestión de Catálogo",
+    "prof": "**Analogía:** Es como abrir tu armario y contar cuántas camisas hay de cada tipo (formal, casual, deporte), pero solo mostrar las categorías con más de 10 prendas.",
+    "opt": "`GROUP BY category_id` sobre la tabla `products` (77 filas, 8 categorías) fuerza una agregación por clave foránea. El optimizador lee secuencialmente la tabla, extrayendo `category_id` y `product_id` (tupla de ancho mínimo), y aplica HashAggregate. `HAVING COUNT(*) > 10` retiene solo categorías con alta densidad de SKUs. Si existe un índice en `products(category_id)`, PostgreSQL puede realizar un *Index-Only Scan* para leer solo la clave, evitando el Heap.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    P[\"products (Heap)\"] -->|Index-Only Scan en category_id + product_id| IO[\"Índice B-Tree\"]\r\n    IO -->|Conteo por clave| Agg[\"HashAggregate: COUNT(*)\"]\r\n    Agg -->|HAVING > 10| Out[\"Categorías con más de 10 productos\"]\r\n```",
+    "sql": "SELECT\r\n    category_id,\r\n    COUNT(*) AS total_productos\r\nFROM products\r\nGROUP BY category_id\r\nHAVING COUNT(*) > 10\r\nORDER BY total_productos DESC;",
+    "nota": "Si existe un índice compuesto en `(category_id, product_id)`, PostgreSQL puede hacer Index-Only Scan (sin leer el Heap). Proyectar `category_name` sin incluirlo en `GROUP BY` ni hacer JOIN con `categories` genera error.",
+    "crit": "Mide si el candidato comprende que `GROUP BY` sobre FK indexadas permite Index-Only Scan (sin tocar el Heap). Candidatos junior ignoran esta optimización de cobertura."
+  },
+  {
+    "num": 3,
+    "title": "Productividad de la Fuerza de Ventas - Empleados con Mayor Volumen",
+    "prof": "**Analogía:** Es como querer saber qué vendedores tienen más de 80 pedidos cerrados. No te interesan los novatos; solo los que realmente mueven producto.",
+    "opt": "La consulta agrupa `orders` por `employee_id` (830 filas, 9 empleados). El optimizador lee secuencialmente la tabla transaccional, proyecta solo `employee_id` y `order_id` (tupla angosta), y acumula el contador. `HAVING COUNT(order_id) > 80` filtra los 3 empleados top. El planificador puede optar por GroupAggregate si `orders` está físicamente ordenada por `employee_id`.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders (Seq Scan)\"] -->|Proyecto employee_id, order_id| Agg[\"GroupAggregate / HashAggregate\"]\r\n    Agg -->|employee_id, COUNT(*)| Groups[\"9 grupos (uno por empleado)\"]\r\n    Groups -->|HAVING COUNT(*) > 80| Top[\"Empleados con > 80 pedidos\"]\r\n    Top -->|ORDER BY total DESC| Out[\"Ranking de productividad\"]\r\n```",
+    "sql": "SELECT\r\n    employee_id,\r\n    COUNT(order_id) AS total_pedidos\r\nFROM orders\r\nGROUP BY employee_id\r\nHAVING COUNT(order_id) > 80\r\nORDER BY total_pedidos DESC;",
+    "nota": "`COUNT(order_id)` ignora `NULLs` mientras `COUNT(*)` no. Con 830 filas y 9 empleados, HashAggregate es instantáneo. En tablas de millones, considera índices en la columna agrupada.",
+    "crit": "Verifica que el candidato entienda el orden de procesamiento: `GROUP BY` colapsa filas, `HAVING` filtra grupos. Error: confundir `WHERE` por `HAVING` para filtrar agregaciones."
+  },
+  {
+    "num": 4,
+    "title": "Cartera de Proveedores - Gestión de Abastecimiento",
+    "prof": "**Analogía:** Es como preguntarle al gerente de compras: \"¿qué proveedores me tienen más de 3 productos?\". Quieres trabajar solo con proveedores que tengan catálogos amplios.",
+    "opt": "Requiere un `INNER JOIN` entre `suppliers` y `products` antes de agrupar. PostgreSQL aplica Predicate Pushdown: primero une ambas tablas (Hash Join: `suppliers` es la tabla pequeña de 29 filas, se construye hash en `supplier_id`), luego agrupa por `supplier_id, company_name` y cuenta productos. `HAVING COUNT(p.product_id) > 3` retorna proveedores con cartera sustancial.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    S[\"suppliers (29 filas)\"] -->|Hash Build| HT[\"Hash Table (supplier_id)\"]\r\n    P[\"products (77 filas)\"] -->|Hash Probe| HT\r\n    HT -->|INNER JOIN| J[\"Conjunto: supplier_id, company_name, product_id\"]\r\n    J -->|GROUP BY supplier_id| Agg[\"COUNT(product_id)\"]\r\n    Agg -->|HAVING > 3| Out[\"Proveedores con > 3 productos\"]\r\n```",
+    "sql": "SELECT\r\n    s.supplier_id,\r\n    s.company_name,\r\n    COUNT(p.product_id) AS total_productos\r\nFROM suppliers s\r\nINNER JOIN products p ON s.supplier_id = p.supplier_id\r\nGROUP BY s.supplier_id, s.company_name\r\nHAVING COUNT(p.product_id) > 3\r\nORDER BY total_productos DESC;",
+    "nota": "`suppliers` tiene solo 29 filas; el optimizador construye hash en memoria. En producción, verifica que `supplier_id` esté indexado. Ambos SGBD requieren que todas las columnas no agregadas estén en `GROUP BY`.",
+    "crit": "Evalúa si el candidato sabe agrupar por columnas de la tabla padre después de un JOIN. Error común: olvidar incluir `s.company_name` en `GROUP BY` cuando está en `SELECT`."
+  },
+  {
+    "num": 5,
+    "title": "Clientes Premium por Facturación - Segmentación Comercial",
+    "prof": "**Analogía:** Es como querer saber qué clientes gastaron más de $5,000 con nosotros. No te importa cuántos pedidos hicieron, sino cuánto dinero total dejaron.",
+    "opt": "Consulta que une `orders` con `order_details` (830 × 2155 filas) para calcular facturación por cliente. El optimizador ejecuta un Hash Join entre ambas tablas (tabla intermedia aproximada de 2155 filas), agrupa por `customer_id` y suma `(quantity * unit_price * (1 - discount))`. `HAVING SUM(...) > 5000` filtra solo los clientes de alto valor. La expresión aritmética se evalúa en la CPU por cada tupla antes de la agregación.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders\"] -->|Hash Join| OD[\"order_details\"]\r\n    OD -->|product_id, quantity, unit_price, discount| Calc[\"Cálculo: quantity * unit_price * (1 - discount)\"]\r\n    Calc -->|GROUP BY customer_id| Agg[\"SUM(facturacion)\"]\r\n    Agg -->|HAVING SUM > 5000| Out[\"Clientes premium\"]\r\n```",
+    "sql": "SELECT\r\n    o.customer_id,\r\n    ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS facturacion_total\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nGROUP BY o.customer_id\r\nHAVING SUM(od.quantity * od.unit_price * (1 - od.discount)) > 5000\r\nORDER BY facturacion_total DESC;",
+    "nota": "La expresión `quantity * unit_price * (1 - discount)` se evalúa por cada fila (2155 filas). En producción, considera pre-calacular en una columna materializada. `discount` es decimal (0.15 = 15%), no porcentaje entero.",
+    "crit": "Evalúa capacidad de expresión aritmética dentro de funciones agregadas. Error: duplicar la expresión en `SELECT` y `HAVING` sin considerar el impacto de reevaluación. PostgreSQL no cachea automáticamente la expresión entre cláusulas."
+  },
+  {
+    "num": 6,
+    "title": "Rotación de Inventario - Productos Más Vendidos por Cantidad",
+    "prof": "**Analogía:** Es como revisar qué productos se venden más por cantidad (no por dinero). Un producto barato puede ser el más vendido aunque no genere más ingresos.",
+    "opt": "Agrupa `order_details` por `product_id`, sumando `quantity`. Con 2155 filas, el HashAggregate es eficiente. `HAVING SUM(quantity) > 200` descarta productos de baja rotación. El planificador proyecta solo `product_id` y `quantity` desde el Heap, minimizando el ancho de tupla en memoria.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    OD[\"order_details (Seq Scan)\"] -->|Proyecto: product_id, quantity| Agg[\"HashAggregate (work_mem)\"]\r\n    Agg -->|SUM(quantity) GROUP BY product_id| Groups[\"77 grupos\"]\r\n    Groups -->|HAVING SUM > 200| Filtered[\"Productos alta rotación\"]\r\n    Filtered -->|ORDER BY total DESC| Out[\"Top ventas por cantidad\"]\r\n```",
+    "sql": "SELECT\r\n    product_id,\r\n    SUM(quantity) AS unidades_vendidas\r\nFROM order_details\r\nGROUP BY product_id\r\nHAVING SUM(quantity) > 200\r\nORDER BY unidades_vendidas DESC;",
+    "nota": "`SUM(quantity)` retorna el total de unidades, no el total de dinero. Con 2155 filas, HashAggregate es eficiente. Para tablas de millones, crea un índice en `product_id`.",
+    "crit": "Mide comprensión de agregación pura sobre tabla transaccional sin JOINs. Error: proyectar columnas como `product_name` sin incluir en `GROUP BY`."
+  },
+  {
+    "num": 7,
+    "title": "Estacionalidad de Ventas - Pedidos por Año",
+    "prof": "**Analogía:** Es como querer saber cuántos exámenes hubo en cada año para planificar la carga de trabajo del profesor.",
+    "opt": "`GROUP BY EXTRACT(YEAR FROM order_date)` fuerza la evaluación de la función `EXTRACT` sobre cada tupla de `orders` (830 filas). PostgreSQL convierte la fecha a un entero de año y agrupa sobre ese valor derivado. El optimizador no puede usar un índice B-Tree en `order_date` para Index-Only Scan porque la expresión no es idéntica a la columna subyacente (`order_date` vs `EXTRACT`). `HAVING COUNT(*) > 100` retiene años con alta actividad.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders (Heap)\"] -->|Seq Scan| Extract[\"EXTRACT(YEAR FROM order_date)\"]\r\n    Extract -->|Año como entero| Agg[\"HashAggregate: GROUP BY año\"]\r\n    Agg -->|HAVING COUNT > 100| Out[\"Años con > 100 pedidos\"]\r\n```",
+    "sql": "SELECT\r\n    EXTRACT(YEAR FROM order_date)::int AS anio,\r\n    COUNT(*) AS total_pedidos\r\nFROM orders\r\nGROUP BY EXTRACT(YEAR FROM order_date)\r\nHAVING COUNT(*) > 100\r\nORDER BY anio;",
+    "nota": "`GROUP BY` con `EXTRACT` impide uso de índice. Para consultas frecuentes, crea un índice funcional: `CREATE INDEX idx_orders_year ON orders(EXTRACT(YEAR FROM order_date))`. PostgreSQL 15+ permite alias de `SELECT` en `GROUP BY`.",
+    "crit": "Evalúa si el candidato sabe agrupar por expresiones derivadas. PostgreSQL 15+ permite alias de `GROUP BY` (`GROUP BY anio`) siempre que no haya ambigüedad. Error: usar alias de `SELECT` en `GROUP BY` sin conocer la precedencia lógica."
+  },
+  {
+    "num": 8,
+    "title": "Logística Internacional - Países con Flete Promedio Elevado",
+    "prof": "**Analogía:** Es como querer saber en qué países el costo de envío es más caro en promedio. Si envías a Uruguay y el flete promedio es $80, algo debes cambiar en tu estrategia logística.",
+    "opt": "`GROUP BY ship_country` sobre 830 pedidos. `AVG(freight)` calcula la media aritmética manteniendo dos variables de estado transitorias (suma acumulada y contador). `HAVING AVG(freight) > 50` filtra países con costo logístico alto. El planificador puede usar un índice en `ship_country` si existe para reducir el Heap Scan, aunque la tabla es pequeña.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    O[\"orders\"] -->|Seq Scan| Agg[\"HashAggregate: AVG(freight)\"]\r\n    Agg -->|ship_country, avg_freight| Groups[\"21 países destino\"]\r\n    Groups -->|HAVING AVG > 50| Filtered[\"Países con flete costoso\"]\r\n```",
+    "sql": "SELECT\r\n    ship_country,\r\n    ROUND(AVG(freight)::numeric, 2) AS flete_promedio,\r\n    COUNT(*) AS total_pedidos\r\nFROM orders\r\nGROUP BY ship_country\r\nHAVING AVG(freight) > 50\r\nORDER BY flete_promedio DESC;",
+    "nota": "`AVG()` y `COUNT()` se calculan en una sola pasada sobre los datos. En PostgreSQL 15+, `HAVING` puede referenciar alias de `SELECT` (`HAVING flete_promedio > 50`), pero no es portable. En SQL estándar, `HAVING` se evalúa antes que `SELECT`.",
+    "crit": "Mide si el candidato maneja múltiples agregaciones y redondeo. Error: asumir que `HAVING` puede referenciar alias de `SELECT` (`flete_promedio`) — en SQL estándar, `HAVING` se evalúa antes que `SELECT`, por lo que debe repetir la expresión."
+  },
+  {
+    "num": 9,
+    "title": "Distribución Geográfica del Equipo - Ciudades con Múltiples Empleados",
+    "prof": "**Analogía:** Es como querer saber en qué ciudades hay más de un empleado. Si Lima tiene 3 empleados y Cusco solo 1, solo Lima aparecerá en el reporte.",
+    "opt": "`GROUP BY city` sobre `employees` (9 filas). El Optimizador ejecuta un Seq Scan trivial y HashAggregate en `work_mem`. `HAVING COUNT(*) > 1` filtra ciudades con más de un empleado. La cardinalidad es tan baja que el plan es prácticamente instantáneo, pero el ejercicio refuerza el concepto de agrupamiento con filtro.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    E[\"employees (9 filas)\"] -->|Seq Scan| Agg[\"HashAggregate\"]\r\n    Agg -->|GROUP BY city| Groups[\"Ciudades agrupadas\"]\r\n    Groups -->|HAVING COUNT(*) > 1| Out[\"Ciudades con 2+ empleados\"]\r\n```",
+    "sql": "SELECT\r\n    city,\r\n    COUNT(*) AS total_empleados\r\nFROM employees\r\nGROUP BY city\r\nHAVING COUNT(*) > 1\r\nORDER BY total_empleados DESC;",
+    "nota": "Con solo 9 filas, este ejercicio es trivial. En producción con miles de empleados, crea un índice en `city` si haces esta consulta frecuentemente. No confundir `HAVING COUNT(*) > 1` (más de 1 empleado) con `HAVING COUNT(*) = 1` (solo 1 empleado).",
+    "crit": "Ejercicio conceptual. El entrevistador busca confirmar que el candidato no usa `WHERE` para filtrar agregaciones. Error: escribir `WHERE COUNT(*) > 1`."
+  },
+  {
+    "num": 10,
+    "title": "Estrategia de Precios - Categorías con Precio Promedio Superior",
+    "prof": "**Analogía:** Es como querer saber qué secciones del supermercado tienen precios promedio altos. Si la sección de electrónica promedia $200 y la de verduras $5, solo la electrónica aparecerá.",
+    "opt": "`GROUP BY category_id` sobre `products`, calculando `AVG(unit_price)`. PostgreSQL debe leer la columna `unit_price` (numeric) y `category_id` (int). `HAVING AVG(unit_price) > 25` retiene categorías cuyo precio promedio excede 25. Si existe un índice compuesto en `(category_id, unit_price)`, el optimizador puede ejecutar un *Index-Only Scan* evitando la lectura del Heap.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    P[\"products (Heap)\"] -->|Index-Only Scan| Idx[\"Índice (category_id, unit_price)\"]\r\n    Idx -->|GROUP BY category_id| Agg[\"AVG(unit_price)\"]\r\n    Agg -->|HAVING AVG > 25| Out[\"Categorías premium\"]\r\n```",
+    "sql": "SELECT\r\n    category_id,\r\n    ROUND(AVG(unit_price)::numeric, 2) AS precio_promedio,\r\n    COUNT(*) AS total_productos\r\nFROM products\r\nGROUP BY category_id\r\nHAVING AVG(unit_price) > 25\r\nORDER BY precio_promedio DESC;",
+    "nota": "Si tienes un índice compuesto en `(category_id, unit_price)`, PostgreSQL puede hacer Index-Only Scan sin leer el Heap. `AVG(unit_price)` ignora valores `NULL` automáticamente.",
+    "crit": "Evalúa si el candidato piensa en estrategias de indexación (índice de cobertura). Error: proyectar `category_name` sin incluirlo en `GROUP BY` ni usar JOIN."
+  },
+  {
+    "num": 11,
+    "title": "Subconsulta Escalar - Producto Más Caro del Catálogo",
+    "prof": "**Analogía:** Es como preguntar \"¿cuál es el producto más caro de toda la tienda?\" y luego mostrar su ficha completa. Primero calculas el precio máximo, y luego buscas quién tiene ese precio.",
+    "opt": "La subconsulta escalar `(SELECT MAX(unit_price) FROM products)` se ejecuta una sola vez en la fase de iniciación de la consulta externa. PostgreSQL la trata como una constante paramétrica (el planificador la materializa como un `Result` node). El valor resultante se une implícitamente a cada fila de `products` sin costo adicional de E/S. La tabla se escanea dos veces: una para la subconsulta (Seq Scan con agregación) y otra para la externa.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    subgraph Subconsulta\r\n        P1[\"products (Seq Scan)\"] -->|MAX(unit_price)| MaxVal[\"Constante: 263.50\"]\r\n    end\r\n    subgraph Consulta externa\r\n        P2[\"products (Seq Scan 2)\"] -->|Filtro: unit_price = MAX| Filter[\"unit_price = 263.50\"]\r\n        Filter --> Out[\"Producto más caro\"]\r\n    end\r\n    MaxVal --> Filter\r\n```",
+    "sql": "SELECT\r\n    product_id,\r\n    product_name,\r\n    unit_price\r\nFROM products\r\nWHERE unit_price = (\r\n    SELECT MAX(unit_price)\r\n    FROM products\r\n);",
+    "nota": "La subconsulta se ejecuta una sola vez como `InitPlan`. En productos con 77 filas es instantáneo, pero en tablas grandes considera usar `LIMIT 1` con `ORDER BY DESC`. Usar `IN` en lugar de `=` para subconsultas escalares funciona, pero es menos explícito.",
+    "crit": "Mide si el candidato distingue subconsultas escalares (retornan 1 fila × 1 columna) de subconsultas de conjunto. Error: usar `=` con subconsulta que puede retornar múltiples filas (lanzaría error)."
+  },
+  {
+    "num": 12,
+    "title": "Subconsulta con IN - Productos de Proveedores Japoneses",
+    "prof": "**Analogía:** Es como decir \"muéstrame todos los productos que vengan de proveedores de Japón\". Primero buscas qué proveedores son japoneses, y luego filtrarás los productos de esos proveedores.",
+    "opt": "La subconsulta `SELECT supplier_id FROM suppliers WHERE country = 'Japan'` se ejecuta primero (materializada como tabla hash o resultado literal) y luego la externa usa `IN` para sondear. PostgreSQL transforma internamente `IN (subquery)` en un `Semi Join` (`Hash Semi Join`) si la subconsulta no es correlacionada, evitando duplicados. La tabla `suppliers` tiene 29 filas; el Hash Semi Join es óptimo.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    S[\"suppliers (29 filas)\"] -->|Filtro: country = 'Japan'| SubQ[\"Hash Set: supplier_ids\"]\r\n    P[\"products (77 filas)\"] -->|Sondeo en Hash Set| Semi[\"Hash Semi Join\"]\r\n    Semi -->|Coincidencia| Out[\"Productos de proveedores japoneses\"]\r\n```",
+    "sql": "SELECT\r\n    product_id,\r\n    product_name,\r\n    unit_price\r\nFROM products\r\nWHERE supplier_id IN (\r\n    SELECT supplier_id\r\n    FROM suppliers\r\n    WHERE country = 'Japan'\r\n)\r\nORDER BY product_name;",
+    "nota": "PostgreSQL transforma `IN (subquery)` en `Hash Semi Join` internamente. Es más eficiente que hacer un `JOIN` y luego `DISTINCT`. Usar `NOT IN` con subconsultas que pueden tener `NULLs` retorna 0 filas (resultado vacío inesperado). Preferir `NOT EXISTS` en esos casos.",
+    "crit": "Evalúa comprensión de Semi Join. Error: usar `NOT IN (subquery)` con columnas anulables — si la subconsulta contiene `NULL`, `NOT IN` retorna 0 filas. Preferir `NOT EXISTS`."
+  },
+  {
+    "num": 13,
+    "title": "Subconsulta Correlacionada - Productos sobre el Promedio de su Categoría",
+    "prof": "**Analogía:** Es como preguntar para cada producto: \"¿este producto es más caro que el promedio de los demás productos de su misma categoría?\". No comparas contra el promedio general, sino contra el promedio de SU categoría.",
+    "opt": "La subconsulta `SELECT AVG(p2.unit_price) FROM products p2 WHERE p2.category_id = p1.category_id` está correlacionada: hace referencia a `p1.category_id` de la consulta externa. PostgreSQL la ejecuta una vez **por cada fila** de la tabla externa (77 filas), resultando en un plan con `InitPlan` o `SubPlan`. Esto puede forzar un `Nested Loop` implícito con costo $O(N \\times M)$. La subconsulta calcula `AVG` sobre el subconjunto de productos de la misma categoría.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    P1[\"products p1 (77 filas)\"] -->|Para cada fila| Loop[\"SubPlan (correlacionado)\"]\r\n    Loop -->|Filtra p2.category_id = p1.category_id| P2[\"products p2 (Subconjunto por categoría)\"]\r\n    P2 -->|AVG(unit_price)| Avg[\"Promedio de la categoría\"]\r\n    Avg -->|¿p1.unit_price > AVG?| Check{\"unit_price > promedio\"}\r\n    Check -->|Sí| Out[\"Producto sobre el promedio\"]\r\n```",
+    "sql": "SELECT\r\n    product_name,\r\n    unit_price,\r\n    category_id\r\nFROM products p1\r\nWHERE unit_price > (\r\n    SELECT AVG(unit_price)\r\n    FROM products p2\r\n    WHERE p2.category_id = p1.category_id\r\n)\r\nORDER BY category_id, unit_price DESC;",
+    "nota": "Una subconsulta correlacionada sobre 77 filas × 77 promedios = ~6000 operaciones. Un `LATERAL JOIN` o una window function `AVG() OVER (PARTITION BY category_id)` es mucho más eficiente. Alternativa con CTE: calcular los promedios primero y luego hacer JOIN.",
+    "crit": "¡Pregunta clásica de FAANG! Evalúa si el candidato comprende el costo cuadrático de las subconsultas correlacionadas vs alternativas (`LATERAL JOIN`, ventanas). Error: no entender que la subconsulta se ejecuta 77 veces."
+  },
+  {
+    "num": 14,
+    "title": "Derived Table — Promedio de Ítems por Pedido",
+    "prof": "**Analogía:** Imagina que primero calculas cuántos exámenes rindió cada alumno, y luego sacas el promedio de esa lista. Primero obtienes un dato por alumno (derived table), y sobre ese resultado calculas el promedio general. Es como una consulta sobre otra consulta.",
+    "opt": "La subconsulta en `FROM` (derived table) calcula `COUNT(product_id)` por `order_id` (2155 filas agrupadas en ≈830 grupos). PostgreSQL materializa este resultado como una tabla temporal en memoria. Luego la consulta externa calcula `AVG(total_productos)` sobre esa tabla virtual. El optimizador no puede propagar condiciones de filtro hacia la derived table porque no hay cláusula `WHERE` externa.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    OD[\"order_details (2155 filas)\"] -->|GROUP BY order_id| Agg[\"COUNT(product_id) por pedido\"]\r\n    Agg -->|Materializar| DT[\"Derived Table (830 filas)\"]\r\n    DT -->|AVG(total_productos)| Out[\"Promedio de ítems por pedido\"]\r\n```",
+    "sql": "SELECT\r\n    ROUND(AVG(total_productos)::numeric, 2) AS promedio_items_por_pedido\r\nFROM (\r\n    SELECT\r\n        order_id,\r\n        COUNT(product_id) AS total_productos\r\n    FROM order_details\r\n    GROUP BY order_id\r\n) AS pedido_counts;",
+    "nota": "Derived tables se materializan en memoria. En PostgreSQL 14+, el optimizador puede \"push down\" filtros externos hacia la derived table si la subconsulta no tiene `GROUP BY`, `LIMIT` ni `DISTINCT`. Olvidar el alias obligatorio (`AS pedido_counts`) lanza `ERROR: subquery in FROM must have an alias`.",
+    "crit": "Mide si el candidato domina las derived tables (subconsultas en `FROM`). Error: omitir el alias obligatorio (`AS pedido_counts`) — PostgreSQL lanzará `ERROR: subquery in FROM must have an alias`."
+  },
+  {
+    "num": 15,
+    "title": "EXISTS — Clientes con Actividad Comercial (Semi Join)",
+    "prof": "**Analogía:** Es como revisar una lista de invitados y preguntar: \"¿esta persona está en la lista?\". Solo necesitas saber SÍ está, no cuántas veces aparece ni qué fecha se anotó. En cuanto la encuentras, dejas de buscar.",
+    "opt": "`EXISTS` ejecuta un **Semi Join** lógico. PostgreSQL evaluará `EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = c.customer_id)` y detendrá el escaneo interno en cuanto encuentre **la primera** coincidencia para cada cliente (short-circuit evaluation). Esto es radicalmente más eficiente que `IN` cuando la subconsulta puede retornar muchas filas. El `SELECT 1` es una convención: PostgreSQL ignora el contenido del `SELECT` dentro de `EXISTS`.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    C[\"customers (91 filas)\"] -->|Para cada cliente| Loop[\"Semi Join Search\"]\r\n    Loop -->|¿Existe orden para este customer_id?| O[\"orders (Index Scan en customer_id)\"]\r\n    O -->|Primera coincidencia encontrada| Stop[\"STOP (Short-circuit)\"]\r\n    Stop -->|Sí| Out[\"Cliente con actividad\"]\r\n```",
+    "sql": "SELECT\r\n    customer_id,\r\n    company_name,\r\n    country\r\nFROM customers c\r\nWHERE EXISTS (\r\n    SELECT 1\r\n    FROM orders o\r\n    WHERE o.customer_id = c.customer_id\r\n)\r\nORDER BY company_name;",
+    "nota": "`EXISTS` usa short-circuit: detiene la búsqueda en la primera coincidencia. En tablas grandes, esto es significativamente más rápido que `IN` que materializa todo el conjunto. MySQL a veces optimiza mal `EXISTS` en subconsultas simples.",
+    "crit": "Evalúa si el candidato prefiere `EXISTS` sobre `IN` para consultas correlacionadas con posibles nulos. Error: escribir `SELECT *` dentro de `EXISTS` (ineficiente, aunque PostgreSQL lo ignore)."
+  },
+  {
+    "num": 16,
+    "title": "NOT EXISTS — Productos Inactivos (Nunca Vendidos)",
+    "prof": "**Analogía:** Es como buscar alumnos que nunca presentaron un examen. Recorres la lista de alumnos y verificas que NO exista ningún registro de examen para cada uno. Los que no tienen ningún registro son los que buscas.",
+    "opt": "`NOT EXISTS` implementa un **Anti Join** lógico: retorna todas las filas de la tabla izquierda que **no** tienen correspondencia en la derecha. PostgreSQL ejecuta un `Hash Anti Join`: construye un conjunto hash con los `product_id` de `order_details` (2155 filas) y luego escanea `products` (77 filas) verificando ausencia en el hash. Es inmune al problema de `NULL` que afecta a `NOT IN`.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    OD[\"order_details\"] -->|Build: Hash Set de product_id| HT[\"Hash Set (2155 claves)\"]\r\n    P[\"products (77 filas)\"] -->|Probe: ¿product_id no existe?| Anti[\"Hash Anti Join\"]\r\n    Anti -->|No encontrado| Out[\"Productos sin ventas\"]\r\n```",
+    "sql": "SELECT\r\n    product_id,\r\n    product_name,\r\n    unit_price\r\nFROM products p\r\nWHERE NOT EXISTS (\r\n    SELECT 1\r\n    FROM order_details od\r\n    WHERE od.product_id = p.product_id\r\n);",
+    "nota": "`NOT EXISTS` ejecuta un Anti Join con hash. `NOT IN` requiere materializar todo el conjunto y comparar fila por fila. `NOT EXISTS` es más eficiente en la mayoría de casos. `NOT IN` con subconsulta que contiene `NULLs` retorna 0 filas (resultado vacío inesperado). Ejemplo: `WHERE id NOT IN (1, 2, NULL)` nunca retorna filas porque `NOT IN` con `NULL` siempre es `UNKNOWN`.",
+    "crit": "¡Pregunta de seguridad! El entrevistador busca que el candidato evite `NOT IN (SELECT product_id FROM order_details)` porque `product_id` en `order_details` es parte de PK compuesta y no tiene `NULLs` (podría funcionar), pero la mejor práctica es usar `NOT EXISTS` siempre. Demostrar esta conciencia es señal de seniority."
+  },
+  {
+    "num": 17,
+    "title": "ANY — Productos Más Caros que Cualquier Producto de Categoría 1",
+    "prof": "**Analogía:** Es como preguntar: \"¿hay algún producto que cueste más que el producto más barato de la tienda A?\". No necesitas que supere a TODOS los de la tienda A, solo a al menos uno. Si superas al más barato de allá, ya ganaste.",
+    "opt": "`> ANY (subquery)` retorna `TRUE` si el valor de la izquierda es mayor que **al menos un** valor de la subconsulta. PostgreSQL ejecuta la subconsulta interna primero (productos de categoría 1), materializa los precios, y para cada producto externo evalúa la comparación. Internamente puede reescribirse como `unit_price > (SELECT MIN(unit_price) FROM products WHERE category_id = 1)` si el optimizador detecta la equivalencia semántica.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    SubQ[\"Subconsulta: precios categoría 1\"] -->|Materializar lista| Set[\"Set de precios\"]\r\n    P[\"products (todas categorías)\"] -->|Por cada producto: unit_price > ANY(set)| Eval[\"Evaluar > ANY\"]\r\n    Eval -->|TRUE| Out[\"Productos más caros que alguno de categoría 1\"]\r\n```",
+    "sql": "SELECT\r\n    product_id,\r\n    product_name,\r\n    unit_price,\r\n    category_id\r\nFROM products\r\nWHERE unit_price > ANY (\r\n    SELECT unit_price\r\n    FROM products\r\n    WHERE category_id = 1\r\n)\r\nORDER BY unit_price;",
+    "nota": "PostgreSQL puede reescribir `> ANY (subquery)` como `> (SELECT MIN(...) FROM ...)` internamente, lo que permite usar un índice en la subconsulta. `= ANY` es equivalente a `IN`. Muchos desarrolladores no saben esta equivalencia.",
+    "crit": "Mide comprensión de los cuantificadores lógicos. Error: confundir `ANY` con `ALL`. `> ANY` equivale a \"mayor que el mínimo del conjunto\"."
+  },
+  {
+    "num": 18,
+    "title": "ALL — Productos Más Caros que Todos los de Categoría 1",
+    "prof": "**Analogía:** Es como preguntar: \"¿hay algún producto que cueste más que el producto más caro de la tienda A?\". Aquí sí necesitas superar a TODOS los de la tienda A, no basta con superar a uno solo.",
+    "opt": "`> ALL (subquery)` retorna `TRUE` solo si el valor supera **todos** los valores de la subconsulta. PostgreSQL reescribe internamente como `unit_price > (SELECT MAX(unit_price) FROM products WHERE category_id = 1)`. La subconsulta se ejecuta una vez como `InitPlan`, produciendo una constante.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    SubQ[\"Subconsulta: MAX(price) categoría 1\"] -->|Constante| MaxVal[\"263.50\"]\r\n    P[\"products\"] -->|Filtro: unit_price > 263.50| Filter[\"unit_price > MAX\"]\r\n    Filter --> Out[\"Productos más caros que toda categoría 1\"]\r\n```",
+    "sql": "SELECT\r\n    product_id,\r\n    product_name,\r\n    unit_price,\r\n    category_id\r\nFROM products\r\nWHERE unit_price > ALL (\r\n    SELECT unit_price\r\n    FROM products\r\n    WHERE category_id = 1\r\n)\r\nORDER BY unit_price;",
+    "nota": "PostgreSQL reescribe `> ALL (subquery)` como `> (SELECT MAX(...) FROM ...)`. Esto produce una constante que se compara en una sola pasada. `<> ALL` equivale a `NOT IN`. Mismo riesgo con `NULLs`.",
+    "crit": "Evalúa si el candidato distingue `ANY` vs `ALL`. Error común: pensar que `> ALL` requiere que la subconsulta retorne una sola fila."
+  },
+  {
+    "num": 19,
+    "title": "Subconsulta Correlacionada en SELECT — Última Compra por Cliente",
+    "prof": "**Analogía:** Es como tener una lista de clientes y para cada uno abrir su expediente personal para ver cuándo fue la última vez que compraron. Recorres la lista de clientes uno por uno, y para cada uno buscas su última fecha de compra.",
+    "opt": "La subconsulta escalar en `SELECT` calcula `MAX(order_date)` para cada cliente. Por cada fila de `customers` (91 filas), PostgreSQL ejecuta la subconsulta correlacionada sobre `orders` (830 filas) usando un `Index Scan` en `orders(customer_id)` para localizar la fecha máxima. Si no existe índice, el plan sería un Seq Scan de orders por cada cliente (91 × 830 = 75,530 operaciones de E/S).",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    C[\"customers (91 filas)\"] -->|Por cada fila| Init[\"SubPlan\"]\r\n    Init -->|Index Scan: customer_id = c.customer_id| O[\"orders (Index Scan)\"]\r\n    O -->|MAX(order_date)| MaxDate[\"Última fecha de compra\"]\r\n    MaxDate -->|Proyectar como columna| Out[\"customer_id, company_name, ultima_compra\"]\r\n```",
+    "sql": "SELECT\r\n    customer_id,\r\n    company_name,\r\n    (\r\n        SELECT MAX(order_date)\r\n        FROM orders o\r\n        WHERE o.customer_id = c.customer_id\r\n    ) AS ultima_compra\r\nFROM customers c\r\nORDER BY ultima_compra DESC NULLS LAST;",
+    "nota": "Con 91 clientes y 830 pedidos, el Index Scan en `orders(customer_id)` hace esto eficiente. Sin índice, serían 91 escaneos secuenciales de `orders`. Un `LEFT JOIN LATERAL` con `LIMIT 1` es más explícito y a menudo más rápido para este patrón.",
+    "crit": "Mide si el candidato conoce el patrón de subconsulta escalar en `SELECT` para enriquecer reportes. Error: no manejar `NULLS LAST` para clientes sin pedidos."
+  },
+  {
+    "num": 20,
+    "title": "Subconsulta Anidada — Top 5 Productos por Ingresos",
+    "prof": "**Analogía:** Es como calcular las calificaciones de cada alumno, ordenarlos de mayor a menor, quedarte con los 5 mejores, y luego mostrar sus nombres completos. Son tres pasos: calcular, filtrar, y mostrar.",
+    "opt": "Consulta de tres niveles de anidación: la subconsulta más interna calcula ingresos por producto desde `order_details`; la intermedia ordena y limita a 5; la externa agrega el nombre del producto con un JOIN adicional. PostgreSQL ejecuta las subconsultas de adentro hacia afuera. La derived table `product_revenue` se materializa en memoria (77 filas, tabla pequeña).",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    OD[\"order_details\"] -->|SUM(quantity * unit_price * (1 - discount)) GROUP BY product_id| Rev[\"Ingresos por producto\"]\r\n    Rev -->|ORDER BY DESC LIMIT 5| Top5[\"Top 5 product_id\"]\r\n    Top5 -->|INNER JOIN products| P[\"products\"]\r\n    P --> Out[\"product_id, product_name, ingresos\"]\r\n```",
+    "sql": "SELECT\r\n    p.product_id,\r\n    p.product_name,\r\n    r.ingresos_totales\r\nFROM (\r\n    SELECT\r\n        product_id,\r\n        ROUND(SUM(quantity * unit_price * (1 - discount))::numeric, 2) AS ingresos_totales\r\n    FROM order_details\r\n    GROUP BY product_id\r\n    ORDER BY ingresos_totales DESC\r\n    LIMIT 5\r\n) r\r\nINNER JOIN products p ON r.product_id = p.product_id\r\nORDER BY r.ingresos_totales DESC;",
+    "nota": "Con `LIMIT 5`, el optimizador puede usar un Top-N Sort en memoria en lugar de ordenar toda la tabla. En PostgreSQL 14+, puedes usar `LATERAL` para hacer el JOIN de forma más eficiente si la derived table es costosa.",
+    "crit": "Evalúa si el candidato estructura consultas anidadas de forma legible. Error: perder la cardinalidad al hacer `JOIN` después de `LIMIT` (funciona aquí porque `LIMIT` se aplica antes del `JOIN`). En PostgreSQL 15+, las derived tables con `LIMIT` se evalúan completamente antes del `JOIN` externo."
+  },
+  {
+    "num": 21,
+    "title": "CASE Simple — Segmentación de Precios (Económico / Intermedio / Premium)",
+    "prof": "**Analogía:** Es como un semáforo que clasifica productos por precio: verde si es barato, amarillo si es normal, rojo si es caro. Revisas el precio de cada producto y le pones la etiqueta que corresponde.",
+    "opt": "La expresión `CASE` se evalúa en la fase de proyección de tuplas (después de `WHERE`, antes de `ORDER BY`). PostgreSQL implementa `CASE` como una serie de comparaciones booleanas en CPU: la primera condición verdadera cortocircuita la evaluación. No hay impacto en el plan de acceso a disco; es puramente computacional en la capa de proyección.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    P[\"products (Seq Scan)\"] -->|unit_price| Case{\"CASE WHEN unit_price < 20 THEN 'Económico'\\nWHEN unit_price <= 50 THEN 'Intermedio'\\nELSE 'Premium'\"}\r\n    Case -->|Categoría calculada| Out[\"product_name, unit_price, categoria_costo\"]\r\n```",
+    "sql": "SELECT\r\n    product_name,\r\n    unit_price,\r\n    CASE\r\n        WHEN unit_price < 20 THEN 'Económico'\r\n        WHEN unit_price <= 50 THEN 'Intermedio'\r\n        ELSE 'Premium'\r\n    END AS categoria_costo\r\nFROM products\r\nORDER BY unit_price;",
+    "nota": "`CASE` se evalúa en la capa de proyección, no en la de acceso a disco. No afecta el plan de ejecución. Para múltiples condiciones, `CASE searched` (`CASE WHEN condición`) es más flexible que `CASE simple` (`CASE columna WHEN valor`).",
+    "crit": "Mide si el candidato conoce la sintaxis `CASE` searched (sin expresión después de `CASE`). Error: olvidar que `CASE` retorna la primera coincidencia y el orden de las cláusulas `WHEN` importa."
+  },
+  {
+    "num": 22,
+    "title": "CASE Searched — Zona Logística de Clientes",
+    "prof": "**Analogía:** Es como colorear un mapa por regiones: si el país está en América del Norte, pintas de azul; si está en Europa, de verde; y el resto de gris. Recorres cada cliente y le asignas su zona según su país.",
+    "opt": "`CASE` searched evalúa condiciones booleanas arbitrarias. Similar al ejercicio anterior, la evaluación es puramente computacional en la capa de proyección. La función se aplica a cada una de las 91 filas de `customers`, con cortocircuito en la primera coincidencia. Las condiciones con `IN` son evaluadas como comparación de conjunto (el motor expande `IN` a una serie de `OR`).",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    C[\"customers (91 filas)\"] -->|country| Case{\"CASE WHEN country IN ('USA','Canada','Mexico') THEN 'Norteamérica'\\nWHEN country IN ('UK','Germany','France','Spain','Italy') THEN 'Europa'\\nELSE 'Resto del Mundo'\"}\r\n    Case -->|zona_logistica| Out[\"company_name, country, zona_logistica\"]\r\n```",
+    "sql": "SELECT\r\n    company_name,\r\n    country,\r\n    CASE\r\n        WHEN country IN ('USA', 'Canada', 'Mexico') THEN 'Norteamérica'\r\n        WHEN country IN ('UK', 'Germany', 'France', 'Spain', 'Italy') THEN 'Europa'\r\n        ELSE 'Resto del Mundo'\r\n    END AS zona_logistica\r\nFROM customers\r\nORDER BY country;",
+    "nota": "`CASE` searched con `IN` puede ser reescrito como múltiples `OR` internamente. Para listas largas, considera usar una tabla temporal de referencia. Ambos SGBD soportan `CASE` searched con la misma sintaxis.",
+    "crit": "Evalúa si el candidato usa `CASE` searched sin expresión después de `CASE`. Error: escribir `CASE country WHEN IN (...)` (sintaxis inválida). `CASE` simple no acepta `IN`."
+  },
+  {
+    "num": 23,
+    "title": "CASE + FILTER — Conteo Condicional por Zona Geográfica",
+    "prof": "**Analogía:** Es como tener tres contadores en la mesa: uno para América, otro para Europa, y otro para el resto. Recorres la lista de clientes y sumas +1 al contador que corresponda según el país. Un solo recorrido, tres contadores.",
+    "opt": "`COUNT(*) FILTER (WHERE ...)` es una extensión PostgreSQL que implementa agregación condicional sin subconsultas. Internamente, la función de ventana/agregación mantiene un contador que solo se incrementa cuando el `FILTER` es `TRUE`. El `FILTER` se evalúa tupla por tupla durante el escaneo, y la agregación acumula en una sola pasada sobre los datos. Esto evita escanear la tabla múltiples veces o usar costosos `CASE` dentro de `COUNT`.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    C[\"customers (Seq Scan)\"] -->|Filtros condicionales| Filters[\"FILTER: country IN ('USA','Canada','Mexico')\\nFILTER: country IN ('UK','Germany','France','Spain','Italy')\\nFILTER: ELSE\"]\r\n    Filters -->|Tres contadores| Agg[\"COUNT(*) FILTER 1 | COUNT(*) FILTER 2 | COUNT(*) FILTER 3\"]\r\n    Agg --> Out[\"Norteamérica: 16 | Europa: 45 | Resto: 30\"]\r\n```",
+    "sql": "SELECT\r\n    COUNT(*) FILTER (\r\n        WHERE country IN ('USA', 'Canada', 'Mexico')\r\n    ) AS norteamerica,\r\n    COUNT(*) FILTER (\r\n        WHERE country IN ('UK', 'Germany', 'France', 'Spain', 'Italy')\r\n    ) AS europa,\r\n    COUNT(*) FILTER (\r\n        WHERE country NOT IN ('USA', 'Canada', 'Mexico', 'UK', 'Germany', 'France', 'Spain', 'Italy')\r\n    ) AS resto_del_mundo\r\nFROM customers;",
+    "nota": "`FILTER` es una extensión PostgreSQL más legible que `COUNT(CASE WHEN ... THEN 1 END)`. Ambos producen el mismo plan de ejecución. `FILTER` no está soportado en MySQL. Usar `CASE WHEN` como alternativa portable.",
+    "crit": "Mide si el candidato conoce `FILTER (WHERE ...)` como alternativa superior a `CASE WHEN ... THEN 1 END`. En PostgreSQL 15+, `FILTER` es más legible y tiene el mismo plan de ejecución optimizado. Error: usar múltiples subconsultas `SELECT (SELECT COUNT(*) FROM ... WHERE ...)` para cada categoría."
+  },
+  {
+    "num": 24,
+    "title": "CASE + SUM — Pivote de Ventas por Año en Columnas",
+    "prof": "**Analogía:** Es como tener columnas separadas para 1996, 1997 y 1998, y para cada cliente ir sumando las ventas en la columna del año que corresponda. Transformas filas en columnas manualmente.",
+    "opt": "`SUM(CASE WHEN ... THEN value ELSE 0 END)` implementa un pivote manual (filas a columnas). PostgreSQL evalúa el `CASE` para cada tupla de `order_details` JOIN `orders` (2155 filas), y la función `SUM` acumula selectivamente. El optimizador no puede indexar sobre la expresión condicional, por lo que el plan es un Hash Join seguido de HashAggregate con múltiples acumuladores.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders\"] -->|INNER JOIN| OD[\"order_details\"]\r\n    OD -->|Cálculo por fila| Case{\"CASE WHEN EXTRACT(YEAR FROM order_date) = 1996 THEN importe ELSE 0\\nCASE WHEN EXTRACT(YEAR FROM order_date) = 1997 THEN importe ELSE 0\\nCASE WHEN EXTRACT(YEAR FROM order_date) = 1998 THEN importe ELSE 0\"}\r\n    Case -->|GROUP BY customer_id| Agg[\"SUM(1996), SUM(1997), SUM(1998)\"]\r\n    Agg --> Out[\"customer_id, ventas_1996, ventas_1997, ventas_1998\"]\r\n```",
+    "sql": "SELECT\r\n    o.customer_id,\r\n    ROUND(SUM(CASE WHEN EXTRACT(YEAR FROM o.order_date) = 1996\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS ventas_1996,\r\n    ROUND(SUM(CASE WHEN EXTRACT(YEAR FROM o.order_date) = 1997\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS ventas_1997,\r\n    ROUND(SUM(CASE WHEN EXTRACT(YEAR FROM o.order_date) = 1998\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS ventas_1998\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nGROUP BY o.customer_id\r\nORDER BY o.customer_id;",
+    "nota": "El pivote manual con `CASE` + `SUM` funciona bien para pocos valores. Para muchos valores dinámicos, usa `crosstab()` de la extensión `tablefunc`. Olvidar `ELSE 0` genera `NULLs` que complican reportes y cálculos posteriores.",
+    "crit": "Evalúa técnica de pivoteo sin `crosstab()`. Error: no usar `ELSE 0` — si no hay ventas en un año, `SUM(CASE ... END)` retorna `NULL` en lugar de `0`."
+  },
+  {
+    "num": 25,
+    "title": "CASE para Antigüedad Laboral — Clasificación de Empleados",
+    "prof": "**Analogía:** Es como clasificar atletas por su experiencia: los que llevan más de 30 años son veteranos (oro), 20-30 son seniors (plata), 10-20 son experimentados (bronce), y los nuevos son novatos. Mides la antigüedad y asignas la categoría.",
+    "opt": "`CASE` con funciones de fecha (`AGE`, `EXTRACT`). `AGE(hire_date)` retorna un intervalo; `EXTRACT(YEAR FROM AGE(...))` extrae los años. La evaluación se realiza en la proyección sobre 9 filas. PostgreSQL optimiza la función `AGE` como immutable para el mismo valor de entrada, permitiendo cacheo de resultados.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    E[\"employees (Seq Scan)\"] -->|hire_date| Age[\"EXTRACT(YEAR FROM AGE(hire_date))\"]\r\n    Age -->|Años de antigüedad| Case{\"CASE WHEN >= 30 THEN 'Veterano'\\nWHEN >= 20 THEN 'Senior'\\nWHEN >= 10 THEN 'Experimentado'\\nELSE 'Nuevo'\"}\r\n    Case --> Out[\"employee_id, nombre, antigüedad, categoría\"]\r\n```",
+    "sql": "SELECT\r\n    employee_id,\r\n    first_name || ' ' || last_name AS nombre_completo,\r\n    EXTRACT(YEAR FROM AGE(hire_date))::int AS anios_antiguedad,\r\n    CASE\r\n        WHEN EXTRACT(YEAR FROM AGE(hire_date)) >= 30 THEN 'Veterano'\r\n        WHEN EXTRACT(YEAR FROM AGE(hire_date)) >= 20 THEN 'Senior'\r\n        WHEN EXTRACT(YEAR FROM AGE(hire_date)) >= 10 THEN 'Experimentado'\r\n        ELSE 'Nuevo'\r\n    END AS categoria_antiguedad\r\nFROM employees\r\nORDER BY anios_antiguedad DESC;",
+    "nota": "`AGE()` es inmutable y puede cachearse. Calcular `EXTRACT(YEAR FROM AGE(hire_date))` dos veces (en `SELECT` y en `ORDER BY`) duplica el trabajo. Considera usar un CTE o alias. Hardcodear el año actual en lugar de usar `CURRENT_DATE` es frágil.",
+    "crit": "Mide si el candidato usa `AGE()` correctamente. Error: calcular antigüedad como `2024 - EXTRACT(YEAR FROM hire_date)` — frágil y no usa funciones nativas de PostgreSQL."
+  },
+  {
+    "num": 26,
+    "title": "CASE en ORDER BY — Priorización Personalizada de Países",
+    "prof": "**Analogía:** Es como cuando hay una fila de pacientes y el doctor decide atender primero a los de emergencia, luego a los graves, y al final a los leves. No es orden alfabético ni por hora, sino por regla de negocio.",
+    "opt": "`CASE` dentro de `ORDER BY` permite ordenamiento customizado. El motor evalúa el `CASE` para cada fila durante la fase de ordenamiento (después de `SELECT`). Si el conjunto es grande, la expresión se evalúa antes del sort y se almacena como clave de ordenamiento en `work_mem`. No hay impacto en el plan de acceso, pero la expresión puede aumentar la memoria requerida para el sort.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    C[\"customers (Seq Scan)\"] -->|country| Case{\"CASE WHEN country = 'USA' THEN 1\\nWHEN country = 'Germany' THEN 2\\nWHEN country = 'UK' THEN 3\\nELSE 4\"}\r\n    Case -->|Clave de orden personalizada| Sort[\"ORDER BY CASE priority, country\"]\r\n    Sort --> Out[\"Clientes USA primero, luego Germany, luego UK, luego resto\"]\r\n```",
+    "sql": "SELECT\r\n    customer_id,\r\n    company_name,\r\n    country\r\nFROM customers\r\nORDER BY\r\n    CASE\r\n        WHEN country = 'USA' THEN 1\r\n        WHEN country = 'Germany' THEN 2\r\n        WHEN country = 'UK' THEN 3\r\n        ELSE 4\r\n    END,\r\n    country;",
+    "nota": "`CASE` en `ORDER BY` puede impedir el uso de índices para el ordenamiento. En tablas grandes, puede ser más eficiente calcular la columna en `SELECT` y ordenar por ella. Creer que el alias de `CASE` en `SELECT` se puede usar en `ORDER BY` sin repetir la expresión es un error común.",
+    "crit": "Evalúa creatividad en `ORDER BY`. Útil para reportes donde ciertos mercados tienen prioridad visual. Error: no entender que `CASE` en `ORDER BY` puede referenciar columnas no incluidas en `SELECT`."
+  },
+  {
+    "num": 27,
+    "title": "CASE + FILTER Combinados — Reporte de Desempeño por Trimestre",
+    "prof": "**Analogía:** Es como armar un reporte trimestral donde para cada vendedor calculas sus ventas por trimestre, y además cuentas cuántos pedidos tuvieron descuento. Son dos métricas distintas en una sola consulta.",
+    "opt": "Combinación de `FILTER` (para agregación condicional nativa) y `CASE` (para lógica compleja). PostgreSQL evalúa ambos en la misma pasada de agregación. `FILTER` es puramente una condición booleana que el acumulador verifica; `CASE` es una expresión evaluada antes de pasar el valor al acumulador.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders\"] -->|INNER JOIN| OD[\"order_details\"]\r\n    OD -->|Para cada fila| Case{\"CASE WHEN EXTRACT(QUARTER FROM order_date) = 1 THEN importe ELSE 0\\n... para 4 trimestres\"}\r\n    Case -->|COUNT(*) FILTER (WHERE discount > 0)| Agg[\"SUM por trimestre, COUNT con descuento\"]\r\n    Agg -->|GROUP BY employee_id| Out[\"employee_id, Q1, Q2, Q3, Q4, pedidos_con_descuento\"]\r\n```",
+    "sql": "SELECT\r\n    o.employee_id,\r\n    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 1\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q1,\r\n    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 2\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q2,\r\n    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 3\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q3,\r\n    ROUND(SUM(CASE WHEN EXTRACT(QUARTER FROM o.order_date) = 4\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS q4,\r\n    COUNT(*) FILTER (WHERE od.discount > 0) AS pedidos_con_descuento\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nGROUP BY o.employee_id\r\nORDER BY o.employee_id;",
+    "nota": "`FILTER` es más legible que `CASE WHEN` dentro de `COUNT`/`SUM`. Ambos producen el mismo plan, pero `FILTER` comunica mejor la intención. Usa `FILTER` para conteos y `CASE` para valores condicionales.",
+    "crit": "Ejercicio integrador de `CASE` + `FILTER`. El entrevistador busca que el candidato distinga cuándo usar uno u otro: `FILTER` para agregación condicional nativa, `CASE` dentro de `SUM` para valores condicionales."
+  },
+  {
+    "num": 28,
+    "title": "CASE en HAVING — Categorías con Alto Ratio de Productos Caros",
+    "prof": "**Analogía:** Es como querer saber qué secciones del supermercado tienen más del 50% de productos caros. Primero agrupas por sección, cuentas los productos caros y el total, y luego filtras las secciones que cumplen el criterio.",
+    "opt": "`CASE` dentro de `HAVING` permite filtrar grupos basados en agregaciones condicionales. El motor agrupa primero, calcula las agregaciones condicionales para cada grupo, y luego aplica `HAVING`. En este caso, `SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END)` cuenta productos caros por categoría, y `HAVING` retiene categorías con al menos 3 productos caros.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    P[\"products (Seq Scan)\"] -->|GROUP BY category_id| Agg[\"SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END) AS productos_caros\\nCOUNT(*) AS total\"]\r\n    Agg -->|HAVING productos_caros >= 3| Filtered[\"Categorías con >=3 productos > 30\"]\r\n    Filtered -->|Cociente: productos_caros / total| Out[\"category_id, ratio\"]\r\n```",
+    "sql": "SELECT\r\n    category_id,\r\n    COUNT(*) AS total_productos,\r\n    SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END) AS productos_caros,\r\n    ROUND(\r\n        SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END)::numeric\r\n        / COUNT(*)::numeric * 100, 2\r\n    ) AS porcentaje_caros\r\nFROM products\r\nGROUP BY category_id\r\nHAVING SUM(CASE WHEN unit_price > 30 THEN 1 ELSE 0 END) >= 3\r\nORDER BY porcentaje_caros DESC;",
+    "nota": "`SUM(CASE WHEN ...)` es evaluado por el motor de agregación. Es equivalente a `COUNT(*) FILTER (WHERE ...)` pero menos legible. En PostgreSQL 15+, `HAVING` puede referenciar alias de `SELECT`, pero no es portable a versiones anteriores ni a otros SGBD.",
+    "crit": "Mide si el candidato usa `CASE` dentro de funciones agregadas en `HAVING`. Error: olvidar que `HAVING` se evalúa antes que `SELECT` (no puede referenciar alias `productos_caros` en PostgreSQL, aunque en algunos dialectos sí)."
+  },
+  {
+    "num": 29,
+    "title": "CASE Anidado — Categorización Compleja de Descuentos",
+    "prof": "**Analogía:** Es como un árbol de decisiones: un doctor que primero pregunta: \"¿tiene fiebre?\". Si no, es resfriado común. Si sí, pregunta: \"¿tiene tos?\". Si no, es gripe leve. Si sí, es neumonía. Cada pregunta te lleva por un camino diferente.",
+    "opt": "`CASE` anidados se evalúan de adentro hacia afuera. Cada nivel de anidamiento agrega comparaciones booleanas adicionales. PostgreSQL evalúa el `CASE` más interno primero, y su resultado alimenta el `CASE` externo. No hay penalización significativa de rendimiento para anidamientos poco profundos (2-3 niveles) sobre conjuntos pequeños como 2155 filas.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    OD[\"order_details\"] -->|discount| Inner{\"CASE interno: \\nWHEN discount = 0 THEN 'Sin descuento'\\nWHEN discount <= 0.05 THEN 'Descuento bajo'\\nWHEN discount <= 0.15 THEN 'Descuento medio'\\nELSE 'Descuento alto'\"}\r\n    Inner -->|categoria_1| Outer{\"CASE externo:\\nWHEN 'Sin descuento' THEN 'Precio completo'\\nWHEN 'Descuento bajo' THEN 'Mínima promoción'\\nELSE 'En promoción'\"}\r\n    Outer --> Out[\"order_id, product_id, discount, clasificación\"]\r\n```",
+    "sql": "SELECT\r\n    order_id,\r\n    product_id,\r\n    discount,\r\n    CASE\r\n        WHEN discount = 0 THEN 'Precio completo'\r\n        ELSE\r\n            CASE\r\n                WHEN discount <= 0.05 THEN 'Mínima promoción'\r\n                WHEN discount <= 0.15 THEN 'Promoción media'\r\n                ELSE 'Alta promoción'\r\n            END\r\n    END AS tipo_descuento\r\nFROM order_details\r\nORDER BY discount DESC;",
+    "nota": "`CASE` anidado con 2-3 niveles es eficiente. Niveles más profundos dificultan el mantenimiento sin impacto significativo en rendimiento. Un `CASE` searched plano con rangos explícitos es más legible y mantenible.",
+    "crit": "Evalúa si el candidato puede estructurar lógica condicional compleja. Alternativa recomendada: usar `CASE` searched plano en lugar de anidado para legibilidad. Error: olvidar el `END` del `CASE` interno."
+  },
+  {
+    "num": 30,
+    "title": "CASE con Agregación Múltiple — Reporte de Ventas por Región (Pivote)",
+    "prof": "**Analogía:** Es como tener un marcador donde anotas los puntos de cada equipo en columnas separadas. Recorres cada pedido y sumas el importe en la columna del país de destino correspondiente.",
+    "opt": "Este es un pivote manual completo: `SUM(CASE WHEN country IN (...) THEN importe END)` para cada región. La tabla `orders` se une con `order_details` (2155 filas), se agrupa por `employee_id`, y se calculan 4 acumuladores simultáneos en una sola pasada. El optimizador no puede usar índices en las expresiones `CASE`.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders\"] -->|JOIN ship_country| OD[\"order_details\"]\r\n    OD -->|importe| Cases[\"4 acumuladores CASE\"]\r\n    Cases -->|GROUP BY employee_id| Agg[\"SUM(USA), SUM(Europa), SUM(Latam), SUM(Resto)\"]\r\n    Agg -->|ORDER BY employee_id| Out[\"employee_id, usa, europa, latam, resto\"]\r\n```",
+    "sql": "SELECT\r\n    o.employee_id,\r\n    ROUND(SUM(CASE WHEN o.ship_country IN ('USA', 'Canada', 'Mexico')\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS norteamerica,\r\n    ROUND(SUM(CASE WHEN o.ship_country IN ('UK', 'Germany', 'France', 'Spain', 'Italy')\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS europa,\r\n    ROUND(SUM(CASE WHEN o.ship_country IN ('Argentina', 'Brazil', 'Venezuela')\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS latam,\r\n    ROUND(SUM(CASE WHEN o.ship_country NOT IN ('USA', 'Canada', 'Mexico', 'UK', 'Germany', 'France', 'Spain', 'Italy', 'Argentina', 'Brazil', 'Venezuela')\r\n              THEN od.quantity * od.unit_price * (1 - od.discount) ELSE 0 END)::numeric, 2) AS resto_mundo\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\nGROUP BY o.employee_id\r\nORDER BY o.employee_id;",
+    "nota": "Pivote manual con `CASE` funciona para pocas columnas. Para columnas dinámicas, considera `crosstab()` o una vista materializada. Olvidar `ELSE 0` genera `NULLs`. Usar `COALESCE` o `ELSE 0` siempre.",
+    "crit": "Evalúa habilidad de pivoteo manual. El entrevistador busca que el candidato reconozca cuándo esto es adecuado vs cuándo usar la extensión `tablefunc` con `crosstab()`. Error: no manejar clientes sin ventas en una región (resultado `NULL` vs `0`)."
+  },
+  {
+    "num": 31,
+    "title": "SELF JOIN — Organigrama Jerárquico de Empleados",
+    "prof": "**Analogía:** Es como un árbol genealógico donde cada persona tiene un padre. Cruzas la lista de personas dos veces: una para encontrar al empleado y otra para encontrar a su jefe. El resultado te muestra quién reporta a quién.",
+    "opt": "El `SELF JOIN` crea dos instancias lógicas de la misma tabla física `employees` en el plan de ejecución. El optimizador asigna alias `e` (empleado) y `m` (manager) a dos instancias separadas en memoria. La condición `e.reports_to = m.employee_id` se resuelve mediante un `Hash Join` si no hay índice, o un `Nested Loop` con Index Scan si existe un índice en `reports_to`. Como la tabla tiene solo 9 filas, el plan es trivial.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    E[\"employees e (Subordinados)\"] -->|e.reports_to = m.employee_id| Join[\"INNER JOIN (SELF)\"]\r\n    M[\"employees m (Managers)\"] --> Join\r\n    Join -->|Coincidencia| Out[\"empleado | cargo_empleado | manager | cargo_manager\"]\r\n```",
+    "sql": "SELECT\r\n    e.employee_id,\r\n    e.first_name || ' ' || e.last_name AS empleado,\r\n    e.title AS cargo_empleado,\r\n    m.first_name || ' ' || m.last_name AS manager,\r\n    m.title AS cargo_manager\r\nFROM employees e\r\nINNER JOIN employees m ON e.reports_to = m.employee_id\r\nORDER BY e.employee_id;",
+    "nota": "Con solo 9 filas es trivial. En organigramas grandes, crea un índice en `reports_to` y considera usar Recursive CTE para jerarquías de múltiples niveles. No manejar `NULLs` en `reports_to` (el CEO no tiene jefe) es un error común.",
+    "crit": "Mide si el candidato comprende la auto-referenciación relacional. Error: usar `LEFT JOIN` aquí excluiría al Presidente (Andrew Fuller, `reports_to IS NULL`). Si se desea incluirlo, debe ser `LEFT JOIN`. La elección depende del requerimiento."
+  },
+  {
+    "num": 32,
+    "title": "SELF JOIN — Empleados que Comparten el Mismo Manager",
+    "prof": "**Analogía:** Es como encontrar compañeros que comparten el mismo supervisor. Recorres la lista de empleados dos veces y buscas pares que tengan el mismo jefe pero sean personas distintas.",
+    "opt": "SELF JOIN no-equitativo: `e1.reports_to = e2.reports_to AND e1.employee_id <> e2.employee_id`. El optimizador cruza la tabla consigo misma encontrando pares de empleados que reportan al mismo jefe. El plan es un `Nested Loop` sobre las 9 filas con filtro adicional de desigualdad. La tabla es tan pequeña que el plan es instantáneo.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    E1[\"employees e1\"] -->|e1.reports_to = e2.reports_to| Cross[\"Cruce cruzado\"]\r\n    E2[\"employees e2\"] --> Cross\r\n    Cross -->|Filtro: e1.employee_id <> e2.employee_id| Filter[\"Excluir mismo empleado\"]\r\n    Filter -->|e1.employee_id < e2.employee_id| Dedup[\"Eliminar pares duplicados\"]\r\n    Dedup --> Out[\"e1 (colega) | e2 (colega) | manager_id\"]\r\n```",
+    "sql": "SELECT\r\n    e1.employee_id AS empleado1_id,\r\n    e1.first_name || ' ' || e1.last_name AS empleado1,\r\n    e2.employee_id AS empleado2_id,\r\n    e2.first_name || ' ' || e2.last_name AS empleado2,\r\n    e1.reports_to AS manager_id\r\nFROM employees e1\r\nINNER JOIN employees e2 ON e1.reports_to = e2.reports_to\r\n    AND e1.employee_id < e2.employee_id\r\nORDER BY e1.reports_to, e1.employee_id;",
+    "nota": "El patrón `e1.employee_id < e2.employee_id` reduce las combinaciones a la mitad y elimina duplicados en una sola operación. Usar `<>` genera pares `(A,B)` y `(B,A)` duplicados.",
+    "crit": "Evalúa si el candidato conoce el patrón de \"pares únicos\" usando `<` en lugar de `<>` para evitar duplicados simétricos. Error: usar `<>` que genera pares `(A,B)` y `(B,A)` duplicados."
+  },
+  {
+    "num": 33,
+    "title": "FULL OUTER JOIN — Empleados vs Territorios (Todos de Ambos Lados)",
+    "prof": "**Analogía:** Es como un registro civil que muestra todos los matrimonios: los que se casaron (coincidencias), los solteros (empleados sin territorio), y los viudos (territorios sin empleado). Nadie se queda fuera.",
+    "opt": "`FULL OUTER JOIN` preserva filas de ambas tablas. PostgreSQL implementa el `FULL OUTER JOIN` como la combinación de un `LEFT JOIN` y un `RIGHT JOIN` con `UNION`, o más eficientemente como un `Hash Join` con marcadores de presencia. Las filas sin correspondencia se rellenan con `NULL`. `employee_territories` es la tabla puente; al hacer FULL JOIN directo entre `employees` y `employee_territories`, se preservan empleados sin territorio y territorios sin empleado.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    E[\"employees\"] -->|FULL OUTER JOIN| ET[\"employee_territories\"]\r\n    ET -->|Coincidencia| Match[\"filas emparejadas\"]\r\n    E -->|Sin coincidencia| LeftNull[\"Empleados sin territorio (NULLs a la derecha)\"]\r\n    ET -->|Sin coincidencia| RightNull[\"Territorios sin empleado (NULLs a la izquierda)\"]\r\n    Match & LeftNull & RightNull --> Out[\"Resultado FULL OUTER\"]\r\n```",
+    "sql": "SELECT\r\n    e.employee_id,\r\n    e.first_name || ' ' || e.last_name AS empleado,\r\n    et.territory_id\r\nFROM employees e\r\nFULL OUTER JOIN employee_territories et ON e.employee_id = et.employee_id\r\nORDER BY e.employee_id NULLS LAST, et.territory_id NULLS LAST;",
+    "nota": "`FULL OUTER JOIN` es menos eficiente que `LEFT`/`RIGHT JOIN` porque requiere marcadores de presencia en ambas tablas. En PostgreSQL se implementa como la combinación de `LEFT` y `RIGHT JOIN`. MySQL no soporta `FULL OUTER JOIN`. La alternativa es `LEFT JOIN UNION RIGHT JOIN`.",
+    "crit": "Mide si el candidato entiende la diferencia entre FULL y LEFT/RIGHT JOIN. Error: asumir que FULL JOIN siempre produce filas con `NULLs` en ambos lados (ambas tablas pueden tener todas las filas emparejadas)."
+  },
+  {
+    "num": 34,
+    "title": "FULL OUTER JOIN — Clientes y Pedidos (Análisis Completo)",
+    "prof": "**Analogía:** Es como cruzar el padrón de votantes con los que efectivamente votaron. Quieres ver todos los votantes (aunque no votaron) y todos los votos (aunque el votante no está en el padrón). Es una auditoría completa de integridad.",
+    "opt": "FULL OUTER JOIN entre `customers` (91 filas) y `orders` (830 filas). PostgreSQL construye un Hash Join con marcadores de presencia. Clientes sin pedidos aparecen con `NULL` en columnas de `orders`; pedidos huérfanos (sin cliente válido) aparecen con `NULL` en columnas de `customers`. Esto permite detectar inconsistencias de integridad referencial.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    C[\"customers\"] -->|FULL JOIN| O[\"orders\"]\r\n    O -->|customer_id| Join[\"Hash Full Join\"]\r\n    Join --> Out[\"Todos los clientes (con/sin pedidos) + Pedidos huérfanos (si existen)\"]\r\n```",
+    "sql": "SELECT\r\n    c.customer_id AS id_cliente,\r\n    c.company_name,\r\n    o.order_id,\r\n    o.order_date\r\nFROM customers c\r\nFULL OUTER JOIN orders o ON c.customer_id = o.customer_id\r\nORDER BY c.customer_id NULLS LAST, o.order_id NULLS LAST;",
+    "nota": "FULL JOIN entre tablas grandes es costoso. Para auditorías, considera `LEFT JOIN` y `RIGHT JOIN` por separado con `UNION`. Asumir que la FK siempre garantiza integridad es un error; FULL JOIN detecta registros huérfanos.",
+    "crit": "Evalúa si el candidato usa FULL JOIN para auditoría de integridad referencial. Error: no usar `NULLS LAST` en `ORDER BY` — por defecto PostgreSQL ordena `NULLs` primero (dependiendo de la configuración)."
+  },
+  {
+    "num": 35,
+    "title": "JOIN de 5 Tablas — Trazabilidad Completa de un Producto en un Pedido",
+    "prof": "**Analogía:** Es como reconstruir el historial completo de un paciente: desde el pedido del médico, el producto indicado, la categoría terapéutica, el proveedor que lo fabricó, y la fecha del pedido. Son 5 fuentes de información que se cruzan.",
+    "opt": "Consulta que une 5 tablas: `order_details` → `products` → `categories` → `suppliers` → `orders`. El optimizador usa algoritmos genéticos (GEQO) para determinar el orden óptimo de joins. Con 5 tablas pequeñas, el plan típico comienza JOINeando `order_details` con `products` (índice en PK), luego `categories` (índice en PK), luego `suppliers` (índice en PK), y finalmente `orders`. Cada JOIN reduce la cardinalidad del conjunto intermedio.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    OD[\"order_details\"] -->|product_id| P[\"products\"]\r\n    P -->|category_id| C[\"categories\"]\r\n    P -->|supplier_id| S[\"suppliers\"]\r\n    OD -->|order_id| O[\"orders\"]\r\n    C & S & O --> Out[\"order_id | product_name | category_name | supplier_name | order_date\"]\r\n```",
+    "sql": "SELECT\r\n    od.order_id,\r\n    p.product_name,\r\n    c.category_name,\r\n    s.company_name AS proveedor,\r\n    o.order_date,\r\n    od.quantity,\r\n    od.unit_price\r\nFROM order_details od\r\nINNER JOIN products p ON od.product_id = p.product_id\r\nINNER JOIN categories c ON p.category_id = c.category_id\r\nINNER JOIN suppliers s ON p.supplier_id = s.supplier_id\r\nINNER JOIN orders o ON od.order_id = o.order_id\r\nORDER BY od.order_id, p.product_name;",
+    "nota": "5 JOINs sobre tablas pequeñas con índices en PK/FK son instantáneos. En tablas grandes, el orden de los JOINs importa: empieza por las tablas más filtradas. Usar `SELECT *` en joins múltiples genera columnas duplicadas de columnas con el mismo nombre.",
+    "crit": "Evalúa si el candidato mantiene legibilidad en JOINS múltiples. Error: perder filas por usar `INNER JOIN` cuando un `LEFT JOIN` sería necesario (p. ej., si un producto no tiene categoría)."
+  },
+  {
+    "num": 36,
+    "title": "JOIN de 4 Tablas — Reporte Logístico Completo",
+    "prof": "**Analogía:** Es como armar el manifiesto de un envío: necesitas saber qué cliente pidió, quién lo atendió, quién lo transportó, y cuándo se hizo. Son 4 fuentes de datos que se unen en un solo documento.",
+    "opt": "4 tablas: `orders` → `customers`, `orders` → `employees`, `orders` → `shippers`. El optimizador usa `orders` como tabla central (tabla de hechos en esquema estrella). Como `customers` (91), `employees` (9), y `shippers` (3) son tablas pequeñas, el optimizador construye Hash Joins secuenciales, agregando cada tabla dimensión al conjunto intermedio. El plan es un `Nested Loop` con índices.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders (Tabla de hechos)\"] -->|customer_id| C[\"customers\"]\r\n    O -->|employee_id| E[\"employees\"]\r\n    O -->|ship_via| S[\"shippers\"]\r\n    C & E & S -->|Hash Joins secuenciales| Out[\"Reporte consolidado de operaciones\"]\r\n```",
+    "sql": "SELECT\r\n    o.order_id,\r\n    o.order_date,\r\n    c.company_name AS cliente,\r\n    e.first_name || ' ' || e.last_name AS empleado,\r\n    s.company_name AS transportista,\r\n    o.freight\r\nFROM orders o\r\nINNER JOIN customers c ON o.customer_id = c.customer_id\r\nINNER JOIN employees e ON o.employee_id = e.employee_id\r\nINNER JOIN shippers s ON o.ship_via = s.shipper_id\r\nORDER BY o.order_date DESC\r\nLIMIT 20;",
+    "nota": "`orders` es la tabla central (hechos) y las otras son dimensiones. El optimizador construye hashes de las tablas pequeñas primero. No limitar el resultado con `LIMIT` cuando el reporte puede retornar miles de filas es un error común.",
+    "crit": "Evalúa capacidad de construir reportes multi-tabla. Error: no usar alias descriptivos, haciendo el SQL críptico."
+  },
+  {
+    "num": 37,
+    "title": "RIGHT JOIN — Empleados y sus Pedidos (Preservando Empleados)",
+    "prof": "**Analogía:** RIGHT JOIN es como un espejo de LEFT JOIN. Si giras la consulta, puedes ver los mismos datos. Es como escribir la misma frase al revés: el resultado es el mismo, solo cambia el orden de las palabras.",
+    "opt": "`RIGHT JOIN` es la imagen espejo de `LEFT JOIN`. El parser de PostgreSQL reescribe internamente `RIGHT JOIN` como `LEFT JOIN` invirtiendo el orden de las tablas en el árbol sintáctico. `orders RIGHT JOIN employees` es equivalente a `employees LEFT JOIN orders`. Es una transformación puramente sintáctica: el optimizador genera el mismo plan físico independientemente.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders (izquierda en código)\"] -->|RIGHT JOIN| E[\"employees (derecha — preservada)\"]\r\n    E -->|Parser reescribe como LEFT JOIN| Rewrite[\"employees LEFT JOIN orders\"]\r\n    Rewrite --> Out[\"Todos los empleados con/sin pedidos\"]\r\n```",
+    "sql": "SELECT\r\n    e.employee_id,\r\n    e.first_name || ' ' || e.last_name AS empleado,\r\n    o.order_id,\r\n    o.order_date\r\nFROM orders o\r\nRIGHT JOIN employees e ON o.employee_id = e.employee_id\r\nORDER BY e.employee_id;",
+    "nota": "`RIGHT JOIN` y `LEFT JOIN` producen exactamente el mismo plan de ejecución. PostgreSQL reescribe internamente uno como el otro. Es preferible usar `LEFT JOIN` por convención y legibilidad.",
+    "crit": "El entrevistador busca que el candidato explique que `RIGHT JOIN` es sintácticamente redundante y que prefiere `LEFT JOIN` para legibilidad. Error: sugerir que `RIGHT JOIN` tiene mejor rendimiento que `LEFT JOIN` (falso, el plan es idéntico tras la reescritura)."
+  },
+  {
+    "num": 38,
+    "title": "CROSS JOIN + Filtro — Combinaciones de Productos y Categorías",
+    "prof": "**Analogía:** Es como combinar todos los platos con todas las bebidas para crear pares, pero luego te quedas solo con los platos que van bien con la bebida que eliges. Primero generas todas las combinaciones, y luego filtras las que tienen sentido.",
+    "opt": "`CROSS JOIN` genera el producto cartesiano de dos tablas (77 × 8 = 616 filas). El optimizador implementa el CROSS JOIN como un `Nested Loop` sin condición de join. El filtro `WHERE p.category_id = c.category_id` transforma el CROSS JOIN en un INNER JOIN lógico. En PostgreSQL, escribir `FROM products p, categories c WHERE p.category_id = c.category_id` es equivalente a `CROSS JOIN` + `WHERE`. El optimizador trata ambas formulaciones de forma idéntica.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    P[\"products (77 filas)\"] -->|CROSS JOIN| Cart[\"Producto Cartesiano (77 × 8 = 616 filas)\"]\r\n    C[\"categories (8 filas)\"] --> Cart\r\n    Cart -->|Filtro: p.category_id = c.category_id| Filter[\"Filtrar a 77 filas\"]\r\n    Filter --> Out[\"product_name, category_name\"]\r\n```",
+    "sql": "SELECT\r\n    p.product_name,\r\n    c.category_name,\r\n    p.unit_price\r\nFROM products p\r\nCROSS JOIN categories c\r\nWHERE p.category_id = c.category_id\r\nORDER BY c.category_name, p.product_name;",
+    "nota": "PostgreSQL optimiza `CROSS JOIN + WHERE` a INNER JOIN internamente. El plan es idéntico. Sin el `WHERE`, un CROSS JOIN genera N × M filas. Con 77 productos y 8 categorías serían 616 filas; con tablas grandes podrían ser millones.",
+    "crit": "Mide si el candidato entiende que CROSS JOIN + WHERE es equivalente a INNER JOIN. Error: olvidar el filtro y generar un producto cartesiano masivo no intencional."
+  },
+  {
+    "num": 39,
+    "title": "JOIN con Condición Compuesta — Pedidos y Detalles con Filtro en ON",
+    "prof": "**Analogía:** Es como tener un filtro que no solo une dos tuberías, sino que además bloquea el agua sucia antes de que se mezcle. El filtro está integrado en la unión, no después.",
+    "opt": "La condición de JOIN puede incluir múltiples predicados más allá de la FK. `INNER JOIN order_details od ON o.order_id = od.order_id AND od.discount > 0` filtra los detalles con descuento **durante** la operación de JOIN, no después. El optimizador puede usar un `Hash Join` donde la tabla hash solo contiene filas con `discount > 0`, reduciendo el tamaño de la estructura hash en memoria.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders\"] -->|Hash Join| HT[\"Hash Table (order_details con discount > 0)\"]\r\n    OD[\"order_details\"] -->|Filtro: discount > 0 (durante build)| HT\r\n    HT -->|Sondeo por order_id| Out[\"Pedidos con al menos un detalle con descuento\"]\r\n```",
+    "sql": "SELECT\r\n    o.order_id,\r\n    o.order_date,\r\n    od.product_id,\r\n    od.discount\r\nFROM orders o\r\nINNER JOIN order_details od ON o.order_id = od.order_id\r\n    AND od.discount > 0\r\nORDER BY od.discount DESC;",
+    "nota": "Filtrar en `ON` permite al optimizador reducir el tamaño de la tabla hash antes del JOIN, lo que puede mejorar el rendimiento. En `LEFT JOIN`, si pones el filtro en `ON`, las filas sin coincidencia aparecen con `NULLs`. Si lo pones en `WHERE`, esas filas desaparecen.",
+    "crit": "Evalúa si el candidato distingue filtrar en `ON` vs `WHERE` para JOINs. En `INNER JOIN` no hay diferencia lógica (ambos producen mismo resultado), pero en `OUTER JOIN` la ubicación del filtro cambia el resultado. Error: pensar que siempre es lo mismo sin considerar el tipo de JOIN."
+  },
+  {
+    "num": 40,
+    "title": "JOIN con LATERAL — Subconsulta por Fila para el Último Pedido de Cada Cliente",
+    "prof": "**Analogía:** Es como tener un asistente que para cada cliente busca su último pedido en la base de datos. No haces una búsqueda general, sino que le pasas el nombre del cliente y él busca específicamente ese registro.",
+    "opt": "`LATERAL` permite que la subconsulta en `FROM` referencie columnas de tablas precedentes en el mismo `FROM`. Es una alternativa a subconsultas correlacionadas. Para cada fila de `customers` (91 filas), PostgreSQL ejecuta la subconsulta lateral que obtiene el último pedido usando `ORDER BY order_date DESC LIMIT 1`. El plan es un `Nested Loop` con `Limit` — para cada cliente, un Index Scan en `orders(customer_id, order_date)` encuentra la última fecha instantáneamente.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    C[\"customers (91 filas)\"] -->|Para cada fila| Loop[\"Nested Loop\"]\r\n    Loop -->|Index Scan: customer_id, ORDER BY order_date DESC LIMIT 1| O[\"orders (Index Scan)\"]\r\n    O -->|Último pedido| Out[\"customer_id, company_name, order_id, order_date\"]\r\n```",
+    "sql": "SELECT\r\n    c.customer_id,\r\n    c.company_name,\r\n    ultimo_pedido.order_id,\r\n    ultimo_pedido.order_date\r\nFROM customers c\r\nCROSS JOIN LATERAL (\r\n    SELECT o.order_id, o.order_date\r\n    FROM orders o\r\n    WHERE o.customer_id = c.customer_id\r\n    ORDER BY o.order_date DESC\r\n    LIMIT 1\r\n) ultimo_pedido\r\nORDER BY ultimo_pedido.order_date DESC;",
+    "nota": "`LATERAL` con `LIMIT 1` es más eficiente que subconsulta correlacionada porque el optimizador puede aplicar el Sort + Limit por cada grupo. `CROSS JOIN LATERAL` excluye filas sin coincidencia. Usar `LEFT JOIN LATERAL ... ON TRUE` para preservar todas las filas.",
+    "crit": "¡Técnica avanzada! El entrevistador busca si el candidato conoce `LATERAL` como optimización sobre subconsultas correlacionadas. Nota: este JOIN excluye clientes sin pedidos (usa `INNER JOIN`). Para incluirlos, usar `LEFT JOIN LATERAL ... ON TRUE`."
+  },
+  {
+    "num": 41,
+    "title": "ROW_NUMBER — Ranking Secuencial de Productos por Precio",
+    "prof": "**Analogía:** Es como asignar número de dorsal a corredores según su tiempo de llegada: el más rápido lleva el #1, el siguiente el #2, y así sucesivamente. No hay empates, cada uno tiene un número único.",
+    "opt": "`ROW_NUMBER() OVER (ORDER BY unit_price DESC)` asigna números secuenciales únicos (1, 2, 3, ...) basados en el orden descendente de `unit_price`. La función de ventana opera **después** de `WHERE`, `GROUP BY` y `HAVING`, pero **antes** de `ORDER BY` final y `LIMIT`. PostgreSQL evalúa la ventana en una fase separada del plan de ejecución (WindowAgg node), que ordena las filas en `work_mem` y aplica la numeración.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    P[\"products (Seq Scan)\"] -->|Ordenar por unit_price DESC| Sort[\"Sort Node (work_mem)\"]\r\n    Sort -->|WindowAgg| Win[\"ROW_NUMBER() OVER (ORDER BY unit_price DESC)\"]\r\n    Win -->|Numeración secuencial| Out[\"product_name, unit_price, ranking_secuencial\"]\r\n```",
+    "sql": "SELECT\r\n    product_name,\r\n    unit_price,\r\n    ROW_NUMBER() OVER (ORDER BY unit_price DESC) AS ranking_secuencial\r\nFROM products\r\nORDER BY ranking_secuencial;",
+    "nota": "`ROW_NUMBER` es una de las window functions más eficientes porque solo asigna números secuenciales sin resolver empates. No usar `ORDER BY` dentro de `OVER()` genera un orden indefinido. `ROW_NUMBER` sin `ORDER BY` asigna números arbitrarios.",
+    "crit": "Mide comprensión básica de window functions. Error: creer que `ROW_NUMBER` garantiza un orden específico sin `ORDER BY` en la ventana. Error: confundir `ROW_NUMBER` con `RANK`."
+  },
+  {
+    "num": 42,
+    "title": "RANK y DENSE_RANK — Ranking con Empates por Categoría",
+    "prof": "**Analogía:** Si dos corredores llegan empatados en segundo lugar, RANK les da a ambos el puesto #2, y el siguiente pasa al #4 (salta el #3). DENSE_RANK les da el #2 al siguiente es el #3 (sin saltos). Como en la Olimpiada vs en un examen.",
+    "opt": "`RANK() OVER (PARTITION BY category_id ORDER BY unit_price DESC)` y `DENSE_RANK()` difieren en el tratamiento de empates. `RANK` genera saltos después de un empate (1, 1, 3, ...), `DENSE_RANK` no (1, 1, 2, ...). El WindowAgg particiona las filas por `category_id`, ordena por precio dentro de cada partición, y asigna rangos. Las particiones se procesan secuencialmente en memoria; si hay muchas particiones, PostgreSQL puede derramar a disco.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    P[\"products\"] -->|PARTITION BY category_id| Partition[\"Particiones por categoría\"]\r\n    Partition -->|ORDER BY unit_price DESC| Sort[\"Ordenar dentro de cada partición\"]\r\n    Sort -->|RANK() vs DENSE_RANK()| Win[\"WindowAgg\"]\r\n    Win -->|Con empates| Out[\"category_id, product_name, unit_price, rank, dense_rank\"]\r\n```",
+    "sql": "SELECT\r\n    category_id,\r\n    product_name,\r\n    unit_price,\r\n    RANK() OVER (PARTITION BY category_id ORDER BY unit_price DESC) AS rango_con_saltos,\r\n    DENSE_RANK() OVER (PARTITION BY category_id ORDER BY unit_price DESC) AS rango_sin_saltos\r\nFROM products\r\nORDER BY category_id, rango_con_saltos;",
+    "nota": "`RANK` y `DENSE_RANK` requieren resolver empates, lo que puede ser más costoso que `ROW_NUMBER` en conjuntos grandes. `ROW_NUMBER` + una columna adicional para desambiguar empates es la forma más común en producción.",
+    "crit": "Pregunta clásica de entrevista técnica. El entrevistador busca que el candidato explique las diferencias entre `ROW_NUMBER`, `RANK` y `DENSE_RANK` con ejemplos concretos. Error: no entender que `RANK` salta números tras empates."
+  },
+  {
+    "num": 43,
+    "title": "Top-N por Grupo — Los 3 Productos Más Caros de Cada Categoría",
+    "prof": "**Analogía:** Es como sacar los 3 mejores alumnos de cada salón. Primero ordenas a los alumnos de cada salón por nota, y te quedas con los 3 primeros de cada uno. No puedes hacer esto con `GROUP BY` común porque `GROUP BY` colapsa las filas.",
+    "opt": "Para obtener el top-N por grupo, se usa una subconsulta con ventana que asigna `ROW_NUMBER()` por partición, y luego la externa filtra `WHERE rn <= 3`. PostgreSQL ejecuta primero el WindowAgg internamente (ordena por categoría y precio), numera las filas, y luego la consulta externa aplica el filtro. No hay un operador específico \"Top-N por grupo\" en el optimizador; se implementa como WindowAgg + Filter.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    P[\"products\"] -->|PARTITION BY category_id ORDER BY unit_price DESC| Win[\"WindowAgg: ROW_NUMBER()\"]\r\n    Win -->|WHERE rn <= 3| Filter[\"Filtro externo\"]\r\n    Filter -->|Solo 3 por categoría| Out[\"Top 3 productos más caros por categoría\"]\r\n```",
+    "sql": "WITH ranked_products AS (\r\n    SELECT\r\n        category_id,\r\n        product_id,\r\n        product_name,\r\n        unit_price,\r\n        ROW_NUMBER() OVER (\r\n            PARTITION BY category_id\r\n            ORDER BY unit_price DESC\r\n        ) AS rn\r\n    FROM products\r\n)\r\nSELECT\r\n    rp.category_id,\r\n    c.category_name,\r\n    rp.product_name,\r\n    rp.unit_price,\r\n    rp.rn\r\nFROM ranked_products rp\r\nINNER JOIN categories c ON rp.category_id = c.category_id\r\nWHERE rp.rn <= 3\r\nORDER BY rp.category_id, rp.rn;",
+    "nota": "En PostgreSQL 12+, el optimizador puede usar un \"WindowAgg + Limit\" más eficiente que materializar todo el CTE. Para tablas grandes, crea un índice en `(category_id, unit_price DESC)`. No confundir top-N por grupo con `MAX()` por grupo. `MAX()` solo retorna un valor, no los N más caros.",
+    "crit": "¡Pregunta clásica de top-N por grupo! El entrevistador evalúa si el candidato usa CTE con window function para resolver el patrón. Error: intentar usar `GROUP BY` + `LIMIT` (no funciona para top-N por grupo)."
+  },
+  {
+    "num": 44,
+    "title": "LAG — Diferencia entre Pedido Actual y Anterior del Mismo Cliente",
+    "prof": "**Analogía:** Es como poner un reloj al lado de cada cliente y medir cuántos días pasaron desde su último pedido. LAG te da el momento en que hizo el pedido anterior, y la resta te da los días transcurridos.",
+    "opt": "`LAG(order_date, 1) OVER (PARTITION BY customer_id ORDER BY order_date)` accede a la fila anterior dentro de la misma partición de cliente. El WindowAgg mantiene un buffer de una fila por partición para proporcionar el valor `LAG`. Si no hay fila anterior, retorna `NULL`. La diferencia de fechas se calcula con el operador de resta de PostgreSQL, que retorna un `interval`.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders\"] -->|PARTITION BY customer_id ORDER BY order_date| Win[\"WindowAgg: LAG(order_date)\"]\r\n    Win -->|order_date - LAG = dias_entre_pedidos| Calc[\"Diferencia de fechas (interval)\"]\r\n    Calc --> Out[\"customer_id, order_id, order_date, order_date_anterior, dias_diferencia\"]\r\n```",
+    "sql": "SELECT\r\n    customer_id,\r\n    order_id,\r\n    order_date,\r\n    LAG(order_date, 1) OVER (\r\n        PARTITION BY customer_id\r\n        ORDER BY order_date\r\n    ) AS fecha_pedido_anterior,\r\n    order_date - LAG(order_date, 1) OVER (\r\n        PARTITION BY customer_id\r\n        ORDER BY order_date\r\n    ) AS dias_entre_pedidos\r\nFROM orders\r\nORDER BY customer_id, order_date;",
+    "nota": "`LAG` y `LEAD` son window functions muy eficientes porque solo necesitan un buffer de 1 fila por partición. `LAG` retorna `NULL` para la primera fila de cada partición. Usar `COALESCE` si necesitas un valor por defecto.",
+    "crit": "Mide si el candidato conoce `LAG` para análisis temporal. Error: no considerar el `NULL` en el primer pedido de cada cliente (no hay fila anterior). El entrevistador valora si el candidato menciona que el resultado incluye `NULLs` para la primera fila."
+  },
+  {
+    "num": 45,
+    "title": "LEAD — Detección de Próximo Pedido por Cliente",
+    "prof": "**Analogía:** Es como mirar tu calendario y ver cuándo es tu próxima cita. LEAD te da la fecha del siguiente pedido de cada cliente, como si leyeras el calendario hacia adelante.",
+    "opt": "`LEAD(order_date, 1) OVER (PARTITION BY customer_id ORDER BY order_date)` proporciona la siguiente fecha de pedido para cada fila. Similar a `LAG`, pero mirando hacia adelante. El WindowAgg procesa las filas en orden y almacena en un buffer la fila siguiente. Si es la última fila de la partición, retorna `NULL`.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    O[\"orders\"] -->|PARTITION BY customer_id ORDER BY order_date| Win[\"WindowAgg: LEAD(order_date)\"]\r\n    Win -->|order_date_actual | LEAD | lead_date| Out[\"customer_id, order_id, order_date, proximo_pedido\"]\r\n```",
+    "sql": "SELECT\r\n    customer_id,\r\n    order_id,\r\n    order_date,\r\n    LEAD(order_date, 1) OVER (\r\n        PARTITION BY customer_id\r\n        ORDER BY order_date\r\n    ) AS fecha_proximo_pedido\r\nFROM orders\r\nORDER BY customer_id, order_date;",
+    "nota": "`LEAD` con `LIMIT` en la ventana puede ser más eficiente que subconsultas correlacionadas para encontrar el siguiente registro. No confundir `LEAD(order_date, 1)` con `LEAD(order_date, 2)` que salta un registro intermedio.",
+    "crit": "Evalúa si el candidato comprende `LEAD` vs `LAG`. Error: confundir la dirección — `LAG` mira atrás, `LEAD` mira adelante. Útil para calcular período entre compras consecutivas."
+  },
+  {
+    "num": 46,
+    "title": "SUM OVER — Acumulado de Ingresos Mes a Mes",
+    "prof": "**Analogía:** Es como un alcancía donde cada mes sumas lo que ganaste. En enero tienes $100, en febrero sumas $150 y tienes $250 acumulados, en marzo sumas $200 y tienes $450. Es un total que nunca se reinicia.",
+    "opt": "`SUM(ingresos_mes) OVER (ORDER BY periodo_mes ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)` calcula un acumulado histórico. El CTE `monthly_revenue` primero computa los ingresos mensuales (GROUP BY), luego la ventana suma acumulativamente. La cláusula `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` define el frame desde el inicio hasta la fila actual. Si se omite, `SUM OVER` por defecto usa `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    O[\"orders\"] -->|JOIN + GROUP BY mes| MR[\"CTE: monthly_revenue (ingresos por mes)\"]\r\n    MR -->|SUM OVER (ORDER BY mes)| Win[\"WindowAgg: SUM(frame: unbounded preceding → current row)\"]\r\n    Win -->|Acumulado| Out[\"periodo_mes, ingresos_mes, ingresos_acumulados\"]\r\n```",
+    "sql": "WITH monthly_revenue AS (\r\n    SELECT\r\n        TO_CHAR(o.order_date, 'YYYY-MM') AS periodo_mes,\r\n        ROUND(SUM(od.quantity * od.unit_price * (1 - od.discount))::numeric, 2) AS ingresos_mes\r\n    FROM orders o\r\n    INNER JOIN order_details od ON o.order_id = od.order_id\r\n    GROUP BY TO_CHAR(o.order_date, 'YYYY-MM')\r\n)\r\nSELECT\r\n    periodo_mes,\r\n    ingresos_mes,\r\n    ROUND(SUM(ingresos_mes) OVER (\r\n        ORDER BY periodo_mes\r\n        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\r\n    )::numeric, 2) AS ingresos_acumulados\r\nFROM monthly_revenue\r\nORDER BY periodo_mes;",
+    "nota": "`ROWS BETWEEN` es más eficiente que `RANGE BETWEEN` porque procesa filas exactas en lugar de valores de rango. Con `RANGE` (default), si dos filas tienen el mismo valor en `ORDER BY`, ambas reciben el mismo acumulado. `ROWS BETWEEN` evita esto.",
+    "crit": "Mide si el candidato domina window frames. Error: no especificar `ROWS BETWEEN` y asumir el frame por defecto. En `SUM OVER` con `ORDER BY`, el frame default es `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`, que puede dar resultados inesperados con empates en la columna de ordenamiento."
+  },
+  {
+    "num": 47,
+    "title": "AVG OVER — Precio del Producto vs Promedio de su Categoría",
+    "prof": "**Analogía:** Es como calcular el promedio del salón y comparar cada alumno con ese promedio. Si el alumno tiene 9 y el promedio es 7, está +2 puntos arriba. Sin agrupar, solo comparando cada uno individualmente.",
+    "opt": "`AVG(unit_price) OVER (PARTITION BY category_id)` calcula el precio promedio de la categoría **sin colapsar filas**. A diferencia de `GROUP BY`, la ventana preserva cada producto individual. El WindowAgg calcula el promedio por partición y replica el mismo valor en todas las filas de esa partición. La diferencia `unit_price - AVG(...)` muestra la desviación de cada producto respecto al promedio de su categoría.",
+    "diagram": "```mermaid\r\nflowchart LR\r\n    P[\"products\"] -->|PARTITION BY category_id| Win[\"WindowAgg: AVG(unit_price)\"]\r\n    Win -->|unit_price - avg_categoria| Calc[\"Desviación del promedio\"]\r\n    Calc --> Out[\"product_name, category_id, unit_price, promedio_categoria, desviacion\"]\r\n```",
+    "sql": "SELECT\r\n    product_name,\r\n    category_id,\r\n    unit_price,\r\n    ROUND(AVG(unit_price) OVER (PARTITION BY category_id)::numeric, 2) AS promedio_categoria,\r\n    ROUND((unit_price - AVG(unit_price) OVER (PARTITION BY category_id))::numeric, 2) AS desviacion_promedio\r\nFROM products\r\nORDER BY category_id, unit_price;",
+    "nota": "`AVG OVER` sin `ORDER BY` es muy eficiente porque solo necesita calcular el promedio por partición una vez. No confundir `AVG OVER` (preserva filas) con `GROUP BY` (colapsa filas). Son conceptualmente diferentes.",
+    "crit": "Evalúa si el candidato comprende que las window functions preservan el número de filas, a diferencia de `GROUP BY`. Error: creer que `AVG OVER` es lo mismo que `GROUP BY` (producen el mismo valor pero diferente cardinalidad)."
+  },
+  {
+    "num": 48,
+    "title": "FIRST_VALUE / LAST_VALUE — Producto Más Caro y Más Barato por Categoría",
+    "prof": "**Analogía:** Es como abrir el libro de registros de una tienda y mirar el primer y último producto que aparecen en cada sección. FIRST_VALUE te da el primero que ves, LAST_VALUE el último.",
+    "opt": "`FIRST_VALUE(unit_price) OVER (PARTITION BY category_id ORDER BY unit_price DESC)` retorna el precio del primer producto en el frame (el más caro). `LAST_VALUE(unit_price) OVER (PARTITION BY category_id ORDER BY unit_price DESC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)` retorna el último (el más barato). Sin el frame `UNBOUNDED FOLLOWING`, `LAST_VALUE` solo vería hasta la fila actual.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    P[\"products\"] -->|PARTITION BY category_id ORDER BY unit_price DESC| Win[\"WindowAgg: FIRST_VALUE + LAST_VALUE\"]\r\n    Win -->|Frame: UNBOUNDED PRECEDING TO UNBOUNDED FOLLOWING| Frame[\"Frame completo por partición\"]\r\n    Frame --> Out[\"category_id, product_name, unit_price, mas_caro, mas_barato\"]\r\n```",
+    "sql": "SELECT\r\n    category_id,\r\n    product_name,\r\n    unit_price,\r\n    FIRST_VALUE(product_name) OVER (\r\n        PARTITION BY category_id\r\n        ORDER BY unit_price DESC\r\n    ) AS producto_mas_caro,\r\n    LAST_VALUE(unit_price) OVER (\r\n        PARTITION BY category_id\r\n        ORDER BY unit_price DESC\r\n        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING\r\n    ) AS precio_mas_barato\r\nFROM products\r\nORDER BY category_id, unit_price DESC;",
+    "nota": "`FIRST_VALUE` es más eficiente que `LAST_VALUE` porque no requiere un frame completo. Para obtener el último valor, a menudo es mejor `ORDER BY ASC` y usar `FIRST_VALUE`. `LAST_VALUE` sin frame completo retorna el valor de la fila actual, no el último de la partición.",
+    "crit": "¡Trampa clásica! Si el candidato usa `LAST_VALUE` sin especificar `ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING`, el frame por defecto termina en `CURRENT ROW`, haciendo que `LAST_VALUE` sea igual a `unit_price` actual. El entrevistador busca que el candidato conozca el comportamiento del frame."
+  },
+  {
+    "num": 49,
+    "title": "NTILE — Clasificación de Clientes en Cuartiles por Nivel de Pedidos",
+    "prof": "**Analogía:** Es como dividir a los alumnos en 4 grupos según su nota: los mejores van al grupo 1, los siguientes al 2, y así. NTILE divide el conjunto en N partes lo más equitativas posible.",
+    "opt": "`NTILE(4) OVER (ORDER BY total_pedidos DESC)` divide el conjunto ordenado en 4 grupos (cuartiles) lo más equitativamente posible. Si hay 91 clientes, NTILE asigna 23 filas a algunos cuartiles y 22 a otros. El WindowAgg necesita conocer el número total de filas para determinar el tamaño de cada bucket, por lo que puede requerir dos pasadas sobre los datos.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    C[\"customers\"] -->|LEFT JOIN| O[\"orders\"]\r\n    O -->|GROUP BY customer_id| Agg[\"COUNT(order_id) por cliente\"]\r\n    Agg -->|NTILE(4) OVER (ORDER BY pedidos DESC)| Win[\"WindowAgg: NTILE\"]\r\n    Win -->|Cuartil 1 (top 25%)| Q1[\"Clientes Premium\"]\r\n    Win -->|Cuartil 2| Q2[\"Clientes Regulares\"]\r\n    Win -->|Cuartil 3| Q3[\"Clientes Ocasionales\"]\r\n    Win -->|Cuartil 4| Q4[\"Clientes Inactivos\"]\r\n```",
+    "sql": "WITH customer_orders AS (\r\n    SELECT\r\n        c.customer_id,\r\n        c.company_name,\r\n        COUNT(o.order_id) AS total_pedidos\r\n    FROM customers c\r\n    LEFT JOIN orders o ON c.customer_id = o.customer_id\r\n    GROUP BY c.customer_id, c.company_name\r\n)\r\nSELECT\r\n    customer_id,\r\n    company_name,\r\n    total_pedidos,\r\n    NTILE(4) OVER (ORDER BY total_pedidos DESC) AS cuartil\r\nFROM customer_orders\r\nORDER BY cuartil, total_pedidos DESC;",
+    "nota": "`NTILE` necesita conocer el total de filas antes de asignar buckets, lo que puede requerir dos pasadas sobre los datos. `NTILE` no garantiza buckets de igual tamaño. Si hay 91 clientes y divides en 4, algunos tendrán 23 y otros 22.",
+    "crit": "Mide si el candidato conoce `NTILE` para segmentación de clientes (RFM). Error: asumir que NTILE divide exactamente (el número de filas puede no ser divisible exactamente por N)."
+  },
+  {
+    "num": 50,
+    "title": "Window con FILTER — Suma Acumulada con Filtro Condicional",
+    "prof": "**Analogía:** Es como tener un contador que solo suma cuando hay descuento. Si el producto no tiene descuento, el contador no se mueve. Es un acumulado que solo crece cuando se cumple la condición.",
+    "opt": "`SUM(quantity) FILTER (WHERE discount > 0) OVER (PARTITION BY product_id ORDER BY order_id)` combina dos conceptos avanzados: `FILTER` dentro de una window function. PostgreSQL aplica primero el filtro a cada fila dentro de la ventana; las filas que no cumplen la condición se excluyen del acumulador. El WindowAgg mantiene un acumulador que solo se actualiza cuando `discount > 0`. Esto permite calcular, por ejemplo, la suma acumulada de unidades vendidas **con descuento** para cada producto.",
+    "diagram": "```mermaid\r\nflowchart TD\r\n    OD[\"order_details\"] -->|PARTITION BY product_id ORDER BY order_id| Win[\"WindowAgg\"]\r\n    Win -->|FILTER (WHERE discount > 0)| Filtered[\"Solo filas con descuento\"]\r\n    Filtered -->|SUM(quantity) ventana| Sum[\"Acumulado condicional\"]\r\n    Sum --> Out[\"order_id, product_id, quantity, discount, unidades_con_descuento_acum\"]\r\n```",
+    "sql": "SELECT\r\n    order_id,\r\n    product_id,\r\n    quantity,\r\n    discount,\r\n    SUM(quantity) FILTER (WHERE discount > 0) OVER (\r\n        PARTITION BY product_id\r\n        ORDER BY order_id\r\n        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\r\n    ) AS unidades_con_descuento_acumuladas\r\nFROM order_details\r\nORDER BY product_id, order_id;",
+    "nota": "`FILTER` dentro de window functions es una extensión PostgreSQL muy eficiente. Evita subconsultas y `CASE` dentro de la ventana. `FILTER` no está soportado en MySQL. La alternativa portable es `SUM(CASE WHEN ... THEN quantity ELSE 0 END) OVER (...)`.",
+    "crit": "Ejercicio cumbre del nivel intermedio. Evalúa dominio combinado de window functions + FILTER + frames. El entrevistador busca que el candidato demuestre que puede construir análisis condicionales avanzados sin subconsultas. Error: olvidar el frame `ROWS BETWEEN`, que en PostgreSQL es el valor por defecto para `SUM OVER` con `ORDER BY`, pero explicitarlo muestra mejor práctica."
+  }
+]
