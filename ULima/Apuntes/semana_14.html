@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" id="theme-color-meta" content="#FEF7FF">
     <title>Semana 14 - Data Warehouse, Modelado Dimensional Kimball y Cubos OLAP</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,11 +33,17 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif !important;
             letter-spacing: -0.02em;
+            text-wrap: balance;
         }
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.625;
             letter-spacing: -0.011em;
+        }
+        [id] { scroll-margin-top: 5rem; }
+        :is(table) { font-variant-numeric: tabular-nums; }
+        html.dark {
+            color-scheme: dark;
         }
         html.dark body {
             color: #cbd5e1 !important;
@@ -56,51 +63,84 @@
         }
     </script>
 
-    <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style id="reader-mode-style">
+        html.reader-mode { font-size: 106.25%; }
+        html.reader-mode header,
+        html.reader-mode aside,
+        html.reader-mode nav[class*="fixed"] { display: none !important; }
+        html.reader-mode #theme-toggle { display: flex !important; }
+        html.reader-mode #reader-toggle { display: flex !important; }
+        html.reader-mode body { line-height: 1.75; text-wrap: pretty; }
+        html.reader-mode main { width: 100% !important; max-width: 72ch; margin-inline: auto; }
+    </style>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            mermaid.initialize({
-                startOnLoad: true,
-                theme: isDark ? 'dark' : 'default',
-                securityLevel: 'loose',
-                flowchart: { useMaxWidth: true, htmlLabels: true }
+        (function () {
+            if (localStorage.getItem('reader-mode') === 'on' && !document.documentElement.classList.contains('reader-mode')) {
+                document.documentElement.classList.add('reader-mode');
+            }
+            function syncReaderButtons() {
+                var on = document.documentElement.classList.contains('reader-mode');
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            function toggleReaderMode() {
+                var on = document.documentElement.classList.toggle('reader-mode');
+                localStorage.setItem('reader-mode', on ? 'on' : 'off');
+                syncReaderButtons();
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.addEventListener('click', toggleReaderMode);
+                });
+                syncReaderButtons();
             });
-        });
+        })();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
+    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
+    <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="md:hidden fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
     <!-- Header (M3 Tonal App Bar) -->
-    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                     Data Warehouse: Metodología Kimball, Modelado Dimensional y Cubos OLAP
                 </h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
                     Semana 14 • Inteligencia de Negocios y Arquitectura de Datos • Nivel Avanzado 2026
                 </p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
         </div>
     </header>
 
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24" id="main">
 
             <!-- Banner Hero -->
             <div class="mb-8 p-6 md:p-8 rounded-3xl bg-gradient-to-br from-blue-950 via-slate-900 to-indigo-950 text-white shadow-xl border border-blue-500/20 relative overflow-hidden">
@@ -129,7 +169,7 @@
                     <div id="controls_14" class="flex gap-2"></div>
                 </div>
                 <div class="w-full flex justify-center overflow-hidden rounded-2xl bg-slate-950/5 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
-                    <canvas id="canvas_14" width="680" height="360" class="max-w-full h-auto"></canvas>
+                    <canvas id="canvas_14" width="680" height="360" class="max-w-full h-auto" role="img" aria-label="Flujo de Consulta en Star Schema"></canvas>
                 </div>
             </div>
 
@@ -223,93 +263,112 @@
                     <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                         <h4 class="text-sm font-bold text-indigo-600 dark:text-indigo-400 mb-2">🌐 Dimensiones Conformadas (Conformed Dimensions)</h4>
                         <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Dimensiones idénticas o subconjuntos consistentes compartidos entre múltiples Data Marts (ej. <code class="font-mono text-[11px]">Dim_Cliente</code> o <code class="font-mono text-[11px]">Dim_Tiempo</code> compartida por Ventas, Envíos e Inventario). Permite el análisis cross-funcional (Kimball Enterprise Bus Matrix).
+                            Dimensiones idénticas o subconjuntos consistentes compartidos entre múltiples Data Marts (ej. <code class="font-mono text-sm">Dim_Cliente</code> o <code class="font-mono text-sm">Dim_Tiempo</code> compartida por Ventas, Envíos e Inventario). Permite el análisis cross-funcional (Kimball Enterprise Bus Matrix).
                         </p>
                     </div>
 
                     <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                         <h4 class="text-sm font-bold text-purple-600 dark:text-purple-400 mb-2">🎭 Role-Playing Dimensions</h4>
                         <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Una misma tabla física de dimensión que asume múltiples roles conceptuales en la misma Fact Table mediante alias en vistas o SQL (ej. <code class="font-mono text-[11px]">Dim_Tiempo</code> se vincula como <code class="font-mono text-[11px]">fecha_pedido_key</code>, <code class="font-mono text-[11px]">fecha_envio_key</code> y <code class="font-mono text-[11px]">fecha_entrega_key</code>).
+                            Una misma tabla física de dimensión que asume múltiples roles conceptuales en la misma Fact Table mediante alias en vistas o SQL (ej. <code class="font-mono text-sm">Dim_Tiempo</code> se vincula como <code class="font-mono text-sm">fecha_pedido_key</code>, <code class="font-mono text-sm">fecha_envio_key</code> y <code class="font-mono text-sm">fecha_entrega_key</code>).
                         </p>
                     </div>
 
                     <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                         <h4 class="text-sm font-bold text-amber-600 dark:text-amber-400 mb-2">🗑️ Junk Dimensions (Dimensión Basura)</h4>
                         <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Agrupación de múltiples indicadores, flags booleanos y códigos de estado dispersos (ej. <code class="font-mono text-[11px]">es_promocion, tipo_pago, metodo_entrega</code>) en una única dimensión combinatoria para evitar tener decenas de columnas de flags en la Fact Table.
+                            Agrupación de múltiples indicadores, flags booleanos y códigos de estado dispersos (ej. <code class="font-mono text-sm">es_promocion, tipo_pago, metodo_entrega</code>) en una única dimensión combinatoria para evitar tener decenas de columnas de flags en la Fact Table.
                         </p>
                     </div>
 
                     <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                         <h4 class="text-sm font-bold text-rose-600 dark:text-rose-400 mb-2">📉 Degenerate Dimensions (Dimensiones Degeneradas)</h4>
                         <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Identificadores operacionales (como el <code class="font-mono text-[11px]">numero_factura</code> o <code class="font-mono text-[11px]">ticket_id</code>) que se almacenan directamente en la Fact Table sin tener una tabla de dimensión satélite asociada, porque todos sus atributos descriptivos ya pertenecen a otras dimensiones.
+                            Identificadores operacionales (como el <code class="font-mono text-sm">numero_factura</code> o <code class="font-mono text-sm">ticket_id</code>) que se almacenan directamente en la Fact Table sin tener una tabla de dimensión satélite asociada, porque todos sus atributos descriptivos ya pertenecen a otras dimensiones.
                         </p>
                     </div>
                 </div>
 
                 <!-- SLOWLY CHANGING DIMENSIONS (SCD 1, 2, 3, 6) -->
-                <div class="mb-6 p-5 rounded-2xl bg-slate-900 text-slate-200 border border-slate-800 font-mono text-xs">
+                <div class="mb-6 p-5 rounded-2xl bg-slate-900 text-slate-200 border border-slate-800 font-mono text-sm">
                     <h3 class="text-indigo-400 font-bold mb-3">/* GUÍA MAESTRA DE SLOWLY CHANGING DIMENSIONS (SCD) */</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
                             <span class="text-yellow-400 font-bold">SCD Tipo 1: Sobrescritura</span>
-                            <p class="text-[11px] text-slate-400 mt-1">Sobrescribe el valor anterior en el mismo registro. No guarda historial. Sencillo, pero destruye la trazabilidad histórica de reportes pasados.</p>
+                            <p class="text-sm text-slate-400 mt-1">Sobrescribe el valor anterior en el mismo registro. No guarda historial. Sencillo, pero destruye la trazabilidad histórica de reportes pasados.</p>
                         </div>
                         <div class="p-3 bg-slate-950 rounded-xl border border-indigo-500/50">
                             <span class="text-emerald-400 font-bold">SCD Tipo 2: Histórico con Filas</span>
-                            <p class="text-[11px] text-slate-400 mt-1">Crea una nueva fila con nueva <code class="text-indigo-300">Surrogate Key</code>, marcando <code class="text-indigo-300">fecha_inicio</code>, <code class="text-indigo-300">fecha_fin</code> y flag <code class="text-indigo-300">es_actual</code>. Estándar de oro en la industria.</p>
+                            <p class="text-sm text-slate-400 mt-1">Crea una nueva fila con nueva <code class="text-indigo-300">Surrogate Key</code>, marcando <code class="text-indigo-300">fecha_inicio</code>, <code class="text-indigo-300">fecha_fin</code> y flag <code class="text-indigo-300">es_actual</code>. Estándar de oro en la industria.</p>
                         </div>
                         <div class="p-3 bg-slate-950 rounded-xl border border-slate-800">
                             <span class="text-purple-400 font-bold">SCD Tipo 3: Histórico en Columna</span>
-                            <p class="text-[11px] text-slate-400 mt-1">Agrega una columna adicional (ej. <code class="text-purple-300">ciudad_anterior</code> y <code class="text-purple-300">ciudad_actual</code>). Solo guarda el estado inmediatamente previo.</p>
+                            <p class="text-sm text-slate-400 mt-1">Agrega una columna adicional (ej. <code class="text-purple-300">ciudad_anterior</code> y <code class="text-purple-300">ciudad_actual</code>). Solo guarda el estado inmediatamente previo.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- DIAGRAMA ASCII: ESQUEMA ESTRELLA (STAR SCHEMA) -->
-                <div class="mb-6 bg-slate-950 text-slate-200 p-4 md:p-5 rounded-2xl font-mono text-xs overflow-x-auto shadow-md border border-slate-800">
-                    <div class="text-blue-400 font-bold mb-2">/* DIAGRAMA: STAR SCHEMA (VENTAS RETAIL CON SCD 2) */</div>
-<pre class="leading-relaxed">
-  ┌────────────────────────┐                    ┌────────────────────────┐
-  │      DIM_CLIENTE       │                    │      DIM_PRODUCTO      │
-  ├────────────────────────┤                    ├────────────────────────┤
-  │ cliente_sk (PK, Surr)  │◄──┐            ┌──►│ producto_sk (PK)       │
-  │ cliente_id (NK Oper)   │   │            │   │ codigo_sku             │
-  │ nombre_completo        │   │            │   │ nombre_producto        │
-  │ categoria_cliente      │   │            │   │ categoria              │
-  │ fecha_inicio_scd2      │   │            │   │ precio_unitario        │
-  │ fecha_fin_scd2         │   │            │   └────────────────────────┘
-  │ es_actual (True/False) │   │            │
-  └────────────────────────┘   │            │
-                               │            │
-                ┌──────────────┴────────────┴─────────────┐
-                │             FACT_VENTAS                 │
-                ├─────────────────────────────────────────┤
-                │ fecha_sk (FK) ─────────────────────────┐│
-                │ cliente_sk (FK)                        ││
-                │ producto_sk (FK)                       ││
-                │ tienda_sk (FK) ───────────┐            ││
-                │ numero_ticket (Degenerate)│            ││
-                │ ───────────────────────── │            ││
-                │ cantidad_unidades         │            ││
-                │ monto_bruto               │            ││
-                │ monto_descuento           │            ││
-                │ monto_neto_total          │            ││
-                └───────────────────────────┼────────────┼┘
-                                            │            │
-                                            ▼            ▼
-                             ┌───────────────────┐  ┌────────────────────┐
-                             │    DIM_TIENDA     │  │     DIM_TIEMPO     │
-                             ├───────────────────┤  ├────────────────────┤
-                             │ tienda_sk (PK)    │  │ fecha_sk (PK)      │
-                             │ nombre_tienda     │  │ fecha_completa     │
-                             │ ciudad            │  │ anio               │
-                             │ region            │  │ trimestre          │
-                             │ canal (Web/Fisica)│  │ mes / dia_semana   │
-                             └───────────────────┘  └────────────────────┘
-</pre>
+                <!-- Diagrama: ESQUEMA ESTRELLA (STAR SCHEMA) -->
+                <div class="mb-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 md:p-5 rounded-2xl shadow-sm">
+                    <div class="inline-block font-mono font-bold text-blue-600 dark:text-blue-400 text-xs mb-3">/* DIAGRAMA: STAR SCHEMA (VENTAS RETAIL CON SCD 2) */</div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
+                        <div class="border-2 border-blue-300 dark:border-blue-800 bg-blue-50/40 dark:bg-blue-950/20 rounded-xl p-3">
+                            <div class="font-mono text-sm font-bold text-blue-700 dark:text-blue-300 border-b border-blue-200 dark:border-blue-800 pb-1 mb-2">DIM_CLIENTE</div>
+                            <ul class="font-mono text-sm text-slate-600 dark:text-slate-400 space-y-0.5">
+                                <li>cliente_sk (PK, Surr) ◄──</li>
+                                <li>cliente_id (NK Oper)</li>
+                                <li>nombre_completo</li>
+                                <li>categoria_cliente</li>
+                                <li>fecha_inicio_scd2</li>
+                                <li>fecha_fin_scd2</li>
+                                <li class="text-emerald-600 dark:text-emerald-400">es_actual (True/False)</li>
+                            </ul>
+                        </div>
+                        <div class="border-2 border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-950 rounded-xl p-3">
+                            <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">DIM_PRODUCTO</div>
+                            <ul class="font-mono text-sm text-slate-600 dark:text-slate-400 space-y-0.5">
+                                <li>producto_sk (PK) ──►</li>
+                                <li>codigo_sku</li>
+                                <li>nombre_producto</li>
+                                <li>categoria</li>
+                                <li>precio_unitario</li>
+                            </ul>
+                        </div>
+                        <div class="border-2 border-rose-300 dark:border-rose-800 bg-rose-50/40 dark:bg-rose-950/20 rounded-xl p-3 md:col-start-3">
+                            <div class="font-mono text-sm font-bold text-rose-700 dark:text-rose-300 border-b border-rose-200 dark:border-rose-800 pb-1 mb-2">DIM_TIEMPO</div>
+                            <ul class="font-mono text-sm text-slate-600 dark:text-slate-400 space-y-0.5">
+                                <li>fecha_sk (PK) ▲</li>
+                                <li>fecha_completa</li>
+                                <li>anio</li>
+                                <li>trimestre</li>
+                                <li>mes / dia_semana</li>
+                            </ul>
+                        </div>
+                        <div class="border-2 border-amber-300 dark:border-amber-800 bg-amber-50/40 dark:bg-amber-950/20 rounded-xl p-3 md:col-start-3">
+                            <div class="font-mono text-sm font-bold text-amber-700 dark:text-amber-300 border-b border-amber-200 dark:border-amber-800 pb-1 mb-2">DIM_TIENDA</div>
+                            <ul class="font-mono text-sm text-slate-600 dark:text-slate-400 space-y-0.5">
+                                <li>tienda_sk (PK) ▲</li>
+                                <li>nombre_tienda</li>
+                                <li>ciudad</li>
+                                <li>region</li>
+                                <li>canal (Web/Fisica)</li>
+                            </ul>
+                        </div>
+                        <div class="border-2 border-indigo-300 dark:border-indigo-800 bg-indigo-50/50 dark:bg-indigo-950/25 rounded-xl p-4 md:row-start-1 md:col-start-2 md:row-span-2 self-center shadow-md">
+                            <div class="font-mono text-base font-bold text-indigo-700 dark:text-indigo-300 border-b border-indigo-200 dark:border-indigo-800 pb-2 mb-2">FACT_VENTAS</div>
+                            <ul class="font-mono text-sm text-slate-700 dark:text-slate-300 space-y-0.5">
+                                <li>fecha_sk (FK)</li>
+                                <li>cliente_sk (FK)</li>
+                                <li>producto_sk (FK)</li>
+                                <li>tienda_sk (FK)</li>
+                                <li>numero_ticket <span class="text-slate-400">(Degenerate)</span></li>
+                                <li class="border-t border-indigo-200 dark:border-indigo-800 my-1 pt-1">cantidad_unidades</li>
+                                <li>monto_bruto</li>
+                                <li>monto_descuento</li>
+                                <li class="text-indigo-600 dark:text-indigo-400 font-bold">monto_neto_total</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -334,12 +393,12 @@
                 </div>
 
                 <!-- SQL Avanzado: GROUPING SETS, ROLLUP y CUBE -->
-                <div class="bg-slate-900 text-slate-200 p-5 rounded-2xl border border-slate-800 font-mono text-xs mb-6">
+                <div class="bg-slate-900 text-slate-200 p-5 rounded-2xl border border-slate-800 font-mono text-sm mb-6">
                     <div class="flex justify-between items-center pb-2 mb-3 border-b border-slate-800">
                         <span class="text-blue-400 font-bold">SQL Analytics de Élite: Agregaciones Jerárquicas</span>
-                        <span class="text-[10px] text-slate-400">PostgreSQL 16/17 / Snowflake</span>
+                        <span class="text-xs text-slate-400">PostgreSQL 16/17 / Snowflake</span>
                     </div>
-<pre class="overflow-x-auto text-[11px] leading-relaxed">
+<pre class="overflow-x-auto text-sm leading-relaxed">
 <span class="text-slate-400">-- 1. ROLLUP: Subtotales jerárquicos (Año -> Mes -> Región)</span>
 <span class="text-purple-400">SELECT</span> 
     t.anio,
@@ -375,17 +434,17 @@
                 <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">En esta sesión</h3>
                     <nav class="space-y-2 text-xs font-medium">
-                        <a href="#oltp-vs-olap" class="block px-3 py-2 rounded-xl text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30 font-semibold transition-all">1. OLTP vs OLAP & Kimball</a>
-                        <a href="#dimensiones-hechos" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">2. Dimensiones y Fact Tables</a>
-                        <a href="#cubos-olap-sql" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">3. Cubos OLAP & SQL</a>
+                        <a href="#oltp-vs-olap" class="block px-3 py-2 rounded-xl text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30 font-semibold transition">1. OLTP vs OLAP & Kimball</a>
+                        <a href="#dimensiones-hechos" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">2. Dimensiones y Fact Tables</a>
+                        <a href="#cubos-olap-sql" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">3. Cubos OLAP & SQL</a>
                     </nav>
                 </div>
 
                 <!-- Info Card -->
                 <div class="p-5 rounded-3xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40">
                     <h4 class="text-xs font-bold text-blue-900 dark:text-blue-300 mb-1">Principio de Kimball</h4>
-                    <p class="text-[11px] text-blue-700/80 dark:text-blue-400 leading-relaxed">
-                        Nunca unas tablas de hechos entre sí directamente (<code class="font-mono text-[10px]">Fact to Fact JOIN</code>). Realiza consultas a través de dimensiones conformadas o utiliza <code class="font-mono text-[10px]">UNION ALL</code> / Data Marts consolidados.
+                    <p class="text-sm text-blue-700/80 dark:text-blue-400 leading-relaxed">
+                        Nunca unas tablas de hechos entre sí directamente (<code class="font-mono text-xs">Fact to Fact JOIN</code>). Realiza consultas a través de dimensiones conformadas o utiliza <code class="font-mono text-xs">UNION ALL</code> / Data Marts consolidados.
                     </p>
                 </div>
             </div>

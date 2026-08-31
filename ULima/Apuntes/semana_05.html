@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" id="theme-color-meta" content="#FEF7FF">
     <title>Semana 05 - DML y Consultas Simples | Ingeniería de Datos</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,11 +33,17 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif !important;
             letter-spacing: -0.02em;
+            text-wrap: balance;
         }
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.625;
             letter-spacing: -0.011em;
+        }
+        [id] { scroll-margin-top: 5rem; }
+        :is(table) { font-variant-numeric: tabular-nums; }
+        html.dark {
+            color-scheme: dark;
         }
         html.dark body {
             color: #cbd5e1 !important;
@@ -56,148 +63,164 @@
         }
     </script>
 
-    <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style id="reader-mode-style">
+        html.reader-mode { font-size: 106.25%; }
+        html.reader-mode header,
+        html.reader-mode aside,
+        html.reader-mode nav[class*="fixed"] { display: none !important; }
+        html.reader-mode #theme-toggle { display: flex !important; }
+        html.reader-mode #reader-toggle { display: flex !important; }
+        html.reader-mode body { line-height: 1.75; text-wrap: pretty; }
+        html.reader-mode main { width: 100% !important; max-width: 72ch; margin-inline: auto; }
+    </style>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            mermaid.initialize({
-                startOnLoad: true,
-                theme: isDark ? 'dark' : 'default',
-                securityLevel: 'loose',
-                flowchart: { useMaxWidth: true, htmlLabels: true }
+        (function () {
+            if (localStorage.getItem('reader-mode') === 'on' && !document.documentElement.classList.contains('reader-mode')) {
+                document.documentElement.classList.add('reader-mode');
+            }
+            function syncReaderButtons() {
+                var on = document.documentElement.classList.contains('reader-mode');
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            function toggleReaderMode() {
+                var on = document.documentElement.classList.toggle('reader-mode');
+                localStorage.setItem('reader-mode', on ? 'on' : 'off');
+                syncReaderButtons();
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.addEventListener('click', toggleReaderMode);
+                });
+                syncReaderButtons();
             });
-        });
+        })();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
+    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
     <!-- Header (M3 Tonal App Bar) -->
-    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                     DML y Consultas Simples (Manipulación y Recuperación de Datos)
                 </h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
                     Semana 05 • Manipulación DML, Álgebra de Filtrado, Lógica Trivaluada y MVCC • Ingeniería de Datos
                 </p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
         </div>
     </header>
 
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24" id="main">
 
             <!-- M3 Step-by-Step Diagram -->
             <div class="my-6">
                 <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2" id="diagram-title">
                         📌 Proceso Paso a Paso: Ciclo Transaccional DML con Control ACID y Aislamiento
                     </h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
                         Flujo de ejecución de modificaciones de datos desde el buffer de memoria hasta la persistencia física en WAL y almacenamiento.
                     </p>
                     <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                        <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-                            <g transform="translate(10, 15)">
-                                <!-- 1. BEGIN -->
-                                <rect x="0" y="20" width="130" height="60" rx="10" class="fill-blue-50 dark:fill-slate-800 stroke-blue-500 dark:stroke-blue-400" stroke-width="2" />
-                                <text x="65" y="45" text-anchor="middle" class="fill-blue-700 dark:fill-blue-400 font-bold text-xs">BEGIN TRANSACTION</text>
-                                <text x="65" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Abre contexto transaccional</text>
-
-                                <!-- Flecha -->
-                                <path d="M 130 50 L 160 50" stroke="#3b82f6" stroke-width="2" fill="none" />
-                                <polygon points="160,50 153,46 153,54" fill="#3b82f6" />
-
-                                <!-- 2. EXECUTE DML -->
-                                <rect x="170" y="20" width="160" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="250" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">INSERT / UPDATE / DELETE</text>
-                                <text x="250" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Cambios en buffer + WAL</text>
-
-                                <!-- Flecha -->
-                                <path d="M 330 50 L 360 50" stroke="#6366f1" stroke-width="2" fill="none" />
-                                <polygon points="360,50 353,46 353,54" fill="#6366f1" />
-
-                                <!-- 3. DECISION -->
-                                <polygon points="420,20 470,50 420,80 370,50" class="fill-amber-50 dark:fill-slate-850 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
-                                <text x="420" y="53" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-[9px]">¿Todo OK?</text>
-
-                                <!-- Flecha Si -->
-                                <path d="M 470 50 L 525 30" stroke="#10b981" stroke-width="2" fill="none" />
-                                <polygon points="525,30 517,28 520,36" fill="#10b981" />
-                                <text x="500" y="32" class="fill-emerald-600 font-bold text-[10px]">Sí</text>
-
-                                <!-- Flecha No -->
-                                <path d="M 470 50 L 525 70" stroke="#ef4444" stroke-width="2" fill="none" />
-                                <polygon points="525,70 520,64 517,72" fill="#ef4444" />
-                                <text x="500" y="72" class="fill-rose-600 font-bold text-[10px]">No</text>
-
-                                <!-- COMMIT -->
-                                <rect x="535" y="5" width="220" height="40" rx="8" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-                                <text x="645" y="22" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">COMMIT: Persistencia Permanente</text>
-                                <text x="645" y="34" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Durabilidad garantizada en disco</text>
-
-                                <!-- ROLLBACK -->
-                                <rect x="535" y="55" width="220" height="40" rx="8" class="fill-rose-50 dark:fill-slate-800 stroke-rose-500 dark:stroke-rose-400" stroke-width="2" />
-                                <text x="645" y="72" text-anchor="middle" class="fill-rose-700 dark:fill-rose-400 font-bold text-xs">ROLLBACK: Revertir Cambios</text>
-                                <text x="645" y="84" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Atomicidad: Regresa al estado inicial</text>
-                            </g>
-                        </svg>
+                        <div class="flex flex-col md:flex-row md:items-stretch gap-3">
+                                <div class="flex-1 rounded-xl border-2 border-blue-500/60 dark:border-blue-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-blue-700 dark:text-blue-300">BEGIN TRANSACTION</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Abre contexto transaccional</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-blue-500 dark:text-blue-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">INSERT / UPDATE / DELETE</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Cambios en buffer + WAL</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-dashed border-amber-500/70 dark:border-amber-400/70 bg-amber-50/40 dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-amber-700 dark:text-amber-300">¿Todo OK? <span class="text-xs font-normal">(Decisión)</span></p>
+                                </div>
+                            </div>
+                            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div class="rounded-xl border-2 border-emerald-500/60 dark:border-emerald-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-emerald-700 dark:text-emerald-300">Sí → COMMIT: Persistencia Permanente</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Durabilidad garantizada en disco</p>
+                                </div>
+                                <div class="rounded-xl border-2 border-rose-500/60 dark:border-rose-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-rose-700 dark:text-rose-300">No → ROLLBACK: Revertir Cambios</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Atomicidad: Regresa al estado inicial</p>
+                                </div>
+                            </div>
                     </div>
                 </div>
             </div>
 
             <article class="space-y-8 prose dark:prose-invert max-w-none">
-                <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
-                <div class="my-6">
-                    <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
-                        <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
-                            <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                                🗺️ Mapa Conceptual y Relación de Términos (DML y Recuperación)
-                            </span>
-                            <span class="transition group-open:rotate-180">
-                                <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </span>
-                        </summary>
-                        <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                            <pre class="mermaid bg-transparent">
-graph TD
-    DML[Lenguaje DML & SQL] --> Modif[Operaciones de Modificación]
-    DML --> Query[Operaciones de Consulta]
-    DML --> TCL[Control Transaccional ACID]
-
-    Modif --> INS[INSERT: Inserción, Bulk & RETURNING]
-    Modif --> UPD[UPDATE: Modificación puntual o uniones]
-    Modif --> DEL[DELETE: Borrado lógico/físico con WHERE]
-    Modif --> UPS[UPSERT: ON CONFLICT DO UPDATE]
-
-    Query --> SEL[SELECT: Proyección de columnas]
-    SEL --> WHR[WHERE: Predicados & Lógica Trivaluada]
-    WHR --> OPS[Operadores: LIKE, BETWEEN, IN, IS NULL]
-    SEL --> ORD[ORDER BY: ASC, DESC, NULLS FIRST/LAST]
-    SEL --> DIS[DISTINCT / DISTINCT ON]
-    SEL --> LIM[LIMIT / OFFSET / FETCH FIRST]
-
-    TCL --> ACID[Atomicidad, Consistencia, Aislamiento, Durabilidad]
-    TCL --> COM[COMMIT / ROLLBACK / SAVEPOINT]
-    TCL --> MVCC[MVCC: Multi-Version Concurrency Control]
-                            </pre>
+    <!-- M3 Conceptual Map Minimap (Native Responsive HTML/CSS) -->
+    <div class="my-6">
+        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition duration-300">
+            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
+                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
+                    🗺️ Mapa Conceptual: DML Avanzado y Recuperación
+                </span>
+                <span class="transition group-open:rotate-180">
+                    <svg aria-hidden="true" class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </span>
+            </summary>
+            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 space-y-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3">🛠️ Modificación de Datos (DML)</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-emerald-600 dark:text-emerald-400 block mb-1">INSERT & RETURNING</span>
+                            <span class="text-slate-500 dark:text-slate-400">Inserción con retorno atómico de campos generados.</span>
                         </div>
-                    </details>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-blue-600 dark:text-blue-400 block mb-1">UPDATE con FROM</span>
+                            <span class="text-slate-500 dark:text-slate-400">Actualizaciones cruzadas entre tablas en PostgreSQL.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-rose-600 dark:text-rose-400 block mb-1">DELETE</span>
+                            <span class="text-slate-500 dark:text-slate-400">Eliminación segura condicionada con WHERE.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-purple-600 dark:text-purple-400 block mb-1">UPSERT</span>
+                            <span class="text-slate-500 dark:text-slate-400"><code>ON CONFLICT DO UPDATE / NOTHING</code>.</span>
+                        </div>
+                    </div>
                 </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div class="p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/60 dark:border-indigo-900/30">
+                        <div class="font-bold text-indigo-700 dark:text-indigo-400 mb-1">🔍 Consulta & Proyección (DQL)</div>
+                        <p class="text-slate-600 dark:text-slate-400"><code>SELECT</code> | <code>WHERE</code> (Filtros y 3VL) | <code>ORDER BY</code> (ASC/DESC, NULLS FIRST/LAST) | <code>DISTINCT ON</code> (PostgreSQL) | <code>LIMIT/OFFSET</code>.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-emerald-900/30">
+                        <div class="font-bold text-emerald-700 dark:text-emerald-400 mb-1">⚡ Arquitectura MVCC & ACID</div>
+                        <p class="text-slate-600 dark:text-slate-400">Control de concurrencia multiversión mediante tuplas con encabezados <code>xmin</code> / <code>xmax</code> sin bloqueos de lectura.</p>
+                    </div>
+                </div>
+            </div>
+        </details>
+    </div>
 
                 <!-- Enfoque Arquitecto: DML e Internals de MVCC -->
                 <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
@@ -224,7 +247,7 @@ graph TD
                 <!-- Objetivos de Aprendizaje -->
                 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
                     <h4 class="text-blue-950 dark:text-blue-200 font-bold flex items-center gap-2 mb-2">
-                        <svg class="w-5 h-5 shrink-0 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        <svg aria-hidden="true" class="w-5 h-5 shrink-0 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                         Objetivos y Competencias de la Semana
                     </h4>
                     <ul class="space-y-2 list-disc list-inside text-sm text-slate-700 dark:text-slate-300">
@@ -288,7 +311,7 @@ graph TD
                 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     La sentencia <code>INSERT</code> añade una o más filas a una tabla. Si no se especifican las columnas, se deben proporcionar valores para todos los atributos en el orden exacto de definición de la tabla.
                 </p>
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-sm overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 -- 1. Inserción posicional completa
 INSERT INTO cliente 
 VALUES (101, 'Corporación Andina S.A.C.', 'Av. Javier Prado 4500', 'A', '15023');
@@ -323,7 +346,7 @@ DO UPDATE SET
                 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     <code>UPDATE</code> modifica los valores de las columnas existentes. <strong>Regla de oro:</strong> Toda sentencia UPDATE en entornos operacionales debe llevar una cláusula <code>WHERE</code> explícita, a menos que intencionalmente se desee actualizar la totalidad de la tabla.
                 </p>
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-sm overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 -- 1. Actualización simple con condición matemática
 UPDATE producto
 SET precio = precio * 1.08,
@@ -354,20 +377,27 @@ RETURNING p.id_producto, p.nombre_linea, p.meta_venta;
                 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     Una de las preguntas más comunes en exámenes y entrevistas de ingeniería de datos radica en la distinción operativa y física entre <code>DELETE</code> y <code>TRUNCATE</code>:
                 </p>
-                <div class="bg-slate-100 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto mb-6 text-slate-800 dark:text-slate-200">
-+----------------------+---------------------------------+---------------------------------+
-| Característica       | DELETE (DML)                    | TRUNCATE (DDL)                  |
-+----------------------+---------------------------------+---------------------------------+
-| Categoría SQL        | DML (Data Manipulation)         | DDL (Data Definition)           |
-| Filtrado con WHERE   | SÍ (Permite borrar filas esp.)  | NO (Elimina TODAS las filas)    |
-| Mecanismo de borrado | Fila por fila (Genera Dead Tuples)| Desasigna páginas de disco      |
-| Logging / WAL        | Alto (Registra cada tupla)      | Mínimo (Registra desasignación) |
-| Velocidad            | Lenta en tablas grandes         | Ultrarrápida (O(1) complejidad) |
-| Bloqueo (Locks)      | Row-level locks (Modo exclusivo)| AccessExclusiveLock (Tabla com.)|
-| Triggers             | Dispara triggers ON DELETE      | Dispara solo triggers TRUNCATE  |
-| Reinicio de PK       | NO reinicia secuencias/identidad| SÍ reinicia con RESTART IDENTITY|
-| Rollback en Postgres | SÍ (Totalmente transaccional)   | SÍ (Transaccional en Postgres)  |
-+----------------------+---------------------------------+---------------------------------+
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-x-auto mb-6 shadow-sm">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-200/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+                                <th class="p-2.5 rounded-l-lg">Característica</th>
+                                <th class="p-2.5">DELETE (DML)</th>
+                                <th class="p-2.5 rounded-r-lg">TRUNCATE (DDL)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                            <tr><td class="p-2.5 font-medium">Categoría SQL</td><td class="p-2.5 font-mono text-sm">DML (Data Manipulation)</td><td class="p-2.5 font-mono text-sm">DDL (Data Definition)</td></tr>
+                            <tr><td class="p-2.5 font-medium">Filtrado con WHERE</td><td class="p-2.5">SÍ (Permite borrar filas específicas)</td><td class="p-2.5">NO (Elimina TODAS las filas)</td></tr>
+                            <tr><td class="p-2.5 font-medium">Mecanismo de borrado</td><td class="p-2.5">Fila por fila (genera Dead Tuples)</td><td class="p-2.5">Desasigna páginas de disco</td></tr>
+                            <tr><td class="p-2.5 font-medium">Logging / WAL</td><td class="p-2.5">Alto (registra cada tupla)</td><td class="p-2.5">Mínimo (registra desasignación)</td></tr>
+                            <tr><td class="p-2.5 font-medium">Velocidad</td><td class="p-2.5">Lenta en tablas grandes</td><td class="p-2.5">Ultrarrápida (O(1) complejidad)</td></tr>
+                            <tr><td class="p-2.5 font-medium">Bloqueo (Locks)</td><td class="p-2.5">Row-level locks (modo exclusivo)</td><td class="p-2.5">AccessExclusiveLock (tabla completa)</td></tr>
+                            <tr><td class="p-2.5 font-medium">Triggers</td><td class="p-2.5">Dispara triggers ON DELETE</td><td class="p-2.5">Dispara solo triggers TRUNCATE</td></tr>
+                            <tr><td class="p-2.5 font-medium">Reinicio de PK</td><td class="p-2.5">NO reinicia secuencias/identidad</td><td class="p-2.5">SÍ reinicia con RESTART IDENTITY</td></tr>
+                            <tr><td class="p-2.5 font-medium">Rollback en Postgres</td><td class="p-2.5">SÍ (totalmente transaccional)</td><td class="p-2.5">SÍ (transaccional en Postgres)</td></tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <!-- 3. Consultas Básicas con SELECT -->
@@ -376,7 +406,7 @@ RETURNING p.id_producto, p.nombre_linea, p.meta_venta;
                     La sentencia <code>SELECT</code> implementa los operadores fundamentales del álgebra relacional: la <strong>Proyección ($\pi$)</strong> para seleccionar columnas y la <strong>Selección ($\sigma$)</strong> para filtrar tuplas que cumplan un predicado lógico.
                 </p>
 
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-sm overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 -- Proyección con alias, cálculos aritméticos y funciones escalares
 SELECT 
     id_producto,
@@ -396,20 +426,30 @@ FROM producto;
                     En SQL, el valor especial <code>NULL</code> representa la ausencia de dato o un valor desconocido. Por tanto, SQL no opera con lógica booleana binaria (Verdadero/Falso), sino con una <strong>Lógica Trivaluada (3VL)</strong> compuesta por <code>TRUE</code>, <code>FALSE</code> y <code>UNKNOWN</code>.
                 </p>
 
-                <div class="bg-slate-100 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto mb-6 text-slate-800 dark:text-slate-200">
-                  TABLA DE VERDAD LÓGICA TRIVALUADA (3VL EN SQL)
-====================================================================
-P        | Q        | P AND Q   | P OR Q    | NOT P
----------+----------+-----------+-----------+-----------
-TRUE     | TRUE     | TRUE      | TRUE      | FALSE
-TRUE     | FALSE    | FALSE     | TRUE      | FALSE
-TRUE     | UNKNOWN  | UNKNOWN   | TRUE      | FALSE
-FALSE    | FALSE    | FALSE     | FALSE     | TRUE
-FALSE    | UNKNOWN  | FALSE     | UNKNOWN   | TRUE
-UNKNOWN  | UNKNOWN  | UNKNOWN   | UNKNOWN   | UNKNOWN
-====================================================================
-* REGLA DE ORO DE WHERE: La cláusula WHERE solo retorna filas cuyo predicado 
-  evalúe estrictamente a TRUE. Si evalúa a FALSE o UNKNOWN, la fila se DESCARTA.
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-x-auto mb-6 shadow-sm">
+                    <div class="text-sm font-bold mb-3">TABLA DE VERDAD LÓGICA TRIVALUADA (3VL EN SQL)</div>
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-200/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+                                <th class="p-2.5 rounded-l-lg font-mono">P</th>
+                                <th class="p-2.5 font-mono">Q</th>
+                                <th class="p-2.5 font-mono">P AND Q</th>
+                                <th class="p-2.5 font-mono">P OR Q</th>
+                                <th class="p-2.5 font-mono rounded-r-lg">NOT P</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-sm text-slate-700 dark:text-slate-300">
+                            <tr><td class="p-2.5">TRUE</td><td class="p-2.5">TRUE</td><td class="p-2.5 font-bold text-emerald-600 dark:text-emerald-400">TRUE</td><td class="p-2.5 font-bold text-emerald-600 dark:text-emerald-400">TRUE</td><td class="p-2.5 font-bold text-rose-600 dark:text-rose-400">FALSE</td></tr>
+                            <tr><td class="p-2.5">TRUE</td><td class="p-2.5">FALSE</td><td class="p-2.5 font-bold text-rose-600 dark:text-rose-400">FALSE</td><td class="p-2.5 font-bold text-emerald-600 dark:text-emerald-400">TRUE</td><td class="p-2.5 font-bold text-rose-600 dark:text-rose-400">FALSE</td></tr>
+                            <tr><td class="p-2.5">TRUE</td><td class="p-2.5">UNKNOWN</td><td class="p-2.5 font-bold text-amber-600 dark:text-amber-400">UNKNOWN</td><td class="p-2.5 font-bold text-emerald-600 dark:text-emerald-400">TRUE</td><td class="p-2.5 font-bold text-rose-600 dark:text-rose-400">FALSE</td></tr>
+                            <tr><td class="p-2.5">FALSE</td><td class="p-2.5">FALSE</td><td class="p-2.5 font-bold text-rose-600 dark:text-rose-400">FALSE</td><td class="p-2.5 font-bold text-rose-600 dark:text-rose-400">FALSE</td><td class="p-2.5 font-bold text-emerald-600 dark:text-emerald-400">TRUE</td></tr>
+                            <tr><td class="p-2.5">FALSE</td><td class="p-2.5">UNKNOWN</td><td class="p-2.5 font-bold text-rose-600 dark:text-rose-400">FALSE</td><td class="p-2.5 font-bold text-amber-600 dark:text-amber-400">UNKNOWN</td><td class="p-2.5 font-bold text-emerald-600 dark:text-emerald-400">TRUE</td></tr>
+                            <tr><td class="p-2.5">UNKNOWN</td><td class="p-2.5">UNKNOWN</td><td class="p-2.5 font-bold text-amber-600 dark:text-amber-400">UNKNOWN</td><td class="p-2.5 font-bold text-amber-600 dark:text-amber-400">UNKNOWN</td><td class="p-2.5 font-bold text-amber-600 dark:text-amber-400">UNKNOWN</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="mt-3 text-sm text-slate-700 dark:text-slate-300">
+                        <strong>* REGLA DE ORO DE WHERE:</strong> La cláusula WHERE solo retorna filas cuyo predicado evalúe estrictamente a <strong>TRUE</strong>. Si evalúa a FALSE o UNKNOWN, la fila se DESCARTA.
+                    </p>
                 </div>
 
                 <div class="bg-amber-50 dark:bg-amber-950/20 p-5 rounded-2xl border border-amber-200 dark:border-amber-900/40 mb-6">
@@ -427,7 +467,7 @@ UNKNOWN  | UNKNOWN  | UNKNOWN   | UNKNOWN   | UNKNOWN
                 </div>
 
                 <h3>4.1 Operadores Especiales de Predicado</h3>
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-sm overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 -- 1. Operador BETWEEN ... AND (Inclusivo en ambos límites)
 SELECT numero_orden, fecha_colocacion, id_cliente
 FROM orden_pedido
@@ -452,7 +492,7 @@ WHERE nombre LIKE 'Corp%'       -- Case-sensitive
                 <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                     Por definición matemática del modelo relacional, las tuplas en una tabla no tienen un orden inherente. La única forma de garantizar un orden de presentación consiste en utilizar <code>ORDER BY</code>.
                 </p>
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-sm overflow-x-auto text-slate-800 dark:text-slate-200 mb-4">
 -- 1. Ordenamiento múltiple con control explícito de nulos
 SELECT numero_orden, fecha_colocacion, fecha_llenado, id_cliente
 FROM orden_pedido
@@ -484,7 +524,7 @@ LIMIT 10 OFFSET 20; -- Retorna la página 3 (filas 21 a 30)
                     Una transacción es una unidad lógica de trabajo indivisible. En aplicaciones bancarias o de comercio electrónico, los <code>SAVEPOINTS</code> permiten establecer puntos de restauración intermedios para revertir errores parciales sin cancelar la totalidad del flujo transaccional.
                 </p>
 
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-6">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-sm overflow-x-auto text-slate-800 dark:text-slate-200 mb-6">
 -- Inicio explícito de la transacción
 BEGIN;
 
@@ -592,9 +632,9 @@ ORDER BY o.fecha_colocacion DESC, o.numero_orden ASC;
             <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
                 <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
                 <ul class="space-y-3 text-sm">
-                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                    <li><a href="semana_04.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 04</a></li>
-                    <li><a href="semana_06.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 06 →</a></li>
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition shadow-sm">📂 Índice del Curso</a></li>
+                    <li><a href="semana_04.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition shadow-sm">← Semana 04</a></li>
+                    <li><a href="semana_06.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition shadow-sm">Semana 06 →</a></li>
                 </ul>
             </div>
         </aside>
@@ -602,32 +642,38 @@ ORDER BY o.fecha_colocacion DESC, o.numero_orden ASC;
 
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Índice</span>
         </a>
-        <a href="semana_04.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_04.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Anterior</span>
         </a>
-        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Lector</span>
+        </button>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg aria-hidden="true" id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Tema</span>
         </button>
-        <a href="semana_06.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_06.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
-            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
+            <span class="text-sm font-bold tracking-wide mt-1">Siguiente</span>
         </a>
     </nav>
 
@@ -655,6 +701,11 @@ ORDER BY o.fecha_colocacion DESC, o.numero_orden ASC;
         }
 
         updateToggleText();
+        function syncThemeColor() {
+            const tcm = document.getElementById('theme-color-meta');
+            if (tcm) tcm.setAttribute('content', document.documentElement.classList.contains('dark') ? '#0A0A0C' : '#FEF7FF');
+        }
+        syncThemeColor();
 
         const toggleTheme = () => {
             if (document.documentElement.classList.contains('dark')) {
@@ -665,6 +716,7 @@ ORDER BY o.fecha_colocacion DESC, o.numero_orden ASC;
                 localStorage.setItem('color-theme', 'dark');
             }
             updateToggleText();
+            syncThemeColor();
         };
 
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);

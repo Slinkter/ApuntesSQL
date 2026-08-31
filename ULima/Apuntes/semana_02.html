@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" id="theme-color-meta" content="#FEF7FF">
     <title>Semana 02 - Arquitectura de DBMS, Independencia de Datos y Transacciones ACID</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,11 +33,17 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif !important;
             letter-spacing: -0.02em;
+            text-wrap: balance;
         }
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.625;
             letter-spacing: -0.011em;
+        }
+        [id] { scroll-margin-top: 5rem; }
+        :is(table) { font-variant-numeric: tabular-nums; }
+        html.dark {
+            color-scheme: dark;
         }
         html.dark body {
             color: #cbd5e1 !important;
@@ -56,124 +63,153 @@
         }
     </script>
 
-    <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style id="reader-mode-style">
+        html.reader-mode { font-size: 106.25%; }
+        html.reader-mode header,
+        html.reader-mode aside,
+        html.reader-mode nav[class*="fixed"] { display: none !important; }
+        html.reader-mode #theme-toggle { display: flex !important; }
+        html.reader-mode #reader-toggle { display: flex !important; }
+        html.reader-mode body { line-height: 1.75; text-wrap: pretty; }
+        html.reader-mode main { width: 100% !important; max-width: 72ch; margin-inline: auto; }
+    </style>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            mermaid.initialize({
-                startOnLoad: true,
-                theme: isDark ? 'dark' : 'default',
-                securityLevel: 'loose',
-                flowchart: { useMaxWidth: true, htmlLabels: true }
+        (function () {
+            if (localStorage.getItem('reader-mode') === 'on' && !document.documentElement.classList.contains('reader-mode')) {
+                document.documentElement.classList.add('reader-mode');
+            }
+            function syncReaderButtons() {
+                var on = document.documentElement.classList.contains('reader-mode');
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            function toggleReaderMode() {
+                var on = document.documentElement.classList.toggle('reader-mode');
+                localStorage.setItem('reader-mode', on ? 'on' : 'off');
+                syncReaderButtons();
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.addEventListener('click', toggleReaderMode);
+                });
+                syncReaderButtons();
             });
-        });
+        })();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
+    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
     <!-- Header (M3 Tonal App Bar) -->
-    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                     Semana 02: Arquitectura de DBMS, Independencia de Datos y Transacciones ACID
                 </h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
                     ANSI/SPARC • Motores Internos • Protocolo ACID • Rol del DBA 2026 • Universidad de Lima
                 </p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
         </div>
     </header>
 
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24" id="main">
 
     <!-- M3 Step-by-Step Diagram -->
     <div class="my-6">
         <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2" id="diagram-title">
                 📌 Proceso Paso a Paso: Flujo de Independencia de Datos (ANSI/SPARC)
             </h3>
             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
                 Cómo las solicitudes de usuario se traducen y abstraen en cada nivel de almacenamiento sin acoplamiento.
             </p>
             <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-                  <g transform="translate(40, 15)">
-                    <!-- Externo -->
-                    <rect x="0" y="20" width="180" height="60" rx="12" class="fill-blue-50 dark:fill-slate-800 stroke-blue-500 dark:stroke-blue-400" stroke-width="2" />
-                    <text x="90" y="45" text-anchor="middle" class="fill-blue-700 dark:fill-blue-400 font-bold text-sm">Nivel Externo</text>
-                    <text x="90" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Vistas de Usuario / APIs / Roles</text>
-                    
-                    <!-- Mapeo 1 -->
-                    <path d="M 180 50 L 260 50" stroke="#3b82f6" stroke-width="2" fill="none" stroke-dasharray="4,4" />
-                    <polygon points="265,50 258,46 258,54" fill="#3b82f6" />
-                    <text x="222.5" y="40" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px] font-mono">Mapeo E-C</text>
-
-                    <!-- Conceptual -->
-                    <rect x="270" y="20" width="180" height="60" rx="12" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                    <text x="360" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-sm">Nivel Conceptual</text>
-                    <text x="360" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Esquema Lógico Global & Reglas</text>
-
-                    <!-- Mapeo 2 -->
-                    <path d="M 450 50 L 530 50" stroke="#6366f1" stroke-width="2" fill="none" stroke-dasharray="4,4" />
-                    <polygon points="535,50 528,46 528,54" fill="#6366f1" />
-                    <text x="492.5" y="40" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px] font-mono">Mapeo C-I</text>
-
-                    <!-- Interno -->
-                    <rect x="540" y="20" width="180" height="60" rx="12" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-                    <text x="630" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-sm">Nivel Interno</text>
-                    <text x="630" y="62" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[10px]">Páginas de Disco, B-Trees, WAL</text>
-                  </g>
-                </svg>
+                <div class="flex flex-col md:flex-row md:items-stretch gap-3">
+                    <div class="flex-1 rounded-xl border-2 border-blue-500/60 dark:border-blue-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-blue-700 dark:text-blue-300">Nivel Externo</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Vistas de Usuario / APIs / Roles</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center gap-0.5 shrink-0">
+                        <span class="text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0" aria-hidden="true">→</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">Mapeo E-C</span>
+                    </div>
+                    <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">Nivel Conceptual</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Esquema Lógico Global &amp; Reglas</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center gap-0.5 shrink-0">
+                        <span class="text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0" aria-hidden="true">→</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">Mapeo C-I</span>
+                    </div>
+                    <div class="flex-1 rounded-xl border-2 border-emerald-500/60 dark:border-emerald-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-emerald-700 dark:text-emerald-300">Nivel Interno</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Páginas de Disco, B-Trees, WAL</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
+    <!-- M3 Conceptual Map Minimap (Native Responsive HTML/CSS) -->
     <div class="my-6">
-        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
+        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition duration-300">
             <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
                 <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Arquitectura del Motor DBMS
+                    🗺️ Mapa Conceptual: Arquitectura del Motor DBMS
                 </span>
                 <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg aria-hidden="true" class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </summary>
-            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                <pre class="mermaid bg-transparent">
-graph TD
-    ANSI[Arquitectura ANSI/SPARC 3 Niveles] --> EXT[Nivel Externo: Vistas de Usuario]
-    ANSI --> CONC[Nivel Conceptual: Esquema Lógico Global]
-    ANSI --> INT[Nivel Interno: Archivos Físicos e Índices]
-    
-    EXT -->|Independencia Lógica| CONC
-    CONC -->|Independencia Física| INT
-    
-    ENGINE[Motor DBMS Interno] --> QP[Query Parser & Analyzer]
-    ENGINE --> QO[Query Optimizer CBO]
-    ENGINE --> BP[Buffer Pool / Shared Buffers]
-    ENGINE --> TM[Transaction & Lock Manager: 2PL / MVCC]
-    ENGINE --> WAL[WAL & Recovery Manager: ARIES]
-    
-    TM --> ACID[Propiedades ACID: Atomicidad, Consistencia, Aislamiento, Durabilidad]
-    DBA[Rol DBA / DBRE 2026] --> OBS[Observabilidad & Query Tuning]
-    DBA --> RES[RPO / RTO & Backup Recovery PITR]
-                </pre>
+            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 space-y-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3">🏛️ Arquitectura ANSI/SPARC (3 Niveles)</div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/40">
+                            <span class="font-bold text-blue-700 dark:text-blue-400 block mb-1">1. Nivel Externo</span>
+                            <span class="text-slate-600 dark:text-slate-400">Vistas de usuario, permisos y esquemas personalizados.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-900/40">
+                            <span class="font-bold text-indigo-700 dark:text-indigo-400 block mb-1">2. Nivel Conceptual</span>
+                            <span class="text-slate-600 dark:text-slate-400">Esquema lógico global, tablas y restricciones (Independencia Lógica).</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40">
+                            <span class="font-bold text-emerald-700 dark:text-emerald-400 block mb-1">3. Nivel Interno</span>
+                            <span class="text-slate-600 dark:text-slate-400">Almacenamiento físico, bloques de disco y B-Trees (Independencia Física).</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 mb-3">⚡ Componentes Clave del Motor Interno</div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-xs text-center">
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 font-semibold text-slate-800 dark:text-slate-200">Query Parser</div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 font-semibold text-slate-800 dark:text-slate-200">Optimizer CBO</div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 font-semibold text-slate-800 dark:text-slate-200">Buffer Pool</div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 font-semibold text-slate-800 dark:text-slate-200">Lock / MVCC</div>
+                        <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 font-semibold text-slate-800 dark:text-slate-200">WAL / ARIES</div>
+                    </div>
+                </div>
             </div>
         </details>
     </div>
@@ -183,7 +219,7 @@ graph TD
         <div class="bg-indigo-50/60 dark:bg-indigo-950/20 rounded-3xl p-6 border border-indigo-100 dark:border-indigo-900/40 shadow-sm">
             <div class="flex items-center gap-3 mb-3">
                 <div class="p-2 bg-indigo-600 text-white rounded-xl">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </div>
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Objetivos Pedagógicos y Competencias de Arquitectura</h3>
             </div>
@@ -216,7 +252,7 @@ graph TD
                     <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                         Es la visión individualizada de los datos para un usuario o grupo de aplicaciones específico. Cada grupo accede a un <em>esquema externo</em> (subesquema o vista) que expone únicamente los datos relevantes y oculta el resto por motivos de simplicidad y confidencialidad.
                     </p>
-                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-[11px] text-blue-600 dark:text-blue-400">
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-sm text-blue-600 dark:text-blue-400">
                         CREATE VIEW v_clientes_resumen AS SELECT id, nombre, email FROM clientes;
                     </div>
                 </div>
@@ -228,7 +264,7 @@ graph TD
                     <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                         Es la representación estructural global y lógica de <strong>toda la base de datos</strong>. Modela todas las entidades, sus atributos, interrelaciones, restricciones de integridad referencial y reglas de negocio, completamente independiente de la tecnología física de disco.
                     </p>
-                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-[11px] text-indigo-600 dark:text-indigo-400">
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-sm text-indigo-600 dark:text-indigo-400">
                         Tabla Clientes (id PK, nombre, email, password_hash, created_at)
                     </div>
                 </div>
@@ -240,39 +276,51 @@ graph TD
                     <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                         Describe la estructura física de persistencia: organización de archivos de datos en bloques de 8KB, factores de relleno (fillfactor), árboles B-Tree, clustering, compresión columnar y ubicación en tablespaces en discos NVMe/SSD.
                     </p>
-                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-[11px] text-emerald-600 dark:text-emerald-400">
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-sm text-emerald-600 dark:text-emerald-400">
                         Block 0x4F8A: Tuple [Offset 32, Len 120, ItemPointer (0, 1)]
                     </div>
                 </div>
             </div>
 
-            <!-- Diagrama ASCII: Los Mapeos ANSI/SPARC -->
+            <!-- Diagrama: Los Mapeos ANSI/SPARC -->
             <div class="my-6">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Mecanismo de Mapeos y Transformación de Consultas</div>
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
-[USUARIO / APLICACIÓN] ── (Consulta sobre Vista Externa: v_ventas_mes)
-         │
-         ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 1. NIVEL EXTERNO: Subesquema de Ventas                                      │
-│    Esquema Externo A: { id_factura, nombre_cliente, total_soles }           │
-└──────────────────────────────────────┬──────────────────────────────────────┘
-                                       │  ◄── [MAPEO EXTERNO-CONCEPTUAL (E-C)]
-                                       │      Traduce nombres y proyecciones
-                                       ▼      de vistas a tablas reales.
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 2. NIVEL CONCEPTUAL: Esquema Lógico Global                                  │
-│    Tabla Factura(id_factura PK, id_cliente FK, monto, igv, estado)          │
-│    Tabla Cliente(id_cliente PK, nombres, apellidos, ruc, direccion)         │
-└──────────────────────────────────────┬──────────────────────────────────────┘
-                                       │  ◄── [MAPEO CONCEPTUAL-INTERNO (C-I)]
-                                       │      Traduce tablas lógicas a offsets
-                                       ▼      de bloques, índices y archivos.
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ 3. NIVEL INTERNO: Esquema Físico                                            │
-│    Tablespace 'fast_nvme' -> Archivo 'base/16384/24580', Páginas de 8KB     │
-│    Índice B-Tree 'idx_factura_cliente_id' -> Root Block 3, Leaf Block 45    │
-└─────────────────────────────────────────────────────────────────────────────┘</pre>
+                <div class="mb-2 text-sm text-slate-600 dark:text-slate-400 font-mono">[USUARIO / APLICACIÓN] ── (Consulta sobre Vista Externa: v_ventas_mes) ▼</div>
+                <div class="space-y-3">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">1</span>
+                            <span class="text-sm font-bold text-slate-800 dark:text-slate-200">NIVEL EXTERNO: Subesquema de Ventas</span>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 font-mono">Esquema Externo A: { id_factura, nombre_cliente, total_soles }</p>
+                    </div>
+                    <div class="my-1 text-center text-slate-500 dark:text-slate-400 text-xs">
+                        ▼ <span class="font-semibold text-slate-600 dark:text-slate-300">[MAPEO EXTERNO-CONCEPTUAL (E-C)]</span><span class="text-slate-500 dark:text-slate-400"> — Traduce nombres y proyecciones de vistas a tablas reales.</span>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">2</span>
+                            <span class="text-sm font-bold text-slate-800 dark:text-slate-200">NIVEL CONCEPTUAL: Esquema Lógico Global</span>
+                        </div>
+                        <ul class="text-sm text-slate-600 dark:text-slate-400 font-mono space-y-1">
+                            <li>Tabla Factura(id_factura PK, id_cliente FK, monto, igv, estado)</li>
+                            <li>Tabla Cliente(id_cliente PK, nombres, apellidos, ruc, direccion)</li>
+                        </ul>
+                    </div>
+                    <div class="my-1 text-center text-slate-500 dark:text-slate-400 text-xs">
+                        ▼ <span class="font-semibold text-slate-600 dark:text-slate-300">[MAPEO CONCEPTUAL-INTERNO (C-I)]</span><span class="text-slate-500 dark:text-slate-400"> — Traduce tablas lógicas a offsets de bloques, índices y archivos.</span>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">3</span>
+                            <span class="text-sm font-bold text-slate-800 dark:text-slate-200">NIVEL INTERNO: Esquema Físico</span>
+                        </div>
+                        <ul class="text-sm text-slate-600 dark:text-slate-400 font-mono space-y-1">
+                            <li>Tablespace 'fast_nvme' → Archivo 'base/16384/24580', Páginas de 8KB</li>
+                            <li>Índice B-Tree 'idx_factura_cliente_id' → Root Block 3, Leaf Block 45</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -374,43 +422,51 @@ graph TD
 
             <div class="my-6">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Ciclo de Vida de Ejecución de una Consulta en el Motor DBMS</div>
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
-                               ┌───────────────────────────┐
-                               │     CONSULTA SQL TEXT     │
-                               └─────────────┬─────────────┘
-                                             │
-                                             ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. QUERY PARSER & LEXER: Valida sintaxis gramatical y construye el Abstract Syntax Tree │
-└────────────────────────────────────────────┬────────────────────────────────────────────┘
-                                             │
-                                             ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│ 2. QUERY REWRITER & CATALOG: Valida permisos de usuario y expande vistas del catálogo   │
-└────────────────────────────────────────────┬────────────────────────────────────────────┘
-                                             │
-                                             ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│ 3. QUERY OPTIMIZER (CBO): Evalúa planes alternativos (Hash Join vs Nested Loop, Index   │
-│    Scan vs Seq Scan) usando histogramas estadísticos (pg_statistic) y costos de E/S.   │
-└────────────────────────────────────────────┬────────────────────────────────────────────┘
-                                             │  ◄── Genera el "Execution Plan" óptimo
-                                             ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│ 4. EXECUTION ENGINE: Ejecuta el plan iterando operadores volcán (Open/Next/Close)        │
-└───────────────────────┬─────────────────────────────────┬───────────────────────────────┘
-                        │                                 │
-                        ▼                                 ▼
-┌──────────────────────────────────────────┐    ┌─────────────────────────────────────────┐
-│ 5. LOCK & CONCURRENCY MANAGER            │    │ 6. BUFFER POOL MANAGER (Shared Buffers) │
-│    - Locks de tabla / fila               │    │    - Busca páginas de 8KB en RAM        │
-│    - MVCC (xmin, xmax para aislamiento)  │    │    - Si hay "Buffer Miss", lee de disco │
-└───────────────────────┬──────────────────┘    └─────────────────┬───────────────────────┘
-                        │                                         │
-                        ▼                                         ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│ 7. WAL & DISK ENGINE: Escribe en Log previo (Write-Ahead Log) y persiste a Disco (fsync)│
-└─────────────────────────────────────────────────────────────────────────────────────────┘</pre>
+                <div class="space-y-2">
+                    <div class="mx-auto w-fit bg-slate-200/70 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 text-sm font-bold text-slate-800 dark:text-slate-200">CONSULTA SQL TEXT</div>
+                    <div class="text-center text-slate-400 dark:text-slate-500 text-sm">▼</div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200">1. QUERY PARSER & LEXER</div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Valida sintaxis gramatical y construye el Abstract Syntax Tree.</p>
+                    </div>
+                    <div class="text-center text-slate-400 dark:text-slate-500 text-sm">▼</div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200">2. QUERY REWRITER & CATALOG</div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Valida permisos de usuario y expande vistas del catálogo.</p>
+                    </div>
+                    <div class="text-center text-slate-400 dark:text-slate-500 text-sm">▼</div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200">3. QUERY OPTIMIZER (CBO)</div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Evalúa planes alternativos (Hash Join vs Nested Loop, Index Scan vs Seq Scan) usando histogramas estadísticos (pg_statistic) y costos de E/S.</p>
+                    </div>
+                    <div class="text-center text-slate-400 dark:text-slate-500 text-sm">▼ <span class="text-xs text-slate-500 dark:text-slate-400">Genera el "Execution Plan" óptimo</span></div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200">4. EXECUTION ENGINE</div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Ejecuta el plan iterando operadores volcán (Open/Next/Close).</p>
+                    </div>
+                    <div class="text-center text-slate-400 dark:text-slate-500 text-sm">▼ ▼</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                            <div class="text-sm font-bold text-slate-800 dark:text-slate-200">5. LOCK & CONCURRENCY MANAGER</div>
+                            <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-400 mt-1 space-y-1">
+                                <li>Locks de tabla / fila</li>
+                                <li>MVCC (xmin, xmax para aislamiento)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                            <div class="text-sm font-bold text-slate-800 dark:text-slate-200">6. BUFFER POOL MANAGER (Shared Buffers)</div>
+                            <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-400 mt-1 space-y-1">
+                                <li>Busca páginas de 8KB en RAM</li>
+                                <li>Si hay "Buffer Miss", lee de disco</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="text-center text-slate-400 dark:text-slate-500 text-sm">▼ ▼</div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200">7. WAL & DISK ENGINE</div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Escribe en Log previo (Write-Ahead Log) y persiste a Disco (fsync).</p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -470,31 +526,42 @@ graph TD
             <!-- Autómata de Estados de una Transacción -->
             <div class="my-6">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Autómata de Estados de una Transacción en el DBMS</div>
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
-                  ┌──────────────────────┐
-                  │    ESTADO ACTIVO     │  ◄── Inicio de transacción (BEGIN / START TRANSACTION)
-                  └──────────┬───────────┘
-                             │
-            ┌────────────────┴────────────────┐
-            │                                 │ (Error, Deadlock, Abort)
-            ▼                                 ▼
-┌──────────────────────┐            ┌──────────────────────┐
-│PARCIALMENTE COMPROM. │            │    ESTADO FALLIDO    │
-│(Tras última sentencia│            │ (Operación inválida) │
-└──────────┬───────────┘            └──────────┬───────────┘
-           │                                   │
-           │ (fsync en WAL exitoso)            │ (Rollback ejecutado)
-           ▼                                   ▼
-┌──────────────────────┐            ┌──────────────────────┐
-│  ESTADO COMPROMETIDO │            │   ESTADO ABORTADO    │
-│   (COMMIT Exitoso)   │            │(Rollback completado) │
-└──────────┬───────────┘            └──────────┬───────────┘
-           │                                   │
-           └─────────────────┬─────────────────┘
-                             ▼
-                  ┌──────────────────────┐
-                  │   ESTADO TERMINADO   │
-                  └──────────────────────┘</pre>
+                <div class="space-y-2">
+                    <div class="mx-auto w-fit bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-800 rounded-xl px-4 py-2 shadow-sm text-center">
+                        <div class="text-sm font-bold text-emerald-700 dark:text-emerald-300">ESTADO ACTIVO</div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400">Inicio de transacción (BEGIN / START TRANSACTION)</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-center text-slate-400 dark:text-slate-500 text-sm">
+                        <div>▼</div>
+                        <div>▼ <span class="text-xs text-rose-500 dark:text-rose-400">(Error, Deadlock, Abort)</span></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                            <div class="text-sm font-bold text-slate-800 dark:text-slate-200">PARCIALMENTE COMPROMETIDO</div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Tras la última sentencia.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                            <div class="text-sm font-bold text-slate-800 dark:text-slate-200">ESTADO FALLIDO</div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Operación inválida.</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-center text-slate-400 dark:text-slate-500 text-sm">
+                        <div>▼ <span class="text-xs text-slate-500 dark:text-slate-400">(fsync en WAL exitoso)</span></div>
+                        <div>▼ <span class="text-xs text-slate-500 dark:text-slate-400">(Rollback ejecutado)</span></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-800 rounded-2xl p-4 shadow-sm">
+                            <div class="text-sm font-bold text-emerald-700 dark:text-emerald-300">ESTADO COMPROMETIDO</div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">COMMIT exitoso.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 border border-rose-300 dark:border-rose-800 rounded-2xl p-4 shadow-sm">
+                            <div class="text-sm font-bold text-rose-700 dark:text-rose-300">ESTADO ABORTADO</div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Rollback completado.</p>
+                        </div>
+                    </div>
+                    <div class="text-center text-slate-400 dark:text-slate-500 text-sm">▼</div>
+                    <div class="mx-auto w-fit bg-slate-200/70 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-2 text-sm font-bold text-slate-800 dark:text-slate-200">ESTADO TERMINADO</div>
+                </div>
             </div>
         </section>
 
@@ -550,7 +617,7 @@ graph TD
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-2">
                     <h4 class="text-sm font-bold text-indigo-600 dark:text-indigo-400 m-0">🎯 Métricas RPO y RTO en Recuperación</h4>
                     <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                        <strong>RPO (Recovery Point Objective):</strong> La cantidad máxima de tiempo de datos transaccionales que la empresa puede tolerar perder ante un desastre (e.g., RPO &lt; 1 segundo con replicación síncrona).<br>
+                        <strong>RPO (Recovery Point Objective):</strong> La cantidad máxima de tiempo de datos transaccionales que la empresa puede tolerar perder ante un desastre (e.g., RPO < 1 segundo con replicación síncrona).<br>
                         <strong>RTO (Recovery Time Objective):</strong> El tiempo máximo admisible para restaurar la base de datos a un estado 100% operativo tras una caída.
                     </p>
                 </div>
@@ -568,7 +635,7 @@ graph TD
         <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8 space-y-4">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </span>
                 💡 Tips del Profesor y Preguntas Clave de Examen
             </h2>
@@ -607,7 +674,7 @@ graph TD
             <!-- Canvas Interactivo -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col items-center">
                 <div class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Simulación Visual Interactiva: Mapeos ANSI/SPARC</div>
-                <canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_02" width="800"></canvas>
+                <canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_02" width="800" role="img" aria-label="Mapeos ANSI/SPARC"></canvas>
                 <div class="mt-4 flex gap-2" id="controls_02"></div>
             </div>
         </section>
@@ -663,9 +730,9 @@ graph TD
             <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
                 <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación del Curso</h3>
                 <ul class="space-y-3 text-sm">
-                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice General</a></li>
-                    <li><a href="semana_01.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">&larr; Semana 01</a></li>
-                    <li><a href="semana_03.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 03 &rarr;</a></li>
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition shadow-sm">📂 Índice General</a></li>
+                    <li><a href="semana_01.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition shadow-sm">&larr; Semana 01</a></li>
+                    <li><a href="semana_03.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition shadow-sm">Semana 03 &rarr;</a></li>
                 </ul>
             </div>
         </aside>
@@ -673,32 +740,38 @@ graph TD
 
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Índice</span>
         </a>
-        <a href="semana_01.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_01.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Anterior</span>
         </a>
-        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Lector</span>
+        </button>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg aria-hidden="true" id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Tema</span>
         </button>
-        <a href="semana_03.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_03.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
-            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
+            <span class="text-sm font-bold tracking-wide mt-1">Siguiente</span>
         </a>
     </nav>
 
@@ -726,6 +799,11 @@ graph TD
         }
 
         updateToggleText();
+        function syncThemeColor() {
+            const tcm = document.getElementById('theme-color-meta');
+            if (tcm) tcm.setAttribute('content', document.documentElement.classList.contains('dark') ? '#0A0A0C' : '#FEF7FF');
+        }
+        syncThemeColor();
 
         const toggleTheme = () => {
             if (document.documentElement.classList.contains('dark')) {
@@ -736,6 +814,7 @@ graph TD
                 localStorage.setItem('color-theme', 'dark');
             }
             updateToggleText();
+            syncThemeColor();
         };
 
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);

@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
-    <title>Semana 14 - Data Warehouse y Business Intelligence</title>
+    <meta name="theme-color" id="theme-color-meta" content="#FEF7FF">
+    <title>Laboratorio - Optimización de Consultas e Índices en PostgreSQL</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Tailwind v4 CDN -->
+    <script src="canvas-ui.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
         @theme {
             --font-sans: 'Inter', sans-serif;
@@ -31,11 +33,17 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif !important;
             letter-spacing: -0.02em;
+            text-wrap: balance;
         }
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.625;
             letter-spacing: -0.011em;
+        }
+        [id] { scroll-margin-top: 5rem; }
+        :is(table) { font-variant-numeric: tabular-nums; }
+        html.dark {
+            color-scheme: dark;
         }
         html.dark body {
             color: #cbd5e1 !important;
@@ -46,6 +54,10 @@
         html.dark .prose strong, html.dark strong {
             color: #f1f5f9 !important;
         }
+        pre code {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.84rem;
+        }
     </style>
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -54,383 +66,302 @@
             document.documentElement.classList.remove('dark');
         }
     </script>
-
+    <style id="reader-mode-style">
+        html.reader-mode { font-size: 106.25%; }
+        html.reader-mode header,
+        html.reader-mode aside,
+        html.reader-mode nav[class*="fixed"] { display: none !important; }
+        html.reader-mode #theme-toggle { display: flex !important; }
+        html.reader-mode #reader-toggle { display: flex !important; }
+        html.reader-mode body { line-height: 1.75; text-wrap: pretty; }
+        html.reader-mode main { width: 100% !important; max-width: 72ch; margin-inline: auto; }
+    </style>
+    <script>
+        (function () {
+            if (localStorage.getItem('reader-mode') === 'on' && !document.documentElement.classList.contains('reader-mode')) {
+                document.documentElement.classList.add('reader-mode');
+            }
+            function syncReaderButtons() {
+                var on = document.documentElement.classList.contains('reader-mode');
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            function toggleReaderMode() {
+                var on = document.documentElement.classList.toggle('reader-mode');
+                localStorage.setItem('reader-mode', on ? 'on' : 'off');
+                syncReaderButtons();
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.addEventListener('click', toggleReaderMode);
+                });
+                syncReaderButtons();
+            });
+        })();
+    </script>
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
+    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
     <!-- Header (M3 Tonal App Bar) -->
-    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
-                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Data Warehouse y Business Intelligence</h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 14 | Ingeniería de Datos | ULima 2013-2</p>
+                <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Optimización de Consultas e Índices en PostgreSQL</h1>
+                <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">Laboratorio de Rendimiento • Cost-Based Optimizer & Index Tuning</p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
         </div>
     </header>
 
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">\n
-    <!-- M3 Step-by-Step Diagram -->
-    <div class="my-6">
-        <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                📌 Proceso Paso a Paso: Fases del Optimizador de Consultas Basado en Costos (CBO)
-            </h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Cómo transforma e interpreta PostgreSQL una consulta SQL escrita por el usuario en un plan de ejecución optimizado.
-            </p>
-            <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-  <g transform="translate(10, 15)">
-    <!-- 1 -->
-    <rect x="0" y="20" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="70" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. Parser &amp; Analyzer</text>
-    <text x="70" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Verificar sintaxis y tablas</text>
-
-    <!-- Flecha -->
-    <path d="M 140 50 L 155 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="155,50 148,46 148,54" fill="#6366f1" />
-
-    <!-- 2 -->
-    <rect x="160" y="20" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="230" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. Reescritura (Rewriter)</text>
-    <text x="230" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Aplicar reglas y expandir vistas</text>
-
-    <!-- Flecha -->
-    <path d="M 300 50 L 315 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="315,50 308,46 308,54" fill="#6366f1" />
-
-    <!-- 3 -->
-    <rect x="320" y="20" width="140" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-    <text x="390" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Planificación (Planner)</text>
-    <text x="390" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Generar rutas alternativas</text>
-
-    <!-- Flecha -->
-    <path d="M 460 50 L 475 50" stroke="#6366f1" stroke-width="2" fill="none" />
-    <polygon points="475,50 468,46 468,54" fill="#6366f1" />
-
-    <!-- 4 -->
-    <rect x="480" y="20" width="140" height="60" rx="10" class="fill-amber-50 dark:fill-slate-800 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
-    <text x="550" y="45" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-xs">4. Estimación de Costo</text>
-    <text x="550" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Uso de pg_statistic y CPU/IO</text>
-
-    <!-- Flecha -->
-    <path d="M 620 50 L 635 50" stroke="#f59e0b" stroke-width="2" fill="none" />
-    <polygon points="635,50 628,46 628,54" fill="#f59e0b" />
-
-    <!-- 5 -->
-    <rect x="640" y="20" width="145" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-    <text x="712.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">5. Executor (Ejecución)</text>
-    <text x="712.5" y="58" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Elegir menor costo y ejecutar</text>
-  </g>
-</svg>
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24" id="main">
+            
+            <!-- M3 Step-by-Step Diagram -->
+            <div class="my-6">
+                <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2" id="diagram-title">
+                        📌 Proceso Paso a Paso: Fases del Optimizador Basado en Costos (CBO)
+                    </h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                        Cómo transforma e interpreta PostgreSQL una consulta SQL escrita por el usuario en un plan de ejecución óptimo.
+                    </p>
+                    <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
+                        <div class="flex flex-col md:flex-row md:items-stretch gap-3">
+                            <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">1. Parser &amp; Analyzer</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Sintaxis y Catálogo</p>
+                            </div>
+                            <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                            <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">2. Rewriter (Vistas)</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Expandir vistas y reglas</p>
+                            </div>
+                            <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                            <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">3. Planner (CBO)</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Generar árboles de acceso</p>
+                            </div>
+                            <div class="flex items-center justify-center text-xl text-amber-500 dark:text-amber-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                            <div class="flex-1 rounded-xl border-2 border-amber-500/60 dark:border-amber-400/60 bg-white dark:bg-slate-950 p-3">
+                                <p class="text-sm font-bold text-amber-700 dark:text-amber-300">4. Cost Estimator</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">pg_statistic / CPU / I/O</p>
+                            </div>
+                            <div class="flex items-center justify-center text-xl text-emerald-500 dark:text-emerald-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                            <div class="flex-1 rounded-xl border-2 border-emerald-500/60 dark:border-emerald-400/60 bg-white dark:bg-slate-950 p-3">
+                                <p class="text-sm font-bold text-emerald-700 dark:text-emerald-300">5. Executor</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Ejecución física en disco/RAM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
             <article class="space-y-8 prose dark:prose-invert max-w-none">
-                
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<article class="space-y-8 prose dark:prose-invert max-w-none">
-<div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
-<p><strong>?? Objetivos de Aprendizaje</strong></p>
-<ul style="margin: 8px 0 0 20px;">
-<li>Comprender qué es un Data Warehouse</li>
-<li>Diferenciar entre sistemas OLTP y OLAP</li>
-<li>Diseñar modelos de datos para DW (esquema estrella)</li>
-<li>Entender el proceso ETL</li>
-<li>Comprender conceptos de dimensiones y jerarquías</li>
-</ul>
-</div>
-<section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
-<h4>?? Insight del Arquitecto: DW en 2026</h4>
-<p><strong>El surgimiento del Data Lakehouse:</strong> En 2026, el enfoque tradicional de DW ha evolucionado. Plataformas como Snowflake, BigQuery yDatabricks combinan lo mejor de Data Warehouses y Data Lakes. Sin embargo, los conceptos fundamentales (hechos, dimensiones, ETL) siguen siendo relevantes.</p>
-</section>
-<h2>1. ¿Qué es un Data Warehouse?</h2>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p><strong>Data Warehouse:</strong> Repositorio centralizado de datos históricos organizados para soportar decisiones de negocio.</p>
-</div>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Orientado a temas:</strong> Datos organizados por temas (ventas, clientes, productos)</li>
-<li><strong>Integrado:</strong> Datos de múltiples fuentes unificados</li>
-<li><strong>Variante en el tiempo:</strong> Mantiene historial de cambios</li>
-<li><strong>No volátil:</strong> Los datos no se eliminan ni modifican</li>
-</ul>
-<h2>2. OLTP vs OLAP</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Característica</th><th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">OLTP (Transaccional)</th><th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">OLAP (Analítico)</th></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Propósito</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Operaciones del día a día</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Análisis y decisiones</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Usuarios</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Operadores, cajeros</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Gerentes, analistas</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Tipo de acceso</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Lectura/Escritura</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Mayormente lectura</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Tamaño de datos</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">GBs</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">TBs a PBs</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Consultas</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Simples, predefinidas</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Complejas, ad-hoc</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Rendimiento</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Rápido (&lt; 1 seg)</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Segundos a minutos</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Normalización</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Alta (3FN)</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Baja (desnormalizado)</td></tr>
-</table>
-</div>
-<h2>3. Arquitectura de un DW</h2>
-<div class="relative my-6"><div class="relative my-6"><div class="relative my-6"><pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-slate-400"><code class="block font-mono text-slate-300"><code class="block font-mono text-slate-300">
+                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
+                    <p class="font-bold text-blue-900 dark:text-blue-200">🎯 Objetivos de Aprendizaje</p>
+                    <ul class="mt-2 space-y-1 text-sm text-slate-700 dark:text-slate-300 list-disc list-inside">
+                        <li>Interpretar métricas reales de <code>EXPLAIN (ANALYZE, BUFFERS)</code>.</li>
+                        <li>Diferenciar métodos de acceso: <em>Seq Scan</em>, <em>Index Scan</em>, <em>Index Only Scan</em> y <em>Bitmap Index Scan</em>.</li>
+                        <li>Seleccionar el tipo de índice adecuado: <strong>B-Tree</strong>, <strong>GIN</strong>, <strong>GiST</strong> y <strong>BRIN</strong>.</li>
+                        <li>Identificar y solucionar anti-patrones que anulan el uso de índices (sargability).</li>
+                    </ul>
+                </div>
 
-                    +-------------+
+                <section class="pl-4 border-l-4 border-amber-500 dark:border-amber-600 mb-6">
+                    <h4 class="text-base font-bold text-amber-900 dark:text-amber-300">💡 Insight del Arquitecto: El mito de "más índices = más rápido"</h4>
+                    <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                        Cada índice acelera lecturas selectivas pero penaliza directamente los <code>INSERT</code>, <code>UPDATE</code> y <code>DELETE</code> debido a la sobrecarga de mantenimiento en el WAL y Buffer Pool (HOT Updates). Un buen DBA crea índices basados en la cardinalidad y los predicados frecuentes del workload real.
+                    </p>
+                </section>
 
-                    ¦   Fuentes   ¦
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">1. Anatomía de EXPLAIN (ANALYZE, BUFFERS)</h2>
+                <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                    <code>EXPLAIN</code> simula la estimación del optimizador sin ejecutar. Agregar <code>(ANALYZE, BUFFERS)</code> ejecuta efectivamente la consulta, reportando el tiempo real en milisegundos y los bloques leídos de memoria RAM (shared hit) o disco (read).
+                </p>
 
-                    ¦  (OLTP, DB) ¦
+                <div class="relative my-6">
+                    <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-emerald-400">EXPLAIN (ANALYZE, BUFFERS, COSTS, TIMING)
+SELECT cliente_id, SUM(total)
+FROM ordenes
+WHERE fecha_creacion >= '2026-01-01'
+GROUP BY cliente_id;
 
-                    +-------------+
+-- Salida de diagnóstico:
+-- HashAggregate (cost=1420.50..1520.50 rows=1000 width=16) (actual time=12.45..14.20 rows=850 loops=1)
+--   Buffers: shared hit=420 read=12
+--   -> Seq Scan on ordenes (cost=0.00..1250.00 rows=15000 width=12) (actual time=0.05..8.50 rows=14800 loops=1)
+--         Filter: (fecha_creacion >= '2026-01-01'::date)
+--         Buffers: shared hit=390 read=12
+-- Execution Time: 14.85 ms</code></pre>
+                </div>
 
-                           ¦
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">2. Taxonomía de Índices en PostgreSQL</h2>
+                <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Tipo de Índice</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Casos de Uso Ideales</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Operadores Soportados</th>
+                                <th class="p-3 border-b border-slate-200 dark:border-slate-800 font-bold">Overhead de Espacio</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                            <tr>
+                                <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">B-Tree (Por Defecto)</td>
+                                <td class="p-3">Datos escalares con orden total (IDs, fechas, números, strings).</td>
+                                <td class="p-3 font-mono">&lt;, &le;, =, &ge;, &gt;, BETWEEN, IN</td>
+                                <td class="p-3 text-slate-500">Medio (~10-25% de la tabla)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-purple-600 dark:text-purple-400">GIN (Generalized Inverted Index)</td>
+                                <td class="p-3">Estructuras compuestas: Arrays, JSONB, Full Text Search.</td>
+                                <td class="p-3 font-mono">@&gt;, &lt;@, ?, ?&, @@</td>
+                                <td class="p-3 text-rose-500 font-semibold">Alto (lectura rápida, escritura lenta)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-emerald-600 dark:text-emerald-400">BRIN (Block Range Index)</td>
+                                <td class="p-3">Tablas masivas (10M+ filas) con correlación física natural (fechas autoincrementales).</td>
+                                <td class="p-3 font-mono">&lt;, &le;, =, &ge;, &gt;</td>
+                                <td class="p-3 text-emerald-600 font-semibold">Ultraligero (&lt; 1% del tamaño de B-Tree)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                    +------?------+
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">3. Patrones y Anti-patrones de Rendimiento</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                    <div class="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 rounded-2xl p-5">
+                        <div class="text-xs font-bold uppercase text-rose-600 dark:text-rose-400 mb-2">❌ Anti-Patrón (No Sargable)</div>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 mb-3">Aplicar funciones sobre columnas indexadas anula el B-Tree:</p>
+                        <pre class="bg-slate-900 text-rose-300 p-3 rounded-xl font-mono text-sm">-- Provoca Seq Scan completo:
+SELECT * FROM usuarios 
+WHERE DATE(fecha_registro) = '2026-08-29';
 
-                    ¦     ETL     ¦
+SELECT * FROM clientes 
+WHERE UPPER(email) = 'TEST@GMAIL.COM';</pre>
+                    </div>
 
-                    ¦(Extracción, ¦
+                    <div class="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 rounded-2xl p-5">
+                        <div class="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400 mb-2">✅ Solución de Producción</div>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 mb-3">Usar rangos directos o Índices Basados en Funciones:</p>
+                        <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl font-mono text-sm">-- Índice basado en función:
+CREATE INDEX idx_email_upper 
+ON clientes (UPPER(email));
 
-                    ¦Transform.,  ¦
+-- Rango directo sargable:
+WHERE fecha_registro >= '2026-08-29 00:00:00'
+  AND fecha_registro < '2026-08-30 00:00:00';</pre>
+                    </div>
+                </div>
 
-                    ¦   Carga)    ¦
+                <hr class="border-slate-200 dark:border-slate-800 my-8"/>
 
-                    +-------------+
+                <section class="bg-indigo-50/40 dark:bg-indigo-950/20 p-6 rounded-2xl border border-indigo-100 dark:border-indigo-900/40">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">🧪 Laboratorio Práctico: Query Tuning & Indexing</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                        <li>Ejecuta un <code>EXPLAIN ANALYZE</code> sobre una tabla de transacciones buscando ventas por cliente en un rango de fechas.</li>
+                        <li>Crea un índice compuesto <code>CREATE INDEX idx_ventas_cli_fecha ON ventas(cliente_id, fecha);</code> y compara la reducción de buffer hits y tiempo de ejecución.</li>
+                        <li>Implementa un <strong>Índice Parcial</strong> para filtrar solo órdenes en estado <code>'PENDIENTE'</code> (que representan el 5% de la tabla).</li>
+                    </ol>
+                </section>
 
-                           ¦
-
-                    +------?------+
-
-                    ¦ Data        ¦
-
-                    ¦ Warehouse    ¦
-
-                    +-------------+
-
-                           ¦
-
-              +------------+------------+
-
-              ¦            ¦            ¦
-
-        +-----?-----+ +----?----+ +----?-----+
-
-        ¦ Data Mart ¦ ¦  Data   ¦ ¦  OLAP    ¦
-
-        ¦  Ventas   ¦ ¦   Mart  ¦ ¦  Cubes   ¦
-
-        ¦           ¦ ¦  Marketing     ¦
-
-        +-----------+ +---------+ +----------+</code></code></code></pre></div></div></div>
-<h2>4. Modelo Estrella (Star Schema)</h2>
-<div class="box box-ejemplo">
-<p><strong>Componentes:</strong></p>
-</div>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Tabla de Hechos (Fact Table):</strong> Centro del modelo, contiene métricas/medidas</li>
-<li><strong>Tablas de Dimensión:</strong> Rodean la tabla de hechos, contienen atributos descriptivos</li>
-</ul>
-<h3>Ejemplo: Esquema de Ventas</h3>
-<div class="relative my-6"><div class="relative my-6"><div class="relative my-6"><pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-slate-400"><code class="block font-mono text-slate-300"><code class="block font-mono text-slate-300">
-
-                    +---------------------+
-
-                    ¦   dim_tiempo        ¦
-
-                    ¦ ------------------- ¦
-
-                    ¦ tiempo_id (PK)      ¦
-
-                    ¦ fecha               ¦
-
-                    ¦ año                 ¦
-
-                    ¦ mes                 ¦
-
-                    ¦ trimestre           ¦
-
-                    +---------------------+
-
-                               ¦
-
-        +-----------------------+-----------------------+
-
-        ¦                       ¦                       ¦
-
-+------?------+      +--------?--------+      +--------?--------+
-
-¦ dim_producto¦      ¦ fact_ventas     ¦      ¦  dim_cliente   ¦
-
-¦-------------¦      ¦----------------¦      ¦----------------¦
-
-¦producto_id  ¦?----?¦ tiempo_id (FK)  ¦?----?¦ cliente_id (PK)¦
-
-¦ (PK)        ¦      ¦ producto_id(FK)¦      ¦ nombre         ¦
-
-¦ nombre      ¦      ¦ cliente_id (FK)¦      ¦ segmento       ¦
-
-¦ categoría   ¦      ¦ cantidad       ¦      ¦ región         ¦
-
-¦ marca       ¦      ¦ precio_unitario¦      +----------------+
-
-¦ línea       ¦      ¦ importe_total  ¦
-
-+-------------+      ¦ tiempo_id (FK) ¦
-
-                     ¦ dim_geografía  ¦
-
-                     ¦ --------------¦
-
-                     ¦ geografía_id(PK)¦
-
-                     ¦ ciudad         ¦
-
-                     ¦ región         ¦
-
-                     ¦ país           ¦
-
-                     +----------------+</code></code></code></pre></div></div></div>
-<h2>5. Tablas de Dimensión</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo de Dimensión</th><th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripción</th></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Dimensión de Tiempo</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Siempre presente, fechas, períodos</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Dimensión de Producto</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Categorías, marcas, descripciones</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Dimensión de Cliente</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Demográficos, segmentación</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Dimensión Geográfica</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Ubicación, región, país</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Dimensión de Empleado</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Departamentos, cargos</td></tr>
-</table>
-</div>
-<h3>Jerarquías en Dimensiones:</h3>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li>Producto ? Categoría ? Línea ? Marca</li>
-<li>Geografía ? País ? Región ? Ciudad ? Tienda</li>
-<li>Tiempo ? Año ? Trimestre ? Mes ? Día</li>
-</ul>
-<h2>6. Proceso ETL</h2>
-<div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-5 border border-indigo-100 dark:border-indigo-800/50 mb-6">
-<p><strong>ETL (Extract, Transform, Load):</strong> Proceso de extraer datos de fuentes, transformarlos y cargarlos al DW.</p>
-</div>
-<ul class="space-y-3 mb-6 pl-5 list-disc text-slate-700 dark:text-slate-300">
-<li><strong>Extracción:</strong> Leer datos de sistemas fuente</li>
-<li><strong>Transformación:</strong> Limpiar, convertir, agregar</li>
-<li><strong>Carga:</strong> Insertar en el DW</li>
-</ul>
-<h2>7. Esquema Copo de Nieve (Snowflake)</h2>
-<div class="relative my-6"><div class="relative my-6"><div class="relative my-6"><pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-4 md:p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="block font-mono text-slate-400"><code class="block font-mono text-slate-300"><code class="block font-mono text-slate-300">
-
--- Diferencia con Estrella:
-
--- Las tablas de dimensión están normalizadas
-
-dim_producto --? dim_categoría (separada)
-
-     ¦
-
-     +--? dim_marca (separada)
-
--- Ventaja: Menos redundancia
-
--- Desventaja: Más JOINs, menor rendimiento</code></code></code></pre></div></div></div>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Esquema</th><th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Ventajas</th><th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Desventajas</th></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Estrella</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Simple, rápido, fácil de entender</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Redundancia</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Copo de Nieve</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Menos redundancia, más flexibilidad</td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Más complejo, más JOINs</td></tr>
-</table>
-</div>
-<h2>8. Tipos de Tablas de Hechos</h2>
-<div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm mb-6">
-<table class="w-full text-left border-collapse my-6">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Tipo</th><th class="p-3.5 border-b border-slate-200 dark:border-slate-800 font-semibold text-slate-900 dark:text-slate-100 bg-slate-100/50 dark:bg-slate-900/50 text-sm">Descripción</th></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Transaccional</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Una fila por transacción</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Periódica</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Resumen por período (diario, semanal)</td></tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-900/30 transition-colors"><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm"><strong>Acumulativa</strong></td><td class="p-3.5 border-b border-slate-100 dark:border-slate-800/40 text-slate-600 dark:text-slate-400 text-sm">Todo el lifecycle de un proceso</td></tr>
-</table>
-</div>
-<hr/>
-<section class="laboratorio">
-<h3>?? Laboratorio: Diseña un DW</h3>
-<ol style="margin-left: 20px;">
-<li>Diseña el modelo estrella para un sistema de ventas de una tienda</li>
-<li>Identifica las tablas de hechos y dimensiones</li>
-<li>Define las jerarquías en cada dimensión</li>
-<li>¿Qué consultas podría responder este DW?</li>
-</ol>
-</section>
-</article>
-</article>
-
+                <div class="flex justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+                    <a class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow" href="index.html">← Volver al Índice</a>
+                    <a class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-medium text-sm hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors shadow-sm hover:shadow" href="extra_seguridad_adv.html">Siguiente Lab (Seguridad) →</a>
+                </div>
             </article>
         </main>
 
         <!-- Sidebar -->
         <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
-        <!-- Keywords (M3 Outlined Card) -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-            <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
-            <ul class="space-y-2">
-                <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ DW</strong><br/>Data Warehouse</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ Modelo Estrella</strong><br/>Esquema en estrella</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ Tabla de Hechos</strong><br/>Fact Table</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ Dimensión</strong><br/>Tabla de dimensión</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ ETL</strong><br/>Extract, Transform, Load</li>
-<li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400"><strong>§ OLAP</strong><br/>Procesamiento analítico</li>
-
-            </ul>
-        </div>
-        <!-- Navigation Resources (M3 Filled/Tonal Card, visible on desktop, hidden on mobile in favor of bottom bar) -->
-        <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
-            <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
-            <ul class="space-y-3 text-sm">
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Volver al Índice</a></li>
-                <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Volver al Índice →</a></li>
-            </ul>
-        </div>
-
+            <!-- Keywords -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
+                <ul class="space-y-2">
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; CBO</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Optimizador basado en costos (CPU + I/O).</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; EXPLAIN ANALYZE</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Ejecución real con medición de tiempos y buffers.</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; B-Tree vs BRIN</strong>
+                        <span class="text-slate-600 dark:text-slate-400">B-Tree para búsquedas individuales; BRIN para tablas temporales masivas.</span>
+                    </li>
+                    <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Índice Parcial</strong>
+                        <span class="text-slate-600 dark:text-slate-400">Indexa solo un subconjunto de filas (WHERE).</span>
+                    </li>
+                </ul>
+            </div>
+            <!-- Navigation -->
+            <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
+                <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition shadow-sm">📂 Índice del Curso</a></li>
+                    <li><a href="extra_plpgsql_adv.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition shadow-sm">&larr; PL/pgSQL Avanzado</a></li>
+                    <li><a href="extra_seguridad_adv.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition shadow-sm">Seguridad Avanzada &rarr;</a></li>
+                </ul>
+            </div>
         </aside>
     </div>
 
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Índice</span>
         </a>
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="extra_plpgsql_adv.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Anterior</span>
         </a>
-        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Lector</span>
+        </button>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg aria-hidden="true" id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Tema</span>
         </button>
-        <a href="index.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="extra_seguridad_adv.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
-            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
+            <span class="text-sm font-bold tracking-wide mt-1">Siguiente</span>
         </a>
     </nav>
 
@@ -458,6 +389,11 @@ dim_producto --? dim_categoría (separada)
         }
 
         updateToggleText();
+        function syncThemeColor() {
+            const tcm = document.getElementById('theme-color-meta');
+            if (tcm) tcm.setAttribute('content', document.documentElement.classList.contains('dark') ? '#0A0A0C' : '#FEF7FF');
+        }
+        syncThemeColor();
 
         const toggleTheme = () => {
             if (document.documentElement.classList.contains('dark')) {
@@ -468,11 +404,11 @@ dim_producto --? dim_categoría (separada)
                 localStorage.setItem('color-theme', 'dark');
             }
             updateToggleText();
+            syncThemeColor();
         };
 
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
         if (themeToggleM3Btn) themeToggleM3Btn.addEventListener('click', toggleTheme);
     </script>
-
 </body>
 </html>

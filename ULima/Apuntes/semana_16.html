@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" id="theme-color-meta" content="#FEF7FF">
     <title>Semana 16 - Guía Maestra para el Examen Final (Objetivo 20)</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,11 +33,17 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif !important;
             letter-spacing: -0.02em;
+            text-wrap: balance;
         }
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.625;
             letter-spacing: -0.011em;
+        }
+        [id] { scroll-margin-top: 5rem; }
+        :is(table) { font-variant-numeric: tabular-nums; }
+        html.dark {
+            color-scheme: dark;
         }
         html.dark body {
             color: #cbd5e1 !important;
@@ -56,51 +63,84 @@
         }
     </script>
 
-    <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style id="reader-mode-style">
+        html.reader-mode { font-size: 106.25%; }
+        html.reader-mode header,
+        html.reader-mode aside,
+        html.reader-mode nav[class*="fixed"] { display: none !important; }
+        html.reader-mode #theme-toggle { display: flex !important; }
+        html.reader-mode #reader-toggle { display: flex !important; }
+        html.reader-mode body { line-height: 1.75; text-wrap: pretty; }
+        html.reader-mode main { width: 100% !important; max-width: 72ch; margin-inline: auto; }
+    </style>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            mermaid.initialize({
-                startOnLoad: true,
-                theme: isDark ? 'dark' : 'default',
-                securityLevel: 'loose',
-                flowchart: { useMaxWidth: true, htmlLabels: true }
+        (function () {
+            if (localStorage.getItem('reader-mode') === 'on' && !document.documentElement.classList.contains('reader-mode')) {
+                document.documentElement.classList.add('reader-mode');
+            }
+            function syncReaderButtons() {
+                var on = document.documentElement.classList.contains('reader-mode');
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            function toggleReaderMode() {
+                var on = document.documentElement.classList.toggle('reader-mode');
+                localStorage.setItem('reader-mode', on ? 'on' : 'off');
+                syncReaderButtons();
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.addEventListener('click', toggleReaderMode);
+                });
+                syncReaderButtons();
             });
-        });
+        })();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
+    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
+    <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="md:hidden fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
     <!-- Header (M3 Tonal App Bar) -->
-    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                     Guía Maestra para el Examen Final: Objetivo Nota 20
                 </h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
                     Semana 16 • Cobertura Integral Semanas 01 a 15 • Simulacro de Élite Resuelto Paso a Paso
                 </p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
         </div>
     </header>
 
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24" id="main">
 
             <!-- Banner Hero -->
             <div class="mb-8 p-6 md:p-8 rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 text-white shadow-2xl border border-indigo-500/30 relative overflow-hidden">
@@ -129,7 +169,7 @@
                     <div id="controls_16" class="flex gap-2"></div>
                 </div>
                 <div class="w-full flex justify-center overflow-hidden rounded-2xl bg-slate-950/5 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
-                    <canvas id="canvas_16" width="680" height="360" class="max-w-full h-auto"></canvas>
+                    <canvas id="canvas_16" width="680" height="360" class="max-w-full h-auto" role="img" aria-label="Estrategia de 120 Minutos para Resolver el Examen Final"></canvas>
                 </div>
             </div>
 
@@ -166,11 +206,11 @@
                     <div class="p-5 rounded-2xl bg-rose-50/30 dark:bg-rose-950/20 border border-rose-200/50 dark:border-rose-900/30">
                         <h3 class="text-sm font-bold text-rose-700 dark:text-rose-400 mb-3">🚫 Top 5 Errores Fatales que Quitan Puntos</h3>
                         <ul class="text-xs text-slate-700 dark:text-slate-300 space-y-1.5">
-                            <li>❌ <strong>NOT IN con subconsulta con NULLs:</strong> Retorna siempre 0 filas. Usa <code class="font-mono text-[11px] font-bold">NOT EXISTS</code>.</li>
+                            <li>❌ <strong>NOT IN con subconsulta con NULLs:</strong> Retorna siempre 0 filas. Usa <code class="font-mono text-sm font-bold">NOT EXISTS</code>.</li>
                             <li>❌ <strong>Mutating Table en Triggers:</strong> Modificar la misma tabla en un trigger FOR EACH ROW.</li>
                             <li>❌ <strong>Granularidad Duplicada en Hechos:</strong> Mezclar cabecera con detalle sin Surrogate Keys.</li>
                             <li>❌ <strong>Olvidar COMMIT/ROLLBACK en Procedures:</strong> No controlar los límites transaccionales.</li>
-                            <li>❌ <strong>División Entera en Métricas:</strong> <code class="font-mono text-[11px]">5 / 2 = 2</code> en SQL. Usa <code class="font-mono text-[11px]">5.0 / 2</code> o <code class="font-mono text-[11px]">CAST</code>.</li>
+                            <li>❌ <strong>División Entera en Métricas:</strong> <code class="font-mono text-sm">5 / 2 = 2</code> en SQL. Usa <code class="font-mono text-sm">5.0 / 2</code> o <code class="font-mono text-sm">CAST</code>.</li>
                         </ul>
                     </div>
                 </div>
@@ -187,15 +227,15 @@
                 <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm mb-4">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Pregunta 1 • Subconsultas y NULLs</span>
-                        <span class="px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-[10px] font-bold">Trampa Clásica</span>
+                        <span class="px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">Trampa Clásica</span>
                     </div>
                     <p class="text-xs md:text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                        ¿Qué resultado arroja la consulta <code class="font-mono text-xs text-purple-600 dark:text-purple-400">SELECT * FROM clientes WHERE cliente_id NOT IN (SELECT cliente_id FROM pedidos);</code> si existe al menos un registro en <code class="font-mono text-xs">pedidos</code> cuyo <code class="font-mono text-xs">cliente_id</code> sea NULL?
+                        ¿Qué resultado arroja la consulta <code class="font-mono text-sm text-purple-600 dark:text-purple-400">SELECT * FROM clientes WHERE cliente_id NOT IN (SELECT cliente_id FROM pedidos);</code> si existe al menos un registro en <code class="font-mono text-sm">pedidos</code> cuyo <code class="font-mono text-sm">cliente_id</code> sea NULL?
                     </p>
                     <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-300 space-y-1.5">
                         <p><strong class="text-emerald-600 dark:text-emerald-400">Respuesta Correcta:</strong> <strong>Cero filas (Conjunto vacío).</strong></p>
-                        <p><strong class="text-indigo-600 dark:text-indigo-400">Explicación Profunda:</strong> En SQL tri-valuado (True, False, Unknown), <code class="font-mono text-[11px]">x NOT IN (1, 2, NULL)</code> se evalúa como <code class="font-mono text-[11px]">(x <> 1) AND (x <> 2) AND (x <> NULL)</code>. Como cualquier comparación con NULL resulta en <strong>UNKNOWN</strong>, toda la conjunción AND evalúa a UNKNOWN/FALSE, descartando todas las filas.</p>
-                        <p><strong class="text-amber-600 dark:text-amber-400">Solución recomendada para el examen:</strong> Usar siempre <code class="font-mono text-[11px] font-bold">WHERE NOT EXISTS (SELECT 1 FROM pedidos p WHERE p.cliente_id = c.cliente_id)</code>.</p>
+                        <p><strong class="text-indigo-600 dark:text-indigo-400">Explicación Profunda:</strong> En SQL tri-valuado (True, False, Unknown), <code class="font-mono text-sm">x NOT IN (1, 2, NULL)</code> se evalúa como <code class="font-mono text-sm">(x <> 1) AND (x <> 2) AND (x <> NULL)</code>. Como cualquier comparación con NULL resulta en <strong>UNKNOWN</strong>, toda la conjunción AND evalúa a UNKNOWN/FALSE, descartando todas las filas.</p>
+                        <p><strong class="text-amber-600 dark:text-amber-400">Solución recomendada para el examen:</strong> Usar siempre <code class="font-mono text-sm font-bold">WHERE NOT EXISTS (SELECT 1 FROM pedidos p WHERE p.cliente_id = c.cliente_id)</code>.</p>
                     </div>
                 </div>
 
@@ -203,14 +243,14 @@
                 <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm mb-4">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Pregunta 2 • Modelado Dimensional Kimball</span>
-                        <span class="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-[10px] font-bold">Arquitectura OLAP</span>
+                        <span class="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-xs font-bold">Arquitectura OLAP</span>
                     </div>
                     <p class="text-xs md:text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
                         En un Data Warehouse, un cliente cambia de dirección residencial el 15 de marzo de 2026. Si el negocio requiere analizar las compras históricas hechas en su dirección antigua y las compras nuevas en su dirección actual, ¿qué técnica de Slowly Changing Dimension (SCD) se DEBE implementar?
                     </p>
                     <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-300 space-y-1.5">
                         <p><strong class="text-emerald-600 dark:text-emerald-400">Respuesta Correcta:</strong> <strong>SCD Tipo 2 (Creación de nueva fila con Surrogate Key y rango de vigencia).</strong></p>
-                        <p><strong class="text-indigo-600 dark:text-indigo-400">Explicación Profunda:</strong> SCD Tipo 1 sobrescribe la dirección y alteraría las ventas del pasado. SCD Tipo 3 solo almacena la dirección previa en una columna pero no particiona los hechos por tiempo. Solo SCD Tipo 2 mantiene registros separados con diferentes Surrogate Keys (<code class="font-mono text-[11px]">cliente_sk</code>), permitiendo que los hechos antiguos apunten a la versión histórica y los nuevos a la actual.</p>
+                        <p><strong class="text-indigo-600 dark:text-indigo-400">Explicación Profunda:</strong> SCD Tipo 1 sobrescribe la dirección y alteraría las ventas del pasado. SCD Tipo 3 solo almacena la dirección previa en una columna pero no particiona los hechos por tiempo. Solo SCD Tipo 2 mantiene registros separados con diferentes Surrogate Keys (<code class="font-mono text-sm">cliente_sk</code>), permitiendo que los hechos antiguos apunten a la versión histórica y los nuevos a la actual.</p>
                     </div>
                 </div>
             </section>
@@ -222,12 +262,12 @@
                     <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Caso Práctico 1: Triggers de Validación, Auditoría Delta y Stored Procedure</h2>
                 </div>
 
-                <div class="bg-slate-900 text-slate-200 p-5 rounded-2xl border border-slate-800 font-mono text-xs mb-6">
+                <div class="bg-slate-900 text-slate-200 p-5 rounded-2xl border border-slate-800 font-mono text-sm mb-6">
                     <div class="flex justify-between items-center pb-2 mb-3 border-b border-slate-800">
                         <span class="text-indigo-400 font-bold">Solución Completa Nota 20: Stored Procedure con Transacción y Trigger BEFORE</span>
-                        <span class="text-[10px] text-slate-400">PostgreSQL 16/17</span>
+                        <span class="text-xs text-slate-400">PostgreSQL 16/17</span>
                     </div>
-<pre class="overflow-x-auto text-[11px] leading-relaxed">
+<pre class="overflow-x-auto text-sm leading-relaxed">
 <span class="text-slate-400">-- 1. Trigger BEFORE para validar invariantes de negocio y sanitizar</span>
 <span class="text-purple-400">CREATE OR REPLACE FUNCTION</span> fn_validar_transaccion_pago()
 <span class="text-purple-400">RETURNS TRIGGER</span>
@@ -299,12 +339,12 @@ $$;
                     <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Caso Práctico 2: Star Schema Kimball y Consultas OLAP</h2>
                 </div>
 
-                <div class="bg-slate-900 text-slate-200 p-5 rounded-2xl border border-slate-800 font-mono text-xs mb-6">
+                <div class="bg-slate-900 text-slate-200 p-5 rounded-2xl border border-slate-800 font-mono text-sm mb-6">
                     <div class="flex justify-between items-center pb-2 mb-3 border-b border-slate-800">
                         <span class="text-blue-400 font-bold">Diseño DDL y Consulta Multidimensional CUBE</span>
-                        <span class="text-[10px] text-slate-400">PostgreSQL / Redshift / Snowflake</span>
+                        <span class="text-xs text-slate-400">PostgreSQL / Redshift / Snowflake</span>
                     </div>
-<pre class="overflow-x-auto text-[11px] leading-relaxed">
+<pre class="overflow-x-auto text-sm leading-relaxed">
 <span class="text-slate-400">-- 1. Dimensión SCD Tipo 2</span>
 <span class="text-purple-400">CREATE TABLE</span> dim_cliente (
     cliente_sk <span class="text-yellow-400">BIGSERIAL PRIMARY KEY</span>,
@@ -395,18 +435,18 @@ $$;
                 <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">En esta Guía Maestra</h3>
                     <nav class="space-y-2 text-xs font-medium">
-                        <a href="#matriz-estrategia" class="block px-3 py-2 rounded-xl text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30 font-semibold transition-all">1. Matriz & Checklist 20/20</a>
-                        <a href="#preguntas-trampa" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">2. Preguntas Trampa</a>
-                        <a href="#caso-procedimientos" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">3. Caso Triggers & SPs</a>
-                        <a href="#caso-kimball" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">4. Caso Kimball & Cubos</a>
-                        <a href="#rubrica-evaluacion" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all">5. Rúbrica de Nota 20</a>
+                        <a href="#matriz-estrategia" class="block px-3 py-2 rounded-xl text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30 font-semibold transition">1. Matriz & Checklist 20/20</a>
+                        <a href="#preguntas-trampa" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">2. Preguntas Trampa</a>
+                        <a href="#caso-procedimientos" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">3. Caso Triggers & SPs</a>
+                        <a href="#caso-kimball" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">4. Caso Kimball & Cubos</a>
+                        <a href="#rubrica-evaluacion" class="block px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-indigo-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">5. Rúbrica de Nota 20</a>
                     </nav>
                 </div>
 
                 <!-- Info Card -->
                 <div class="p-5 rounded-3xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40">
                     <h4 class="text-xs font-bold text-indigo-900 dark:text-indigo-300 mb-1">Estrategia Mental</h4>
-                    <p class="text-[11px] text-indigo-700/80 dark:text-indigo-400 leading-relaxed">
+                    <p class="text-sm text-indigo-700/80 dark:text-indigo-400 leading-relaxed">
                         Dedica los primeros 5 minutos a leer todo el examen. Resuelve primero las preguntas conceptuales y el modelado dimensional; luego codifica los triggers y procedimientos con calma.
                     </p>
                 </div>

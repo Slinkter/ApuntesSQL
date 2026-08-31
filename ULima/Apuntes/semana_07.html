@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" id="theme-color-meta" content="#FEF7FF">
     <title>Semana 07 - Normalización de Bases de Datos (1FN - 3FN / BCNF) | Ingeniería de Datos</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,11 +33,17 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif !important;
             letter-spacing: -0.02em;
+            text-wrap: balance;
         }
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.625;
             letter-spacing: -0.011em;
+        }
+        [id] { scroll-margin-top: 5rem; }
+        :is(table) { font-variant-numeric: tabular-nums; }
+        html.dark {
+            color-scheme: dark;
         }
         html.dark body {
             color: #cbd5e1 !important;
@@ -56,135 +63,154 @@
         }
     </script>
 
-    <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style id="reader-mode-style">
+        html.reader-mode { font-size: 106.25%; }
+        html.reader-mode header,
+        html.reader-mode aside,
+        html.reader-mode nav[class*="fixed"] { display: none !important; }
+        html.reader-mode #theme-toggle { display: flex !important; }
+        html.reader-mode #reader-toggle { display: flex !important; }
+        html.reader-mode body { line-height: 1.75; text-wrap: pretty; }
+        html.reader-mode main { width: 100% !important; max-width: 72ch; margin-inline: auto; }
+    </style>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            mermaid.initialize({
-                startOnLoad: true,
-                theme: isDark ? 'dark' : 'default',
-                securityLevel: 'loose',
-                flowchart: { useMaxWidth: true, htmlLabels: true }
+        (function () {
+            if (localStorage.getItem('reader-mode') === 'on' && !document.documentElement.classList.contains('reader-mode')) {
+                document.documentElement.classList.add('reader-mode');
+            }
+            function syncReaderButtons() {
+                var on = document.documentElement.classList.contains('reader-mode');
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            function toggleReaderMode() {
+                var on = document.documentElement.classList.toggle('reader-mode');
+                localStorage.setItem('reader-mode', on ? 'on' : 'off');
+                syncReaderButtons();
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.addEventListener('click', toggleReaderMode);
+                });
+                syncReaderButtons();
             });
-        });
+        })();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
+    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
     <!-- Header (M3 Tonal App Bar) -->
-    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                     Normalización Relacional (1FN, 2FN, 3FN y BCNF)
                 </h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
                     Semana 07 • Dependencias Funcionales, Axiomas de Armstrong, Cierre de Atributos y Descomposición sin Pérdida • Ingeniería de Datos
                 </p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
         </div>
     </header>
 
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24" id="main">
 
             <!-- M3 Step-by-Step Diagram -->
             <div class="my-6">
                 <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2" id="diagram-title">
                         📌 Proceso Paso a Paso: Embudo de Normalización Relacional Formal
                     </h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
                         Secuencia algorítmica de purificación de esquemas para eliminar redundancias y anomalías operacionales.
                     </p>
                     <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                        <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-                            <g transform="translate(10, 15)">
-                                <!-- 0FN -> 1FN -->
-                                <rect x="0" y="20" width="165" height="60" rx="10" class="fill-rose-50 dark:fill-slate-800 stroke-rose-500 dark:stroke-rose-400" stroke-width="2" />
-                                <text x="82.5" y="45" text-anchor="middle" class="fill-rose-700 dark:fill-rose-400 font-bold text-xs">1FN: Atomicidad</text>
-                                <text x="82.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Eliminar grupos repetitivos</text>
-
-                                <!-- Flecha -->
-                                <path d="M 165 50 L 195 50" stroke="#f43f5e" stroke-width="2" fill="none" />
-                                <polygon points="195,50 188,46 188,54" fill="#f43f5e" />
-
-                                <!-- 1FN -> 2FN -->
-                                <rect x="200" y="20" width="170" height="60" rx="10" class="fill-amber-50 dark:fill-slate-800 stroke-amber-500 dark:stroke-amber-400" stroke-width="2" />
-                                <text x="285" y="45" text-anchor="middle" class="fill-amber-700 dark:fill-amber-400 font-bold text-xs">2FN: Dep. Completa</text>
-                                <text x="285" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Eliminar dependencias parciales</text>
-
-                                <!-- Flecha -->
-                                <path d="M 370 50 L 400 50" stroke="#f59e0b" stroke-width="2" fill="none" />
-                                <polygon points="400,50 393,46 393,54" fill="#f59e0b" />
-
-                                <!-- 2FN -> 3FN -->
-                                <rect x="405" y="20" width="175" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="492.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3FN: No Transitividad</text>
-                                <text x="492.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Eliminar dependencias transitivas</text>
-
-                                <!-- Flecha -->
-                                <path d="M 580 50 L 610 50" stroke="#6366f1" stroke-width="2" fill="none" />
-                                <polygon points="610,50 603,46 603,54" fill="#6366f1" />
-
-                                <!-- 3FN -> BCNF -->
-                                <rect x="615" y="20" width="165" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-                                <text x="697.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">BCNF: Superclaves</text>
-                                <text x="697.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Todo determinante es superclave</text>
-                            </g>
-                        </svg>
+                        <div class="flex flex-col md:flex-row md:items-stretch gap-3">
+                                <div class="flex-1 rounded-xl border-2 border-rose-500/60 dark:border-rose-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-rose-700 dark:text-rose-300">1FN: Atomicidad</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Eliminar grupos repetitivos</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-rose-500 dark:text-rose-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-amber-500/60 dark:border-amber-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-amber-700 dark:text-amber-300">2FN: Dep. Completa</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Eliminar dependencias parciales</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-amber-500 dark:text-amber-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">3FN: No Transitividad</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Eliminar dependencias transitivas</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-emerald-500 dark:text-emerald-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-emerald-500/60 dark:border-emerald-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-emerald-700 dark:text-emerald-300">BCNF: Superclaves</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Todo determinante es superclave</p>
+                                </div>
+                            </div>
                     </div>
                 </div>
             </div>
 
             <article class="space-y-8 prose dark:prose-invert max-w-none">
-                <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
-                <div class="my-6">
-                    <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
-                        <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
-                            <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                                🗺️ Mapa Conceptual y Relación de Términos (Teoría de Normalización)
-                            </span>
-                            <span class="transition group-open:rotate-180">
-                                <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </span>
-                        </summary>
-                        <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                            <pre class="mermaid bg-transparent">
-graph TD
-    Norm[Normalización Relacional] --> Anom[Anomalías Evitadas]
-    Norm --> FD[Dependencias Funcionales DFs]
-    Norm --> FN[Formas Normales]
-
-    Anom --> Ins[Inserción: Imposible registrar sin datos ajenos]
-    Anom --> Del[Eliminación: Pérdida involuntaria de información]
-    Anom --> Upd[Modificación: Inconsistencias por duplicación]
-
-    FD --> Arm[Axiomas de Armstrong: Reflex, Aumento, Trans]
-    FD --> Clo[Cierre de Atributos X+]
-    FD --> Cand[Claves Candidatas & Atributos Primos]
-
-    FN --> 1FN[1FN: Dominios Atómicos & PK]
-    1FN --> 2FN[2FN: Cero Dependencias Parciales]
-    2FN --> 3FN[3FN: Cero Dependencias Transitivas]
-    3FN --> BCNF[BCNF: Determinante es Superclave]
-                            </pre>
+    <!-- M3 Conceptual Map Minimap (Native Responsive HTML/CSS) -->
+    <div class="my-6">
+        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition duration-300">
+            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
+                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
+                    🗺️ Mapa Conceptual: Normalización Relacional (1FN a BCNF)
+                </span>
+                <span class="transition group-open:rotate-180">
+                    <svg aria-hidden="true" class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </span>
+            </summary>
+            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 space-y-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3">🛡️ Las 4 Formas Normales Clásicas</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400 block mb-1">1FN (Atomicidad)</span>
+                            <span class="text-slate-500 dark:text-slate-400">Atributos atómicos indivisibles y clave primaria definida.</span>
                         </div>
-                    </details>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400 block mb-1">2FN (Dependencia Total)</span>
+                            <span class="text-slate-500 dark:text-slate-400">En 1FN + Cero dependencias parciales de claves compuestas.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400 block mb-1">3FN (No Transitividad)</span>
+                            <span class="text-slate-500 dark:text-slate-400">En 2FN + Cero dependencias transitivas entre no-primos.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-purple-50/60 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/40">
+                            <span class="font-bold text-purple-700 dark:text-purple-400 block mb-1">BCNF (Boyce-Codd)</span>
+                            <span class="text-slate-600 dark:text-slate-400">Para toda DF X $\rightarrow$ Y, X es superclave.</span>
+                        </div>
+                    </div>
                 </div>
+                <div class="p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-950/10 border border-rose-200/60 dark:border-rose-900/30 text-xs">
+                    <div class="font-bold text-rose-700 dark:text-rose-400 mb-1">⚠️ Las 3 Anomalías Erradicadas</div>
+                    <p class="text-slate-600 dark:text-slate-400"><strong>Inserción:</strong> No poder agregar una fila sin datos ajenos | <strong>Eliminación:</strong> Pérdida colateral de hechos al borrar un registro | <strong>Modificación:</strong> Datos inconsistentes por actualización parcial.</p>
+                </div>
+            </div>
+        </details>
+    </div>
 
                 <!-- Enfoque Arquitecto: Por qué Normalizar en 2026 -->
                 <section class="bg-indigo-50/50 dark:bg-indigo-950/10 p-6 rounded-2xl border border-indigo-100/50 dark:border-indigo-900/30 mb-8">
@@ -200,7 +226,7 @@ graph TD
                 <!-- Objetivos de Aprendizaje -->
                 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50 mb-6">
                     <h4 class="text-blue-950 dark:text-blue-200 font-bold flex items-center gap-2 mb-2">
-                        <svg class="w-5 h-5 shrink-0 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        <svg aria-hidden="true" class="w-5 h-5 shrink-0 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                         Objetivos y Competencias de la Semana
                     </h4>
                     <ul class="space-y-2 list-disc list-inside text-sm text-slate-700 dark:text-slate-300">
@@ -218,15 +244,23 @@ graph TD
                     Consideremos la tabla no normalizada <code>DOCENTE_CURSO</code>:
                 </p>
 
-                <div class="bg-slate-100 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto mb-6 text-slate-800 dark:text-slate-200">
-+----------------+---------------------+---------------+---------+
-| Codigo_Docente | Curso_Capacitacion  | Fecha_Ingreso | Salario |
-+----------------+---------------------+---------------+---------+
-| 42000          | Excel Avanzado      | 20/11/2007    | 1500    |
-| 42000          | PowerPoint Avanzado | 20/11/2007    | 1500    |
-| 58000          | Python para Datos   | 15/03/2012    | 2200    |
-+----------------+---------------------+---------------+---------+
-PK Compuesta: (Codigo_Docente, Curso_Capacitacion)
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-x-auto mb-6 shadow-sm">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-200/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+                                <th class="p-2.5 rounded-l-lg font-mono">Codigo_Docente</th>
+                                <th class="p-2.5 font-mono">Curso_Capacitacion</th>
+                                <th class="p-2.5 font-mono">Fecha_Ingreso</th>
+                                <th class="p-2.5 font-mono rounded-r-lg">Salario</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-sm text-slate-700 dark:text-slate-300">
+                            <tr><td class="p-2.5">42000</td><td class="p-2.5">Excel Avanzado</td><td class="p-2.5">20/11/2007</td><td class="p-2.5">1500</td></tr>
+                            <tr><td class="p-2.5">42000</td><td class="p-2.5">PowerPoint Avanzado</td><td class="p-2.5">20/11/2007</td><td class="p-2.5">1500</td></tr>
+                            <tr><td class="p-2.5">58000</td><td class="p-2.5">Python para Datos</td><td class="p-2.5">15/03/2012</td><td class="p-2.5">2200</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="mt-3 text-sm text-slate-700 dark:text-slate-300"><strong>PK Compuesta:</strong> <span class="font-mono">(Codigo_Docente, Curso_Capacitacion)</span></p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6 text-xs text-slate-700 dark:text-slate-300">
@@ -250,7 +284,7 @@ PK Compuesta: (Codigo_Docente, Curso_Capacitacion)
                     Una Dependencia Funcional $X \to Y$ entre dos conjuntos de atributos $X$ e $Y$ de una relación $R$ establece que para cualquier par de tuplas $t_1, t_2 \in R$, si $t_1[X] = t_2[X]$, entonces necesariamente $t_1[Y] = t_2[Y]$. En términos simples: <em>el valor de $X$ determina de forma única el valor de $Y$</em>.
                 </p>
 
-                <div class="bg-slate-100 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto mb-6 text-slate-800 dark:text-slate-200">
+                <div class="bg-slate-100 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-sm overflow-x-auto mb-6 text-slate-800 dark:text-slate-200">
                   AXIOMAS DE ARMSTRONG Y REGLAS DERIVADAS
 =============================================================================
 Axiomas Primarios (Completos y Correctos):
@@ -283,7 +317,7 @@ Reglas Secundarias Derivadas:
                         <p class="text-xs text-slate-700 dark:text-slate-300 mb-2 leading-relaxed">
                             <strong>Condición:</strong> Todos los valores de los atributos deben ser atómicos (indivisibles), no deben existir grupos repetitivos (arreglos o listas) y debe definirse una clave primaria formal.
                         </p>
-                        <div class="bg-slate-100 dark:bg-slate-800/60 p-3 rounded-xl font-mono text-[11px] text-slate-800 dark:text-slate-200">
+                        <div class="bg-slate-100 dark:bg-slate-800/60 p-3 rounded-xl font-mono text-sm text-slate-800 dark:text-slate-200">
                             Antes (0FN): EMPLEADO(id_emp, nombre, {telefonos})<br>
                             Después (1FN): EMPLEADO_TEL(<u>id_emp</u>, <u>telefono</u>, nombre)
                         </div>
@@ -333,7 +367,7 @@ Reglas Secundarias Derivadas:
 
                 <!-- 4. Ejercicio Práctico de Normalización Completo -->
                 <h2>4. Ejercicio Completo de Descomposición Paso a Paso</h2>
-                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-xs overflow-x-auto text-slate-800 dark:text-slate-200 mb-6">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 font-mono text-sm overflow-x-auto text-slate-800 dark:text-slate-200 mb-6">
 -- Esquema Inicial No Normalizado:
 ORDEN_COMPRA(id_orden, fecha, id_cliente, nom_cliente, ruc_cliente, id_prod, desc_prod, cant, precio_unit)
 
@@ -397,9 +431,9 @@ DETALLE_ORDEN(<u>id_orden</u>, <u>id_prod</u>, cant)
             <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
                 <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación</h3>
                 <ul class="space-y-3 text-sm">
-                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice del Curso</a></li>
-                    <li><a href="semana_06.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 06</a></li>
-                    <li><a href="semana_08.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-rose-600 text-white dark:bg-rose-500 font-bold transition-all shadow-sm">⭐ Semana 08: Examen Parcial →</a></li>
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition shadow-sm">📂 Índice del Curso</a></li>
+                    <li><a href="semana_06.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition shadow-sm">← Semana 06</a></li>
+                    <li><a href="semana_08.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-rose-600 text-white dark:bg-rose-500 font-bold transition shadow-sm">⭐ Semana 08: Examen Parcial →</a></li>
                 </ul>
             </div>
         </aside>
@@ -407,32 +441,38 @@ DETALLE_ORDEN(<u>id_orden</u>, <u>id_prod</u>, cant)
 
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Índice</span>
         </a>
-        <a href="semana_06.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_06.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Anterior</span>
         </a>
-        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Lector</span>
+        </button>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg aria-hidden="true" id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Tema</span>
         </button>
-        <a href="semana_08.html" class="flex flex-col items-center justify-center text-rose-600 dark:text-rose-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_08.html" class="flex flex-col items-center justify-center text-rose-600 dark:text-rose-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
-            <span class="text-[9px] font-bold tracking-wide mt-1">Parcial</span>
+            <span class="text-sm font-bold tracking-wide mt-1">Parcial</span>
         </a>
     </nav>
 
@@ -460,6 +500,11 @@ DETALLE_ORDEN(<u>id_orden</u>, <u>id_prod</u>, cant)
         }
 
         updateToggleText();
+        function syncThemeColor() {
+            const tcm = document.getElementById('theme-color-meta');
+            if (tcm) tcm.setAttribute('content', document.documentElement.classList.contains('dark') ? '#0A0A0C' : '#FEF7FF');
+        }
+        syncThemeColor();
 
         const toggleTheme = () => {
             if (document.documentElement.classList.contains('dark')) {
@@ -470,6 +515,7 @@ DETALLE_ORDEN(<u>id_orden</u>, <u>id_prod</u>, cant)
                 localStorage.setItem('color-theme', 'dark');
             }
             updateToggleText();
+            syncThemeColor();
         };
 
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);

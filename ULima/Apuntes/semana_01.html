@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" id="theme-color-meta" content="#FEF7FF">
     <title>Semana 01 - Fundamentos de Administracion de Informacion</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,11 +33,17 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif !important;
             letter-spacing: -0.02em;
+            text-wrap: balance;
         }
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.625;
             letter-spacing: -0.011em;
+        }
+        [id] { scroll-margin-top: 5rem; }
+        :is(table) { font-variant-numeric: tabular-nums; }
+        html.dark {
+            color-scheme: dark;
         }
         html.dark body {
             color: #cbd5e1 !important;
@@ -56,137 +63,166 @@
         }
     </script>
 
-    <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style id="reader-mode-style">
+        html.reader-mode { font-size: 106.25%; }
+        html.reader-mode header,
+        html.reader-mode aside,
+        html.reader-mode nav[class*="fixed"] { display: none !important; }
+        html.reader-mode #theme-toggle { display: flex !important; }
+        html.reader-mode #reader-toggle { display: flex !important; }
+        html.reader-mode body { line-height: 1.75; text-wrap: pretty; }
+        html.reader-mode main { width: 100% !important; max-width: 72ch; margin-inline: auto; }
+    </style>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            mermaid.initialize({
-                startOnLoad: true,
-                theme: isDark ? 'dark' : 'default',
-                securityLevel: 'loose',
-                flowchart: { useMaxWidth: true, htmlLabels: true }
+        (function () {
+            if (localStorage.getItem('reader-mode') === 'on' && !document.documentElement.classList.contains('reader-mode')) {
+                document.documentElement.classList.add('reader-mode');
+            }
+            function syncReaderButtons() {
+                var on = document.documentElement.classList.contains('reader-mode');
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            function toggleReaderMode() {
+                var on = document.documentElement.classList.toggle('reader-mode');
+                localStorage.setItem('reader-mode', on ? 'on' : 'off');
+                syncReaderButtons();
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.addEventListener('click', toggleReaderMode);
+                });
+                syncReaderButtons();
             });
-        });
+        })();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
+    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
     <!-- Header (M3 Tonal App Bar) -->
-    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                     Semana 01: Fundamentos de Administración de Información
                 </h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
                     De Datos a Conocimiento • De Archivos a DBMS • Evolución y SDLC • Universidad de Lima 2026
                 </p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
         </div>
     </header>
 
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24" id="main">
 
     <!-- M3 Step-by-Step Diagram -->
     <div class="my-6">
         <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2" id="diagram-title">
                 📌 Proceso de Transformación: Del Dato a la Decisión Organizacional (DIKW)
             </h3>
             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
                 Flujo epistemológico y tecnológico para convertir registros crudos en ventaja competitiva sostenible.
             </p>
             <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                <svg viewBox="0 0 800 120" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="800" height="120" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-                  <g transform="translate(10, 20)">
-                    <!-- Paso 1 -->
-                    <rect x="0" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                    <text x="55" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">1. Dato</text>
-                    <text x="55" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Hecho bruto objetivo</text>
-                    
-                    <path d="M 115 40 L 130 40" stroke="#6366f1" stroke-width="2" fill="none" />
-                    <polygon points="130,40 123,36 123,44" fill="#6366f1" />
-                    
-                    <!-- Paso 2 -->
-                    <rect x="135" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                    <text x="190" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">2. Estructura</text>
-                    <text x="190" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Tablas y Esquemas</text>
-                    
-                    <path d="M 250 40 L 265 40" stroke="#6366f1" stroke-width="2" fill="none" />
-                    <polygon points="265,40 258,36 258,44" fill="#6366f1" />
-                    
-                    <!-- Paso 3 -->
-                    <rect x="270" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                    <text x="325" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">3. Información</text>
-                    <text x="325" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Contexto y Utilidad</text>
-                    
-                    <path d="M 385 40 L 400 40" stroke="#6366f1" stroke-width="2" fill="none" />
-                    <polygon points="400,40 393,36 393,44" fill="#6366f1" />
-                    
-                    <!-- Paso 4 -->
-                    <rect x="405" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                    <text x="460" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">4. Conocimiento</text>
-                    <text x="460" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Patrones e Insights</text>
-                    
-                    <path d="M 520 40 L 535 40" stroke="#6366f1" stroke-width="2" fill="none" />
-                    <polygon points="535,40 528,36 528,44" fill="#6366f1" />
-                    
-                    <!-- Paso 5 -->
-                    <rect x="540" y="10" width="110" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                    <text x="595" y="32" text-anchor="middle" class="fill-indigo-600 dark:fill-indigo-400 font-bold text-xs">5. Decisión</text>
-                    <text x="595" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Acción de Negocio</text>
-                    
-                    <path d="M 650 40 L 665 40" stroke="#10b981" stroke-width="2" fill="none" />
-                    <polygon points="665,40 658,36 658,44" fill="#10b981" />
-                    
-                    <!-- Paso 6 -->
-                    <rect x="670" y="10" width="110" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-                    <text x="725" y="32" text-anchor="middle" class="fill-emerald-600 dark:fill-emerald-400 font-bold text-xs">6. Valor</text>
-                    <text x="725" y="50" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Impacto y Retorno</text>
-                  </g>
-                </svg>
+                <div class="flex flex-col md:flex-row md:items-stretch gap-3">
+                    <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">1. Dato</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Hecho bruto objetivo</p>
+                    </div>
+                    <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                    <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">2. Estructura</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Tablas y Esquemas</p>
+                    </div>
+                    <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                    <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">3. Información</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Contexto y Utilidad</p>
+                    </div>
+                    <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                    <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">4. Conocimiento</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Patrones e Insights</p>
+                    </div>
+                    <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                    <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">5. Decisión</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Acción de Negocio</p>
+                    </div>
+                    <div class="flex items-center justify-center text-xl text-emerald-500 dark:text-emerald-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                    <div class="flex-1 rounded-xl border-2 border-emerald-500/60 dark:border-emerald-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-emerald-700 dark:text-emerald-300">6. Valor</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Impacto y Retorno</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
+    <!-- M3 Conceptual Map Minimap (Native Responsive HTML/CSS) -->
     <div class="my-6">
-        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
+        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition duration-300">
             <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
                 <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                    🗺️ Mapa Conceptual y Ecosistema de la Información
+                    🗺️ Mapa Conceptual: Ecosistema de la Información
                 </span>
                 <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg aria-hidden="true" class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </summary>
-            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                <pre class="mermaid bg-transparent">
-graph TD
-    D[Dato: Hecho Objetivo Bruto] -->|Estructuración & Metadatos| I[Información: Contexto y Propósito]
-    I -->|Síntesis Cognitiva & Análisis| K[Conocimiento: Patrones y Causalidad]
-    K -->|Estrategia & Juicio Experto| W[Decisión / Sabiduría: Acción de Negocio]
-    
-    ST[Sistemas Tradicionales de Archivos] -->|Patologías: Redundancia, Inconsistencia, Acoplamiento| CRISIS[Crisis de Mantenimiento de Software]
-    CRISIS -->|Solución Revolucionaria| DBMS[DBMS: Separación Lógica-Física & ACID]
-    
-    DBMS --> HIST[Evolución: Jerárquico ➔ Red ➔ Relacional ➔ Objeto-Relacional ➔ Lakehouse / Vector 2026]
-    DBMS --> SDLC[SDLC: Planificación ➔ Análisis ➔ Diseño Lógico ➔ Físico ➔ Implementación ➔ Mantenimiento]
-                </pre>
+            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 space-y-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3">⚡ Pirámide Epistemológica (DIKW)</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800">
+                            <span class="font-bold text-slate-900 dark:text-white block mb-1">1. Dato</span>
+                            <span class="text-slate-500 dark:text-slate-400">Hecho bruto objetivo e individual.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800">
+                            <span class="font-bold text-slate-900 dark:text-white block mb-1">2. Información</span>
+                            <span class="text-slate-500 dark:text-slate-400">Contexto estructurado que reduce incertidumbre.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800">
+                            <span class="font-bold text-slate-900 dark:text-white block mb-1">3. Conocimiento</span>
+                            <span class="text-slate-500 dark:text-slate-400">Síntesis cognitiva, patrones y causalidad.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40">
+                            <span class="font-bold text-emerald-700 dark:text-emerald-400 block mb-1">4. Decisión / Valor</span>
+                            <span class="text-slate-600 dark:text-slate-400">Acción estratégica con retorno de negocio.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div class="p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-950/10 border border-rose-200/60 dark:border-rose-900/30">
+                        <div class="font-bold text-rose-700 dark:text-rose-400 mb-1">❌ Sistemas de Archivos Tradicionales</div>
+                        <p class="text-slate-600 dark:text-slate-400">Redundancia, inconsistencias, acoplamiento físico y silos no compartidos.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/60 dark:border-indigo-900/30">
+                        <div class="font-bold text-indigo-700 dark:text-indigo-400 mb-1">✅ Enfoque DBMS Moderno</div>
+                        <p class="text-slate-600 dark:text-slate-400">Independencia física/lógica, transacciones ACID, optimizador CBO y seguridad.</p>
+                    </div>
+                </div>
             </div>
         </details>
     </div>
@@ -196,7 +232,7 @@ graph TD
         <div class="bg-indigo-50/60 dark:bg-indigo-950/20 rounded-3xl p-6 border border-indigo-100 dark:border-indigo-900/40 shadow-sm">
             <div class="flex items-center gap-3 mb-3">
                 <div class="p-2 bg-indigo-600 text-white rounded-xl">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </div>
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Objetivos Pedagógicos y Competencias del Ingeniero</h3>
             </div>
@@ -229,7 +265,7 @@ graph TD
                     <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
                         Representación simbólica (numérica, alfanumérica, espacial) de un hecho aislado del minimundo real. Es estrictamente objetivo y carece de semántica contextual propia.
                     </p>
-                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-xs text-pink-600 dark:text-pink-400">
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-sm text-pink-600 dark:text-pink-400">
                         Ej: 3.50 | '001' | '2026-08-21'
                     </div>
                 </div>
@@ -241,7 +277,7 @@ graph TD
                     <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
                         Conjunto de datos estructurados, categorizados y procesados con un propósito específico. Su función matemática primordial es <strong>reducir la incertidumbre</strong> en el receptor.
                     </p>
-                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400">
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-sm text-blue-600 dark:text-blue-400">
                         "El precio de 'Cola Manzana' en 2026 es S/. 3.50"
                     </div>
                 </div>
@@ -253,35 +289,45 @@ graph TD
                     <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
                         Comprensión abstracta derivada de correlacionar múltiples fuentes de información, reconociendo patrones temporales, leyes de causalidad y reglas de negocio para accionar.
                     </p>
-                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-xs text-emerald-600 dark:text-emerald-400">
+                    <div class="bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl font-mono text-sm text-emerald-600 dark:text-emerald-400">
                         "La demanda cayó 15% al subir a 3.50; ajustar pricing"
                     </div>
                 </div>
             </div>
 
-            <!-- Diagrama ASCII DIKW -->
+            <!-- Diagrama DIKW -->
             <div class="my-6">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Estructura Jerárquica DIKW y Transformación Organizacional</div>
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
-+-------------------------------------------------------------------------------+
-|                             PIRÁMIDE DIKW Y ACCIÓN                            |
-+-------------------------------------------------------------------------------+
-|         /\                                                                    |
-|        /  \    [SABIDURÍA / DECISIÓN] -> ¿Qué camino estratégico seguir?        |
-|       /----\                             Impacto: ROI y Liderazgo de Mercado  |
-|      /      \   [CONOCIMIENTO]        -> ¿Por qué sucede? (Causalidad/Patrón) |
-|     /--------\                            Síntesis analítica de BI y ML       |
-|    /          \  [INFORMACIÓN]         -> ¿Qué, quién, cuándo y dónde?       |
-|   /------------\                           Datos estructurados + Contexto     |
-|  /              \ [DATOS]              -> Hechos brutos objetivos sin procesar|
-| +----------------+                         Puntos de captura transaccional    |
-+-------------------------------------------------------------------------------+
-| Ejemplo:                                                                      |
-|   1. Dato:         [Cod: 104, Valor: 3.50, Fecha: 2026-08-21, Stock: 0]       |
-|   2. Información:  "El producto 104 está agotado con precio unitario 3.50"   |
-|   3. Conocimiento: "La tasa de rotación es 3x más veloz los viernes por la tarde"
-|   4. Decisión:     "Automatizar orden de reabastecimiento los viernes a las 11:00"
-+-------------------------------------------------------------------------------+</pre>
+                <div class="space-y-3">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row md:items-center gap-2">
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 w-fit shrink-0">DATOS</span>
+                        <p class="text-sm text-slate-700 dark:text-slate-300"><strong>Hechos brutos, objetivos y sin procesar.</strong> Puntos de captura transaccional.</p>
+                    </div>
+                    <div class="md:ml-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row md:items-center gap-2">
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 w-fit shrink-0">INFORMACIÓN</span>
+                        <p class="text-sm text-slate-700 dark:text-slate-300"><strong>"¿Qué, quién, cuándo y dónde?"</strong> Datos estructurados + contexto.</p>
+                    </div>
+                    <div class="md:ml-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row md:items-center gap-2">
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 w-fit shrink-0">CONOCIMIENTO</span>
+                        <p class="text-sm text-slate-700 dark:text-slate-300"><strong>"¿Por qué sucede?" (causalidad / patrón).</strong> Síntesis analítica de BI y ML.</p>
+                    </div>
+                    <div class="md:ml-18 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <div class="flex flex-col md:flex-row md:items-center gap-2">
+                            <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 w-fit shrink-0">SABIDURÍA / DECISIÓN</span>
+                            <p class="text-sm text-slate-700 dark:text-slate-300"><strong>"¿Qué camino estratégico seguir?"</strong> Impacto: ROI y liderazgo de mercado.</p>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">El conocimiento (CIENCIA DE DATOS) se convierte en acción: decisiones accionables.</p>
+                    </div>
+                </div>
+                <div class="mt-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                    <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-3 uppercase tracking-wide">Ejemplo: de Dato a Decisión</div>
+                    <ol class="list-decimal list-inside space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                        <li><span class="font-medium">Dato:</span> <span class="font-mono text-slate-600 dark:text-slate-400">[Cod: 104, Valor: 3.50, Fecha: 2026-08-21, Stock: 0]</span></li>
+                        <li><span class="font-medium">Información:</span> "El producto 104 está agotado con precio unitario 3.50"</li>
+                        <li><span class="font-medium">Conocimiento:</span> "La tasa de rotación es 3x más veloz los viernes por la tarde"</li>
+                        <li><span class="font-medium">Decisión:</span> "Automatizar orden de reabastecimiento los viernes a las 11:00"</li>
+                    </ol>
+                </div>
             </div>
 
             <!-- Metadatos -->
@@ -346,46 +392,81 @@ graph TD
                 Antes de la adopción de los DBMS, los sistemas de información corporativos dependían de archivos planos descentralizados (ISAM, VSAM, archivos secuenciales COBOL). Cada departamento construía sus propios programas y gestionaba sus propios ficheros independientes.
             </p>
 
-            <!-- Diagrama ASCII: Silos vs DBMS -->
-            <div class="my-6">
-                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Arquitectura de Silos de Archivos vs Arquitectura Integrada DBMS</div>
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
-[SISTEMA TRADICIONAL DE ARCHIVOS: CAOS Y SILOS]
-+----------------------+     +----------------------+     +----------------------+
-| Depto. Facturación   |     | Depto. Almacén       |     | Depto. Cobranzas     |
-| [Programa Factura]   |     | [Programa Stock]     |     | [Programa Mora]      |
-+----------+-----------+     +----------+-----------+     +----------+-----------+
-           |                             |                             |
-           v                             v                             v
-+----------------------+     +----------------------+     +----------------------+
-| Archivo Clientes A   |     | Archivo Clientes B   |     | Archivo Clientes C   |
-| (Nombre, RUC, Dir)   |     | (Nombre, Direcc, Tel)|     | (Nombre, RUC, Saldo) |
-+----------------------+     +----------------------+     +----------------------+
-   * Inconsistencia: Si un cliente cambia de dirección, solo se actualiza en Archivo A.
-   * Redundancia: 3 copias del mismo nombre ocupando disco y generando discrepancias.
+<!-- Diagrama: Silos vs DBMS -->
+            <div class="my-6 space-y-6">
+                <div>
+                    <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Arquitectura de Silos de Archivos vs Arquitectura Integrada DBMS</div>
 
------------------------------------------------------------------------------------
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm mb-2">
+                        <div class="text-sm font-bold text-rose-700 dark:text-rose-400 mb-3">SISTEMA TRADICIONAL DE ARCHIVOS: CAOS Y SILOS</div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
+                            <div class="border border-slate-300 dark:border-slate-700 rounded-xl p-3">
+                                <div class="font-semibold text-sm text-slate-800 dark:text-slate-200">Depto. Facturación</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">[Programa Factura]</div>
+                            </div>
+                            <div class="border border-slate-300 dark:border-slate-700 rounded-xl p-3">
+                                <div class="font-semibold text-sm text-slate-800 dark:text-slate-200">Depto. Almacén</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">[Programa Stock]</div>
+                            </div>
+                            <div class="border border-slate-300 dark:border-slate-700 rounded-xl p-3">
+                                <div class="font-semibold text-sm text-slate-800 dark:text-slate-200">Depto. Cobranzas</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">[Programa Mora]</div>
+                            </div>
+                        </div>
+                        <div class="text-center text-slate-400 dark:text-slate-500 text-sm my-1">↓ ↓ ↓</div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
+                            <div class="border-2 border-dashed border-rose-300 dark:border-rose-900 rounded-xl p-3">
+                                <div class="font-mono text-sm text-slate-800 dark:text-slate-200">Archivo Clientes A</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">(Nombre, RUC, Dir)</div>
+                            </div>
+                            <div class="border-2 border-dashed border-rose-300 dark:border-rose-900 rounded-xl p-3">
+                                <div class="font-mono text-sm text-slate-800 dark:text-slate-200">Archivo Clientes B</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">(Nombre, Direcc, Tel)</div>
+                            </div>
+                            <div class="border-2 border-dashed border-rose-300 dark:border-rose-900 rounded-xl p-3">
+                                <div class="font-mono text-sm text-slate-800 dark:text-slate-200">Archivo Clientes C</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">(Nombre, RUC, Saldo)</div>
+                            </div>
+                        </div>
+                        <ul class="mt-3 space-y-1 text-sm text-slate-700 dark:text-slate-300">
+                            <li><span class="text-rose-600 dark:text-rose-400">*</span> <strong>Inconsistencia:</strong> Si un cliente cambia de dirección, solo se actualiza en Archivo A.</li>
+                            <li><span class="text-rose-600 dark:text-rose-400">*</span> <strong>Redundancia:</strong> 3 copias del mismo nombre ocupando disco y generando discrepancias.</li>
+                        </ul>
+                    </div>
 
-[ENFOQUE MODERNO ORIENTADO A BASE DE DATOS]
-+----------------------+     +----------------------+     +----------------------+
-| Depto. Facturación   |     | Depto. Almacén       |     | Depto. Cobranzas     |
-| [App Facturación]    |     | [App Inventario]     |     | [App Finanzas]       |
-+----------+-----------+     +----------+-----------+     +----------+-----------+
-           \                             |                             /
-            \                            |                            /
-             +----------------------------v---------------------------+
-             |      SISTEMA DE GESTIÓN DE BASE DE DATOS (DBMS)        |
-             |   - Control de Concurrencia (MVCC / Locks)            |
-             |   - Integridad Declarativa (PK, FK, CHECK, UNIQUE)    |
-             |   - Vistas Personalizadas por Rol y Seguridad RBAC     |
-             |   - Catálogo Centralizado de Metadatos                 |
-             +----------------------------+---------------------------+
-                                          |
-                                          v
-             +--------------------------------------------------------+
-             |             BASE DE DATOS CORPORATIVA ÚNICA            |
-             |      [Tabla Clientes] • [Tabla Pedidos] • [Inventario]  |
-             +--------------------------------------------------------+</pre>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                        <div class="text-sm font-bold text-emerald-700 dark:text-emerald-400 mb-3">ENFOQUE MODERNO ORIENTADO A BASE DE DATOS</div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
+                            <div class="border border-slate-300 dark:border-slate-700 rounded-xl p-3">
+                                <div class="font-semibold text-sm text-slate-800 dark:text-slate-200">Depto. Facturación</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">[App Facturación]</div>
+                            </div>
+                            <div class="border border-slate-300 dark:border-slate-700 rounded-xl p-3">
+                                <div class="font-semibold text-sm text-slate-800 dark:text-slate-200">Depto. Almacén</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">[App Inventario]</div>
+                            </div>
+                            <div class="border border-slate-300 dark:border-slate-700 rounded-xl p-3">
+                                <div class="font-semibold text-sm text-slate-800 dark:text-slate-200">Depto. Cobranzas</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-1">[App Finanzas]</div>
+                            </div>
+                        </div>
+                        <div class="text-center text-slate-400 dark:text-slate-500 text-sm my-1">↘ ↙ ↓</div>
+                        <div class="border-2 border-indigo-300 dark:border-indigo-800 bg-indigo-50/60 dark:bg-indigo-950/20 rounded-xl p-4">
+                            <div class="font-bold text-indigo-700 dark:text-indigo-300 text-sm mb-2">SISTEMA DE GESTIÓN DE BASE DE DATOS (DBMS)</div>
+                            <ul class="space-y-1 text-sm text-slate-700 dark:text-slate-300">
+                                <li>• Control de Concurrencia (MVCC / Locks)</li>
+                                <li>• Integridad Declarativa (PK, FK, CHECK, UNIQUE)</li>
+                                <li>• Vistas Personalizadas por Rol y Seguridad RBAC</li>
+                                <li>• Catálogo Centralizado de Metadatos</li>
+                            </ul>
+                        </div>
+                        <div class="text-center text-slate-400 dark:text-slate-500 text-sm my-1">↓</div>
+                        <div class="border-2 border-solid border-emerald-300 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/20 rounded-xl p-3 text-center">
+                            <div class="font-bold text-emerald-700 dark:text-emerald-300 text-sm">BASE DE DATOS CORPORATIVA ÚNICA</div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400 font-mono mt-1">[Tabla Clientes] • [Tabla Pedidos] • [Inventario]</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Las 6 Patologías de los Sistemas de Archivos -->
@@ -505,7 +586,7 @@ graph TD
                         <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40 bg-emerald-50/40 dark:bg-emerald-950/20">
                             <td class="p-3 font-bold font-mono text-emerald-700 dark:text-emerald-400">2020s-2026</td>
                             <td class="p-3 font-semibold text-emerald-700 dark:text-emerald-400">Modern Data Stack, Lakehouses & Vector DBs</td>
-                            <td class="p-3 font-mono text-[11px]">PostgreSQL 16/17 + pgvector, Apache Iceberg, Snowflake, DuckDB, Neon Serverless</td>
+                            <td class="p-3 font-mono text-sm">PostgreSQL 16/17 + pgvector, Apache Iceberg, Snowflake, DuckDB, Neon Serverless</td>
                             <td class="p-3 font-mono">Almacenamiento columnar desacoplado (Parquet/Iceberg), Índices HNSW para Embeddings, Cómputo serverless</td>
                             <td class="p-3">Convergencia OLTP/OLAP (HTAP), ACID en Data Lakes, procesamiento vectorizado nativo e IA semántica integrada.</td>
                         </tr>
@@ -585,38 +666,81 @@ graph TD
                 El desarrollo de una base de datos no es una actividad aislada; se encuentra intrínsecamente articulado con el <strong>System Development Life Cycle (SDLC)</strong> de la organización.
             </p>
 
-            <div class="my-6">
+            <div class="my-6 overflow-x-auto">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Mapeo Formal: Fases del SDLC vs Actividades de Ingeniería de Datos</div>
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
-+-----------------------------------------------------------------------------------------+
-|                  INTEGRACIÓN FORMAL SDLC Y MODELAMIENTO DE BASES DE DATOS               |
-+------------------------------------+----------------------------------------------------+
-| FASE DEL SDLC (SISTEMAS)           | ACTIVIDAD CRÍTICA DE BASE DE DATOS (DATA ENG)      |
-+------------------------------------+----------------------------------------------------+
-| 1. Identificación y Planificación  | • Modelamiento del Dominio Empresarial             |
-|    - Estudio de viabilidad técnica | • Identificación de unidades de negocio y límites  |
-|    - Estimación de presupuesto     | • Definición preliminar de entidades clave         |
-+------------------------------------+----------------------------------------------------+
-| 2. Análisis de Requerimientos      | • Modelamiento Conceptual de Datos                 |
-|    - Entrevistas a stakeholders    | • Diagrama Entidad-Relación (DER Chen / Crow's Foot)
-|    - Levantamiento de reglas       | • Identificación de cardinalidades (1:1, 1:N, N:M) |
-+------------------------------------+----------------------------------------------------+
-| 3. Diseño Lógico                   | • Transformación al Modelo Relacional (Tablas)     |
-|    - Arquitectura de software      | • Proceso de Normalización (1NF, 2NF, 3NF, BCNF)   |
-|    - Casos de uso e interfaces     | • Definición de Llaves Primarias y Foráneas        |
-+------------------------------------+----------------------------------------------------+
-| 4. Diseño Físico                   | • Definición de Tipos de Datos nativos del DBMS    |
-|    - Selección de hardware/cloud   | • Estrategia de Indexación (B-Tree, GIN, Hash)     |
-|    - Arquitectura de red           | • Particionamiento de tablas y Tablespaces en disco|
-+------------------------------------+----------------------------------------------------+
-| 5. Implementación                  | • Ejecución de scripts DDL (CREATE TABLE, INDEX)   |
-|    - Programación de código app    | • Pipelines de migración y carga inicial (ETL/ELT) |
-|    - Pruebas de integración        | • Pruebas de estrés y validación de constraints    |
-+------------------------------------+----------------------------------------------------+
-| 6. Operación y Mantenimiento       | • Monitoreo de consultas lentas (Query Tuning)     |
-|    - Despliegue en producción      | • Estrategias de Backup periódico y Disaster Recov.|
-|    - Soporte continuo              | • Mantenimiento de estadísticas (ANALYZE / VACUUM) |
-+------------------------------------+----------------------------------------------------+</pre>
+                <table class="w-full text-left border-collapse text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+                    <thead>
+                        <tr class="bg-slate-200/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+                            <th class="p-3">INTEGRACIÓN FORMAL SDLC Y MODELAMIENTO DE BASES DE DATOS</th>
+                        </tr>
+                        <tr class="bg-slate-200/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+                            <th class="p-3 text-indigo-700 dark:text-indigo-300">FASE DEL SDLC (SISTEMAS)</th>
+                            <th class="p-3 text-indigo-700 dark:text-indigo-300">ACTIVIDAD CRÍTICA DE BASE DE DATOS (DATA ENG)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                        <tr>
+                            <td class="p-3 align-top"><strong>1. Identificación y Planificación</strong><ul class="list-disc list-inside text-slate-600 dark:text-slate-400 text-sm mt-1"><li>Estudio de viabilidad técnica</li><li>Estimación de presupuesto</li></ul></td>
+                            <td class="p-3 align-top">
+                                <ul class="list-disc list-inside text-sm text-slate-700 dark:text-slate-300">
+                                    <li>Modelamiento del Dominio Empresarial</li>
+                                    <li>Identificación de unidades de negocio y límites</li>
+                                    <li>Definición preliminar de entidades clave</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 align-top"><strong>2. Análisis de Requerimientos</strong><ul class="list-disc list-inside text-slate-600 dark:text-slate-400 text-sm mt-1"><li>Entrevistas a stakeholders</li><li>Levantamiento de reglas</li></ul></td>
+                            <td class="p-3 align-top">
+                                <ul class="list-disc list-inside text-sm text-slate-700 dark:text-slate-300">
+                                    <li>Modelamiento Conceptual de Datos</li>
+                                    <li>Diagrama Entidad-Relación (DER Chen / Crow's Foot)</li>
+                                    <li>Identificación de cardinalidades (1:1, 1:N, N:M)</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 align-top"><strong>3. Diseño Lógico</strong><ul class="list-disc list-inside text-slate-600 dark:text-slate-400 text-sm mt-1"><li>Arquitectura de software</li><li>Casos de uso e interfaces</li></ul></td>
+                            <td class="p-3 align-top">
+                                <ul class="list-disc list-inside text-sm text-slate-700 dark:text-slate-300">
+                                    <li>Transformación al Modelo Relacional (Tablas)</li>
+                                    <li>Proceso de Normalización (1NF, 2NF, 3NF, BCNF)</li>
+                                    <li>Definición de Llaves Primarias y Foráneas</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 align-top"><strong>4. Diseño Físico</strong><ul class="list-disc list-inside text-slate-600 dark:text-slate-400 text-sm mt-1"><li>Selección de hardware/cloud</li><li>Arquitectura de red</li></ul></td>
+                            <td class="p-3 align-top">
+                                <ul class="list-disc list-inside text-sm text-slate-700 dark:text-slate-300">
+                                    <li>Definición de Tipos de Datos nativos del DBMS</li>
+                                    <li>Estrategia de Indexación (B-Tree, GIN, Hash)</li>
+                                    <li>Particionamiento de tablas y Tablespaces en disco</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 align-top"><strong>5. Implementación</strong><ul class="list-disc list-inside text-slate-600 dark:text-slate-400 text-sm mt-1"><li>Programación de código app</li><li>Pruebas de integración</li></ul></td>
+                            <td class="p-3 align-top">
+                                <ul class="list-disc list-inside text-sm text-slate-700 dark:text-slate-300">
+                                    <li>Ejecución de scripts DDL (CREATE TABLE, INDEX)</li>
+                                    <li>Pipelines de migración y carga inicial (ETL/ELT)</li>
+                                    <li>Pruebas de estrés y validación de constraints</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 align-top"><strong>6. Operación y Mantenimiento</strong><ul class="list-disc list-inside text-slate-600 dark:text-slate-400 text-sm mt-1"><li>Despliegue en producción</li><li>Soporte continuo</li></ul></td>
+                            <td class="p-3 align-top">
+                                <ul class="list-disc list-inside text-sm text-slate-700 dark:text-slate-300">
+                                    <li>Monitoreo de consultas lentas (Query Tuning)</li>
+                                    <li>Estrategias de Backup periódico y Disaster Recov.</li>
+                                    <li>Mantenimiento de estadísticas (ANALYZE / VACUUM)</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <!-- Comparativa: Cascada vs RAD vs DataOps 2026 -->
@@ -670,7 +794,7 @@ graph TD
         <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8 space-y-4">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </span>
                 💡 Tips del Profesor y Preguntas Clave de Examen
             </h2>
@@ -716,7 +840,7 @@ graph TD
             <!-- Canvas Interactivo de la Pipeline DIKW -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col items-center">
                 <div class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Simulación Visual Interactiva: Flujo de Datos a Conocimiento</div>
-                <canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_01" width="800"></canvas>
+                <canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_01" width="800" role="img" aria-label="Flujo de Datos a Conocimiento (DIKW)"></canvas>
                 <div class="mt-4 flex gap-2" id="controls_01"></div>
             </div>
         </section>
@@ -772,9 +896,9 @@ graph TD
             <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
                 <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación del Curso</h3>
                 <ul class="space-y-3 text-sm">
-                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice General</a></li>
-                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">&larr; Índice Principal</a></li>
-                    <li><a href="semana_02.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 02 &rarr;</a></li>
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition shadow-sm">📂 Índice General</a></li>
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition shadow-sm">&larr; Índice Principal</a></li>
+                    <li><a href="semana_02.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition shadow-sm">Semana 02 &rarr;</a></li>
                 </ul>
             </div>
         </aside>
@@ -782,32 +906,38 @@ graph TD
 
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Índice</span>
         </a>
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Anterior</span>
         </a>
-        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Lector</span>
+        </button>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg aria-hidden="true" id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Tema</span>
         </button>
-        <a href="semana_02.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_02.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
-            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
+            <span class="text-sm font-bold tracking-wide mt-1">Siguiente</span>
         </a>
     </nav>
 
@@ -835,6 +965,11 @@ graph TD
         }
 
         updateToggleText();
+        function syncThemeColor() {
+            const tcm = document.getElementById('theme-color-meta');
+            if (tcm) tcm.setAttribute('content', document.documentElement.classList.contains('dark') ? '#0A0A0C' : '#FEF7FF');
+        }
+        syncThemeColor();
 
         const toggleTheme = () => {
             if (document.documentElement.classList.contains('dark')) {
@@ -845,6 +980,7 @@ graph TD
                 localStorage.setItem('color-theme', 'dark');
             }
             updateToggleText();
+            syncThemeColor();
         };
 
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);

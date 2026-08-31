@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" id="theme-color-meta" content="#FEF7FF">
     <title>Semana 12 - Programación en Base de Datos: PL/pgSQL, Procedimientos, Triggers y Control Transaccional</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,11 +33,17 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif !important;
             letter-spacing: -0.02em;
+            text-wrap: balance;
         }
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.625;
             letter-spacing: -0.011em;
+        }
+        [id] { scroll-margin-top: 5rem; }
+        :is(table) { font-variant-numeric: tabular-nums; }
+        html.dark {
+            color-scheme: dark;
         }
         html.dark body {
             color: #cbd5e1 !important;
@@ -60,143 +67,162 @@
         }
     </script>
 
-    <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style id="reader-mode-style">
+        html.reader-mode { font-size: 106.25%; }
+        html.reader-mode header,
+        html.reader-mode aside,
+        html.reader-mode nav[class*="fixed"] { display: none !important; }
+        html.reader-mode #theme-toggle { display: flex !important; }
+        html.reader-mode #reader-toggle { display: flex !important; }
+        html.reader-mode body { line-height: 1.75; text-wrap: pretty; }
+        html.reader-mode main { width: 100% !important; max-width: 72ch; margin-inline: auto; }
+    </style>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            mermaid.initialize({
-                startOnLoad: true,
-                theme: isDark ? 'dark' : 'default',
-                securityLevel: 'loose',
-                flowchart: { useMaxWidth: true, htmlLabels: true }
+        (function () {
+            if (localStorage.getItem('reader-mode') === 'on' && !document.documentElement.classList.contains('reader-mode')) {
+                document.documentElement.classList.add('reader-mode');
+            }
+            function syncReaderButtons() {
+                var on = document.documentElement.classList.contains('reader-mode');
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            function toggleReaderMode() {
+                var on = document.documentElement.classList.toggle('reader-mode');
+                localStorage.setItem('reader-mode', on ? 'on' : 'off');
+                syncReaderButtons();
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.addEventListener('click', toggleReaderMode);
+                });
+                syncReaderButtons();
             });
-        });
+        })();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
+    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
     <!-- Header -->
-    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Programación PL/pgSQL, Procedimientos, Triggers y Control Transaccional</h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 12 • Ingeniería de Datos • ULima 2026</p>
+                <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 12 • Ingeniería de Datos • ULima 2026</p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
         </div>
     </header>
 
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24" id="main">
             
             <!-- Execution Flow Banner -->
             <div class="my-4">
                 <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2" id="diagram-title">
                         📌 Ciclo de Ejecución de un Procedimiento / Trigger en el Motor Relacional
                     </h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
                         Flujo transaccional ACID desde el evento de base de datos hasta el disparo de lógica de servidor y captura de excepciones.
                     </p>
                     <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                        <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-                            <g transform="translate(10, 15)">
-                                <!-- Step 1 -->
-                                <rect x="0" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="57.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. DML Event</text>
-                                <text x="57.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">INSERT / UPDATE / DELETE</text>
-                                <path d="M 115 47 L 130 47" stroke="#6366f1" stroke-width="2" fill="none" />
-                                <polygon points="130,47 123,43 123,51" fill="#6366f1" />
-
-                                <!-- Step 2 -->
-                                <rect x="132" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="189.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. BEFORE Trigger</text>
-                                <text x="189.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Mutar NEW / Validar</text>
-                                <path d="M 247 47 L 262 47" stroke="#6366f1" stroke-width="2" fill="none" />
-                                <polygon points="262,47 255,43 255,51" fill="#6366f1" />
-
-                                <!-- Step 3 -->
-                                <rect x="264" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="321.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Tabla Heap / WAL</text>
-                                <text x="321.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Escritura física + Índices</text>
-                                <path d="M 379 47 L 394 47" stroke="#6366f1" stroke-width="2" fill="none" />
-                                <polygon points="394,47 387,43 387,51" fill="#6366f1" />
-
-                                <!-- Step 4 -->
-                                <rect x="396" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="453.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">4. AFTER Trigger</text>
-                                <text x="453.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Auditoría / Logs / CDC</text>
-                                <path d="M 511 47 L 526 47" stroke="#6366f1" stroke-width="2" fill="none" />
-                                <polygon points="526,47 519,43 519,51" fill="#6366f1" />
-
-                                <!-- Step 5 -->
-                                <rect x="528" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="585.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">5. Exception Trap</text>
-                                <text x="585.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Savepoint / SQLSTATE</text>
-                                <path d="M 643 47 L 658 47" stroke="#10b981" stroke-width="2" fill="none" />
-                                <polygon points="658,47 651,43 651,51" fill="#10b981" />
-
-                                <!-- Step 6 -->
-                                <rect x="660" y="20" width="115" height="55" rx="8" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-                                <text x="717.5" y="40" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">6. COMMIT Final</text>
-                                <text x="717.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Persistencia Transaccional</text>
-                            </g>
-                        </svg>
+                        <div class="flex flex-col md:flex-row md:items-stretch gap-3">
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">1. DML Event</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">INSERT / UPDATE / DELETE</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">2. BEFORE Trigger</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Mutar NEW / Validar</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">3. Tabla Heap / WAL</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Escritura física + Índices</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">4. AFTER Trigger</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Auditoría / Logs / CDC</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-emerald-500 dark:text-emerald-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">5. Exception Trap</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Savepoint / SQLSTATE</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-emerald-500 dark:text-emerald-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-emerald-500/60 dark:border-emerald-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-emerald-700 dark:text-emerald-300">6. COMMIT Final</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Persistencia Transaccional</p>
+                                </div>
+                            </div>
                     </div>
                 </div>
             </div>
 
             <article class="space-y-8 prose dark:prose-invert max-w-none">
                 
-                <!-- Mermaid Minimap -->
-                <div class="my-4">
-                    <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
-                        <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
-                            <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                                🗺️ Arquitectura de Programación en Servidor PL/pgSQL
-                            </span>
-                            <span class="transition group-open:rotate-180">
-                                <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </span>
-                        </summary>
-                        <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                            <pre class="mermaid bg-transparent">
-graph TD
-    PL[PL/pgSQL Server-Side Engine] --> BLK[Estructura de Bloques DECLARE / BEGIN / EXCEPTION / END]
-    PL --> VARS[Tipado Fuerte: %TYPE, %ROWTYPE, RECORD, JSONB]
-    PL --> CTRL[Control de Flujo: IF/ELSE, CASE, LOOP, WHILE, FOR]
-    PL --> CURS[Cursores: OPEN, FETCH, FOR IN, WHERE CURRENT OF]
-    
-    PL --> OBJECTS[Objetos de Base de Datos]
-    OBJECTS --> FUNC[CREATE FUNCTION: Expresiones con retorno, SELECT]
-    OBJECTS --> PROC[CREATE PROCEDURE: Transaccional autónomo, CALL, COMMIT/ROLLBACK]
-    OBJECTS --> TRIG[CREATE TRIGGER: BEFORE / AFTER / INSTEAD OF con NEW & OLD]
-
-    PL --> SEC[Seguridad & Rendimiento 2026]
-    SEC --> DYN[SQL Dinámico Seguro: EXECUTE format]
-    SEC --> PRIV[SECURITY DEFINER vs search_path]
-    SEC --> DIAG[Manejo Robusto de Excepciones: SQLSTATE / STACKED]
-                            </pre>
+    <!-- M3 Conceptual Map Minimap (Native Responsive HTML/CSS) -->
+    <div class="my-6">
+        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition duration-300">
+            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
+                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
+                    🗺️ Mapa Conceptual: Arquitectura de Programación en Servidor PL/pgSQL
+                </span>
+                <span class="transition group-open:rotate-180">
+                    <svg aria-hidden="true" class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </span>
+            </summary>
+            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 space-y-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3">⚙️ Estructura y Componentes del Lenguaje</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400 block mb-1">Bloques & Tipado</span>
+                            <span class="text-slate-500 dark:text-slate-400"><code>DECLARE / BEGIN / EXCEPTION / END</code> con <code>%TYPE</code> y <code>%ROWTYPE</code>.</span>
                         </div>
-                    </details>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-blue-600 dark:text-blue-400 block mb-1">Functions vs Procedures</span>
+                            <span class="text-slate-500 dark:text-slate-400"><code>FUNCTION</code> (Expresiones) vs <code>PROCEDURE</code> (Transacciones autónomas <code>COMMIT/ROLLBACK</code>).</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-emerald-600 dark:text-emerald-400 block mb-1">Triggers & Auditoría</span>
+                            <span class="text-slate-500 dark:text-slate-400"><code>BEFORE</code> / <code>AFTER</code> / <code>INSTEAD OF</code> con variables <code>NEW</code>, <code>OLD</code> y CDC JSONB.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-purple-600 dark:text-purple-400 block mb-1">Seguridad & Robustez</span>
+                            <span class="text-slate-500 dark:text-slate-400">SQL Dinámico seguro con <code>format() USING</code> y captura de <code>SQLSTATE</code>.</span>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </details>
+    </div>
 
                 <!-- Learning Objectives -->
                 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
                     <h4 class="text-blue-900 dark:text-blue-200 font-bold flex items-center gap-2 mb-2">
-                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        <svg aria-hidden="true" class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                         Objetivos de Aprendizaje Técnico
                     </h4>
                     <ul class="list-disc list-inside space-y-1.5 text-sm text-blue-950/80 dark:text-blue-200/90">
@@ -219,10 +245,10 @@ graph TD
                     </p>
 
                     <!-- ASCII Block Structure -->
-                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-xs overflow-x-auto shadow-inner my-4">
+                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-sm overflow-x-auto shadow-inner my-4">
                         <div class="text-emerald-400 font-bold mb-2">/* ESTRUCTURA FORMAL DE UN BLOQUE PL/pgSQL */</div>
 <pre>
-[ &lt;&lt;etiqueta_bloque&gt;&gt; ]
+[ <<etiqueta_bloque>> ]
 [ DECLARE
     -- Declaración de variables, constantes, tipos ancla (%TYPE, %ROWTYPE), cursores
     v_id          INTEGER := 100;
@@ -272,25 +298,29 @@ END [ etiqueta_bloque ];
                         2. Control de Flujo, Bucles y Gestión de Cursores
                     </h2>
 
-                    <!-- ASCII Cursor Life Cycle -->
-                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-xs overflow-x-auto shadow-inner my-4">
-                        <div class="text-indigo-400 font-bold mb-2">/* DIAGRAMA ASCII: Ciclo de Vida y Manipulación de un Cursor */</div>
-<pre>
-1. DECLARE cur CURSOR FOR SELECT ... FOR UPDATE;
-       ↓
-2. OPEN cur;                    <-- El motor materializa/prepara el plan de consulta
-       ↓
-3. FETCH NEXT FROM cur INTO var; <-- Recupera la tupla actual y avanza el puntero
-       ↓
-   ¿FOUND = TRUE?
-    ├── SI: Procesar datos -> UPDATE tabla SET ... WHERE CURRENT OF cur; -> Repetir FETCH
-    └── NO: Fin del conjunto (EOF)
-       ↓
-4. CLOSE cur;                   <-- Libera memoria de trabajo (Portal buffers)
-</pre>
+                    <!-- Diagrama: Cursor Life Cycle -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm my-4">
+                        <div class="inline-block font-mono font-bold text-indigo-600 dark:text-indigo-400 text-xs mb-3">/* Diagrama: Ciclo de Vida y Manipulación de un Cursor */</div>
+                        <div class="space-y-3 font-mono text-sm text-slate-800 dark:text-slate-200">
+                            <div class="bg-slate-100 dark:bg-slate-950 rounded-xl p-3"><strong>1. DECLARE</strong> cur CURSOR FOR SELECT ... FOR UPDATE;</div>
+                            <div class="text-center text-slate-400 dark:text-slate-500 text-sm">↓</div>
+                            <div class="bg-slate-100 dark:bg-slate-950 rounded-xl p-3"><strong>2. OPEN</strong> cur; <span class="text-xs text-slate-500 dark:text-slate-400">&lt;-- El motor materializa/prepara el plan de consulta</span></div>
+                            <div class="text-center text-slate-400 dark:text-slate-500 text-sm">↓</div>
+                            <div class="bg-slate-100 dark:bg-slate-950 rounded-xl p-3"><strong>3. FETCH NEXT</strong> FROM cur INTO var; <span class="text-xs text-slate-500 dark:text-slate-400">&lt;-- Recupera la tupla actual y avanza el puntero</span></div>
+                            <div class="text-center text-slate-400 dark:text-slate-500 text-sm">↓</div>
+                            <div class="bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 rounded-xl p-3">
+                                <strong class="text-amber-700 dark:text-amber-300">¿FOUND = TRUE?</strong>
+                                <ul class="text-sm text-slate-700 dark:text-slate-300 mt-1 ml-6 list-none space-y-1">
+                                    <li>├── SI: Procesar datos → <span class="font-mono text-sm">UPDATE tabla SET ... WHERE CURRENT OF cur;</span> → Repetir FETCH</li>
+                                    <li>└── NO: Fin del conjunto (EOF)</li>
+                                </ul>
+                            </div>
+                            <div class="text-center text-slate-400 dark:text-slate-500 text-sm">↓</div>
+                            <div class="bg-slate-100 dark:bg-slate-950 rounded-xl p-3"><strong>4. CLOSE</strong> cur; <span class="text-xs text-slate-500 dark:text-slate-400">&lt;-- Libera memoria de trabajo (Portal buffers)</span></div>
+                        </div>
                     </div>
 
-                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-xs overflow-x-auto border border-slate-800 shadow-md my-4">
+                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-sm overflow-x-auto border border-slate-800 shadow-md my-4">
                         <div class="text-indigo-400 font-semibold mb-2">-- Actualización Posicional Segura con Cursor y FOR UPDATE</div>
 <pre><code class="language-sql">DO $$
 DECLARE
@@ -360,7 +390,7 @@ END $$;
                         </table>
                     </div>
 
-                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-xs overflow-x-auto border border-slate-800 shadow-md my-4">
+                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-sm overflow-x-auto border border-slate-800 shadow-md my-4">
                         <div class="text-emerald-400 font-semibold mb-2">-- Procedimiento Almacenado con Gestión Transaccional Batch y COMMIT Autónomo</div>
 <pre><code class="language-sql">CREATE OR REPLACE PROCEDURE sp_procesar_pagos_masivos(
     p_lote_id INT,
@@ -419,20 +449,20 @@ $$;
                         4. Triggers Avanzados: Validación de Negocio y Auditoría CDC con JSONB
                     </h2>
 
-                    <!-- ASCII Trigger Event Sequence -->
-                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-xs overflow-x-auto shadow-inner my-4">
-                        <div class="text-indigo-400 font-bold mb-2">/* VARIABLES ESPECIALES DISPONIBLES EN TRIGGER FUNCTIONS */</div>
-<pre>
-- NEW           : Registro con los nuevos valores (INSERT, UPDATE). En DELETE es NULL.
-- OLD           : Registro con los valores previos (UPDATE, DELETE). En INSERT es NULL.
-- TG_OP         : Operación actual ('INSERT', 'UPDATE', 'DELETE', 'TRUNCATE').
-- TG_TABLE_NAME : Nombre de la tabla sobre la que se disparó el trigger.
-- TG_WHEN       : Momento de ejecución ('BEFORE', 'AFTER', 'INSTEAD OF').
-- TG_LEVEL      : Nivel de ejecución ('ROW' o 'STATEMENT').
-</pre>
+                    <!-- Trigger Event Sequence -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm my-4">
+                        <div class="inline-block font-mono font-bold text-indigo-600 dark:text-indigo-400 text-xs mb-3">/* VARIABLES ESPECIALES DISPONIBLES EN TRIGGER FUNCTIONS */</div>
+                        <ul class="space-y-2">
+                            <li class="bg-slate-100 dark:bg-slate-950 rounded-xl px-3 py-2 text-sm"><span class="font-mono font-bold text-slate-800 dark:text-slate-200">NEW</span> <span class="text-slate-600 dark:text-slate-400">: Registro con los nuevos valores (INSERT, UPDATE). En DELETE es NULL.</span></li>
+                            <li class="bg-slate-100 dark:bg-slate-950 rounded-xl px-3 py-2 text-sm"><span class="font-mono font-bold text-slate-800 dark:text-slate-200">OLD</span> <span class="text-slate-600 dark:text-slate-400">: Registro con los valores previos (UPDATE, DELETE). En INSERT es NULL.</span></li>
+                            <li class="bg-slate-100 dark:bg-slate-950 rounded-xl px-3 py-2 text-sm"><span class="font-mono font-bold text-slate-800 dark:text-slate-200">TG_OP</span> <span class="text-slate-600 dark:text-slate-400">: Operación actual ('INSERT', 'UPDATE', 'DELETE', 'TRUNCATE').</span></li>
+                            <li class="bg-slate-100 dark:bg-slate-950 rounded-xl px-3 py-2 text-sm"><span class="font-mono font-bold text-slate-800 dark:text-slate-200">TG_TABLE_NAME</span> <span class="text-slate-600 dark:text-slate-400">: Nombre de la tabla sobre la que se disparó el trigger.</span></li>
+                            <li class="bg-slate-100 dark:bg-slate-950 rounded-xl px-3 py-2 text-sm"><span class="font-mono font-bold text-slate-800 dark:text-slate-200">TG_WHEN</span> <span class="text-slate-600 dark:text-slate-400">: Momento de ejecución ('BEFORE', 'AFTER', 'INSTEAD OF').</span></li>
+                            <li class="bg-slate-100 dark:bg-slate-950 rounded-xl px-3 py-2 text-sm"><span class="font-mono font-bold text-slate-800 dark:text-slate-200">TG_LEVEL</span> <span class="text-slate-600 dark:text-slate-400">: Nivel de ejecución ('ROW' o 'STATEMENT').</span></li>
+                        </ul>
                     </div>
 
-                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-xs overflow-x-auto border border-slate-800 shadow-md my-4">
+                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-sm overflow-x-auto border border-slate-800 shadow-md my-4">
                         <div class="text-indigo-400 font-semibold mb-2">-- Trigger de Auditoría Universal CDC (Change Data Capture) con Payload JSONB</div>
 <pre><code class="language-sql">-- 1. Tabla de Auditoría Genérica
 CREATE TABLE auditoria_general (
@@ -489,7 +519,7 @@ EXECUTE FUNCTION trg_fn_auditoria_universal();
                             Avance paso a paso para ver cómo el bloque evalúa condiciones, dispara triggers BEFORE/AFTER y captura excepciones.
                         </p>
                         <div class="flex flex-col items-center gap-4">
-                            <canvas id="canvas_12" width="700" height="240" class="w-full max-w-full bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"></canvas>
+                            <canvas id="canvas_12" width="700" height="240" class="w-full max-w-full bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm" role="img" aria-label="Ejecución PL/pgSQL: Variables, Triggers y Excepciones"></canvas>
                             <div id="controls_12" class="flex gap-2"></div>
                         </div>
                     </div>
@@ -509,7 +539,7 @@ EXECUTE FUNCTION trg_fn_auditoria_universal();
                             Nunca concatene cadenas de texto de usuario directamente en una sentencia <code>EXECUTE</code>. Utilice <code>format('%I', identificador)</code> para tablas/columnas y la cláusula <code>USING valor</code> para parámetros escalares.
                         </p>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-xs">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-sm">
                             <div class="p-3 bg-red-100/50 dark:bg-red-900/30 rounded-lg text-red-900 dark:text-red-200">
                                 <strong>❌ Vulnerable a Inyección SQL:</strong>
                                 <pre class="mt-1"><code>-- ¡Inseguro! Concatenación directa
@@ -567,9 +597,9 @@ EXECUTE v_sql USING p_user;</code></pre>
             <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
                 <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación del Curso</h3>
                 <ul class="space-y-3 text-sm">
-                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice Principal</a></li>
-                    <li><a href="semana_11.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 11: SQL Analítico & CTEs</a></li>
-                    <li><a href="semana_13.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 13: Data Warehousing →</a></li>
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition shadow-sm">📂 Índice Principal</a></li>
+                    <li><a href="semana_11.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition shadow-sm">← Semana 11: SQL Analítico & CTEs</a></li>
+                    <li><a href="semana_13.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition shadow-sm">Semana 13: Data Warehousing →</a></li>
                 </ul>
             </div>
         </aside>
@@ -577,22 +607,28 @@ EXECUTE v_sql USING p_user;</code></pre>
 
     <!-- Mobile Navigation -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Índice</span>
         </a>
-        <a href="semana_11.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+        <a href="semana_11.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Anterior</span>
         </a>
-        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path></svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+        <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Lector</span>
         </button>
-        <a href="semana_13.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
-            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path></svg>
+            <svg aria-hidden="true" id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Tema</span>
+        </button>
+        <a href="semana_13.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+            <span class="text-sm font-bold tracking-wide mt-1">Siguiente</span>
         </a>
     </nav>
 
@@ -621,6 +657,11 @@ EXECUTE v_sql USING p_user;</code></pre>
         }
 
         updateToggleText();
+        function syncThemeColor() {
+            const tcm = document.getElementById('theme-color-meta');
+            if (tcm) tcm.setAttribute('content', document.documentElement.classList.contains('dark') ? '#0A0A0C' : '#FEF7FF');
+        }
+        syncThemeColor();
 
         const toggleTheme = () => {
             if (document.documentElement.classList.contains('dark')) {
@@ -631,6 +672,7 @@ EXECUTE v_sql USING p_user;</code></pre>
                 localStorage.setItem('color-theme', 'dark');
             }
             updateToggleText();
+            syncThemeColor();
         };
 
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);

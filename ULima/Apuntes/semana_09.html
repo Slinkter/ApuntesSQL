@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" id="theme-color-meta" content="#FEF7FF">
     <title>Semana 09 - Formas Normales Superiores (BCNF, 4FN, 5FN, DKNF) y Desnormalización Estratégica</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,11 +33,17 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif !important;
             letter-spacing: -0.02em;
+            text-wrap: balance;
         }
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.625;
             letter-spacing: -0.011em;
+        }
+        [id] { scroll-margin-top: 5rem; }
+        :is(table) { font-variant-numeric: tabular-nums; }
+        html.dark {
+            color-scheme: dark;
         }
         html.dark body {
             color: #cbd5e1 !important;
@@ -60,155 +67,190 @@
         }
     </script>
 
-    <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style id="reader-mode-style">
+        html.reader-mode { font-size: 106.25%; }
+        html.reader-mode header,
+        html.reader-mode aside,
+        html.reader-mode nav[class*="fixed"] { display: none !important; }
+        html.reader-mode #theme-toggle { display: flex !important; }
+        html.reader-mode #reader-toggle { display: flex !important; }
+        html.reader-mode body { line-height: 1.75; text-wrap: pretty; }
+        html.reader-mode main { width: 100% !important; max-width: 72ch; margin-inline: auto; }
+    </style>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            mermaid.initialize({
-                startOnLoad: true,
-                theme: isDark ? 'dark' : 'default',
-                securityLevel: 'loose',
-                flowchart: { useMaxWidth: true, htmlLabels: true }
+        (function () {
+            if (localStorage.getItem('reader-mode') === 'on' && !document.documentElement.classList.contains('reader-mode')) {
+                document.documentElement.classList.add('reader-mode');
+            }
+            function syncReaderButtons() {
+                var on = document.documentElement.classList.contains('reader-mode');
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            function toggleReaderMode() {
+                var on = document.documentElement.classList.toggle('reader-mode');
+                localStorage.setItem('reader-mode', on ? 'on' : 'off');
+                syncReaderButtons();
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.addEventListener('click', toggleReaderMode);
+                });
+                syncReaderButtons();
             });
-        });
+        })();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
+    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
         <!-- Sun icon -->
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
         <!-- Moon icon -->
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
     <!-- Header (M3 Tonal App Bar) -->
-    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Formas Normales Superiores y Desnormalización Estratégica</h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 09 • Ingeniería de Datos • ULima 2026</p>
+                <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 09 • Ingeniería de Datos • ULima 2026</p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
         </div>
     </header>
 
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24" id="main">
             
             <!-- M3 Step-by-Step Diagram -->
             <div class="my-4">
                 <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2" id="diagram-title">
                         📌 Jerarquía de Formas Normales y Frontera de Optimización
                     </h3>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
                         De la eliminación de anomalías operacionales (1FN-5FN) a la desnormalización arquitectónica en almacenes modernos y lakehouses.
                     </p>
                     <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                        <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-                            <g transform="translate(10, 15)">
-                                <!-- Step 1 -->
-                                <rect x="0" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="57.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1FN - 3FN</text>
-                                <text x="57.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Atomicidad y DF básica</text>
-                                <!-- Arrow -->
-                                <path d="M 115 47 L 130 47" stroke="#6366f1" stroke-width="2" fill="none" />
-                                <polygon points="130,47 123,43 123,51" fill="#6366f1" />
-
-                                <!-- Step 2 -->
-                                <rect x="132" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="189.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">BCNF</text>
-                                <text x="189.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Determinantes = Superclaves</text>
-                                <!-- Arrow -->
-                                <path d="M 247 47 L 262 47" stroke="#6366f1" stroke-width="2" fill="none" />
-                                <polygon points="262,47 255,43 255,51" fill="#6366f1" />
-
-                                <!-- Step 3 -->
-                                <rect x="264" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="321.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">4FN (MVD)</text>
-                                <text x="321.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Sin hechos 1:N cruzados</text>
-                                <!-- Arrow -->
-                                <path d="M 379 47 L 394 47" stroke="#6366f1" stroke-width="2" fill="none" />
-                                <polygon points="394,47 387,43 387,51" fill="#6366f1" />
-
-                                <!-- Step 4 -->
-                                <rect x="396" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="453.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">5FN / PJNF</text>
-                                <text x="453.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Sin Join Dependencies</text>
-                                <!-- Arrow -->
-                                <path d="M 511 47 L 526 47" stroke="#6366f1" stroke-width="2" fill="none" />
-                                <polygon points="526,47 519,43 519,51" fill="#6366f1" />
-
-                                <!-- Step 5 -->
-                                <rect x="528" y="20" width="115" height="55" rx="8" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                                <text x="585.5" y="40" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">DKNF</text>
-                                <text x="585.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">Claves y dominios puros</text>
-                                <!-- Arrow -->
-                                <path d="M 643 47 L 658 47" stroke="#10b981" stroke-width="2" fill="none" />
-                                <polygon points="658,47 651,43 651,51" fill="#10b981" />
-
-                                <!-- Step 6 -->
-                                <rect x="660" y="20" width="115" height="55" rx="8" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-                                <text x="717.5" y="40" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">Desnormalización</text>
-                                <text x="717.5" y="54" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[8px]">OLAP / CQRS / JSONB</text>
-                            </g>
-                        </svg>
+                        <div class="flex flex-col md:flex-row md:items-stretch gap-3">
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">1FN - 3FN</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Atomicidad y DF básica</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">BCNF</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Determinantes = Superclaves</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">4FN (MVD)</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Sin hechos 1:N cruzados</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">5FN / PJNF</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Sin Join Dependencies</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">DKNF</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Claves y dominios puros</p>
+                                </div>
+                                <div class="flex items-center justify-center text-xl text-emerald-500 dark:text-emerald-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                                <div class="flex-1 rounded-xl border-2 border-emerald-500/60 dark:border-emerald-400/60 bg-white dark:bg-slate-950 p-3">
+                                    <p class="text-sm font-bold text-emerald-700 dark:text-emerald-300">Desnormalización</p>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">OLAP / CQRS / JSONB</p>
+                                </div>
+                            </div>
                     </div>
                 </div>
             </div>
 
             <article class="space-y-8 prose dark:prose-invert max-w-none">
                 
-                <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
-                <div class="my-4">
-                    <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
-                        <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
-                            <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
-                                🗺️ Mapa Conceptual: Normalización Avanzada vs Desnormalización
-                            </span>
-                            <span class="transition group-open:rotate-180">
-                                <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </span>
-                        </summary>
-                        <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                            <pre class="mermaid bg-transparent">
-graph TD
-    subgraph "Teoría Relacional Pura (OLTP)"
-        BCNF["BCNF: Todo determinante X es Superclave"]
-        MVD["4FN: X ↠ Y sin hechos ortogonales"]
-        PJNF["5FN: Reconstrucción n-aria sin pérdida"]
-        DKNF["DKNF: Dominio + Clave = Cero Anomalías"]
-        BCNF --> MVD --> PJNF --> DKNF
-    end
-
-    subgraph "Ingeniería de Datos 2026 (Read Performance & Analytics)"
-        DENORM["Desnormalización Estratégica"]
-        MAT_VIEW["Vistas Materializadas Concurrentes"]
-        JSONB_HYBRID["PostgreSQL JSONB + GIN (Semi-estructurado)"]
-        LAKEHOUSE["Tablas Planas en Parquet / Iceberg / ClickHouse"]
-        CQRS["Arquitectura CQRS / Read-Replicas"]
-        DENORM --> MAT_VIEW
-        DENORM --> JSONB_HYBRID
-        DENORM --> LAKEHOUSE
-        DENORM --> CQRS
-    end
-                            </pre>
+    <!-- M3 Conceptual Map Minimap (Native Responsive HTML/CSS) -->
+    <div class="my-4">
+        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition duration-300">
+            <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
+                <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
+                    🗺️ Mapa Conceptual: Formas Normales Superiores vs Desnormalización 2026
+                </span>
+                <span class="transition group-open:rotate-180">
+                    <svg aria-hidden="true" class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </span>
+            </summary>
+            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- OLTP Puro -->
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+                        <div class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">🛡️ Teoría Relacional Pura (OLTP)</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                                <span class="font-bold text-slate-900 dark:text-white block">BCNF</span>
+                                <span class="text-sm text-slate-500 dark:text-slate-400">Todo determinante es superclave.</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                                <span class="font-bold text-slate-900 dark:text-white block">4FN</span>
+                                <span class="text-sm text-slate-500 dark:text-slate-400">Sin dependencias multivaluadas.</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                                <span class="font-bold text-slate-900 dark:text-white block">5FN (PJNF)</span>
+                                <span class="text-sm text-slate-500 dark:text-slate-400">Reunión n-aria sin pérdida.</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                                <span class="font-bold text-slate-900 dark:text-white block">DKNF</span>
+                                <span class="text-sm text-slate-500 dark:text-slate-400">Dominio + Clave = Cero anomalías.</span>
+                            </div>
                         </div>
-                    </details>
+                    </div>
+
+                    <!-- Desnormalización 2026 -->
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+                        <div class="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">⚡ Desnormalización Analítica (2026)</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                                <span class="font-bold text-purple-700 dark:text-purple-400 block">Vistas Materializadas</span>
+                                <span class="text-sm text-slate-500 dark:text-slate-400">Refresco concurrente para KPIs.</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                                <span class="font-bold text-purple-700 dark:text-purple-400 block">JSONB + GIN</span>
+                                <span class="text-sm text-slate-500 dark:text-slate-400">Modelos híbridos relacionales.</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                                <span class="font-bold text-purple-700 dark:text-purple-400 block">Lakehouse / Parquet</span>
+                                <span class="text-sm text-slate-500 dark:text-slate-400">Tablas planas optimizadas.</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                                <span class="font-bold text-purple-700 dark:text-purple-400 block">CQRS Replicas</span>
+                                <span class="text-sm text-slate-500 dark:text-slate-400">Separación lectura y escritura.</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </details>
+    </div>
 
                 <!-- Section: Objetivos -->
                 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-100 dark:border-blue-800/50">
                     <h4 class="text-blue-900 dark:text-blue-200 font-bold flex items-center gap-2 mb-2">
-                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        <svg aria-hidden="true" class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                         Objetivos de Maestría Profesional
                     </h4>
                     <ul class="list-disc list-inside space-y-1.5 text-sm text-blue-950/80 dark:text-blue-200/90">
@@ -257,31 +299,45 @@ graph TD
                         <li>Un atributo que no es clave por sí solo determina a un atributo primo (parte de otra clave).</li>
                     </ol>
 
-                    <!-- ASCII DIAGRAM: BCNF Violation -->
-                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-xs overflow-x-auto shadow-inner my-6">
-                        <div class="text-emerald-400 font-bold mb-2">/* DIAGRAMA ASCII: Anomalía en 3FN que viola BCNF */</div>
-<pre>
-TABLA: Asignacion_Asesoria (Codigo_Estudiante, Carrera, Asesor, Nota_Promedio)
-
-REGLAS DE NEGOCIO:
-1. Un estudiante puede cursar múltiples carreras. (Codigo, Carrera) -> Asesor, Nota_Promedio
-2. En cada carrera, el estudiante tiene un único asesor y una nota.
-3. Un Asesor es especialista EXCLUSIVO de UNA SOLA carrera. (Asesor -> Carrera)
-
-ANÁLISIS DE DEPENDENCIAS FUNCIONALES:
-  DF1: {Codigo_Estudiante, Carrera} → {Asesor, Nota_Promedio}   [Clave Candidata 1]
-  DF2: {Codigo_Estudiante, Asesor}  → {Carrera, Nota_Promedio}   [Clave Candidata 2]
-  DF3: Asesor → Carrera                                         [¡ATRIBUTO DETERMINANTE NO ES SUPERCLAVE!]
-
-¿Está en 3FN?
-  - Atributos primos: {Codigo_Estudiante, Carrera, Asesor}
-  - En DF3: Asesor -> Carrera, el consecuente 'Carrera' ES PRIMO.
-  - Por la regla de 3FN ("o X es superclave, o Y es primo"), ¡ESTÁ EN 3FN!
-
-¿Está en BCNF?
-  - En DF3: Asesor -> Carrera, el determinante 'Asesor' NO ES SUPERCLAVE.
-  - Por tanto: VIOLA BCNF. Produce anomalías severas de redundancia.
-</pre>
+                    <!-- Diagrama: BCNF Violation -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm my-6">
+                        <div class="inline-block font-mono font-bold text-emerald-600 dark:text-emerald-400 text-xs mb-3">/* Diagrama: Anomalía en 3FN que viola BCNF */</div>
+                        <div class="font-mono text-sm text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 bg-slate-50 dark:bg-slate-950 mb-4">TABLA: <strong>Asignacion_Asesoria</strong> (Codigo_Estudiante, Carrera, Asesor, Nota_Promedio)</div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <div class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Reglas de Negocio</div>
+                                <ol class="list-decimal list-inside space-y-1.5 text-sm text-slate-700 dark:text-slate-300">
+                                    <li>Un estudiante puede cursar múltiples carreras. <span class="font-mono text-sm">(Codigo, Carrera) → Asesor, Nota_Promedio</span></li>
+                                    <li>En cada carrera, el estudiante tiene un único asesor y una nota.</li>
+                                    <li>Un Asesor es especialista EXCLUSIVO de UNA SOLA carrera. <span class="font-mono text-sm">(Asesor → Carrera)</span></li>
+                                </ol>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">Análisis de Dependencias Funcionales</div>
+                                <ul class="space-y-1.5 text-sm text-slate-700 dark:text-slate-300 font-mono text-sm">
+                                    <li>DF1: {Codigo_Estudiante, Carrera} → {Asesor, Nota_Promedio} <span class="text-slate-500 dark:text-slate-400">[Clave Candidata 1]</span></li>
+                                    <li>DF2: {Codigo_Estudiante, Asesor} → {Carrera, Nota_Promedio} <span class="text-slate-500 dark:text-slate-400">[Clave Candidata 2]</span></li>
+                                    <li class="font-bold text-indigo-600 dark:text-indigo-400">DF3: Asesor → Carrera <span class="text-slate-500 dark:text-slate-400 font-normal">[&iexcl;Atributo determinante NO es superclave!]</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div class="border border-emerald-200 dark:border-emerald-900/40 bg-emerald-50/60 dark:bg-emerald-950/20 rounded-xl p-4">
+                                <div class="text-sm font-bold text-emerald-700 dark:text-emerald-300 mb-1">&iexcl;Está en 3FN?</div>
+                                <ul class="text-sm text-slate-700 dark:text-slate-300 space-y-1 list-inside">
+                                    <li>• Atributos primos: {Codigo_Estudiante, Carrera, Asesor}</li>
+                                    <li>• En DF3 (Asesor → Carrera), el consecuente 'Carrera' ES PRIMO.</li>
+                                    <li class="text-emerald-700 dark:text-emerald-300 font-semibold">→ Por la regla de 3FN ("o X es superclave, o Y es primo"), &iexcl;ESTÁ EN 3FN!</li>
+                                </ul>
+                            </div>
+                            <div class="border border-rose-200 dark:border-rose-900/40 bg-rose-50/60 dark:bg-rose-950/20 rounded-xl p-4">
+                                <div class="text-sm font-bold text-rose-700 dark:text-rose-300 mb-1">&iexcl;Está en BCNF?</div>
+                                <ul class="text-sm text-slate-700 dark:text-slate-300 space-y-1 list-inside">
+                                    <li>• En DF3 (Asesor → Carrera), el determinante 'Asesor' NO ES superclave.</li>
+                                    <li class="text-rose-700 dark:text-rose-300 font-semibold">→ Por tanto: VIOLA BCNF. Produce anomalías severas de redundancia.</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
                     <h4 class="font-bold text-slate-900 dark:text-white mt-6 mb-2">Tabla Antes de Normalizar a BCNF:</h4>
@@ -325,39 +381,50 @@ ANÁLISIS DE DEPENDENCIAS FUNCIONALES:
                         Se extrae la dependencia problemática $Asesor \to Carrera$ a una tabla independiente, dejando en la tabla de hechos la relación entre el estudiante y su asesor:
                     </p>
 
-                    <!-- ASCII DIAGRAM: BCNF Decomposed -->
-                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-xs overflow-x-auto shadow-inner mb-6">
-                        <div class="text-emerald-400 font-bold mb-2">/* ESQUEMA FINAL BCNF: 2 Tablas Descompuestas */</div>
-<pre>
-1. TABLA: Asesor_Carrera (Asesor, Carrera)
-   PK: Asesor
-   DF: Asesor -> Carrera  [Asesor es Superclave -> Cumple BCNF]
-
-   +-----------+------------+
-   | Asesor    | Carrera    |
-   +-----------+------------+
-   | Dr. Lopez | Sistemas   |
-   | Dra. Salas| Industrial |
-   +-----------+------------+
-
-2. TABLA: Estudiante_Asesoria (Codigo_Estudiante, Asesor, Nota_Promedio)
-   PK: (Codigo_Estudiante, Asesor)
-   FK: Asesor REFERENCES Asesor_Carrera(Asesor)
-   DF: {Codigo_Estudiante, Asesor} -> Nota_Promedio [Determinante es Superclave -> Cumple BCNF]
-
-   +-------------------+-----------+---------------+
-   | Codigo_Estudiante | Asesor    | Nota_Promedio |
-   +-------------------+-----------+---------------+
-   | 20241001          | Dr. Lopez | 17.5          |
-   | 20241001          | Dra. Salas| 15.0          |
-   | 20241045          | Dr. Lopez | 16.0          |
-   | 20241088          | Dra. Salas| 14.0          |
-   +-------------------+-----------+---------------+
-</pre>
+                    <!-- Diagrama: BCNF Decomposed -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm mb-6">
+                        <div class="inline-block font-mono font-bold text-emerald-600 dark:text-emerald-400 text-xs mb-4">/* ESQUEMA FINAL BCNF: 2 Tablas Descompuestas */</div>
+                        <div class="space-y-4">
+                            <div class="border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+                                <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">1. TABLA: Asesor_Carrera (Asesor, Carrera)</div>
+                                <div class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5 mb-2">
+                                    <div>PK: Asesor</div>
+                                    <div>DF: Asesor → Carrera <span class="text-emerald-600 dark:text-emerald-400">[Asesor es Superclave → Cumple BCNF]</span></div>
+                                </div>
+                                <table class="w-full text-left border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-300 font-mono text-sm"><th class="p-2 border border-slate-200 dark:border-slate-800">Asesor</th><th class="p-2 border border-slate-200 dark:border-slate-800">Carrera</th></tr>
+                                    </thead>
+                                    <tbody class="font-mono text-sm text-slate-600 dark:text-slate-400">
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Dr. Lopez</td><td class="p-2 border border-slate-200 dark:border-slate-800">Sistemas</td></tr>
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Dra. Salas</td><td class="p-2 border border-slate-200 dark:border-slate-800">Industrial</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+                                <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">2. TABLA: Estudiante_Asesoria (Codigo_Estudiante, Asesor, Nota_Promedio)</div>
+                                <div class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5 mb-2">
+                                    <div>PK: (Codigo_Estudiante, Asesor)</div>
+                                    <div>FK: Asesor REFERENCES Asesor_Carrera(Asesor)</div>
+                                    <div>DF: {Codigo_Estudiante, Asesor} → Nota_Promedio <span class="text-emerald-600 dark:text-emerald-400">[Determinante es Superclave → Cumple BCNF]</span></div>
+                                </div>
+                                <table class="w-full text-left border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-300 font-mono text-sm"><th class="p-2 border border-slate-200 dark:border-slate-800">Codigo_Estudiante</th><th class="p-2 border border-slate-200 dark:border-slate-800">Asesor</th><th class="p-2 border border-slate-200 dark:border-slate-800">Nota_Promedio</th></tr>
+                                    </thead>
+                                    <tbody class="font-mono text-sm text-slate-600 dark:text-slate-400">
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">20241001</td><td class="p-2 border border-slate-200 dark:border-slate-800">Dr. Lopez</td><td class="p-2 border border-slate-200 dark:border-slate-800">17.5</td></tr>
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">20241001</td><td class="p-2 border border-slate-200 dark:border-slate-800">Dra. Salas</td><td class="p-2 border border-slate-200 dark:border-slate-800">15.0</td></tr>
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">20241045</td><td class="p-2 border border-slate-200 dark:border-slate-800">Dr. Lopez</td><td class="p-2 border border-slate-200 dark:border-slate-800">16.0</td></tr>
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">20241088</td><td class="p-2 border border-slate-200 dark:border-slate-800">Dra. Salas</td><td class="p-2 border border-slate-200 dark:border-slate-800">14.0</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- DDL PostgreSQL 16/17 -->
-                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-xs overflow-x-auto border border-slate-800 shadow-md">
+                    <div class="bg-slate-950 text-slate-200 rounded-2xl p-5 font-mono text-sm overflow-x-auto border border-slate-800 shadow-md">
                         <div class="text-indigo-400 font-semibold mb-2">-- Implementación en PostgreSQL 16/17 con DDL BCNF Seguro</div>
 <pre><code class="language-sql">CREATE TABLE asesor_carrera (
     asesor_id VARCHAR(50) PRIMARY KEY,
@@ -408,27 +475,33 @@ JOIN asesor_carrera ac ON ea.asesor_id = ac.asesor_id;
                         Considere la relación `Curso_Info(Curso, Profesor, Libro_Texto)`. Un curso es dictado por varios profesores y utiliza varios libros de texto recomendados. Los profesores y los libros son entidades totalmente independientes entre sí:
                     </p>
 
-                    <!-- ASCII DIAGRAM: 4FN Explosion -->
-                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-xs overflow-x-auto shadow-inner my-4">
-                        <div class="text-amber-400 font-bold mb-2">/* DIAGRAMA ASCII: Redundancia por Dependencias Multivaluadas (Viola 4FN) */</div>
-<pre>
-TABLA: Curso_Info (Curso, Profesor, Libro_Texto)
-MVDs: Curso ↠ Profesor | Curso ↠ Libro_Texto
-
-+--------------------+-------------------+-------------------------------+
-| Curso              | Profesor          | Libro_Texto                   |
-+--------------------+-------------------+-------------------------------+
-| Bases de Datos     | Ing. Garcia       | Silberschatz Database Sys     |  <-- Duplicidad requerida
-| Bases de Datos     | Ing. Garcia       | Garcia-Molina Complete Book   |  <-- para mantener
-| Bases de Datos     | Dra. Mendoza      | Silberschatz Database Sys     |  <-- independencia lógica
-| Bases de Datos     | Dra. Mendoza      | Garcia-Molina Complete Book   |  <-- (2 profes * 2 libros = 4 filas)
-| Inteligencia Art.  | Dr. Alva          | Russell & Norvig AI Modern    |
-| Inteligencia Art.  | Dr. Alva          | Goodfellow Deep Learning      |
-+--------------------+-------------------+-------------------------------+
-
-ANOMALÍA: Si se agrega un 3er libro a Bases de Datos, se deben insertar 2 filas nuevas (una por cada profesor).
-Si el curso tiene 10 profesores y 10 libros -> ¡100 filas en la tabla para solo 20 hechos reales!
-</pre>
+                    <!-- Diagrama: 4FN Explosion -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm my-4">
+                        <div class="inline-block font-mono font-bold text-amber-600 dark:text-amber-400 text-xs mb-3">/* Diagrama: Redundancia por Dependencias Multivaluadas (Viola 4FN) */</div>
+                        <div class="font-mono text-sm text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 bg-slate-50 dark:bg-slate-950 mb-3">TABLA: <strong>Curso_Info</strong> (Curso, Profesor, Libro_Texto) <span class="text-xs text-indigo-600 dark:text-indigo-400">MVDs: Curso ↠ Profesor | Curso ↠ Libro_Texto</span></div>
+                        <div class="overflow-x-auto mb-3">
+                            <table class="w-full text-left border-collapse text-sm">
+                                <thead>
+                                    <tr class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-300 font-mono text-sm">
+                                        <th class="p-2 border border-slate-200 dark:border-slate-800">Curso</th>
+                                        <th class="p-2 border border-slate-200 dark:border-slate-800">Profesor</th>
+                                        <th class="p-2 border border-slate-200 dark:border-slate-800">Libro_Texto</th>
+                                        <th class="p-2 border border-slate-200 dark:border-slate-800"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="font-mono text-sm text-slate-600 dark:text-slate-400">
+                                    <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Bases de Datos</td><td class="p-2 border border-slate-200 dark:border-slate-800">Ing. Garcia</td><td class="p-2 border border-slate-200 dark:border-slate-800">Silberschatz Database Sys</td><td class="p-2 border border-slate-200 dark:border-slate-800 text-amber-600 dark:text-amber-400">&lt;-- Duplicidad requerida</td></tr>
+                                    <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Bases de Datos</td><td class="p-2 border border-slate-200 dark:border-slate-800">Ing. Garcia</td><td class="p-2 border border-slate-200 dark:border-slate-800">Garcia-Molina Complete Book</td><td class="p-2 border border-slate-200 dark:border-slate-800 text-amber-600 dark:text-amber-400">&lt;-- para mantener</td></tr>
+                                    <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Bases de Datos</td><td class="p-2 border border-slate-200 dark:border-slate-800">Dra. Mendoza</td><td class="p-2 border border-slate-200 dark:border-slate-800">Silberschatz Database Sys</td><td class="p-2 border border-slate-200 dark:border-slate-800 text-amber-600 dark:text-amber-400">&lt;-- independencia lógica</td></tr>
+                                    <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Bases de Datos</td><td class="p-2 border border-slate-200 dark:border-slate-800">Dra. Mendoza</td><td class="p-2 border border-slate-200 dark:border-slate-800">Garcia-Molina Complete Book</td><td class="p-2 border border-slate-200 dark:border-slate-800 text-amber-600 dark:text-amber-400">&lt;-- (2 profes * 2 libros = 4 filas)</td></tr>
+                                    <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Inteligencia Art.</td><td class="p-2 border border-slate-200 dark:border-slate-800">Dr. Alva</td><td class="p-2 border border-slate-200 dark:border-slate-800">Russell &amp; Norvig AI Modern</td><td class="p-2 border border-slate-200 dark:border-slate-800"></td></tr>
+                                    <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Inteligencia Art.</td><td class="p-2 border border-slate-200 dark:border-slate-800">Dr. Alva</td><td class="p-2 border border-slate-200 dark:border-slate-800">Goodfellow Deep Learning</td><td class="p-2 border border-slate-200 dark:border-slate-800"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 rounded-xl p-3 text-sm text-slate-700 dark:text-slate-300">
+                            <strong class="text-amber-700 dark:text-amber-300">ANOMALÍA:</strong> Si se agrega un 3er libro a Bases de Datos, se deben insertar 2 filas nuevas (una por cada profesor). Si el curso tiene 10 profesores y 10 libros → <strong>&iexcl;100 filas en la tabla para solo 20 hechos reales!</strong>
+                        </div>
                     </div>
 
                     <h4 class="font-bold text-slate-900 dark:text-white mt-6 mb-2">Descomposición sin Pérdidas a 4FN:</h4>
@@ -436,23 +509,42 @@ Si el curso tiene 10 profesores y 10 libros -> ¡100 filas en la tabla para solo
                         Teorema de Fagin: $R(A, B, C)$ se descompone sin pérdida en $R_1(A, B)$ y $R_2(A, C)$ si y solo si $A \twoheadrightarrow B \mid C$.
                     </p>
 
-                    <!-- ASCII DIAGRAM: 4FN Solution -->
-                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-xs overflow-x-auto shadow-inner mb-6">
-                        <div class="text-emerald-400 font-bold mb-2">/* ESQUEMA FINAL 4FN: Desacoplamiento de Hechos Multivaluados */</div>
-<pre>
-1. TABLA: Curso_Profesor (Curso, Profesor)           2. TABLA: Curso_Libro (Curso, Libro_Texto)
-   PK: (Curso, Profesor)                               PK: (Curso, Libro_Texto)
-
-   +--------------------+-------------------+          +--------------------+-------------------------------+
-   | Curso              | Profesor          |          | Curso              | Libro_Texto                   |
-   +--------------------+-------------------+          +--------------------+-------------------------------+
-   | Bases de Datos     | Ing. Garcia       |          | Bases de Datos     | Silberschatz Database Sys     |
-   | Bases de Datos     | Dra. Mendoza      |          | Bases de Datos     | Garcia-Molina Complete Book   |
-   | Inteligencia Art.  | Dr. Alva          |          | Inteligencia Art.  | Russell & Norvig AI Modern    |
-   +--------------------+-------------------+          | Inteligencia Art.  | Goodfellow Deep Learning      |
-                                                       +--------------------+-------------------------------+
-   (Total: 3 filas)                                    (Total: 4 filas) -> Espacio O(N + M) vs O(N * M)
-</pre>
+                    <!-- Diagrama: 4FN Solution -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm mb-6">
+                        <div class="inline-block font-mono font-bold text-emerald-600 dark:text-emerald-400 text-xs mb-4">/* ESQUEMA FINAL 4FN: Desacoplamiento de Hechos Multivaluados */</div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            <div class="border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+                                <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">1. TABLA: Curso_Profesor (Curso, Profesor)</div>
+                                <div class="text-xs text-slate-600 dark:text-slate-400 font-mono mb-2">PK: (Curso, Profesor)</div>
+                                <table class="w-full text-left border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-300 font-mono text-sm"><th class="p-2 border border-slate-200 dark:border-slate-800">Curso</th><th class="p-2 border border-slate-200 dark:border-slate-800">Profesor</th></tr>
+                                    </thead>
+                                    <tbody class="font-mono text-sm text-slate-600 dark:text-slate-400">
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Bases de Datos</td><td class="p-2 border border-slate-200 dark:border-slate-800">Ing. Garcia</td></tr>
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Bases de Datos</td><td class="p-2 border border-slate-200 dark:border-slate-800">Dra. Mendoza</td></tr>
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Inteligencia Art.</td><td class="p-2 border border-slate-200 dark:border-slate-800">Dr. Alva</td></tr>
+                                    </tbody>
+                                </table>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-2 font-mono">(Total: 3 filas)</div>
+                            </div>
+                            <div class="border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+                                <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">2. TABLA: Curso_Libro (Curso, Libro_Texto)</div>
+                                <div class="text-xs text-slate-600 dark:text-slate-400 font-mono mb-2">PK: (Curso, Libro_Texto)</div>
+                                <table class="w-full text-left border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-300 font-mono text-sm"><th class="p-2 border border-slate-200 dark:border-slate-800">Curso</th><th class="p-2 border border-slate-200 dark:border-slate-800">Libro_Texto</th></tr>
+                                    </thead>
+                                    <tbody class="font-mono text-sm text-slate-600 dark:text-slate-400">
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Bases de Datos</td><td class="p-2 border border-slate-200 dark:border-slate-800">Silberschatz Database Sys</td></tr>
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Bases de Datos</td><td class="p-2 border border-slate-200 dark:border-slate-800">Garcia-Molina Complete Book</td></tr>
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Inteligencia Art.</td><td class="p-2 border border-slate-200 dark:border-slate-800">Russell &amp; Norvig AI Modern</td></tr>
+                                        <tr><td class="p-2 border border-slate-200 dark:border-slate-800">Inteligencia Art.</td><td class="p-2 border border-slate-200 dark:border-slate-800">Goodfellow Deep Learning</td></tr>
+                                    </tbody>
+                                </table>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-2 font-mono">(Total: 4 filas) → Espacio O(N + M) vs O(N * M)</div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -467,28 +559,31 @@ Si el curso tiene 10 profesores y 10 libros -> ¡100 filas en la tabla para solo
                         La <strong>5FN</strong> trata con <strong>Dependencias de Join (Join Dependencies - JD)</strong>. Una relación está en 5FN si no puede descomponerse en varias relaciones más pequeñas sin perder información mediante joins, a menos que todas las tablas resultantes contengan una clave candidata de la tabla original.
                     </p>
 
-                    <!-- ASCII DIAGRAM: 5FN Ternary Cyclic Join -->
-                    <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 font-mono text-xs overflow-x-auto shadow-inner my-4">
-                        <div class="text-indigo-400 font-bold mb-2">/* DIAGRAMA ASCII: Dependencia de Join Ternaria Cíclica (5FN) */</div>
-<pre>
-ESCENARIO: Proveedor - Producto - Proyecto
-REGLA RESTRINGIDA CÍCLICA:
-Un Proveedor S suministra el Producto P al Proyecto J SOLO SI:
-  1. S suministra P (en general).
-  2. P es utilizado por J.
-  3. S es proveedor aprobado del Proyecto J.
-
-                    [ S: Proveedor ]
-                       /         \
-          (S suministra P)     (S aprobado en J)
-                     /             \
-            [ P: Producto ] ------- [ J: Proyecto ]
-                       (P usado en J)
-
-Si intentamos descomponer en solo 2 tablas binarias, al hacer JOIN obtenemos tuplas espurias (falsas).
-Solo se reconstruye exactamente si se descompone en 3 tablas:
-  R1(Proveedor, Producto)  ⋈  R2(Producto, Proyecto)  ⋈  R3(Proveedor, Proyecto)
-</pre>
+                    <!-- Diagrama: 5FN Ternary Cyclic Join -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm my-4">
+                        <div class="inline-block font-mono font-bold text-indigo-600 dark:text-indigo-400 text-xs mb-3">/* Diagrama: Dependencia de Join Ternaria Cíclica (5FN) */</div>
+                        <div class="font-mono text-sm text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 bg-slate-50 dark:bg-slate-950 mb-3">ESCENARIO: Proveedor - Producto - Proyecto</div>
+                        <div class="bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-900/40 rounded-xl p-3 mb-3">
+                            <div class="text-sm font-bold text-indigo-700 dark:text-indigo-300 mb-1">Regla Restringida Cíclica</div>
+                            <p class="text-sm text-slate-700 dark:text-slate-300">Un Proveedor S suministra el Producto P al Proyecto J <strong>SOLO SI</strong>:</p>
+                            <ol class="list-decimal list-inside text-sm text-slate-700 dark:text-slate-300 mt-1 space-y-0.5">
+                                <li>S suministra P (en general).</li>
+                                <li>P es utilizado por J.</li>
+                                <li>S es proveedor aprobado del Proyecto J.</li>
+                            </ol>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 mb-3 text-center">
+                            <div class="border-2 border-slate-300 dark:border-slate-700 rounded-xl px-2 py-3 bg-slate-100 dark:bg-slate-950"><div class="font-mono font-bold text-sm text-slate-800 dark:text-slate-200">S: Proveedor</div><div class="text-sm text-slate-500 dark:text-slate-400 mt-1">(S suministra P)</div></div>
+                            <div class="self-center text-slate-400 dark:text-slate-500 text-sm">──</div>
+                            <div class="border-2 border-slate-300 dark:border-slate-700 rounded-xl px-2 py-3 bg-slate-100 dark:bg-slate-950"><div class="font-mono font-bold text-sm text-slate-800 dark:text-slate-200">P: Producto</div><div class="text-sm text-slate-500 dark:text-slate-400 mt-1">(P usado en J)</div></div>
+                            <div class="text-slate-400 dark:text-slate-500 text-sm">└(S aprobado en J)</div>
+                            <div class="self-center text-slate-400 dark:text-slate-500 text-sm">──</div>
+                            <div class="border-2 border-slate-300 dark:border-slate-700 rounded-xl px-2 py-3 bg-slate-100 dark:bg-slate-950"><div class="font-mono font-bold text-sm text-slate-800 dark:text-slate-200">J: Proyecto</div></div>
+                        </div>
+                        <div class="bg-slate-100 dark:bg-slate-950 rounded-xl p-3 text-sm text-slate-700 dark:text-slate-300">
+                            <p>Si intentamos descomponer en solo 2 tablas binarias, al hacer JOIN obtenemos <strong>tuplas espurias (falsas)</strong>. Solo se reconstruye exactamente si se descompone en 3 tablas:</p>
+                            <p class="font-mono mt-1"><strong>R1</strong>(Proveedor, Producto) ⋈ <strong>R2</strong>(Producto, Proyecto) ⋈ <strong>R3</strong>(Proveedor, Proyecto)</p>
+                        </div>
                     </div>
 
                     <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-6 mb-2">DKNF: Domain-Key Normal Form (El Límite Teórico)</h3>
@@ -550,7 +645,7 @@ Solo se reconstruye exactamente si se descompone en 3 tablas:
                             <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
                                 Precalcula joins complejos en un snapshot físico indexado sin bloquear lecturas concurrentes mediante `REFRESH MATERIALIZED VIEW CONCURRENTLY`.
                             </p>
-<pre class="bg-slate-950 text-slate-200 p-4 rounded-xl font-mono text-xs overflow-x-auto"><code class="language-sql">-- Crear vista materializada desnormalizada para reportes de clientes
+<pre class="bg-slate-950 text-slate-200 p-4 rounded-xl font-mono text-sm overflow-x-auto"><code class="language-sql">-- Crear vista materializada desnormalizada para reportes de clientes
 CREATE MATERIALIZED VIEW mv_resumen_cliente_ventas AS
 SELECT 
     c.cliente_id,
@@ -577,7 +672,7 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY mv_resumen_cliente_ventas;
                             <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
                                 En lugar de crear 5 tablas 4FN para atributos variables (especificaciones técnicas, tags, metadatos), se almacena un payload semiestructurado `JSONB` indexado con GIN `jsonb_path_ops`.
                             </p>
-<pre class="bg-slate-950 text-slate-200 p-4 rounded-xl font-mono text-xs overflow-x-auto"><code class="language-sql">CREATE TABLE productos (
+<pre class="bg-slate-950 text-slate-200 p-4 rounded-xl font-mono text-sm overflow-x-auto"><code class="language-sql">CREATE TABLE productos (
     producto_id BIGSERIAL PRIMARY KEY,
     sku VARCHAR(64) UNIQUE NOT NULL,
     nombre VARCHAR(255) NOT NULL,
@@ -607,7 +702,7 @@ WHERE especificaciones @> '{"color": "Titanio", "ram_gb": 32}';
                             Observe cómo se transforman las estructuras tabulares al pasar por BCNF, 4FN y la estrategia de consolidación desnormalizada.
                         </p>
                         <div class="flex flex-col items-center gap-4">
-                            <canvas id="canvas_09" width="700" height="240" class="w-full max-w-full bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"></canvas>
+                            <canvas id="canvas_09" width="700" height="240" class="w-full max-w-full bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm" role="img" aria-label="Estados de Normalización y Desnormalización"></canvas>
                             <div id="controls_09" class="flex gap-2"></div>
                         </div>
                     </div>
@@ -676,9 +771,9 @@ WHERE especificaciones @> '{"color": "Titanio", "ram_gb": 32}';
             <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
                 <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación del Curso</h3>
                 <ul class="space-y-3 text-sm">
-                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice Principal</a></li>
-                    <li><a href="semana_08.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">← Semana 08: Examen Parcial</a></li>
-                    <li><a href="semana_10.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 10: JOINs y Subconsultas →</a></li>
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition shadow-sm">📂 Índice Principal</a></li>
+                    <li><a href="semana_08.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition shadow-sm">← Semana 08: Examen Parcial</a></li>
+                    <li><a href="semana_10.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition shadow-sm">Semana 10: JOINs y Subconsultas →</a></li>
                 </ul>
             </div>
         </aside>
@@ -686,32 +781,38 @@ WHERE especificaciones @> '{"color": "Titanio", "ram_gb": 32}';
 
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Índice</span>
         </a>
-        <a href="semana_08.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_08.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Anterior</span>
         </a>
-        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Lector</span>
+        </button>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg aria-hidden="true" id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Tema</span>
         </button>
-        <a href="semana_10.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_10.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
-            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
+            <span class="text-sm font-bold tracking-wide mt-1">Siguiente</span>
         </a>
     </nav>
 
@@ -740,6 +841,11 @@ WHERE especificaciones @> '{"color": "Titanio", "ram_gb": 32}';
         }
 
         updateToggleText();
+        function syncThemeColor() {
+            const tcm = document.getElementById('theme-color-meta');
+            if (tcm) tcm.setAttribute('content', document.documentElement.classList.contains('dark') ? '#0A0A0C' : '#FEF7FF');
+        }
+        syncThemeColor();
 
         const toggleTheme = () => {
             if (document.documentElement.classList.contains('dark')) {
@@ -750,6 +856,7 @@ WHERE especificaciones @> '{"color": "Titanio", "ram_gb": 32}';
                 localStorage.setItem('color-theme', 'dark');
             }
             updateToggleText();
+            syncThemeColor();
         };
 
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);

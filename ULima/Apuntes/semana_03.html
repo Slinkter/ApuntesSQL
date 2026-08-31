@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" id="theme-color-meta" content="#FEF7FF">
     <title>Semana 03 - Bases de Datos Relacionales: Modelo Formal y Lenguaje DDL</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,11 +33,17 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Outfit', sans-serif !important;
             letter-spacing: -0.02em;
+            text-wrap: balance;
         }
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.625;
             letter-spacing: -0.011em;
+        }
+        [id] { scroll-margin-top: 5rem; }
+        :is(table) { font-variant-numeric: tabular-nums; }
+        html.dark {
+            color-scheme: dark;
         }
         html.dark body {
             color: #cbd5e1 !important;
@@ -56,126 +63,152 @@
         }
     </script>
 
-    <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style id="reader-mode-style">
+        html.reader-mode { font-size: 106.25%; }
+        html.reader-mode header,
+        html.reader-mode aside,
+        html.reader-mode nav[class*="fixed"] { display: none !important; }
+        html.reader-mode #theme-toggle { display: flex !important; }
+        html.reader-mode #reader-toggle { display: flex !important; }
+        html.reader-mode body { line-height: 1.75; text-wrap: pretty; }
+        html.reader-mode main { width: 100% !important; max-width: 72ch; margin-inline: auto; }
+    </style>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            mermaid.initialize({
-                startOnLoad: true,
-                theme: isDark ? 'dark' : 'default',
-                securityLevel: 'loose',
-                flowchart: { useMaxWidth: true, htmlLabels: true }
+        (function () {
+            if (localStorage.getItem('reader-mode') === 'on' && !document.documentElement.classList.contains('reader-mode')) {
+                document.documentElement.classList.add('reader-mode');
+            }
+            function syncReaderButtons() {
+                var on = document.documentElement.classList.contains('reader-mode');
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+            }
+            function toggleReaderMode() {
+                var on = document.documentElement.classList.toggle('reader-mode');
+                localStorage.setItem('reader-mode', on ? 'on' : 'off');
+                syncReaderButtons();
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#reader-toggle, #reader-toggle-m3').forEach(function (btn) {
+                    if (btn) btn.addEventListener('click', toggleReaderMode);
+                });
+                syncReaderButtons();
             });
-        });
+        })();
     </script>
 </head>
 <body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
+    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+    </button>
+    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
+        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
         </svg>
-        <svg id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
         </svg>
     </button>
 
     <!-- Header (M3 Tonal App Bar) -->
-    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition-all">
+    <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                     Semana 03: Bases de Datos Relacionales: Modelo Formal y Lenguaje DDL
                 </h1>
-                <p class="text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
                     Fundamentos de Codd • Integridad Declarativa • PostgreSQL 17 • Caso Mueblería • Universidad de Lima
                 </p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">&larr; Índice</a>
+            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
         </div>
     </header>
 
     <!-- Layout Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-8">
         <!-- Main Content -->
-        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24">
+        <main class="w-full lg:w-3/4 flex flex-col order-1 lg:order-2 pb-20 md:pb-24" id="main">
 
     <!-- M3 Step-by-Step Diagram -->
     <div class="my-6">
         <div class="bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-6 shadow-sm">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2" id="diagram-title">
                 📌 Proceso Paso a Paso: Verificación de Integridad Referencial y Restricciones DDL
             </h3>
             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
                 Cómo valida el motor relacional las restricciones de claves primarias, foráneas y checks durante operaciones DDL/DML.
             </p>
             <div class="overflow-x-auto p-2 bg-white dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800/80">
-                <svg viewBox="0 0 800 130" class="w-full h-auto text-slate-800 dark:text-slate-200" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="800" height="130" rx="16" class="fill-slate-100/50 dark:fill-slate-900/30" />
-                  <g transform="translate(10, 15)">
-                    <!-- Paso 1 -->
-                    <rect x="0" y="20" width="165" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                    <text x="82.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">1. Inserción en Hijo</text>
-                    <text x="82.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Provee FK id_cliente = 405</text>
-                    
-                    <path d="M 165 50 L 195 50" stroke="#6366f1" stroke-width="2" fill="none" />
-                    <polygon points="195,50 188,46 188,54" fill="#6366f1" />
-
-                    <!-- Paso 2 -->
-                    <rect x="200" y="20" width="175" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                    <text x="287.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">2. Búsqueda en Padre</text>
-                    <text x="287.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Index Scan en PK de Cliente</text>
-
-                    <path d="M 375 50 L 405 50" stroke="#6366f1" stroke-width="2" fill="none" />
-                    <polygon points="405,50 398,46 398,54" fill="#6366f1" />
-
-                    <!-- Paso 3 -->
-                    <rect x="410" y="20" width="175" height="60" rx="10" class="fill-indigo-50 dark:fill-slate-800 stroke-indigo-500 dark:stroke-indigo-400" stroke-width="2" />
-                    <text x="497.5" y="45" text-anchor="middle" class="fill-indigo-700 dark:fill-indigo-400 font-bold text-xs">3. Evaluación de Dominio</text>
-                    <text x="497.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Validación CHECK y NOT NULL</text>
-
-                    <path d="M 585 50 L 615 50" stroke="#10b981" stroke-width="2" fill="none" />
-                    <polygon points="615,50 608,46 608,54" fill="#10b981" />
-
-                    <!-- Paso 4 -->
-                    <rect x="620" y="20" width="165" height="60" rx="10" class="fill-emerald-50 dark:fill-slate-800 stroke-emerald-500 dark:stroke-emerald-400" stroke-width="2" />
-                    <text x="702.5" y="45" text-anchor="middle" class="fill-emerald-700 dark:fill-emerald-400 font-bold text-xs">4. Inserción Persistida</text>
-                    <text x="702.5" y="60" text-anchor="middle" class="fill-slate-500 dark:fill-slate-400 text-[9px]">Escritura en Bloque + WAL</text>
-                  </g>
-                </svg>
+                <div class="flex flex-col md:flex-row md:items-stretch gap-3">
+                    <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">1. Inserción en Hijo</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Provee FK id_cliente = 405</p>
+                    </div>
+                    <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                    <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">2. Búsqueda en Padre</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Index Scan en PK de Cliente</p>
+                    </div>
+                    <div class="flex items-center justify-center text-xl text-indigo-500 dark:text-indigo-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                    <div class="flex-1 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-indigo-700 dark:text-indigo-300">3. Evaluación de Dominio</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Validación CHECK y NOT NULL</p>
+                    </div>
+                    <div class="flex items-center justify-center text-xl text-emerald-500 dark:text-emerald-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+                    <div class="flex-1 rounded-xl border-2 border-emerald-500/60 dark:border-emerald-400/60 bg-white dark:bg-slate-950 p-3">
+                        <p class="text-sm font-bold text-emerald-700 dark:text-emerald-300">4. Inserción Persistida</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Escritura en Bloque + WAL</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- M3 Conceptual Map Minimap (Mermaid.js) -->
+    <!-- M3 Conceptual Map Minimap (Native Responsive HTML/CSS) -->
     <div class="my-6">
-        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition-all duration-300">
+        <details class="group bg-indigo-50/30 dark:bg-indigo-950/10 border border-indigo-100/50 dark:border-indigo-900/30 rounded-3xl p-5 shadow-sm [&_summary::-webkit-details-marker]:hidden transition duration-300">
             <summary class="flex justify-between items-center cursor-pointer font-bold text-slate-900 dark:text-white list-none">
                 <span class="flex items-center gap-2 text-primary dark:text-primary-dark">
                     🗺️ Mapa Conceptual: El Modelo Relacional y DDL
                 </span>
                 <span class="transition group-open:rotate-180">
-                    <svg class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg aria-hidden="true" class="h-5 w-5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </span>
             </summary>
-            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 overflow-x-auto flex justify-center bg-white dark:bg-slate-950 p-4 rounded-2xl">
-                <pre class="mermaid bg-transparent">
-graph TD
-    CODD[Modelo Relacional Formal de Codd] --> REL[Relación = Tabla de 2D]
-    CODD --> TUP[Tupla = Fila / Registro]
-    CODD --> ATR[Atributo = Columna / Campo]
-    
-    REL --> RESTR[Restricciones de Integridad]
-    RESTR --> PK[Integridad de Entidad: Primary Key NOT NULL & UNIQUE]
-    RESTR --> FK[Integridad Referencial: Foreign Key]
-    RESTR --> DOM[Integridad de Dominio: CHECK, NOT NULL, DEFAULT]
-    
-    FK --> ACT[Acciones Referenciales: CASCADE, RESTRICT, SET NULL, NO ACTION]
-    
-    DDL[Lenguaje DDL] --> CREATE[CREATE TABLE / VIEW / INDEX / SCHEMA]
-    DDL --> ALTER[ALTER TABLE: ADD, DROP, ALTER COLUMN, ADD CONSTRAINT]
-    DDL --> DROP[DROP TABLE CASCADE / RESTRICT]
-                </pre>
+            <div class="mt-4 pt-4 border-t border-indigo-100/40 dark:border-indigo-900/20 space-y-4">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3">📐 Constructos del Modelo Relacional (Codd)</div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400 block mb-1">Relación (Tabla)</span>
+                            <span class="text-slate-600 dark:text-slate-400">Conjunto de tuplas sin duplicados y sin orden intrínseco.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400 block mb-1">Tupla (Fila)</span>
+                            <span class="text-slate-600 dark:text-slate-400">Instancia concreta de una entidad del minimundo.</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400 block mb-1">Atributo (Columna)</span>
+                            <span class="text-slate-600 dark:text-slate-400">Propiedad atómica tipada con dominio restringido.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div class="p-4 rounded-2xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                        <div class="font-bold text-amber-700 dark:text-amber-400 mb-1">🔒 Restricciones de Integridad</div>
+                        <p class="text-slate-600 dark:text-slate-400"><strong>PK:</strong> Identidad única | <strong>FK:</strong> Integridad referencial (CASCADE / RESTRICT / SET NULL) | <strong>CHECK:</strong> Validación de reglas de negocio.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-emerald-900/30">
+                        <div class="font-bold text-emerald-700 dark:text-emerald-400 mb-1">🛠️ Comandos DDL Fundamentales</div>
+                        <p class="text-slate-600 dark:text-slate-400"><code>CREATE TABLE</code> (Definir estructura) | <code>ALTER TABLE</code> (Mutar columnas/checks) | <code>DROP TABLE</code> (Eliminación).</p>
+                    </div>
+                </div>
             </div>
         </details>
     </div>
@@ -185,16 +218,16 @@ graph TD
         <div class="bg-indigo-50/60 dark:bg-indigo-950/20 rounded-3xl p-6 border border-indigo-100 dark:border-indigo-900/40 shadow-sm">
             <div class="flex items-center gap-3 mb-3">
                 <div class="p-2 bg-indigo-600 text-white rounded-xl">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </div>
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Objetivos Pedagógicos y Competencias de Definición de Datos</h3>
             </div>
             <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-slate-700 dark:text-slate-300 list-disc list-inside m-0">
                 <li>Formalizar matemáticamente los constructos del modelo relacional: Producto Cartesiano, Relación, Grado y Cardinalidad.</li>
                 <li>Dominar la teoría de claves: Superclaves, Candidatas, Primarias (PK) y Foráneas (FK).</li>
-                <li>Configurar acciones de integridad referencial: <code class="font-mono text-xs">CASCADE</code>, <code class="font-mono text-xs">RESTRICT</code>, <code class="font-mono text-xs">NO ACTION</code>, <code class="font-mono text-xs">SET NULL</code>.</li>
+                <li>Configurar acciones de integridad referencial: <code class="font-mono text-sm">CASCADE</code>, <code class="font-mono text-sm">RESTRICT</code>, <code class="font-mono text-sm">NO ACTION</code>, <code class="font-mono text-sm">SET NULL</code>.</li>
                 <li>Conocer el sistema exhaustivo de tipos de datos SQL ANSI y PostgreSQL 16/17 (incluyendo JSONB, UUID y pgvector).</li>
-                <li>Escribir sentencias DDL industriales (<code class="font-mono text-xs">CREATE</code>, <code class="font-mono text-xs">ALTER</code>, <code class="font-mono text-xs">DROP</code>) con restricciones nombradas explícitamente.</li>
+                <li>Escribir sentencias DDL industriales (<code class="font-mono text-sm">CREATE</code>, <code class="font-mono text-sm">ALTER</code>, <code class="font-mono text-sm">DROP</code>) con restricciones nombradas explícitamente.</li>
                 <li>Implementar el caso de estudio empresarial de la Mueblería Industrial mediante un esquema relacional normalizado.</li>
             </ul>
         </div>
@@ -315,25 +348,24 @@ graph TD
             <!-- Jerarquía de Claves -->
             <div class="my-6">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Jerarquía Conceptual de Claves Relacionales</div>
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ SUPERCLAVE (Superkey):                                                      │
-│ Cualquier subconjunto de atributos {A1, A2, ...} que identifica unívocamente │
-│ a cada tupla en la relación. (Ej: {DNI, Email, Nombre, Teléfono})           │
-│                                                                             │
-│   ┌─────────────────────────────────────────────────────────────────────┐   │
-│   │ CLAVE CANDIDATA (Candidate Key):                                    │   │
-│   │ Una superclave MINIMAL (sin atributos redundantes).                 │   │
-│   │ (Ej: {DNI} es candidata; {Email} es candidata)                      │   │
-│   │                                                                     │   │
-│   │   ┌───────────────────────────────┐ ┌───────────────────────────┐   │   │
-│   │   │ CLAVE PRIMARIA (Primary Key)  │ │ CLAVE ALTERNATIVA         │   │   │
-│   │   │ Elegida formalmente por el    │ │ Las demás claves          │   │   │
-│   │   │ arquitecto como identificador.│ │ candidatas no elegidas.   │   │   │
-│   │   │ (Restricción: NOT NULL UNIQUE)│ │ (Restricción: UNIQUE)     │   │   │
-│   │   └───────────────────────────────┘ └───────────────────────────┘   │   │
-│   └─────────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────┘</pre>
+                <div class="border-2 border-slate-300 dark:border-slate-700 rounded-2xl p-4 bg-white dark:bg-slate-900">
+                    <div class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">SUPERCLAVE (Superkey)</div>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Cualquier subconjunto de atributos {A1, A2, ...} que identifica unívocamente a cada tupla en la relación. <span class="font-mono text-sm">(Ej: {DNI, Email, Nombre, Teléfono})</span></p>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 rounded-2xl p-4">
+                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">CLAVE CANDIDATA (Candidate Key)</div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Una superclave <strong>MINIMAL</strong> (sin atributos redundantes). <span class="font-mono text-sm">(Ej: {DNI} es candidata; {Email} es candidata)</span></p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="border-2 border-indigo-300 dark:border-indigo-800 bg-indigo-50/50 dark:bg-indigo-950/20 rounded-xl p-3">
+                                <div class="text-sm font-bold text-indigo-700 dark:text-indigo-300">CLAVE PRIMARIA (Primary Key)</div>
+                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Elegida formalmente por el arquitecto como identificador. <span class="font-mono text-sm">(Restricción: NOT NULL UNIQUE)</span></p>
+                            </div>
+                            <div class="border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-xl p-3">
+                                <div class="text-sm font-bold text-emerald-700 dark:text-emerald-300">CLAVE ALTERNATIVA</div>
+                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Las demás claves candidatas no elegidas. <span class="font-mono text-sm">(Restricción: UNIQUE)</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Acciones Referenciales -->
@@ -448,7 +480,7 @@ graph TD
 
             <div class="relative my-6">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Ejemplo Integral de DDL Profesional con Constraints Nombrados</div>
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed"><code class="language-sql">-- 1. CREACIÓN DE EXTENSIÓN Y SCHEMA
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="language-sql">-- 1. CREACIÓN DE EXTENSIÓN Y SCHEMA
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE SCHEMA IF NOT EXISTS ventas;
 
@@ -522,59 +554,123 @@ CREATE INDEX idx_cliente_email_lower ON ventas.cliente (LOWER(email));</code></p
                 A continuación se presenta el esquema relacional normalizado para una empresa de manufactura y comercialización de muebles, integrando producción, inventarios, compras y ventas.
             </p>
 
-            <!-- Diagrama ASCII del Modelo -->
+<!-- Diagrama del Modelo -->
             <div class="my-6">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Diagrama Entidad-Relación Relacional (DER) de la Mueblería</div>
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed">
-┌────────────────────┐          ┌───────────────────────┐          ┌────────────────────┐
-│   LINEA_PRODUCTO   │ 1      N │        PRODUCTO       │ N      M │    MATERIA_PRIMA   │
-│────────────────────│──────────│───────────────────────│──────────│────────────────────│
-│ * nombre_linea(PK) │          │ * id_producto (PK)    │          │ * cod_mat_prima(PK)│
-│   meta_venta       │          │   nombre_linea (FK)   │          │   nombre_mat_prima │
-└────────────────────┘          │   stock, precio, costo│          │   cantidad, ubicac │
-                                └───────────┬───────────┘          └─────────┬──────────┘
-                                            │ 1                              │ 1
-                                            │ N                              │ N
-                                ┌───────────▼───────────┐          ┌─────────▼──────────┐
-                                │   PRODUCTO_ORDENADO   │          │ LINEA_ORDEN_TRABAJO│
-                                │───────────────────────│          │────────────────────│
-                                │ * numero_orden (PK,FK)│          │ * id_producto(PK,FK│
-                                │ * id_producto (PK,FK) │          │ * numero_ot (PK,FK)│
-                                │   cantidad_ordenada   │          │ * cod_mat_prima(FK)│
-                                └───────────▲───────────┘          └─────────▲──────────┘
-                                            │ N                              │ N
-                                            │ 1                              │ 1
-┌────────────────────┐ 1      N ┌───────────┴───────────┐ 1      N ┌─────────┴──────────┐
-│      CLIENTE       │──────────│     ORDEN_PEDIDO      │──────────│    ORDEN_TRABAJO   │
-│────────────────────│          │───────────────────────│          │────────────────────│
-│ * id_cliente (PK)  │          │ * numero_orden (PK)   │          │ * numero_ot (PK)   │
-│   nombre, dir, zip │          │   id_cliente (FK)     │          │   numero_orden (FK)│
-└────────────────────┘          │   fecha_colocacion    │          └─────────┬──────────┘
-                                └───────────┬───────────┘                    │ N
-                                            │ 1                              │ M
-                                            │ 1                    ┌─────────▼──────────┐
-                                ┌───────────▼───────────┐          │ ASIGNACION_TRABAJO │
-                                │        FACTURA        │          │────────────────────│
-                                │───────────────────────│          │ * numero_ot (PK,FK)│
-                                │ * numero_factura (PK) │          │ * cod_ct (PK,FK)   │
-                                │   numero_orden (FK)   │          └─────────┬──────────┘
-                                │   fecha_factura       │                    │ N
-                                └───────────┬───────────┘                    │ 1
-                                            │ 1                    ┌─────────▼──────────┐
-                                            │ N                    │   CENTRO_TRABAJO   │
-                                ┌───────────▼───────────┐          │────────────────────│
-                                │         PAGO          │          │ * cod_ct (PK)      │
-                                │───────────────────────│          │   nombre, ubicacion│
-                                │ * id_pago (PK)        │          └────────────────────┘
-                                │   numero_factura (FK) │
-                                │   fecha_pago, monto   │
-                                └───────────────────────┘</pre>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">LINEA_PRODUCTO</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* nombre_linea (PK)</li>
+                            <li>&nbsp;&nbsp;meta_venta</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">PRODUCTO</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* id_producto (PK)</li>
+                            <li>&nbsp;&nbsp;nombre_linea (FK)</li>
+                            <li>&nbsp;&nbsp;stock, precio, costo</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">MATERIA_PRIMA</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* cod_mat_prima (PK)</li>
+                            <li>&nbsp;&nbsp;nombre_mat_prima</li>
+                            <li>&nbsp;&nbsp;cantidad, ubicac</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">PRODUCTO_ORDENADO</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* numero_orden (PK,FK)</li>
+                            <li>* id_producto (PK,FK)</li>
+                            <li>&nbsp;&nbsp;cantidad_ordenada</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">ORDEN_PEDIDO</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* numero_orden (PK)</li>
+                            <li>&nbsp;&nbsp;id_cliente (FK)</li>
+                            <li>&nbsp;&nbsp;fecha_colocacion</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">CLIENTE</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* id_cliente (PK)</li>
+                            <li>&nbsp;&nbsp;nombre, dir, zip</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">FACTURA</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* numero_factura (PK)</li>
+                            <li>&nbsp;&nbsp;numero_orden (FK)</li>
+                            <li>&nbsp;&nbsp;fecha_factura</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">PAGO</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* id_pago (PK)</li>
+                            <li>&nbsp;&nbsp;numero_factura (FK)</li>
+                            <li>&nbsp;&nbsp;fecha_pago, monto</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">LINEA_ORDEN_TRABAJO</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* id_producto (PK,FK)</li>
+                            <li>* numero_ot (PK,FK)</li>
+                            <li>&nbsp;&nbsp;cod_mat_prima (FK)</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">ORDEN_TRABAJO</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* numero_ot (PK)</li>
+                            <li>&nbsp;&nbsp;numero_orden (FK)</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">ASIGNACION_TRABAJO</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* numero_ot (PK,FK)</li>
+                            <li>* cod_ct (PK,FK)</li>
+                        </ul>
+                    </div>
+                    <div class="border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 rounded-xl p-3">
+                        <div class="font-mono text-sm font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-800 pb-1 mb-2">CENTRO_TRABAJO</div>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-0.5">
+                            <li>* cod_ct (PK)</li>
+                            <li>&nbsp;&nbsp;nombre, ubicacion</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-slate-100 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-200 dark:border-slate-800">
+                    <div class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Relaciones (cardinalidades del DER)</div>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 text-sm text-slate-700 dark:text-slate-300">
+                        <li>LINEA_PRODUCTO <span class="font-mono text-sm">(1)</span> ── <span class="font-mono text-sm">(N)</span> PRODUCTO</li>
+                        <li>PRODUCTO <span class="font-mono text-sm">(N)</span> ── <span class="font-mono text-sm">(M)</span> MATERIA_PRIMA (vía LINEA_ORDEN_TRABAJO)</li>
+                        <li>PRODUCTO <span class="font-mono text-sm">(1)</span> ── <span class="font-mono text-sm">(N)</span> PRODUCTO_ORDENADO</li>
+                        <li>MATERIA_PRIMA <span class="font-mono text-sm">(1)</span> ── <span class="font-mono text-sm">(N)</span> LINEA_ORDEN_TRABAJO</li>
+                        <li>ORDEN_PEDIDO <span class="font-mono text-sm">(1)</span> ── <span class="font-mono text-sm">(N)</span> PRODUCTO_ORDENADO</li>
+                        <li>CLIENTE <span class="font-mono text-sm">(1)</span> ── <span class="font-mono text-sm">(N)</span> ORDEN_PEDIDO</li>
+                        <li>ORDEN_PEDIDO <span class="font-mono text-sm">(1)</span> ── <span class="font-mono text-sm">(N)</span> FACTURA <span class="font-mono text-sm">(1)</span> ── <span class="font-mono text-sm">(N)</span> PAGO</li>
+                        <li>ORDEN_TRABAJO <span class="font-mono text-sm">(1)</span> ── <span class="font-mono text-sm">(N)</span> LINEA_ORDEN_TRABAJO</li>
+                        <li>ORDEN_TRABAJO <span class="font-mono text-sm">(1)</span> ── <span class="font-mono text-sm">(N)</span> ASIGNACION_TRABAJO</li>
+                        <li>CENTRO_TRABAJO <span class="font-mono text-sm">(1)</span> ── <span class="font-mono text-sm">(N)</span> ASIGNACION_TRABAJO</li>
+                    </ul>
+                </div>
             </div>
 
             <!-- DDL Completo del Caso -->
             <div class="relative my-6">
                 <div class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Script DDL PostgreSQL 16/17 Completo y Ejecutable</div>
-                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-xs leading-relaxed"><code class="language-sql">-- Tabla 1: Línea de Producto
+                <pre class="bg-slate-900 text-slate-100 dark:bg-black border border-slate-800 rounded-2xl p-5 overflow-x-auto font-mono text-sm leading-relaxed"><code class="language-sql">-- Tabla 1: Línea de Producto
 CREATE TABLE linea_producto (
     nombre_linea    VARCHAR(30) PRIMARY KEY,
     meta_venta      NUMERIC(12,2) NOT NULL CHECK (meta_venta >= 0.00)
@@ -697,7 +793,7 @@ CREATE TABLE linea_orden_trabajo (
         <section class="border-t border-slate-200 dark:border-slate-800 pt-8 mt-8 space-y-4">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span class="p-1.5 bg-amber-100 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </span>
                 💡 Tips del Profesor y Preguntas Clave de Examen
             </h2>
@@ -735,7 +831,7 @@ CREATE TABLE linea_orden_trabajo (
             <!-- Canvas Interactivo -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col items-center">
                 <div class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Simulación Visual Interactiva: Validación de Integridad Referencial</div>
-                <canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_03" width="800"></canvas>
+                <canvas class="max-w-full h-auto rounded-lg" height="360" id="canvas_03" width="800" role="img" aria-label="Validación de Integridad Referencial"></canvas>
                 <div class="mt-4 flex gap-2" id="controls_03"></div>
             </div>
         </section>
@@ -791,9 +887,9 @@ CREATE TABLE linea_orden_trabajo (
             <div class="hidden md:block bg-indigo-50/30 dark:bg-indigo-950/10 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 p-6">
                 <h3 class="text-xs font-bold tracking-wider text-primary dark:text-primary-dark uppercase mb-4">Navegación del Curso</h3>
                 <ul class="space-y-3 text-sm">
-                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition-all shadow-sm">📂 Índice General</a></li>
-                    <li><a href="semana_02.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-all shadow-sm">&larr; Semana 02</a></li>
-                    <li><a href="semana_04.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition-all shadow-sm">Semana 04 &rarr;</a></li>
+                    <li><a href="index.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-semibold transition shadow-sm">📂 Índice General</a></li>
+                    <li><a href="semana_02.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition shadow-sm">&larr; Semana 02</a></li>
+                    <li><a href="semana_04.html" class="flex items-center gap-2 py-2 px-3 rounded-xl bg-primary text-white dark:bg-primary-dark dark:text-slate-900 font-bold transition shadow-sm">Semana 04 &rarr;</a></li>
                 </ul>
             </div>
         </aside>
@@ -801,32 +897,38 @@ CREATE TABLE linea_orden_trabajo (
 
     <!-- M3 Bottom Navigation Bar (Mobile only) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md flex items-center justify-around px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] select-none">
-        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="index.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Índice</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Índice</span>
         </a>
-        <a href="semana_02.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_02.html" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Anterior</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Anterior</span>
         </a>
-        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation cursor-pointer">
-            <svg id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span class="text-sm font-semibold tracking-wide mt-1">Lector</span>
+        </button>
+        <button id="theme-toggle-m3" aria-label="Toggle theme" class="flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation cursor-pointer">
+            <svg aria-hidden="true" id="m3-theme-icon-light" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
             </svg>
-            <svg id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg aria-hidden="true" id="m3-theme-icon-dark" class="hidden w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
-            <span class="text-[9px] font-semibold tracking-wide mt-1">Tema</span>
+            <span class="text-sm font-semibold tracking-wide mt-1">Tema</span>
         </button>
-        <a href="semana_04.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition-all w-16 h-14 touch-manipulation">
-            <svg class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="semana_04.html" class="flex flex-col items-center justify-center text-indigo-600 dark:text-indigo-400 active:scale-95 hover:text-primary dark:hover:text-primary-dark transition w-16 h-14 touch-manipulation">
+            <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
             </svg>
-            <span class="text-[9px] font-bold tracking-wide mt-1">Siguiente</span>
+            <span class="text-sm font-bold tracking-wide mt-1">Siguiente</span>
         </a>
     </nav>
 
@@ -854,6 +956,11 @@ CREATE TABLE linea_orden_trabajo (
         }
 
         updateToggleText();
+        function syncThemeColor() {
+            const tcm = document.getElementById('theme-color-meta');
+            if (tcm) tcm.setAttribute('content', document.documentElement.classList.contains('dark') ? '#0A0A0C' : '#FEF7FF');
+        }
+        syncThemeColor();
 
         const toggleTheme = () => {
             if (document.documentElement.classList.contains('dark')) {
@@ -864,6 +971,7 @@ CREATE TABLE linea_orden_trabajo (
                 localStorage.setItem('color-theme', 'dark');
             }
             updateToggleText();
+            syncThemeColor();
         };
 
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
