@@ -1,6 +1,6 @@
-# Diagrama Entidad-Relación (ERD) — Base de Datos Northwind
+# Diagramas de la Base de Datos Northwind
 
-Este documento detalla el esquema relacional de la base de datos **Northwind**, sus cardinalidades y las relaciones entre tablas utilizando el formato **Mermaid**.
+Este documento detalla el esquema relacional de la base de datos **Northwind**, sus cardinalidades y las relaciones entre tablas utilizando diagramas **ERD** y **UML** en formato Mermaid.
 
 ---
 
@@ -133,7 +133,113 @@ erDiagram
 
 ---
 
-## 🔑 2. Tipos de Relaciones y Cardinalidad en Northwind
+## 📐 2. Diagrama UML de Clases (Mermaid)
+
+El siguiente diagrama muestra las tablas como **clases** con sus atributos, tipos de datos y relaciones usando notación UML.
+
+```mermaid
+classDiagram
+    class Customer {
+        +VARCHAR(5) customer_id PK
+        +VARCHAR(40) company_name
+        +VARCHAR(30) contact_name
+        +VARCHAR(30) contact_title
+        +VARCHAR(60) address
+        +VARCHAR(15) city
+        +VARCHAR(15) country
+    }
+    class Order {
+        +SMALLINT order_id PK
+        +VARCHAR(5) customer_id FK
+        +SMALLINT employee_id FK
+        +DATE order_date
+        +DATE required_date
+        +DATE shipped_date
+        +SMALLINT ship_via FK
+        +NUMERIC freight
+        +VARCHAR(40) ship_name
+        +VARCHAR(15) ship_country
+    }
+    class OrderDetail {
+        +SMALLINT order_id PK,FK
+        +SMALLINT product_id PK,FK
+        +NUMERIC unit_price
+        +SMALLINT quantity
+        +NUMERIC discount
+    }
+    class Product {
+        +SMALLINT product_id PK
+        +VARCHAR(40) product_name
+        +SMALLINT supplier_id FK
+        +SMALLINT category_id FK
+        +VARCHAR(20) quantity_per_unit
+        +NUMERIC unit_price
+        +SMALLINT units_in_stock
+        +SMALLINT units_on_order
+        +SMALLINT reorder_level
+        +INT discontinued
+    }
+    class Category {
+        +SMALLINT category_id PK
+        +VARCHAR(15) category_name
+        +TEXT description
+        +BYTEA picture
+    }
+    class Supplier {
+        +SMALLINT supplier_id PK
+        +VARCHAR(40) company_name
+        +VARCHAR(30) contact_name
+        +VARCHAR(30) contact_title
+        +VARCHAR(60) address
+        +VARCHAR(15) city
+        +VARCHAR(15) country
+    }
+    class Employee {
+        +SMALLINT employee_id PK
+        +VARCHAR(20) last_name
+        +VARCHAR(10) first_name
+        +VARCHAR(30) title
+        +SMALLINT reports_to FK
+        +DATE birth_date
+        +DATE hire_date
+        +VARCHAR(15) city
+        +VARCHAR(15) country
+    }
+    class Shipper {
+        +SMALLINT shipper_id PK
+        +VARCHAR(40) company_name
+        +VARCHAR(24) phone
+    }
+    class Territory {
+        +VARCHAR(20) territory_id PK
+        +VARCHAR(60) territory_description
+        +SMALLINT region_id FK
+    }
+    class Region {
+        +SMALLINT region_id PK
+        +VARCHAR(60) region_description
+    }
+    class EmployeeTerritory {
+        +SMALLINT employee_id PK,FK
+        +VARCHAR(20) territory_id PK,FK
+    }
+
+    Customer "1" --> "N" Order : realiza
+    Order "1" --> "N" OrderDetail : tiene
+    Product "1" --> "N" OrderDetail : incluido_en
+    Category "1" --> "N" Product : contiene
+    Supplier "1" --> "N" Product : provee
+    Employee "1" --> "N" Order : gestiona
+    Shipper "1" --> "N" Order : envia
+    Employee "1" --> "N" Employee : reporta_a
+    Employee "1" --> "N" EmployeeTerritory : asignado_a
+    Territory "1" --> "N" EmployeeTerritory : contiene
+    Region "1" --> "N" Territory : divide
+```
+
+---
+
+## 🔑 3. Tipos de Relaciones y Cardinalidad en Northwind
 
 ### A. Relación de 1 a Varios (1:N)
 Es la relación más común en bases de datos relacionales. Un registro en la tabla "padre" puede estar asociado a cero, uno o muchos registros en la tabla "hijo", pero un registro en la tabla "hijo" pertenece a uno y solo un registro del "padre".
@@ -168,7 +274,7 @@ Ocurre cuando una tabla tiene una relación consigo misma.
 
 ---
 
-## 🛠️ 3. DDL de Ejemplo en PostgreSQL para Validar Integridad
+## 🛠️ 4. DDL de Ejemplo en PostgreSQL para Validar Integridad
 
 Para asegurar que estas relaciones se implementen físicamente con cardinalidades correctas y soporte para acciones en cascada, las restricciones se declaran de la siguiente forma en SQL:
 
