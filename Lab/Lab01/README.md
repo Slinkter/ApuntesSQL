@@ -14,6 +14,7 @@ Este archivo sirve como punto de partida y contexto operativo para futuros **age
 Lab/Lab01/
 ├── 1.Guia/
 │   ├── 0.Guia_Docker_AWS.md          # Manual de infraestructura y SSH en AWS EC2
+│   ├── BIBLIOGRAFIA_Y_LIBROS.md       # 13 Tratados canónicos, libros de referencia y citas
 │   ├── README.md                      # Indexación detallada de la guía
 │   ├── STANDARD.md                    # Normas editoriales, andragogía y orden del motor
 │   └── Material/

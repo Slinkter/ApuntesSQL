@@ -1,19 +1,19 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: pg_architect_lab
+    container_name: docker_ps_lab01
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-slinkter}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
-      POSTGRES_DB: ${POSTGRES_DB:-northwind}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "${PGPORT:-5432}:5432"
+      - "${PGPORT}:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./init/db_northwind.sql:/docker-entrypoint-initdb.d/01_db_northwind.sql:ro
+      - ./db_northwind.sql:/docker-entrypoint-initdb.d/01_db_northwind.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-slinkter} -d ${POSTGRES_DB:-northwind}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5

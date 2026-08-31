@@ -12,10 +12,12 @@ El Laboratorio 01 está organizado siguiendo una ruta de aprendizaje estructurad
 
 ### 1. ☁️ Infraestructura y Despliegue en la Nube (`1.Guia/`)
 - **[`0.Guia_Docker_AWS.md`](0.Guia_Docker_AWS.md):** Manual paso a paso para aprovisionar la instancia EC2, configurar Security Groups (puertos 22 y 5432 restringidos a `/32`), instalar Docker en **Amazon Linux 2023** (`ec2-user`, `dnf`) / **Ubuntu 24.04** (`ubuntu`, `apt`), transferir archivos mediante `scp` directo y orquestar el contenedor con `docker compose`.
+- **[`Material/README.md`](Material/README.md):** Guía operativa del directorio de materiales, inicio rápido, comandos psql, verificación de salud y ciclo de vida de Docker.
 - **[`Material/docker-compose.yml`](Material/docker-compose.yml):** Manifiesto de infraestructura declarativa con PostgreSQL 16 Alpine, mapeo de volúmenes persistentes (`pg_data`), inicialización de base de datos de solo lectura (`:ro`), límites de recursos (RAM 512M), logging y healthcheck.
 - **[`Material/.env.example`](Material/.env.example):** Plantilla de variables de entorno seguras (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `PGPORT`).
 - **[`Material/.env`](Material/.env):** Archivo de variables de entorno locales por defecto.
 - **[`Material/db_northwind.sql`](Material/db_northwind.sql):** Script canónico de inicialización de las 14 tablas relacionales de Northwind.
+- **[`BIBLIOGRAFIA_Y_LIBROS.md`](BIBLIOGRAFIA_Y_LIBROS.md):** Tratados canónicos, libros recomendados y bibliografía académica (Codd, Date, Celko, Ben-Gan, Winand, Fontaine, Schönig, Kleppmann).
 - **[`STANDARD.md`](STANDARD.md):** Estándar pedagógico, plantillas de ejercicios por nivel, orden lógico de ejecución del motor SQL y marco de 6 pasos *"Cómo Pensar como un Analista de Datos"*.
 
 ---

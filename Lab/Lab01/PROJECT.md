@@ -38,9 +38,11 @@ PostgreSQL Lab01 is an advanced, production-grade hands-on laboratory centered o
 Lab/Lab01/
 ├── 1.Guia/
 │   ├── 0.Guia_Docker_AWS.md          # Complete AWS EC2 + Docker guide
+│   ├── BIBLIOGRAFIA_Y_LIBROS.md       # Canonical 13 SQL/PostgreSQL treatises and references
 │   ├── README.md                      # Index with verified relative links
 │   ├── STANDARD.md                    # Editorial and technical standard
 │   └── Material/
+│       ├── README.md                  # Operational guide for local and cloud material
 │       ├── .env                       # Default environment variables
 │       ├── .env.example               # Example template
 │       ├── docker-compose.yml         # Hardened PostgreSQL 16 compose definition

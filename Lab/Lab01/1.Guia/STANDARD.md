@@ -287,3 +287,24 @@ SELECT ...
    - En conjuntos de datos grandes (>15 filas), mostrar las primeras filas significativas seguidas de `...` y el resumen final `(N rows)`.
 7. **Diagramas Mermaid:** Utilizar diagramas de flujo o grafos únicamente cuando aporten claridad conceptual (árboles de decisión, pipelines de datos, cruces de conjuntos).
 8. **Enfoque Pedagógico Progresivo (Andragogía):** Primero la intuición mediante analogías del mundo real, luego la formalización técnica y finalmente la optimización y validación.
+
+---
+
+## 📚 5. Bibliografía Canónica y Obras de Referencia
+
+Para respaldar el rigor académico y técnico de todo el contenido, el laboratorio se fundamenta en los 13 tratados y libros de referencia documentados en:  
+👉 **[`BIBLIOGRAFIA_Y_LIBROS.md`](BIBLIOGRAFIA_Y_LIBROS.md)**
+
+1. **Edgar F. Codd (1970, 1990):** *A Relational Model of Data for Large Shared Data Banks* / *Version 2*.
+2. **C.J. Date (2011):** *SQL and Relational Theory: How to Write Accurate SQL Code*.
+3. **Joe Celko (2008, 2014):** *Thinking in Sets* / *Joe Celko's SQL for Smarties*.
+4. **Itzik Ben-Gan (2015):** *T-SQL Querying* (Pipeline lógico de 12 pasos).
+5. **Markus Winand (2012):** *SQL Performance Explained* (Use The Index, Luke!).
+6. **Dimitri Fontaine (2020):** *The Art of PostgreSQL*.
+7. **Hans-Jürgen Schönig (2023):** *Mastering PostgreSQL 16*.
+8. **Gregory Smith (2023):** *PostgreSQL 16 High Performance*.
+9. **Martin Kleppmann (2017):** *Designing Data-Intensive Applications*.
+10. **Hal Berenson et al. (1995):** *A Critique of ANSI SQL Isolation Levels*.
+11. **Stephane Faroult (2006):** *The Art of SQL*.
+12. **Regina Obe & Leo Hsu (2023):** *PostgreSQL: Up and Running*.
+13. **PostgreSQL Global Development Group (2024):** *PostgreSQL 16.x Documentation*.
