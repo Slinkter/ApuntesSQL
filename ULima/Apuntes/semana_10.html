@@ -70,7 +70,11 @@
     
     <style id="reader-mode-style">
         html.reader-mode { font-size: 106.25%; }
-        html.reader-mode header,
+        html.reader-mode header { background: transparent !important; border: none !important; box-shadow: none !important; position: static !important; }
+        html.reader-mode header h1,
+        html.reader-mode header p,
+        html.reader-mode header a { display: none !important; }
+        html.reader-mode header > div { justify-content: flex-end !important; padding: 1rem 1.5rem !important; }
         html.reader-mode aside,
         html.reader-mode nav[class*="fixed"] { display: none !important; }
         html.reader-mode #theme-toggle { display: flex !important; }
@@ -103,30 +107,23 @@
         })();
     </script>
 </head>
-<body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 antialiased font-sans transition-colors duration-300">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
-    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-        </svg>
-    </button>
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
-        </svg>
-        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-        </svg>
-    </button>
+    
+    
 
     <!-- Header -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Álgebra Relacional de JOINs, Consultas Multi-Tabla y Subconsultas</h1>
                 <p class="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">Semana 10 • Ingeniería de Datos • ULima 2026</p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
+            <div class="flex items-center gap-2.5 shrink-0">
+                <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
+                <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation"> <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/> </svg> </button>
+                <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation"> <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path> </svg> <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path> </svg> </button>
+            </div>
         </div>
     </header>
 
@@ -207,7 +204,7 @@
                         </div>
                         <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
                             <span class="font-bold text-emerald-600 dark:text-emerald-400 block mb-1">Semi & Anti-Joins</span>
-                            <span class="text-slate-500 dark:text-slate-400"><code>EXISTS</code> (Semi-Join $\ltimes$) vs <code>NOT EXISTS</code> (Anti-Join $\rhd$).</span>
+                            <span class="text-slate-500 dark:text-slate-400"><code>EXISTS</code> (Semi-Join &#x22C9;) vs <code>NOT EXISTS</code> (Anti-Join &#x25B7;).</span>
                         </div>
                     </div>
                 </div>
@@ -226,7 +223,7 @@
                         Objetivos de Aprendizaje Técnico
                     </h4>
                     <ul class="list-disc list-inside space-y-1.5 text-sm text-blue-950/80 dark:text-blue-200/90">
-                        <li>Formular con rigor formal la correspondencia entre los operadores del <strong>Álgebra Relacional</strong> ($\times, \sigma, \pi, \bowtie_\theta, \ltimes, \rhd$) y su sintaxis SQL estándar.</li>
+                        <li>Formular con rigor formal la correspondencia entre los operadores del <strong>Álgebra Relacional</strong> (&times;, &sigma;, &pi;, &#x22C8;<sub>&theta;</sub>, &#x22C9;, &#x25B7;) y su sintaxis SQL estándar.</li>
                         <li>Dominar la diferencia semántica y física entre <strong>INNER, LEFT, RIGHT, FULL OUTER, CROSS, SELF</strong> y <strong>LATERAL JOINs</strong>.</li>
                         <li>Implementar patrones de <strong>Semi-Joins</strong> y <strong>Anti-Joins</strong> evitando las trampas críticas de valores `NULL` con `NOT IN`.</li>
                         <li>Diseñar y optimizar <strong>Subconsultas Correlacionadas</strong> frente a subconsultas escalares y decorrelación automática.</li>
@@ -256,34 +253,34 @@
                             </thead>
                             <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 font-mono text-slate-700 dark:text-slate-300">
                                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
-                                    <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">R × S</td>
+                                    <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">R &times; S</td>
                                     <td class="font-sans font-medium">Producto Cartesiano</td>
                                     <td><code>FROM R CROSS JOIN S</code></td>
-                                    <td class="font-sans">Empareja cada tupla $r \in R$ con todas las tuplas $s \in S$. Cardinalidad: $|R| \times |S|$.</td>
+                                    <td class="font-sans">Empareja cada tupla <em>r</em> &isin; <em>R</em> con todas las tuplas <em>s</em> &isin; <em>S</em>. Cardinalidad: |<em>R</em>| &times; |<em>S</em>|.</td>
                                 </tr>
                                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
-                                    <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">R ⋈<sub>θ</sub> S</td>
+                                    <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">R &#x22C8;<sub>&theta;</sub> S</td>
                                     <td class="font-sans font-medium">Theta-Join / Equijoin</td>
-                                    <td><code>FROM R JOIN S ON θ</code></td>
-                                    <td class="font-sans">$\sigma_\theta(R \times S)$. Producto cartesiano filtrado por la condición booleana $\theta$.</td>
+                                    <td><code>FROM R JOIN S ON &theta;</code></td>
+                                    <td class="font-sans">&sigma;<sub>&theta;</sub>(<em>R</em> &times; <em>S</em>). Producto cartesiano filtrado por la condición booleana &theta;.</td>
                                 </tr>
                                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
-                                    <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">R ⋉ S</td>
+                                    <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">R &#x22C9; S</td>
                                     <td class="font-sans font-medium">Semi-Join</td>
                                     <td><code>WHERE EXISTS (...)</code></td>
-                                    <td class="font-sans">Retorna tuplas de $R$ que tienen al menos una coincidencia en $S$, sin duplicar filas de $R$.</td>
+                                    <td class="font-sans">Retorna tuplas de <em>R</em> que tienen al menos una coincidencia en <em>S</em>, sin duplicar filas de <em>R</em>.</td>
                                 </tr>
                                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
-                                    <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">R ▷ S</td>
+                                    <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">R &#x25B7; S</td>
                                     <td class="font-sans font-medium">Anti-Join</td>
                                     <td><code>WHERE NOT EXISTS (...)</code></td>
-                                    <td class="font-sans">Retorna tuplas de $R$ que NO tienen ninguna coincidencia en $S$.</td>
+                                    <td class="font-sans">Retorna tuplas de <em>R</em> que NO tienen ninguna coincidencia en <em>S</em>.</td>
                                 </tr>
                                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
-                                    <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">R ⟕ S</td>
+                                    <td class="p-3 font-bold text-indigo-600 dark:text-indigo-400">R &#x27D5; S</td>
                                     <td class="font-sans font-medium">Left Outer Join</td>
-                                    <td><code>FROM R LEFT JOIN S ON θ</code></td>
-                                    <td class="font-sans">$(R \bowtie_\theta S) \cup (R - \pi_R(R \bowtie_\theta S)) \times \{(\text{null}, \dots)\}$. Preserva todo $R$.</td>
+                                    <td><code>FROM R LEFT JOIN S ON &theta;</code></td>
+                                    <td class="font-sans">(<em>R</em> &#x22C8;<sub>&theta;</sub> <em>S</em>) &cup; (<em>R</em> &minus; &pi;<sub><em>R</em></sub>(<em>R</em> &#x22C8;<sub>&theta;</sub> <em>S</em>)) &times; {(NULL, &hellip;)}. Preserva todo <em>R</em>.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -613,25 +610,87 @@ Execution Time: 0.075 ms
                     </div>
                 </section>
 
+        <!-- Perspectivas Profesionales & Literatura Canónica -->
+        <section id="perspectivas-profesionales" class="my-10 space-y-6">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h3 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>🎯</span> Perspectivas Profesionales & Literatura Canónica
+                </h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Análisis técnico aplicado según los perfiles de la industria y fundamentos de textos clásicos de bases de datos.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Card 1: Arquitecto de Datos -->
+                <div class="bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-200/70 dark:border-indigo-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>🏛️</span> Arquitecto de Datos
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">Optimización Basada en Costos (CBO) y Reescritura de Subconsultas</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            Las subconsultas correlacionadas pueden degradar a una complejidad cuadrática $O(N \times M)$ si el optimizador no logra descorrelacionarlas. El Arquitecto modela la integridad referencial y audita el catálogo estadístico (histogramas equi-depth de cardinalidad y dispersión de claves) para asegurar que el Cost-Based Optimizer (CBO) reescriba subconsultas anidadas en Semi-Joins y Anti-Joins planos, garantizando planes de ejecución estables frente al crecimiento de datos.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-indigo-100 dark:border-indigo-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Silberschatz, Korth & Sudarshan — <em>Database System Concepts</em> (7th Ed.), Cap. 12: Query Processing & Cap. 13: Query Optimization
+                    </div>
+                </div>
+
+                <!-- Card 2: Ingeniero de Datos -->
+                <div class="bg-amber-50/40 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>⚙️</span> Ingeniero de Datos
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">Mecánica Física de JOINs: Hash Join vs. Merge Join vs. Nested Loop</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            El motor físico elige el algoritmo según memoria (<code>work_mem</code>) e índices. Un Hash Join realiza la fase Build en RAM y Probe sobre la tabla grande; si supera la memoria asignada, degrada a Grace Hash Join en disco con alto I/O. El Merge Join aprovecha relaciones preordenadas por índices B-Tree para costo lineal $O(N + M)$. El Nested Loop es el más veloz para consultas puntuales OLTP con alta selectividad guiadas por índices únicos.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-amber-100 dark:border-amber-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Alex Petrov — <em>Database Internals</em>, Cap. 4 & Bill Karwin — <em>SQL Antipatterns</em>, Cap. 17: Poor Man's Search Engine
+                    </div>
+                </div>
+
+                <!-- Card 3: Ingeniero Cloud -->
+                <div class="bg-sky-50/40 dark:bg-sky-950/20 border border-sky-200/70 dark:border-sky-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-sky-700 dark:text-sky-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>☁️</span> Ingeniero Cloud & MDS
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">Distributed Shuffle vs. Broadcast JOINs en Motores MPP</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            En motores distribuidos como Trino, Presto, BigQuery y Snowflake, los JOINs implican movimiento de tuplas a través de la red. Si una tabla dimensional es pequeña (&lt;100MB), el planificador ejecuta un Broadcast (Replicated) Join a cada nodo trabajador. En joins masivos, se recurre a Partitioned Hash Shuffle; el Ingeniero Cloud debe identificar y mitigar el Data Skew en las join keys para evitar que nodos rezagados (stragglers) monopolicen el clúster.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-sky-100 dark:border-sky-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Arquitectura de Cómputo Distribuido & Prácticas MPP Cloud 2026 (Snowflake / Trino Architecture)
+                    </div>
+                </div>
+            </div>
+        </section>
+
             </article>
         </main>
 
         <!-- Sidebar -->
-        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
+        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto mb-20 lg:mb-0 pr-1">
             <!-- Keywords -->
             <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
                 <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
                 <ul class="space-y-2">
                     <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Theta-Join</strong>
-                        <span>Producto cartesiano restringido por predicado arbitrario ($R \bowtie_\theta S$).</span>
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Theta-Join</strong>
+                        <span>Producto cartesiano restringido por predicado arbitrario (<em>R</em> &#x22C8;<sub>&theta;</sub> <em>S</em>).</span>
                     </li>
                     <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Semi-Join (⋉)</strong>
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Semi-Join (&#x22C9;)</strong>
                         <span>Filtro de existencia (`EXISTS`) sin duplicar filas del padre.</span>
                     </li>
                     <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">
-                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">§ Anti-Join (▷)</strong>
+                        <strong class="text-indigo-600 dark:text-indigo-400 block mb-0.5">&sect; Anti-Join (&#x25B7;)</strong>
                         <span>Filtro de no-existencia (`NOT EXISTS`) resistente a `NULL`s.</span>
                     </li>
                     <li class="py-2 border-b border-slate-100 dark:border-slate-800/40 text-sm text-slate-600 dark:text-slate-400">

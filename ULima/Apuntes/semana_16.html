@@ -66,7 +66,11 @@
     
     <style id="reader-mode-style">
         html.reader-mode { font-size: 106.25%; }
-        html.reader-mode header,
+        html.reader-mode header { background: transparent !important; border: none !important; box-shadow: none !important; position: static !important; }
+        html.reader-mode header h1,
+        html.reader-mode header p,
+        html.reader-mode header a { display: none !important; }
+        html.reader-mode header > div { justify-content: flex-end !important; padding: 1rem 1.5rem !important; }
         html.reader-mode aside,
         html.reader-mode nav[class*="fixed"] { display: none !important; }
         html.reader-mode #theme-toggle { display: flex !important; }
@@ -99,32 +103,14 @@
         })();
     </script>
 </head>
-<body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 antialiased font-sans transition-colors duration-300">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
-    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-        </svg>
-    </button>
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <!-- Sun icon -->
-        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
-        </svg>
-        <!-- Moon icon -->
-        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-        </svg>
-    </button>
+    
+    
 
-    <button id="reader-toggle-m3" aria-label="Activar modo lector" aria-pressed="false" class="md:hidden fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-        </svg>
-    </button>
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                     Guía Maestra para el Examen Final: Objetivo Nota 20
@@ -133,7 +119,11 @@
                     Semana 16 • Cobertura Integral Semanas 01 a 15 • Simulacro de Élite Resuelto Paso a Paso
                 </p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
+            <div class="flex items-center gap-2.5 shrink-0">
+                <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
+                <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="flex w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation"> <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/> </svg> </button>
+                <button id="theme-toggle" aria-label="Toggle theme" class="flex w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation"> <!-- Sun icon --> <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path> </svg> <!-- Moon icon --> <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path> </svg> </button>
+            </div>
         </div>
     </header>
 
@@ -426,11 +416,73 @@ $$;
                 </div>
             </section>
 
+        <!-- Perspectivas Profesionales & Literatura Canónica -->
+        <section id="perspectivas-profesionales" class="my-10 space-y-6">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h3 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>🎯</span> Perspectivas Profesionales & Literatura Canónica
+                </h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Análisis técnico aplicado según los perfiles de la industria y fundamentos de textos clásicos de bases de datos.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Card 1: Arquitecto de Datos -->
+                <div class="bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-200/70 dark:border-indigo-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>🏛️</span> Arquitecto de Datos
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">El Optimizador Basado en Costos (CBO) y Espacios de Búsqueda</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            El Cost-Based Optimizer (CBO) evalúa miles de permutaciones de árboles de ejecución aplicando identidades de álgebra relacional (pushdown de predicados y reordenamiento asociativo de joins). Si una consulta une más de 10-12 tablas, el planificador abandona la programación dinámica exhaustiva y conmuta a algoritmos genéticos (GEQO), arriesgando planes inestables. El Arquitecto modela vistas intermedias y límites de relaciones para acotar el espacio combinatorio del planificador.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-indigo-100 dark:border-indigo-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Silberschatz, Korth & Sudarshan — <em>Database System Concepts</em> (7th Ed.), Cap. 13: Query Optimization
+                    </div>
+                </div>
+
+                <!-- Card 2: Ingeniero de Datos -->
+                <div class="bg-amber-50/40 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>⚙️</span> Ingeniero de Datos
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">Anatomía de EXPLAIN ANALYZE (BUFFERS) y B-Trees Cubrientes</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            El rendimiento real se diagnostica mediante telemetría de memoria: <code>shared hit</code> revela bloques recuperados de RAM (<code>shared_buffers</code>), mientras que <code>read</code> delata I/O a disco y <code>temp spill</code> alerta sobre <code>work_mem</code> deficiente para Sorts o Hashes. El Ingeniero de Datos diseña índices B-Tree cubrientes con cláusula <code>INCLUDE</code> para convertir costosos Index Scans con Heap Fetches en veloces <code>Index Only Scans</code> puros sin tocar la tabla principal.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-amber-100 dark:border-amber-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Alex Petrov — <em>Database Internals</em>, Cap. 4 & PostgreSQL Performance Tuning: <em>EXPLAIN (ANALYZE, BUFFERS)</em>
+                    </div>
+                </div>
+
+                <!-- Card 3: Ingeniero Cloud -->
+                <div class="bg-sky-50/40 dark:bg-sky-950/20 border border-sky-200/70 dark:border-sky-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-sky-700 dark:text-sky-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>☁️</span> Ingeniero Cloud & MDS
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">FinOps de Datos, Poda de Escaneo y Búsqueda Vectorial pgvector</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            En esquemas serverless (BigQuery por Terabyte escaneado, Snowflake por créditos de cómputo), una query ineficiente destruye el presupuesto. El Ingeniero Cloud audita métricas FinOps mediante particionamiento y clustering. Paralelamente, en la era de los LLMs de 2026, optimiza motores cloud híbridos desplegando <code>pgvector</code> con índices aproximados HNSW sobre embeddings, garantizando respuestas sub-10ms para RAG sin bases de datos adicionales.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-sky-100 dark:border-sky-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Principios FinOps para Plataformas de Datos Cloud & Modern pgvector Architecture 2026
+                    </div>
+                </div>
+            </div>
+        </section>
+
         </main>
 
         <!-- Sidebar / Navigation -->
         <aside class="w-full lg:w-1/4 order-2 lg:order-1">
-            <div class="sticky top-24 space-y-6">
+            <div class="sticky top-24 space-y-6 max-h-[calc(100vh-8rem)] overflow-y-auto pr-1">
                 <!-- Nav Card -->
                 <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">En esta Guía Maestra</h3>

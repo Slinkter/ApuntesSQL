@@ -1,28 +1,60 @@
 var CanvasUI = (function () {
   'use strict';
 
+  function isDarkMode() {
+    return typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+  }
+
   var COLORS = {
-    bg: '#1e293b',
-    surface: '#334155',
-    line: '#3b82f6',
-    accent: '#10b981',
-    warn: '#f59e0b',
-    danger: '#ef4444',
-    text: '#e2e8f0',
-    textMuted: '#94a3b8',
-    highlight: '#f472b6',
-    grid: '#1e293b'
+    get bg() {
+      return isDarkMode() ? '#1e293b' : '#f8fafc';
+    },
+    get surface() {
+      return isDarkMode() ? '#334155' : '#e2e8f0';
+    },
+    get line() {
+      return '#3b82f6';
+    },
+    get accent() {
+      return '#10b981';
+    },
+    get warn() {
+      return '#f59e0b';
+    },
+    get danger() {
+      return '#ef4444';
+    },
+    get text() {
+      return isDarkMode() ? '#e2e8f0' : '#1e293b';
+    },
+    get textMuted() {
+      return isDarkMode() ? '#94a3b8' : '#64748b';
+    },
+    get highlight() {
+      return '#f472b6';
+    },
+    get grid() {
+      return isDarkMode() ? '#1e293b' : '#e2e8f0';
+    }
   };
 
   function getContext(id) {
     var c = document.getElementById(id);
     if (!c) return null;
     var ctx = c.getContext('2d');
-    var rect = c.parentElement.getBoundingClientRect();
-    c.width = Math.min(rect.width - 4, 800);
-    c.height = Math.min(c.width * 0.5, 360);
-    ctx.clearRect(0, 0, c.width, c.height);
-    return { ctx: ctx, canvas: c, W: c.width, H: c.height };
+    var rect = c.parentElement ? c.parentElement.getBoundingClientRect() : { width: 800 };
+    var displayW = Math.max(Math.min(rect.width - 4, 800), 200);
+    var displayH = Math.min(displayW * 0.5, 360);
+    var dpr = window.devicePixelRatio || 1;
+
+    c.width = Math.round(displayW * dpr);
+    c.height = Math.round(displayH * dpr);
+    c.style.width = displayW + 'px';
+    c.style.height = displayH + 'px';
+
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, displayW, displayH);
+    return { ctx: ctx, canvas: c, W: displayW, H: displayH, dpr: dpr };
   }
 
   function clear(id) {
@@ -95,7 +127,7 @@ var CanvasUI = (function () {
     var fullW = cols.length * colW + pad * 2;
     var fullH = (rows.length + 1) * rowH + headerH + pad * 2;
     roundRect(ctx, x, y, fullW, fullH, 6);
-    ctx.fillStyle = '#0f172a';
+    ctx.fillStyle = isDarkMode() ? '#0f172a' : '#ffffff';
     ctx.fill();
     ctx.strokeStyle = COLORS.surface;
     ctx.lineWidth = 1;
@@ -362,7 +394,7 @@ var CanvasUI = (function () {
     observer.observe(el);
   }
 
-  // Auto-attach Copy Code buttons and keyboard navigation
+  // Auto-attach Copy Code buttons
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', function () {
       // 1. Copy Code Buttons on <pre> (Exclude Mermaid diagrams)
@@ -370,53 +402,50 @@ var CanvasUI = (function () {
       preBlocks.forEach(function (pre) {
         if (pre.classList.contains('mermaid')) return;
         if (pre.parentElement && pre.parentElement.classList.contains('copy-attached')) return;
+        
         var wrapper = pre.parentElement;
-        if (wrapper) wrapper.classList.add('copy-attached', 'relative', 'group');
+        if (!wrapper || wrapper.tagName === 'BODY' || wrapper.tagName === 'MAIN' || wrapper.tagName === 'ARTICLE' || wrapper.tagName === 'SECTION') {
+          wrapper = document.createElement('div');
+          wrapper.className = 'relative group copy-attached';
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+        } else {
+          wrapper.classList.add('copy-attached', 'relative', 'group');
+        }
         
         var copyBtn = document.createElement('button');
-        copyBtn.className = 'absolute top-3 right-3 text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 hover:text-white transition opacity-80 hover:opacity-100 shadow-sm cursor-pointer';
+        copyBtn.type = 'button';
+        copyBtn.setAttribute('data-copy-btn', 'true');
+        copyBtn.className = 'absolute top-3 right-3 text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 hover:text-white transition opacity-80 hover:opacity-100 shadow-sm cursor-pointer z-10';
         copyBtn.textContent = '📋 Copiar';
         copyBtn.title = 'Copiar al portapapeles';
         copyBtn.setAttribute('aria-live', 'polite');
 
-        copyBtn.onclick = function () {
-          var codeText = pre.innerText || pre.textContent;
-          navigator.clipboard.writeText(codeText).then(function () {
-            copyBtn.textContent = '✅ ¡Copiado!';
-            copyBtn.classList.add('bg-emerald-700', 'text-white');
-            setTimeout(function () {
-              copyBtn.textContent = '📋 Copiar';
-              copyBtn.classList.remove('bg-emerald-700', 'text-white');
-            }, 2000);
-          }).catch(function () {
-            copyBtn.textContent = '❌ Error';
-          });
+        copyBtn.onclick = function (e) {
+          e.stopPropagation();
+          // Extract pure code without button labels
+          var clone = pre.cloneNode(true);
+          var buttons = clone.querySelectorAll('button, [data-copy-btn]');
+          buttons.forEach(function (b) { b.remove(); });
+          var codeEl = clone.querySelector('code');
+          var textSource = codeEl ? codeEl.textContent : clone.textContent;
+          var pureCode = (textSource || '').replace(/\r\n/g, '\n').trim();
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(pureCode).then(function () {
+              copyBtn.textContent = '✅ ¡Copiado!';
+              copyBtn.classList.add('bg-emerald-700', 'text-white');
+              setTimeout(function () {
+                copyBtn.textContent = '📋 Copiar';
+                copyBtn.classList.remove('bg-emerald-700', 'text-white');
+              }, 2000);
+            }).catch(function () {
+              copyBtn.textContent = '❌ Error';
+            });
+          }
         };
 
-        if (wrapper && getComputedStyle(wrapper).position === 'relative') {
-          wrapper.appendChild(copyBtn);
-        } else if (pre) {
-          pre.style.position = 'relative';
-          pre.appendChild(copyBtn);
-        }
-      });
-
-      // 2. Keyboard Arrow Navigation (Left = Previous, Right = Next)
-      document.addEventListener('keydown', function (e) {
-        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
-        var nextLink = document.querySelector('a[href*="semana_"], a[href*="extra_"]');
-        if (e.key === 'ArrowRight') {
-          var navNext = document.querySelector('nav a[href*="semana_"], nav a[href*="extra_"], aside a[href*="semana_"]');
-          var lastNav = document.querySelectorAll('nav a');
-          if (lastNav.length >= 4 && lastNav[3].href) {
-            window.location.href = lastNav[3].href;
-          }
-        } else if (e.key === 'ArrowLeft') {
-          var firstNav = document.querySelectorAll('nav a');
-          if (firstNav.length >= 2 && firstNav[1].href) {
-            window.location.href = firstNav[1].href;
-          }
-        }
+        wrapper.appendChild(copyBtn);
       });
     });
   }

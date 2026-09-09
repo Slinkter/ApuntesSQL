@@ -66,7 +66,11 @@
     
     <style id="reader-mode-style">
         html.reader-mode { font-size: 106.25%; }
-        html.reader-mode header,
+        html.reader-mode header { background: transparent !important; border: none !important; box-shadow: none !important; position: static !important; }
+        html.reader-mode header h1,
+        html.reader-mode header p,
+        html.reader-mode header a { display: none !important; }
+        html.reader-mode header > div { justify-content: flex-end !important; padding: 1rem 1.5rem !important; }
         html.reader-mode aside,
         html.reader-mode nav[class*="fixed"] { display: none !important; }
         html.reader-mode #theme-toggle { display: flex !important; }
@@ -99,25 +103,14 @@
         })();
     </script>
 </head>
-<body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 antialiased font-sans transition-colors duration-300">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
-    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-        </svg>
-    </button>
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
-        </svg>
-        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-        </svg>
-    </button>
+    
+    
 
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                     Semana 01: Fundamentos de Administración de Información
@@ -126,7 +119,11 @@
                     De Datos a Conocimiento • De Archivos a DBMS • Evolución y SDLC • Universidad de Lima 2026
                 </p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
+            <div class="flex items-center gap-2.5 shrink-0">
+                <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
+                <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation"> <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/> </svg> </button>
+                <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation"> <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path> </svg> <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path> </svg> </button>
+            </div>
         </div>
     </header>
 
@@ -844,12 +841,1879 @@
                 <div class="mt-4 flex gap-2" id="controls_01"></div>
             </div>
         </section>
+
+        <!-- Perspectivas Profesionales & Literatura Canónica -->
+        <section class="my-10 space-y-6">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h3 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>🎯</span> Perspectivas Profesionales & Literatura Canónica
+                </h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Análisis técnico aplicado según los perfiles de la industria y fundamentos de textos clásicos de bases de datos.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Card 1: Arquitecto de Datos -->
+                <div class="bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-200/70 dark:border-indigo-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>🏛️</span> Arquitecto de Datos
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">Ontología DIKW y Gobernanza en el SDLC</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            Bajo las directrices de DAMA-DMBOK y la teoría relacional, el dato carece de valor sin un metamodelo que defina su linaje, semántica y dominio formal. En el SDLC, la transición de archivos planos a un DBMS representa el salto de estructuras ad-hoc a esquemas conceptuales universales con catalogación activa, garantizando la consistencia organizacional y mitigando silos funcionales.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-indigo-100 dark:border-indigo-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Silberschatz, Korth & Sudarshan — <em>Database System Concepts (7ma Ed.)</em>, Cap. 1: "Introduction".
+                    </div>
+                </div>
+
+                <!-- Card 2: Ingeniero de Datos -->
+                <div class="bg-amber-50/40 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>⚙️</span> Ingeniero de Datos
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">Confiabilidad de Storage y Fallas de Archivos</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            Procesar datos en archivos planos acarrea problemas de contención de I/O, bloqueos del SO y colisiones de escritura (<em>lost updates</em>). El DBMS desacopla la persistencia física mediante el <em>Buffer Manager</em> y el <em>Write-Ahead Logging</em> (WAL), garantizando atomicidad y serialización sin delegar la gestión de memoria ni el parsing a cada aplicación.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-amber-100 dark:border-amber-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Martin Kleppmann — <em>Designing Data-Intensive Applications</em>, Cap. 1: "Reliable, Scalable, Maintainable".
+                    </div>
+                </div>
+
+                <!-- Card 3: Ingeniero Cloud -->
+                <div class="bg-sky-50/40 dark:bg-sky-950/20 border border-sky-200/70 dark:border-sky-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-sky-700 dark:text-sky-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>☁️</span> Ingeniero Cloud & MDS
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">Modern Data Stack, Object Storage y FinOps</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            En arquitecturas cloud 2026, los datos transaccionales conviven con lagos de datos en almacenamiento de objetos (Amazon S3, Cloud Storage). La economía cloud transforma inversiones de capital fijas (CapEx de servidores físicos) en costos elásticos bajo demanda (OpEx), centralizando catálogos de metadatos gobernados como AWS Glue o Databricks Unity Catalog.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-sky-100 dark:border-sky-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> AWS Well-Architected Framework: Data Analytics Lens (TCO & Elastic Storage 2026).
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- SECCIÓN BALOTARIO DE EXÁMENES INTERACTIVO (50 PREGUNTAS TIPO FLASHCARD) -->
+        <section class="my-12 space-y-6" id="balotario-examenes">
+            <div class="bg-gradient-to-r from-indigo-900 to-slate-900 rounded-3xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 mb-2">
+                            🎓 Balotario & Simulador de Examen • Semana 01
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-extrabold tracking-tight m-0 text-white">
+                            50 Preguntas Típicas de Examen con Flashcards
+                        </h3>
+                        <p class="text-slate-300 text-xs md:text-sm mt-1 max-w-2xl">
+                            Banco de preguntas de alta frecuencia en evaluaciones de la Universidad de Lima. Cada pregunta incluye la reformulación / paráfrasis del profesor, la respuesta técnica esperada y el análisis de la trampa o distractor común.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" id="btn-expand-all" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition duration-200 backdrop-blur-sm border border-white/10 cursor-pointer">
+                            👁️ Mostrar Todas
+                        </button>
+                        <button type="button" id="btn-collapse-all" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition duration-200 backdrop-blur-sm border border-white/10 cursor-pointer">
+                            🙈 Ocultar Todas
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Barra de Filtros por Categoría -->
+                <div class="mt-6 pt-4 border-t border-white/10 flex flex-wrap gap-2 relative z-10" id="balotario-filters">
+                    <button type="button" data-filter="all" class="active-filter px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white transition duration-200 cursor-pointer">
+                        Todas (50)
+                    </button>
+                    <button type="button" data-filter="dikw" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-slate-200 transition duration-200 cursor-pointer">
+                        1. DIKW & Metadatos (10)
+                    </button>
+                    <button type="button" data-filter="archivos" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-slate-200 transition duration-200 cursor-pointer">
+                        2. Archivos vs DBMS (10)
+                    </button>
+                    <button type="button" data-filter="dbms" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-slate-200 transition duration-200 cursor-pointer">
+                        3. Arquitectura DBMS (10)
+                    </button>
+                    <button type="button" data-filter="sdlc" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-slate-200 transition duration-200 cursor-pointer">
+                        4. SDLC & Roles (10)
+                    </button>
+                    <button type="button" data-filter="casos" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-slate-200 transition duration-200 cursor-pointer">
+                        5. Casos & Trampas Ulima (10)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid de Flashcards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="balotario-cards-container">
+                
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dikw">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+                P01 • DIKW & Metadatos
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            1. Diferencia formal entre Dato e Información
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué un conjunto de caracteres o números sin procesar no puede considerarse un activo de información para la toma de decisiones?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">El dato es una representación simbólica (numérica, alfanumérica o espacial) de un hecho aislado de la realidad, estrictamente objetivo y sin contexto semántico propio (ej. "3.50"). La información es el resultado de estructurar, categorizar y procesar dichos datos en un contexto específico, cuyo propósito matemático primordial es reducir la incertidumbre del receptor para permitir la toma de decisiones ("El precio unitario de venta es S/. 3.50 a la fecha 2026-08-21").</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que la digitalización convierte automáticamente un dato en información. Un número dentro de un disco o archivo sigue siendo un dato crudo hasta que se le asocia una semántica y un propósito.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dikw">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+                P02 • DIKW & Metadatos
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            2. Propósito matemático y cognitivo de la Información
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"En teoría de la información y sistemas de decisión empresarial, ¿cuál es el efecto medible que debe producir la información?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Su función esencial es la disminución cuantitativa y cualitativa del grado de incertidumbre en el receptor ante un conjunto de alternativas posibles. Si un mensaje no reduce la duda ni altera la distribución de probabilidades para decidir, no califica como información útil, sino como ruido o redundancia.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Marcar en opciones múltiples que la información "elimina totalmente el riesgo". El riesgo siempre subsiste por factores exógenos; la información únicamente disminuye la incertidumbre.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dikw">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+                P03 • DIKW & Metadatos
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            3. Naturaleza del Conocimiento en la pirámide DIKW
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cómo se produce el salto cualitativo entre poseer información descriptiva y generar conocimiento organizacional?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">El conocimiento surge al correlacionar y sintetizar múltiples fuentes de información a lo largo del tiempo, reconociendo patrones empíricos, leyes de causalidad ("¿por qué ocurre?"), tendencias históricas y reglas de negocio aplicables. Mientras la información responde al "¿qué, quién y cuándo?", el conocimiento responde al "¿por qué y cómo?".</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Confundir conocimiento con acumulación masiva de datos (Big Data). Acumular millones de registros sin modelos de inferencia o síntesis analítica no produce conocimiento.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dikw">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+                P04 • DIKW & Metadatos
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            4. Nivel de Decisión y Sabiduría (Actionable Insight)
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cuál es la cúspide de la jerarquía DIKW y cómo se mide su impacto en la Universidad de Lima?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Es la transformación del conocimiento en decisiones y acciones operativas o estratégicas concretas (Sabiduría / Wisdom). Su valor se mide directamente en el impacto económico: maximización del retorno de inversión (ROI), mitigación de pérdidas, optimización de márgenes o ventaja competitiva sostenible.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Asumir que el proceso concluye con el reporte o dashboard de BI. El ciclo solo genera valor cuando la gerencia o un sistema automatizado ejecuta una acción fundamentada en dicho conocimiento.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dikw">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+                P05 • DIKW & Metadatos
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            5. Objetividad del Dato vs. Subjetividad de la Información
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué se afirma en cátedra que el dato DEBE ser objetivo mientras la información PUEDE ser subjetiva?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">El dato debe ser una medición empírica neutral y exacta del minimundo real sin distorsión (ej. la balanza marca 50.0 kg). En cambio, la información adquiere significado a través del perfil, rol, metas cognitivas y contexto del receptor: un inventario de 100 unidades puede interpretarse como "stock saludable" para el jefe de tienda pero como "capital inmovilizado excesivo" para el director de finanzas.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Pensar que la subjetividad en la información implica falsedad. La subjetividad aquí se refiere a la interpretación contextual según los objetivos del área usuaria.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dikw">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+                P06 • DIKW & Metadatos
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            6. Definición y Rol Crítico de los Metadatos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Qué componente estructural del DBMS impide que un archivo físico de base de datos sea tratado como una masa caótica de ceros y unos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Los metadatos ("datos sobre los datos"): definiciones formales registradas en el catálogo del sistema que describen la estructura lógica (nombres de tablas y columnas), tipos de datos físicos (INTEGER, VARCHAR), restricciones de dominio (CHECK, rangos), nulabilidad (NOT NULL), relaciones de clave (PK, FK) y reglas de acceso.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Confundir metadatos con datos redundantes. Los metadatos no son copias de registros; son las reglas y esquemas abstractos que gobiernan a todos los registros.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dikw">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+                P07 • DIKW & Metadatos
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            7. Catálogo del Sistema (Data Dictionary) vs. Metadatos Embebidos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿En qué se diferencia el almacenamiento de metadatos en un RDBMS del almacenamiento tradicional en programas de archivos planos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">En el enfoque tradicional, la estructura (metadatos) estaba codificada rígidamente dentro de cada programa (DATA DIVISION en COBOL, structs en C). En un RDBMS, los metadatos residen de forma centralizada y auto-descriptiva en el Diccionario de Datos (Information Schema), accesible mediante consultas SQL estándar por cualquier aplicación.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que el catálogo del sistema es un archivo externo de texto. Es un conjunto de tablas internas del propio motor gestionadas con la misma integridad transaccional.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dikw">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+                P08 • DIKW & Metadatos
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            8. Secuencia Práctica de Evolución DIKW en Retail
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Dado el registro crudo [Prod: 902, Cant: 0, Fecha: 2026-05-15, Tienda: 04], ejemplifique los 4 estadios de la pirámide."</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) Dato: Los valores crudos sin significado contextual. 2) Información: "El producto 902 está agotado en la Tienda 04 el 15 de mayo de 2026". 3) Conocimiento: "Las ventas de este producto se disparan 300% cada quincena y el proveedor tarda 48 horas en reponer". 4) Decisión: "Emitir orden de compra automática 72 horas antes de cada fin de mes".</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Omitir la decisión final o confundir el conocimiento (patrón explicativo) con la información (descripción del estado actual).</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dikw">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+                P09 • DIKW & Metadatos
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            9. El Fenómeno de Sobrecarga de Información (Information Overload)
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué recolectar terabytes de datos sin catalogación formal paraliza la gestión empresarial en lugar de potenciarla?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Porque genera exceso de datos genéricos no estructurados y de baja calidad, dificulta la identificación de métricas críticas por perfil, eleva el tiempo y costo de búsqueda e incrementa el riesgo de tomar decisiones basadas en datos obsoletos o irrelevantes.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Afirmar que más almacenamiento siempre equivale a mejores decisiones. Sin arquitectura de metadatos, mayor volumen solo implica mayor ruido.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dikw">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300">
+                P10 • DIKW & Metadatos
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            10. El Principio GIGO (Garbage In, Garbage Out) en Bases de Datos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cómo afecta la ausencia de restricciones de integridad física en la capa de datos a los sistemas de Business Intelligence?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Si la base de datos permite la entrada de datos corruptos, incompletos o fuera de dominio (Garbage In), cualquier transformación analítica, algoritmo de Machine Learning o reporte gerencial arrojará conclusiones erróneas y perjudiciales (Garbage Out). Las restricciones (CONSTRAINTS) en el DBMS son la primera línea de defensa de la calidad.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Suponer que las herramientas de visualización de datos (Power BI / Tableau) pueden "limpiar mágicamente" datos corrompidos en la fuente.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="archivos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                P11 • Archivos vs DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            11. Dependencia Estricta Programa-Datos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cuál era la principal causa de sobrecostos en mantenimiento de software bajo el modelo de procesamiento de archivos planos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">La estructura y formato de los registros (posiciones de bytes, delimitadores y tipos de datos) residían embebidos en el código fuente de cada aplicación. Si se requería alterar la longitud de un campo de 10 a 12 caracteres, era obligatorio localizar, reescribir y recompilar todos y cada uno de los programas que leían dicho archivo.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Confundir dependencia programa-datos con dependencia funcional de llaves relacionales. La primera es un defecto físico de archivos; la segunda es una regla formal matemática.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="archivos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                P12 • Archivos vs DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            12. Génesis de la Redundancia Descontrolada
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué los departamentos de una empresa tradicional terminaban con datos duplicados de los mismos clientes?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Porque cada departamento creaba sus propios programas y ficheros para satisfacer sus necesidades específicas de forma aislada, sin una visión corporativa centralizada. El departamento de créditos tenía su fichero de clientes, almacén el suyo y facturación otro idéntico.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Pensar que la redundancia fue intencional para respaldo. Fue producto del aislamiento organizativo y la incapacidad técnica de compartir archivos concurrentemente.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="archivos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                P13 • Archivos vs DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            13. Inconsistencia de Datos y Anomalías de Modificación
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Qué consecuencia directa sufría la gerencia ante la redundancia incontrolada de archivos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Inconsistencia de datos: cuando un cliente cambiaba de teléfono o dirección y el cambio se registraba solo en el fichero de cobranzas, los demás ficheros conservaban datos antiguos. Esto generaba reportes financieros contradictorios y pérdidas operativas.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que redundancia e inconsistencia son sinónimos. La redundancia es la duplicidad de datos; la inconsistencia es la discrepancia de valores entre dichas copias.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="archivos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                P14 • Archivos vs DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            14. Imposibilidad de Consultas Ad-Hoc en Archivos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué un gerente no podía obtener una respuesta rápida a una pregunta de negocio imprevista antes de los DBMS?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Porque no existía un lenguaje de consulta declarativo universal (como SQL). Responder a una consulta ad-hoc demandaba solicitar a un programador la codificación manual de un script en C o COBOL que abriera archivos, gestionara punteros de disco e iterara registro por registro, tardando semanas.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que existían comandos rápidos de filtrado en el sistema operativo que sustituyeran un motor de optimización relacional.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="archivos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                P15 • Archivos vs DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            15. El Problema de la Actualización Perdida (Lost Update)
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Qué anomalía de concurrencia se produce cuando dos procesos acceden simultáneamente a un archivo sin control transaccional?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">La anomalía de actualización perdida (Lost Update): dos usuarios leen el mismo saldo bancario ($100). El usuario A suma $50 (escribe $150); el usuario B resta $20 del valor original leído ($100) y escribe $80 milisegundos después, sobrescribiendo y destruyendo por completo la operación del usuario A.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Pensar que el sistema operativo resuelve esto bloqueando el archivo entero. Si bloquea el archivo entero, se destruye la concurrencia y el sistema queda inoperable para múltiples usuarios.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="archivos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                P16 • Archivos vs DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            16. Silos de Datos y Falta de Integración Organizacional
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué los sistemas tradicionales impedían el cruce de información entre áreas corporativas?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Porque cada archivo se estructuraba con formatos binarios o de texto propietarios, codificaciones heterogéneas y claves locales no estandarizadas, impidiendo la interoperabilidad y el análisis cruzado (ej. correlacionar quejas de clientes con retrasos de almacén).</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Asumir que el problema era de cables o red. Era un problema de diseño estructural y semántica de datos fragmentada.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="archivos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                P17 • Archivos vs DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            17. Seguridad Fina: DBMS vs. Sistema Operativo
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué los permisos del sistema de archivos (lectura/escritura) son insuficientes para la gobernanza corporativa?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Los permisos del sistema operativo son de grano grueso (todo o nada sobre el fichero completo). Un DBMS permite seguridad granular por tabla, por columna (ocultar salario), por fila mediante Row-Level Security (RLS) y segregación de roles (RBAC) auditables.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Afirmar que cifrar el archivo en el sistema operativo resuelve la seguridad granular. Cifrar el archivo oculta los datos de extraños pero no previene que un usuario con acceso vea columnas confidenciales.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="archivos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                P18 • Archivos vs DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            18. Centralización de Reglas de Integridad
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué programar las validaciones de negocio en el frontend o código de la aplicación genera fallas inevitables en archivos planos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Porque si existen 5 aplicaciones distintas que acceden a los ficheros, basta que un solo desarrollador cometa un error u omita una validación para corromper los datos de todos. En un DBMS, las reglas se centralizan declarativamente en el motor (NOT NULL, CHECK, UNIQUE, FK) y se aplican sin excepción a todo acceso.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que validar en la interfaz de usuario exime de validar en la base de datos. La interfaz es para experiencia de usuario; la base de datos es para preservación inviolable de la verdad.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="archivos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                P19 • Archivos vs DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            19. Vulnerabilidad ante Fallas Catastróficas
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Qué sucedía en un sistema de archivos si el servidor sufría un corte eléctrico en medio de una operación compuesta?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">La operación quedaba a medio ejecutar (ej. fondos descontados de una cuenta pero no acreditados en otra), corrompiendo el estado del negocio sin mecanismo automático de compensación (Rollback) ni bitácora de recuperación (WAL).</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Pensar que un simple backup diario resuelve esto. Un backup restaura el estado de la noche anterior, perdiendo todas las transacciones realizadas durante el día.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="archivos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                P20 • Archivos vs DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            20. Matriz Comparativa Canónica Archivos vs. DBMS
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Sintetice en 5 dimensiones la superioridad del enfoque DBMS sobre los sistemas tradicionales."</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) Redundancia: Descontrolada vs. Mínima y controlada. 2) Independencia: Nula (acoplamiento físico) vs. Alta (física y lógica). 3) Concurrencia: Insegura (Lost Updates) vs. Controlada (ACID/MVCC). 4) Integridad: Embebida en código de app vs. Centralizada y declarativa en motor. 5) Consultas: Procedimentales lentas vs. Declarativas ágiles con SQL.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Olvidar mencionar el control de concurrencia y la independencia de datos, que son los dos pilares teóricos evaluados en la Ulima.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dbms">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
+                P21 • Arquitectura DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            21. Definición Formal de DBMS / SGBD
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Qué es exactamente un DBMS según la definición académica de Silberschatz y los apuntes Ulima?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Es un software general de sistema compuesto por una colección estructurada de datos interrelacionados y un conjunto integrado de herramientas y programas que permiten a los usuarios definir, construir, manipular, consultar y compartir datos de forma segura y eficiente entre múltiples usuarios y aplicaciones.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Confundir el DBMS (software gestor como PostgreSQL u Oracle) con la Base de Datos (la colección de datos persistida en disco).</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dbms">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
+                P22 • Arquitectura DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            22. La Arquitectura ANSI/SPARC de Tres Niveles
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cuáles son los tres niveles de abstracción de ANSI/SPARC y qué responde cada uno?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) Nivel Físico / Interno: describe CÓMO se almacenan físicamente los datos (bloques, punteros, compresión, índices). 2) Nivel Conceptual / Lógico: describe QUÉ datos se almacenan, sus entidades, atributos, relaciones y restricciones para toda la empresa. 3) Nivel Externo / Vistas: describe CÓMO ve cada grupo de usuarios individuales su porción particular de la base de datos.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Invertir el orden: colocar el nivel conceptual como el más bajo. El orden de abstracción creciente es Físico -> Conceptual -> Externo.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dbms">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
+                P23 • Arquitectura DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            23. Independencia Física de Datos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Si el DBA agrega un índice B-Tree o traslada tablas a un almacenamiento flash NVMe, ¿por qué no se rompen los sistemas?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Gracias a la Independencia Física de Datos: la capacidad de modificar el esquema físico o interno (métodos de acceso, organización de archivos en disco, índices) sin obligar a reescribir el esquema conceptual ni las aplicaciones o consultas de usuario.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Confundirla con independencia lógica. La física protege contra cambios de hardware/índices; la lógica protege contra adición o eliminación de tablas/atributos.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dbms">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
+                P24 • Arquitectura DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            24. Independencia Lógica de Datos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Si la empresa añade el campo "email_corporativo" a la tabla Empleados, ¿qué principio evita fallas en los reportes existentes?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">La Independencia Lógica de Datos: la capacidad de alterar el esquema conceptual (añadir nuevas tablas, columnas o relaciones) sin exigir la modificación de los esquemas externos ni de las aplicaciones que no hacen uso de esos nuevos elementos.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Asumir que si se borra una columna que una app utiliza, la app no fallará. La independencia lógica protege contra adición y reestructuración no disruptiva mediante el uso de vistas.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dbms">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
+                P25 • Arquitectura DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            25. Los 5 Componentes del Entorno de Base de Datos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cuáles son los elementos integrales que conforman un entorno de base de datos en funcionamiento?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) Hardware (servidores, procesadores, RAM, discos, switches). 2) Software (DBMS, sistema operativo, software de red). 3) Datos y Metadatos (registros transaccionales y catálogo del sistema). 4) Procedimientos (reglas operativas, guías de respaldo, auditoría). 5) Personas (DBA, analistas, arquitectos, desarrolladores y usuarios finales).</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Olvidar los componentes humanos y normativos (procedimientos). Un sistema de base de datos no es solo software y fierros.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dbms">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
+                P26 • Arquitectura DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            26. El Procesador de Consultas (Query Processor)
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Qué módulos internos del DBMS procesan una instrucción SQL antes de que toque los datos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) DDL Interpreter: procesa esquemas. 2) DML Compiler / Parser: valida la sintaxis y semántica contra el catálogo. 3) Query Optimizer (CBO): genera múltiples planes de ejecución y elige el de menor costo computacional. 4) Execution Engine: ejecuta el plan seleccionado coordinando con el Storage Manager.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que el DBMS ejecuta el SQL tal como lo escribe el usuario. El optimizador suele reescribir el orden de los joins y filtros para maximizar la velocidad.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dbms">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
+                P27 • Arquitectura DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            27. Storage Manager y el Buffer Manager
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué las lecturas y escrituras de bases de datos se realizan siempre a través de la memoria RAM?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">El Storage Manager utiliza el Buffer Manager para gestionar un área en RAM (Buffer Pool / Shared Buffers) organizada en páginas (típicamente de 8KB). Leer de memoria es miles de veces más veloz que leer de disco. Solo las páginas que no están en memoria generan I/O físico hacia el almacenamiento.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Asumir que cada instrucción SELECT lee directamente del disco. Si la página ya reside en el Buffer Pool (Buffer Cache Hit), la lectura se resuelve puramente en memoria.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dbms">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
+                P28 • Arquitectura DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            28. El Protocolo Write-Ahead Logging (WAL)
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Qué regla fundamental de durabilidad asegura que una transacción confirmada no se pierda ante un corte de energía?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">El protocolo WAL: ninguna página de datos modificada en memoria puede escribirse en los archivos de tabla en disco antes de que el registro de log que describe dicho cambio haya sido forzado y persistido secuencialmente en el archivo WAL (disco no volátil).</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Pensar que la durabilidad (COMMIT) espera a que toda la tabla en disco se actualice. El COMMIT solo espera a que el WAL confirme la escritura secuencial.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dbms">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
+                P29 • Arquitectura DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            29. Garantías Transaccionales ACID
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Describa el significado y responsabilidad de cada letra del acrónimo ACID."</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Atomicidad: la transacción es indivisible (todo se completa o todo se revierte). Consistencia: la transacción transforma la BD de un estado válido a otro estado válido respetando todas las invariantes. Aislamiento: operaciones concurrentes se ejecutan sin interferencias mutuas como si fueran secuenciales. Durabilidad: los cambios confirmados persisten ante caídas del sistema.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Confundir Consistencia transaccional (C de ACID) con consistencia de replicación distribuida (C de CAP). La primera es respecto a reglas del esquema; la segunda es sobre visibilidad entre nodos.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="dbms">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
+                P30 • Arquitectura DBMS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            30. Desventajas y Sobrecostos de Adoptar un DBMS
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿En qué circunstancias o con qué costos debe lidiar una empresa al migrar hacia un DBMS empresarial?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) Altos costos de software (licenciamiento por core) y hardware servidor. 2) Costo de capacitación y contratación de personal altamente especializado (DBAs, arquitectos). 3) Sobrecarga computacional de procesamiento (overhead de validación de metadatos y locks). 4) Impacto crítico de fallas si el DBMS no cuenta con alta disponibilidad (SPOF - Single Point of Failure).</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Afirmar que un DBMS no tiene desventajas. Para aplicaciones ultraligeras embebidas o sensores simples, un RDBMS empresarial puede ser costoso e innecesario.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="sdlc">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                P31 • SDLC & Roles
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            31. Mapeo del Ciclo de Vida de Base de Datos en el SDLC
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cómo se alinean las fases del desarrollo de software con las etapas de desarrollo de una base de datos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) Planificación del Sistema -> Estudio de viabilidad y definición de alcance de datos. 2) Análisis de Requerimientos -> Modelamiento Conceptual (DER). 3) Diseño de Sistemas -> Diseño Lógico Relacional y Normalización. 4) Implementación -> Diseño Físico, DDL y carga de datos. 5) Mantenimiento -> Optimización, backups y evolución de esquemas.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que la base de datos se diseña en la fase de codificación o programación. La base de datos se modela conceptualmente en la fase de análisis.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="sdlc">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                P32 • SDLC & Roles
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            32. El Canvas de Proyecto y Procesos AS-IS / TO-BE (Ulima)
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué el primer entregable del curso de Ingeniería de Datos exige modelar los procesos AS-IS y TO-BE?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Porque una base de datos debe dar soporte a los flujos reales de la organización. El proceso AS-IS diagnostica los cuellos de botella actuales (silos, redundancias en formularios); el TO-BE diseña el flujo futuro optimizado que la base de datos automatizará.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Diseñar tablas directamente sin conocer el flujo de procesos. Si el proceso de negocio es defectuoso, la base de datos solo automatizará errores con mayor velocidad.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="sdlc">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                P33 • SDLC & Roles
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            33. Producto Tangible de la Fase de Análisis: El DER
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cuál es el artefacto que cierra la fase de análisis y qué características posee?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">El Diagrama Entidad-Relación (DER Extendido): un modelo formal independiente de cualquier software comercial o lenguaje de programación, que documenta las entidades de negocio, sus atributos, cardinalidades y jerarquías.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Incluir tipos de datos de un motor específico (ej. NUMBER(8), VARCHAR2 de Oracle) en el DER. En el análisis conceptual solo se definen dominios lógicos independientes de la tecnología.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="sdlc">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                P34 • SDLC & Roles
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            34. El Gran Error Conceptual: DER vs. Esquema Relacional
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué se penaliza severamente dibujar llaves foráneas (FK) en un Diagrama Entidad-Relación?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Porque el concepto de Llave Foránea (Foreign Key) pertenece estrictamente al Modelo Lógico Relacional (implementación basada en tablas y punteros). En el modelo conceptual DER, la asociación entre dos entidades se expresa puramente mediante una Relación con cardinalidades mínimas y máximas.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Dibujar el atributo "id_departamento" dentro de la entidad EMPLEADO en un DER. En el DER solo se dibuja la relación "Pertenece" uniendo ambas entidades.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="sdlc">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                P35 • SDLC & Roles
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            35. Responsabilidades Esenciales del DBA
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cuáles son las funciones primarias que diferencian al DBA del resto del equipo de TI?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) Instalación, configuración y actualización del DBMS. 2) Gestión de cuentas, roles y seguridad. 3) Diseño y ejecución de la estrategia de Backup y Disaster Recovery (RPO y RTO). 4) Monitoreo continuo de salud del servidor, mantenimiento de índices y tuning de parámetros de memoria.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Asumir que el DBA es el encargado de diseñar los mockups o programar el frontend de la aplicación web.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="sdlc">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                P36 • SDLC & Roles
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            36. El Rol Estratégico del Arquitecto de Datos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cuál es la misión del Data Architect y cómo interactúa con el DBA?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">El Arquitecto de Datos define la visión a largo plazo del ecosistema de datos: modelos conceptuales universales, gobernanza bajo DAMA-DMBOK, arquitectura de integración, catálogos de metadatos y selección de motores (políglota). El DBA implementa y mantiene operativas dichas definiciones físicas en el día a día.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que el arquitecto solo dibuja diagramas y no participa en decisiones de escalabilidad. Sus decisiones dictan el costo y viabilidad técnica de toda la empresa.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="sdlc">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                P37 • SDLC & Roles
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            37. El Rol Operativo del Ingeniero de Datos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Qué funciones cumple el Data Engineer en la cadena de valor de los datos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Construye y automatiza los pipelines de datos (ETL/ELT), extrae datos de fuentes heterogéneas, optimiza consultas complejas, diseña tablas de hechos y dimensiones, y garantiza que los datos limpios lleguen con baja latencia al Data Warehouse o Data Lake para analistas y modelos de IA.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Confundir Ingeniero de Datos con Científico de Datos. El ingeniero construye las carreteras y tuberías; el científico maneja los autos y modelos predictivos sobre esos datos.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="sdlc">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                P38 • SDLC & Roles
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            38. La Trilogía del Modelamiento: Conceptual, Lógico y Físico
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Describa el grado de abstracción y herramientas de cada uno de los 3 modelos secuenciales."</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) Conceptual: 100% independiente de software/hardware; modela conceptos y reglas de negocio (DER). 2) Lógico: independiente de hardware pero dependiente del paradigma (Relacional); define tablas, columnas, PKs, FKs y normalización (3FN/BCNF). 3) Físico: dependiente del RDBMS específico; define storage en disco, índices B-Tree/GIN, particiones, tablespaces y tipos exactos (ej. PostgreSQL 17).</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Saltar directamente del requerimiento al modelo físico. Diseñar tablas físicas sin modelado conceptual previo provoca esquemas acoplados llenos de redundancias y parches.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="sdlc">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                P39 • SDLC & Roles
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            39. Estrategias de Diseño: Top-Down vs. Bottom-Up
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cuándo se debe aplicar un enfoque Top-Down y cuándo un enfoque Bottom-Up según la Ulima?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Top-Down: se usa para sistemas nuevos; se parte de la visión abstracta del negocio para deducir entidades y relaciones (DER). Bottom-Up: se usa para refactorizar sistemas legados; se parte de formularios impresos, facturas o pantallas existentes y se aplica normalización rigurosa para extraer las tablas normalizadas.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Pensar que son excluyentes. Los mejores proyectos combinan ambos: diseñan el DER general (Top-Down) y validan sus entidades normalizando los formularios reales (Bottom-Up).</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="sdlc">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                P40 • SDLC & Roles
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            40. Mantenimiento y Evolución de la Base de Datos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué el ciclo de vida de una base de datos nunca concluye tras la puesta en producción?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Porque las organizaciones son dinámicas: se incorporan nuevas líneas de negocio, crecen los volúmenes transaccionales (exigiendo particionamiento y re-indexación), surgen normativas regulatorias de privacidad y se deben aplicar parches de seguridad y migraciones de versión de motor.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Considerar la base de datos como un activo estático "terminado". Si una base de datos no se monitorea y evoluciona, colapsa por degradación de índices y fragmentación de disco.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="casos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                P41 • Casos & Trampas Ulima
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            41. Pregunta Clásica Ulima: ¿Es un Excel compartido una Base de Datos?
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Justifique formalmente en una evaluación por qué una hoja de cálculo en red NO califica como un DBMS."</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Aunque contiene datos estructurados, NO es un DBMS porque: 1) Carece de independencia programa-datos. 2) No ofrece control de concurrencia ACID con aislamiento serializable (riesgo de Lost Updates). 3) No cuenta con motor de recuperación transaccional ante caídas (WAL). 4) No fuerza integridad referencial declarativa en el núcleo. 5) Su seguridad no permite segregación granular por usuario y fila.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Responder simplemente "no porque no usa SQL". La respuesta debe fundamentarse en los principios de arquitectura, concurrencia, integridad y ACID.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="casos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                P42 • Casos & Trampas Ulima
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            42. Caso E-Commerce: Ventas con Cantidad Negativa
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Una tienda online insertó órdenes con cantidad = -100 debido a un bug en JavaScript. ¿Dónde residió la falla de arquitectura de datos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Residió en el diseño de la base de datos por no implementar una restricción declarativa de integridad en el catálogo: "CHECK (cantidad > 0)". La arquitectura nunca debe delegar la integridad crítica a la capa de aplicación o frontend.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Culpar exclusivamente al desarrollador web frontend. El principio cardinal de la Ingeniería de Datos es que el motor relacional debe ser auto-defensivo ante entradas corruptas.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="casos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                P43 • Casos & Trampas Ulima
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            43. Caso Bancario: Retiro Simultáneo en dos Cajeros ATM
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Un cliente con saldo S/. 100 intenta retirar S/. 100 en dos cajeros en el mismo milisegundo. ¿Qué mecanismo del DBMS lo impide?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">El control de concurrencia transaccional: el aislamiento (Isolation) y la atomicidad (Atomicity). El motor utiliza bloqueos a nivel de fila (Row Locks mediante "SELECT ... FOR UPDATE") serializando las peticiones. La primera transacción descuenta el saldo a 0; la segunda evalúa la condición con el nuevo saldo y es rechazada por saldo insuficiente.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Afirmar que el sistema operativo se encarga de esto. Los sistemas de archivos no tienen semántica bancaria ni entienden de saldos; es el Transaction Manager del DBMS quien lo resuelve.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="casos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                P44 • Casos & Trampas Ulima
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            44. Pregunta Trampa: ¿La redundancia siempre es negativa?
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Bajo qué circunstancias la redundancia de datos es deliberada, aceptable y necesaria en la industria?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">La redundancia incontrolada es nefasta. Sin embargo, la redundancia CONTROLADA es deliberada y necesaria en: 1) Modelos Dimensionales de Data Warehouse (Esquemas Estrella de Kimball) para acelerar consultas analíticas masivas sin hacer decenas de joins. 2) Replicación de bases de datos para alta disponibilidad y tolerancia a fallos. 3) Cachés de lectura rápida en memoria (Redis).</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Responder categóricamente que "toda redundancia debe erradicarse siempre". En analítica y Big Data, la desnormalización y duplicidad controlada es una técnica estándar de optimización.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="casos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                P45 • Casos & Trampas Ulima
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            45. Evolución Histórica de los Motores de Datos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Trace la cronología formal de modelos de bases de datos desde los años 60 hasta el año 2026."</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) Años 60: Jerárquico (IBM IMS) y Red (CODASYL) - navegación por punteros físicos. 2) Años 70-80: Modelo Relacional (Edgar Codd, SQL) - independencia física y lógica. 3) Años 90: Orientado a Objetos (OODBMS) y Objeto-Relacional. 4) Años 2000+: NoSQL (Documental, Key-Value, Columnar, Grafos) para escala masiva web. 5) Años 2012+: NewSQL y bases distribuidas (Google Spanner). 6) Actualidad 2026: Lakehouse (Apache Iceberg, Delta Lake) y bases vectoriales híbridas con pgvector para IA Generativa.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que NoSQL "reemplazó" al modelo relacional. El modelo relacional sigue siendo el rey de las transacciones financieras y corporativas (OLTP); NoSQL y Lakehouses complementan casos de uso específicos (persistencia políglota).</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="casos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                P46 • Casos & Trampas Ulima
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            46. La Ecuación Económica: CapEx vs. OpEx en Bases de Datos
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Por qué las empresas modernas migran sus motores de bases de datos de centros de cómputo propios a la nube pública?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Sustituyen gastos de capital masivos e inflexibles (CapEx: compra de racks, servidores, almacenamiento SAN, licencias perpetuas y energía) por costos operativos elásticos y predecibles (OpEx: pago por uso, auto-scaling, bases serverless como Aurora Serverless o BigQuery), reduciendo el costo total de propiedad (TCO) y acelerando el time-to-market.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que la nube siempre es más barata sin importar cómo se use. Si las consultas son ineficientes y escanean terabytes innecesarios, el costo de OpEx en la nube puede superar al on-premise.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="casos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                P47 • Casos & Trampas Ulima
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            47. Caso de Matrícula Universitaria: Caída del Sistema
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"Durante la apertura de matrícula, 20,000 alumnos saturan el portal web de la universidad. ¿Qué falló en la arquitectura de base de datos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">1) Falta de pool de conexiones (Connection Pooling como PgBouncer), agotando la memoria RAM del servidor al abrir miles de procesos dedicados. 2) Contención de bloqueos por no separar lecturas de escrituras (las consultas de horarios deben ir a réplicas de lectura). 3) Ausencia de transacciones optimistas o colas de espera que regulen el flujo de confirmación de vacantes.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Pensar que la solución inmediata es simplemente "comprar un servidor con más núcleos de CPU". El cuello de botella suele ser contención de locks y sobrecarga de conexiones concurrentes.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="casos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                P48 • Casos & Trampas Ulima
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            48. Pregunta Conceptual: ¿SQL es Procedimental o Declarativo?
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Cuál es la naturaleza paradigmática del lenguaje SQL estándar según Codd y Silberschatz?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">SQL es estrictamente un lenguaje DECLARATIVO (especificas QUÉ datos deseas proyectar y filtrar mediante SELECT, FROM, WHERE, sin detallar los pasos algorítmicos). El motor y su optimizador CBO deciden CÓMO navegar por los índices o escanear las páginas. Lenguajes como PL/SQL o PL/pgSQL son extensiones procedimentales agregadas posteriormente.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Afirmar que un script SQL es procedimental solo porque tiene varias líneas. Mientras sean sentencias puras SELECT/INSERT/UPDATE, sigue siendo declarativo.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="casos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                P49 • Casos & Trampas Ulima
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            49. Caso Hospitalario: Lógica Trivalente y Tratamiento de NULLs
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"En una clínica, el campo "alergia_penicilina" almacena NULL. ¿Por qué esto es un riesgo de vida en el diseño de datos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">Porque en lógica relacional trivaluada (3VL), NULL no significa "no tiene alergia", significa DESCONOCIDO (Unknown). Tratar un NULL como FALSE en un condicional de emergencia puede llevar a administrar penicilina a un paciente mortalmente alérgico. El modelado debe obligar a estados explícitos: 'CONFIRMADA', 'DESCARTADA', 'NO EVALUADA' con restricción NOT NULL.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Asumir que NULL equivale a cero (0) o cadena vacía (''). NULL es la ausencia formal de valor o valor desconocido.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+    <div class="balotario-card bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow" data-cat="casos">
+        <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                P50 • Casos & Trampas Ulima
+            </span>
+            <span class="text-xs text-slate-400 font-mono">Ulima Focus</span>
+        </div>
+        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-3">
+            50. Pregunta Integradora: ¿Por qué la Ingeniería de Datos es una disciplina de ingeniería?
+        </h4>
+        <details class="group bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200/60 dark:border-slate-800/80 p-3.5 [&_summary::-webkit-details-marker]:hidden transition-all">
+            <summary class="flex justify-between items-center cursor-pointer font-semibold text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 select-none">
+                <span class="flex items-center gap-1.5">
+                    <span>💡 Ver Pregunta de Examen & Respuesta Oficial</span>
+                </span>
+                <span class="text-slate-400 text-xs transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div class="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 space-y-3 text-xs leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/30">
+                    <strong class="text-indigo-900 dark:text-indigo-300 block mb-1">🔄 ¿Cómo te lo preguntará el profesor? (Variación / Paráfrasis):</strong>
+                    <p class="text-slate-700 dark:text-slate-300 italic">"¿Qué distingue a un verdadero Ingeniero de Datos de un usuario que solo sabe escribir comandos SQL básicos?"</p>
+                </div>
+                <div>
+                    <strong class="text-emerald-700 dark:text-emerald-400 block mb-1">✅ Respuesta Técnica Oficial:</strong>
+                    <p class="text-slate-700 dark:text-slate-300">La aplicación sistemática del método de ingeniería: analizar requerimientos organizacionales, modelar conceptualmente con rigor matemático formal, normalizar esquemas para garantizar integridad sin pérdidas, optimizar estructuras físicas (índices, storage, buffers), garantizar la continuidad operativa ante desastres (ACID, RTO, RPO) y gobernar los datos como el activo más valioso de la empresa.</p>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/30">
+                    <strong class="text-amber-800 dark:text-amber-300 block mb-0.5">⚠️ Trampa Típica de Examen / Distractor:</strong>
+                    <span class="text-slate-600 dark:text-slate-400">Creer que la ingeniería de datos consiste únicamente en "aprenderse la sintaxis de los comandos SQL". La sintaxis cambia; los principios arquitectónicos y de integridad permanecen.</span>
+                </div>
+            </div>
+        </details>
+    </div>
+  
+            </div>
+
+            <!-- Script Interactivo de Filtrado -->
+            <script>
+            (function() {
+                const filterBtns = document.querySelectorAll('#balotario-filters button');
+                const cards = document.querySelectorAll('.balotario-card');
+                const btnExpandAll = document.getElementById('btn-expand-all');
+                const btnCollapseAll = document.getElementById('btn-collapse-all');
+
+                filterBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        filterBtns.forEach(b => {
+                            b.classList.remove('active-filter', 'bg-indigo-600', 'text-white');
+                            b.classList.add('bg-white/10', 'text-slate-200');
+                        });
+                        this.classList.add('active-filter', 'bg-indigo-600', 'text-white');
+                        this.classList.remove('bg-white/10', 'text-slate-200');
+
+                        const filter = this.getAttribute('data-filter');
+                        cards.forEach(card => {
+                            if (filter === 'all' || card.getAttribute('data-cat') === filter) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                    });
+                });
+
+                if (btnExpandAll) {
+                    btnExpandAll.addEventListener('click', function() {
+                        cards.forEach(card => {
+                            if (card.style.display !== 'none') {
+                                const details = card.querySelector('details');
+                                if (details) details.open = true;
+                            }
+                        });
+                    });
+                }
+
+                if (btnCollapseAll) {
+                    btnCollapseAll.addEventListener('click', function() {
+                        cards.forEach(card => {
+                            const details = card.querySelector('details');
+                            if (details) details.open = false;
+                        });
+                    });
+                }
+            })();
+            </script>
+        </section>
+
     </article>
 
         </main>
 
         <!-- Sidebar -->
-        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
+        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto mb-20 lg:mb-0 pr-1">
             <!-- Keywords (M3 Outlined Card) -->
             <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
                 <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>

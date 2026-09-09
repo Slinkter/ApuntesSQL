@@ -1,4 +1,4 @@
-﻿# 🏛️ INGENIERÍA DE DATOS & SQL MASTERCLASS
+# 🏛️ INGENIERÍA DE DATOS & SQL MASTERCLASS
 ### *El Tratado Definitivo de Diseño Relacional, Optimización de Consultas, Arquitectura Cloud y Data Warehousing*
 
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16_Alpine-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
@@ -114,7 +114,7 @@ gantt
 | Semana | Tema Principal | Apunte Cornell (HTML) | Diapositivas de Clase | Transcripción de Clase |
 | :---: | :--- | :---: | :---: | :---: |
 | **Semana 00** | *Proceso de Desarrollo de Bases de Datos en la Empresa* | — | [Clase_00.pdf](ULima/Clases/Clase_00.pdf) | [Clase_00.txt](ULima/Clases/text/Clase_00.txt) |
-| **Semana 01** | *Fundamentos de Administración de Información, SDLC y Enfoque DBMS* | [semana_01.html](ULima/Apuntes/semana_01.html) | [Clase_01.pdf](ULima/Clases/Clase_01.pdf) | [Clase_01.txt](ULima/Clases/text/Clase_01.txt) |
+| **Semana 01** | *Fundamentos de Administración de Información, SDLC y Enfoque DBMS* | [semana_01.html](ULima/Apuntes/semana_01.html) 🎯 *(50 Flashcards)* | [Clase_01.pdf](ULima/Clases/Clase_01.pdf) | [Clase_01.txt](ULima/Clases/text/Clase_01.txt) |
 | **Semana 02** | *Arquitectura ANSI-SPARC 3 Niveles, Independencia de Datos y ACID* | [semana_02.html](ULima/Apuntes/semana_02.html) | [Clase_02.pdf](ULima/Clases/Clase_02.pdf) | [Clase_02.txt](ULima/Clases/text/Clase_02.txt) |
 | **Semana 03** | *Modelo Relacional Formal, Restricciones de Integridad y DDL Básico* | [semana_03.html](ULima/Apuntes/semana_03.html) | [Clase_03.pdf](ULima/Clases/Clase_03.pdf) | [Clase_03.txt](ULima/Clases/text/Clase_03.txt) |
 | **Semana 04** | *DDL Avanzado: Constraints, Secuencias, Vistas e Índices B-Tree* | [semana_04.html](ULima/Apuntes/semana_04.html) | [Clase_04.pdf](ULima/Clases/Clase_04.pdf) | [Clase_04.txt](ULima/Clases/text/Clase_04.txt) |
@@ -130,6 +130,38 @@ gantt
 | **Semana 14** | *Data Warehouse, Esquema Estrella/Copo de Nieve y Cubos OLAP* | [semana_14.html](ULima/Apuntes/semana_14.html) | — | — |
 | **Semana 15** | *Alta Disponibilidad (HA), AlwaysOn, Replicación, NoSQL y Lakehouse* | [semana_15.html](ULima/Apuntes/semana_15.html) | [Clase_15.pdf](ULima/Clases/Clase_15.pdf) | [Clase_15.txt](ULima/Clases/text/Clase_15.txt) |
 | **Semana 16** | **EVALUACIÓN FINAL: Guía Maestra Integral con Solucionario Completo** | [semana_16.html](ULima/Apuntes/semana_16.html) | — | — |
+
+---
+
+### 💼 Integración de Perfiles Profesionales Senior y Literatura Canónica
+
+Todas las semanas académicas (`semana_01.html` a `semana_16.html`) han sido enriquecidas con un marco de análisis profesional que cruza la teoría universitaria con las demandas técnicas de la industria contemporánea (2026):
+
+```mermaid
+graph TD
+    S["📖 Contenido Semanal Ulima"] --> A["🏛️ Arquitecto de Datos<br/>(Silberschatz / Kimball)"]
+    S --> E["⚙️ Ingeniero de Datos<br/>(Petrov / Karwin / Kleppmann)"]
+    S --> C["☁️ Ingeniero Cloud & MDS<br/>(Snowflake / Iceberg / pgvector)"]
+```
+
+| Rol Profesional | Enfoque de Dominio en el Curso | Textos y Referencias Canónicas Integradas |
+| :--- | :--- | :--- |
+| **🏛️ Arquitecto de Datos** | Modelado conceptual/lógico, ontología DIKW, gobernanza bajo DAMA-DMBOK, normalización formal (1FN-5FN/BCNF) y modelado dimensional (matrices de bus, dimensiones conformadas, SCD2). | *Database System Concepts* (Silberschatz, Korth, Sudarshan)<br/>*Fundamentals of Database Systems* (Elmasri & Navathe)<br/>*The Data Warehouse Toolkit* (Ralph Kimball & Margy Ross) |
+| **⚙️ Ingeniero de Datos** | Anatomía física del motor (Buffer Pool, WAL ARIES, páginas de 8KB), control de concurrencia MVCC (`xmin`/`xmax`), algoritmos de JOIN (Hash Join, Merge Join), optimización de planes (`EXPLAIN ANALYZE`), antipatrones SQL y pipelines declarativos con dbt. | *Database Internals* (Alex Petrov)<br/>*SQL Antipatterns* (Bill Karwin)<br/>*Designing Data-Intensive Applications* (Martin Kleppmann)<br/>*PostgreSQL Internals* |
+| **☁️ Ingeniero Cloud & MDS** | Modern Data Stack, almacenamiento desacoplado de cómputo (AWS S3, Snowflake, BigQuery), Data Lakehouses con formatos abiertos (*Apache Iceberg*, *Delta Lake*), Change Data Capture (*Debezium / Kafka*) y bases de datos vectoriales con `pgvector` para IA Generativa (2026). | *AWS Well-Architected Data Analytics Lens*<br/>*Snowflake Multi-Cluster Architecture*<br/>*Apache Iceberg Open Table Spec*<br/>*Modern Vector Search & RAG Best Practices* |
+
+---
+
+### 🎓 Balotario & Simulador de Exámenes Interactivo (Flashcards)
+
+En [`semana_01.html`](ULima/Apuntes/semana_01.html#balotario-examenes) se encuentra integrado un **Banco de 50 Preguntas Típicas de Examen** con dinámica de auto-evaluación tipo Flashcard:
+* **Filtros por Categoría en 1 Clic**: DIKW & Metadatos (10), Archivos vs DBMS (10), Arquitectura DBMS (10), SDLC & Roles (10), y Casos & Trampas Ulima (10).
+* **Anatomía de Estudio Activo**:
+  1. *Pregunta Directa*: Formulación conceptual estándar.
+  2. *🔄 Reformulación / Paráfrasis del Profesor*: Escenario alternativo para evitar memorización mecánica.
+  3. *✅ Respuesta Técnica Oficial*: Fundamento formal para alcanzar calificación sobresaliente.
+  4. *⚠️ Trampa de Examen / Distractor*: Advertencia sobre las opciones engañosas donde se pierden puntos.
+* **Despliegue Progresivo**: Semana 01 operativa (50 ítems). Siguiente fase: Semana 02 (Arquitectura ANSI/SPARC, Buffer Pool, ACID) y Semana 03 (Modelo Relacional, Reglas de Codd y DDL).
 
 ---
 

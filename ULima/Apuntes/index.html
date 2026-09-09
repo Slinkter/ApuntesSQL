@@ -97,7 +97,7 @@
         })();
     </script>
 </head>
-<body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-400 antialiased font-sans transition-colors duration-300 p-4 pb-20 md:p-12">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 antialiased font-sans transition-colors duration-300 p-4 pb-20 md:p-12">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
     <!-- M3 Step-by-Step Diagram -->
     <div id="main" class="my-6">
@@ -117,7 +117,7 @@
       <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Semanas 1-3</p>
     </div>
   </div>
-  <div class="flex items-center justify-center text-xl text-purple-500 dark:text-purple-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+  <div class="flex items-center justify-center text-xl text-indigo-400 dark:text-indigo-500 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
   <div class="flex-1 flex flex-col items-center gap-2 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3 text-center">
     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-600 dark:bg-indigo-500 text-white text-sm font-bold">2</span>
     <div>
@@ -125,7 +125,7 @@
       <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Semanas 4-7</p>
     </div>
   </div>
-  <div class="flex items-center justify-center text-xl text-purple-500 dark:text-purple-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+  <div class="flex items-center justify-center text-xl text-indigo-400 dark:text-indigo-500 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
   <div class="flex-1 flex flex-col items-center gap-2 rounded-xl border-2 border-rose-500/60 dark:border-rose-400/60 bg-white dark:bg-slate-950 p-3 text-center">
     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-rose-600 dark:bg-rose-500 text-white text-sm font-bold">3</span>
     <div>
@@ -133,7 +133,7 @@
       <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Semana 8</p>
     </div>
   </div>
-  <div class="flex items-center justify-center text-xl text-purple-500 dark:text-purple-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+  <div class="flex items-center justify-center text-xl text-indigo-400 dark:text-indigo-500 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
   <div class="flex-1 flex flex-col items-center gap-2 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3 text-center">
     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-600 dark:bg-indigo-500 text-white text-sm font-bold">4</span>
     <div>
@@ -141,7 +141,7 @@
       <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Semanas 9-13</p>
     </div>
   </div>
-  <div class="flex items-center justify-center text-xl text-pink-500 dark:text-pink-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+  <div class="flex items-center justify-center text-xl text-indigo-400 dark:text-indigo-500 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
   <div class="flex-1 flex flex-col items-center gap-2 rounded-xl border-2 border-indigo-500/60 dark:border-indigo-400/60 bg-white dark:bg-slate-950 p-3 text-center">
     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-600 dark:bg-indigo-500 text-white text-sm font-bold">5</span>
     <div>
@@ -149,7 +149,7 @@
       <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Semanas 14-15</p>
     </div>
   </div>
-  <div class="flex items-center justify-center text-xl text-pink-500 dark:text-pink-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
+  <div class="flex items-center justify-center text-xl text-emerald-500 dark:text-emerald-400 rotate-90 md:rotate-0 shrink-0" aria-hidden="true">→</div>
   <div class="flex-1 flex flex-col items-center gap-2 rounded-xl border-2 border-emerald-500/60 dark:border-emerald-400/60 bg-white dark:bg-slate-950 p-3 text-center">
     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-600 dark:bg-emerald-500 text-white text-sm font-bold">6</span>
     <div>
@@ -162,72 +162,73 @@
         </div>
     </div>
 
-    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <!-- Top Controls Bar -->
+    <div class="max-w-5xl mx-auto mb-4 flex justify-end items-center gap-2">
+        <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="flex w-10 h-10 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition duration-200 cursor-pointer touch-manipulation">
+            <svg aria-hidden="true" class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-        </svg>
-    </button>
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <!-- Sun icon -->
-        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
-        </svg>
-        <!-- Moon icon -->
-        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-        </svg>
-    </button>
+            </svg>
+        </button>
+        <button id="theme-toggle" aria-label="Toggle theme" class="flex w-10 h-10 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition duration-200 cursor-pointer touch-manipulation">
+            <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+            <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+        </button>
+    </div>
 
     <!-- Header title card (M3 Banner Style) -->
     <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 md:p-12 shadow-xl text-center max-w-5xl mx-auto mb-8 md:mb-12 relative overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-1.5 before:bg-gradient-to-r before:from-blue-600 before:to-emerald-500">
         <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3">Ingeniería de Datos</h1>
-        <p class="text-sm md:text-lg font-medium text-slate-500 dark:text-slate-400">Universidad de Lima | 16 Semanas | Sílabo 2013-2</p>
+        <p class="text-sm md:text-lg font-medium text-slate-500 dark:text-slate-400">Universidad de Lima | 16 Semanas | Sílabo Académico</p>
     </div>
 
     <!-- Weeks sections -->
-    <div class="text-xs font-bold tracking-wider text-slate-500 dark:text-slate-400 dark:text-slate-500 uppercase mt-8 md:mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-slate-200 before:dark:bg-slate-800 after:h-px after:flex-1 after:bg-slate-200 after:dark:bg-slate-800 max-w-5xl mx-auto">Semanas 1-7: Fundamentos y Diseno de BD</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:p-5 md:p-6 max-w-5xl mx-auto mb-8 md:mb-12">
-<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
-<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S01</span> Fundamentos de Informacion</h2>
-<p class="text-slate-700 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Dato vs Informacion, Sistemas Tradicionales, Enfoque DBMS, Componentes, SDLC, Evolucion de BD.</p>
+    <div class="text-xs font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase mt-8 md:mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-slate-200 before:dark:bg-slate-800 after:h-px after:flex-1 after:bg-slate-200 after:dark:bg-slate-800 max-w-5xl mx-auto">Semanas 1-7: Fundamentos, Modelo Relacional y Diseño de BD</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-4 md:p-6 max-w-5xl mx-auto mb-8 md:mb-12">
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
+<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S01</span> Fundamentos de Información</h2>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Dato vs Información, Sistemas Tradicionales, Enfoque DBMS, Componentes, SDLC, Evolución de BD.</p>
 <a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto"  href="semana_01.html">Ver Semana 1 <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
 </div>
-<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
-<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S02</span> Sistema de Gestion de BD</h2>
-<p class="text-slate-700 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Arquitectura 3 niveles, Independencia de Datos, Tipos de BD, Funciones del DBMS, ACID.</p>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
+<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S02</span> Sistema de Gestión de BD</h2>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Arquitectura 3 niveles, Independencia de Datos, Tipos de BD, Funciones del DBMS, ACID.</p>
 <a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto"  href="semana_02.html">Ver Semana 2 <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
 </div>
-<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
-<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S03</span> Bases de Datos Relacionales</h2>
-<p class="text-slate-700 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Conceptos BDR, Terminologia, Restricciones de Integridad, PK y FK.</p>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
+<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S03</span> Modelo Relacional y DDL Formal</h2>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Reglas de Codd, Restricciones de Integridad (PK, FK), Creación y Definición DDL.</p>
 <a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto"  href="semana_03.html">Ver Semana 3 <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
 </div>
-<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
-<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S04</span> DDL y Administracion</h2>
-<p class="text-slate-700 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">CREATE TABLE, ALTER TABLE, DROP TABLE, Constraints, Secuencias, Vistas, Indices B-Tree.</p>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
+<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S04</span> DML y Álgebra Relacional</h2>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Álgebra Relacional vs SQL, INSERT, UPDATE, DELETE, SELECT básico, 3VL y NULL.</p>
 <a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto"  href="semana_04.html">Ver Semana 4 <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
 </div>
-<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
-<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S05</span> DML y Consultas Simples</h2>
-<p class="text-slate-700 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">INSERT, UPDATE, DELETE, SELECT, WHERE, ORDER BY, DISTINCT, Transacciones DML.</p>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
+<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S05</span> DML Avanzado y Transacciones</h2>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">UPSERT, Control Transaccional (TCL), Arquitectura MVCC, Concurrencia y Carga Masiva.</p>
 <a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto"  href="semana_05.html">Ver Semana 5 <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
 </div>
-<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
-<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S06</span> Modelamiento E-R</h2>
-<p class="text-slate-700 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Entidades Fuertes y Debiles, Relaciones, Cardinalidad, DER, Supertipos y Subtipos.</p>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
+<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S06</span> Modelamiento Conceptual E-R</h2>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Entidades Fuertes y Débiles, Relaciones, Cardinalidad, DER Extendido, Supertipos y Subtipos.</p>
 <a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto"  href="semana_06.html">Ver Semana 6 <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
 </div>
-<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
-<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S07</span> Normalizacion (1FN-3FN)</h2>
-<p class="text-slate-700 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">1FN, 2FN, 3FN, Dependencias Funcionales, Anomalias de Insercion/Eliminacion/Modificacion.</p>
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 dark:border-slate-800/80 rounded-3xl p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500 dark:hover:border-blue-400 transition duration-300 flex flex-col justify-between">
+<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">S07</span> Normalización Relacional</h2>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">1FN, 2FN, 3FN, BCNF, Dependencias Funcionales, Descomposición sin Pérdida.</p>
 <a class="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors mt-auto"  href="semana_07.html">Ver Semana 7 <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
 </div>
 </div>
 <div class="text-xs font-bold tracking-wider text-rose-500 dark:text-rose-400 uppercase mt-8 md:mt-12 mb-6 flex items-center gap-4 before:h-px before:flex-1 before:bg-rose-200/50 before:dark:bg-rose-900/30 after:h-px after:flex-1 after:bg-rose-200/50 after:dark:bg-rose-900/30 max-w-5xl mx-auto">Semana 8: Examen Parcial</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:p-5 md:p-6 max-w-5xl mx-auto mb-8 md:mb-12">
-<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-500 border-y border-r dark:border-slate-800/80 rounded-3xl p-5 md:p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-l-rose-600 transition duration-300 flex flex-col justify-between">
-<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">PARCIAL</span> Evaluacion Parcial</h2>
-<p class="text-slate-700 dark:text-slate-400 dark:text-slate-500 text-sm mb-4 flex-grow">Cobertura: Semanas 01-07. Teoria, Modelamiento E-R, Normalizacion y SQL. Incluye solucionario.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-4 md:p-6 max-w-5xl mx-auto mb-8 md:mb-12">
+<div class="bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-500 border-y border-r dark:border-slate-800/80 rounded-3xl p-5 md:p-6 hover:shadow-xl hover:-translate-y-1 hover:border-l-rose-600 transition duration-300 flex flex-col justify-between">
+<h2><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-900 text-white dark:bg-slate-800 dark:text-slate-300">PARCIAL</span> Evaluación Parcial</h2>
+<p class="text-slate-700 dark:text-slate-400 text-sm mb-4 flex-grow">Cobertura: Semanas 01-07. Teoría, Modelamiento E-R, Normalización y SQL. Incluye solucionario.</p>
 <a class="inline-flex items-center gap-1 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-500 dark:hover:text-rose-300 transition-colors mt-auto"  href="semana_08.html">Ver Examen Parcial <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg></a>
 </div>
 </div>

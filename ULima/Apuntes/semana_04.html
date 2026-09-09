@@ -66,7 +66,11 @@
     
     <style id="reader-mode-style">
         html.reader-mode { font-size: 106.25%; }
-        html.reader-mode header,
+        html.reader-mode header { background: transparent !important; border: none !important; box-shadow: none !important; position: static !important; }
+        html.reader-mode header h1,
+        html.reader-mode header p,
+        html.reader-mode header a { display: none !important; }
+        html.reader-mode header > div { justify-content: flex-end !important; padding: 1rem 1.5rem !important; }
         html.reader-mode aside,
         html.reader-mode nav[class*="fixed"] { display: none !important; }
         html.reader-mode #theme-toggle { display: flex !important; }
@@ -99,25 +103,14 @@
         })();
     </script>
 </head>
-<body class="bg-slate-50 text-slate-850 dark:bg-slate-950 dark:text-slate-300 antialiased font-sans transition-colors duration-300">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 antialiased font-sans transition-colors duration-300">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-xl focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:font-semibold focus:shadow-lg">Saltar al contenido</a>
-    <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex fixed top-4 right-20 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-        </svg>
-    </button>
-    <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex fixed top-4 right-4 z-50 w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation">
-        <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
-        </svg>
-        <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-        </svg>
-    </button>
+    
+    
 
     <!-- Header (M3 Tonal App Bar) -->
     <header class="bg-white/80 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 sticky top-0 z-40 shadow-sm transition">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
             <div class="pr-6">
                 <h1 class="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                     Semana 04: Lenguaje de Manipulación de Datos (DML) y Consultas Básicas
@@ -126,7 +119,11 @@
                     Álgebra Relacional vs SQL • Inserción, Modificación y Borrado Seguro • 3VL y NULL • Universidad de Lima
                 </p>
             </div>
-            <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
+            <div class="flex items-center gap-2.5 shrink-0">
+                <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">&larr; Índice</a>
+                <button id="reader-toggle" aria-label="Activar modo lector" aria-pressed="false" class="hidden md:flex w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation"> <svg aria-hidden="true" class="w-5.5 h-5.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/> </svg> </button>
+                <button id="theme-toggle" aria-label="Toggle theme" class="hidden md:flex w-11 h-11 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-200 shadow-md hover:scale-105 active:scale-95 transition duration-200 cursor-pointer backdrop-blur-sm touch-manipulation"> <svg aria-hidden="true" id="theme-toggle-light-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path> </svg> <svg aria-hidden="true" id="theme-toggle-dark-icon" class="hidden w-5.5 h-5.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"> <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path> </svg> </button>
+            </div>
         </div>
     </header>
 
@@ -232,7 +229,7 @@
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white m-0">Objetivos Pedagógicos y Competencias de Manipulación de Datos</h3>
             </div>
             <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-slate-700 dark:text-slate-300 list-disc list-inside m-0">
-                <li>Comprender la correspondencia entre operadores del Álgebra Relacional ($sigma, pi, 	imes, owtie$) y SQL declarativo.</li>
+                <li>Comprender la correspondencia entre operadores del Álgebra Relacional (&sigma;, &pi;, &times;, &#x22C8;) y SQL declarativo.</li>
                 <li>Escribir sentencias <code class="font-mono text-sm">INSERT</code> avanzadas: multi-fila, subconsultas y patrones UPSERT con <code class="font-mono text-sm">ON CONFLICT</code>.</li>
                 <li>Ejecutar sentencias <code class="font-mono text-sm">UPDATE</code> seguras bajo protocolos transaccionales para prevenir pérdidas de datos.</li>
                 <li>Comparar en profundidad <code class="font-mono text-sm">DELETE</code> vs <code class="font-mono text-sm">TRUNCATE</code> (WAL logging, bloqueos, triggers y reseteo de secuencias).</li>
@@ -280,11 +277,11 @@
                             <td class="p-3 font-semibold text-amber-600">Producto Cartesiano</td>
                             <td class="p-3 font-mono font-bold text-sm">R &times; S</td>
                             <td class="p-3 font-mono text-amber-600 dark:text-amber-400">SELECT * FROM R CROSS JOIN S;</td>
-                            <td class="p-3">Combina cada tupla de $R$ con todas las tuplas de $S$ ($|R| 	imes |S|$ tuplas).</td>
+                            <td class="p-3">Combina cada tupla de <em>R</em> con todas las tuplas de <em>S</em> (|<em>R</em>| &times; |<em>S</em>| tuplas).</td>
                         </tr>
                         <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/40">
                             <td class="p-3 font-semibold text-emerald-600">Reunión / Join</td>
-                            <td class="p-3 font-mono font-bold text-sm">R &#8904;<sub>cond</sub> S</td>
+                            <td class="p-3 font-mono font-bold text-sm">R &#x22C8;<sub>cond</sub> S</td>
                             <td class="p-3 font-mono text-emerald-600 dark:text-emerald-400">SELECT * FROM R INNER JOIN S ON cond;</td>
                             <td class="p-3">Producto cartesiano seguido inmediatamente de una selección por coincidencia de claves.</td>
                         </tr>
@@ -600,12 +597,74 @@ FROM orden_pedido;</code></pre>
                 <div class="mt-4 flex gap-2" id="controls_04"></div>
             </div>
         </section>
+
+        <!-- Perspectivas Profesionales & Literatura Canónica -->
+        <section class="my-10 space-y-6">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h3 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>🎯</span> Perspectivas Profesionales & Literatura Canónica
+                </h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    Análisis técnico aplicado según los perfiles de la industria y fundamentos de textos clásicos de bases de datos.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Card 1: Arquitecto de Datos -->
+                <div class="bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-200/70 dark:border-indigo-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>🏛️</span> Arquitecto de Datos
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">Álgebra Relacional Cerrada y Lógica Trivalente</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            El diseño de consultas analíticas rigurosas parte de la propiedad de clausura del álgebra relacional: cada operador formal opera sobre relaciones y genera una relación. La presencia de <code>NULL</code> introduce la lógica trivalente de Boole (TRUE, FALSE, UNKNOWN), donde un predicado descarta tuplas UNKNOWN en la cláusula <code>WHERE</code>, demandando políticas de modelado claras entre nulos y valores por defecto.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-indigo-100 dark:border-indigo-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Silberschatz, Korth & Sudarshan — <em>Database System Concepts (7ma Ed.)</em>, Cap. 3: "Introduction to SQL".
+                    </div>
+                </div>
+
+                <!-- Card 2: Ingeniero de Datos -->
+                <div class="bg-amber-50/40 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>⚙️</span> Ingeniero de Datos
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">Antipatrón 'Fear of the Unknown' y Optimizador CBO</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            El antipatrón <em>Fear of the Unknown</em> resalta cómo <code>NOT IN</code> evalúa a vacío ante un solo <code>NULL</code> en subconsultas. A nivel de ejecución física, el Optimizador Basado en Costos (CBO) transforma el árbol algebraico en algoritmos concretos (Hash Join, Merge Join, Index Scan), decidiendo la ruta más eficiente según la dispersión estadística de los datos.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-amber-100 dark:border-amber-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Bill Karwin — <em>SQL Antipatterns</em>, Cap. 14: "Fear of the Unknown" & Alex Petrov, Cap. 3.
+                    </div>
+                </div>
+
+                <!-- Card 3: Ingeniero Cloud -->
+                <div class="bg-sky-50/40 dark:bg-sky-950/20 border border-sky-200/70 dark:border-sky-900/40 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2 text-sky-700 dark:text-sky-400 font-bold text-xs uppercase tracking-wider mb-2">
+                            <span>☁️</span> Ingeniero Cloud & MDS
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2">Ingesta Masiva Serverless y Carga con COPY</h4>
+                        <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                            Ejecutar sentencias <code>INSERT</code> fila a fila en motores cloud (Snowflake, BigQuery, Redshift) genera una degradación severa por overhead transaccional. La arquitectura moderna utiliza pipelines serverless (AWS Lambda + S3) que disparan comandos <code>COPY INTO</code> masivos, procesando archivos columnares (Parquet, Iceberg) con motores vectorizados SIMD a millones de filas/segundo.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-sky-100 dark:border-sky-900/30 text-[11px] text-slate-500 dark:text-slate-400">
+                        📖 <strong>Referencia:</strong> Cloud DW Best Practices: High-Throughput Bulk Loading & Serverless Ingestion (2026).
+                    </div>
+                </div>
+            </div>
+        </section>
     </article>
 
         </main>
 
         <!-- Sidebar -->
-        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit mb-20 lg:mb-0">
+        <aside class="w-full lg:w-1/4 flex flex-col gap-6 shrink-0 order-2 lg:order-1 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto mb-20 lg:mb-0 pr-1">
             <!-- Keywords (M3 Outlined Card) -->
             <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
                 <h3 class="text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase mb-4">Conceptos Clave</h3>
