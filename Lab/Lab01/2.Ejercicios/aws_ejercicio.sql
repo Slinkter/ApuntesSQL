@@ -1,15 +1,17 @@
--- ============================================================================
--- PostgreSQL Lab01 - Script de Verificación de Conectividad (AWS EC2 / Docker)
--- ============================================================================
--- Corresponde al Ejercicio 1 (Nivel Básico): Proyección de la Fuerza de Ventas
--- Base de datos: Northwind (pthom/northwind_psql)
--- Motor: PostgreSQL 15+ / 16 Alpine
--- ============================================================================
+SELECT c.category_name,
+       COUNT(p.product_id) AS total_productos
+FROM categories c
+LEFT JOIN products p ON c.category_id = p.category_id
+GROUP BY c.category_name
+ORDER BY total_productos DESC;
 
-SELECT
-    employee_id,
-    last_name,
-    first_name,
-    title
-FROM employees
-ORDER BY employee_id;
+
+SELECT c.category_id,
+       c.category_name
+from categories as c ;
+
+
+SELECT product_id,
+       product_name,
+       category_id
+from products as p;
